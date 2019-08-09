@@ -1,0 +1,33 @@
+{
+  "name": "travelling",
+  "version": "1.0.0",
+  "description": "A dynamic route level groups permissions middleman service",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abeai/travelling.git"
+  },
+  "keywords": [
+    "dynamic",
+    "route",
+    "permissions",
+    "rest",
+    "groups"
+  ],
+  "author": "Jt Whissel",
+  "license": "GPL-2.0-only",
+  "bugs": {
+    "url": "https://github.com/abeai/travelling/issues"
+  },
+  "homepage": "https://github.com/abeai/travelling#readme",
+  "dependencies": {
+    "@abeai/node-utils": "^2.0.0",
+    "fastify": "^2.7.1",
+    "fastify-cookie": "^3.0.2",
+    "fastify-session": "^3.0.0",
+    "nstats": "^2.1.5"
+  }
+}
