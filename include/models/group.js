@@ -15,10 +15,6 @@ class Group extends Base(BaseModel, 'groups', {
   }) {
     constructor(...args) {
       super(...args);
-      // if(!this.id)
-      // {
-      //   this.id = uuid.v4();
-      // }
     }
 
     static async createTable()
