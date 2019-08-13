@@ -20,5 +20,9 @@ module.exports = {
     number: isSetDefault(process.env.TRAVELLING_PASSWORD_NUMBER, 0),
     lowercase: isSetDefault(process.env.TRAVELLING_PASSWORD_LOWERCASE, 1),
     uppercase: isSetDefault(process.env.TRAVELLING_PASSWORD_UPPERCASE, 0)
+  },
+  token: {
+    secret: isSetDefault(process.env.TRAVELLING_TOKEN_SECRET, null),
+    salt: isSetDefault(process.env.TRAVELLING_TOKEN_SALT, null)
   }
 }

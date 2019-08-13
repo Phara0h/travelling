@@ -15,6 +15,7 @@ const regex = {
         config.password.maxchar +
         '}$'),
 }
+const User = require('../../models/user');
 
 module.exports = function (app, opts, done) {
 
@@ -28,8 +29,7 @@ module.exports = function (app, opts, done) {
 
   app.post('/auth/register',(req, res) =>{
 
-    if(!req.body)
-    {
+    if(!req.body) {
       res.code(400).send({
         type: 'body-register-error',
         msg: 'No body sent with request)'
@@ -50,18 +50,6 @@ module.exports = function (app, opts, done) {
     }
     else if (regex.password.exec(password) == null)
     {
-      (config.password.consecutive ? '' : '(?!.*(.)\\1{1})') +
-      '(?=(.*[\\d]){' + config.password.number + ',})(?=(.*[a-z]){' +
-        config.password.lowercase +
-        ',})(?=(.*[A-Z]){' +
-        config.password.uppercase +
-        ',})(?=(.*[@#$%!]){' +
-        config.password.special +
-        ',})(?:[\\da-zA-Z@#$%!]){' +
-        config.password.minchar +
-        ',' +
-        config.password.maxchar;
-
       res.code(400).send(
       {
         type: 'password-register-error',
@@ -81,13 +69,48 @@ module.exports = function (app, opts, done) {
     }
     else
     {
-
       res.code(200).send(
         {
           msg: 'swag'
         });
 
-
+      // db.checkEmailExists(email, function(emailExists)
+      // {
+      //   if (emailExists)
+      //   {
+      //     return res.code(400).send(
+      //     {
+      //       type: 'duplicate-email-register-error',
+      //       msg: 'That email is already linked to an account. If you forgot your account details link "Forgot Password?" link'
+      //     });
+      //   }
+      //   else
+      //   {
+      //     db.checkAuth(username, password, function(user, err)
+      //     {
+      //       if (err && err.msg == "invalid password")
+      //       {
+      //         return res.code(400).send(
+      //         {
+      //           type: 'duplicate-username-register-error',
+      //           msg: 'That username is already in use, try too think of another one. If you forgot your account details link "Forgot Password?" link'
+      //         });
+      //       }
+      //       else if (err && err.msg == "invalid username")
+      //       {
+      //         createAccount(username, password, email, function(u)
+      //         {
+      //           log.info('New User Created: ' + u.username + ' | ' + req.connection.remoteAddress)
+      //           return login(u, req, res, next);
+      //         })
+      //       }
+      //       else
+      //       {
+      //         return login(user, req, \res, next);
+      //       }
+      //     });
+      //   }
+      // });
     }
   })
 

@@ -18,6 +18,8 @@ class User extends Base(BaseModel, 'users', {
       email: PGTypes.AutoCrypt,
       created_on: null,
       last_login: null,
+      client_id: null,
+      client_secret: PGTypes.Hash
   }) {
     constructor(...args) {
       super(...args);
@@ -41,6 +43,8 @@ class User extends Base(BaseModel, 'users', {
                 change_password numeric DEFAULT 0,
                 avatar text,
                 creation_on bigint,
+                client_id character varying(258),
+                client_secret character varying(258),
                 PRIMARY KEY (id)
               );`,
               variables: null,
