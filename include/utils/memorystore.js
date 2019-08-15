@@ -2,24 +2,21 @@
 
 class MemoryStore {
     constructor() {
-      this.sessions = {};
+        this.sessions = {};
     }
 
-    set(sessionId, session, callback)
-    {
-      this.sessions[sessionId] = session;
-      callback();
+    set(sessionId, session, callback) {
+        this.sessions[sessionId] = session;
+        callback();
     }
 
-    get(sessionId, callback)
-    {
-      callback(null,this.sessions[sessionId]);
+    get(sessionId, callback) {
+        callback(null, this.sessions[sessionId]);
     }
 
-    destroy(sessionId, callback)
-    {
-      delete this.sessions[sessionId];
-      callback();
+    destroy(sessionId, callback) {
+        delete this.sessions[sessionId];
+        callback();
     }
 
 }
