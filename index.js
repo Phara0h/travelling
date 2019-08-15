@@ -17,12 +17,16 @@ const fastifyCookie = require('fastify-cookie');
 const MemoryStore = require('./include/utils/memorystore');
 
 const PGConnecter = require('@abeai/node-utils').PGConnecter;
+
 const pg = new PGConnecter({
+  pg:{
     connectionString: process.env.DATABASE_URL,
+  },
+  crypto: require(config.pg.crypto.implementation)
 });
 
-const Group = require('./include/models/group');
-const User = require('./include/models/user');
+const Group = require('./include/database/models/group');
+const User = require('./include/database/models/user');
 
 const nstats = require('nstats')();
 
@@ -31,8 +35,7 @@ app.get('/travelling/_health', (req, res) => res.code(200).send('OK'));
 
 //nstats
 app.use((req,res,next)=>{
-  if(req.url.indexOf('/travelling/metrics') == -1 && req.url.indexOf('/travelling/_health') == -1)
-  {
+  if(req.url.indexOf('/travelling/metrics') == -1 && req.url.indexOf('/travelling/_health') == -1) {
     if(!nstats.httpServer)
     {
       nstats.httpServer = req.connection.server;
@@ -53,10 +56,11 @@ app.register(fastifySession,
   secret: config.cookie.secret,
   store: new MemoryStore(),
   cookie: {
+        expires: new Date(Date.now() + (config.token.expiration * 86400000)),
          secure: true,
          httpOnly: true,
        },
-  cookieName: 'trav:tok'
+  cookieName: 'trav:ssid'
 }); // @TODO Make configurable latter
 
 app.addHook('preHandler', (request, reply, next) => {
@@ -72,7 +76,7 @@ async function initDBTables()
 {
   await User.createTable();
   await Group.createTable();
-  app.listen(process.env.TRAVELLING_PORT)
+  app.listen(config.port,'0.0.0.0')
 
   console.log(`Travelling on port ${config.port}`);
 }

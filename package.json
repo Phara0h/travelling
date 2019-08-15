@@ -4,7 +4,8 @@
   "description": "A dynamic route level groups permissions middleman service",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "./scripts/start.sh"
   },
   "repository": {
     "type": "git",
@@ -24,11 +25,14 @@
   },
   "homepage": "https://github.com/abeai/travelling#readme",
   "dependencies": {
-    "@abeai/node-utils": "^2.0.0",
     "fasquest": "^1.0.0",
     "fastify": "^2.7.1",
     "fastify-cookie": "^3.0.2",
     "fastify-session": "^3.0.0",
     "nstats": "^2.1.5"
+  },
+  "devDependencies": {
+    "eslint": "^6.1.0",
+    "eslint-plugin-security": "^1.4.0"
   }
 }
