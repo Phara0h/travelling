@@ -20,15 +20,14 @@ class Token {
             var ip = req.ip;
             var dToken = await this.decrypt(tok);
             var cred = dToken.split(':');
-
-            if (cred[3] == ip && Date.now() - cred[2] < config.tokenExpiration * 86400000) // 90 days in millls
+            if (cred[3] == ip && (Date.now() - Number(cred[2]) < config.token.expiration * 86400000)) // 90 days in millls
             {
                 var user = await User.findAllBy({username: cred[0], password: cred[1]});
 
                 if (!user || user.length < 1) {
                     return false;
                 } else {
-                    return user[0];
+                    return await user[0].resolveGroup();
                 }
             } else {
                 this.removeAuthCookie(res);

@@ -3,6 +3,7 @@
 const BaseModel = require('@abeai/node-utils').PGActiveModel;
 const Base = require('@abeai/node-utils').Base;
 const PGTypes = require('@abeai/node-utils').PGTypes;
+const Group = require('./group');
 
 class User extends Base(BaseModel, 'users', {
     id: PGTypes.PK,
@@ -52,6 +53,12 @@ class User extends Base(BaseModel, 'users', {
                 variables: null,
             },
         ]);
+    }
+
+    async resolveGroup() {
+      var group = await Group.findById(this.group_id);
+      this.addProperty('group', group);
+      return this;
     }
 
 }

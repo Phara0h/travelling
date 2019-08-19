@@ -16,7 +16,9 @@
     "route",
     "permissions",
     "rest",
-    "groups"
+    "groups",
+    "gateway",
+    "api"
   ],
   "author": "Jt Whissel",
   "license": "GPL-2.0-only",
@@ -29,6 +31,7 @@
     "fastify": "^2.7.1",
     "fastify-cookie": "^3.0.2",
     "fastify-session": "^3.0.0",
+    "http-proxy": "^1.17.0",
     "nstats": "^2.1.5"
   },
   "devDependencies": {

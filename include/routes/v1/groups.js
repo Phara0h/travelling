@@ -13,6 +13,10 @@ module.exports = function(app, opts, done) {
                 });
         } else if (req.body.id || req.body.name) {
             req.body.name = req.body.name.toLowerCase();
+            if(!req.body.type){
+              req.body.type = 'group';
+            }
+            
 
             var id = req.body.id ? {id: req.body.id} : {name: req.body.name};
 
