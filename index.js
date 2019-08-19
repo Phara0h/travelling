@@ -94,6 +94,12 @@ app.register(require('./include/routes/v1/users'), {prefix: '/travelling/api/v1'
 app.register(require('./include/routes/v1/groups'), {prefix: '/travelling/api/v1'});
 app.register(require('./include/routes/v1/auth'), {prefix: '/travelling/api/v1'});
 
+app.register(require('fastify-static'), {
+  root: config.portal.filePath,
+  prefix: config.portal.path, // optional: default '/'
+})
+
+
 async function init() {
     await User.createTable();
     await Group.createTable();

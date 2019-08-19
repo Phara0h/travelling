@@ -21,7 +21,8 @@ const config = {
     },
     portal: {
       path: isSetDefault(process.env.TRAVELLING_PORTAL_PATH, '/travelling/portal/'),
-      host: isSetDefault(process.env.TRAVELLING_PORTAL_HOST, null)
+      host: isSetDefault(process.env.TRAVELLING_PORTAL_HOST, null),
+      filePath: isSetDefault(process.env.TRAVELLING_PORTAL_FILE_PATH, './client'),
     },
     proxy: {
       timeout: isSetDefault(Number(process.env.TRAVELLING_PROXY_TIMEOUT), 0)
