@@ -2,7 +2,6 @@
 
 var isSetDefault = function(v, d) {
 
-
     if(typeof v == 'number')
     {
       return (!Number.isNaN(v)) ? v : d;

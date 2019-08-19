@@ -103,43 +103,43 @@ class Database {
           var anon = await Group.create({
             name: "anonymous",
             type: "group",
-            allowed: [{
-              route: config.portal.path+'*',
-              host: config.portal.host,
-              removeFromPath: config.portal.path.slice(0, -1)
-            },
-            {
-              route: '/travelling/api/v1/auth/*',
-              host: null
-            },
-            {
-              route: '/travelling/api/v1/user/me/route/allowed',
-              host: null,
-              method: 'GET'
-            }],
+            allowed: [],
             is_default: false
           });
-
+          anon.addRoute({
+            route: config.portal.path+'*',
+            host: config.portal.host,
+            removeFromPath: config.portal.path.slice(0, -1)
+          });
+          anon.addRoute({
+            route: '/travelling/api/v1/auth/*',
+            host: null
+          })
+          anon.addRoute({
+            route: '/travelling/api/v1/user/me/route/allowed',
+            host: null,
+            method: 'GET'
+          });
+          await anon.save();
 
           router.groups[anon.name] = this.groupInheritedMerge(anon, grps);
 
           var admin = await Group.create({
             name: "superadmin",
             type: "group",
-            allowed: [
-            {
-              host: null,
-              route: '/travelling/*'
-            },
-            {
-              host: 'http://127.0.0.1:1237/',
-              route: '/*'
-            },
-          ],
+            allowed: [],
             is_default: true
           })
 
+          admin.addRoute({
+            host: null,
+            route: '/travelling/*'
+          });
+          await admin.save();
+
           router.groups[admin.name] = this.groupInheritedMerge(admin, grps);
+
+
 
           await router.updateGroupList();
           return true;

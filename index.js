@@ -12,6 +12,8 @@ const app = require('fastify')({
     logger: true,
     disableRequestLogging: true,
 });
+const fp = require('fastify-plugin')
+
 const fastifySession = require('fastify-session');
 const fastifyCookie = require('fastify-cookie');
 const MemoryStore = require('./include/utils/memorystore');
@@ -57,8 +59,7 @@ app.use((req, res, next)=>{
 app.register(fastifyCookie);
 
 // @TODO Make configurable latter rewrite this for a huge preformance increase.
-app.register(fastifySession,
-    {
+app.register(fastifySession,{
         secret: config.cookie.secret,
         store: new MemoryStore(),
         cookie: {
@@ -66,45 +67,48 @@ app.register(fastifySession,
             httpOnly: true,
         },
         cookieName: 'trav:ssid'
-    });
+});
 
 app.decorateRequest('checkLoggedIn', auth.checkLoggedIn);
 app.decorateRequest('logout', auth.logout);
 app.decorateRequest('isAuthenticated', false);
-
-app.register(function(app, opts, done){
-
-  app.all('/',(req,res)=>{
-    req.checkLoggedIn(req, res).then(auth=>{
-     req.isAuthenticated = auth;
-     router.routeUrl(req,res);
-   });
+app.addHook('preHandler',function(req, res, next) {
+  req.checkLoggedIn(req, res).then(auth=>{
+    req.isAuthenticated = auth.auth;
+    //console.log(auth)
+    if (auth.redirect) {
+        //console.log('redirect');
+        // redirect so it gets it session cookie set to bypass proxy
+        res.redirect(req.raw.url);
+    } else {
+      router.routeUrl(req,res).then(route=>{
+        if(!route){
+          //console.log('route next')
+          next();
+        }
+      });
+    }
   })
-
-  app.all('/*', (req,res)=>{
-    req.checkLoggedIn(req, res).then(auth=>{
-     req.isAuthenticated = auth;
-     router.routeUrl(req,res);
-   });
-  });
-
-  done();
 })
-app.register(require('./include/routes/v1/users'), {prefix: '/travelling/api/v1'});
-app.register(require('./include/routes/v1/groups'), {prefix: '/travelling/api/v1'});
-app.register(require('./include/routes/v1/auth'), {prefix: '/travelling/api/v1'});
+
+
+app.register(require('./include/routes/v1/users'), {prefix: '/travelling/api/v1', router});
+app.register(require('./include/routes/v1/groups'), {prefix: '/travelling/api/v1', router});
+app.register(require('./include/routes/v1/auth'), {prefix: '/travelling/api/v1', router});
 
 app.register(require('fastify-static'), {
   root: config.portal.filePath,
   prefix: config.portal.path, // optional: default '/'
 })
 
-
+app.ready(()=>{
+  console.log(app.printRoutes())
+})
 async function init() {
     await User.createTable();
     await Group.createTable();
     await Database.initGroups(router);
-
+    console.log(router.groups)
     app.listen(config.port, '0.0.0.0');
 
     console.log(`Travelling on port ${config.port}`);

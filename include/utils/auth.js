@@ -1,10 +1,10 @@
 const Token = require('./token');
 const config = require('./config');
 
-var checkLoggedIn = async function(req, res) {
+var checkLoggedIn = async (req, res)=> {
 
-    if(req.session.user) {
-      return true;
+    if(req.session && req.session.user) {
+      return {auth: true, redirect: false};
     }
 
     if(req.cookies['trav:tok']) {
@@ -12,30 +12,32 @@ var checkLoggedIn = async function(req, res) {
         var user = await Token.checkToken(req, res)
 
         if(!user) {
-          return false
+          return {auth: false, redirect: false}
         }
         req.session.user = user;
 
         config.log.logger.info('User Token Session Refreshed: ' + user.username + ' (' + user._.group.name + ')' + ' | ' + req.ip);
 
-        //redirect so it gets it session cookie set to bypass proxy
-        res.redirect(req.raw.url)
-        return true;
+        return {auth: true, redirect: true};
     }
-    return false;
+    return {auth: false, redirect: false};
 };
 
-var logout = function(req, res) {
-  req.destroySession(d=>{
-    res = Token.removeAuthCookie(res)
-    res.setCookie('trav:ssid', null, {
-      expires: Date.now(),
-      secure: true,
-      httpOnly: true,
-      path: '/'
-    })
-    res.code(200).send();
+var logout = (req, res) => {
+  req.session.user = null;
+  req.sessionStore.destroy(req.session.sessionId,()=>{
+
   });
+  Token.removeAuthCookie(res)
+  res.setCookie('trav:ssid', null, {
+    expires: Date.now(),
+    secure: true,
+    httpOnly: true,
+    path: '/'
+  })
+  req.isAuthenticated = false;
+  delete req.session;
+  res.code(200).send('Logged Out');
 }
 
 module.exports = {

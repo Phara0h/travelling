@@ -2,6 +2,8 @@ const httpProxy = require('http-proxy');
 const http = require('http');
 const https = require('https');
 const url = require('url');
+const fp = require('fastify-plugin')
+
 const config = require('../utils/config');
 const database = require('../database')
 const Group = require('../database/models/group');
@@ -65,7 +67,7 @@ class Router {
         var authenticated = req.isAuthenticated;
         var sessionUser = req.session.user;
 
-        var group = !authenticated ? this.groups['anonymous'] : this.groups[sessionUser.group.name];
+        var group = this.currentGroup(req,res);
 
         if (sessionUser && sessionUser.locked) {
             req.logout(req,res);
@@ -73,7 +75,6 @@ class Router {
         } else if (group) {
             // the route object
             var r = this.isRouteAllowed(req.raw.method, req.raw.url, group, sessionUser);
-
             if (r) {
                 // sets user id cookie every time to protect against tampering.
                 // res.cookie('travelling:aid', sessionUser._id);
@@ -82,11 +83,12 @@ class Router {
                 if (authenticated) {
                     req.headers['un'] = sessionUser.username;
                     req.headers['g'] = sessionUser.group.name;
+                    req.headers['perm'] = r.name;
                     req.headers['aid'] = sessionUser.id;
                 }
 
                 if (req.raw.url.indexOf('/travelling/') == 0) {
-                    return true;
+                    return false;
                 } else {
                     var target = {
                         target: this.transformRoute(sessionUser, r.host == null ? req.protocol + '://' + req.headers.host : r.host),
@@ -114,10 +116,11 @@ class Router {
                 }
                 if (config.log.requests) {
                     if (authenticated) {
-                        log.info(sessionUser.username + ' (' + sessionUser.group.name + ') | ' + req.ip + ' | [' + req.raw.method + '] ' + req.raw.url);
+                        log.info(sessionUser.username + ' (' + sessionUser.group.name + ') | ' + req.ip + ' | [' + req.raw.method + '] '+req.req.url+' -> ' + target.target);
                     } else {
-                        log.warn('Unregistered User' + ' (anonymous)' + ' | ' + req.ip + ' | [' + req.raw.method + '] ' + req.raw.url);
+                        log.warn('Unregistered User' + ' (anonymous)' + ' | ' + req.ip + ' | [' + req.raw.method + '] '+req.req.url+' -> ' + target.target);
                     }
+                    return true
                 }
             } else if (!authenticated) {
                 // if (req.raw.url.indexOf('api') > -1) {
@@ -128,14 +131,14 @@ class Router {
                 //}
 
                 if (config.log.unauthorizedAccess) {
-                    log.log('Unauthorized', 'Unregistered User' + ' (anonymous)' + ' | ' + req.ip + ' | [' + req.raw.method + '] ' + req.raw.url);
+                    log.log('Unauthorized', 'Unregistered User' + ' (anonymous)' + ' | ' + req.ip + ' | [' + req.raw.method + '] '+req.req.url);
                 }
 
             } else {
                 res.code(401).send('Access Denied');
 
                 if (config.log.unauthorizedAccess) {
-                  log.log('Unauthorized', sessionUser.username + ' (' + sessionUser.group.name + ') | ' + req.ip + ' | [' + req.raw.method + '] ' + req.raw.url);
+                  log.log('Unauthorized', sessionUser.username + ' (' + sessionUser.group.name + ') | ' + req.ip + ' | [' + req.raw.method + '] '+req.req.url);
                 }
             }
         } else {
@@ -143,16 +146,16 @@ class Router {
             req.session._backurl = req.raw.url;
             res.redirect(config.portal.path);
         }
-
-       return true;
     }
 
     isRouteAllowed(method, url, routes, user) {
 
         var surl = url.split('?')[0].split(/[\/]/g).filter(String);
+
         for (var i = 0; i < routes.length; i++) {
-            if (!routes[i].method || !method || method == routes[i].method) {
-                var route = this.transformRoute(user, routes[i].route).split(/[\/]/g).filter(String);
+
+            if (!routes[i].method || !method || method == routes[i].method || routes[i].method == '*') {
+                  var route = this.transformRoute(user, routes[i].route).split(/[\/]/g).filter(String);
                 if (route.length == surl.length || route.length <= surl.length + 1 && (route[route.length - 1] == '*' || route[0] == '*')) {
                     var allowed = true;
 
@@ -182,6 +185,19 @@ class Router {
         return false;
     };
 
+
+    isPermissionAllowed(perm,routes,user) {
+      var route = null;
+      for (var i = 0; i < routes.length; i++) {
+        if(routes[i].name == perm) {
+          route = routes[i];
+          break;
+        }
+      }
+
+      return !route ? false : this.isRouteAllowed(route.method,route.route, routes, user);
+    }
+
     transformRoute(user, route) {
         return route.replace(/(:id|:username|:email|:group)/g, (a, b, c)=>{
             var prop = '';
@@ -205,8 +221,11 @@ class Router {
             return prop;
         });
     }
+
+    currentGroup(req,res) {
+      return !req.isAuthenticated ? this.groups['anonymous'] : this.groups[req.session.user.group.name];
+    }
 }
 
 
 module.exports = Router;
-// module.exports = function(log, db, server, app){return new Routing(log, db, server, app)}; // if running into Hoisting issues use this, not fully tested though.

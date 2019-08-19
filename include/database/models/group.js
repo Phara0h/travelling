@@ -3,11 +3,21 @@
 const BaseModel = require('@abeai/node-utils').PGActiveModel;
 const Base = require('@abeai/node-utils').Base;
 const PGTypes = require('@abeai/node-utils').PGTypes;
-
+const pg = new (require('@abeai/node-utils').PGConnecter)();
 class Group extends Base(BaseModel, 'groups', {
     id: PGTypes.PK,
     name: null,
     type: null,
+    /**
+    allowed is an array of objects with this struct:
+    {
+        name: String, //needs to be unqiue
+        method: String,
+        removeFromPath: String,
+        route: String,
+        host: String
+    }
+    **/
     allowed: null,
     inherited: null,
     is_default: null,
@@ -46,15 +56,17 @@ class Group extends Base(BaseModel, 'groups', {
         route.method = route.method.toUpperCase();
 
         if (!route.name) {
-            route.name = (route.method == '*' ? 'all' : route.method) + '-' + route.route.replace(/\//g, '-');
+            route.name = (route.method == '*' ? 'all' : route.method) + route.route.replace(/\//g, '-');
         }
         route.name = route.name.toLowerCase();
 
-        if(!this.allowed) {
+        if(!this.allowed || this.allowed.length <= 0) {
           this.allowed = [];
         }
         this.allowed.push(route);
+          this.allowed = [...this.allowed]
     }
+
 }
 
 module.exports = Group;
