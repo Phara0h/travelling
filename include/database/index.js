@@ -43,7 +43,7 @@ class Database {
         if (user.password == await crypto.hash(password)) {
             user.failed_login_attempts = 0;
             await user.save();
-            user._.group = await Group.findById(user.group_id);
+            user.addProperty('group',await Group.findById(user.group_id))
 
             return {user, err: null};
         }
@@ -86,14 +86,88 @@ class Database {
             created_on: Date.now(),
             group_id: group[0].id
         });
-
-        user.group = group[0];
+        user.addProperty('group',group[0])
         return user;
     }
 
     static async getDefaultGroup() {
         return await Group.getDefaultGroup();
     }
+
+    static async initGroups(router) {
+
+        var grps = await Group.findAll();
+
+        if (grps.length == 0) {
+          // create default groups
+          var anon = await Group.create({
+            name: "anonymous",
+            type: "group",
+            allowed: [{
+              route: config.portal.path+'*',
+              host: config.portal.host,
+              removeFromPath: config.portal.path.slice(0, -1)
+            },
+            {
+              route: '/travelling/api/v1/auth/*',
+              host: null
+            },
+            {
+              route: '/travelling/api/v1/user/me/route/allowed',
+              host: null,
+              method: 'GET'
+            }],
+            is_default: false
+          });
+
+
+          router.groups[anon.name] = this.groupInheritedMerge(anon, grps);
+
+          var admin = await Group.create({
+            name: "superadmin",
+            type: "group",
+            allowed: [
+            {
+              host: null,
+              route: '/travelling/*'
+            },
+            {
+              host: 'http://127.0.0.1:1237/',
+              route: '/*'
+            },
+          ],
+            is_default: true
+          })
+
+          router.groups[admin.name] = this.groupInheritedMerge(admin, grps);
+
+          await router.updateGroupList();
+          return true;
+        }
+
+    await router.updateGroupList();
+    return false;
+  }
+
+  static groupInheritedMerge(group, groups) {
+    var nallowed = group.allowed ? [...group.allowed] : [];
+
+    if (group.inherited && group.inherited.length > 0) {
+      if(!group.inheritedGroups){
+        group.addProperty('inheritedGroups', [])
+      }
+      for (var i = 0; i < group.inherited.length; ++i) {
+          for (var j = 0; j < groups.length; ++j) {
+            if (groups[j].id == group.inherited[i].id) {
+              group.inheritedGroups[i] = groups[j];
+              break;
+            }
+          }
+        nallowed.push(...this.groupInheritedMerge(group.inherited[i], groups));
+      }
+    }
+    return nallowed;
+  }
 }
 
 module.exports = Database;

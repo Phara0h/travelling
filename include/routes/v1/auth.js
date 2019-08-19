@@ -1,29 +1,15 @@
 const config = require('../../utils/config');
-const regex = {
-    email: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    username: new RegExp(`^[A-Za-z0-9_.]{${config.username.minchar},}`),
-    password: new RegExp('^' + (config.password.consecutive ? '' : '(?!.*(.)\\1{1})')
-        + '(?=(.*[\\d]){' + config.password.number + ',})(?=(.*[a-z]){'
-        + config.password.lowercase
-        + ',})(?=(.*[A-Z]){'
-        + config.password.uppercase
-        + ',})(?=(.*[@#$%!]){'
-        + config.password.special
-        + ',})(?:[\\da-zA-Z@#$%!\\^\\&\\*\\(\\)]){'
-        + config.password.minchar
-        + ','
-        + config.password.maxchar
-        + '}$'),
-};
+const regex = require('../../utils/regex');
+
 const Database = require('../../database');
 const Token = require('../../utils/token');
+
 
 var login = async function(user,req, res) {
 
     user.last_login = {
         date: Date.now(),
-        ip: req.ip,
-        sessionId: req.sessionID
+        ip: req.ip
       }
 
     user.failed_login_attempts = 0;
@@ -32,7 +18,7 @@ var login = async function(user,req, res) {
     res = await Token.newTokenInCookie(user.username, user.password, req, res);
     req.session.user = user;
 
-    config.log.info('User Logged in: ' + user.username + ' (' + user._.group.name + ')' + ' | ' + req.ip);
+    config.log.logger.info('User Logged in: ' + user.username + ' (' + user.group.name + ')' + ' | ' + req.ip);
 
     if (req.session._backurl) {
       res.redirect(req.session._backurl);
@@ -44,27 +30,12 @@ var login = async function(user,req, res) {
     }
  };
 
-var checkLoggedIn = async function(req, res) {
-    if(req.session.user) {
-      return true;
-    }
-
-    if(req.cookies['trav:tok']) {
-        var user = await Token.checkToken(req, res)
-        if(!user) {
-          return false
-        }
-        res.session.user = user;
-        config.log.info('User Token Session Refreshed: ' + user.username + ' (' + user._.group.name + ')' + ' | ' + req.ip);
-        return true;
-    }
-};
 
 module.exports = function(app, opts, done) {
 
     app.post('/auth/login', (req, res) => {
 
-      if(checkLoggedIn(req,res))
+      if(req.isAuthenticated)
       {
         res.code(200).send(
         {
@@ -76,7 +47,7 @@ module.exports = function(app, opts, done) {
         if (!req.body) {
             res.code(400).send({
                 type: 'body-login-error',
-                msg: 'No body sent with request)',
+                msg: 'No body sent with request',
             });
         }
 
@@ -101,7 +72,7 @@ module.exports = function(app, opts, done) {
         Database.checkAuth(username, email, req.body.password).then(user=>{
           login(user.user, req, res);
         }).catch(e=>{
-          res.code(400).sned({
+          res.code(400).send({
               type: 'login-error',
               msg: 'Invalid login',
           })
@@ -111,22 +82,12 @@ module.exports = function(app, opts, done) {
     });
 
     app.get('/auth/logout', (req, res) =>{
-        req.destroySession(d=>{
-          res = Token.removeAuthCookie(res)
-          res.setCookie('trav:ssid', null, {
-            expires: Date.now(),
-            secure: true,
-            httpOnly: true,
-            path: '/'
-          })
-          res.code(200).send();
-        });
-
+        req.logout(req,res);
     });
 
     app.post('/auth/register', async (req, res) =>{
 
-        if(await checkLoggedIn(req,res))
+        if(req.isAuthenticated)
         {
           res.code(200).send(
           {
@@ -195,7 +156,7 @@ module.exports = function(app, opts, done) {
                 } else {
                     var user = await Database.createAccount(username, password, email);
 
-                    config.log.info('New User Created: ' + user.username + ' | ' + req.connection);
+                    config.log.logger.info('New User Created: ' + user.username + ' | ' + req.connection);
                     login(user, req, res);
                 }
             });
