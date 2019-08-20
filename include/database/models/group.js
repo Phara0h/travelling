@@ -49,22 +49,30 @@ class Group extends Base(BaseModel, 'groups', {
         return await this.findLimtedBy({is_default: true}, 'AND', 1);
     }
 
-    async addRoute(route) {
+    addRoute(route) {
         if (!route.method) {
             route.method = '*';
         }
         route.method = route.method.toUpperCase();
 
         if (!route.name) {
-            route.name = (route.method == '*' ? 'all' : route.method) + route.route.replace(/\//g, '-');
+            route.name = route.method + route.route.replace(/\//g, '-');
         }
         route.name = route.name.toLowerCase();
 
         if(!this.allowed || this.allowed.length <= 0) {
           this.allowed = [];
         }
+
+        for (var i = 0; i < this.allowed.length; i++) {
+          if(this.allowed[i].name == route.name || this.allowed[i].route == route.route) {
+            return false;
+          }
+        }
+
         this.allowed.push(route);
-          this.allowed = [...this.allowed]
+        this.allowed = [...this.allowed]
+        return true;
     }
 
 }
