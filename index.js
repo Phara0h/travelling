@@ -12,7 +12,6 @@ const app = require('fastify')({
     logger: true,
     disableRequestLogging: true,
 });
-const fp = require('fastify-plugin')
 
 const fastifySession = require('fastify-session');
 const fastifyCookie = require('fastify-cookie');
@@ -58,7 +57,7 @@ app.use((req, res, next)=>{
 
 app.register(fastifyCookie);
 
-// @TODO Make configurable latter rewrite this for a huge preformance increase.
+// @TODO later rewrite this for a huge preformance increase.
 app.register(fastifySession,{
         secret: config.cookie.secret,
         store: new MemoryStore(),
@@ -94,7 +93,7 @@ app.register(require('./include/routes/v1/auth'), {prefix: '/travelling/api/v1',
 
 app.register(require('fastify-static'), {
   root: config.portal.filePath,
-  prefix: config.portal.path, // optional: default '/'
+  prefix: config.portal.path,
 })
 
 app.ready(()=>{

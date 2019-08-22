@@ -4,6 +4,7 @@ const BaseModel = require('@abeai/node-utils').PGActiveModel;
 const Base = require('@abeai/node-utils').Base;
 const PGTypes = require('@abeai/node-utils').PGTypes;
 const pg = new (require('@abeai/node-utils').PGConnecter)();
+
 class Group extends Base(BaseModel, 'groups', {
     id: PGTypes.PK,
     name: null,
