@@ -54,9 +54,15 @@ const config = {
         crypto: {
             implementation: isSetDefault(process.env.TRAVELLING_PG_CRYPTO_IMPLEMENTATION, './include/utils/cryptointerface'),
             secret: isSetDefault(process.env.TRAVELLING_PG_CRYPTO_IMPLEMENTATION_SECRET, null),
-            salt: isSetDefault(process.env.TRAVELLING_PG_CRYPTO_IMPLEMENTATION_SALT, null)
+            salt: isSetDefault(process.env.TRAVELLING_PG_CRYPTO_IMPLEMENTATION_SALT, null),
+            encryptUserData: isSetDefault(Boolean(process.env.TRAVELLING_PG_CRYPTO_ENCRYPT_USER_DATA), false)
         },
     },
+    email: {
+      recovery : {
+        expiration: isSetDefault(Number(process.env.TRAVELLING_EMAIL_RECOVERY_EXPIRATION), 900) //seconds
+      }
+    }
 };
 
 module.exports = config;

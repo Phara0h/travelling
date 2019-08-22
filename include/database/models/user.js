@@ -4,6 +4,7 @@ const BaseModel = require('@abeai/node-utils').PGActiveModel;
 const Base = require('@abeai/node-utils').Base;
 const PGTypes = require('@abeai/node-utils').PGTypes;
 const Group = require('./group');
+const config = require('../../utils/config');
 
 class User extends Base(BaseModel, 'users', {
     id: PGTypes.PK,
@@ -21,6 +22,8 @@ class User extends Base(BaseModel, 'users', {
     last_login: null,
     client_id: null,
     client_secret: PGTypes.Hash,
+    client_refresh: PGTypes.Hash,
+    user_data: config.pg.crypto.encryptUserData ? PGTypes.AutoCrypt : null
 }) {
     constructor(...args) {
         super(...args);
@@ -43,11 +46,15 @@ class User extends Base(BaseModel, 'users', {
                 group_id serial,
                 failed_login_attempts int DEFAULT 0,
                 change_username boolean DEFAULT false,
-                change_password int DEFAULT 0,
+                change_password boolean DEFAULT false,
+                reset_password_token varying(258),
                 avatar text,
                 created_on bigint,
                 client_id character varying(258),
                 client_secret character varying(258),
+                client_refresh character varying(258),
+                user_data text,
+                __user_data character varying(258),
                 PRIMARY KEY (id)
               );`,
                 variables: null,

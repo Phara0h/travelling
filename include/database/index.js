@@ -5,6 +5,7 @@ const User = require('./models/user');
 
 const crypto = require('../utils/cryptointerface');
 const config = require('../utils/config');
+const Email = require('../utils/email');
 
 class Database {
     constructor() {
@@ -88,6 +89,33 @@ class Database {
         });
         user.addProperty('group',group[0])
         return user;
+    }
+
+    static async forgotPassword(email) {
+      var user = await User.findLimtedBy(email,'AND',1);
+      if(user && user.length > 0) {
+        user = user[0];
+
+        var rt = await Email.getRecoveryToken();
+        user.reset_password_token = rt.secret;
+        await user.save();
+
+        // @TODO send the email;
+        Email.sendPasswordRecovery(user.email, rt.token);
+      }
+    }
+
+    static async resetPassword(token, password) {
+      var user = await User.findLimtedBy({reset_password_token:token},'AND',1);
+      if(!user || user.length < 1) {
+        return false;
+      }
+
+      user = user[0]
+      user.password = password;
+      user.reset_password_token = null;
+      await user.save();
+      return true;
     }
 
     static async getDefaultGroup() {
