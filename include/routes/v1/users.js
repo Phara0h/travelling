@@ -6,7 +6,7 @@ module.exports = function(app, opts, done) {
 
     var getUser = async (req, res, resolveGroup = false) => {
 
-        if (req.params.username && !regex.safeName.exec(req.params.username) || req.params.id && Number.isNaN(req.params.id)) {
+        if ((req.params.username && !regex.safeName.exec(req.params.username)) || (req.params.id && Number.isNaN(req.params.id))) {
             res.code(400);
             return {
                 type: 'user-find-by-error',

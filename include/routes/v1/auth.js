@@ -160,7 +160,7 @@ module.exports = function(app, opts, done) {
             });
         } else {
             res.code(200).send();
-            Database.forgotPassword(req.body.email);
+            Database.forgotPassword(req.body.email, req.ip);
         }
     });
 
@@ -177,7 +177,6 @@ module.exports = function(app, opts, done) {
                   + config.password.special + 'special character/s. ',
             });
         } else {
-          console.log(req.query.token)
             var token = await Email.checkRecoveryToken(req.query.token);
 
             if (!token) {
@@ -188,7 +187,6 @@ module.exports = function(app, opts, done) {
             } else
             {
               var cPassword = await Database.resetPassword(token, req.body.password);
-              console.log(cPassword)
               if (cPassword) {
                 res.code(200).send();
             } else {
