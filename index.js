@@ -34,6 +34,7 @@ const Router = require('./include/server/router');
 const router = new Router(app.server);
 
 const auth = require('./include/utils/auth');
+const Email = require('./include/utils/email');
 
 const nstats = require('nstats')();
 
@@ -103,6 +104,7 @@ async function init() {
     await User.createTable();
     await Group.createTable();
     await Database.initGroups(router);
+    await Email.init();
     app.listen(config.port, '0.0.0.0');
 
     console.log(`Travelling on port ${config.port}`);
