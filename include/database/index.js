@@ -92,12 +92,13 @@ class Database {
     }
 
     static async forgotPassword(email) {
-      var user = await User.findLimtedBy(email,'AND',1);
+      var user = await User.findLimtedBy({email:email},'AND',1);
       if(user && user.length > 0) {
         user = user[0];
 
         var rt = await Email.getRecoveryToken();
         user.reset_password_token = rt.secret;
+        console.log(user)
         await user.save();
 
         // @TODO send the email;

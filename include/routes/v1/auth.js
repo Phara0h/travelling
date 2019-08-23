@@ -3,7 +3,7 @@ const regex = require('../../utils/regex');
 
 const Database = require('../../database');
 const Token = require('../../utils/token');
-
+const Email = require('../../utils/email');
 var login = async function(user, req, res) {
     /** *
       @TODO add check to ip to see if they are differnt then email the user of possible
@@ -152,7 +152,7 @@ module.exports = function(app, opts, done) {
         }
     });
 
-    app.put('/auth/forgot/password', async (req, res) =>{
+    app.put('/auth/password/forgot', async (req, res) =>{
         if (regex.email.exec(req.body.email) == null) {
             res.code(400).send({
                 type: 'email-error',
@@ -164,8 +164,8 @@ module.exports = function(app, opts, done) {
         }
     });
 
-    app.put('/auth/password/reset/:token', async (req, res) =>{
-        if (regex.password.exec(password) == null) {
+    app.put('/auth/password/reset', async (req, res) =>{
+        if (regex.password.exec(req.body.password) == null) {
             res.code(400).send({
                 type: 'password-reset-error',
                 msg: 'Minimum ' + config.password.minchar + ' characters '
@@ -177,14 +177,19 @@ module.exports = function(app, opts, done) {
                   + config.password.special + 'special character/s. ',
             });
         } else {
-            var token = await Email.checkRecoveryToken(req.params.token);
+          console.log(req.query.token)
+            var token = await Email.checkRecoveryToken(req.query.token);
 
             if (!token) {
                 res.code(400).send({
                     type: 'password-reset-token-error',
                     msg: 'Token is invaild, please click on forgot password again.',
                 });
-            } else if (await Database.resetPassword(req.params.token, req.body.password) == true) {
+            } else
+            {
+              var cPassword = await Database.resetPassword(token, req.body.password);
+              console.log(cPassword)
+              if (cPassword) {
                 res.code(200).send();
             } else {
                 res.code(400).send({
@@ -192,6 +197,7 @@ module.exports = function(app, opts, done) {
                     msg: 'Token is invaild, please click on forgot password again.',
                 });
             }
+          }
 
         }
     });

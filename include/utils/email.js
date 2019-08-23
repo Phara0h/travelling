@@ -8,9 +8,8 @@ class Email {
 
     static async checkRecoveryToken(token) {
         try {
-            var dToken = (await Token.decrypt(token)).split('|');
-
-            if (Date.now() - Number(dToken[1]) < config.email.recovery.expiration * 1000) {
+          var dToken = (await Token.decrypt(token.replace(/-/g,'+').replace(/_/g,'\/'))).split('|');
+              if ((Date.now() - Number(dToken[1])) < config.email.recovery.expiration * 1000) {
                 return dToken.join('|'); // secret;
             }
             return false;
@@ -31,10 +30,14 @@ class Email {
 
                 secret = secret.toString('base64');
 
-                resolve({token: await Token.encrypt(secret), secret});
+                resolve({token: (await Token.encrypt(secret)).replace(/\+/g,'-').replace(/\//g,'_'), secret});
             });
         });
 
+    }
+
+    static sendPasswordRecovery(email, token) {
+      console.log(email,token)
     }
 
 }
