@@ -6,7 +6,7 @@ var isSetDefault = function(v, d) {
     }
     return (v !== null && v !== undefined) ? v : d;
 };
-console.log(process.env.TRAVELLING_EMAIL_TEST_ENABLE)
+
 const config = {
     port: isSetDefault(Number(process.env.TRAVELLING_PORT), 443),
     key: process.env.TRAVELLING_KEY,
@@ -26,6 +26,7 @@ const config = {
     },
     cookie: {
         secret: isSetDefault(process.env.TRAVELLING_COOKIE_SECRET, null),
+        expiration: isSetDefault(Number(process.env.TRAVELLING_COOKIE_EXPIRATION), 10) //seconds
     },
     username: {
       minchar:isSetDefault(Number(process.env.TRAVELLING_USERNAME_MINCHAR), 3),
@@ -57,12 +58,18 @@ const config = {
         },
     },
     email: {
+      from: isSetDefault(process.env.TRAVELLING_EMAIL_FROM, null),
       recovery : {
         expiration: isSetDefault(Number(process.env.TRAVELLING_EMAIL_RECOVERY_EXPIRATION), 900) //seconds
       },
+      activation: {
+          expiration: isSetDefault(Number(process.env.TRAVELLING_EMAIL_ACTIVATION_EXPIRATION), 86400) //seconds
+      },
       template: {
-        body:isSetDefault(process.env.TRAVELLING_EMAIL_TEMPLATE_BODY, './templates/email-body.html'),
-        subject: isSetDefault(process.env.TRAVELLING_EMAIL_TEMPLATE_SUBJECT, './templates/email-subject.html')
+        passwordResetBody:isSetDefault(process.env.TRAVELLING_EMAIL_RESET_PASSWORD_TEMPLATE_BODY, './templates/email-reset-password-body.html'),
+        passwordResetSubject: isSetDefault(process.env.TRAVELLING_EMAIL_RESET_PASSWOR_TEMPLATE_SUBJECT, './templates/email-reset-password-subject.html'),
+        activationBody:isSetDefault(process.env.TRAVELLING_EMAIL_ACTIVATION_TEMPLATE_BODY, './templates/email-activation-body.html'),
+        activationSubject: isSetDefault(process.env.TRAVELLING_EMAIL_ACTIVATION_TEMPLATE_SUBJECT, './templates/email-activation-subject.html')
       },
       test: {
         enable: isSetDefault(process.env.TRAVELLING_EMAIL_TEST_ENABLE == 'true', false)
@@ -82,9 +89,13 @@ const config = {
         }
       },
       aws : {
-        enable: isSetDefault(Boolean(process.env.TRAVELLING_EMAIL_AWS_ENABLE), false),
+        enable: isSetDefault(process.env.TRAVELLING_EMAIL_AWS_ENABLE  == 'true', false),
         config: isSetDefault(process.env.TRAVELLING_EMAIL_AWS_CONFIG, null),
       }
+    },
+    registration: {
+      requireEmailActivation: isSetDefault(process.env.TRAVELLING_REGISTRATION_REQUIRE_EMAIL_ACTIVATION  == 'true', false),
+      requireManualActivation: isSetDefault(process.env.TRAVELLING_REGISTRATION_REQUIRE_MANUAL_ACTIVATION  == 'true', false)
     }
 };
 

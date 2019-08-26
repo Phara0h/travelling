@@ -9,7 +9,7 @@ class Token {
     constructor() {
     }
 
-    static async checkToken(req, res) {
+    static async checkToken(req, res, router) {
         try {
             var tok = req.cookies['trav:tok'];
 
@@ -28,13 +28,14 @@ class Token {
                 if (!user || user.length < 1) {
                     return false;
                 } else {
-                    return await user[0].resolveGroup();
+                    return await user[0].resolveGroup(router);
                 }
             } else {
                 this.removeAuthCookie(res);
                 return false;
             }
         } catch (e) {
+          console.log(e)
             this.removeAuthCookie(res);
             return false;
         }
@@ -62,7 +63,7 @@ class Token {
 
     // password are the hashed password only!
     static async getToken(username, password, ip, date) {
-        return await this.encrypt(`${username}:${password}:${date.getTime()}:${ip}`).toString('base64');
+        return await this.encrypt(`${username}:${password}:${date.getTime()}:${ip}`);
     }
 
     // password are the hashed password only!

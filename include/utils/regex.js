@@ -17,5 +17,6 @@ module.exports =  {
         + ','
         + config.password.maxchar
         + '}$'),
-    safeName: new RegExp(`^[A-Za-z0-9_\/\?\-\@\#\$\%\!\^\&\*\.]{1,350}$`)
+    safeName: new RegExp(`^[A-Za-z0-9_\/\?\-\@\#\$\%\!\^\&\*\.]{1,350}$`),
+    base64Image: new RegExp('^(data:\\w+\\/[a-zA-Z\\+\\-\\.]+;base64,)(?:[A-Za-z0-9+\\/]{4})*(?:[A-Za-z0-9+\\/]{2}==|[A-Za-z0-9+\/]{3}=)?$','gi')
 }

@@ -13,7 +13,7 @@ const app = require('fastify')({
     disableRequestLogging: true,
 });
 
-const fastifySession = require('fastify-session');
+const fastifySession = require('fastify-good-sessions');
 const fastifyCookie = require('fastify-cookie');
 const MemoryStore = require('./include/utils/memorystore');
 
@@ -44,9 +44,11 @@ app.get('/travelling/_health', (req, res) => res.code(200).send('OK'));
 // nstats
 app.use((req, res, next)=>{
     if (req.url.indexOf('/travelling/metrics') == -1 && req.url.indexOf('/travelling/_health') == -1) {
+
         if (!nstats.httpServer) {
             nstats.httpServer = req.connection.server;
         }
+
         var sTime = process.hrtime.bigint();
 
         res.on('finish', () => {
@@ -59,31 +61,34 @@ app.use((req, res, next)=>{
 app.register(fastifyCookie);
 
 // @TODO later rewrite this for a huge preformance increase.
-app.register(fastifySession,{
+// Add removing tokens if user needs updated (removed, locked, etc)
+app.register(fastifySession, {
         secret: config.cookie.secret,
         store: new MemoryStore(),
         cookie: {
             secure: true,
             httpOnly: true,
+            maxAge: config.cookie.expiration * 1000
         },
-        cookieName: 'trav:ssid'
+        cookieName: 'trav:ssid',
+        saveUninitialized: false
 });
 
-app.decorateRequest('checkLoggedIn', auth.checkLoggedIn);
+app.decorateRequest('checkLoggedIn', async function(req,res){return await auth.checkLoggedIn(req,res,router)});
 app.decorateRequest('logout', auth.logout);
 app.decorateRequest('isAuthenticated', false);
 app.addHook('preHandler',function(req, res, next) {
   req.checkLoggedIn(req, res).then(auth=>{
     req.isAuthenticated = auth.auth;
-    if (auth.redirect) {
-        res.redirect(302,req.raw.url);
-    } else {
+    // if (auth.redirect) {
+    //     res.redirect(302,req.raw.url);
+    // } else {
       router.routeUrl(req,res).then(route=>{
         if(!route){
           next();
         }
       });
-    }
+    // }
   })
 })
 

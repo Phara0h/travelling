@@ -83,7 +83,7 @@ module.exports = function(app, opts, done) {
 
             var id = req.body.id ? {id: Number(req.body.id)} : {name: req.body.name};
 
-            var fgroup = await Group.findLimtedBy(id, 'AND', 1);
+            var fgroup = await router.getGroup(id);
 
             if (fgroup.length > 0) {
                 res.code(400).send(
@@ -122,7 +122,7 @@ module.exports = function(app, opts, done) {
                 });
         } else {
             var name = req.params.groupname.toLowerCase();
-            var fgroup = await Group.findLimtedBy({name}, 'AND', 1);
+            var fgroup = await router.getGroup(name);
 
             if (fgroup.length <= 0) {
                 res.code(400).send(
@@ -154,16 +154,15 @@ module.exports = function(app, opts, done) {
                 });
         } else {
             var name = req.params.groupname.toLowerCase();
-            var group = await Group.findLimtedBy({name}, 'AND', 1);
+            var group = await router.getGroup(name);
 
-            if (group.length <= 0) {
+            if (!group) {
                 res.code(400).send(
                     {
                         type: 'error',
                         msg: 'No group with the name or id already exists.',
                     });
             } else {
-                group = group[0];
 
                 if (group.addRoute(req.body)) {
                     await group.save();
@@ -180,15 +179,20 @@ module.exports = function(app, opts, done) {
     });
 
     app.get('/groups', async (req, res) => {
-        res.send(await Group.findAll());
+        res.send(await router.getGroups());
     });
 
     app.get('/groups/type/:type', async (req, res) => {
-        res.send(await Group.findAllBy({type:req.params.type}));
+        var groups = await router.getGroups();
+
+        res.send(groups.filter(e=>{
+          return e.type == req.params.type;
+        }));
     });
 
     app.get('/groups/types', async (req, res) => {
-        res.send(Array.from(new Set(router.unmergedGroups.map(g=> g.type))));
+        var groups = await router.getGroups();
+        res.send(Array.from(new Set(groups.map(g=> g.type))));
     });
 
     done();
