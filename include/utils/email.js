@@ -39,8 +39,10 @@ class Email {
             });
         }
         templates = {
-            body: Handlebars.compile(fs.readFileSync(require('path').resolve(config.email.template.body), 'utf-8')),
-            subject: Handlebars.compile(fs.readFileSync(require('path').resolve(config.email.template.subject), 'utf-8')),
+            resetPasswordBody: Handlebars.compile(fs.readFileSync(require('path').resolve(config.email.template.passwordResetBody), 'utf-8')),
+            resetPasswordSubject: Handlebars.compile(fs.readFileSync(require('path').resolve(config.email.template.passwordResetSubject), 'utf-8')),
+            activationBody: Handlebars.compile(fs.readFileSync(require('path').resolve(config.email.template.activationBody), 'utf-8')),
+            activationSubject: Handlebars.compile(fs.readFileSync(require('path').resolve(config.email.template.activationSubject), 'utf-8')),
         };
     }
 
@@ -74,16 +76,34 @@ class Email {
         });
     }
 
+
+    static async checkActivationToken(token) {
+        try {
+            var dToken = (await Token.decrypt(token.replace(/-/g, '+').replace(/_/g, '\/'))).split('|');
+            console.log(Date.now() - Number(dToken[1]), config.email.activation.expiration * 1000 )
+            if (Date.now() - Number(dToken[1]) < config.email.activation.expiration * 1000) {
+                return dToken.join('|'); // secret;
+            }
+            return false;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    static async getActivationToken() {
+        return await this.getRecoveryToken();
+    }
+
     static async sendPasswordRecovery(user, ip, email, token) {
 
         ip = await Fasquest.request({
             uri: `http://ip-api.com/json/${ip}?fields=status,country,regionName,city,isp,query`,
         });
-        var body = templates.body({user, ip, config, token});
-        var subject = templates.subject({user});
+        var body = templates.resetPasswordBody({user, ip, config, token});
+        var subject = templates.resetPasswordSubject({user});
 
         transporter.sendMail({
-            from: 'jolmodarta@desoz.com',
+            from: config.email.from,
             to: email,
             subject: subject,
             html: body,
@@ -93,6 +113,24 @@ class Email {
             }
         });
         config.log.logger.debug('Password Recovery For: ', email, token);
+    }
+
+    static async sendActivation(user, email, token) {
+
+        var body = templates.activationBody({user, config, token});
+        var subject = templates.activationSubject({user});
+
+        transporter.sendMail({
+            from: config.email.from,
+            to: email,
+            subject: subject,
+            html: body,
+        }, (e, r)=>{
+            if (e) {
+                config.log.logger.error(e);
+            }
+        });
+        config.log.logger.debug('Activation Email For: ', email, token);
     }
 }
 

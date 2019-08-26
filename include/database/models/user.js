@@ -5,6 +5,7 @@ const Base = require('@abeai/node-utils').Base;
 const PGTypes = require('@abeai/node-utils').PGTypes;
 const Group = require('./group');
 const config = require('../../utils/config');
+const regex = require('../../utils/regex');
 
 class User extends Base(BaseModel, 'users', {
     id: PGTypes.PK,
@@ -17,6 +18,7 @@ class User extends Base(BaseModel, 'users', {
     change_username: null,
     change_password: null,
     reset_password_token: null,
+    email_verify_token: null,
     group_id: null,
     email: PGTypes.AutoCrypt,
     created_on: null,
@@ -24,7 +26,8 @@ class User extends Base(BaseModel, 'users', {
     client_id: null,
     client_secret: PGTypes.Hash,
     client_refresh: PGTypes.Hash,
-    user_data: config.pg.crypto.encryptUserData ? PGTypes.AutoCrypt : null
+    user_data: config.pg.crypto.encryptUserData ? PGTypes.AutoCrypt : null,
+    eprofile: PGTypes.EncryptProfile
 }) {
     constructor(...args) {
         super(...args);
@@ -49,13 +52,15 @@ class User extends Base(BaseModel, 'users', {
                 change_username boolean DEFAULT false,
                 change_password boolean DEFAULT false,
                 reset_password_token character varying(350),
-                avatar text,
+                email_verify_token character varying(350),
+                avatar bytea,
                 created_on bigint,
                 client_id character varying(258),
                 client_secret character varying(258),
                 client_refresh character varying(258),
-                user_data text,
+                user_data bytea,
                 __user_data character varying(258),
+                eprofile character varying(350),
                 PRIMARY KEY (id)
               );`,
                 variables: null,
@@ -63,10 +68,28 @@ class User extends Base(BaseModel, 'users', {
         ]);
     }
 
-    async resolveGroup() {
-      var group = await Group.findById(this.group_id);
-      this.addProperty('group', group);
+    async resolveGroup(router) {
+      var group = router ? await router.getGroup(this.group_id) : await Group.findById(this.group_id);
+      if(!this.group) {
+        this.addProperty('group', group);
+      }
+      else {
+        this.group = group;
+      }
+
       return this;
+    }
+
+
+    toJSON() {
+      var u = {...this._};
+      if(u.avatar != null) {
+        u.avatar = u.avatar.toString('utf8')
+      }
+      if(u.user_data != null) {
+        u.user_data = JSON.parse(u.user_data.toString('utf8'));
+      }
+        return u;
     }
 
 }

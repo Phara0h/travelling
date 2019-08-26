@@ -39,6 +39,7 @@ class Group extends Base(BaseModel, 'groups', {
                 allowed json[],
                 inherited character varying(350)[],
                 is_default boolean DEFAULT false,
+                eprofile character varying(350),
                 PRIMARY KEY (id)
               );`,
                 variables: null,

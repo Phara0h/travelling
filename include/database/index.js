@@ -28,6 +28,14 @@ class Database {
           };
         }
 
+        // Regenerate new email with token for activation
+        if(user.email_verify_token != null && user.locked) {
+          var token = await Email.getActivationToken();
+          user.email_verify_token = token.secret;
+          await Email.sendActivation(user, user.email,token.token)
+        }
+
+
         //Locked check
         user = user[0];
         if (user.locked) {
@@ -75,19 +83,34 @@ class Database {
 
     }
 
-    static async createAccount(username, password, email) {
-        var group = await Database.getDefaultGroup();
-
-        var user = await User.create({
+    static async createAccount(username, password, email, group_id) {
+        var userProp = {
             change_username: false,
-            change_password: 0,
+            change_password: false,
             username: username.toLowerCase(),
             password: password,
             email: email,
             created_on: Date.now(),
-            group_id: group[0].id
-        });
-        user.addProperty('group',group[0])
+            group_id: group_id
+        };
+
+        if(config.registration.requireManualActivation) {
+          userProp.locked = true;
+          userProp.locked_reason = 'Activation Required, email your admin to get your account activated'
+        }
+
+        var user = await User.create(userProp);
+
+        if(config.registration.requireEmailActivation) {
+          user.locked = true;
+          user.locked_reason = 'Activation Required, check your email for the activation link.'
+          var token = await Email.getActivationToken();
+          user.email_verify_token = token.secret;
+          await Email.sendActivation(user, user.email,token.token)
+          await user.save();
+        }
+
+        //user.addProperty('group',group[0])
         return user;
     }
 
@@ -117,6 +140,24 @@ class Database {
       await user.save();
       return true;
     }
+
+    static async activateAccount(token) {
+      console.log(token)
+      var user = await User.findLimtedBy({email_verify_token:token},'AND',1);
+      if(!user || user.length < 1) {
+        return false;
+      }
+
+      user = user[0]
+
+      user.email_verify_token = null;
+      user.locked = false;
+      user.locked_reason = null;
+      await user.save();
+      return true;
+    }
+
+
 
     static async getDefaultGroup() {
         return await Group.getDefaultGroup();

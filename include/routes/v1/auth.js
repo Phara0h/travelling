@@ -4,6 +4,9 @@ const regex = require('../../utils/regex');
 const Database = require('../../database');
 const Token = require('../../utils/token');
 const Email = require('../../utils/email');
+
+const {checkVaildUser} = require('../../utils/user');
+
 var login = async function(user, req, res) {
     /** *
       @TODO add check to ip to see if they are differnt then email the user of possible
@@ -18,12 +21,19 @@ var login = async function(user, req, res) {
     await user.save();
 
     res = await Token.newTokenInCookie(user.username, user.password, req, res);
-    req.session.user = user;
+    req.createSession(user.id, {user});
 
     config.log.logger.info('User Logged in: ' + user.username + ' (' + user.group.name + ')' + ' | ' + req.ip);
 
-    if (req.session._backurl) {
-        res.redirect(req.session._backurl);
+    if (req.cookies['trav:backurl']) {
+        var url = req.cookies['trav:backurl'];
+        res.setCookie('trav:backurl', null, {
+          expires: Date.now(),
+          secure: true,
+          httpOnly: true,
+          path: '/'
+        })
+        res.redirect(url);
     } else {
         res.code(200).send({
             msg: 'Access Granted',
@@ -32,8 +42,9 @@ var login = async function(user, req, res) {
 };
 
 module.exports = function(app, opts, done) {
+    const router = opts.router;
 
-    app.post('/auth/login', (req, res) => {
+    app.put('/auth/login', async (req, res) => {
 
         if (req.isAuthenticated) {
             res.code(200).send({
@@ -50,31 +61,27 @@ module.exports = function(app, opts, done) {
             var username;
             var email;
 
-            if (regex.password.exec(req.body.password) == null) {
-                res.code(400).sned({
-                    type: 'login-error',
-                    msg: 'Invalid login',
+            if (req.body.username) {
+                username = req.body.username = req.body.username.toLowerCase();
+            }
+            if (req.body.email) {
+                email = req.body.email = req.body.email.toLowerCase();
+            }
+            var isVaild = await checkVaildUser(req.body, false);
+
+            if (isVaild !== true) {
+                res.code(400).send(isVaild);
+            } else {
+                Database.checkAuth(username, email, req.body.password).then(user=>{
+                    login(user.user, req, res);
+                }).catch(e=>{
+                    res.code(400).send(e.err.type=='locked' ? e.err : {
+                        type: 'login-error',
+                        msg: 'Invalid login',
+                    });
                 });
             }
-
-            if (regex.username.exec(req.body.username.toLowerCase()) != null) {
-                username = req.body.username.toLowerCase();
-            }
-
-            if (regex.email.exec(req.body.email.toLowerCase()) != null) {
-                email = req.body.email.toLowerCase();
-            }
-
-            Database.checkAuth(username, email, req.body.password).then(user=>{
-                login(user.user, req, res);
-            }).catch(e=>{
-                res.code(400).send({
-                    type: 'login-error',
-                    msg: 'Invalid login',
-                });
-            });
         }
-
     });
 
     app.get('/auth/logout', (req, res) =>{
@@ -89,115 +96,85 @@ module.exports = function(app, opts, done) {
             });
         }
 
-        if (!req.body) {
-            res.code(400).send({
-                type: 'body-register-error',
-                msg: 'No body sent with request)',
-            });
-        }
+        var isVaild = await checkVaildUser(req.body);
 
-        var username = req.body.username.toLowerCase();
-        var password = req.body.password;
-        var email = req.body.email.toLowerCase();
-
-        if (regex.username.exec(username) == null) {
-            res.code(400).send({
-                type: 'username-register-error',
-                msg: `Minimum ${config.password.minchar} characters and only have these characters (A-Z, a-z, 0-9, _)`,
-            });
-        } else if (regex.password.exec(password) == null) {
-            res.code(400).send({
-                type: 'password-register-error',
-                msg: 'Minimum ' + config.password.minchar + ' characters '
-                    + (config.password.consecutive ? '' : 'with no consecutive characters')
-                    + ', max of ' + config.password.maxchar + ' and at least '
-                    + config.password.number + ' Number, '
-                    + config.password.lowercase + ' lowercase, '
-                    + config.password.uppercase + ' uppercase and '
-                    + config.password.special + 'special character/s. ',
-            });
-        } else if (regex.email.exec(email) == null) {
-            res.code(400).send({
-                type: 'email-register-error',
-                msg: 'Must be a real email. (Used only for password recovery)',
-            });
+        if (isVaild !== true) {
+            res.code(400).send(isVaild);
         } else {
-            Database.checkAuth(username, email, password).then(user=>{
-                login(user.user, req, res);
-            }).catch(async e=>{
 
-                var err = e.err;
-                var user = e.user;
+            var username = req.body.username.toLowerCase();
+            var password = req.body.password;
+            var email = req.body.email.toLowerCase();
+            var dGroup = await router.defaultGroup();
+            var user = await Database.createAccount(username, password, email, dGroup.id);
 
-                if (user) {
-
-                    if (email == user.email) {
-                        res.code(400).send({
-                            type: 'duplicate-email-register-error',
-                            msg: 'That email is already linked to an account. If you forgot your account details click the "Forgot Password?" link',
-                        });
-                    } else {
-                        res.code(400).send({
-                            type: 'duplicate-username-register-error',
-                            msg: 'That username is already in use, try too think of another one. If you forgot your account details click the "Forgot Password?" link',
-                        });
-                    }
-                } else {
-                    var user = await Database.createAccount(username, password, email);
-
-                    config.log.logger.info('New User Created: ' + user.username + ' | ' + req.connection);
-                    login(user, req, res);
-                }
-            });
+            config.log.logger.info('New User Created: ' + user.username + ' | ' + req.connection);
+            res.code(200).send('Account Created');
         }
     });
 
-    app.put('/auth/password/forgot', async (req, res) =>{
-        if (regex.email.exec(req.body.email) == null) {
-            res.code(400).send({
-                type: 'email-error',
-                msg: 'Must be a real email. (Used only for password recovery)',
-            });
+    app.put('/auth/password/forgot', async (req, res) => {
+        var isVaild = checkVaildUser(req.body, false);
+
+        if (isVaild !== true) {
+            res.code(400).send(isVaild);
         } else {
             res.code(200).send();
             Database.forgotPassword(req.body.email, req.ip);
         }
     });
 
-    app.put('/auth/password/reset', async (req, res) =>{
-        if (regex.password.exec(req.body.password) == null) {
-            res.code(400).send({
-                type: 'password-reset-error',
-                msg: 'Minimum ' + config.password.minchar + ' characters '
-                  + (config.password.consecutive ? '' : 'with no consecutive characters')
-                  + ', max of ' + config.password.maxchar + ' and at least '
-                  + config.password.number + ' Number, '
-                  + config.password.lowercase + ' lowercase, '
-                  + config.password.uppercase + ' uppercase and '
-                  + config.password.special + 'special character/s. ',
-            });
-        } else {
-            var token = await Email.checkRecoveryToken(req.query.token);
+    app.put('/auth/password/reset', async (req, res) => {
+        var isVaild = checkVaildUser(req.body, false);
 
-            if (!token) {
-                res.code(400).send({
-                    type: 'password-reset-token-error',
-                    msg: 'Token is invaild, please click on forgot password again.',
-                });
-            } else
-            {
-              var cPassword = await Database.resetPassword(token, req.body.password);
-              if (cPassword) {
-                res.code(200).send();
-            } else {
-                res.code(400).send({
-                    type: 'password-reset-token-error',
-                    msg: 'Token is invaild, please click on forgot password again.',
-                });
-            }
-          }
-
+        if (isVaild !== true) {
+            res.code(400).send(isVaild);
+            return;
         }
+        var token = await Email.checkRecoveryToken(req.query.token);
+
+        if (!token) {
+            res.code(400).send({
+                type: 'password-reset-token-error',
+                msg: 'Token is invaild, please click on forgot password again.',
+            });
+            return;
+        }
+
+        var cPassword = await Database.resetPassword(token, req.body.password);
+
+        if (!cPassword) {
+            res.code(400).send({
+                type: 'password-reset-token-error',
+                msg: 'Token is invaild, please click on forgot password again.',
+            });
+            return;
+        }
+
+        res.code(200).send();
+    });
+
+    app.get('/auth/activate', async (req, res) => {
+        var token = await Email.checkActivationToken(req.query.token);
+
+        if(!token) {
+          res.code(400);
+          return {
+              type: 'activation-token-error',
+              msg: 'Token is invaild, please login again for a new activation link sent to your email.',
+          }
+        }
+
+        var isActivated = await Database.activateAccount(token);
+
+        if(!isActivated) {
+          return {
+              type: 'activation-token-error',
+              msg: 'Token is invaild, please login again for a new activation link sent to your email.',
+          }
+        }
+
+        return 'Account activated, please login.';
     });
 
     done();

@@ -18,7 +18,6 @@ class MemoryStore {
         delete this.sessions[sessionId];
         callback();
     }
-
 }
 
 module.exports = MemoryStore;

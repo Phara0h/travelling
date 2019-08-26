@@ -68,14 +68,14 @@ class Router {
     }
     async routeUrl(req, res) {
         var authenticated = req.isAuthenticated;
-        var sessionUser = req.session.user;
+        var sessionUser = req.session.data ? req.session.data.user : null;
 
         if(this.needsGroupUpdate) {
-          console.log('updating groups')
+          log.debug('updating groups')
           await this.updateGroupList();
         }
 
-        var group = this.currentGroup(req,res);
+        var group = await this.currentGroup(req,res);
 
         if (sessionUser && sessionUser.locked) {
             req.logout(req,res);
@@ -134,7 +134,12 @@ class Router {
                 // if (req.raw.url.indexOf('api') > -1) {
                 //     res.code(401).send('Access Denied');
                 // } else {
-                    req.session._backurl = req.raw.url;
+                res.setCookie('trav:backurl', req.raw.url, {
+                  expires: new Date(Date.now() + 240000),
+                  secure: true,
+                  httpOnly: true,
+                  path: '/'
+                });
                     res.redirect(config.portal.path);
                 //}
 
@@ -151,7 +156,11 @@ class Router {
             }
         } else {
             await this.updateGroupList();
-            req.session._backurl = req.raw.url;
+            res.setCookie('trav:backurl', req.raw.url, {
+              secure: true,
+              httpOnly: true,
+              path: '/'
+            });
             res.redirect(config.portal.path);
         }
     }
@@ -241,8 +250,67 @@ class Router {
         });
     }
 
-    currentGroup(req,res) {
-      return !req.isAuthenticated ? this.groups['anonymous'] : this.groups[req.session.user.group.name];
+    async currentGroup(req,res) {
+
+      if(this.needsGroupUpdate) {
+        log.debug('updating groups')
+        await this.updateGroupList();
+      }
+
+      return !req.isAuthenticated ? this.groups['anonymous'] : this.groups[req.session.data.user.group.name];
+    }
+
+    async defaultGroup() {
+
+      if(this.needsGroupUpdate) {
+        log.debug('updating groups')
+        await this.updateGroupList();
+      }
+
+      for (var i = 0; i < this.unmergedGroups.length; i++) {
+          if(this.unmergedGroups[i].is_default) {
+            return this.unmergedGroups[i];
+          }
+      }
+    }
+
+    async getGroup(id) {
+
+      if(this.needsGroupUpdate) {
+        log.debug('updating groups')
+        await this.updateGroupList();
+      }
+
+      for (var i = 0; i < this.unmergedGroups.length; i++) {
+          if(this.unmergedGroups[i].id == id || this.unmergedGroups[i].name == id) {
+            return this.unmergedGroups[i];
+          }
+      }
+      return null;
+    }
+
+    async getGroupByType(type) {
+
+      if(this.needsGroupUpdate) {
+        log.debug('updating groups')
+        await this.updateGroupList();
+      }
+
+      for (var i = 0; i < this.unmergedGroups.length; i++) {
+          if(this.unmergedGroups[i].type == type) {
+            return this.unmergedGroups[i];
+          }
+      }
+    }
+
+    async getGroups() {
+
+      if(this.needsGroupUpdate) {
+        log.debug('updating groups')
+        await this.updateGroupList();
+      }
+
+      return this.unmergedGroups;
     }
 }
 
