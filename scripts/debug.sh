@@ -1,4 +1,4 @@
 #!/bin/bash
 export $(sed -e '/^#/d' .env | xargs)
 
-node index.js
+node --inspect index.js

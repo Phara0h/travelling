@@ -96,6 +96,11 @@ class Router {
                 }
 
                 if (req.raw.url.indexOf('/travelling/') == 0) {
+                  if (config.log.requests) {
+                      if (authenticated) {
+                          log.info(sessionUser.username + ' (' + sessionUser.group.name + ') | ' + req.ip + ' | [' + req.raw.method + '] '+req.req.url);
+                      }
+                    }
                     return false;
                 } else {
                     var target = {
@@ -155,6 +160,7 @@ class Router {
                 }
             }
         } else {
+          console.log('LSKDJFLKSDFJLKSIDJFl')
             await this.updateGroupList();
             res.setCookie('trav:backurl', req.raw.url, {
               secure: true,

@@ -5,18 +5,33 @@ class MemoryStore {
         this.sessions = {};
     }
 
-    set(sessionId, session, callback) {
+    async set(sessionId, session, callback) {
         this.sessions[sessionId] = session;
-        callback();
+  //console.log('Set: ', this.sessions[sessionId])
+        if(callback) {
+          callback();
+        }
+
+        return this.sessions[sessionId];
+
     }
 
-    get(sessionId, callback) {
+    async get(sessionId, callback) {
+            //console.trace('Get: ', this.sessions[sessionId])
+      if(callback) {
         callback(null, this.sessions[sessionId]);
+      }
+
+      return this.sessions[sessionId];
     }
 
-    destroy(sessionId, callback) {
+    async destroy(sessionId, callback) {
+  //console.trace('Destory: ', this.sessions[sessionId])
         delete this.sessions[sessionId];
-        callback();
+        if(callback) {
+          callback();
+        }
+
     }
 }
 
