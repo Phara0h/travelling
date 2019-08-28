@@ -4,6 +4,9 @@ const config = require('./config');
 var checkLoggedIn = async (req, res, router)=> {
 
     if(req.session && req.session.data && req.session.data.user) {
+      if(req.session.data.user.locked) {
+        return {auth: false, redirect: false}
+      }
       return {auth: true, redirect: false};
     }
 
@@ -11,9 +14,10 @@ var checkLoggedIn = async (req, res, router)=> {
 
         var user = await Token.checkToken(req, res, router)
 
-        if(!user) {
+        if(!user || user.locked) {
           return {auth: false, redirect: false}
         }
+
         user.resolveGroup(router);
         req.createSession(user.id, {user});
 

@@ -2,6 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const config = require('./include/utils/config');
 
+config.log.logger = require(config.log.logger);
+
+
 const app = require('fastify')({
     http2: true,
     https: {
@@ -9,7 +12,7 @@ const app = require('fastify')({
         key: fs.readFileSync(path.join(__dirname, config.key)),
         cert: fs.readFileSync(path.join(__dirname, config.cert))
     },
-    logger: true,
+    logger: config.log.fastifyLogger,
     disableRequestLogging: true,
 });
 
@@ -103,15 +106,21 @@ app.register(require('fastify-static'), {
 })
 
 app.ready(()=>{
-  console.log(app.printRoutes())
+  config.log.logger.debug(app.printRoutes())
 })
 async function init() {
+  try {
     await User.createTable();
     await Group.createTable();
+  } catch (e) {
+
+  }
+
     await Database.initGroups(router);
     await Email.init();
     app.listen(config.port, '0.0.0.0');
 
-    console.log(`Travelling on port ${config.port}`);
+    config.log.logger.info(`Travelling on port ${config.port}`);
 }
-init();
+
+module.exports = init();

@@ -68,7 +68,7 @@ module.exports = function(app, opts, done) {
     const router = opts.router;
 
     // Add Group
-    app.put('/group', async (req, res) => {
+    app.post('/group', async (req, res) => {
         if (!req.body.name) {
             res.code(400).send(
                 {

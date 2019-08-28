@@ -95,6 +95,10 @@ class Email {
     }
 
     static async sendPasswordRecovery(user, ip, email, token) {
+        if(!transporter) {
+          config.log.logger.debug('Password Recovery For: ', email, token);
+          return;
+        }
 
         ip = await Fasquest.request({
             uri: `http://ip-api.com/json/${ip}?fields=status,country,regionName,city,isp,query`,
@@ -112,25 +116,29 @@ class Email {
                 config.log.logger.error(e);
             }
         });
-        config.log.logger.debug('Password Recovery For: ', email, token);
+
     }
 
     static async sendActivation(user, email, token) {
 
-        var body = templates.activationBody({user, config, token});
-        var subject = templates.activationSubject({user});
-
-        transporter.sendMail({
-            from: config.email.from,
-            to: email,
-            subject: subject,
-            html: body,
-        }, (e, r)=>{
-            if (e) {
-                config.log.logger.error(e);
-            }
-        });
+      if(!transporter) {
         config.log.logger.debug('Activation Email For: ', email, token);
+        return;
+      }
+
+      var body = templates.activationBody({user, config, token});
+      var subject = templates.activationSubject({user});
+
+      transporter.sendMail({
+          from: config.email.from,
+          to: email,
+          subject: subject,
+          html: body,
+      }, (e, r)=>{
+          if (e) {
+              config.log.logger.error(e);
+          }
+      });
     }
 }
 

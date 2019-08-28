@@ -1,4 +1,4 @@
-export $(sed -e '/^#/d' .env | xargs)
+export $(sed -e '/^#/d' .testENV | xargs)
 
-jest --coverage --verbose
+jest --coverage --verbose --forceExit --detectOpenHandles
 #node --inspect-brk node_modules/.bin/jest --runInBand --coverage --verbose

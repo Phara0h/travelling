@@ -1,0 +1,1139 @@
+{
+	"info": {
+		"_postman_id": "ed1cc233-466f-4b13-80db-86aeee516062",
+		"name": "Travelling",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\":\"user5\",\n\t\"password\":\"swagmoney69xd420\",\n\t\"email\": \"joseph@abe.ai\"\n}"
+						},
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/auth/register",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"auth",
+								"register"
+							]
+						},
+						"description": "Register a user"
+					},
+					"response": [
+						{
+							"name": "Register User",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"username\":\"user1\",\n\t\"password\":\"swagmoney69xd420\",\n\t\"email\": \"test@test.com\"\n}"
+								},
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/auth/register",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"auth",
+										"register"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "set-cookie",
+									"value": "trav:tok=537709f9a7e7b32ecad6a1f1ca620a48a3df61708d530db3e82a60e33ebf5e752d6a0d39f58975aeee1dc2c561a5f8295417343108576a48e8fbfc2f92cae4cb36b2ffdd5c13b577a32745c44cbcfdccf7b399ce5b1dc17a477d0d41551e2628%2F09057a5665f51469fdb227edea8faff0; Path=/; Expires=Thu, 19 Sep 2019 19:57:38 GMT; HttpOnly; Secure"
+								},
+								{
+									"key": "set-cookie",
+									"value": "trav:ssid=9UDLGJpD307kZSLAeKHvBBRfyl-d2J6u.VS080%2BKNf3y280f2XW%2FThFKGGjPrzkFnjIL7yCMPKQE; Path=/; HttpOnly; Secure"
+								},
+								{
+									"key": "content-length",
+									"value": "24"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 20 Aug 2019 19:57:38 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"msg\": \"Access Granted\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\":\"user5\",\n\t\"password\":\"swagmoney69xd420\"\n}"
+						},
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/auth/login",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						},
+						"description": "Register a user"
+					},
+					"response": [
+						{
+							"name": "Login",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"username\":\"test\",\n\t\"password\":\"swagmoney69xd420\",\n\t\"email\": \"test@test.com\"\n}"
+								},
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/auth/login",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "set-cookie",
+									"value": "trav:tok=db34b933bf4b7b7afeebd1e258a0c8c0fa80bb0132cf74186d8f32033dbce7ebb4779527aa9d05ed3e9eba54b41510167f4d3b63a067591a49dc1fadf97b06ce46f0499b241f0a9855429b750880bc7c00c0130fc012427b73326b7beff6f15b%2Fde3086b22638e56370f2397334a788ed; Path=/; Expires=Thu, 19 Sep 2019 20:11:42 GMT; HttpOnly; Secure"
+								},
+								{
+									"key": "set-cookie",
+									"value": "trav:ssid=0bQDu3Vb-5PZR8o9uuqsMkecjGi6Nguv.RPBOsJtYuAWeno7%2F7JJ5VUHnj8Z2MEfhXIYYhK0GmAk; Path=/; HttpOnly; Secure"
+								},
+								{
+									"key": "content-length",
+									"value": "24"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 20 Aug 2019 20:11:42 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"msg\": \"Access Granted\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/auth/logout",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Logout",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/auth/logout",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"auth",
+										"logout"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "set-cookie",
+									"value": "trav:tok=null; Path=/; Expires=Tue, 20 Aug 2019 20:10:44 GMT; HttpOnly; Secure"
+								},
+								{
+									"key": "set-cookie",
+									"value": "trav:ssid=null; Path=/; Expires=Tue, 20 Aug 2019 20:10:44 GMT; HttpOnly; Secure"
+								},
+								{
+									"key": "content-type",
+									"value": "text/plain; charset=utf-8"
+								},
+								{
+									"key": "content-length",
+									"value": "10"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 20 Aug 2019 20:10:44 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "Logged Out"
+						}
+					]
+				},
+				{
+					"name": "Forgot Password",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\":\"joseph@abe.ai\"\n}"
+						},
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/auth/password/forgot",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"auth",
+								"password",
+								"forgot"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": ""
+								}
+							]
+						},
+						"description": "Generates a recovery token and sends a email to the attached user (if they exist) "
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"password\":\"asdf\"\n}"
+						},
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/auth/password/reset?token=[thegeneratedtoken]",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"auth",
+								"password",
+								"reset"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "[thegeneratedtoken]"
+								}
+							]
+						},
+						"description": "Resets the password if the recovery token is vaild of the user."
+					},
+					"response": []
+				},
+				{
+					"name": "Activate",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/auth/activate?token=activation_token",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"auth",
+								"activate"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "activation_token"
+								}
+							]
+						},
+						"description": "Activates and unlocks user"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Groups",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"group1\",\n    \"type\": \"accounts\",\n    \"allowed\": [\n        {\n            \"route\": \"/test\",\n            \"host\": \"http://127.0.0.1:1237/\",\n            \"removeFromPath\": \"test\",\n            \"method\": \"*\",\n            \"name\": \"all-test\"\n        }\n    ],\n    \"is_default\": false\n}"
+						},
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/group",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"group"
+							]
+						},
+						"description": "Add a new group"
+					},
+					"response": []
+				},
+				{
+					"name": "Edit By Name",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "  {\n        \"allowed\": [\n            {\n                \"host\": null,\n                \"route\": \"/travelling/*\",\n                \"method\": \"*\",\n                \"name\": \"all-travelling-*\"\n            },\n            {\n                \"route\": \"/test\",\n                \"host\": \"http://127.0.0.1:1237/\",\n                \"removeFromPath\": \"test\",\n                \"method\": \"*\",\n                \"name\": \"all-test\"\n            }\n        ]\n    }"
+						},
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/group/:groupname",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"group",
+								":groupname"
+							],
+							"variable": [
+								{
+									"key": "groupname",
+									"value": "superadmin"
+								}
+							]
+						},
+						"description": "Edits a group"
+					},
+					"response": []
+				},
+				{
+					"name": "Add Route",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"route\":\"/test/:username\",\n\t\"host\": \"http://127.0.0.1:1237/:permission\",\n\t\"removeFromPath\": \"test\"\n}"
+						},
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/group/:groupname/route",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"group",
+								":groupname",
+								"route"
+							],
+							"variable": [
+								{
+									"key": "groupname",
+									"value": "superadmin"
+								}
+							]
+						},
+						"description": "Adds a route to a group."
+					},
+					"response": []
+				},
+				{
+					"name": "All Groups",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/groups",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"groups"
+							]
+						},
+						"description": "Get all the groups"
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Type",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/groups/type/:type",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"groups",
+								"type",
+								":type"
+							],
+							"variable": [
+								{
+									"key": "type",
+									"value": ""
+								}
+							]
+						},
+						"description": "Gets all groups of a certain type."
+					},
+					"response": [
+						{
+							"name": "Get Type of Groups",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/groups/type/:type",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"groups",
+										"type",
+										":type"
+									],
+									"variable": [
+										{
+											"key": "type",
+											"value": ""
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "set-cookie",
+									"value": "trav:ssid=9UDLGJpD307kZSLAeKHvBBRfyl-d2J6u.VS080%2BKNf3y280f2XW%2FThFKGGjPrzkFnjIL7yCMPKQE; Path=/; HttpOnly; Secure"
+								},
+								{
+									"key": "content-length",
+									"value": "198"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 20 Aug 2019 19:58:27 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 53,\n        \"name\": \"group1\",\n        \"type\": \"accounts\",\n        \"allowed\": [\n            {\n                \"route\": \"/test\",\n                \"host\": \"http://127.0.0.1:1237/\",\n                \"removeFromPath\": \"test\",\n                \"method\": \"*\",\n                \"name\": \"all-test\"\n            }\n        ],\n        \"inherited\": null,\n        \"is_default\": false\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Get Types List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/groups/types",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"groups",
+								"types"
+							]
+						},
+						"description": "Gets all the types of groups currently made."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Current",
+					"item": [
+						{
+							"name": "Get User",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/user/me",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"user",
+										"me"
+									]
+								},
+								"description": "Gets the currently logged in user"
+							},
+							"response": []
+						},
+						{
+							"name": "Permission Check",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/user/me/permission/allowed/:permission",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"user",
+										"me",
+										"permission",
+										"allowed",
+										":permission"
+									],
+									"variable": [
+										{
+											"key": "permission",
+											"value": "get-travelling",
+											"description": "name of the route/permission"
+										}
+									]
+								},
+								"description": "Checks to see if the current user can access content based on permission."
+							},
+							"response": []
+						},
+						{
+							"name": "Route Check",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/user/me/route/allowed?method=get&route=/travelling/api/v1/users/me",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"user",
+										"me",
+										"route",
+										"allowed"
+									],
+									"query": [
+										{
+											"key": "method",
+											"value": "get"
+										},
+										{
+											"key": "route",
+											"value": "/travelling/api/v1/users/me"
+										}
+									]
+								},
+								"description": "Checks if current logged in user can access the route with method."
+							},
+							"response": []
+						},
+						{
+							"name": "Get User Property",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/user/me/:property",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"user",
+										"me",
+										":property"
+									],
+									"variable": [
+										{
+											"key": "property",
+											"value": "username"
+										}
+									]
+								},
+								"description": "Gets the currently logged in user's single property "
+							},
+							"response": []
+						},
+						{
+							"name": "Edit",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"username\" : \"user6\",\n\t\"password\" : \"Awickednewawesomepasword4242!@\"\n}"
+								},
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/user/me",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"user",
+										"me"
+									]
+								},
+								"description": "Updates the current logged in user."
+							},
+							"response": [
+								{
+									"name": "Edit User",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"username\" : \"user6\",\n\t\"password\" : \"Awickednewawesomepasword4242!@\"\n}"
+										},
+										"url": {
+											"raw": "{{TRAV}}/travelling/api/v1/user/me",
+											"host": [
+												"{{TRAV}}"
+											],
+											"path": [
+												"travelling",
+												"api",
+												"v1",
+												"user",
+												"me"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "content-type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "set-cookie",
+											"value": "trav:ssid=10%3AEIOmCFPwdTBcahxDDZVEAA%3D%3D.gSEo0VoNAWsiU9tQjtwtcz5sLKfIpwQGEP5cuqec40Y; Max-Age=10000; Path=/; Expires=Wed, 28 Aug 2019 15:19:01 GMT; HttpOnly; Secure"
+										},
+										{
+											"key": "content-length",
+											"value": "769"
+										},
+										{
+											"key": "Date",
+											"value": "Wed, 28 Aug 2019 15:18:51 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": 10,\n    \"username\": \"user6\",\n    \"password\": \"bcc690dfa35c3214ef67a63383e0420e177c47577c8e31a90b3ba94e2b923b93\",\n    \"avatar\": null,\n    \"locked\": false,\n    \"locked_reason\": null,\n    \"failed_login_attempts\": 0,\n    \"change_username\": false,\n    \"change_password\": false,\n    \"reset_password_token\": null,\n    \"email_verify_token\": null,\n    \"group_id\": 2,\n    \"email\": \"joseph@abe.ai\",\n    \"created_on\": \"1567005382100\",\n    \"last_login\": null,\n    \"client_id\": null,\n    \"client_secret\": null,\n    \"client_refresh\": null,\n    \"user_data\": null,\n    \"eprofile\": null,\n    \"group\": {\n        \"id\": 2,\n        \"name\": \"superadmin\",\n        \"type\": \"group\",\n        \"allowed\": [\n            {\n                \"host\": null,\n                \"route\": \"/travelling/*\",\n                \"method\": \"*\",\n                \"name\": \"*-travelling-*\"\n            },\n            {\n                \"route\": \"/test/:username\",\n                \"host\": \"http://127.0.0.1:1237/:permission\",\n                \"removeFromPath\": \"test\",\n                \"method\": \"*\",\n                \"name\": \"*-test-:username\"\n            }\n        ],\n        \"inherited\": null,\n        \"is_default\": true\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Edit Property",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"test\": 123\n}"
+								},
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/user/me/:property",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"user",
+										"me",
+										":property"
+									],
+									"variable": [
+										{
+											"key": "property",
+											"value": "user_data"
+										}
+									]
+								},
+								"description": "Edit a current user's property data."
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Get by Username",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/user/username/:username",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"user",
+								"username",
+								":username"
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": "user1"
+								}
+							]
+						},
+						"description": "Get user by their username"
+					},
+					"response": []
+				},
+				{
+					"name": "Get by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/user/id/:id",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"user",
+								"id",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "22"
+								}
+							]
+						},
+						"description": "Get a user by it's id."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Property by Username ",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/user/username/:username/:prop",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"user",
+								"username",
+								":username",
+								":prop"
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": "user1"
+								},
+								{
+									"key": "prop",
+									"value": "id"
+								}
+							]
+						},
+						"description": "Gets the user's property"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Property by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/user/id/:id/:prop",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"user",
+								"id",
+								":id",
+								":prop"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "22"
+								},
+								{
+									"key": "prop",
+									"value": "username"
+								}
+							]
+						},
+						"description": "Get a user's property by it's id."
+					},
+					"response": []
+				},
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/users",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"users"
+							]
+						},
+						"description": "Gets all the users"
+					},
+					"response": []
+				},
+				{
+					"name": "Edit by Id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\" : \"user6\",\n\t\"password\" : \"Awickednewawesomepasword4242!@\"\n}"
+						},
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/user/id/10",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"user",
+								"id",
+								"10"
+							]
+						},
+						"description": "Edit a user's props but id."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete by Id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/user/id/9",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"user",
+								"id",
+								"9"
+							]
+						},
+						"description": "Delete a user by it's Id."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Metrics",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{TRAV}}/travelling/metrics",
+					"host": [
+						"{{TRAV}}"
+					],
+					"path": [
+						"travelling",
+						"metrics"
+					]
+				},
+				"description": "servers metrics"
+			},
+			"response": []
+		},
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{TRAV}}/travelling/_health",
+					"host": [
+						"{{TRAV}}"
+					],
+					"path": [
+						"travelling",
+						"_health"
+					]
+				},
+				"description": "server's health check"
+			},
+			"response": []
+		}
+	]
+}

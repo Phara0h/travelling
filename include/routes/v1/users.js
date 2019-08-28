@@ -58,11 +58,11 @@ module.exports = function(app, opts, done) {
         }
 
         var isVaild = await userUtils.checkVaildUser(model);
+
         if(isVaild !== true) {
             res.code(400);
             return isVaild;
         }
-
 
         var user = await User.updateLimitedBy(id, model , 'AND', 1);
 
@@ -70,11 +70,13 @@ module.exports = function(app, opts, done) {
 
             await user[0].resolveGroup(router);
 
-            if( req.session && req.session.data.user && (req.session.data.user.username == req.params.username  || req.session.data.user.id  == req.params.id ))  {
-              req.session.data.user = user[0];
-            }
-
             res.code(200);
+
+            // Update any current logged in users
+            var session = await req.sessionStore.get(user[0].id)
+            session.data = {user:user[0]};
+            await req.sessionStore.set(session.sessionId, session)
+
             return user[0];
         }
 
@@ -173,7 +175,6 @@ module.exports = function(app, opts, done) {
           await req.session.data.user.resolveGroup(router);
           res.send(req.session.data.user);
         }
-
     });
 
     app.put('/user/me/:prop', async (req, res) => {

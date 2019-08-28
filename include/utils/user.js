@@ -3,7 +3,7 @@ const regex = require('./regex');
 const User = require('../database/models/user');
 
 var checkVaildUser = async function(user, checkDupe = true) {
-
+  
   if (!user) {
       return {
           type: 'body-error',

@@ -7,14 +7,27 @@ var isSetDefault = function(v, d) {
     return (v !== null && v !== undefined) ? v : d;
 };
 
+var stringToBool = function(bool) {
+  if(bool == 'true' ) {
+    return true;
+  }
+  if(bool == 'false') {
+    return false
+  }
+  return null;
+}
+
 const config = {
     port: isSetDefault(Number(process.env.TRAVELLING_PORT), 443),
     key: process.env.TRAVELLING_KEY,
     cert: process.env.TRAVELLING_CERT,
     log: {
-      logger:require(isSetDefault(process.env.TRAVELLING_LOG_LOGGER, 'console')),
-      requests: isSetDefault(process.env.TRAVELLING_LOG_REQUESTS == 'true', true),
-      unauthorizedAccess: isSetDefault(process.env.TRAVELLING_LOG_UNAUTHORIZED_ACCESS == 'true', true)
+      enable: isSetDefault(stringToBool(process.env.TRAVELLING_LOG_ENABLE), true),
+      colors: isSetDefault(stringToBool(process.env.TRAVELLING_LOG_COLORS), true),
+      fastifyLogger: isSetDefault(stringToBool(process.env.TRAVELLING_LOG_FASTIFY_LOGGER), true),
+      logger: isSetDefault(process.env.TRAVELLING_LOG_LOGGER, __dirname+'/logger.js'),
+      requests: isSetDefault(stringToBool(process.env.TRAVELLING_LOG_REQUESTS), true),
+      unauthorizedAccess: isSetDefault(stringToBool(process.env.TRAVELLING_LOG_UNAUTHORIZED_ACCESS), true)
     },
     portal: {
       path: isSetDefault(process.env.TRAVELLING_PORTAL_PATH, '/travelling/portal/'),
@@ -29,16 +42,16 @@ const config = {
         expiration: isSetDefault(Number(process.env.TRAVELLING_COOKIE_EXPIRATION), 10) //seconds
     },
     username: {
-      minchar:isSetDefault(Number(process.env.TRAVELLING_USERNAME_MINCHAR), 3),
+      minchar:isSetDefault(Number(process.env.TRAVELLING_USERNAME_MINCHAR), 4),
     },
     password: {
-        consecutive: isSetDefault(process.env.TRAVELLING_PASSWORD_CONSECUTIVE == 'true', true),
-        minchar: isSetDefault(Number(process.env.TRAVELLING_PASSWORD_MINCHAR), 1),
-        maxchar: isSetDefault(Number(process.env.TRAVELLING_PASSWORD_MAXCHAR), 100),
-        special: isSetDefault(Number(process.env.TRAVELLING_PASSWORD_SPECIAL), 0),
-        number: isSetDefault(Number(process.env.TRAVELLING_PASSWORD_NUMBER), 0),
+        consecutive: isSetDefault(stringToBool(process.env.TRAVELLING_PASSWORD_CONSECUTIVE), false),
+        minchar: isSetDefault(Number(process.env.TRAVELLING_PASSWORD_MINCHAR), 8),
+        maxchar: isSetDefault(Number(process.env.TRAVELLING_PASSWORD_MAXCHAR), ''),
+        special: isSetDefault(Number(process.env.TRAVELLING_PASSWORD_SPECIAL), 1),
+        number: isSetDefault(Number(process.env.TRAVELLING_PASSWORD_NUMBER), 1),
         lowercase: isSetDefault(Number(process.env.TRAVELLING_PASSWORD_LOWERCASE), 1),
-        uppercase: isSetDefault(Number(process.env.TRAVELLING_PASSWORD_UPPERCASE), 0)
+        uppercase: isSetDefault(Number(process.env.TRAVELLING_PASSWORD_UPPERCASE), 1)
     },
     login: {
         maxLoginAttempts: isSetDefault(Number(process.env.TRAVELLING_LOGIN_MAX_LOGIN_ATTEMPTS), 10)
@@ -51,10 +64,10 @@ const config = {
     pg: {
         url: isSetDefault(process.env.DATABASE_URL, null),
         crypto: {
-            implementation: isSetDefault(process.env.TRAVELLING_PG_CRYPTO_IMPLEMENTATION, './include/utils/cryptointerface'),
+            implementation: isSetDefault(process.env.TRAVELLING_PG_CRYPTO_IMPLEMENTATION, __dirname+'/cryptointerface.js'),
             secret: isSetDefault(process.env.TRAVELLING_PG_CRYPTO_IMPLEMENTATION_SECRET, null),
             salt: isSetDefault(process.env.TRAVELLING_PG_CRYPTO_IMPLEMENTATION_SALT, null),
-            encryptUserData: isSetDefault(process.env.TRAVELLING_PG_CRYPTO_ENCRYPT_USER_DATA == 'true', false)
+            encryptUserData: isSetDefault(stringToBool(process.env.TRAVELLING_PG_CRYPTO_ENCRYPT_USER_DATA), false)
         },
     },
     email: {
@@ -72,30 +85,30 @@ const config = {
         activationSubject: isSetDefault(process.env.TRAVELLING_EMAIL_ACTIVATION_TEMPLATE_SUBJECT, './templates/email-activation-subject.html')
       },
       test: {
-        enable: isSetDefault(process.env.TRAVELLING_EMAIL_TEST_ENABLE == 'true', false)
+        enable: isSetDefault(stringToBool(process.env.TRAVELLING_EMAIL_TEST_ENABLE), false)
       },
       smtp: {
-        enable: isSetDefault(process.env.TRAVELLING_EMAIL_SMTP_ENABLE == 'true', false),
+        enable: isSetDefault(stringToBool(process.env.TRAVELLING_EMAIL_SMTP_ENABLE), false),
         host: isSetDefault(process.env.TRAVELLING_EMAIL_SMTP_HOST, "127.0.0.1"),
         port: isSetDefault(process.env.TRAVELLING_EMAIL_SMTP_PORT, 465),
-        secure: isSetDefault(process.env.TRAVELLING_EMAIL_SMTP_SECURE == 'true', true), // use TLS
+        secure: isSetDefault(stringToBool(process.env.TRAVELLING_EMAIL_SMTP_SECURE), true), // use TLS
         auth: {
            user: isSetDefault(process.env.TRAVELLING_EMAIL_SMTP_AUTH_USER, null),
            pass: isSetDefault(process.env.TRAVELLING_EMAIL_SMTP_AUTH_PASSWORD, null),
         },
         tls: {
            // do not fail on invalid certs
-           rejectUnauthorized: isSetDefault(process.env.TRAVELLING_EMAIL_SMTP_TLS_REJECT_UNAUTHORIZED, false),
+           rejectUnauthorized: isSetDefault(stringToBool(process.env.TRAVELLING_EMAIL_SMTP_TLS_REJECT_UNAUTHORIZED), false),
         }
       },
       aws : {
-        enable: isSetDefault(process.env.TRAVELLING_EMAIL_AWS_ENABLE  == 'true', false),
+        enable: isSetDefault(stringToBool(process.env.TRAVELLING_EMAIL_AWS_ENABLE ), false),
         config: isSetDefault(process.env.TRAVELLING_EMAIL_AWS_CONFIG, null),
       }
     },
     registration: {
-      requireEmailActivation: isSetDefault(process.env.TRAVELLING_REGISTRATION_REQUIRE_EMAIL_ACTIVATION  == 'true', false),
-      requireManualActivation: isSetDefault(process.env.TRAVELLING_REGISTRATION_REQUIRE_MANUAL_ACTIVATION  == 'true', false)
+      requireEmailActivation: isSetDefault(stringToBool(process.env.TRAVELLING_REGISTRATION_REQUIRE_EMAIL_ACTIVATION ), false),
+      requireManualActivation: isSetDefault(stringToBool(process.env.TRAVELLING_REGISTRATION_REQUIRE_MANUAL_ACTIVATION ), false)
     }
 };
 

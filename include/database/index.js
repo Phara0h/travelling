@@ -13,7 +13,6 @@ class Database {
 
     static async checkAuth(name, email, password) {
 
-        name = name.toLowerCase();
 
         var user = await User.findLimtedBy({username: name, email: email}, 'OR', 1);
 
@@ -168,6 +167,7 @@ class Database {
         var grps = await Group.findAll();
 
         if (grps.length == 0) {
+          config.log.logger.info('Creating default groups...');
           // create default groups
           var anon = await Group.create({
             name: "anonymous",

@@ -35,37 +35,35 @@ class User extends Base(BaseModel, 'users', {
 
     static async createTable() {
         const pg = new (require('@abeai/node-utils').PGConnecter)();
+        try {
+          await pg.query(`CREATE TABLE users (
+                  id serial,
+                  username character varying(100),
+                  password character varying(258),
+                  email character varying(500),
+                  __email character varying(258),
+                  locked_reason text,
+                  locked boolean DEFAULT false,
+                  last_login json,
+                  group_id serial,
+                  failed_login_attempts int DEFAULT 0,
+                  change_username boolean DEFAULT false,
+                  change_password boolean DEFAULT false,
+                  reset_password_token character varying(350),
+                  email_verify_token character varying(350),
+                  avatar bytea,
+                  created_on bigint,
+                  client_id character varying(258),
+                  client_secret character varying(258),
+                  client_refresh character varying(258),
+                  user_data bytea,
+                  __user_data character varying(258),
+                  eprofile character varying(350),
+                  PRIMARY KEY (id)
+                );`);
+        } catch (e) {
 
-        await pg.queryBatch([
-            {
-                query: `CREATE TABLE IF NOT EXISTS users (
-                id serial,
-                username character varying(100),
-                password character varying(258),
-                email character varying(500),
-                __email character varying(258),
-                locked_reason text,
-                locked boolean DEFAULT false,
-                last_login json,
-                group_id serial,
-                failed_login_attempts int DEFAULT 0,
-                change_username boolean DEFAULT false,
-                change_password boolean DEFAULT false,
-                reset_password_token character varying(350),
-                email_verify_token character varying(350),
-                avatar bytea,
-                created_on bigint,
-                client_id character varying(258),
-                client_secret character varying(258),
-                client_refresh character varying(258),
-                user_data bytea,
-                __user_data character varying(258),
-                eprofile character varying(350),
-                PRIMARY KEY (id)
-              );`,
-                variables: null,
-            },
-        ]);
+        }
     }
 
     async resolveGroup(router) {
