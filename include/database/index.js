@@ -189,6 +189,12 @@ class Database {
             host: null,
             method: 'GET'
           });
+          anon.addRoute({
+            route: '/travelling/api/v1/user/me/permission/allowed/*',
+            host: null,
+            method: 'GET'
+          });
+
           await anon.save();
 
           router.groups[anon.name] = this.groupInheritedMerge(anon, grps);

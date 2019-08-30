@@ -88,7 +88,7 @@ module.exports = function(app, opts, done) {
                 var user = await Database.checkAuth(username, email, req.body.password)
                 await login(user.user, req, res);
               } catch (e) {
-                res.code(400).send(e.err.type=='locked' ? e.err : {
+                res.code(400).send(e.err.type=='locked' ? {...e.err, email:e.email} : {
                     type: 'login-error',
                     msg: 'Invalid login',
                 });
@@ -100,6 +100,7 @@ module.exports = function(app, opts, done) {
 
     app.get('/auth/logout', (req, res) =>{
         req.logout(req, res);
+        res.code(200).send('Logged Out');
     });
 
     app.post('/auth/register', async (req, res) =>{

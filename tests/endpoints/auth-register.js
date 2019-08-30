@@ -23,6 +23,30 @@ module.exports = () => {
             expect(res.statusCode).toEqual(200);
         });
 
+        test('Create Test User [test3] Manual Activaation', async () => {
+            config.registration.requireManualActivation = true;
+            var res = await Travelling.Auth.register({
+                username: 'test3',
+                password: 'Pas5w0r!d3',
+                email: 'test3@test.com',
+            });
+            config.registration.requireManualActivation = false;
+            expect(res.statusCode).toEqual(200);
+
+        });
+
+        test('Create Test User [test4] Email Activaation', async () => {
+            config.registration.requireEmailActivation = true;
+            var res = await Travelling.Auth.register({
+                username: 'test4',
+                password: 'Pas5w0r!d4',
+                email: 'test4@test.com',
+            });
+            config.registration.requireEmailActivation = false;
+
+            expect(res.statusCode).toEqual(200);
+        });
+
     });
 
     describe('Invaild', () => {

@@ -35,7 +35,6 @@ class Token {
                 return false;
             }
         } catch (e) {
-          console.log(e)
             this.removeAuthCookie(res);
             return false;
         }

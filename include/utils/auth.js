@@ -42,7 +42,6 @@ var logout = (req, res) => {
   })
   req.isAuthenticated = false;
 
-  res.code(200).send('Logged Out');
 }
 
 module.exports = {
