@@ -1,4 +1,4 @@
-describe('Email', () => {
+module.exports = () => {
     const Email = require('../include/utils/email');
 
     describe('Recovery',() =>{
@@ -14,7 +14,6 @@ describe('Email', () => {
 
       test('Check Recovery Token', async () => {
         var sec = await Email.checkRecoveryToken(token);
-        //console.log(sex)
         expect(sec).toEqual(secret)
       });
     })
@@ -34,4 +33,4 @@ describe('Email', () => {
     //     expect(AgentDek.endWatch()).toBeUndefined()
     // });
 
-});
+};

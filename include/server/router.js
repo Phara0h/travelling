@@ -160,7 +160,6 @@ class Router {
                 }
             }
         } else {
-          console.log('LSKDJFLKSDFJLKSIDJFl')
             await this.updateGroupList();
             res.setCookie('trav:backurl', req.raw.url, {
               secure: true,

@@ -106,7 +106,7 @@ class Email {
         var body = templates.resetPasswordBody({user, ip, config, token});
         var subject = templates.resetPasswordSubject({user});
 
-        transporter.sendMail({
+        var info =  transporter.sendMail({
             from: config.email.from,
             to: email,
             subject: subject,
@@ -116,6 +116,12 @@ class Email {
                 config.log.logger.error(e);
             }
         });
+
+        if(config.email.test.enable) {
+          var testInfo = {info, url: nodemailer.getTestMessageUrl(info)};
+          config.log.logger.debug(testInfo)
+          return testInfo;
+        }
 
     }
 
@@ -129,7 +135,7 @@ class Email {
       var body = templates.activationBody({user, config, token});
       var subject = templates.activationSubject({user});
 
-      transporter.sendMail({
+      var info = transporter.sendMail({
           from: config.email.from,
           to: email,
           subject: subject,
@@ -139,6 +145,12 @@ class Email {
               config.log.logger.error(e);
           }
       });
+
+      if(config.email.test.enable) {
+        var testInfo = {info, url: nodemailer.getTestMessageUrl(info)};
+        config.log.logger.debug(testInfo)
+        return testInfo;
+      }
     }
 }
 

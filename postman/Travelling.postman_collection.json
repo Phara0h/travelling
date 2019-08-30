@@ -950,7 +950,7 @@
 					"response": []
 				},
 				{
-					"name": "Get Property by Username ",
+					"name": "Get Property by Username",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -1046,8 +1046,8 @@
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
+								"type": "text",
+								"value": "application/json"
 							}
 						],
 						"body": {
@@ -1055,7 +1055,7 @@
 							"raw": "{\n\t\"username\" : \"user6\",\n\t\"password\" : \"Awickednewawesomepasword4242!@\"\n}"
 						},
 						"url": {
-							"raw": "{{TRAV}}/travelling/api/v1/user/id/10",
+							"raw": "{{TRAV}}/travelling/api/v1/user/id/:id",
 							"host": [
 								"{{TRAV}}"
 							],
@@ -1065,10 +1065,146 @@
 								"v1",
 								"user",
 								"id",
-								"10"
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
 							]
 						},
-						"description": "Edit a user's props but id."
+						"description": "Edit a user's by id."
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Property by Id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\" : \"user6\",\n\t\"password\" : \"Awickednewawesomepasword4242!@\"\n}"
+						},
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/user/id/:id/:prop",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"user",
+								"id",
+								":id",
+								":prop"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								},
+								{
+									"key": "prop",
+									"value": "username"
+								}
+							]
+						},
+						"description": "Edit a user's property by id."
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Property by Username",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\" : \"user6\",\n\t\"password\" : \"Awickednewawesomepasword4242!@\"\n}"
+						},
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/user/username/:username/:prop",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"user",
+								"username",
+								":username",
+								":prop"
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": "test"
+								},
+								{
+									"key": "prop",
+									"value": "email"
+								}
+							]
+						},
+						"description": "Edit a user's property by Username."
+					},
+					"response": []
+				},
+				{
+					"name": "Edit by Username",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\" : \"user6\",\n\t\"password\" : \"Awickednewawesomepasword4242!@\"\n}"
+						},
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/user/username/:username",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"user",
+								"username",
+								":username"
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": "test"
+								}
+							]
+						},
+						"description": "Edit a user's by username."
 					},
 					"response": []
 				},
@@ -1078,7 +1214,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{TRAV}}/travelling/api/v1/user/id/9",
+							"raw": "{{TRAV}}/travelling/api/v1/user/id/:id",
 							"host": [
 								"{{TRAV}}"
 							],
@@ -1088,10 +1224,45 @@
 								"v1",
 								"user",
 								"id",
-								"9"
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
 							]
 						},
 						"description": "Delete a user by it's Id."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete by Username",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/user/username/:username",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"user",
+								"username",
+								":username"
+							],
+							"variable": [
+								{
+									"key": "username",
+									"value": "test"
+								}
+							]
+						},
+						"description": "Delete a user by it's username."
 					},
 					"response": []
 				}

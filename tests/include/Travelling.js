@@ -3,23 +3,29 @@ var hostUrl = '';
 class Travelling {
     constructor() {}
 
-    static async healthCheck() {
+    static async healthCheck(opts) {
         var options = {
             method: 'GET',
             resolveWithFullResponse: true,
             simple: false,
             uri: hostUrl + "/" + `travelling/_health`,
         };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
         return await fasq.request(options)
     }
 
-    static async metrics() {
+    static async metrics(opts) {
         var options = {
             method: 'GET',
             resolveWithFullResponse: true,
             simple: false,
             uri: hostUrl + "/" + `travelling/metrics`,
         };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
         return await fasq.request(options)
     }
 
@@ -38,75 +44,154 @@ class Travelling {
 class User {
     constructor() {}
 
-    static async deleteById() {
+    static async deleteByUsername(username, opts) {
         var options = {
             method: 'DELETE',
             resolveWithFullResponse: true,
             simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/user/id/9`,
+            uri: hostUrl + "/" + `travelling/api/v1/user/username/${username}`,
         };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
         return await fasq.request(options)
     }
 
-    static async editById(body) {
+    static async deleteById(id, opts) {
+        var options = {
+            method: 'DELETE',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/user/id/${id}`,
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+
+    static async editByUsername(body, username, opts) {
         var options = {
             method: 'PUT',
             resolveWithFullResponse: true,
             simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/user/id/10`,
+            uri: hostUrl + "/" + `travelling/api/v1/user/username/${username}`,
             body,
             json: true,
         };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
         return await fasq.request(options)
     }
 
-    static async getAll() {
+    static async editPropertyByUsername(body, username, prop, opts) {
+        var options = {
+            method: 'PUT',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/user/username/${username}/${prop}`,
+            body,
+            json: true,
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+
+    static async editPropertyById(body, id, prop, opts) {
+        var options = {
+            method: 'PUT',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/user/id/${id}/${prop}`,
+            body,
+            json: true,
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+
+    static async editById(body, id, opts) {
+        var options = {
+            method: 'PUT',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/user/id/${id}`,
+            body,
+            json: true,
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+
+    static async getAll(opts) {
         var options = {
             method: 'GET',
             resolveWithFullResponse: true,
             simple: false,
             uri: hostUrl + "/" + `travelling/api/v1/users`,
         };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
         return await fasq.request(options)
     }
 
-    static async getPropertyById(id, prop) {
+    static async getPropertyById(id, prop, opts) {
         var options = {
             method: 'GET',
             resolveWithFullResponse: true,
             simple: false,
             uri: hostUrl + "/" + `travelling/api/v1/user/id/${id}/${prop}`,
         };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
         return await fasq.request(options)
     }
 
-    static async getPropertyByUsername_(username, prop) {
+    static async getPropertyByUsername(username, prop, opts) {
         var options = {
             method: 'GET',
             resolveWithFullResponse: true,
             simple: false,
             uri: hostUrl + "/" + `travelling/api/v1/user/username/${username}/${prop}`,
         };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
         return await fasq.request(options)
     }
 
-    static async getById(id) {
+    static async getById(id, opts) {
         var options = {
             method: 'GET',
             resolveWithFullResponse: true,
             simple: false,
             uri: hostUrl + "/" + `travelling/api/v1/user/id/${id}`,
         };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
         return await fasq.request(options)
     }
 
-    static async getByUsername(username) {
+    static async getByUsername(username, opts) {
         var options = {
             method: 'GET',
             resolveWithFullResponse: true,
             simple: false,
             uri: hostUrl + "/" + `travelling/api/v1/user/username/${username}`,
         };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
         return await fasq.request(options)
     }
 
@@ -117,7 +202,7 @@ class User {
 class Current {
     constructor() {}
 
-    static async editProperty(body, property) {
+    static async editProperty(body, property, opts) {
         var options = {
             method: 'PUT',
             resolveWithFullResponse: true,
@@ -126,10 +211,13 @@ class Current {
             body,
             json: true,
         };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
         return await fasq.request(options)
     }
 
-    static async edit(body) {
+    static async edit(body, opts) {
         var options = {
             method: 'PUT',
             resolveWithFullResponse: true,
@@ -138,20 +226,26 @@ class Current {
             body,
             json: true,
         };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
         return await fasq.request(options)
     }
 
-    static async getUserProperty(property) {
+    static async getUserProperty(property, opts) {
         var options = {
             method: 'GET',
             resolveWithFullResponse: true,
             simple: false,
             uri: hostUrl + "/" + `travelling/api/v1/user/me/${property}`,
         };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
         return await fasq.request(options)
     }
 
-    static async routeCheck(method, route) {
+    static async routeCheck(method, route, opts) {
         var options = {
             method: 'GET',
             resolveWithFullResponse: true,
@@ -162,20 +256,26 @@ class Current {
                 route
             },
         };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
         return await fasq.request(options)
     }
 
-    static async permissionCheck(permission) {
+    static async permissionCheck(permission, opts) {
         var options = {
             method: 'GET',
             resolveWithFullResponse: true,
             simple: false,
             uri: hostUrl + "/" + `travelling/api/v1/user/me/permission/allowed/${permission}`,
         };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
         return await fasq.request(options)
     }
 
-    static async getUser() {
+    static async getUser(opts) {
         var options = {
             method: 'GET',
             resolveWithFullResponse: true,
@@ -183,43 +283,55 @@ class Current {
             uri: hostUrl + "/" + `travelling/api/v1/user/me`,
             json: true,
         };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
         return await fasq.request(options)
     }
 }
 class Groups {
     constructor() {}
 
-    static async getTypesList() {
+    static async getTypesList(opts) {
         var options = {
             method: 'GET',
             resolveWithFullResponse: true,
             simple: false,
             uri: hostUrl + "/" + `travelling/api/v1/groups/types`,
         };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
         return await fasq.request(options)
     }
 
-    static async getByType(type) {
+    static async getByType(type, opts) {
         var options = {
             method: 'GET',
             resolveWithFullResponse: true,
             simple: false,
             uri: hostUrl + "/" + `travelling/api/v1/groups/type/${type}`,
         };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
         return await fasq.request(options)
     }
 
-    static async allGroups() {
+    static async allGroups(opts) {
         var options = {
             method: 'GET',
             resolveWithFullResponse: true,
             simple: false,
             uri: hostUrl + "/" + `travelling/api/v1/groups`,
         };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
         return await fasq.request(options)
     }
 
-    static async addRoute(body, groupname) {
+    static async addRoute(body, groupname, opts) {
         var options = {
             method: 'PUT',
             resolveWithFullResponse: true,
@@ -228,10 +340,13 @@ class Groups {
             body,
             json: true,
         };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
         return await fasq.request(options)
     }
 
-    static async editByName(body, groupname) {
+    static async editByName(body, groupname, opts) {
         var options = {
             method: 'PUT',
             resolveWithFullResponse: true,
@@ -240,10 +355,13 @@ class Groups {
             body,
             json: true,
         };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
         return await fasq.request(options)
     }
 
-    static async create(body) {
+    static async create(body, opts) {
         var options = {
             method: 'POST',
             resolveWithFullResponse: true,
@@ -252,13 +370,16 @@ class Groups {
             body,
             json: true,
         };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
         return await fasq.request(options)
     }
 }
 class Auth {
     constructor() {}
 
-    static async activate(token) {
+    static async activate(token, opts) {
         var options = {
             method: 'GET',
             resolveWithFullResponse: true,
@@ -268,10 +389,13 @@ class Auth {
                 token
             },
         };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
         return await fasq.request(options)
     }
 
-    static async resetPassword(body, token) {
+    static async resetPassword(body, token, opts) {
         var options = {
             method: 'PUT',
             resolveWithFullResponse: true,
@@ -283,10 +407,13 @@ class Auth {
             body,
             json: true,
         };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
         return await fasq.request(options)
     }
 
-    static async forgotPassword(body) {
+    static async forgotPassword(body, opts) {
         var options = {
             method: 'PUT',
             resolveWithFullResponse: true,
@@ -296,20 +423,26 @@ class Auth {
             body,
             json: true,
         };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
         return await fasq.request(options)
     }
 
-    static async logout() {
+    static async logout(opts) {
         var options = {
             method: 'GET',
             resolveWithFullResponse: true,
             simple: false,
             uri: hostUrl + "/" + `travelling/api/v1/auth/logout`,
         };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
         return await fasq.request(options)
     }
 
-    static async login(body) {
+    static async login(body, opts) {
         var options = {
             method: 'PUT',
             resolveWithFullResponse: true,
@@ -318,10 +451,13 @@ class Auth {
             body,
             json: true,
         };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
         return await fasq.request(options)
     }
 
-    static async register(body) {
+    static async register(body, opts) {
         var options = {
             method: 'POST',
             resolveWithFullResponse: true,
@@ -330,6 +466,9 @@ class Auth {
             body,
             json: true,
         };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
         return await fasq.request(options)
     }
 }
