@@ -120,6 +120,8 @@ class Email {
         if(config.email.test.enable) {
           var testInfo = {info, url: nodemailer.getTestMessageUrl(info)};
           config.log.logger.debug(testInfo)
+          var tc = require('../../tests/include/TestContainer');
+          tc.passwordEmail = testInfo;
           return testInfo;
         }
 
@@ -149,6 +151,8 @@ class Email {
       if(config.email.test.enable) {
         var testInfo = {info, url: nodemailer.getTestMessageUrl(info)};
         config.log.logger.debug(testInfo)
+        var tc = require('../../tests/include/TestContainer');
+        tc.activationEmail = testInfo;
         return testInfo;
       }
     }

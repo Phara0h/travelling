@@ -1,6 +1,8 @@
 const config = require('../../include/utils/config');
 const Travelling = require('../include/Travelling')('https://127.0.0.1:6969');
 var userContainer = require('../include/UserContainer.js');
+var testContainer = require('../include/TestContainer.js');
+const fasq = require('fasquest');
 
 module.exports = () => {
     describe('Vaild', () => {
@@ -55,6 +57,31 @@ module.exports = () => {
             });
 
             expect(res.body.type).toEqual('locked');
+
+            var aeRes = await fasq.request({
+             method: 'GET',
+             resolveWithFullResponse: true,
+             simple: false,
+             uri: testContainer.activationEmail.url,
+           })
+
+            var activationUrl = aeRes.body.match(/\bhttps?:\/\/\S+/gi);
+            expect(activationUrl).toHaveLength(1);
+
+            var activationRes = await fasq.request({
+             method: 'GET',
+             resolveWithFullResponse: true,
+             simple: false,
+             uri: activationUrl[0],
+           });
+
+           var res2 = await Travelling.Auth.login({
+               password: 'Pas5w0r!d4',
+               email: 'test4@test.com',
+           });
+
+           expect(res2.statusCode).toEqual(200);
+
         });
     });
 

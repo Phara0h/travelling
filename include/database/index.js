@@ -233,12 +233,12 @@ class Database {
       }
       for (var i = 0; i < group.inherited.length; ++i) {
           for (var j = 0; j < groups.length; ++j) {
-            if (groups[j].id == group.inherited[i].id) {
+            if (groups[j].id == group.inherited[i]) {
               group.inheritedGroups[i] = groups[j];
               break;
             }
           }
-        nallowed.push(...this.groupInheritedMerge(group.inherited[i], groups));
+        nallowed.push(...this.groupInheritedMerge(group.inheritedGroups[i], groups));
       }
     }
     return nallowed;

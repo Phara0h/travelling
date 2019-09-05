@@ -7,4 +7,5 @@ module.exports = () => {
   describe('User', () =>{
       describe('Get', require('./user-get.js'))
   });
+  describe('Groups', require('./groups.js'));
 };

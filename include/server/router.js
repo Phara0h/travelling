@@ -38,7 +38,7 @@ class Router {
 
             res.assignSocket(socket);
             req._wssocket = socket;
-            return app(req, res);
+            //return app(req, res);
         });
 
         this.proxy.on('error', function(err, req, res) {
@@ -103,6 +103,7 @@ class Router {
                     }
                     return false;
                 } else {
+                  console.log('host:',r.host)
                     var target = {
                         target: this.transformRoute(sessionUser, r, r.host == null ? req.protocol + '://' + req.headers.host : r.host),
                     };
@@ -119,7 +120,8 @@ class Router {
                         }
                     } else {
                         // This gets around websites host checking / blocking
-                        delete req.raw.headers.host;
+                        //delete req.raw.headers.host;
+                        console.log(target.target)
                         if (target.target.indexOf('https') > -1) {
                           this.proxyssl.web(req.req, res.res, target);
                         } else {
@@ -285,7 +287,7 @@ class Router {
         log.debug('updating groups')
         await this.updateGroupList();
       }
-
+      //console.log(this.unmergedGroups)
       for (var i = 0; i < this.unmergedGroups.length; i++) {
           if(this.unmergedGroups[i].id == id || this.unmergedGroups[i].name == id) {
             return this.unmergedGroups[i];

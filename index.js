@@ -3,18 +3,21 @@ const path = require('path');
 const config = require('./include/utils/config');
 
 config.log.logger = require(config.log.logger);
-
-
-const app = require('fastify')({
-    http2: true,
-    https: {
-        allowHTTP1: true, // fallback support for HTTP1
-        key: fs.readFileSync(path.join(__dirname, config.key)),
-        cert: fs.readFileSync(path.join(__dirname, config.cert))
-    },
+var fastifyOptions = {
+    http2: false,
     logger: config.log.fastifyLogger,
-    disableRequestLogging: true,
-});
+    disableRequestLogging: true
+};
+
+if(config.https) {
+  fastifyOptions.https = {
+      allowHTTP1: true, // fallback support for HTTP1
+      key: fs.readFileSync(path.join(__dirname, config.key)),
+      cert: fs.readFileSync(path.join(__dirname, config.cert))
+  }
+}
+
+const app = require('fastify')();
 
 const fastifySession = require('fastify-good-sessions');
 const fastifyCookie = require('fastify-cookie');
@@ -40,6 +43,15 @@ const auth = require('./include/utils/auth');
 const Email = require('./include/utils/email');
 
 const nstats = require('nstats')();
+
+if(config.allowAllCors) {
+  app.use((req, res, next) => {
+      res.setHeader("Access-Control-Allow-Origin", "*");
+      res.setHeader("Access-Control-Allow-Methods", "DELETE, POST, GET, PUT, OPTIONS")
+      res.setHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+      next();
+  });
+}
 
 app.get('/travelling/metrics', (req, res) => {res.code(200).send(nstats.toPrometheus());});
 app.get('/travelling/_health', (req, res) => res.code(200).send('OK'));
@@ -100,21 +112,21 @@ app.register(require('./include/routes/v1/users'), {prefix: '/travelling/api/v1'
 app.register(require('./include/routes/v1/groups'), {prefix: '/travelling/api/v1', router});
 app.register(require('./include/routes/v1/auth'), {prefix: '/travelling/api/v1', router});
 
-app.register(require('fastify-static'), {
-  root: config.portal.filePath,
-  prefix: config.portal.path,
-})
-
+if(config.portal.enable) {
+  app.register(require('fastify-static'), {
+    root: config.portal.filePath,
+    prefix: config.portal.path,
+  })
+}
 app.ready(()=>{
   config.log.logger.debug(app.printRoutes())
 })
+
 async function init() {
   try {
     await User.createTable();
     await Group.createTable();
-  } catch (e) {
-
-  }
+  } catch (e) {}
 
     await Database.initGroups(router);
     await Email.init();
