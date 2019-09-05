@@ -21,6 +21,8 @@ const config = {
     port: isSetDefault(Number(process.env.TRAVELLING_PORT), 443),
     key: process.env.TRAVELLING_KEY,
     cert: process.env.TRAVELLING_CERT,
+    allowAllCors: isSetDefault(stringToBool(process.env.TRAVELLING_ALLOW_ALL_CORS), false),
+    https: isSetDefault(stringToBool(process.env.TRAVELLING_HTTPS), true),
     log: {
       enable: isSetDefault(stringToBool(process.env.TRAVELLING_LOG_ENABLE), true),
       colors: isSetDefault(stringToBool(process.env.TRAVELLING_LOG_COLORS), true),
@@ -30,6 +32,7 @@ const config = {
       unauthorizedAccess: isSetDefault(stringToBool(process.env.TRAVELLING_LOG_UNAUTHORIZED_ACCESS), true)
     },
     portal: {
+      enable: isSetDefault(stringToBool(process.env.TRAVELLING_PORTAL_ENABLE), true),
       path: isSetDefault(process.env.TRAVELLING_PORTAL_PATH, '/travelling/portal/'),
       host: isSetDefault(process.env.TRAVELLING_PORTAL_HOST, null),
       filePath: isSetDefault(process.env.TRAVELLING_PORTAL_FILE_PATH, './client'),

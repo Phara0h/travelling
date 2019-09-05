@@ -123,15 +123,15 @@ module.exports = function(app, opts, done) {
         } else {
             var name = req.params.groupname.toLowerCase();
             var fgroup = await router.getGroup(name);
-
-            if (fgroup.length <= 0) {
+            console.log(fgroup)
+            if (!fgroup) {
                 res.code(400).send(
                     {
                         type: 'group-nonexistent-error',
                         msg: 'No group with the name or id exists.',
                     });
             } else {
-                var {invalidGroup, group} = setGroup(req, fgroup[0], router);
+                var {invalidGroup, group} = setGroup(req, fgroup, router);
 
                 if (invalidGroup) {
                     res.code(400).send(invalidGroup);
