@@ -1,7 +1,7 @@
 const config = require('./config');
 const crypto = require('crypto');
-const encryptKey = crypto.scryptSync(config.token.secret, config.token.salt, 32);
-const encryptIV = config.token.secret;
+const encryptKey = crypto.scryptSync(config.cookie.token.secret, config.cookie.token.salt, 32);
+const encryptIV = config.cookie.token.secret;
 
 const User = require('../database/models/user');
 
@@ -21,7 +21,7 @@ class Token {
             var dToken = await this.decrypt(tok.toString('ascii'));
             var cred = dToken.split(':');
 
-            if (cred[3] == ip && Date.now() - Number(cred[2]) < config.token.expiration * 86400000) // 90 days in millls
+            if (cred[3] == ip && Date.now() - Number(cred[2]) < config.cookie.token.expiration * 86400000) // 90 days in millls
             {
                 var user = await User.findAllBy({username: cred[0], password: cred[1]});
 
@@ -42,8 +42,8 @@ class Token {
 
     static setAuthCookie(tok, res, date) {
         res.setCookie('trav:tok', tok, {
-            expires: new Date(date.getTime() + config.token.expiration * 86400000),
-            secure: true,
+            expires: new Date(date.getTime() + config.cookie.token.expiration * 86400000),
+            secure: config.https,
             httpOnly: true,
             path: '/',
         });
@@ -53,7 +53,7 @@ class Token {
     static removeAuthCookie(res) {
         res.setCookie('trav:tok', null, {
             expires: Date.now(),
-            secure: true,
+            secure: config.https,
             httpOnly: true,
             path: '/',
         });

@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const config = require('./include/utils/config');
 
+
 config.log.logger = require(config.log.logger);
 var fastifyOptions = {
     http2: false,
@@ -17,7 +18,7 @@ if(config.https) {
   }
 }
 
-const app = require('fastify')();
+const app = require('fastify')(fastifyOptions);
 
 const fastifySession = require('fastify-good-sessions');
 const fastifyCookie = require('fastify-cookie');
@@ -35,6 +36,7 @@ const pg = new PGConnecter({
 const Database = require('./include/database');
 const Group = require('./include/database/models/group');
 const User = require('./include/database/models/user');
+const Token = require('./include/database/models/token');
 
 const Router = require('./include/server/router');
 const router = new Router(app.server);
@@ -44,12 +46,27 @@ const Email = require('./include/utils/email');
 
 const nstats = require('nstats')();
 
-if(config.allowAllCors) {
+if(config.cors.enable) {
   app.use((req, res, next) => {
-      res.setHeader("Access-Control-Allow-Origin", "*");
-      res.setHeader("Access-Control-Allow-Methods", "DELETE, POST, GET, PUT, OPTIONS")
-      res.setHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+    if(req.headers['origin']) {
+      res.setHeader("access-control-allow-origin", config.cors.origin || req.headers['origin'] || '*');
+    }
+
+    if(req.headers['access-control-request-method']){
+      res.setHeader("access-control-allow-methods", config.cors.methods || req.headers['access-control-request-method'] || '*');
+    }
+
+    if(req.headers['access-control-request-headers']) {
+      res.setHeader("access-control-allow-headers", config.cors.headers || req.headers['access-control-request-headers'] || '*');
+    }
+
       next();
+  });
+  app.options('/travelling/api/v1/*', (req, res) => {
+
+
+      res.header("access-control-max-age",config.cors.age);
+      res.code(204).send();
   });
 }
 
@@ -73,17 +90,18 @@ app.use((req, res, next)=>{
     next();
 });
 
+
 app.register(fastifyCookie);
 
 // @TODO later rewrite this for a huge preformance increase.
 // Add removing tokens if user needs updated (removed, locked, etc)
 app.register(fastifySession, {
-        secret: config.cookie.secret,
+        secret: config.cookie.session.secret,
         store: new MemoryStore(),
         cookie: {
-            secure: true,
+            secure: config.https,
             httpOnly: true,
-            maxAge: config.cookie.expiration * 1000
+            maxAge: config.cookie.session.expiration * 1000
         },
         cookieName: 'trav:ssid',
         saveUninitialized: false
@@ -95,15 +113,19 @@ app.decorateRequest('isAuthenticated', false);
 app.addHook('preHandler',function(req, res, next) {
   req.checkLoggedIn(req, res).then(auth=>{
     req.isAuthenticated = auth.auth;
-    // if (auth.redirect) {
-    //     res.redirect(302,req.raw.url);
-    // } else {
+    if (!auth.route) {
+        res.code(401).send();
+        if(config.log.requests) {
+          config.log.logger.warn('Unauthorized', 'Unregistered User' + ' (anonymous)' + ' | ' + req.ip + ' | [' + req.raw.method + '] '+req.req.url);
+        }
+
+    } else {
       router.routeUrl(req,res).then(route=>{
         if(!route){
           next();
         }
       });
-    // }
+   }
   })
 })
 
@@ -123,10 +145,20 @@ app.ready(()=>{
 })
 
 async function init() {
+
+  try {
+    await pg.query('CREATE EXTENSION "uuid-ossp";');
+  } catch(_){}
   try {
     await User.createTable();
+  } catch (_){}
+  try {
     await Group.createTable();
-  } catch (e) {}
+  } catch (_){}
+  try {
+    await Token.createTable();
+  } catch (_){}
+
 
     await Database.initGroups(router);
     await Email.init();

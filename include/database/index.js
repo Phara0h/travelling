@@ -6,6 +6,7 @@ const User = require('./models/user');
 const crypto = require('../utils/cryptointerface');
 const config = require('../utils/config');
 const Email = require('../utils/email');
+const TokenHandler = require('../token');
 
 class Database {
     constructor() {
@@ -26,17 +27,15 @@ class Database {
               }
           };
         }
+        user = user[0];
 
         // Regenerate new email with token for activation
-        if(user.email_verify_token != null && user.locked) {
-          var token = await Email.getActivationToken();
-          user.email_verify_token = token.secret;
+        if(user.email_verify && user.locked) {
+          var token = await TokenHandler.getActivationToken(user.id);
           await Email.sendActivation(user, user.email,token.token)
         }
 
-
         //Locked check
-        user = user[0];
         if (user.locked) {
             throw {
                 user: user,
@@ -103,10 +102,11 @@ class Database {
         if(config.registration.requireEmailActivation) {
           user.locked = true;
           user.locked_reason = 'Activation Required, check your email for the activation link.'
-          var token = await Email.getActivationToken();
-          user.email_verify_token = token.secret;
-          await Email.sendActivation(user, user.email,token.token)
+          var token = await TokenHandler.getActivationToken(user.id);
+          user.email_verify= true;
           await user.save();
+
+          await Email.sendActivation(user, user.email,token.token)
         }
 
         //user.addProperty('group',group[0])
@@ -118,9 +118,8 @@ class Database {
       if(user && user.length > 0) {
         user = user[0];
 
-        var rt = await Email.getRecoveryToken();
-        user.reset_password_token = rt.secret;
-
+        var rt = await TokenHandler.getRecoveryToken(user.id);
+        user.reset_password = true;
         await user.save();
 
         Email.sendPasswordRecovery(user, ip, user.email, rt.token);
@@ -128,28 +127,27 @@ class Database {
     }
 
     static async resetPassword(token, password) {
-      var user = await User.findLimtedBy({reset_password_token:token},'AND',1);
+      var user = await User.findLimtedBy({id: token[3]},'AND',1);
       if(!user || user.length < 1) {
         return false;
       }
 
       user = user[0]
       user.password = password;
-      user.reset_password_token = null;
+      user.reset_password = false;
       await user.save();
       return true;
     }
 
     static async activateAccount(token) {
-      console.log(token)
-      var user = await User.findLimtedBy({email_verify_token:token},'AND',1);
+      var user = await User.findLimtedBy({id: token[3]},'AND',1);
       if(!user || user.length < 1) {
         return false;
       }
 
       user = user[0]
 
-      user.email_verify_token = null;
+      user.email_verify = false;
       user.locked = false;
       user.locked_reason = null;
       await user.save();

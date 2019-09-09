@@ -16,7 +16,9 @@ var setGroup = function(req, group, router) {
     }
 
     if (req.body.inherited) {
-        group.inherited = req.body.inherited.filter(Number);
+        group.inherited = req.body.inherited.filter(i=>{
+          return i.length == 36;
+        });
 
         if (group.inherited.some((val, i) => group.inherited.indexOf(val) !== i) || group.inherited.indexOf(group.id) > -1) {
             invalidGroup = {
@@ -81,11 +83,11 @@ module.exports = function(app, opts, done) {
                 req.body.type = 'group';
             }
 
-            var id = req.body.id ? {id: Number(req.body.id)} : {name: req.body.name};
+            var id = req.body.id ? {id: req.body.id} : {name: req.body.name};
 
             var fgroup = await router.getGroup(id);
 
-            if (fgroup.length > 0) {
+            if (fgroup) {
                 res.code(400).send(
                     {
                         type: 'error',
@@ -123,7 +125,7 @@ module.exports = function(app, opts, done) {
         } else {
             var name = req.params.groupname.toLowerCase();
             var fgroup = await router.getGroup(name);
-            console.log(fgroup)
+
             if (!fgroup) {
                 res.code(400).send(
                     {

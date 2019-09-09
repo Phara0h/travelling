@@ -29,21 +29,17 @@ class Group extends Base(BaseModel, 'groups', {
 
     static async createTable() {
         const pg = new (require('@abeai/node-utils').PGConnecter)();
-          try {
 
           await pg.query(`CREATE TABLE groups (
-                  id serial,
+                  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
                   name character varying(350),
                   type character varying(350),
                   allowed json[],
                   inherited character varying(350)[],
                   is_default boolean DEFAULT false,
-                  eprofile character varying(350),
-                  PRIMARY KEY (id)
+                  eprofile character varying(350)
                 );`);
-          } catch (e) {
 
-          }
     }
 
     static async getDefaultGroup() {
