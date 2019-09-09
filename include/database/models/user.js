@@ -17,15 +17,12 @@ class User extends Base(BaseModel, 'users', {
     failed_login_attempts: null,
     change_username: null,
     change_password: null,
-    reset_password_token: null,
-    email_verify_token: null,
+    reset_password: null,
+    email_verify: null,
     group_id: null,
     email: PGTypes.AutoCrypt,
     created_on: null,
     last_login: null,
-    client_id: null,
-    client_secret: PGTypes.Hash,
-    client_refresh: PGTypes.Hash,
     user_data: config.pg.crypto.encryptUserData ? PGTypes.AutoCrypt : null,
     eprofile: PGTypes.EncryptProfile
 }) {
@@ -35,9 +32,8 @@ class User extends Base(BaseModel, 'users', {
 
     static async createTable() {
         const pg = new (require('@abeai/node-utils').PGConnecter)();
-        try {
           await pg.query(`CREATE TABLE users (
-                  id serial,
+                  id UUID DEFAULT uuid_generate_v4(),
                   username character varying(100),
                   password character varying(258),
                   email character varying(500),
@@ -45,25 +41,20 @@ class User extends Base(BaseModel, 'users', {
                   locked_reason text,
                   locked boolean DEFAULT false,
                   last_login json,
-                  group_id serial,
+                  group_id UUID,
                   failed_login_attempts int DEFAULT 0,
                   change_username boolean DEFAULT false,
                   change_password boolean DEFAULT false,
-                  reset_password_token character varying(350),
-                  email_verify_token character varying(350),
+                  reset_password boolean DEFAULT false,
+                  email_verify boolean DEFAULT false,
                   avatar bytea,
                   created_on bigint,
-                  client_id character varying(258),
-                  client_secret character varying(258),
-                  client_refresh character varying(258),
                   user_data bytea,
                   __user_data character varying(258),
                   eprofile character varying(350),
-                  PRIMARY KEY (id)
+                  PRIMARY KEY (id, group_id)
                 );`);
-        } catch (e) {
 
-        }
     }
 
     async resolveGroup(router) {

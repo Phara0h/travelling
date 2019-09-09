@@ -1,22 +1,22 @@
 module.exports = () => {
-    const Email = require('../include/utils/email');
+    const TokenHandler = require('../include/token');
 
-    describe('Recovery',() =>{
-      var token = null;
-      var secret = null;
-      test('Get Recovery Token', async () => {
-        var tok = await Email.getRecoveryToken();
-        console.log(tok)
-        token = tok.token;
-        secret = tok.secret;
-        expect(1).toEqual(1)
-      });
-
-      test('Check Recovery Token', async () => {
-        var sec = await Email.checkRecoveryToken(token);
-        expect(sec).toEqual(secret)
-      });
-    })
+    // describe('Recovery',() =>{
+    //   var token = null;
+    //   var secret = null;
+    //   test('Get Recovery Token', async () => {
+    //     var tok = await TokenHandler.getRecoveryToken();
+    //     console.log(tok)
+    //     token = tok.token;
+    //     secret = tok.secret;
+    //     expect(1).toEqual(1)
+    //   });
+    //
+    //   test('Check Recovery Token', async () => {
+    //     var sec = await TokenHandler.checkRecoveryToken(token);
+    //     expect(sec).toEqual(secret)
+    //   });
+    // })
 
     // test('Test encryption', async () => {
     //

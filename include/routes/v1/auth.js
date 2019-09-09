@@ -1,9 +1,11 @@
 const config = require('../../utils/config');
 const regex = require('../../utils/regex');
+const qs = require('qs');
 
 const Database = require('../../database');
-const Token = require('../../utils/token');
+const CookieToken = require('../../utils/cookietoken');
 const Email = require('../../utils/email');
+const TokenHandler = require('../../token');
 
 const {checkVaildUser} = require('../../utils/user');
 
@@ -20,20 +22,21 @@ var login = async (user, req, res) => {
     user.failed_login_attempts = 0;
     await user.save();
 
-    res = await Token.newTokenInCookie(user.username, user.password, req, res);
+
     req.createSession(user.id, {user});
+    res = await CookieToken.newTokenInCookie(user.username, user.password, req, res);
 
     config.log.logger.info('User Logged in: ' + user.username + ' (' + user.group.name + ')' + ' | ' + req.ip);
 
     if (req.cookies['trav:backurl']) {
-        var url = req.cookies['trav:backurl'];
+        var url = req.cookies['trav:backurl'].split('|');
         res.setCookie('trav:backurl', null, {
           expires: Date.now(),
-          secure: true,
+          secure: config.https,
           httpOnly: true,
           path: '/'
         })
-        res.redirect(url);
+        res.redirect(url[0] === 'GET' ? 301 : 303, url[1]);
         return;
     } else {
         res.code(200).send({
@@ -44,6 +47,16 @@ var login = async (user, req, res) => {
 
 module.exports = function(app, opts, done) {
     const router = opts.router;
+    if(config.cors.enable) {
+      app.use((req,res,next)=> {
+        res.setHeader('access-control-allow-credentials', true)
+        next();
+      })
+    }
+
+    app.addContentTypeParser('application/x-www-form-urlencoded',{ parseAs: 'buffer', bodyLimit: opts.bodyLimit}, function (req, body, done) {
+      done(null, qs.parse(body.toString()));
+    })
 
     app.put('/auth/login', async (req, res) => {
 
@@ -88,10 +101,15 @@ module.exports = function(app, opts, done) {
                 var user = await Database.checkAuth(username, email, req.body.password)
                 await login(user.user, req, res);
               } catch (e) {
-                res.code(400).send(e.err.type=='locked' ? {...e.err, email:e.email} : {
+                res.code(400).send(e.err.type=='locked' ? {type: e.err.type, msg: e.err.msg,email:e.email} : {
                     type: 'login-error',
                     msg: 'Invalid login',
                 });
+
+                // res.code(400).send(e.err.type=='locked' ? {...e.err, email:e.email} : {
+                //     type: 'login-error',
+                //     msg: 'Invalid login',
+                // });
 
               }
             }
@@ -169,7 +187,7 @@ module.exports = function(app, opts, done) {
             res.code(400).send(isVaild);
             return;
         }
-        var token = await Email.checkRecoveryToken(req.query.token);
+        var token = await TokenHandler.checkRecoveryToken(req.query.token);
 
         if (!token) {
             res.code(400).send({
@@ -193,7 +211,7 @@ module.exports = function(app, opts, done) {
     });
 
     app.get('/auth/activate', async (req, res) => {
-        var token = await Email.checkActivationToken(req.query.token);
+        var token = await TokenHandler.checkActivationToken(req.query.token);
 
         if(!token) {
           res.code(400);
@@ -214,6 +232,53 @@ module.exports = function(app, opts, done) {
 
         return 'Account activated, please login.';
     });
+
+    app.post('/auth/token', async (req,res) =>{
+      if(req.body.grant_type != 'client_credentials')
+      {
+        res.code(400);
+        return {
+            type: 'oauth2-grant-type-error',
+            msg: 'grant_type is not supported.',
+        };
+      }
+      var client_id = null;
+      var client_secret = null;
+
+      try {
+        if(req.headers.authorization) {
+            var details = Buffer.from(req.headers.authorization.split(' ')[1], 'base64').toString('utf8').split(':');
+            client_id = details[0];
+            client_secret = details[1];
+        } else if(req.body.client_id && req.body.client_secret) {
+          client_id = req.body.client_id;
+          client_secret = req.body.client_secret;
+        }
+      } catch (e) {}
+
+      if(!client_id || !client_secret) {
+        res.code(400);
+        return {
+            type: 'oauth2-client-details-invalid-error',
+            msg: 'client_id and/or client_secret is invaild',
+        };
+      }
+
+      var token = await TokenHandler.checkOAuthToken(client_id, client_secret);
+
+      if(!token) {
+        res.code(400);
+        return {
+            type: 'oauth2-token-invalid-error',
+            msg: 'Token is invalid',
+        };
+      }
+      res.code(200);
+      return await TokenHandler.getAccessToken(token);
+    })
+
+
+
 
     done();
 };

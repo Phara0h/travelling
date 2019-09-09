@@ -1,5 +1,4 @@
 const crypto = require('crypto');
-const Token = require('./token');
 const config = require('./config');
 const nodemailer = require('nodemailer');
 const fs = require('fs');
@@ -15,19 +14,20 @@ class Email {
 
     static async init() {
         if (config.email.test.enable) {
-            var testAccount = await nodemailer.createTestAccount();
 
-            config.log.logger.debug('Test Email Account:',testAccount);
+          var ta = await nodemailer.createTestAccount();
+              config.log.logger.debug('Test Email Account:',ta);
 
-            transporter = nodemailer.createTransport({
-                host: 'smtp.ethereal.email',
-                port: 587,
-                secure: false, // true for 465, false for other ports
-                auth: {
-                    user: testAccount.user, // generated ethereal user
-                    pass: testAccount.pass, // generated ethereal password
-                },
-            });
+              transporter = nodemailer.createTransport({
+                  host: 'smtp.ethereal.email',
+                  port: 587,
+                  secure: false, // true for 465, false for other ports
+                  auth: {
+                      user: ta.user, // generated ethereal user
+                      pass: ta.pass, // generated ethereal password
+                  },
+              });
+
         } else if (config.email.smtp.enable) {
             transporter = nodemailer.createTransport(config.email.smtp);
         } else if (config.email.aws.enable) {
@@ -46,53 +46,7 @@ class Email {
         };
     }
 
-    static async checkRecoveryToken(token) {
-        try {
-            var dToken = (await Token.decrypt(token.replace(/-/g, '+').replace(/_/g, '\/'))).split('|');
 
-            if (Date.now() - Number(dToken[1]) < config.email.recovery.expiration * 1000) {
-                return dToken.join('|'); // secret;
-            }
-            return false;
-        } catch (e) {
-            return false;
-        }
-    }
-
-    static getRecoveryToken() {
-        return new Promise((resolve, reject)=>{
-            crypto.randomBytes(32, async (err, secret) => {
-
-                if (err) {
-                    reject(err);
-                }
-
-                var secret = secret.toString('base64') + '|' + (new Date(Date.now())).getTime();
-
-                secret = secret.toString('base64');
-
-                resolve({token: (await Token.encrypt(secret)).replace(/\+/g, '-').replace(/\//g, '_'), secret});
-            });
-        });
-    }
-
-
-    static async checkActivationToken(token) {
-        try {
-            var dToken = (await Token.decrypt(token.replace(/-/g, '+').replace(/_/g, '\/'))).split('|');
-            console.log(Date.now() - Number(dToken[1]), config.email.activation.expiration * 1000 )
-            if (Date.now() - Number(dToken[1]) < config.email.activation.expiration * 1000) {
-                return dToken.join('|'); // secret;
-            }
-            return false;
-        } catch (e) {
-            return false;
-        }
-    }
-
-    static async getActivationToken() {
-        return await this.getRecoveryToken();
-    }
 
     static async sendPasswordRecovery(user, ip, email, token) {
         if(!transporter) {
@@ -106,25 +60,19 @@ class Email {
         var body = templates.resetPasswordBody({user, ip, config, token});
         var subject = templates.resetPasswordSubject({user});
 
-        var info =  transporter.sendMail({
+          var info = await transporter.sendMail({
             from: config.email.from,
             to: email,
             subject: subject,
             html: body,
-        }, (e, r)=>{
-            if (e) {
-                config.log.logger.error(e);
-            }
         });
-
         if(config.email.test.enable) {
-          var testInfo = {info, url: nodemailer.getTestMessageUrl(info)};
+          var testInfo = {info, url: await nodemailer.getTestMessageUrl(info)};
           config.log.logger.debug(testInfo)
           var tc = require('../../tests/include/TestContainer');
           tc.passwordEmail = testInfo;
           return testInfo;
         }
-
     }
 
     static async sendActivation(user, email, token) {
@@ -137,25 +85,21 @@ class Email {
       var body = templates.activationBody({user, config, token});
       var subject = templates.activationSubject({user});
 
-      var info = transporter.sendMail({
+      var info = await transporter.sendMail({
           from: config.email.from,
           to: email,
           subject: subject,
           html: body,
-      }, (e, r)=>{
-          if (e) {
-              config.log.logger.error(e);
-          }
       });
-
       if(config.email.test.enable) {
-        var testInfo = {info, url: nodemailer.getTestMessageUrl(info)};
+        var testInfo = {info, url: await nodemailer.getTestMessageUrl(info)};
         config.log.logger.debug(testInfo)
         var tc = require('../../tests/include/TestContainer');
         tc.activationEmail = testInfo;
         return testInfo;
       }
     }
+
 }
 
 module.exports = Email;

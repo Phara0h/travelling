@@ -21,7 +21,13 @@ const config = {
     port: isSetDefault(Number(process.env.TRAVELLING_PORT), 443),
     key: process.env.TRAVELLING_KEY,
     cert: process.env.TRAVELLING_CERT,
-    allowAllCors: isSetDefault(stringToBool(process.env.TRAVELLING_ALLOW_ALL_CORS), false),
+    cors: {
+      enable: isSetDefault(stringToBool(process.env.TRAVELLING_CORS_ENABLE), false),
+      origin: isSetDefault(process.env.TRAVELLING_CORS_HEADER_ORIGIN, null),
+      methods: isSetDefault(process.env.TRAVELLING_CORS_HEADER_METHODS, null),
+      headers: isSetDefault(process.env.TRAVELLING_CORS_HEADER_HEADERS, null),
+      age: isSetDefault(Number(process.env.TRAVELLING_CORS_HEADER_MAX_AGE), 3600)
+    },
     https: isSetDefault(stringToBool(process.env.TRAVELLING_HTTPS), true),
     log: {
       enable: isSetDefault(stringToBool(process.env.TRAVELLING_LOG_ENABLE), true),
@@ -41,8 +47,15 @@ const config = {
       timeout: isSetDefault(Number(process.env.TRAVELLING_PROXY_TIMEOUT), 0)
     },
     cookie: {
-        secret: isSetDefault(process.env.TRAVELLING_COOKIE_SECRET, null),
-        expiration: isSetDefault(Number(process.env.TRAVELLING_COOKIE_EXPIRATION), 10) //seconds
+      session: {
+          secret: isSetDefault(process.env.TRAVELLING_COOKIE_SESSION_SECRET, null),
+          expiration: isSetDefault(Number(process.env.TRAVELLING_COOKIE_SESSION_EXPIRATION), 10) //seconds
+      },
+      token: {
+          secret: isSetDefault(process.env.TRAVELLING_COOKIE_TOKEN_SECRET, null),
+          salt: isSetDefault(process.env.TRAVELLING_COOKIE_TOKEN_SALT, null),
+          expiration: isSetDefault(Number(process.env.TRAVELLING_COOKIE_TOKEN_EXPIRATION), 90) //days
+      }
     },
     username: {
       minchar:isSetDefault(Number(process.env.TRAVELLING_USERNAME_MINCHAR), 4),
@@ -60,9 +73,9 @@ const config = {
         maxLoginAttempts: isSetDefault(Number(process.env.TRAVELLING_LOGIN_MAX_LOGIN_ATTEMPTS), 10)
     },
     token: {
-        secret: isSetDefault(process.env.TRAVELLING_TOKEN_SECRET, null),
-        salt: isSetDefault(process.env.TRAVELLING_TOKEN_SALT, null),
-        expiration: isSetDefault(Number(process.env.TRAVELLING_TOKEN_EXPIRATION), 90) //days
+      access: {
+          expiration: isSetDefault(Number(process.env.TRAVELLING_TOKEN_ACCESS_EXPIRATION), 1440) //minutes
+      }
     },
     pg: {
         url: isSetDefault(process.env.DATABASE_URL, null),
@@ -79,7 +92,7 @@ const config = {
         expiration: isSetDefault(Number(process.env.TRAVELLING_EMAIL_RECOVERY_EXPIRATION), 900) //seconds
       },
       activation: {
-          expiration: isSetDefault(Number(process.env.TRAVELLING_EMAIL_ACTIVATION_EXPIRATION), 86400) //seconds
+        expiration: isSetDefault(Number(process.env.TRAVELLING_EMAIL_ACTIVATION_EXPIRATION), 86400) //seconds
       },
       template: {
         passwordResetBody:isSetDefault(process.env.TRAVELLING_EMAIL_RESET_PASSWORD_TEMPLATE_BODY, './templates/email-reset-password-body.html'),

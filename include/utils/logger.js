@@ -6,7 +6,7 @@ class Logger
     this.logger = console;
    }
 
-  log(level,msg)
+  log(level,...msg)
   {
     //console.log(config)
     if(config.log.enable && config.log.colors)
@@ -34,37 +34,37 @@ class Logger
         default:
           break;
         }
-        this.logger.log(colors.cyan('Travelling:')+' ['+colors[color](level.toUpperCase())+'] ',msg);
+        this.logger.log(colors.cyan('Travelling:')+' ['+colors[color](level.toUpperCase())+'] ',...msg);
       }
       else if(config.log.enable)
       {
-        this.logger.log('Travelling: ['+level.toUpperCase()+'] ',msg);
+        this.logger.log('Travelling: ['+level.toUpperCase()+'] ',...msg);
       }
     }
 
-  info(msg)
+  info(...msg)
   {
-    this.log('info',msg);
+    this.log('info',...msg);
   }
-  warn(msg)
+  warn(...msg)
   {
-    this.log('warn',msg);
+    this.log('warn',...msg);
   }
-  error(msg)
+  error(...msg)
   {
-    this.log('error',msg);
+    this.log('error',...msg);
   }
-  debug(msg)
+  debug(...msg)
   {
-    this.log('debug',msg);
+    this.log('debug',...msg);
   }
-  fatal(msg)
+  fatal(...msg)
   {
-    this.log('fatal',msg);
+    this.log('fatal',...msg);
   }
-  trace(msg)
+  trace(...msg)
   {
-    this.log('trace',msg);
+    this.log('trace',...msg);
   }
 
 }

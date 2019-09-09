@@ -1,6 +1,6 @@
 const regex = require('../../utils/regex');
 const User = require('../../database/models/user');
-
+const TokenHandler = require('../../token')
 const userUtils = require('../../utils/user');
 
 module.exports = function(app, opts, done) {
@@ -8,7 +8,7 @@ module.exports = function(app, opts, done) {
 
     var deleteUser = async (req, res) => {
 
-        if ((req.params.username && !regex.safeName.exec(req.params.username)) || (req.params.id && Number.isNaN(req.params.id))) {
+        if ((req.params.username && !regex.safeName.exec(req.params.username)) || (req.params.id && req.params.id.length != 36)) {
             res.code(400);
             return {
                 type: 'user-find-by-error',
@@ -44,7 +44,7 @@ module.exports = function(app, opts, done) {
 
     var editUser = async (req, res) => {
 
-        if ((req.params.username && !regex.safeName.exec(req.params.username)) || (req.params.id && Number.isNaN(req.params.id))) {
+        if ((req.params.username && !regex.safeName.exec(req.params.username)) || (req.params.id && req.params.id.length != 36)) {
             res.code(400);
             return {
                 type: 'user-find-by-error',
@@ -91,8 +91,8 @@ module.exports = function(app, opts, done) {
     };
 
     var getUser = async (req, res) => {
-
-        if ((!req.params.id && !req.params.username )|| (req.params.username && !regex.safeName.exec(req.params.username)) || (req.params.id !== undefined && Number.isNaN(req.params.id))) {
+        
+        if ((!req.params.id && !req.params.username )|| (req.params.username && !regex.safeName.exec(req.params.username)) || (req.params.id !== undefined && req.params.id !== null && req.params.id.length != 36)) {
             res.code(400);
             return {
                 type: 'user-find-by-error',
@@ -102,7 +102,7 @@ module.exports = function(app, opts, done) {
 
         var id = req.params.username ? {username: req.params.username} : {id: req.params.id};
         var user = await User.findLimtedBy(id, "AND", 1);
-
+        //console.log(id, user, user.length)
         if (user && user.length > 0) {
 
             await user[0].resolveGroup(router);
@@ -209,6 +209,11 @@ module.exports = function(app, opts, done) {
         var isAllowed = req.session ? router.isPermissionAllowed(req.params.permission, (await router.currentGroup(req, res)),  (!req.isAuthenticated ? null : req.session.data.user)) : false;
 
         res.code(isAllowed ? 200 : 401).send();
+    });
+
+    app.post('/user/me/token', async (req, res) => {
+      var token = await TokenHandler.getOAuthToken(req.session.data.user.id, req.body.type || 'oauth', req.body.name || '')
+          res.code(200).send({client_id: token.id, client_secret: token.secret})
     });
 
 

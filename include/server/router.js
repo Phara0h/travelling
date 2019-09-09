@@ -99,11 +99,13 @@ class Router {
                   if (config.log.requests) {
                       if (authenticated) {
                           log.info(sessionUser.username + ' (' + sessionUser.group.name + ') | ' + req.ip + ' | [' + req.raw.method + '] '+req.req.url);
+                      } else {
+                          log.info('Unregistered User' + ' (anonymous)' + ' | ' + req.ip + ' | [' + req.raw.method + '] '+req.req.url);
                       }
                     }
                     return false;
                 } else {
-                  console.log('host:',r.host)
+
                     var target = {
                         target: this.transformRoute(sessionUser, r, r.host == null ? req.protocol + '://' + req.headers.host : r.host),
                     };
@@ -121,7 +123,7 @@ class Router {
                     } else {
                         // This gets around websites host checking / blocking
                         //delete req.raw.headers.host;
-                        console.log(target.target)
+
                         if (target.target.indexOf('https') > -1) {
                           this.proxyssl.web(req.req, res.res, target);
                         } else {
@@ -133,41 +135,39 @@ class Router {
                     if (authenticated) {
                         log.info(sessionUser.username + ' (' + sessionUser.group.name + ') | ' + req.ip + ' | [' + req.raw.method + '] '+req.req.url+' -> ' + target.target+req.raw.url);
                     } else {
-                        log.warn('Unregistered User' + ' (anonymous)' + ' | ' + req.ip + ' | [' + req.raw.method + '] '+req.req.url+' -> ' + target.target);
+                        log.info('Unregistered User' + ' (anonymous)' + ' | ' + req.ip + ' | [' + req.raw.method + '] '+req.req.url+' -> ' + target.target);
                     }
-                    return true
+
                 }
+                return true
             } else if (!authenticated) {
                 // if (req.raw.url.indexOf('api') > -1) {
                 //     res.code(401).send('Access Denied');
-                // } else {
-                res.setCookie('trav:backurl', req.raw.url, {
-                  expires: new Date(Date.now() + 240000),
-                  secure: true,
-                  httpOnly: true,
-                  path: '/'
-                });
-                    res.redirect(config.portal.path);
+                // }
+                if(req.req.url != config.portal.path) {
+                  this.setBackurl(res,req);
+                  res.redirect(config.portal.path);
+                }
+                else {
+                  res.code(401).send('Access Denied');
+                }
                 //}
 
                 if (config.log.unauthorizedAccess) {
-                    log.log('Unauthorized', 'Unregistered User' + ' (anonymous)' + ' | ' + req.ip + ' | [' + req.raw.method + '] '+req.req.url);
+                    log.warn('Unauthorized', 'Unregistered User' + ' (anonymous)' + ' | ' + req.ip + ' | [' + req.raw.method + '] '+req.req.url);
                 }
+                return false;
 
             } else {
                 res.code(401).send('Access Denied');
 
                 if (config.log.unauthorizedAccess) {
-                  log.log('Unauthorized', sessionUser.username + ' (' + sessionUser.group.name + ') | ' + req.ip + ' | [' + req.raw.method + '] '+req.req.url);
+                  log.warn('Unauthorized', sessionUser.username + ' (' + sessionUser.group.name + ') | ' + req.ip + ' | [' + req.raw.method + '] '+req.req.url);
                 }
             }
         } else {
             await this.updateGroupList();
-            res.setCookie('trav:backurl', req.raw.url, {
-              secure: true,
-              httpOnly: true,
-              path: '/'
-            });
+            this.setBackurl(res,req);
             res.redirect(config.portal.path);
         }
     }
@@ -318,6 +318,15 @@ class Router {
       }
 
       return this.unmergedGroups;
+    }
+
+    setBackurl(res,req) {
+      res.setCookie('trav:backurl', req.raw.method+"|"+req.raw.url, {
+        expires: new Date(Date.now() + 240000),
+        secure: config.https,
+        httpOnly: true,
+        path: '/'
+      });
     }
 }
 

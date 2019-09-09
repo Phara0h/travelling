@@ -20,14 +20,16 @@ module.exports = () => {
 
         test('Login with Test2 User Again After Session Expires 4 Seconds', async () => {
 
-            jest.setTimeout(10000);
+            jest.setTimeout(20000);
+
             var p = new Promise((resolve, reject)=>{
                 setTimeout(()=>{
                     resolve();
-                }, 5000);
+                }, 4900);
             });
 
             await p;
+
             var ssid = userContainer.user2.ssid;
             var res = await Travelling.Auth.login({
                 password: 'Pas5w0r!d2',

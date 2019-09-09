@@ -58,6 +58,7 @@ module.exports = () => {
 
             expect(res.body.type).toEqual('locked');
 
+
             var aeRes = await fasq.request({
              method: 'GET',
              resolveWithFullResponse: true,
@@ -66,14 +67,14 @@ module.exports = () => {
            })
 
             var activationUrl = aeRes.body.match(/\bhttps?:\/\/\S+/gi);
-            expect(activationUrl).toHaveLength(1);
 
             var activationRes = await fasq.request({
              method: 'GET',
              resolveWithFullResponse: true,
              simple: false,
-             uri: activationUrl[0],
+             uri: activationUrl[1].replace(']', '').replace(/&#x3D;/g, '='),
            });
+           expect(activationRes.statusCode).toEqual(200);
 
            var res2 = await Travelling.Auth.login({
                password: 'Pas5w0r!d4',
