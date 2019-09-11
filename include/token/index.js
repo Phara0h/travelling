@@ -2,6 +2,7 @@
 const crypto = require('crypto');
 const config = require('../utils/config');
 const cryptoInterface = require('../utils/cryptointerface');
+const regex = require('../utils/regex');
 
 const User = require('../database/models/user');
 const Token = require('../database/models/token');
@@ -57,12 +58,18 @@ class TokenHandler {
         });
     }
 
-    static getOAuthToken(user_id, type = 'oauth', name = '') {
+    static getOAuthToken(user_id, type = 'oauth', name = null) {
       return new Promise((resolve, reject)=>{
           crypto.randomBytes(64, async (err, secret) => {
 
               if (err) {
                   reject(err);
+                  return;
+              }
+
+              if(regex.username.exec(name) == null) {
+                reject(true);
+                return;
               }
 
               var token = await Token.create({
@@ -83,12 +90,14 @@ class TokenHandler {
 
               if (err) {
                   reject(err);
+                  return;
               }
 
               var secretb64 = secret.toString('base64');
-              
+
               var secret = await this._hashToken(secretb64,token.secret);
-              var nToken = await TokenStore.set(token.user_id, 'access', secret, config.token.access.expiration * 60000) // min to ms
+              console.log(token)
+              var nToken = await TokenStore.set(token.user_id, 'access', secret, config.token.access.expiration * 60000, token.name) // min to ms
               resolve({access_token: secret, expires_in: config.token.access.expiration*60, token_type:"bearer"});
           });
       });
@@ -97,6 +106,7 @@ class TokenHandler {
     static async checkAccessToken(token) {
         var token = await TokenStore.get(token);
 
+        console.log('CHECK ACCESS: ',token, TokenStore)
         if(!token) {
           return false;
         }
@@ -106,16 +116,17 @@ class TokenHandler {
     }
 
     static async checkOAuthToken(id, secret) {
-        var token = await Token.findById(id);
-        if(!token) {
+
+        var hashedSecret = await cryptoInterface.hash(secret);
+        //console.log("UUID CHECK : ",regex.uuidCheck(id) ? {id, hashedSecret} : {name:id, hashedSecret})
+        var token = await Token.findLimtedBy(regex.uuidCheck(id) ? {id, secret:hashedSecret} : {name:id, secret:hashedSecret}, 'AND', 1);
+        //console.log(token, secret)
+        if(!token || token.length <= 0) {
           return false;
         }
 
-        if(token.secret != (await cryptoInterface.hash(secret))) {
-          return false;
-        }
-        token.secret = secret;
-        return token;
+        token[0].secret = secret;
+        return token[0];
     }
 
 

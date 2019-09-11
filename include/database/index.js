@@ -195,13 +195,14 @@ class Database {
 
           await anon.save();
 
-          router.groups[anon.name] = this.groupInheritedMerge(anon, grps);
+          //router.groups[anon.name] = this.groupInheritedMerge(anon, grps);
 
           var admin = await Group.create({
             name: "superadmin",
             type: "group",
             allowed: [],
-            is_default: true
+            is_default: true,
+            inherited: [anon.id]
           })
 
           admin.addRoute({
@@ -209,8 +210,8 @@ class Database {
             route: '/travelling/*'
           });
           await admin.save();
-
-          router.groups[admin.name] = this.groupInheritedMerge(admin, grps);
+          //console.log(admin)
+          //router.groups[admin.name] = this.groupInheritedMerge(admin, grps);
 
 
 
