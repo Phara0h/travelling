@@ -91,7 +91,7 @@ module.exports = function(app, opts, done) {
     };
 
     var getUser = async (req, res) => {
-        
+
         if ((!req.params.id && !req.params.username )|| (req.params.username && !regex.safeName.exec(req.params.username)) || (req.params.id !== undefined && req.params.id !== null && req.params.id.length != 36)) {
             res.code(400);
             return {
@@ -212,8 +212,18 @@ module.exports = function(app, opts, done) {
     });
 
     app.post('/user/me/token', async (req, res) => {
-      var token = await TokenHandler.getOAuthToken(req.session.data.user.id, req.body.type || 'oauth', req.body.name || '')
-          res.code(200).send({client_id: token.id, client_secret: token.secret})
+      var token = null;
+      try {
+        token = await TokenHandler.getOAuthToken(req.session.data.user.id, req.body.type || 'oauth', req.body.name || null);
+      } catch (e) {
+        res.code(400).send({
+            type: 'token-error',
+            msg: 'Tokens name needs to have [A-Za-z0-9_@.] as the only vaild characters.',
+        });
+        return;
+      }
+
+      res.code(200).send({client_id: token.name || token.id, client_secret: token.secret})
     });
 
 

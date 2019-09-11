@@ -8,15 +8,15 @@ class TokenStore {
         this.tokens = {};
     }
 
-    async set(user_id, type, token, expiration) {
+    async set(user_id, type, token, expiration, name = '') {
 
         setTimeout(()=>{
           this.destroy(token);
         },expiration);
 
-        this.tokens[token] = {user_id,type,expires: new Date(expiration)};
+        this.tokens[token] = {user_id,type,expires: new Date(expiration), name};
 
-        return this.tokens[user_id];
+        return this.tokens[token];
     }
 
     async get(token, type) {

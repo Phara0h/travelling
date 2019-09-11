@@ -7,7 +7,6 @@ var checkLoggedIn = async (req, res, router)=> {
     if(req.headers.authorization) {
       var user = await TokenHandler.checkAccessToken(req.headers.authorization.split('Bearer ')[1]);
       if(!user) {
-
         return {auth: false, route: req.headers.authorization.indexOf('Basic ') > -1 ? true : false}
       }
 
