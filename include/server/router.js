@@ -84,6 +84,7 @@ class Router {
             // the route object
             var r = this.isRouteAllowed(req.raw.method, req.raw.url, group, sessionUser);
             if (r) {
+              //console.log(r)
                 // sets user id cookie every time to protect against tampering.
                 // res.cookie('travelling:aid', sessionUser._id);
                 // res.cookie('travelling:un', sessionUser.username);
@@ -95,7 +96,7 @@ class Router {
                     req.headers['aid'] = sessionUser.id;
                 }
 
-                if (req.raw.url.indexOf('/travelling/') == 0) {
+                if (req.raw.url.indexOf('/travelling/api/') == 0) {
                   if (config.log.requests) {
                       if (authenticated) {
                           log.info(sessionUser.username + ' (' + sessionUser.group.name + ') | ' + req.ip + ' | [' + req.raw.method + '] '+req.req.url);
@@ -105,31 +106,36 @@ class Router {
                     }
                     return false;
                 } else {
-
                     var target = {
-                        target: this.transformRoute(sessionUser, r, r.host == null ? req.protocol + '://' + req.headers.host : r.host),
+                        target: this.transformRoute(sessionUser, r, r.host || `${config.https ? 'https' : 'http'}://127.0.0.1:${config.port}`),
                     };
 
                     if (r.removeFromPath) {
                         req.raw.url = req.raw.url.replace(this.transformRoute(sessionUser, r, r.removeFromPath), '');
                     }
 
-                    if (req._wssocket) {
-                        if (target.target.indexOf('wss') > -1) {
-                          this.proxyssl.ws(req.raw, req._wssocket, target);
-                        } else {
-                          this.proxy.ws(req.raw, req._wssocket, target);
-                        }
-                    } else {
-                        // This gets around websites host checking / blocking
-                        //delete req.raw.headers.host;
+                    if(r.host)
+                    {
+                      if (req._wssocket) {
+                          if (target.target.indexOf('wss') > -1) {
+                            this.proxyssl.ws(req.raw, req._wssocket, target);
+                          } else {
+                            this.proxy.ws(req.raw, req._wssocket, target);
+                          }
+                      } else {
+                          // This gets around websites host checking / blocking
+                          //delete req.raw.headers.host;
 
-                        if (target.target.indexOf('https') > -1) {
-                          this.proxyssl.web(req.req, res.res, target);
-                        } else {
-                          this.proxy.web(req.req, res.res, target);
-                        }
+                          if (target.target.indexOf('https') > -1) {
+                            this.proxyssl.web(req.req, res.res, target);
+                          } else {
+                            this.proxy.web(req.req, res.res, target);
+                          }
+                      }
+                      return true;
                     }
+
+                    return false;
                 }
                 if (config.log.requests) {
                     if (authenticated) {
@@ -145,6 +151,7 @@ class Router {
                 //     res.code(401).send('Access Denied');
                 // }
                 if(req.req.url != config.portal.path) {
+                  //console.log(req.raw.url, req.raw.url, config.portal.path)
                   this.setBackurl(res,req);
                   res.redirect(config.portal.path);
                 }
