@@ -94,11 +94,9 @@ class TokenHandler {
               }
 
               var secretb64 = secret.toString('base64');
-
               var secret = await this._hashToken(secretb64,token.secret);
-              console.log(token)
               var nToken = await TokenStore.set(token.user_id, 'access', secret, config.token.access.expiration * 60000, token.name) // min to ms
-              resolve({access_token: secret, expires_in: config.token.access.expiration*60, token_type:"bearer"});
+              resolve({access_token: secret, expires_in: config.token.access.expiration*60, token_type:"bearer"}); // min to seconds
           });
       });
     }
@@ -106,7 +104,6 @@ class TokenHandler {
     static async checkAccessToken(token) {
         var token = await TokenStore.get(token);
 
-        console.log('CHECK ACCESS: ',token, TokenStore)
         if(!token) {
           return false;
         }

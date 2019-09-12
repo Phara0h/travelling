@@ -7,6 +7,7 @@ config.log.logger = require(config.log.logger);
 var fastifyOptions = {
     http2: false,
     logger: config.log.fastifyLogger,
+    //logger: true
     disableRequestLogging: true
 };
 
@@ -45,6 +46,14 @@ const auth = require('./include/utils/auth');
 const Email = require('./include/utils/email');
 
 const nstats = require('nstats')();
+
+app.setErrorHandler(function (error, request, reply) {
+  console.log(error)
+  reply.code(500).send({
+      type: 'error',
+      msg: 'Please report this issue to the site admin',
+  })
+})
 
 if(config.cors.enable) {
   app.use((req, res, next) => {
@@ -111,8 +120,10 @@ app.decorateRequest('checkLoggedIn', async function(req,res){return await auth.c
 app.decorateRequest('logout', auth.logout);
 app.decorateRequest('isAuthenticated', false);
 app.addHook('preHandler',function(req, res, next) {
+
   req.checkLoggedIn(req, res).then(auth=>{
     req.isAuthenticated = auth.auth;
+
     if (!auth.route) {
         res.code(401).send();
         if(config.log.requests) {
@@ -140,6 +151,9 @@ if(config.portal.enable) {
     prefix: config.portal.path,
   })
 }
+console.log(config.portal);
+
+
 app.ready(()=>{
   config.log.logger.debug(app.printRoutes())
 })

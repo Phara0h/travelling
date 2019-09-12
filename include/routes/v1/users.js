@@ -215,6 +215,8 @@ module.exports = function(app, opts, done) {
       var token = null;
       try {
         token = await TokenHandler.getOAuthToken(req.session.data.user.id, req.body.type || 'oauth', req.body.name || null);
+        res.code(200).send({client_id: token.name || token.id, client_secret: token.secret})
+        return;
       } catch (e) {
         res.code(400).send({
             type: 'token-error',
@@ -223,7 +225,7 @@ module.exports = function(app, opts, done) {
         return;
       }
 
-      res.code(200).send({client_id: token.name || token.id, client_secret: token.secret})
+
     });
 
 

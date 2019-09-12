@@ -234,6 +234,7 @@ module.exports = function(app, opts, done) {
     });
 
     app.post('/auth/token', async (req,res) =>{
+      console.log(req.body, req.headers)
       if(req.body.grant_type != 'client_credentials')
       {
         res.code(400);
@@ -273,6 +274,7 @@ module.exports = function(app, opts, done) {
             msg: 'Token is invalid',
         };
       }
+
       res.code(200);
       return await TokenHandler.getAccessToken(token);
     })

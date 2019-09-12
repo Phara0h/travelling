@@ -1,5 +1,5 @@
 const config = require('../../include/utils/config');
-const Travelling = require('../include/Travelling')('https://127.0.0.1:6969');
+const Travelling = require('../../sdk')('https://127.0.0.1:6969');
 var userContainer = require('../include/UserContainer.js');
 
 module.exports = () => {
@@ -34,7 +34,7 @@ module.exports = () => {
             var res = await Travelling.Auth.login({
                 password: 'Pas5w0r!d2',
                 email: 'test2@test.com',
-            }, {
+            },  {
                 headers: {
                     cookie: userContainer.user2Cookie(),
                 },
@@ -50,7 +50,7 @@ module.exports = () => {
             var ssid = userContainer.user2.ssid;
             userContainer.user2.ssid = null;
 
-            var res = await Travelling.User.Current.getUser( {
+            var res = await Travelling.User.Current.getUser( null, {
                 headers: {
                     cookie: userContainer.user2Cookie(),
                 },
@@ -74,15 +74,14 @@ module.exports = () => {
 
             userContainer.user2.tok = userContainer.user2.tok.slice(18);
 
-            var res = await Travelling.User.Current.getUser( {
+            var res = await Travelling.User.Current.getUser( null, {
                 headers: {
                     cookie: userContainer.user2Cookie(),
                 },
             });
-
             userContainer.user2.tok = tok;
             userContainer.user2.ssid = ssid;
-            expect(res.headers).toMatchObject({ location: config.portal.path })
+            expect(res.req.path).toEqual(config.portal.path)
 
             expect(res.headers['set-cookie']).toContainEqual(expect.stringContaining('trav:tok=null'))
         });
@@ -91,7 +90,7 @@ module.exports = () => {
             var ssid = userContainer.user2.ssid;
             userContainer.user2.ssid = userContainer.user2.ssid.slice(18);
 
-            var res = await Travelling.User.Current.getUser( {
+            var res = await Travelling.User.Current.getUser( null, {
                 headers: {
                     cookie: userContainer.user2Cookie(),
                 },
