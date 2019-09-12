@@ -5,6 +5,8 @@ const User = require('./models/user');
 
 const crypto = require('../utils/cryptointerface');
 const config = require('../utils/config');
+const Email = require('../utils/email');
+const TokenHandler = require('../token');
 
 class Database {
     constructor() {
@@ -12,7 +14,6 @@ class Database {
 
     static async checkAuth(name, email, password) {
 
-        name = name.toLowerCase();
 
         var user = await User.findLimtedBy({username: name, email: email}, 'OR', 1);
 
@@ -26,9 +27,15 @@ class Database {
               }
           };
         }
+        user = user[0];
+
+        // Regenerate new email with token for activation
+        if(user.email_verify && user.locked) {
+          var token = await TokenHandler.getActivationToken(user.id);
+          await Email.sendActivation(user, user.email,token.token)
+        }
 
         //Locked check
-        user = user[0];
         if (user.locked) {
             throw {
                 user: user,
@@ -74,21 +81,80 @@ class Database {
 
     }
 
-    static async createAccount(username, password, email) {
-        var group = await Database.getDefaultGroup();
-
-        var user = await User.create({
+    static async createAccount(username, password, email, group_id) {
+        var userProp = {
             change_username: false,
-            change_password: 0,
+            change_password: false,
             username: username.toLowerCase(),
             password: password,
             email: email,
             created_on: Date.now(),
-            group_id: group[0].id
-        });
-        user.addProperty('group',group[0])
+            group_id: group_id
+        };
+
+        if(config.registration.requireManualActivation) {
+          userProp.locked = true;
+          userProp.locked_reason = 'Activation Required, email your admin to get your account activated'
+        }
+
+        var user = await User.create(userProp);
+
+        if(config.registration.requireEmailActivation) {
+          user.locked = true;
+          user.locked_reason = 'Activation Required, check your email for the activation link.'
+          var token = await TokenHandler.getActivationToken(user.id);
+          user.email_verify= true;
+          await user.save();
+
+          await Email.sendActivation(user, user.email,token.token)
+        }
+
+        //user.addProperty('group',group[0])
         return user;
     }
+
+    static async forgotPassword(email, ip) {
+      var user = await User.findLimtedBy({email:email},'AND',1);
+      if(user && user.length > 0) {
+        user = user[0];
+
+        var rt = await TokenHandler.getRecoveryToken(user.id);
+        user.reset_password = true;
+        await user.save();
+
+        Email.sendPasswordRecovery(user, ip, user.email, rt.token);
+      }
+    }
+
+    static async resetPassword(token, password) {
+      var user = await User.findLimtedBy({id: token[3]},'AND',1);
+      if(!user || user.length < 1) {
+        return false;
+      }
+
+      user = user[0]
+      user.password = password;
+      user.reset_password = false;
+      await user.save();
+      return true;
+    }
+
+    static async activateAccount(token) {
+      var user = await User.findLimtedBy({id: token[3]},'AND',1);
+      if(!user || user.length < 1) {
+        return false;
+      }
+
+      user = user[0]
+
+      user.email_verify = false;
+      user.locked = false;
+      user.locked_reason = null;
+      await user.save();
+      return true;
+    }
+
+
 
     static async getDefaultGroup() {
         return await Group.getDefaultGroup();
@@ -99,6 +165,7 @@ class Database {
         var grps = await Group.findAll();
 
         if (grps.length == 0) {
+          config.log.logger.info('Creating default groups...');
           // create default groups
           var anon = await Group.create({
             name: "anonymous",
@@ -120,15 +187,22 @@ class Database {
             host: null,
             method: 'GET'
           });
+          anon.addRoute({
+            route: '/travelling/api/v1/user/me/permission/allowed/*',
+            host: null,
+            method: 'GET'
+          });
+
           await anon.save();
 
-          router.groups[anon.name] = this.groupInheritedMerge(anon, grps);
+          //router.groups[anon.name] = this.groupInheritedMerge(anon, grps);
 
           var admin = await Group.create({
             name: "superadmin",
             type: "group",
             allowed: [],
-            is_default: true
+            is_default: true,
+            inherited: [anon.id]
           })
 
           admin.addRoute({
@@ -136,8 +210,8 @@ class Database {
             route: '/travelling/*'
           });
           await admin.save();
-
-          router.groups[admin.name] = this.groupInheritedMerge(admin, grps);
+          //console.log(admin)
+          //router.groups[admin.name] = this.groupInheritedMerge(admin, grps);
 
 
 
@@ -158,12 +232,12 @@ class Database {
       }
       for (var i = 0; i < group.inherited.length; ++i) {
           for (var j = 0; j < groups.length; ++j) {
-            if (groups[j].id == group.inherited[i].id) {
+            if (groups[j].id == group.inherited[i]) {
               group.inheritedGroups[i] = groups[j];
               break;
             }
           }
-        nallowed.push(...this.groupInheritedMerge(group.inherited[i], groups));
+        nallowed.push(...this.groupInheritedMerge(group.inheritedGroups[i], groups));
       }
     }
     return nallowed;

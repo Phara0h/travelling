@@ -1,7 +1,8 @@
 'use strict';
+
 const config = require('./config')
 const crypto = require('crypto');
-const token = require('./token');
+const token = require('./cookietoken');
 
 const encryptKey = crypto.scryptSync(config.pg.crypto.secret, config.pg.crypto.salt, 32)
 
