@@ -38,7 +38,7 @@ class Router {
 
             res.assignSocket(socket);
             req._wssocket = socket;
-            return app(req, res);
+            //return app(req, res);
         });
 
         this.proxy.on('error', function(err, req, res) {
@@ -68,14 +68,14 @@ class Router {
     }
     async routeUrl(req, res) {
         var authenticated = req.isAuthenticated;
-        var sessionUser = req.session.user;
+        var sessionUser = req.session.data ? req.session.data.user : null;
 
         if(this.needsGroupUpdate) {
-          console.log('updating groups')
+          log.debug('updating groups')
           await this.updateGroupList();
         }
 
-        var group = this.currentGroup(req,res);
+        var group = await this.currentGroup(req,res);
 
         if (sessionUser && sessionUser.locked) {
             req.logout(req,res);
@@ -96,8 +96,16 @@ class Router {
                 }
 
                 if (req.raw.url.indexOf('/travelling/') == 0) {
+                  if (config.log.requests) {
+                      if (authenticated) {
+                          log.info(sessionUser.username + ' (' + sessionUser.group.name + ') | ' + req.ip + ' | [' + req.raw.method + '] '+req.req.url);
+                      } else {
+                          log.info('Unregistered User' + ' (anonymous)' + ' | ' + req.ip + ' | [' + req.raw.method + '] '+req.req.url);
+                      }
+                    }
                     return false;
                 } else {
+
                     var target = {
                         target: this.transformRoute(sessionUser, r, r.host == null ? req.protocol + '://' + req.headers.host : r.host),
                     };
@@ -114,7 +122,8 @@ class Router {
                         }
                     } else {
                         // This gets around websites host checking / blocking
-                        delete req.raw.headers.host;
+                        //delete req.raw.headers.host;
+
                         if (target.target.indexOf('https') > -1) {
                           this.proxyssl.web(req.req, res.res, target);
                         } else {
@@ -126,32 +135,39 @@ class Router {
                     if (authenticated) {
                         log.info(sessionUser.username + ' (' + sessionUser.group.name + ') | ' + req.ip + ' | [' + req.raw.method + '] '+req.req.url+' -> ' + target.target+req.raw.url);
                     } else {
-                        log.warn('Unregistered User' + ' (anonymous)' + ' | ' + req.ip + ' | [' + req.raw.method + '] '+req.req.url+' -> ' + target.target);
+                        log.info('Unregistered User' + ' (anonymous)' + ' | ' + req.ip + ' | [' + req.raw.method + '] '+req.req.url+' -> ' + target.target);
                     }
-                    return true
+
                 }
+                return true
             } else if (!authenticated) {
                 // if (req.raw.url.indexOf('api') > -1) {
                 //     res.code(401).send('Access Denied');
-                // } else {
-                    req.session._backurl = req.raw.url;
-                    res.redirect(config.portal.path);
+                // }
+                if(req.req.url != config.portal.path) {
+                  this.setBackurl(res,req);
+                  res.redirect(config.portal.path);
+                }
+                else {
+                  res.code(401).send('Access Denied');
+                }
                 //}
 
                 if (config.log.unauthorizedAccess) {
-                    log.log('Unauthorized', 'Unregistered User' + ' (anonymous)' + ' | ' + req.ip + ' | [' + req.raw.method + '] '+req.req.url);
+                    log.warn('Unauthorized', 'Unregistered User' + ' (anonymous)' + ' | ' + req.ip + ' | [' + req.raw.method + '] '+req.req.url);
                 }
+                return false;
 
             } else {
                 res.code(401).send('Access Denied');
 
                 if (config.log.unauthorizedAccess) {
-                  log.log('Unauthorized', sessionUser.username + ' (' + sessionUser.group.name + ') | ' + req.ip + ' | [' + req.raw.method + '] '+req.req.url);
+                  log.warn('Unauthorized', sessionUser.username + ' (' + sessionUser.group.name + ') | ' + req.ip + ' | [' + req.raw.method + '] '+req.req.url);
                 }
             }
         } else {
             await this.updateGroupList();
-            req.session._backurl = req.raw.url;
+            this.setBackurl(res,req);
             res.redirect(config.portal.path);
         }
     }
@@ -241,8 +257,76 @@ class Router {
         });
     }
 
-    currentGroup(req,res) {
-      return !req.isAuthenticated ? this.groups['anonymous'] : this.groups[req.session.user.group.name];
+    async currentGroup(req,res) {
+
+      if(this.needsGroupUpdate) {
+        log.debug('updating groups')
+        await this.updateGroupList();
+      }
+
+      return !req.isAuthenticated ? this.groups['anonymous'] : this.groups[req.session.data.user.group.name];
+    }
+
+    async defaultGroup() {
+
+      if(this.needsGroupUpdate) {
+        log.debug('updating groups')
+        await this.updateGroupList();
+      }
+
+      for (var i = 0; i < this.unmergedGroups.length; i++) {
+          if(this.unmergedGroups[i].is_default) {
+            return this.unmergedGroups[i];
+          }
+      }
+    }
+
+    async getGroup(id) {
+
+      if(this.needsGroupUpdate) {
+        log.debug('updating groups')
+        await this.updateGroupList();
+      }
+      //console.log(this.unmergedGroups)
+      for (var i = 0; i < this.unmergedGroups.length; i++) {
+          if(this.unmergedGroups[i].id == id || this.unmergedGroups[i].name == id) {
+            return this.unmergedGroups[i];
+          }
+      }
+      return null;
+    }
+
+    async getGroupByType(type) {
+
+      if(this.needsGroupUpdate) {
+        log.debug('updating groups')
+        await this.updateGroupList();
+      }
+
+      for (var i = 0; i < this.unmergedGroups.length; i++) {
+          if(this.unmergedGroups[i].type == type) {
+            return this.unmergedGroups[i];
+          }
+      }
+    }
+
+    async getGroups() {
+
+      if(this.needsGroupUpdate) {
+        log.debug('updating groups')
+        await this.updateGroupList();
+      }
+
+      return this.unmergedGroups;
+    }
+
+    setBackurl(res,req) {
+      res.setCookie('trav:backurl', req.raw.method+"|"+req.raw.url, {
+        expires: new Date(Date.now() + 240000),
+        secure: config.https,
+        httpOnly: true,
+        path: '/'
+      });
     }
 }
 

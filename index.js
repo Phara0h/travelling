@@ -2,19 +2,25 @@ const fs = require('fs');
 const path = require('path');
 const config = require('./include/utils/config');
 
-const app = require('fastify')({
-    http2: true,
-    https: {
-        allowHTTP1: true, // fallback support for HTTP1
-        key: fs.readFileSync(path.join(__dirname, config.key)),
-        cert: fs.readFileSync(path.join(__dirname, config.cert))
-    },
-    logger: true,
-    disableRequestLogging: true,
-});
-const fp = require('fastify-plugin')
 
-const fastifySession = require('fastify-session');
+config.log.logger = require(config.log.logger);
+var fastifyOptions = {
+    http2: false,
+    logger: config.log.fastifyLogger,
+    disableRequestLogging: true
+};
+
+if(config.https) {
+  fastifyOptions.https = {
+      allowHTTP1: true, // fallback support for HTTP1
+      key: fs.readFileSync(path.join(__dirname, config.key)),
+      cert: fs.readFileSync(path.join(__dirname, config.cert))
+  }
+}
+
+const app = require('fastify')(fastifyOptions);
+
+const fastifySession = require('fastify-good-sessions');
 const fastifyCookie = require('fastify-cookie');
 const MemoryStore = require('./include/utils/memorystore');
 
@@ -30,13 +36,39 @@ const pg = new PGConnecter({
 const Database = require('./include/database');
 const Group = require('./include/database/models/group');
 const User = require('./include/database/models/user');
+const Token = require('./include/database/models/token');
 
 const Router = require('./include/server/router');
 const router = new Router(app.server);
 
 const auth = require('./include/utils/auth');
+const Email = require('./include/utils/email');
 
 const nstats = require('nstats')();
+
+if(config.cors.enable) {
+  app.use((req, res, next) => {
+    if(req.headers['origin']) {
+      res.setHeader("access-control-allow-origin", config.cors.origin || req.headers['origin'] || '*');
+    }
+
+    if(req.headers['access-control-request-method']){
+      res.setHeader("access-control-allow-methods", config.cors.methods || req.headers['access-control-request-method'] || '*');
+    }
+
+    if(req.headers['access-control-request-headers']) {
+      res.setHeader("access-control-allow-headers", config.cors.headers || req.headers['access-control-request-headers'] || '*');
+    }
+
+      next();
+  });
+  app.options('/travelling/api/v1/*', (req, res) => {
+
+
+      res.header("access-control-max-age",config.cors.age);
+      res.code(204).send();
+  });
+}
 
 app.get('/travelling/metrics', (req, res) => {res.code(200).send(nstats.toPrometheus());});
 app.get('/travelling/_health', (req, res) => res.code(200).send('OK'));
@@ -44,9 +76,11 @@ app.get('/travelling/_health', (req, res) => res.code(200).send('OK'));
 // nstats
 app.use((req, res, next)=>{
     if (req.url.indexOf('/travelling/metrics') == -1 && req.url.indexOf('/travelling/_health') == -1) {
+
         if (!nstats.httpServer) {
             nstats.httpServer = req.connection.server;
         }
+
         var sTime = process.hrtime.bigint();
 
         res.on('finish', () => {
@@ -56,34 +90,42 @@ app.use((req, res, next)=>{
     next();
 });
 
+
 app.register(fastifyCookie);
 
-// @TODO Make configurable latter rewrite this for a huge preformance increase.
-app.register(fastifySession,{
-        secret: config.cookie.secret,
+// @TODO later rewrite this for a huge preformance increase.
+// Add removing tokens if user needs updated (removed, locked, etc)
+app.register(fastifySession, {
+        secret: config.cookie.session.secret,
         store: new MemoryStore(),
         cookie: {
-            secure: true,
+            secure: config.https,
             httpOnly: true,
+            maxAge: config.cookie.session.expiration * 1000
         },
-        cookieName: 'trav:ssid'
+        cookieName: 'trav:ssid',
+        saveUninitialized: false
 });
 
-app.decorateRequest('checkLoggedIn', auth.checkLoggedIn);
+app.decorateRequest('checkLoggedIn', async function(req,res){return await auth.checkLoggedIn(req,res,router)});
 app.decorateRequest('logout', auth.logout);
 app.decorateRequest('isAuthenticated', false);
 app.addHook('preHandler',function(req, res, next) {
   req.checkLoggedIn(req, res).then(auth=>{
     req.isAuthenticated = auth.auth;
-    if (auth.redirect) {
-        res.redirect(302,req.raw.url);
+    if (!auth.route) {
+        res.code(401).send();
+        if(config.log.requests) {
+          config.log.logger.warn('Unauthorized', 'Unregistered User' + ' (anonymous)' + ' | ' + req.ip + ' | [' + req.raw.method + '] '+req.req.url);
+        }
+
     } else {
       router.routeUrl(req,res).then(route=>{
         if(!route){
           next();
         }
       });
-    }
+   }
   })
 })
 
@@ -92,20 +134,37 @@ app.register(require('./include/routes/v1/users'), {prefix: '/travelling/api/v1'
 app.register(require('./include/routes/v1/groups'), {prefix: '/travelling/api/v1', router});
 app.register(require('./include/routes/v1/auth'), {prefix: '/travelling/api/v1', router});
 
-app.register(require('fastify-static'), {
-  root: config.portal.filePath,
-  prefix: config.portal.path, // optional: default '/'
+if(config.portal.enable) {
+  app.register(require('fastify-static'), {
+    root: config.portal.filePath,
+    prefix: config.portal.path,
+  })
+}
+app.ready(()=>{
+  config.log.logger.debug(app.printRoutes())
 })
 
-app.ready(()=>{
-  console.log(app.printRoutes())
-})
 async function init() {
+
+  try {
+    await pg.query('CREATE EXTENSION "uuid-ossp";');
+  } catch(_){}
+  try {
     await User.createTable();
+  } catch (_){}
+  try {
     await Group.createTable();
+  } catch (_){}
+  try {
+    await Token.createTable();
+  } catch (_){}
+
+
     await Database.initGroups(router);
+    await Email.init();
     app.listen(config.port, '0.0.0.0');
 
-    console.log(`Travelling on port ${config.port}`);
+    config.log.logger.info(`Travelling on port ${config.port}`);
 }
-init();
+
+module.exports = init();

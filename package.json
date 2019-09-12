@@ -1,11 +1,13 @@
 {
   "name": "travelling",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "A dynamic route level groups permissions middleman service",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "./scripts/start.sh"
+    "pretest": "./scripts/pretest.sh",
+    "test": "./startTest.sh",
+    "start": "./scripts/start.sh",
+    "debug": "./scripts/debug.sh"
   },
   "repository": {
     "type": "git",
@@ -21,23 +23,31 @@
     "api"
   ],
   "author": "Jt Whissel",
-  "license": "GPL-2.0-only",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/abeai/travelling/issues"
   },
   "homepage": "https://github.com/abeai/travelling#readme",
   "dependencies": {
+    "@abeai/node-utils": "^3.0.0",
+    "aws-sdk": "^2.516.0",
+    "colors": "^1.3.3",
     "fasquest": "^1.0.0",
     "fastify": "^2.7.1",
     "fastify-cookie": "^3.0.2",
+    "fastify-good-sessions": "^1.2.1",
     "fastify-plugin": "^1.6.0",
-    "fastify-session": "^3.0.0",
     "fastify-static": "^2.5.0",
+    "handlebars": "^4.1.2",
     "http-proxy": "^1.17.0",
+    "nodemailer": "^6.3.0",
     "nstats": "^2.1.5"
   },
   "devDependencies": {
+    "cookie": "^0.4.0",
     "eslint": "^6.1.0",
-    "eslint-plugin-security": "^1.4.0"
+    "eslint-plugin-security": "^1.4.0",
+    "jest": "^24.9.0",
+    "postgen": "^1.1.5"
   }
 }
