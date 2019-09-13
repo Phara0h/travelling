@@ -2,6 +2,8 @@ const regex = require('../../utils/regex');
 const User = require('../../database/models/user');
 const TokenHandler = require('../../token');
 const userUtils = require('../../utils/user');
+const config = require('../../utils/config');
+const misc = require('../../utils/misc');
 
 module.exports = function(app, opts, done) {
     const router = opts.router;
@@ -150,15 +152,13 @@ module.exports = function(app, opts, done) {
     // app.get('/user/resolve/group/id/:id/:prop', getUserResolveGroup);
 
     app.get('/users', async (req, res) => {
-        if (req.query && userUtils.checkVaildUser(req.query, false)) {
-          var query = userUtils.setUser({}, req.query);
-          return await User.findAllBy(query);
+
+        if (!misc.isEmpty(req.query) && userUtils.checkVaildUser(req.query, false)) {
+            var query = userUtils.setUser({}, req.query);
+
+            return await User.findAllBy(query);
         }
         return await User.findAll();
-    });
-
-    app.get('/users', async (req, res) => {
-        res.send(await User.findAll());
     });
 
     app.get('/user/me', (req, res) => {
@@ -229,11 +229,38 @@ module.exports = function(app, opts, done) {
         } catch (e) {
             res.code(400).send({
                 type: 'token-error',
-                msg: 'Tokens name needs to have [A-Za-z0-9_@.] as the only vaild characters.',
+                msg: 'Tokens name needs to have [A-Za-z0-9_@.] as the only vaild characters and not already exist.',
             });
             return;
         }
 
+    });
+
+    app.delete('/user/me/token/:id', async (req, res) => {
+        var token = null;
+
+        try {
+            token = await TokenHandler.deleteOAuthToken(req.params.id, req.session.data.user.id);
+            if (!token) {
+                res.code(400).send({
+                    type: 'token-error',
+                    msg: 'Unabled to delete token.',
+                });
+                return;
+            }
+            res.code(200).send();
+            return;
+        } catch (e) {
+
+            res.code(400).send({
+                type: 'token-error',
+                msg: 'Unabled to delete token.',
+            });
+            config.log.logger.debug(e);
+            return;
+        }
+        res.code(200).send();
+        return;
     });
 
     done();

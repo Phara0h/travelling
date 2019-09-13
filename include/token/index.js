@@ -67,11 +67,17 @@ class TokenHandler {
                   return;
               }
 
-              if(regex.username.exec(name) == null) {
+              if(regex.safeName.exec(name) == null) {
                 reject(true);
                 return;
               }
-
+              if(name) {
+                var fToken = await Token.findLimtedBy({user_id,name}, 'AND', 1);
+                if(fToken && fToken.length > 0) {
+                  reject(true);
+                  return;
+                }
+              }
               var token = await Token.create({
                 user_id,
                 type,
@@ -126,6 +132,10 @@ class TokenHandler {
         return token[0];
     }
 
+    static async deleteOAuthToken(id, user_id) {
+      var token = (await Token.deleteAllBy(regex.uuidCheck(id) ? {id, user_id} : {name:id, user_id}))[0];
+      return token;
+    }
 
     static async checkRecoveryToken(token) {
       return await this.checkTempToken(token, config.email.recovery.expiration * 1000)
