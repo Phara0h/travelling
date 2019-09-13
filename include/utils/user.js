@@ -3,7 +3,7 @@ const regex = require('./regex');
 const User = require('../database/models/user');
 
 var checkVaildUser = async function(user, checkDupe = true) {
-  
+
   if (!user) {
       return {
           type: 'body-error',
@@ -46,6 +46,13 @@ var checkVaildUser = async function(user, checkDupe = true) {
     }
   }
 
+  if (user.group_request && regex.safeName.exec(user.group_request) == null) {
+    return {
+        type: 'group-request-error',
+        msg: 'Invaild group name.',
+    }
+  }
+
   if (user.user_data) {
     try {
       user.user_data = JSON.stringify(user.user_data);
@@ -73,7 +80,7 @@ var checkVaildUser = async function(user, checkDupe = true) {
 var setUser = function(user, props) {
 
   if(props.username) {
-    user.username = props.username;
+    user.username = props.username.toLowerCase();
   }
 
   if(props.password) {
@@ -81,15 +88,15 @@ var setUser = function(user, props) {
   }
 
   if(props.email) {
-    user.email = props.email;
+    user.email = props.email.toLowerCase();
   }
 
-  if(props.locked_reason) {
+  if(props.locked_reason !== undefined) {
     user.locked_reason = props.locked_reason;
   }
 
-  if(props.locked) {
-    user.locked = props.locked === true;
+  if(props.locked !== undefined) {
+    user.locked = stringToBool(props.locked) === true;
     if(!user.locked) {
       user.failed_login_attempts = 0;
     }
@@ -99,23 +106,28 @@ var setUser = function(user, props) {
     user.group_id = Number(props.group_id);
   }
 
-  if(props.change_password) {
-    user.change_password = props.change_password === true;
+  if(props.group_request !== undefined) {
+    user.group_request = props.group_request ? props.group_request.toLowerCase() : null;
   }
 
-  if(props.change_username) {
-    user.change_username = props.change_username === true;
+
+  if(props.change_password !== undefined) {
+    user.change_password = stringToBool(props.change_password) === true;
+  }
+
+  if(props.change_username !== undefined) {
+    user.change_username = stringToBool(props.change_username) === true;
   }
 
   /**
     @TODO add image manipulation and checking
   */
-  if(props.avatar) {
-    user.avatar = Buffer.from(props.avatar);
+  if(props.avatar !== undefined) {
+    user.avatar = props.avatar ? Buffer.from(props.avatar) : null;
   }
 
-  if(props.user_data) {
-    user.user_data = Buffer.from(props.user_data);
+  if(props.user_data !== undefined) {
+    user.user_data = props.user_data ? Buffer.from(props.user_data) : null;
   }
 
   if(props.user_data === null) {
@@ -130,6 +142,18 @@ var setUser = function(user, props) {
   return user;
 }
 
+var stringToBool = function(bool) {
+  if(typeof bool == 'boolean') {
+    return bool;
+  }
+  if(bool == 'true' ) {
+    return true;
+  }
+  if(bool == 'false') {
+    return false
+  }
+  return null;
+}
 
 module.exports = {
   checkVaildUser,

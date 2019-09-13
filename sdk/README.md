@@ -57,6 +57,7 @@ metrics - servers metrics
     * [.editPropertyByUsername(body, username, prop, authorization_bearer)](#User.editPropertyByUsername)
     * [.editPropertyById(body, id, prop, authorization_bearer)](#User.editPropertyById)
     * [.editById(body, id, authorization_bearer)](#User.editById)
+    * [.getUsers(group_request, locked, authorization_bearer)](#User.getUsers)
     * [.getAll(authorization_bearer)](#User.getAll)
     * [.getPropertyById(id, prop, authorization_bearer)](#User.getPropertyById)
     * [.getPropertyByUsername(username, prop, authorization_bearer)](#User.getPropertyByUsername)
@@ -173,6 +174,19 @@ body
     "password": "Awickednewawesomepasword4242!@"
 }
 ```
+<a name="User.getUsers"></a>
+
+### User.getUsers(group_request, locked, authorization_bearer)
+getUsers - Gets users by each query param user prop.
+
+**Kind**: static method of [<code>User</code>](#User)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| group_request | <code>any</code> | (example: superadmin) |
+| locked | <code>any</code> | (example: true) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
 <a name="User.getAll"></a>
 
 ### User.getAll(authorization_bearer)
@@ -412,7 +426,7 @@ addRoute - Adds a route to a group.
 | Param | Type | Description |
 | --- | --- | --- |
 | body | <code>Object</code> |  |
-| groupname | <code>any</code> | (example: cuipermissions) |
+| groupname | <code>any</code> | (example: superadmin) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
@@ -422,7 +436,7 @@ body
     "route": "cui/permissions/*",
     "host": null,
     "method": "*",
-    "name": "*-cui-*"
+    "name": "cui-*"
 }
 ```
 <a name="Groups.editByName"></a>
@@ -627,6 +641,8 @@ body
 ### Auth.register(body)
 register - Register a user
 
+    `group_request`	is optional.
+
 **Kind**: static method of [<code>Auth</code>](#Auth)  
 
 | Param | Type |
@@ -637,8 +653,9 @@ register - Register a user
 body
 ```js
 {
-    "username": "user5",
+    "username": "user7",
     "password": "swagmoney69xd420",
-    "email": "jt@abe.ai"
+    "email": "jt4@abe.ai",
+    "group_request": "superadmin"
 }
 ```

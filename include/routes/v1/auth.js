@@ -38,11 +38,12 @@ var login = async (user, req, res) => {
         });
         res.redirect(url[0] === 'GET' ? 301 : 303, url[1]);
         return;
-    } else {
-        res.code(200).send({
-            msg: 'Access Granted',
-        });
-    }
+      }
+
+    res.code(200).send({
+        msg: 'Access Granted',
+    });
+
 };
 
 module.exports = function(app, opts, done) {
@@ -123,6 +124,7 @@ module.exports = function(app, opts, done) {
                 type: 'register-session-error',
                 msg: 'Logged in already, logout first to register',
             });
+            return;
         }
 
         var isVaild = await checkVaildUser(req.body);
@@ -132,19 +134,30 @@ module.exports = function(app, opts, done) {
                 type: 'register-error',
                 msg: 'A vaild username, password and email are required.',
             });
-        } else if (isVaild !== true) {
-            res.code(400).send(isVaild);
-        } else {
-
-            var username = req.body.username.toLowerCase();
-            var password = req.body.password;
-            var email = req.body.email.toLowerCase();
-            var dGroup = await router.defaultGroup();
-            var user = await Database.createAccount(username, password, email, dGroup.id);
-
-            config.log.logger.info('New User Created: ' + user.username + ' | ' + req.connection);
-            res.code(200).send('Account Created');
+            return;
         }
+        
+        if (isVaild !== true) {
+            res.code(400).send(isVaild);
+            return;
+        }
+
+
+        var username = req.body.username.toLowerCase();
+        var password = req.body.password;
+        var email = req.body.email.toLowerCase();
+        var groupRequest;
+
+        if (req.body.group_request) {
+            groupRequest = req.body.group_request.toLowerCase();
+        }
+
+        var dGroup = await router.defaultGroup();
+        var user = await Database.createAccount(username, password, email, dGroup.id, groupRequest);
+
+        config.log.logger.info('New User Created: ' + user.username + ' | ' + req.connection);
+        res.code(200).send('Account Created');
+
     });
 
     app.put('/auth/password/forgot', async (req, res) => {

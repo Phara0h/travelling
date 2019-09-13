@@ -143,10 +143,11 @@ app.addHook('preHandler',function(req, res, next) {
   })
 })
 
-
-app.register(require('./include/routes/v1/users'), {prefix: '/travelling/api/v1', router});
-app.register(require('./include/routes/v1/groups'), {prefix: '/travelling/api/v1', router});
 app.register(require('./include/routes/v1/auth'), {prefix: '/travelling/api/v1', router});
+app.register(require('./include/routes/v1/groups'), {prefix: '/travelling/api/v1', router});
+app.register(require('./include/routes/v1/users'), {prefix: '/travelling/api/v1', router});
+
+
 
 if(config.portal.enable) {
   app.register(require('fastify-static'), {
@@ -154,7 +155,7 @@ if(config.portal.enable) {
     prefix: config.portal.path,
   })
 }
-console.log(config.portal);
+
 
 
 app.ready(()=>{
