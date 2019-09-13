@@ -238,7 +238,7 @@ class Router {
 
     transformRoute(usr, route, path) {
       var user = !usr ? {group:{}} : usr;
-        return path.replace(/(:id|:username|:email|:group|:permission)/g, (a, b, c)=>{
+        return path.replace(/(:id|:username|:email|:group|:grouptype|:permission)/g, (a, b, c)=>{
             var prop = '';
             switch (a) {
                 case ':id':
@@ -252,6 +252,9 @@ class Router {
                     break;
                 case ':group':
                     prop = user.group.name || prop;
+                    break;
+                case ':grouptype':
+                    prop = user.group.type || prop;
                     break;
                 case ':permission':
                     prop = this.transformRoute(usr, route, route.name || prop);
