@@ -94,7 +94,6 @@ class Router {
 
                 if (req.raw.url.indexOf('/travelling/api/') == 0) {
                   if (config.log.requests) {
-                    console.log(req)
                       if (authenticated) {
 
                           log.info(sessionUser.username + ' (' + sessionUser.group.name + ') | ' + req.raw.ip + ' | [' + req.raw.method + '] '+req.req.url);
