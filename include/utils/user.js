@@ -1,4 +1,5 @@
 const config = require('./config');
+const misc = require('./misc');
 const regex = require('./regex');
 const User = require('../database/models/user');
 
@@ -96,7 +97,7 @@ var setUser = function(user, props) {
   }
 
   if(props.locked !== undefined) {
-    user.locked = stringToBool(props.locked) === true;
+    user.locked = misc.stringToBool(props.locked) === true;
     if(!user.locked) {
       user.failed_login_attempts = 0;
     }
@@ -112,11 +113,11 @@ var setUser = function(user, props) {
 
 
   if(props.change_password !== undefined) {
-    user.change_password = stringToBool(props.change_password) === true;
+    user.change_password = misc.stringToBool(props.change_password) === true;
   }
 
   if(props.change_username !== undefined) {
-    user.change_username = stringToBool(props.change_username) === true;
+    user.change_username = misc.stringToBool(props.change_username) === true;
   }
 
   /**
@@ -142,18 +143,7 @@ var setUser = function(user, props) {
   return user;
 }
 
-var stringToBool = function(bool) {
-  if(typeof bool == 'boolean') {
-    return bool;
-  }
-  if(bool == 'true' ) {
-    return true;
-  }
-  if(bool == 'false') {
-    return false
-  }
-  return null;
-}
+
 
 module.exports = {
   checkVaildUser,

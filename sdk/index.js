@@ -427,6 +427,38 @@ class Current {
 
 
     /**
+     * deleteToken - Deletes a client_credentials based access token auth.
+     * @param {Object} body
+     * @param {any} id id or name of the token 
+     * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+     * @example
+     * body
+     * ```js
+     * {
+     *     "name": "test"
+     * }
+     * ```
+     */
+    static async deleteToken(body, id, authorization_bearer, opts) {
+        var options = {
+            method: 'DELETE',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/user/me/token/${id}`,
+            body,
+            json: true,
+            authorization: {
+                bearer: authorization_bearer
+            },
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+
+
+    /**
      * registerToken - Registers a new credentials service for client_credentials based access token auth.
      * @param {Object} body
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
@@ -589,15 +621,36 @@ class Groups {
 
 
     /**
-     * getTypesList - Gets all the types of groups currently made.
+     * delete - delete group by its id or name
+     * @param {Object} body
+     * @param {any} name id or name  
+     * @param {any} type The type of the group 
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+     * @example
+     * body
+     * ```js
+     * {
+     *     "name": "group1",
+     *     "type": "accounts",
+     *     "allowed": [{
+     *         "route": "/test",
+     *         "host": "http://127.0.0.1:1237/",
+     *         "removeFromPath": "test",
+     *         "method": "*",
+     *         "name": "all-test"
+     *     }],
+     *     "is_default": false
+     * }
+     * ```
      */
-    static async getTypesList(authorization_bearer, opts) {
+    static async delete(body, name, type, authorization_bearer, opts) {
         var options = {
-            method: 'GET',
+            method: 'DELETE',
             resolveWithFullResponse: true,
             simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/groups/types`,
+            uri: hostUrl + "/" + `travelling/api/v1/group/${name}/${type}`,
+            body,
+            json: true,
             authorization: {
                 bearer: authorization_bearer
             },
@@ -610,19 +663,15 @@ class Groups {
 
 
     /**
-     * getByType - Gets all groups of a certain type.
-     * @param {any} type  
-     * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+     * getAllUsersInherited - Gets all the users that belong to the group and all of its inherited groups.
+     * @param {any} name id or name (example: superadmin)
      */
-    static async getByType(type, authorization_bearer, opts) {
+    static async getAllUsersInherited(name, opts) {
         var options = {
             method: 'GET',
             resolveWithFullResponse: true,
             simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/groups/type/${type}`,
-            authorization: {
-                bearer: authorization_bearer
-            },
+            uri: hostUrl + "/" + `travelling/api/v1/group/${name}/users/inherited`,
         };
         if (opts) {
             options = Object.assign(options, opts);
@@ -632,10 +681,28 @@ class Groups {
 
 
     /**
-     * allGroups - Get all the groups
+     * getAllUsers - Gets all the users that belong to the group.
+     * @param {any} name id or name (example: superadmin)
+     */
+    static async getAllUsers(name, opts) {
+        var options = {
+            method: 'GET',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/group/${name}/users`,
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+
+
+    /**
+     * getAll - Get all the groups
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
-    static async allGroups(authorization_bearer, opts) {
+    static async getAll(authorization_bearer, opts) {
         var options = {
             method: 'GET',
             resolveWithFullResponse: true,
@@ -673,7 +740,7 @@ class Groups {
             method: 'PUT',
             resolveWithFullResponse: true,
             simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/group/${groupname}/route`,
+            uri: hostUrl + "/" + `travelling/api/v1/group/${groupname}/insert/route`,
             body,
             json: true,
             authorization: {
@@ -688,63 +755,33 @@ class Groups {
 
 
     /**
+     * setDefault - Sets the group to be the default group for new users.
+     * @param {any} name id or name (example: group6)
+     */
+    static async setDefault(name, opts) {
+        var options = {
+            method: 'PUT',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/group/${name}/set/default`,
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+
+
+    /**
      * editByName - Edits a group
      * @param {Object} body
-     * @param {any} groupname  (example: 15)
+     * @param {any} groupname id or name (example: superadmin)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      * @example
      * body
      * ```js
      * {
-     *     "id": 15,
-     *     "name": "anonymous",
-     *     "type": "group",
-     *     "allowed": [{
-     *             "route": "/cui/portal/*",
-     *             "host": "http://127.0.0.1:4203",
-     *             "removeFromPath": "/cui/portal",
-     *             "method": "*",
-     *             "name": "*-cui-portal-*"
-     *         },
-     *         {
-     *             "route": "/sockjs-node/*",
-     *             "host": "http://127.0.0.1:4203",
-     *             "method": "*",
-     *             "name": "*-cui-portal-files4-*"
-     *         },
-     *         {
-     *             "route": "/assets/*",
-     *             "host": "http://127.0.0.1:4203",
-     *             "method": "*",
-     *             "name": "*-cui-portal-files6-*"
-     *         },
-     *         {
-     *             "route": "/*.*",
-     *             "host": "http://127.0.0.1:4203",
-     *             "method": "*",
-     *             "name": "*-cui-portal-files-*"
-     *         },
-     *         {
-     *             "route": "/travelling/api/v1/auth/*",
-     *             "host": null,
-     *             "method": "*",
-     *             "name": "*-travelling-api-v1-auth-*"
-     *         },
-     *         {
-     *             "route": "/travelling/api/v1/user/me/route/allowed",
-     *             "host": null,
-     *             "method": "GET",
-     *             "name": "get-travelling-api-v1-user-me-route-allowed"
-     *         },
-     *         {
-     *             "route": "/travelling/api/v1/user/me/permission/allowed/*",
-     *             "host": null,
-     *             "method": "GET",
-     *             "name": "get-travelling-api-v1-user-me-permission-allowed-*"
-     *         }
-     *     ],
-     *     "inherited": null,
-     *     "is_default": true
+     *     "inherited": ["a717b880-b17b-4995-9610-cf451a06d015", "7ec8c351-7b8a-4ea8-95cc-0d990b225768"]
      * }
      * ```
      */
@@ -794,6 +831,231 @@ class Groups {
             resolveWithFullResponse: true,
             simple: false,
             uri: hostUrl + "/" + `travelling/api/v1/group`,
+            body,
+            json: true,
+            authorization: {
+                bearer: authorization_bearer
+            },
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+
+    static get Type() {
+        return Type;
+    }
+}
+/**
+ * 
+ */
+class Type {
+    constructor() {}
+
+
+    /**
+     * setDefault - Sets the group of a particular type to be the default group for new users.
+     * @param {any} name id or name (example: group6)
+     */
+    static async setDefault(name, opts) {
+        var options = {
+            method: 'PUT',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/group/${name}/set/default`,
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+
+
+    /**
+     * getAllUsersInherited - Gets all the users that belong to the group  of a particular type by its name or id and all of its inherited groups.
+     * @param {any} name id or name  (example: superadmin)
+     * @param {any} type The type of the group (example: group)
+     */
+    static async getAllUsersInherited(name, type, opts) {
+        var options = {
+            method: 'GET',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/group/${name}/${type}/users/inherited`,
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+
+
+    /**
+     * getAllUsers - Gets all the users that belong to the group  of a particular type by its name or id.
+     * @param {any} name id or name (example: superadmin)
+     * @param {any} type The type of the group (example: group)
+     */
+    static async getAllUsers(name, type, opts) {
+        var options = {
+            method: 'GET',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/group/${name}/${type}/users`,
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+
+
+    /**
+     * delete - delete group of a particular type by its name or id
+     * @param {Object} body
+     * @param {any} name id or name  
+     * @param {any} type The type of the group 
+     * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+     * @example
+     * body
+     * ```js
+     * {
+     *     "name": "group1",
+     *     "type": "accounts",
+     *     "allowed": [{
+     *         "route": "/test",
+     *         "host": "http://127.0.0.1:1237/",
+     *         "removeFromPath": "test",
+     *         "method": "*",
+     *         "name": "all-test"
+     *     }],
+     *     "is_default": false
+     * }
+     * ```
+     */
+    static async delete(body, name, type, authorization_bearer, opts) {
+        var options = {
+            method: 'DELETE',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/group/${name}/${type}`,
+            body,
+            json: true,
+            authorization: {
+                bearer: authorization_bearer
+            },
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+
+
+    /**
+     * create - Add a new group of a particular type
+     * @param {Object} body
+     * @param {any} type groups type (example: accounts)
+     * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+     * @example
+     * body
+     * ```js
+     * {
+     *     "name": "group1",
+     *     "type": "accounts",
+     *     "allowed": [{
+     *         "route": "/test",
+     *         "host": "http://127.0.0.1:1237/",
+     *         "removeFromPath": "test",
+     *         "method": "*",
+     *         "name": "all-test"
+     *     }],
+     *     "is_default": false
+     * }
+     * ```
+     */
+    static async create(body, type, authorization_bearer, opts) {
+        var options = {
+            method: 'POST',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/group/${type}`,
+            body,
+            json: true,
+            authorization: {
+                bearer: authorization_bearer
+            },
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+
+
+    /**
+     * getTypesList - Gets all the types of groups currently made.
+     * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+     */
+    static async getTypesList(authorization_bearer, opts) {
+        var options = {
+            method: 'GET',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/groups/types`,
+            authorization: {
+                bearer: authorization_bearer
+            },
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+
+
+    /**
+     * getAll - Gets all groups of a particular type
+     * @param {any} type The groups type (example: group)
+     * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+     */
+    static async getAll(type, authorization_bearer, opts) {
+        var options = {
+            method: 'GET',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/groups/${type}`,
+            authorization: {
+                bearer: authorization_bearer
+            },
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+
+
+    /**
+     * editByName - Edits a group of a particular type
+     * @param {Object} body
+     * @param {any} name id or name (example: superadmin)
+     * @param {any} type The groups type (example: group)
+     * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+     * @example
+     * body
+     * ```js
+     * {
+     *     "inherited": ["a717b880-b17b-4995-9610-cf451a06d015", "7ec8c351-7b8a-4ea8-95cc-0d990b225768"]
+     * }
+     * ```
+     */
+    static async editByName(body, name, type, authorization_bearer, opts) {
+        var options = {
+            method: 'PUT',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/group/${name}/${type}`,
             body,
             json: true,
             authorization: {
