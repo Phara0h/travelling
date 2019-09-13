@@ -247,6 +247,33 @@ class User {
 
 
     /**
+     * getUsers - Gets users by each query param user prop.
+     * @param {any} group_request  (example: superadmin)
+     * @param {any} locked  (example: true)
+     * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+     */
+    static async getUsers(group_request, locked, authorization_bearer, opts) {
+        var options = {
+            method: 'GET',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/users`,
+            qs: {
+                group_request,
+                locked
+            },
+            authorization: {
+                bearer: authorization_bearer
+            },
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+
+
+    /**
      * getAll - Gets all the users
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
@@ -628,7 +655,7 @@ class Groups {
     /**
      * addRoute - Adds a route to a group.
      * @param {Object} body
-     * @param {any} groupname  (example: cuipermissions)
+     * @param {any} groupname  (example: superadmin)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      * @example
      * body
@@ -637,7 +664,7 @@ class Groups {
      *     "route": "cui/permissions/*",
      *     "host": null,
      *     "method": "*",
-     *     "name": "*-cui-*"
+     *     "name": "cui-*"
      * }
      * ```
      */
@@ -940,18 +967,21 @@ class Auth {
 
 
     /**
-     * register - Register a user
-     * @param {Object} body
-     * @example
-     * body
-     * ```js
-     * {
-     *     "username": "user5",
+      * register - Register a user
+
+    `group_request`	is optional.
+      * @param {Object} body
+      * @example
+      * body
+      * ```js
+      * {
+     *     "username": "user7",
      *     "password": "swagmoney69xd420",
-     *     "email": "jt@abe.ai"
+     *     "email": "jt4@abe.ai",
+     *     "group_request": "superadmin"
      * }
-     * ```
-     */
+      * ```
+      */
     static async register(body, opts) {
         var options = {
             method: 'POST',

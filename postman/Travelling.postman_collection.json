@@ -22,7 +22,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"username\":\"user5\",\n\t\"password\":\"swagmoney69xd420\",\n\t\"email\": \"jt@abe.ai\"\n}"
+							"raw": "{\n\t\"username\":\"user7\",\n\t\"password\":\"swagmoney69xd420\",\n\t\"email\": \"jt4@abe.ai\",\n\t\"group_request\": \"superadmin\"\n}"
 						},
 						"url": {
 							"raw": "{{TRAV}}/travelling/api/v1/auth/register",
@@ -37,7 +37,7 @@
 								"register"
 							]
 						},
-						"description": "Register a user"
+						"description": "Register a user\n\n`group_request`\tis optional."
 					},
 					"response": [
 						{
@@ -659,7 +659,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "   {\n            \"route\": \"cui/permissions/*\",\n            \"host\": null,\n            \"method\": \"*\",\n            \"name\": \"*-cui-*\"\n        }"
+							"raw": "   {\n            \"route\": \"cui/permissions/*\",\n            \"host\": null,\n            \"method\": \"*\",\n            \"name\": \"cui-*\"\n        }"
 						},
 						"url": {
 							"raw": "{{TRAV}}/travelling/api/v1/group/:groupname/route",
@@ -677,7 +677,7 @@
 							"variable": [
 								{
 									"key": "groupname",
-									"value": "cuipermissions"
+									"value": "superadmin"
 								}
 							]
 						},
@@ -1458,6 +1458,108 @@
 						"description": "Gets all the users"
 					},
 					"response": []
+				},
+				{
+					"name": "Get Users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "The client_credentials generated OAUth2 access token.",
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer"
+							}
+						],
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/users?group_request=superadmin&locked=true",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"users"
+							],
+							"query": [
+								{
+									"key": "group_request",
+									"value": "superadmin"
+								},
+								{
+									"key": "locked",
+									"value": "true"
+								}
+							]
+						},
+						"description": "Gets users by each query param user prop."
+					},
+					"response": [
+						{
+							"name": "Get Users",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "The client_credentials generated OAUth2 access token.",
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer"
+									}
+								],
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/users?group_request=superadmin&locked=true",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"users"
+									],
+									"query": [
+										{
+											"key": "group_request",
+											"value": "superadmin"
+										},
+										{
+											"key": "locked",
+											"value": "true"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "set-cookie",
+									"value": "trav:ssid=e517e311-fb37-4ca9-be4f-ff821ff9767d%3AsRV5NKXTeq2AwJufpqVzaA%3D%3D.lmipCDk5xffCPwB3gT5TuRVNWhLpEOS1fgj3Wfrdu8U; Max-Age=10000; Path=/; Expires=Fri, 13 Sep 2019 17:43:38 GMT; HttpOnly"
+								},
+								{
+									"key": "content-length",
+									"value": "556"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 13 Sep 2019 17:43:28 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": \"4d8f1190-5c7b-4dec-b766-be4a24a5df6c\",\n        \"username\": \"user7\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": true,\n        \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n        \"group_request\": \"superadmin\",\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt4@abe.ai\",\n        \"created_on\": \"1568396383891\",\n        \"last_login\": null,\n        \"user_data\": null,\n        \"eprofile\": null\n    }\n]"
+						}
+					]
 				},
 				{
 					"name": "Edit by Id",
