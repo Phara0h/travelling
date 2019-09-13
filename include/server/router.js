@@ -84,11 +84,7 @@ class Router {
             // the route object
             var r = this.isRouteAllowed(req.raw.method, req.raw.url, group, sessionUser);
             if (r) {
-              //console.log(r)
                 // sets user id cookie every time to protect against tampering.
-                // res.cookie('travelling:aid', sessionUser._id);
-                // res.cookie('travelling:un', sessionUser.username);
-                // res.cookie('travelling:g', sessionUser.group.name)
                 if (authenticated) {
                     req.headers['un'] = sessionUser.username;
                     req.headers['g'] = sessionUser.group.name;
@@ -98,10 +94,12 @@ class Router {
 
                 if (req.raw.url.indexOf('/travelling/api/') == 0) {
                   if (config.log.requests) {
+                    console.log(req)
                       if (authenticated) {
-                          log.info(sessionUser.username + ' (' + sessionUser.group.name + ') | ' + req.ip + ' | [' + req.raw.method + '] '+req.req.url);
+
+                          log.info(sessionUser.username + ' (' + sessionUser.group.name + ') | ' + req.raw.ip + ' | [' + req.raw.method + '] '+req.req.url);
                       } else {
-                          log.info('Unregistered User' + ' (anonymous)' + ' | ' + req.ip + ' | [' + req.raw.method + '] '+req.req.url);
+                          log.info('Unregistered User' + ' (anonymous)' + ' | ' + req.raw.ip + ' | [' + req.raw.method + '] '+req.req.url);
                       }
                     }
                     return false;

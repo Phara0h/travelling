@@ -69,6 +69,9 @@ if(config.cors.enable) {
       res.setHeader("access-control-allow-headers", config.cors.headers || req.headers['access-control-request-headers'] || '*');
     }
 
+    if(req.url.indexOf('/travelling/api/v1/auth') > -1) {
+        res.setHeader('access-control-allow-credentials', true)
+    }
       next();
   });
   app.options('/travelling/api/v1/*', (req, res) => {
@@ -176,7 +179,7 @@ async function init() {
 
     await Database.initGroups(router);
     await Email.init();
-    app.listen(config.port, '0.0.0.0');
+    app.listen(config.port, config.ip);
 
     config.log.logger.info(`Travelling on port ${config.port}`);
 }

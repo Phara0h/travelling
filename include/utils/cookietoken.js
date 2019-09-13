@@ -5,7 +5,7 @@ const encryptIV = config.cookie.token.secret;
 
 const User = require('../database/models/user');
 
-class Token {
+class CookieToken {
     constructor() {
     }
 
@@ -21,7 +21,11 @@ class Token {
             var dToken = await this.decrypt(tok.toString('ascii'));
             var cred = dToken.split(':');
 
-            if (cred[3] == ip && Date.now() - Number(cred[2]) < config.cookie.token.expiration * 86400000) // 90 days in millls
+            if(config.cookie.security.ipHijackProtection && cred[3] != ip) {
+              return false;
+            }
+
+            if (Date.now() - Number(cred[2]) < config.cookie.token.expiration * 86400000) // 90 days in millls
             {
                 var user = await User.findAllBy({username: cred[0], password: cred[1]});
 
@@ -44,7 +48,6 @@ class Token {
         res.setCookie('trav:tok', tok, {
             expires: new Date(date.getTime() + config.cookie.token.expiration * 86400000),
             secure: config.https,
-            httpOnly: true,
             path: '/',
         });
         return res;
@@ -62,7 +65,7 @@ class Token {
 
     // password are the hashed password only!
     static async getToken(username, password, ip, date) {
-        return await this.encrypt(`${username}:${password}:${date.getTime()}:${ip}`);
+        return await this.encrypt(`${username}:${password}:${date.getTime()}:${config.cookie.security.ipHijackProtection ? ip : ''}`);
     }
 
     // password are the hashed password only!
@@ -129,4 +132,4 @@ class Token {
     }
 }
 
-module.exports = Token;
+module.exports = CookieToken;
