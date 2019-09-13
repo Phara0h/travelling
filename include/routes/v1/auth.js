@@ -22,7 +22,6 @@ var login = async (user, req, res) => {
     user.failed_login_attempts = 0;
     await user.save();
 
-
     req.createSession(user.id, {user});
     res = await CookieToken.newTokenInCookie(user.username, user.password, req, res);
 
@@ -30,12 +29,13 @@ var login = async (user, req, res) => {
 
     if (req.cookies['trav:backurl']) {
         var url = req.cookies['trav:backurl'].split('|');
+
         res.setCookie('trav:backurl', null, {
-          expires: Date.now(),
-          secure: config.https,
-          httpOnly: true,
-          path: '/'
-        })
+            expires: Date.now(),
+            secure: config.https,
+            httpOnly: true,
+            path: '/',
+        });
         res.redirect(url[0] === 'GET' ? 301 : 303, url[1]);
         return;
     } else {
@@ -47,24 +47,24 @@ var login = async (user, req, res) => {
 
 module.exports = function(app, opts, done) {
     const router = opts.router;
-    if(config.cors.enable) {
-      app.use((req,res,next)=> {
-        res.setHeader('access-control-allow-credentials', true)
-        next();
-      })
-    }
+    // if(config.cors.enable) {
+    //   app.use((req,res,next)=> {
+    //     res.setHeader('access-control-allow-credentials', true)
+    //     next();
+    //   })
+    // }
 
-    app.addContentTypeParser('application/x-www-form-urlencoded',{ parseAs: 'buffer', bodyLimit: opts.bodyLimit}, function (req, body, done) {
-      done(null, qs.parse(body.toString()));
-    })
+    app.addContentTypeParser('application/x-www-form-urlencoded', {parseAs: 'buffer', bodyLimit: opts.bodyLimit}, function(req, body, done) {
+        done(null, qs.parse(body.toString()));
+    });
 
     app.put('/auth/login', async (req, res) => {
-
+        // console.log(req)
         if (req.isAuthenticated) {
-          res.code(200).send({
-              type: 'login-session-error',
-              msg: 'Logged in already.',
-          });
+            res.code(200).send({
+                type: 'login-session-error',
+                msg: 'Logged in already.',
+            });
         } else {
             if (!req.body) {
                 res.code(400).send({
@@ -84,12 +84,12 @@ module.exports = function(app, opts, done) {
                 email = req.body.email = req.body.email.toLowerCase();
             }
 
-            if ((!req.body.email && !req.body.username) || !req.body.password) {
-              res.code(400).send({
-                  type: 'body-login-error',
-                  msg: 'A vaild username or email and password is required.',
-              });
-              return;
+            if (!req.body.email && !req.body.username || !req.body.password) {
+                res.code(400).send({
+                    type: 'body-login-error',
+                    msg: 'A vaild username or email and password is required.',
+                });
+                return;
             }
 
             var isVaild = await checkVaildUser(req.body, false);
@@ -97,21 +97,16 @@ module.exports = function(app, opts, done) {
             if (isVaild !== true) {
                 res.code(400).send(isVaild);
             } else {
-              try {
-                var user = await Database.checkAuth(username, email, req.body.password)
-                await login(user.user, req, res);
-              } catch (e) {
-                res.code(400).send(e.err.type=='locked' ? {type: e.err.type, msg: e.err.msg,email:e.email} : {
-                    type: 'login-error',
-                    msg: 'Invalid login',
-                });
+                try {
+                    var user = await Database.checkAuth(username, email, req.body.password);
 
-                // res.code(400).send(e.err.type=='locked' ? {...e.err, email:e.email} : {
-                //     type: 'login-error',
-                //     msg: 'Invalid login',
-                // });
-
-              }
+                    await login(user.user, req, res);
+                } catch (e) {
+                    res.code(400).send(e.err.type == 'locked' ? {type: e.err.type, msg: e.err.msg, email: e.email} : {
+                        type: 'login-error',
+                        msg: 'Invalid login',
+                    });
+                }
             }
         }
     });
@@ -132,13 +127,12 @@ module.exports = function(app, opts, done) {
 
         var isVaild = await checkVaildUser(req.body);
 
-        if(!req.body.username || !req.body.password || !req.body.email) {
-          res.code(400).send({
-              type: 'register-error',
-              msg: 'A vaild username, password and email are required.',
-          });
-        }
-        else if (isVaild !== true) {
+        if (!req.body.username || !req.body.password || !req.body.email) {
+            res.code(400).send({
+                type: 'register-error',
+                msg: 'A vaild username, password and email are required.',
+            });
+        } else if (isVaild !== true) {
             res.code(400).send(isVaild);
         } else {
 
@@ -154,15 +148,16 @@ module.exports = function(app, opts, done) {
     });
 
     app.put('/auth/password/forgot', async (req, res) => {
-        if(!req.body.email) {
-          res.code(400).send({
-              type: 'forgot-password-error',
-              msg: 'A vaild email is required.',
-          });
-          return;
+        if (!req.body.email) {
+            res.code(400).send({
+                type: 'forgot-password-error',
+                msg: 'A vaild email is required.',
+            });
+            return;
         }
 
         var isVaild = checkVaildUser(req.body, false);
+
         if (isVaild !== true) {
             res.code(400).send(isVaild);
             return;
@@ -174,15 +169,16 @@ module.exports = function(app, opts, done) {
     });
 
     app.put('/auth/password/reset', async (req, res) => {
-        if(!req.body.password) {
-          res.code(400).send({
-              type: 'reset-error',
-              msg: 'A vaild password is required.',
-          });
-          return;
+        if (!req.body.password) {
+            res.code(400).send({
+                type: 'reset-error',
+                msg: 'A vaild password is required.',
+            });
+            return;
         }
 
         var isVaild = checkVaildUser(req.body, false);
+
         if (isVaild !== true) {
             res.code(400).send(isVaild);
             return;
@@ -213,74 +209,74 @@ module.exports = function(app, opts, done) {
     app.get('/auth/activate', async (req, res) => {
         var token = await TokenHandler.checkActivationToken(req.query.token);
 
-        if(!token) {
-          res.code(400);
-          return {
-              type: 'activation-token-error',
-              msg: 'Token is invaild, please login again for a new activation link sent to your email.',
-          }
+        if (!token) {
+            res.code(400);
+            return {
+                type: 'activation-token-error',
+                msg: 'Token is invaild, please login again for a new activation link sent to your email.',
+            };
         }
 
         var isActivated = await Database.activateAccount(token);
 
-        if(!isActivated) {
-          return {
-              type: 'activation-token-error',
-              msg: 'Token is invaild, please login again for a new activation link sent to your email.',
-          }
+        if (!isActivated) {
+            return {
+                type: 'activation-token-error',
+                msg: 'Token is invaild, please login again for a new activation link sent to your email.',
+            };
         }
 
         return 'Account activated, please login.';
     });
 
-    app.post('/auth/token', async (req,res) =>{
-      console.log(req.body, req.headers)
-      if(req.body.grant_type != 'client_credentials')
-      {
-        res.code(400);
-        return {
-            type: 'oauth2-grant-type-error',
-            msg: 'grant_type is not supported.',
-        };
-      }
-      var client_id = null;
-      var client_secret = null;
+    // app.post('/auth/oauth/authorize', async (req,res) =>{
+    //
+    // })
 
-      try {
-        if(req.headers.authorization) {
-            var details = Buffer.from(req.headers.authorization.split(' ')[1], 'base64').toString('utf8').split(':');
-            client_id = details[0];
-            client_secret = details[1];
-        } else if(req.body.client_id && req.body.client_secret) {
-          client_id = req.body.client_id;
-          client_secret = req.body.client_secret;
+    app.post('/auth/token', async (req, res) =>{
+        if (req.body.grant_type != 'client_credentials') {
+            res.code(400);
+            return {
+                error: 'invalid_request',
+                error_description: 'grant_type is not supported.',
+            };
         }
-      } catch (e) {}
+        var client_id = null;
+        var client_secret = null;
 
-      if(!client_id || !client_secret) {
-        res.code(400);
-        return {
-            type: 'oauth2-client-details-invalid-error',
-            msg: 'client_id and/or client_secret is invaild',
-        };
-      }
+        try {
+            if (req.headers.authorization) {
+                var details = Buffer.from(req.headers.authorization.split(' ')[1], 'base64').toString('utf8').split(':');
 
-      var token = await TokenHandler.checkOAuthToken(client_id, client_secret);
+                client_id = details[0];
+                client_secret = details[1];
+            } else if (req.body.client_id && req.body.client_secret) {
+                client_id = req.body.client_id;
+                client_secret = req.body.client_secret;
+            }
+        } catch (e) {}
 
-      if(!token) {
-        res.code(400);
-        return {
-            type: 'oauth2-token-invalid-error',
-            msg: 'Token is invalid',
-        };
-      }
+        if (!client_id || !client_secret) {
+            res.code(401);
+            return {
+                type: 'invalid_client',
+                msg: 'client_id and/or client_secret are invaild',
+            };
+        }
 
-      res.code(200);
-      return await TokenHandler.getAccessToken(token);
-    })
+        var token = await TokenHandler.checkOAuthToken(client_id, client_secret);
 
+        if (!token) {
+            res.code(401);
+            return {
+                type: 'invalid_client',
+                msg: 'client_id and/or client_secret are invaild',
+            };
+        }
 
-
+        res.code(200);
+        return await TokenHandler.getAccessToken(token);
+    });
 
     done();
 };

@@ -19,6 +19,7 @@ var stringToBool = function(bool) {
 
 const config = {
     port: isSetDefault(Number(process.env.TRAVELLING_PORT), 443),
+    ip: isSetDefault(process.env.TRAVELLING_IP, '0.0.0.0'),
     key: process.env.TRAVELLING_KEY,
     cert: process.env.TRAVELLING_CERT,
     cors: {
@@ -55,6 +56,10 @@ const config = {
           secret: isSetDefault(process.env.TRAVELLING_COOKIE_TOKEN_SECRET, null),
           salt: isSetDefault(process.env.TRAVELLING_COOKIE_TOKEN_SALT, null),
           expiration: isSetDefault(Number(process.env.TRAVELLING_COOKIE_TOKEN_EXPIRATION), 90) //days
+      },
+      domain: isSetDefault(process.env.TRAVELLING_COOKIE_DOMAIN, null),
+      security: {
+        ipHijackProtection: isSetDefault(stringToBool(process.env.TRAVELLING_COOKIE_SECURITY_IP_HIJACK_PROTECTION), true)
       }
     },
     username: {

@@ -22,21 +22,25 @@ var logout = (req, res) => {
 
 var checkAuthHeader = async (req, res, router) => {
     if (req.headers.authorization) {
-        config.log.logger.debug(req.headers)
+
         var splitAuth = req.headers.authorization.split(' ');
         if(splitAuth.length < 2) {
           return false;
         }
         splitAuth[0] = splitAuth[0].toLowerCase();
 
-        if(splitAuth[0] != 'basic' || splitAuth != 'bearer') {
+        if(splitAuth[0] == 'basic') {
+          return {auth: false, route: true};
+        }
+
+        if(splitAuth[0] != 'bearer') {
           return false;
         }
 
         var user = await TokenHandler.checkAccessToken(splitAuth[1]);
 
         if (!user) {
-            return {auth: false, route: req.headers.authorization.indexOf('Basic ') > -1 ? true : false};
+            return {auth: false, route: false};
         }
 
         await user.resolveGroup(router);
