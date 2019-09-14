@@ -161,6 +161,18 @@ module.exports = function(app, opts, done) {
         return await User.findAll();
     });
 
+    app.get('/users/group/request/:group_request', async (req, res) => {
+
+        if (!misc.isEmpty(req.query) && userUtils.checkVaildUser(req.query, false)) {
+            req.query.group_request = req.params.group_request;
+            var query = userUtils.setUser({}, req.query);
+
+            return await User.findAllBy(query);
+        }
+
+        return await User.findAllBy({group_request: req.params.group_request});
+    });
+
     app.get('/user/me', (req, res) => {
         res.send(req.session.data.user);
     });
