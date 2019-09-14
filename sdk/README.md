@@ -59,7 +59,6 @@ metrics - servers metrics
     * [.editPropertyByUsername(body, username, prop, authorization_bearer)](#User.editPropertyByUsername)
     * [.editPropertyById(body, id, prop, authorization_bearer)](#User.editPropertyById)
     * [.editById(body, id, authorization_bearer)](#User.editById)
-    * [.getUsers(group_request, locked, authorization_bearer)](#User.getUsers)
     * [.getAll(authorization_bearer)](#User.getAll)
     * [.getPropertyById(id, prop, authorization_bearer)](#User.getPropertyById)
     * [.getPropertyByUsername(username, prop, authorization_bearer)](#User.getPropertyByUsername)
@@ -176,23 +175,29 @@ body
     "password": "Awickednewawesomepasword4242!@"
 }
 ```
-<a name="User.getUsers"></a>
-
-### User.getUsers(group_request, locked, authorization_bearer)
-getUsers - Gets users by each query param user prop.
-
-**Kind**: static method of [<code>User</code>](#User)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| group_request | <code>any</code> | (example: superadmin) |
-| locked | <code>any</code> | (example: true) |
-| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
-
 <a name="User.getAll"></a>
 
 ### User.getAll(authorization_bearer)
 getAll - Gets all the users
+
+    ##### Optional Query Params
+
+    | Param | Description |
+    | --- | --- |
+    | id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+    | username | *optional* (example:  user7) |
+    | locked | *optional* (example:  true) |
+    | locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+    | group_request | *optional* (example:  superadmin) |
+    | failed_login_attempts | *optional* (example:  0) |
+    | change_username | *optional* (example:  false) |
+    | change_password | *optional* (example:  false) |
+    | reset_password | *optional* (example:  false) |
+    | email_verify | *optional* (example:  false) |
+    | group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+    | email | *optional* (example:  test@test.ai) |
+    | created_on | *optional* (example:  1568419646794) |
+    | last_login | *optional* (example:  null) |
 
 **Kind**: static method of [<code>User</code>](#User)  
 
@@ -442,6 +447,25 @@ body
 ### Groups.getAllUsersInherited(name)
 getAllUsersInherited - Gets all the users that belong to the group and all of its inherited groups.
 
+    ##### Optional Query Params
+
+    | Param | Description |
+    | --- | --- |
+    | id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+    | username | *optional* (example:  user7) |
+    | locked | *optional* (example:  true) |
+    | locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+    | group_request | *optional* (example:  superadmin) |
+    | failed_login_attempts | *optional* (example:  0) |
+    | change_username | *optional* (example:  false) |
+    | change_password | *optional* (example:  false) |
+    | reset_password | *optional* (example:  false) |
+    | email_verify | *optional* (example:  false) |
+    | group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+    | email | *optional* (example:  test@test.ai) |
+    | created_on | *optional* (example:  1568419646794) |
+    | last_login | *optional* (example:  null) |
+
 **Kind**: static method of [<code>Groups</code>](#Groups)  
 
 | Param | Type | Description |
@@ -452,6 +476,25 @@ getAllUsersInherited - Gets all the users that belong to the group and all of it
 
 ### Groups.getAllUsers(name)
 getAllUsers - Gets all the users that belong to the group.
+
+    ##### Optional Query Params
+
+    | Param | Description |
+    | --- | --- |
+    | id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+    | username | *optional* (example:  user7) |
+    | locked | *optional* (example:  true) |
+    | locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+    | group_request | *optional* (example:  superadmin) |
+    | failed_login_attempts | *optional* (example:  0) |
+    | change_username | *optional* (example:  false) |
+    | change_password | *optional* (example:  false) |
+    | reset_password | *optional* (example:  false) |
+    | email_verify | *optional* (example:  false) |
+    | group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+    | email | *optional* (example:  test@test.ai) |
+    | created_on | *optional* (example:  1568419646794) |
+    | last_login | *optional* (example:  null) |
 
 **Kind**: static method of [<code>Groups</code>](#Groups)  
 
@@ -583,6 +626,25 @@ setDefault - Sets the group of a particular type to be the default group for new
 ### Type.getAllUsersInherited(name, type)
 getAllUsersInherited - Gets all the users that belong to the group  of a particular type by its name or id and all of its inherited groups.
 
+    ##### Optional Query Params
+
+    | Param | Description |
+    | --- | --- |
+    | id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+    | username | *optional* (example:  user7) |
+    | locked | *optional* (example:  true) |
+    | locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+    | group_request | *optional* (example:  superadmin) |
+    | failed_login_attempts | *optional* (example:  0) |
+    | change_username | *optional* (example:  false) |
+    | change_password | *optional* (example:  false) |
+    | reset_password | *optional* (example:  false) |
+    | email_verify | *optional* (example:  false) |
+    | group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+    | email | *optional* (example:  test@test.ai) |
+    | created_on | *optional* (example:  1568419646794) |
+    | last_login | *optional* (example:  null) |
+
 **Kind**: static method of [<code>Type</code>](#Type)  
 
 | Param | Type | Description |
@@ -594,6 +656,25 @@ getAllUsersInherited - Gets all the users that belong to the group  of a particu
 
 ### Type.getAllUsers(name, type)
 getAllUsers - Gets all the users that belong to the group  of a particular type by its name or id.
+
+    ##### Optional Query Params
+
+    | Param | Description |
+    | --- | --- |
+    | id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+    | username | *optional* (example:  user7) |
+    | locked | *optional* (example:  true) |
+    | locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+    | group_request | *optional* (example:  superadmin) |
+    | failed_login_attempts | *optional* (example:  0) |
+    | change_username | *optional* (example:  false) |
+    | change_password | *optional* (example:  false) |
+    | reset_password | *optional* (example:  false) |
+    | email_verify | *optional* (example:  false) |
+    | group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+    | email | *optional* (example:  test@test.ai) |
+    | created_on | *optional* (example:  1568419646794) |
+    | last_login | *optional* (example:  null) |
 
 **Kind**: static method of [<code>Type</code>](#Type)  
 
@@ -823,9 +904,9 @@ register - Register a user
 body
 ```js
 {
-    "username": "user7",
+    "username": "user5",
     "password": "swagmoney69xd420",
-    "email": "jt4@abe.ai",
+    "email": "jt@abe.ai",
     "group_request": "superadmin"
 }
 ```

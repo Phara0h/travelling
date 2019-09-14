@@ -5,6 +5,7 @@ const User = require('../../database/models/user');
 
 const misc = require('../../utils/misc');
 const regex = require('../../utils/regex');
+const userUtils = require('../../utils/user.js')
 
 var setGroup = async function(req, group, router) {
     var invalidGroup = false;
@@ -238,18 +239,18 @@ var deleteGroup = async function(req, res, router) {
     res.code(200).send();
 };
 
-var getInhertedUsers = async function(group, users) {
+var getInhertedUsers = async function(group, users, query = {}) {
     console.log(group.id);
     if (group.inheritedGroups) {
 
         for (var i = 0; i < group.inheritedGroups.length; i++) {
 
-            users = await getInhertedUsers(group.inheritedGroups[i], users);
+            users = await getInhertedUsers(group.inheritedGroups[i], users, query);
         }
 
     }
 
-    return users = users.concat(await User.findAllBy({group_id: group.id}));
+    return users = users.concat(await User.findAllBy(userUtils.setUser({group_id: group.id}, req.query)));
 };
 
 module.exports = function(app, opts, done) {
@@ -330,17 +331,26 @@ module.exports = function(app, opts, done) {
         if (!group) {
             return;
         }
+        if (!misc.isEmpty(req.query) && userUtils.checkVaildUser(req.query, false)) {
+            var query = userUtils.setUser({group_id: group.id}, req.query);
 
+            res.code(200).send(await User.findAllBy(query));
+        }
         res.code(200).send(await User.findAllBy({group_id: group.id}));
 
     });
+
     app.get('/group/:groupname/:grouptype/users', async (req, res) => {
         var group = await getGroup(req, res, router);
 
         if (!group) {
             return;
         }
+        if (!misc.isEmpty(req.query) && userUtils.checkVaildUser(req.query, false)) {
+            var query = userUtils.setUser({group_id: group.id}, req.query);
 
+            res.code(200).send(await User.findAllBy(query));
+        }
         res.code(200).send(await User.findAllBy({group_id: group.id}));
     });
 
@@ -349,6 +359,11 @@ module.exports = function(app, opts, done) {
 
         if (!group) {
             return;
+        }
+        if (!misc.isEmpty(req.query) && userUtils.checkVaildUser(req.query, false)) {
+            var query = userUtils.setUser({group_id: group.id}, req.query);
+
+            res.code(200).send(await User.findAllBy(query));
         }
 
         res.code(200).send(await getInhertedUsers(group, []));
@@ -362,7 +377,9 @@ module.exports = function(app, opts, done) {
             return;
         }
 
-        res.code(200).send(await getInhertedUsers(group, []));
+        var query = !misc.isEmpty(req.query) && userUtils.checkVaildUser(req.query, false) ? req.query : {};
+
+        res.code(200).send(await getInhertedUsers(group, [], query));
     });
 
     // Get Groups

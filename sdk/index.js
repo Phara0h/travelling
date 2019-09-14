@@ -247,36 +247,28 @@ class User {
 
 
     /**
-     * getUsers - Gets users by each query param user prop.
-     * @param {any} group_request  (example: superadmin)
-     * @param {any} locked  (example: true)
-     * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
-     */
-    static async getUsers(group_request, locked, authorization_bearer, opts) {
-        var options = {
-            method: 'GET',
-            resolveWithFullResponse: true,
-            simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/users`,
-            qs: {
-                group_request,
-                locked
-            },
-            authorization: {
-                bearer: authorization_bearer
-            },
-        };
-        if (opts) {
-            options = Object.assign(options, opts);
-        }
-        return await fasq.request(options)
-    }
+      * getAll - Gets all the users
 
+    ##### Optional Query Params
 
-    /**
-     * getAll - Gets all the users
-     * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
-     */
+    | Param | Description |
+    | --- | --- |
+    | id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+    | username | *optional* (example:  user7) |
+    | locked | *optional* (example:  true) |
+    | locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+    | group_request | *optional* (example:  superadmin) |
+    | failed_login_attempts | *optional* (example:  0) |
+    | change_username | *optional* (example:  false) |
+    | change_password | *optional* (example:  false) |
+    | reset_password | *optional* (example:  false) |
+    | email_verify | *optional* (example:  false) |
+    | group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+    | email | *optional* (example:  test@test.ai) |
+    | created_on | *optional* (example:  1568419646794) |
+    | last_login | *optional* (example:  null) |
+      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+      */
     static async getAll(authorization_bearer, opts) {
         var options = {
             method: 'GET',
@@ -663,9 +655,28 @@ class Groups {
 
 
     /**
-     * getAllUsersInherited - Gets all the users that belong to the group and all of its inherited groups.
-     * @param {any} name id or name (example: superadmin)
-     */
+      * getAllUsersInherited - Gets all the users that belong to the group and all of its inherited groups.
+
+    ##### Optional Query Params
+
+    | Param | Description |
+    | --- | --- |
+    | id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+    | username | *optional* (example:  user7) |
+    | locked | *optional* (example:  true) |
+    | locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+    | group_request | *optional* (example:  superadmin) |
+    | failed_login_attempts | *optional* (example:  0) |
+    | change_username | *optional* (example:  false) |
+    | change_password | *optional* (example:  false) |
+    | reset_password | *optional* (example:  false) |
+    | email_verify | *optional* (example:  false) |
+    | group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+    | email | *optional* (example:  test@test.ai) |
+    | created_on | *optional* (example:  1568419646794) |
+    | last_login | *optional* (example:  null) |
+      * @param {any} name id or name (example: superadmin)
+      */
     static async getAllUsersInherited(name, opts) {
         var options = {
             method: 'GET',
@@ -681,9 +692,28 @@ class Groups {
 
 
     /**
-     * getAllUsers - Gets all the users that belong to the group.
-     * @param {any} name id or name (example: superadmin)
-     */
+      * getAllUsers - Gets all the users that belong to the group.
+
+    ##### Optional Query Params
+
+    | Param | Description |
+    | --- | --- |
+    | id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+    | username | *optional* (example:  user7) |
+    | locked | *optional* (example:  true) |
+    | locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+    | group_request | *optional* (example:  superadmin) |
+    | failed_login_attempts | *optional* (example:  0) |
+    | change_username | *optional* (example:  false) |
+    | change_password | *optional* (example:  false) |
+    | reset_password | *optional* (example:  false) |
+    | email_verify | *optional* (example:  false) |
+    | group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+    | email | *optional* (example:  test@test.ai) |
+    | created_on | *optional* (example:  1568419646794) |
+    | last_login | *optional* (example:  null) |
+      * @param {any} name id or name (example: superadmin)
+      */
     static async getAllUsers(name, opts) {
         var options = {
             method: 'GET',
@@ -873,10 +903,29 @@ class Type {
 
 
     /**
-     * getAllUsersInherited - Gets all the users that belong to the group  of a particular type by its name or id and all of its inherited groups.
-     * @param {any} name id or name  (example: superadmin)
-     * @param {any} type The type of the group (example: group)
-     */
+      * getAllUsersInherited - Gets all the users that belong to the group  of a particular type by its name or id and all of its inherited groups.
+
+    ##### Optional Query Params
+
+    | Param | Description |
+    | --- | --- |
+    | id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+    | username | *optional* (example:  user7) |
+    | locked | *optional* (example:  true) |
+    | locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+    | group_request | *optional* (example:  superadmin) |
+    | failed_login_attempts | *optional* (example:  0) |
+    | change_username | *optional* (example:  false) |
+    | change_password | *optional* (example:  false) |
+    | reset_password | *optional* (example:  false) |
+    | email_verify | *optional* (example:  false) |
+    | group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+    | email | *optional* (example:  test@test.ai) |
+    | created_on | *optional* (example:  1568419646794) |
+    | last_login | *optional* (example:  null) |
+      * @param {any} name id or name  (example: superadmin)
+      * @param {any} type The type of the group (example: group)
+      */
     static async getAllUsersInherited(name, type, opts) {
         var options = {
             method: 'GET',
@@ -892,10 +941,29 @@ class Type {
 
 
     /**
-     * getAllUsers - Gets all the users that belong to the group  of a particular type by its name or id.
-     * @param {any} name id or name (example: superadmin)
-     * @param {any} type The type of the group (example: group)
-     */
+      * getAllUsers - Gets all the users that belong to the group  of a particular type by its name or id.
+
+    ##### Optional Query Params
+
+    | Param | Description |
+    | --- | --- |
+    | id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+    | username | *optional* (example:  user7) |
+    | locked | *optional* (example:  true) |
+    | locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+    | group_request | *optional* (example:  superadmin) |
+    | failed_login_attempts | *optional* (example:  0) |
+    | change_username | *optional* (example:  false) |
+    | change_password | *optional* (example:  false) |
+    | reset_password | *optional* (example:  false) |
+    | email_verify | *optional* (example:  false) |
+    | group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+    | email | *optional* (example:  test@test.ai) |
+    | created_on | *optional* (example:  1568419646794) |
+    | last_login | *optional* (example:  null) |
+      * @param {any} name id or name (example: superadmin)
+      * @param {any} type The type of the group (example: group)
+      */
     static async getAllUsers(name, type, opts) {
         var options = {
             method: 'GET',
@@ -1237,9 +1305,9 @@ class Auth {
       * body
       * ```js
       * {
-     *     "username": "user7",
+     *     "username": "user5",
      *     "password": "swagmoney69xd420",
-     *     "email": "jt4@abe.ai",
+     *     "email": "jt@abe.ai",
      *     "group_request": "superadmin"
      * }
       * ```
