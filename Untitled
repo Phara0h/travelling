@@ -1,0 +1,20 @@
+#####Optional Query Params
+```javascript
+{
+  id,
+  username,
+  locked,
+  locked_reason,
+  group_request,
+  failed_login_attempts,
+  change_username,
+  change_password,
+  reset_password,
+  email_verify,
+  group_id,
+  email,
+  created_on,
+  last_login,
+  user_data
+}
+```
