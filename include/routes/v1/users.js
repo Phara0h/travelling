@@ -5,146 +5,184 @@ const userUtils = require('../../utils/user');
 const config = require('../../utils/config');
 const misc = require('../../utils/misc');
 
-module.exports = function(app, opts, done) {
-    const router = opts.router;
+var deleteUser = async (req, res, router) => {
 
-    var deleteUser = async (req, res) => {
-
-        if (req.params.username && !regex.safeName.exec(req.params.username) || req.params.id && req.params.id.length != 36) {
-            res.code(400);
-            return {
-                type: 'user-find-by-error',
-                msg: 'No user by that username or id was found.',
-            };
-        }
-
-        var id = req.params.username ? {username: req.params.username} : {id: req.params.id};
-
-        var user = await User.deleteAllBy(id, 'AND');
-
-        if (user && user.length > 0) {
-
-            await user[0].resolveGroup(router);
-
-            var session = await req.sessionStore.get(user[0].id);
-
-            if (session) {
-                await req.sessionStore.destroy(session.sessionId);
-            }
-
-            res.code(200);
-            return user[0];
-        }
-
-        res.code(400);
-        return {
-            type: 'user-delete-error',
-            msg: 'No user by that username or id was found.',
-        };
-    };
-
-    var editUser = async (req, res) => {
-
-        if (req.params.username && !regex.safeName.exec(req.params.username) || req.params.id && req.params.id.length != 36) {
-            res.code(400);
-            return {
-                type: 'user-find-by-error',
-                msg: 'No user by that username or id was found.',
-            };
-        }
-
-        var id = req.params.username ? {username: req.params.username} : {id: req.params.id};
-        var model = req.body;
-
-        if (req.params.prop) {
-            model = {[req.params.prop]: req.body};
-        }
-
-        var isVaild = await userUtils.checkVaildUser(model);
-
-        if (isVaild !== true) {
-            res.code(400);
-            return isVaild;
-        }
-
-        var user = await User.updateLimitedBy(id, model, 'AND', 1);
-
-        if (user && user.length > 0) {
-
-            await user[0].resolveGroup(router);
-
-            res.code(200);
-            // Update any current logged in users
-            var session = await req.sessionStore.get(user[0].id);
-
-            if (session) {
-                session.data = {user: user[0]};
-                await req.sessionStore.set(session.sessionId, session);
-            }
-
-            return req.params.prop ? user[0][req.params.prop] : user[0];
-        }
-
-        res.code(400);
-        return {
-            type: 'user-edit-error',
-            msg: 'No user by that username or id was found.',
-        };
-    };
-
-    var getUser = async (req, res) => {
-
-        if (!req.params.id && !req.params.username || req.params.username && !regex.safeName.exec(req.params.username) || req.params.id !== undefined && req.params.id !== null && req.params.id.length != 36) {
-            res.code(400);
-            return {
-                type: 'user-find-by-error',
-                msg: 'No user by that username or id was found.',
-            };
-        }
-
-        var id = req.params.username ? {username: req.params.username} : {id: req.params.id};
-        var user = await User.findLimtedBy(id, 'AND', 1);
-        // console.log(id, user, user.length)
-
-        if (user && user.length > 0) {
-
-            await user[0].resolveGroup(router);
-
-            if (req.params.prop && !user[0]._[req.params.prop]) {
-                res.code(400);
-                return {
-                    type: 'user-prop-error',
-                    msg: 'Not a property of user',
-                };
-            }
-
-            res.code(200);
-            return req.params.prop ? user[0][req.params.prop] : user[0];
-        }
-
-        res.code(400);
+    if (!req.params.id) {
         return {
             type: 'user-find-by-error',
             msg: 'No user by that username or id was found.',
         };
+    }
+    var id;
+
+    if (!regex.uuidCheck(req.params.id)) {
+
+        if (!regex.safeName.exec(req.params.id)) {
+            res.code(400);
+            return {
+                type: 'user-find-by-error',
+                msg: 'No user by that username or id was found.',
+            };
+        }
+
+        id = {username: req.params.id};
+    } else {
+        id = {id: req.params.id};
+    }
+
+    var user = await User.deleteAllBy(id, 'AND');
+
+    if (user && user.length > 0) {
+
+        await user[0].resolveGroup(router);
+
+        var session = await req.sessionStore.get(user[0].id);
+
+        if (session) {
+            await req.sessionStore.destroy(session.sessionId);
+        }
+
+        res.code(200);
+        return user[0];
+    }
+
+    res.code(400);
+    return {
+        type: 'user-delete-error',
+        msg: 'No user by that username or id was found.',
     };
+};
+
+var editUser = async (req, res, router) => {
+
+    if (!req.params.id) {
+        return {
+            type: 'user-find-by-error',
+            msg: 'No user by that username or id was found.',
+        };
+    }
+    var id;
+
+    if (!regex.uuidCheck(req.params.id)) {
+
+        if (!regex.safeName.exec(req.params.id)) {
+            res.code(400);
+            return {
+                type: 'user-find-by-error',
+                msg: 'No user by that username or id was found.',
+            };
+        }
+
+        id = {username: req.params.id};
+    } else {
+        id = {id: req.params.id};
+    }
+
+    var model = req.body;
+
+    if (req.params.prop) {
+        model = {[req.params.prop]: req.body};
+    }
+
+    var isVaild = await userUtils.checkVaildUser(model);
+
+    if (isVaild !== true) {
+        res.code(400);
+        return isVaild;
+    }
+
+    var user = await User.updateLimitedBy(id, model, 'AND', 1);
+
+    if (user && user.length > 0) {
+
+        await user[0].resolveGroup(router);
+
+        res.code(200);
+        // Update any current logged in users
+        var session = await req.sessionStore.get(user[0].id);
+
+        if (session) {
+            session.data = {user: user[0]};
+            await req.sessionStore.set(session.sessionId, session);
+        }
+
+        return req.params.prop ? user[0][req.params.prop] : user[0];
+    }
+
+    res.code(400);
+    return {
+        type: 'user-edit-error',
+        msg: 'No user by that username or id was found.',
+    };
+};
+
+var getUser = async (req, res, router) => {
+
+    if (!req.params.id) {
+        return {
+            type: 'user-find-by-error',
+            msg: 'No user by that username or id was found.',
+        };
+    }
+    var id;
+
+    if (!regex.uuidCheck(req.params.id)) {
+
+        if (!regex.safeName.exec(req.params.id)) {
+            res.code(400);
+            return {
+                type: 'user-find-by-error',
+                msg: 'No user by that username or id was found.',
+            };
+        }
+
+        id = {username: req.params.id};
+    } else {
+        id = {id: req.params.id};
+    }
+
+    var user = await User.findLimtedBy(id, 'AND', 1);
+    // console.log(id, user, user.length)
+
+    if (user && user.length > 0) {
+
+        await user[0].resolveGroup(router);
+
+        if (req.params.prop && !user[0]._[req.params.prop]) {
+            res.code(400);
+            return {
+                type: 'user-prop-error',
+                msg: 'Not a property of user',
+            };
+        }
+
+        res.code(200);
+        return req.params.prop ? user[0][req.params.prop] : user[0];
+    }
+
+    res.code(400);
+    return {
+        type: 'user-find-by-error',
+        msg: 'No user by that username or id was found.',
+    };
+};
+
+var routes = function(app, opts, done) {
+    const router = opts.router;
 
     var getUserResolveGroup = async (req, res) => {
         return await getUser(req, res, true);
     };
 
-    app.get('/user/username/:username', getUser);
-    app.get('/user/username/:username/:prop', getUser);
-    app.get('/user/id/:id', getUser);
-    app.get('/user/id/:id/:prop', getUser);
 
-    app.put('/user/username/:username', editUser);
-    app.put('/user/username/:username/:prop', editUser);
-    app.put('/user/id/:id', editUser);
-    app.put('/user/id/:id/:prop', editUser);
+    app.get('/user/id/:id', async (req, res)=>{await getUser(req, res, router);});
+    app.get('/user/id/:id/:prop', async (req, res)=>{await getUser(req, res, router);});
 
-    app.delete('/user/id/:id', deleteUser);
-    app.delete('/user/username/:username', deleteUser);
+    app.put('/user/id/:id', async (req, res)=>{await editUser(req, res, router);});
+    app.put('/user/id/:id/:prop', async (req, res)=>{await editUser(req, res, router);});
+
+    app.delete('/user/id/:id', async (req, res)=>{await deleteUser(req, res, router);});
+
 
     // app.get('/user/resolve/group/username/:username', getUserResolveGroup);
     // app.get('/user/resolve/group/username/:username/:prop', getUserResolveGroup);
@@ -190,7 +228,7 @@ module.exports = function(app, opts, done) {
 
     app.put('/user/me', async (req, res) => {
         req.params.id = req.session.data.user.id;
-        return await editUser(req, res);
+        return await editUser(req, res, router);
         // var isVaild = await userUtils.checkVaildUser(req.body);
         // if(isVaild !== true) {
         //     res.code(400).send(isVaild);
@@ -204,7 +242,7 @@ module.exports = function(app, opts, done) {
 
     app.put('/user/me/:prop', async (req, res) => {
         req.params.id = req.session.data.user.id;
-        return await editUser(req, res);
+        return await editUser(req, res, router);
         // var prop = {[req.params.prop]:req.body};
         // var isVaild = await userUtils.checkVaildUser(prop);
         // if(isVaild !== true) {
@@ -258,7 +296,7 @@ module.exports = function(app, opts, done) {
                     type: 'token-error',
                     msg: 'Unabled to delete token.',
                 });
-                return;
+                return; s;
             }
             res.code(200).send();
             return;
@@ -276,4 +314,11 @@ module.exports = function(app, opts, done) {
     });
 
     done();
+};
+
+module.exports = {
+    routes,
+    getUser,
+    deleteUser,
+    editUser,
 };
