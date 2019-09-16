@@ -3,11 +3,10 @@ const Travelling = require('../../sdk')('https://127.0.0.1:6969');
 var userContainer = require('../include/UserContainer.js');
 
 module.exports = () => {
+  var token1, token2;
+  var accessToken1, accessToken2;
 
       describe('Vaild', () => {
-        var token1, token2;
-        var accessToken1, accessToken2;
-
         test("Register OAuth2 Credentials Token as Test User With No Name", async () => {
           var res = await Travelling.User.Current.registerToken({}, null, {
               headers: {
@@ -15,6 +14,7 @@ module.exports = () => {
               },
           });
           token1 = res.body;
+
           expect(res.body).toMatchObject({
               client_id: expect.any(String),
               client_secret: expect.any(String)
@@ -39,6 +39,8 @@ module.exports = () => {
 
           var res = await Travelling.Auth.accessToken('client_credentials',token1.client_id, token1.client_secret);
           accessToken1 = res.body.access_token;
+          userContainer.user1Token = res.body.access_token;
+          
           expect(res.body).toMatchObject({
               expires_in: config.token.access.expiration*60, // seconds
               access_token: expect.any(String),
@@ -85,7 +87,38 @@ module.exports = () => {
         test("Get User With Invaild Token as Test User With Name", async () => {
           var res = await Travelling.User.Current.get(accessToken2.slice(3)+'aaa')
 
-          expect(res.body.username).toEqual('test');
+          expect(res.statusCode).toEqual(401);
+        });
+
+
+        test("Expired Access Token", async () => {
+            var oldTokenExpiration = config.token.access.expiration;
+            config.token.access.expiration = 0.050 // mins 3 seconds worth
+
+          var res = await Travelling.Auth.accessToken('client_credentials',token2.client_id, token2.client_secret);
+          var accessToken3 = res.body.access_token;
+
+          expect(res.body).toMatchObject({
+              expires_in: config.token.access.expiration*60, // seconds
+              access_token: expect.any(String),
+              token_type:"bearer"
+            })
+
+            jest.setTimeout(20000);
+
+            var p = new Promise((resolve, reject)=>{
+                setTimeout(()=>{
+                    resolve();
+                }, 4900);
+            });
+
+            await p;
+
+            var user = await Travelling.User.Current.get(accessToken3);
+
+            expect(user.body.error).toEqual('invaild_client');
+
+            config.token.access.expiration = oldTokenExpiration;
         });
 
       });

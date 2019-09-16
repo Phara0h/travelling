@@ -549,7 +549,7 @@
 			]
 		},
 		{
-			"name": "Groups",
+			"name": "Group",
 			"item": [
 				{
 					"name": "Type",
@@ -924,7 +924,7 @@
 							"name": "Users",
 							"item": [
 								{
-									"name": "All  Inherited",
+									"name": "Inherited",
 									"request": {
 										"method": "GET",
 										"header": [],
@@ -1014,7 +1014,7 @@
 									]
 								},
 								{
-									"name": "All",
+									"name": "Get",
 									"request": {
 										"method": "GET",
 										"header": [],
@@ -1746,7 +1746,7 @@
 					"name": "Users",
 					"item": [
 						{
-							"name": "All",
+							"name": "Get",
 							"request": {
 								"method": "GET",
 								"header": [],
@@ -1828,7 +1828,7 @@
 							]
 						},
 						{
-							"name": "All  Inherited",
+							"name": "Inherited",
 							"request": {
 								"method": "GET",
 								"header": [],
@@ -1952,7 +1952,7 @@
 					"response": []
 				},
 				{
-					"name": "Edit By Name",
+					"name": "Edit",
 					"request": {
 						"method": "PUT",
 						"header": [
@@ -2207,34 +2207,6 @@
 					"response": []
 				},
 				{
-					"name": "All",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer",
-								"description": "The client_credentials generated OAUth2 access token.",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{TRAV}}/travelling/api/v1/groups",
-							"host": [
-								"{{TRAV}}"
-							],
-							"path": [
-								"travelling",
-								"api",
-								"v1",
-								"groups"
-							]
-						},
-						"description": "Get all the groups"
-					},
-					"response": []
-				},
-				{
 					"name": "Delete",
 					"request": {
 						"method": "DELETE",
@@ -2380,6 +2352,39 @@
 			]
 		},
 		{
+			"name": "Groups",
+			"item": [
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/groups",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"groups"
+							]
+						},
+						"description": "Get all the groups"
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "User",
 			"item": [
 				{
@@ -2501,7 +2506,7 @@
 							"response": []
 						},
 						{
-							"name": "Get User Property",
+							"name": "Get Property",
 							"request": {
 								"method": "GET",
 								"header": [
@@ -3121,7 +3126,7 @@
 			"name": "Users",
 			"item": [
 				{
-					"name": "All",
+					"name": "Get",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -3149,7 +3154,7 @@
 					"response": []
 				},
 				{
-					"name": "All By Group Request",
+					"name": "By Group Request",
 					"request": {
 						"method": "GET",
 						"header": [

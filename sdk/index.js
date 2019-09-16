@@ -61,6 +61,10 @@ class Travelling {
         return Groups;
     }
 
+    static get Group() {
+        return Group;
+    }
+
     static get Auth() {
         return Auth;
     }
@@ -73,7 +77,7 @@ class Users {
 
 
     /**
-      * allByGroupRequest - Gets all the users that have the specified group request
+      * byGroupRequest - Gets all the users that have the specified group request
 
     ##### Optional Query Params
 
@@ -96,7 +100,7 @@ class Users {
       * @param {any} group_request name of the group  (example: superadmin)
       * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
       */
-    static async allByGroupRequest(group_request, authorization_bearer, opts) {
+    static async byGroupRequest(group_request, authorization_bearer, opts) {
         var options = {
             method: 'GET',
             resolveWithFullResponse: true,
@@ -114,7 +118,7 @@ class Users {
 
 
     /**
-      * all - Gets all the users
+      * get - Gets all the users
 
     ##### Optional Query Params
 
@@ -136,7 +140,7 @@ class Users {
     | last_login | *optional* (example:  null) |
       * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
       */
-    static async all(authorization_bearer, opts) {
+    static async get(authorization_bearer, opts) {
         var options = {
             method: 'GET',
             resolveWithFullResponse: true,
@@ -431,11 +435,11 @@ class UserCurrent {
 
 
     /**
-     * getUserProperty - Gets the currently logged in user's single property 
+     * getProperty - Gets the currently logged in user's single property 
      * @param {any} property  (example: username)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
-    static async getUserProperty(property, authorization_bearer, opts) {
+    static async getProperty(property, authorization_bearer, opts) {
         var options = {
             method: 'GET',
             resolveWithFullResponse: true,
@@ -530,6 +534,33 @@ class Groups {
 
 
     /**
+     * get - Get all the groups
+     * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+     */
+    static async get(authorization_bearer, opts) {
+        var options = {
+            method: 'GET',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/groups`,
+            authorization: {
+                bearer: authorization_bearer
+            },
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+}
+/**
+ * 
+ */
+class Group {
+    constructor() {}
+
+
+    /**
      * delete - delete group by its id or name
      * @param {Object} body
      * @param {any} name id or name  
@@ -559,27 +590,6 @@ class Groups {
             uri: hostUrl + "/" + `travelling/api/v1/group/name/${name}`,
             body,
             json: true,
-            authorization: {
-                bearer: authorization_bearer
-            },
-        };
-        if (opts) {
-            options = Object.assign(options, opts);
-        }
-        return await fasq.request(options)
-    }
-
-
-    /**
-     * all - Get all the groups
-     * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
-     */
-    static async all(authorization_bearer, opts) {
-        var options = {
-            method: 'GET',
-            resolveWithFullResponse: true,
-            simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/groups`,
             authorization: {
                 bearer: authorization_bearer
             },
@@ -645,7 +655,7 @@ class Groups {
 
 
     /**
-     * editByName - Edits a group
+     * edit - Edits a group
      * @param {Object} body
      * @param {any} name  
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
@@ -657,7 +667,7 @@ class Groups {
      * }
      * ```
      */
-    static async editByName(body, name, authorization_bearer, opts) {
+    static async edit(body, name, authorization_bearer, opts) {
         var options = {
             method: 'PUT',
             resolveWithFullResponse: true,
@@ -716,22 +726,22 @@ class Groups {
     }
 
     static get Users() {
-        return GroupsUsers;
+        return GroupUsers;
     }
 
     static get Type() {
-        return GroupsType;
+        return GroupType;
     }
 }
 /**
  * 
  */
-class GroupsUsers {
+class GroupUsers {
     constructor() {}
 
 
     /**
-      * all_Inherited - Gets all the users that belong to the group and all of its inherited groups.
+      * inherited - Gets all the users that belong to the group and all of its inherited groups.
 
     ##### Optional Query Params
 
@@ -753,7 +763,7 @@ class GroupsUsers {
     | last_login | *optional* (example:  null) |
       * @param {any} name id or name (example: superadmin)
       */
-    static async all_Inherited(name, opts) {
+    static async inherited(name, opts) {
         var options = {
             method: 'GET',
             resolveWithFullResponse: true,
@@ -768,7 +778,7 @@ class GroupsUsers {
 
 
     /**
-      * all - Gets all the users that belong to the group.
+      * get - Gets all the users that belong to the group.
 
     ##### Optional Query Params
 
@@ -790,7 +800,7 @@ class GroupsUsers {
     | last_login | *optional* (example:  null) |
       * @param {any} name id or name (example: superadmin)
       */
-    static async all(name, opts) {
+    static async get(name, opts) {
         var options = {
             method: 'GET',
             resolveWithFullResponse: true,
@@ -806,7 +816,7 @@ class GroupsUsers {
 /**
  * 
  */
-class GroupsType {
+class GroupType {
     constructor() {}
 
 
@@ -1039,7 +1049,7 @@ class TypeUsers {
 
 
     /**
-      * all - Gets all the users that belong to the group  of a particular type by its name or id.
+      * get - Gets all the users that belong to the group  of a particular type by its name or id.
 
     ##### Optional Query Params
 
@@ -1062,7 +1072,7 @@ class TypeUsers {
       * @param {any} type  
       * @param {any} name  
       */
-    static async all(type, name, opts) {
+    static async get(type, name, opts) {
         var options = {
             method: 'GET',
             resolveWithFullResponse: true,
@@ -1077,7 +1087,7 @@ class TypeUsers {
 
 
     /**
-      * all_Inherited - Gets all the users that belong to the group  of a particular type by its name or id and all of its inherited groups.
+      * inherited - Gets all the users that belong to the group  of a particular type by its name or id and all of its inherited groups.
 
     ##### Optional Query Params
 
@@ -1100,7 +1110,7 @@ class TypeUsers {
       * @param {any} type The type of the group (example: groups)
       * @param {any} name  (example: group4)
       */
-    static async all_Inherited(type, name, opts) {
+    static async inherited(type, name, opts) {
         var options = {
             method: 'GET',
             resolveWithFullResponse: true,

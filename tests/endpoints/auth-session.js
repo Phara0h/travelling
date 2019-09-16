@@ -50,7 +50,7 @@ module.exports = () => {
             var ssid = userContainer.user2.ssid;
             userContainer.user2.ssid = null;
 
-            var res = await Travelling.User.Current.getUser( null, {
+            var res = await Travelling.User.Current.get( null, {
                 headers: {
                     cookie: userContainer.user2Cookie(),
                 },
@@ -74,7 +74,7 @@ module.exports = () => {
 
             userContainer.user2.tok = userContainer.user2.tok.slice(18);
 
-            var res = await Travelling.User.Current.getUser( null, {
+            var res = await Travelling.User.Current.get( null, {
                 headers: {
                     cookie: userContainer.user2Cookie(),
                 },
@@ -90,7 +90,7 @@ module.exports = () => {
             var ssid = userContainer.user2.ssid;
             userContainer.user2.ssid = userContainer.user2.ssid.slice(18);
 
-            var res = await Travelling.User.Current.getUser( null, {
+            var res = await Travelling.User.Current.get( null, {
                 headers: {
                     cookie: userContainer.user2Cookie(),
                 },

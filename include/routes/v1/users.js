@@ -8,6 +8,7 @@ const misc = require('../../utils/misc');
 var deleteUser = async (req, res, router) => {
 
     if (!req.params.id) {
+        res.code(400);
         return {
             type: 'user-find-by-error',
             msg: 'No user by that username or id was found.',
@@ -56,6 +57,7 @@ var deleteUser = async (req, res, router) => {
 var editUser = async (req, res, router) => {
 
     if (!req.params.id) {
+        res.code(400);
         return {
             type: 'user-find-by-error',
             msg: 'No user by that username or id was found.',
@@ -119,6 +121,7 @@ var editUser = async (req, res, router) => {
 var getUser = async (req, res, router) => {
 
     if (!req.params.id) {
+        res.code(400);
         return {
             type: 'user-find-by-error',
             msg: 'No user by that username or id was found.',
