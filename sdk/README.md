@@ -3,15 +3,23 @@
 <dl>
 <dt><a href="#Travelling">Travelling</a></dt>
 <dd></dd>
-<dt><a href="#User">User</a></dt>
+<dt><a href="#TravellingUsers">TravellingUsers</a></dt>
 <dd></dd>
-<dt><a href="#Current">Current</a></dt>
+<dt><a href="#TravellingUser">TravellingUser</a></dt>
 <dd></dd>
-<dt><a href="#Groups">Groups</a></dt>
+<dt><a href="#UserCurrent">UserCurrent</a></dt>
 <dd></dd>
-<dt><a href="#Type">Type</a></dt>
+<dt><a href="#TravellingGroups">TravellingGroups</a></dt>
 <dd></dd>
-<dt><a href="#Auth">Auth</a></dt>
+<dt><a href="#GroupsUsers">GroupsUsers</a></dt>
+<dd></dd>
+<dt><a href="#GroupsType">GroupsType</a></dt>
+<dd></dd>
+<dt><a href="#TypeUsers">TypeUsers</a></dt>
+<dd></dd>
+<dt><a href="#TypeUser">TypeUser</a></dt>
+<dd></dd>
+<dt><a href="#TravellingAuth">TravellingAuth</a></dt>
 <dd><h4 id="auth-endpoints">Auth endpoints</h4>
 </dd>
 </dl>
@@ -47,138 +55,19 @@ metrics - servers metrics
 | --- | --- | --- |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
-<a name="User"></a>
+<a name="TravellingUsers"></a>
 
-## User
+## TravellingUsers
 **Kind**: global class  
 
-* [User](#User)
-    * [.deleteByUsername(username, authorization_bearer)](#User.deleteByUsername)
-    * [.deleteById(id, authorization_bearer)](#User.deleteById)
-    * [.editByUsername(body, username, authorization_bearer)](#User.editByUsername)
-    * [.editPropertyByUsername(body, username, prop, authorization_bearer)](#User.editPropertyByUsername)
-    * [.editPropertyById(body, id, prop, authorization_bearer)](#User.editPropertyById)
-    * [.editById(body, id, authorization_bearer)](#User.editById)
-    * [.getAll(authorization_bearer)](#User.getAll)
-    * [.getPropertyById(id, prop, authorization_bearer)](#User.getPropertyById)
-    * [.getPropertyByUsername(username, prop, authorization_bearer)](#User.getPropertyByUsername)
-    * [.getById(id, authorization_bearer)](#User.getById)
-    * [.getByUsername(username, authorization_bearer)](#User.getByUsername)
+* [TravellingUsers](#TravellingUsers)
+    * [.allByGroupRequest(group_request, authorization_bearer)](#TravellingUsers.allByGroupRequest)
+    * [.all(authorization_bearer)](#TravellingUsers.all)
 
-<a name="User.deleteByUsername"></a>
+<a name="TravellingUsers.allByGroupRequest"></a>
 
-### User.deleteByUsername(username, authorization_bearer)
-deleteByUsername - Delete a user by it's username.
-
-**Kind**: static method of [<code>User</code>](#User)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| username | <code>any</code> | (example: test) |
-| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
-
-<a name="User.deleteById"></a>
-
-### User.deleteById(id, authorization_bearer)
-deleteById - Delete a user by it's Id.
-
-**Kind**: static method of [<code>User</code>](#User)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| id | <code>any</code> | (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA) |
-| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
-
-<a name="User.editByUsername"></a>
-
-### User.editByUsername(body, username, authorization_bearer)
-editByUsername - Edit a user's by username.
-
-**Kind**: static method of [<code>User</code>](#User)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| body | <code>Object</code> |  |
-| username | <code>any</code> | (example: test) |
-| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
-
-**Example**  
-body
-```js
-{
-    "username": "user6",
-    "password": "Awickednewawesomepasword4242!@"
-}
-```
-<a name="User.editPropertyByUsername"></a>
-
-### User.editPropertyByUsername(body, username, prop, authorization_bearer)
-editPropertyByUsername - Edit a user's property by Username.
-
-**Kind**: static method of [<code>User</code>](#User)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| body | <code>Object</code> |  |
-| username | <code>any</code> | (example: test) |
-| prop | <code>any</code> | (example: email) |
-| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
-
-**Example**  
-body
-```js
-{
-    "username": "user6",
-    "password": "Awickednewawesomepasword4242!@"
-}
-```
-<a name="User.editPropertyById"></a>
-
-### User.editPropertyById(body, id, prop, authorization_bearer)
-editPropertyById - Edit a user's property by id.
-
-**Kind**: static method of [<code>User</code>](#User)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| body | <code>Object</code> |  |
-| id | <code>any</code> | (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA) |
-| prop | <code>any</code> | (example: username) |
-| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
-
-**Example**  
-body
-```js
-{
-    "username": "user6",
-    "password": "Awickednewawesomepasword4242!@"
-}
-```
-<a name="User.editById"></a>
-
-### User.editById(body, id, authorization_bearer)
-editById - Edit a user's by id.
-
-**Kind**: static method of [<code>User</code>](#User)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| body | <code>Object</code> |  |
-| id | <code>any</code> | (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA) |
-| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
-
-**Example**  
-body
-```js
-{
-    "username": "user6",
-    "password": "Awickednewawesomepasword4242!@"
-}
-```
-<a name="User.getAll"></a>
-
-### User.getAll(authorization_bearer)
-getAll - Gets all the users
+### TravellingUsers.allByGroupRequest(group_request, authorization_bearer)
+allByGroupRequest - Gets all the users that have the specified group request
 
     ##### Optional Query Params
 
@@ -199,18 +88,116 @@ getAll - Gets all the users
     | created_on | *optional* (example:  1568419646794) |
     | last_login | *optional* (example:  null) |
 
-**Kind**: static method of [<code>User</code>](#User)  
+**Kind**: static method of [<code>TravellingUsers</code>](#TravellingUsers)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| group_request | <code>any</code> | name of the group  (example: superadmin) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="TravellingUsers.all"></a>
+
+### TravellingUsers.all(authorization_bearer)
+all - Gets all the users
+
+    ##### Optional Query Params
+
+    | Param | Description |
+    | --- | --- |
+    | id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+    | username | *optional* (example:  user7) |
+    | locked | *optional* (example:  true) |
+    | locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+    | group_request | *optional* (example:  superadmin) |
+    | failed_login_attempts | *optional* (example:  0) |
+    | change_username | *optional* (example:  false) |
+    | change_password | *optional* (example:  false) |
+    | reset_password | *optional* (example:  false) |
+    | email_verify | *optional* (example:  false) |
+    | group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+    | email | *optional* (example:  test@test.ai) |
+    | created_on | *optional* (example:  1568419646794) |
+    | last_login | *optional* (example:  null) |
+
+**Kind**: static method of [<code>TravellingUsers</code>](#TravellingUsers)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
-<a name="User.getPropertyById"></a>
+<a name="TravellingUser"></a>
 
-### User.getPropertyById(id, prop, authorization_bearer)
-getPropertyById - Get a user's property by it's id.
+## TravellingUser
+**Kind**: global class  
 
-**Kind**: static method of [<code>User</code>](#User)  
+* [TravellingUser](#TravellingUser)
+    * [.delete(id, authorization_bearer)](#TravellingUser.delete)
+    * [.editProperty(body, id, prop, authorization_bearer)](#TravellingUser.editProperty)
+    * [.edit(body, id, authorization_bearer)](#TravellingUser.edit)
+    * [.getProperty(id, prop, authorization_bearer)](#TravellingUser.getProperty)
+    * [.get(id, authorization_bearer)](#TravellingUser.get)
+
+<a name="TravellingUser.delete"></a>
+
+### TravellingUser.delete(id, authorization_bearer)
+delete - Delete a user by it's Id.
+
+**Kind**: static method of [<code>TravellingUser</code>](#TravellingUser)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>any</code> | (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="TravellingUser.editProperty"></a>
+
+### TravellingUser.editProperty(body, id, prop, authorization_bearer)
+editProperty - Edit a user's property by id.
+
+**Kind**: static method of [<code>TravellingUser</code>](#TravellingUser)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| id | <code>any</code> | (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA) |
+| prop | <code>any</code> | (example: username) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+**Example**  
+body
+```js
+{
+    "username": "user6",
+    "password": "Awickednewawesomepasword4242!@"
+}
+```
+<a name="TravellingUser.edit"></a>
+
+### TravellingUser.edit(body, id, authorization_bearer)
+edit - Edit a user's by id.
+
+**Kind**: static method of [<code>TravellingUser</code>](#TravellingUser)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| id | <code>any</code> | (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+**Example**  
+body
+```js
+{
+    "username": "user6",
+    "password": "Awickednewawesomepasword4242!@"
+}
+```
+<a name="TravellingUser.getProperty"></a>
+
+### TravellingUser.getProperty(id, prop, authorization_bearer)
+getProperty - Get a user's property by it's id.
+
+**Kind**: static method of [<code>TravellingUser</code>](#TravellingUser)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -218,64 +205,39 @@ getPropertyById - Get a user's property by it's id.
 | prop | <code>any</code> | (example: username) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
-<a name="User.getPropertyByUsername"></a>
+<a name="TravellingUser.get"></a>
 
-### User.getPropertyByUsername(username, prop, authorization_bearer)
-getPropertyByUsername - Gets the user's property
+### TravellingUser.get(id, authorization_bearer)
+get - Get a user by it's id.
 
-**Kind**: static method of [<code>User</code>](#User)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| username | <code>any</code> | (example: user1) |
-| prop | <code>any</code> | (example: id) |
-| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
-
-<a name="User.getById"></a>
-
-### User.getById(id, authorization_bearer)
-getById - Get a user by it's id.
-
-**Kind**: static method of [<code>User</code>](#User)  
+**Kind**: static method of [<code>TravellingUser</code>](#TravellingUser)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | id | <code>any</code> | (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
-<a name="User.getByUsername"></a>
+<a name="UserCurrent"></a>
 
-### User.getByUsername(username, authorization_bearer)
-getByUsername - Get user by their username
-
-**Kind**: static method of [<code>User</code>](#User)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| username | <code>any</code> | (example: user1) |
-| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
-
-<a name="Current"></a>
-
-## Current
+## UserCurrent
 **Kind**: global class  
 
-* [Current](#Current)
-    * [.editProperty(body, property, authorization_bearer)](#Current.editProperty)
-    * [.deleteToken(body, id, authorization_bearer)](#Current.deleteToken)
-    * [.registerToken(body, authorization_bearer)](#Current.registerToken)
-    * [.edit(body, authorization_bearer)](#Current.edit)
-    * [.getUserProperty(property, authorization_bearer)](#Current.getUserProperty)
-    * [.routeCheck(method, route, authorization_bearer)](#Current.routeCheck)
-    * [.permissionCheck(permission, authorization_bearer)](#Current.permissionCheck)
-    * [.getUser(authorization_bearer)](#Current.getUser)
+* [UserCurrent](#UserCurrent)
+    * [.editProperty(body, property, authorization_bearer)](#UserCurrent.editProperty)
+    * [.deleteToken(body, id, authorization_bearer)](#UserCurrent.deleteToken)
+    * [.registerToken(body, authorization_bearer)](#UserCurrent.registerToken)
+    * [.edit(body, authorization_bearer)](#UserCurrent.edit)
+    * [.getUserProperty(property, authorization_bearer)](#UserCurrent.getUserProperty)
+    * [.routeCheck(method, route, authorization_bearer)](#UserCurrent.routeCheck)
+    * [.permissionCheck(permission, authorization_bearer)](#UserCurrent.permissionCheck)
+    * [.getUser(authorization_bearer)](#UserCurrent.getUser)
 
-<a name="Current.editProperty"></a>
+<a name="UserCurrent.editProperty"></a>
 
-### Current.editProperty(body, property, authorization_bearer)
+### UserCurrent.editProperty(body, property, authorization_bearer)
 editProperty - Edit a current user's property data.
 
-**Kind**: static method of [<code>Current</code>](#Current)  
+**Kind**: static method of [<code>UserCurrent</code>](#UserCurrent)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -290,12 +252,12 @@ body
     "test": 123
 }
 ```
-<a name="Current.deleteToken"></a>
+<a name="UserCurrent.deleteToken"></a>
 
-### Current.deleteToken(body, id, authorization_bearer)
+### UserCurrent.deleteToken(body, id, authorization_bearer)
 deleteToken - Deletes a client_credentials based access token auth.
 
-**Kind**: static method of [<code>Current</code>](#Current)  
+**Kind**: static method of [<code>UserCurrent</code>](#UserCurrent)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -310,12 +272,12 @@ body
     "name": "test"
 }
 ```
-<a name="Current.registerToken"></a>
+<a name="UserCurrent.registerToken"></a>
 
-### Current.registerToken(body, authorization_bearer)
+### UserCurrent.registerToken(body, authorization_bearer)
 registerToken - Registers a new credentials service for client_credentials based access token auth.
 
-**Kind**: static method of [<code>Current</code>](#Current)  
+**Kind**: static method of [<code>UserCurrent</code>](#UserCurrent)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -329,12 +291,12 @@ body
     "name": "test"
 }
 ```
-<a name="Current.edit"></a>
+<a name="UserCurrent.edit"></a>
 
-### Current.edit(body, authorization_bearer)
+### UserCurrent.edit(body, authorization_bearer)
 edit - Updates the current logged in user.
 
-**Kind**: static method of [<code>Current</code>](#Current)  
+**Kind**: static method of [<code>UserCurrent</code>](#UserCurrent)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -349,24 +311,24 @@ body
     "password": "Awickednewawesomepasword4242!@"
 }
 ```
-<a name="Current.getUserProperty"></a>
+<a name="UserCurrent.getUserProperty"></a>
 
-### Current.getUserProperty(property, authorization_bearer)
+### UserCurrent.getUserProperty(property, authorization_bearer)
 getUserProperty - Gets the currently logged in user's single property
 
-**Kind**: static method of [<code>Current</code>](#Current)  
+**Kind**: static method of [<code>UserCurrent</code>](#UserCurrent)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | property | <code>any</code> | (example: username) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
-<a name="Current.routeCheck"></a>
+<a name="UserCurrent.routeCheck"></a>
 
-### Current.routeCheck(method, route, authorization_bearer)
+### UserCurrent.routeCheck(method, route, authorization_bearer)
 routeCheck - Checks if current logged in user can access the route with method.
 
-**Kind**: static method of [<code>Current</code>](#Current)  
+**Kind**: static method of [<code>UserCurrent</code>](#UserCurrent)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -374,56 +336,53 @@ routeCheck - Checks if current logged in user can access the route with method.
 | route | <code>any</code> | (example: /travelling/api/v1/users/me) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
-<a name="Current.permissionCheck"></a>
+<a name="UserCurrent.permissionCheck"></a>
 
-### Current.permissionCheck(permission, authorization_bearer)
+### UserCurrent.permissionCheck(permission, authorization_bearer)
 permissionCheck - Checks to see if the current user can access content based on permission.
 
-**Kind**: static method of [<code>Current</code>](#Current)  
+**Kind**: static method of [<code>UserCurrent</code>](#UserCurrent)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | permission | <code>any</code> | name of the route/permission (example: get-travelling) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
-<a name="Current.getUser"></a>
+<a name="UserCurrent.getUser"></a>
 
-### Current.getUser(authorization_bearer)
+### UserCurrent.getUser(authorization_bearer)
 getUser - Gets the currently logged in user
 
-**Kind**: static method of [<code>Current</code>](#Current)  
+**Kind**: static method of [<code>UserCurrent</code>](#UserCurrent)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
-<a name="Groups"></a>
+<a name="TravellingGroups"></a>
 
-## Groups
+## TravellingGroups
 **Kind**: global class  
 
-* [Groups](#Groups)
-    * [.delete(body, name, type, authorization_bearer)](#Groups.delete)
-    * [.getAllUsersInherited(name)](#Groups.getAllUsersInherited)
-    * [.getAllUsers(name)](#Groups.getAllUsers)
-    * [.getAll(authorization_bearer)](#Groups.getAll)
-    * [.addRoute(body, groupname, authorization_bearer)](#Groups.addRoute)
-    * [.setDefault(name)](#Groups.setDefault)
-    * [.editByName(body, groupname, authorization_bearer)](#Groups.editByName)
-    * [.create(body, authorization_bearer)](#Groups.create)
+* [TravellingGroups](#TravellingGroups)
+    * [.delete(body, name, authorization_bearer)](#TravellingGroups.delete)
+    * [.all(authorization_bearer)](#TravellingGroups.all)
+    * [.addRoute(body, name, authorization_bearer)](#TravellingGroups.addRoute)
+    * [.setDefault(name)](#TravellingGroups.setDefault)
+    * [.editByName(body, name, authorization_bearer)](#TravellingGroups.editByName)
+    * [.create(body, authorization_bearer)](#TravellingGroups.create)
 
-<a name="Groups.delete"></a>
+<a name="TravellingGroups.delete"></a>
 
-### Groups.delete(body, name, type, authorization_bearer)
+### TravellingGroups.delete(body, name, authorization_bearer)
 delete - delete group by its id or name
 
-**Kind**: static method of [<code>Groups</code>](#Groups)  
+**Kind**: static method of [<code>TravellingGroups</code>](#TravellingGroups)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | body | <code>Object</code> |  |
 | name | <code>any</code> | id or name |
-| type | <code>any</code> | The type of the group |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
@@ -442,88 +401,28 @@ body
     "is_default": false
 }
 ```
-<a name="Groups.getAllUsersInherited"></a>
+<a name="TravellingGroups.all"></a>
 
-### Groups.getAllUsersInherited(name)
-getAllUsersInherited - Gets all the users that belong to the group and all of its inherited groups.
+### TravellingGroups.all(authorization_bearer)
+all - Get all the groups
 
-    ##### Optional Query Params
-
-    | Param | Description |
-    | --- | --- |
-    | id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
-    | username | *optional* (example:  user7) |
-    | locked | *optional* (example:  true) |
-    | locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
-    | group_request | *optional* (example:  superadmin) |
-    | failed_login_attempts | *optional* (example:  0) |
-    | change_username | *optional* (example:  false) |
-    | change_password | *optional* (example:  false) |
-    | reset_password | *optional* (example:  false) |
-    | email_verify | *optional* (example:  false) |
-    | group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
-    | email | *optional* (example:  test@test.ai) |
-    | created_on | *optional* (example:  1568419646794) |
-    | last_login | *optional* (example:  null) |
-
-**Kind**: static method of [<code>Groups</code>](#Groups)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| name | <code>any</code> | id or name (example: superadmin) |
-
-<a name="Groups.getAllUsers"></a>
-
-### Groups.getAllUsers(name)
-getAllUsers - Gets all the users that belong to the group.
-
-    ##### Optional Query Params
-
-    | Param | Description |
-    | --- | --- |
-    | id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
-    | username | *optional* (example:  user7) |
-    | locked | *optional* (example:  true) |
-    | locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
-    | group_request | *optional* (example:  superadmin) |
-    | failed_login_attempts | *optional* (example:  0) |
-    | change_username | *optional* (example:  false) |
-    | change_password | *optional* (example:  false) |
-    | reset_password | *optional* (example:  false) |
-    | email_verify | *optional* (example:  false) |
-    | group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
-    | email | *optional* (example:  test@test.ai) |
-    | created_on | *optional* (example:  1568419646794) |
-    | last_login | *optional* (example:  null) |
-
-**Kind**: static method of [<code>Groups</code>](#Groups)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| name | <code>any</code> | id or name (example: superadmin) |
-
-<a name="Groups.getAll"></a>
-
-### Groups.getAll(authorization_bearer)
-getAll - Get all the groups
-
-**Kind**: static method of [<code>Groups</code>](#Groups)  
+**Kind**: static method of [<code>TravellingGroups</code>](#TravellingGroups)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
-<a name="Groups.addRoute"></a>
+<a name="TravellingGroups.addRoute"></a>
 
-### Groups.addRoute(body, groupname, authorization_bearer)
+### TravellingGroups.addRoute(body, name, authorization_bearer)
 addRoute - Adds a route to a group.
 
-**Kind**: static method of [<code>Groups</code>](#Groups)  
+**Kind**: static method of [<code>TravellingGroups</code>](#TravellingGroups)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | body | <code>Object</code> |  |
-| groupname | <code>any</code> | (example: superadmin) |
+| name | <code>any</code> |  |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
@@ -536,28 +435,28 @@ body
     "name": "cui-*"
 }
 ```
-<a name="Groups.setDefault"></a>
+<a name="TravellingGroups.setDefault"></a>
 
-### Groups.setDefault(name)
+### TravellingGroups.setDefault(name)
 setDefault - Sets the group to be the default group for new users.
 
-**Kind**: static method of [<code>Groups</code>](#Groups)  
+**Kind**: static method of [<code>TravellingGroups</code>](#TravellingGroups)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | name | <code>any</code> | id or name (example: group6) |
 
-<a name="Groups.editByName"></a>
+<a name="TravellingGroups.editByName"></a>
 
-### Groups.editByName(body, groupname, authorization_bearer)
+### TravellingGroups.editByName(body, name, authorization_bearer)
 editByName - Edits a group
 
-**Kind**: static method of [<code>Groups</code>](#Groups)  
+**Kind**: static method of [<code>TravellingGroups</code>](#TravellingGroups)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | body | <code>Object</code> |  |
-| groupname | <code>any</code> | id or name (example: superadmin) |
+| name | <code>any</code> |  |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
@@ -567,12 +466,12 @@ body
     "inherited": ["a717b880-b17b-4995-9610-cf451a06d015", "7ec8c351-7b8a-4ea8-95cc-0d990b225768"]
 }
 ```
-<a name="Groups.create"></a>
+<a name="TravellingGroups.create"></a>
 
-### Groups.create(body, authorization_bearer)
+### TravellingGroups.create(body, authorization_bearer)
 create - Add a new group
 
-**Kind**: static method of [<code>Groups</code>](#Groups)  
+**Kind**: static method of [<code>TravellingGroups</code>](#TravellingGroups)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -595,106 +494,137 @@ body
     "is_default": false
 }
 ```
-<a name="Type"></a>
+<a name="GroupsUsers"></a>
 
-## Type
+## GroupsUsers
 **Kind**: global class  
 
-* [Type](#Type)
-    * [.setDefault(name)](#Type.setDefault)
-    * [.getAllUsersInherited(name, type)](#Type.getAllUsersInherited)
-    * [.getAllUsers(name, type)](#Type.getAllUsers)
-    * [.delete(body, name, type, authorization_bearer)](#Type.delete)
-    * [.create(body, type, authorization_bearer)](#Type.create)
-    * [.getTypesList(authorization_bearer)](#Type.getTypesList)
-    * [.getAll(type, authorization_bearer)](#Type.getAll)
-    * [.editByName(body, name, type, authorization_bearer)](#Type.editByName)
+* [GroupsUsers](#GroupsUsers)
+    * [.all_Inherited(name)](#GroupsUsers.all_Inherited)
+    * [.all(name)](#GroupsUsers.all)
 
-<a name="Type.setDefault"></a>
+<a name="GroupsUsers.all_Inherited"></a>
 
-### Type.setDefault(name)
+### GroupsUsers.all\_Inherited(name)
+all_Inherited - Gets all the users that belong to the group and all of its inherited groups.
+
+    ##### Optional Query Params
+
+    | Param | Description |
+    | --- | --- |
+    | id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+    | username | *optional* (example:  user7) |
+    | locked | *optional* (example:  true) |
+    | locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+    | group_request | *optional* (example:  superadmin) |
+    | failed_login_attempts | *optional* (example:  0) |
+    | change_username | *optional* (example:  false) |
+    | change_password | *optional* (example:  false) |
+    | reset_password | *optional* (example:  false) |
+    | email_verify | *optional* (example:  false) |
+    | group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+    | email | *optional* (example:  test@test.ai) |
+    | created_on | *optional* (example:  1568419646794) |
+    | last_login | *optional* (example:  null) |
+
+**Kind**: static method of [<code>GroupsUsers</code>](#GroupsUsers)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>any</code> | id or name (example: superadmin) |
+
+<a name="GroupsUsers.all"></a>
+
+### GroupsUsers.all(name)
+all - Gets all the users that belong to the group.
+
+    ##### Optional Query Params
+
+    | Param | Description |
+    | --- | --- |
+    | id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+    | username | *optional* (example:  user7) |
+    | locked | *optional* (example:  true) |
+    | locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+    | group_request | *optional* (example:  superadmin) |
+    | failed_login_attempts | *optional* (example:  0) |
+    | change_username | *optional* (example:  false) |
+    | change_password | *optional* (example:  false) |
+    | reset_password | *optional* (example:  false) |
+    | email_verify | *optional* (example:  false) |
+    | group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+    | email | *optional* (example:  test@test.ai) |
+    | created_on | *optional* (example:  1568419646794) |
+    | last_login | *optional* (example:  null) |
+
+**Kind**: static method of [<code>GroupsUsers</code>](#GroupsUsers)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>any</code> | id or name (example: superadmin) |
+
+<a name="GroupsType"></a>
+
+## GroupsType
+**Kind**: global class  
+
+* [GroupsType](#GroupsType)
+    * [.addRoute(body, type, name, authorization_bearer)](#GroupsType.addRoute)
+    * [.setDefault(type, name)](#GroupsType.setDefault)
+    * [.delete(body, type, name, authorization_bearer)](#GroupsType.delete)
+    * [.create(body, type, authorization_bearer)](#GroupsType.create)
+    * [.getTypesList(authorization_bearer)](#GroupsType.getTypesList)
+    * [.all(type, authorization_bearer)](#GroupsType.all)
+    * [.editByName(body, type, name, authorization_bearer)](#GroupsType.editByName)
+
+<a name="GroupsType.addRoute"></a>
+
+### GroupsType.addRoute(body, type, name, authorization_bearer)
+addRoute - Adds a route to a group of a particular type.
+
+**Kind**: static method of [<code>GroupsType</code>](#GroupsType)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| type | <code>any</code> |  |
+| name | <code>any</code> |  |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+**Example**  
+body
+```js
+{
+    "route": "cui/permissions/*",
+    "host": null,
+    "method": "*",
+    "name": "cui-*"
+}
+```
+<a name="GroupsType.setDefault"></a>
+
+### GroupsType.setDefault(type, name)
 setDefault - Sets the group of a particular type to be the default group for new users.
 
-**Kind**: static method of [<code>Type</code>](#Type)  
+**Kind**: static method of [<code>GroupsType</code>](#GroupsType)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| name | <code>any</code> | id or name (example: group6) |
+| type | <code>any</code> | (example: account) |
+| name | <code>any</code> | id or name (example: group1) |
 
-<a name="Type.getAllUsersInherited"></a>
+<a name="GroupsType.delete"></a>
 
-### Type.getAllUsersInherited(name, type)
-getAllUsersInherited - Gets all the users that belong to the group  of a particular type by its name or id and all of its inherited groups.
-
-    ##### Optional Query Params
-
-    | Param | Description |
-    | --- | --- |
-    | id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
-    | username | *optional* (example:  user7) |
-    | locked | *optional* (example:  true) |
-    | locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
-    | group_request | *optional* (example:  superadmin) |
-    | failed_login_attempts | *optional* (example:  0) |
-    | change_username | *optional* (example:  false) |
-    | change_password | *optional* (example:  false) |
-    | reset_password | *optional* (example:  false) |
-    | email_verify | *optional* (example:  false) |
-    | group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
-    | email | *optional* (example:  test@test.ai) |
-    | created_on | *optional* (example:  1568419646794) |
-    | last_login | *optional* (example:  null) |
-
-**Kind**: static method of [<code>Type</code>](#Type)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| name | <code>any</code> | id or name  (example: superadmin) |
-| type | <code>any</code> | The type of the group (example: group) |
-
-<a name="Type.getAllUsers"></a>
-
-### Type.getAllUsers(name, type)
-getAllUsers - Gets all the users that belong to the group  of a particular type by its name or id.
-
-    ##### Optional Query Params
-
-    | Param | Description |
-    | --- | --- |
-    | id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
-    | username | *optional* (example:  user7) |
-    | locked | *optional* (example:  true) |
-    | locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
-    | group_request | *optional* (example:  superadmin) |
-    | failed_login_attempts | *optional* (example:  0) |
-    | change_username | *optional* (example:  false) |
-    | change_password | *optional* (example:  false) |
-    | reset_password | *optional* (example:  false) |
-    | email_verify | *optional* (example:  false) |
-    | group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
-    | email | *optional* (example:  test@test.ai) |
-    | created_on | *optional* (example:  1568419646794) |
-    | last_login | *optional* (example:  null) |
-
-**Kind**: static method of [<code>Type</code>](#Type)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| name | <code>any</code> | id or name (example: superadmin) |
-| type | <code>any</code> | The type of the group (example: group) |
-
-<a name="Type.delete"></a>
-
-### Type.delete(body, name, type, authorization_bearer)
+### GroupsType.delete(body, type, name, authorization_bearer)
 delete - delete group of a particular type by its name or id
 
-**Kind**: static method of [<code>Type</code>](#Type)  
+**Kind**: static method of [<code>GroupsType</code>](#GroupsType)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | body | <code>Object</code> |  |
-| name | <code>any</code> | id or name |
 | type | <code>any</code> | The type of the group |
+| name | <code>any</code> | id or name |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
@@ -713,17 +643,17 @@ body
     "is_default": false
 }
 ```
-<a name="Type.create"></a>
+<a name="GroupsType.create"></a>
 
-### Type.create(body, type, authorization_bearer)
+### GroupsType.create(body, type, authorization_bearer)
 create - Add a new group of a particular type
 
-**Kind**: static method of [<code>Type</code>](#Type)  
+**Kind**: static method of [<code>GroupsType</code>](#GroupsType)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | body | <code>Object</code> |  |
-| type | <code>any</code> | groups type (example: accounts) |
+| type | <code>any</code> |  |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
@@ -742,41 +672,41 @@ body
     "is_default": false
 }
 ```
-<a name="Type.getTypesList"></a>
+<a name="GroupsType.getTypesList"></a>
 
-### Type.getTypesList(authorization_bearer)
+### GroupsType.getTypesList(authorization_bearer)
 getTypesList - Gets all the types of groups currently made.
 
-**Kind**: static method of [<code>Type</code>](#Type)  
+**Kind**: static method of [<code>GroupsType</code>](#GroupsType)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
-<a name="Type.getAll"></a>
+<a name="GroupsType.all"></a>
 
-### Type.getAll(type, authorization_bearer)
-getAll - Gets all groups of a particular type
+### GroupsType.all(type, authorization_bearer)
+all - Gets all groups of a particular type
 
-**Kind**: static method of [<code>Type</code>](#Type)  
+**Kind**: static method of [<code>GroupsType</code>](#GroupsType)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| type | <code>any</code> | The groups type (example: group) |
+| type | <code>any</code> |  |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
-<a name="Type.editByName"></a>
+<a name="GroupsType.editByName"></a>
 
-### Type.editByName(body, name, type, authorization_bearer)
+### GroupsType.editByName(body, type, name, authorization_bearer)
 editByName - Edits a group of a particular type
 
-**Kind**: static method of [<code>Type</code>](#Type)  
+**Kind**: static method of [<code>GroupsType</code>](#GroupsType)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | body | <code>Object</code> |  |
-| name | <code>any</code> | id or name (example: superadmin) |
-| type | <code>any</code> | The groups type (example: group) |
+| type | <code>any</code> |  |
+| name | <code>any</code> |  |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
@@ -786,51 +716,179 @@ body
     "inherited": ["a717b880-b17b-4995-9610-cf451a06d015", "7ec8c351-7b8a-4ea8-95cc-0d990b225768"]
 }
 ```
-<a name="Auth"></a>
+<a name="TypeUsers"></a>
 
-## Auth
+## TypeUsers
+**Kind**: global class  
+
+* [TypeUsers](#TypeUsers)
+    * [.all(type, name)](#TypeUsers.all)
+    * [.all_Inherited(type, name)](#TypeUsers.all_Inherited)
+
+<a name="TypeUsers.all"></a>
+
+### TypeUsers.all(type, name)
+all - Gets all the users that belong to the group  of a particular type by its name or id.
+
+    ##### Optional Query Params
+
+    | Param | Description |
+    | --- | --- |
+    | id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+    | username | *optional* (example:  user7) |
+    | locked | *optional* (example:  true) |
+    | locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+    | group_request | *optional* (example:  superadmin) |
+    | failed_login_attempts | *optional* (example:  0) |
+    | change_username | *optional* (example:  false) |
+    | change_password | *optional* (example:  false) |
+    | reset_password | *optional* (example:  false) |
+    | email_verify | *optional* (example:  false) |
+    | group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+    | email | *optional* (example:  test@test.ai) |
+    | created_on | *optional* (example:  1568419646794) |
+    | last_login | *optional* (example:  null) |
+
+**Kind**: static method of [<code>TypeUsers</code>](#TypeUsers)  
+
+| Param | Type |
+| --- | --- |
+| type | <code>any</code> | 
+| name | <code>any</code> | 
+
+<a name="TypeUsers.all_Inherited"></a>
+
+### TypeUsers.all\_Inherited(type, name)
+all_Inherited - Gets all the users that belong to the group  of a particular type by its name or id and all of its inherited groups.
+
+    ##### Optional Query Params
+
+    | Param | Description |
+    | --- | --- |
+    | id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+    | username | *optional* (example:  user7) |
+    | locked | *optional* (example:  true) |
+    | locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+    | group_request | *optional* (example:  superadmin) |
+    | failed_login_attempts | *optional* (example:  0) |
+    | change_username | *optional* (example:  false) |
+    | change_password | *optional* (example:  false) |
+    | reset_password | *optional* (example:  false) |
+    | email_verify | *optional* (example:  false) |
+    | group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+    | email | *optional* (example:  test@test.ai) |
+    | created_on | *optional* (example:  1568419646794) |
+    | last_login | *optional* (example:  null) |
+
+**Kind**: static method of [<code>TypeUsers</code>](#TypeUsers)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| type | <code>any</code> | The type of the group (example: groups) |
+| name | <code>any</code> | (example: group4) |
+
+<a name="TypeUser"></a>
+
+## TypeUser
+**Kind**: global class  
+
+* [TypeUser](#TypeUser)
+    * [.delete(type, id, authorization_bearer)](#TypeUser.delete)
+    * [.edit(body, type, id, authorization_bearer)](#TypeUser.edit)
+    * [.get(type, id, authorization_bearer)](#TypeUser.get)
+
+<a name="TypeUser.delete"></a>
+
+### TypeUser.delete(type, id, authorization_bearer)
+delete - Delete a user by it's id or username from group of a particular type.
+
+**Kind**: static method of [<code>TypeUser</code>](#TypeUser)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| type | <code>any</code> | (example: accounts) |
+| id | <code>any</code> | (example: user7) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="TypeUser.edit"></a>
+
+### TypeUser.edit(body, type, id, authorization_bearer)
+edit - Edit a user by it's id or username from group of a particular type.
+
+**Kind**: static method of [<code>TypeUser</code>](#TypeUser)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| type | <code>any</code> | (example: accounts) |
+| id | <code>any</code> | (example: user6) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+**Example**  
+body
+```js
+{
+    "locked": false
+}
+```
+<a name="TypeUser.get"></a>
+
+### TypeUser.get(type, id, authorization_bearer)
+get - Get a user by it's id or username from group of a particular type.
+
+**Kind**: static method of [<code>TypeUser</code>](#TypeUser)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| type | <code>any</code> | (example: accounts) |
+| id | <code>any</code> | (example: user6) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="TravellingAuth"></a>
+
+## TravellingAuth
 #### Auth endpoints
 
 **Kind**: global class  
 
-* [Auth](#Auth)
-    * [.accessToken(authorization_client, authorization_secret)](#Auth.accessToken)
-    * [.activate(token)](#Auth.activate)
-    * [.resetPassword(body, token)](#Auth.resetPassword)
-    * [.forgotPassword(body)](#Auth.forgotPassword)
-    * [.logout()](#Auth.logout)
-    * [.login(body)](#Auth.login)
-    * [.register(body)](#Auth.register)
+* [TravellingAuth](#TravellingAuth)
+    * [.accessToken(authorization_client, authorization_secret)](#TravellingAuth.accessToken)
+    * [.activate(token)](#TravellingAuth.activate)
+    * [.resetPassword(body, token)](#TravellingAuth.resetPassword)
+    * [.forgotPassword(body)](#TravellingAuth.forgotPassword)
+    * [.logout()](#TravellingAuth.logout)
+    * [.login(body)](#TravellingAuth.login)
+    * [.register(body)](#TravellingAuth.register)
 
-<a name="Auth.accessToken"></a>
+<a name="TravellingAuth.accessToken"></a>
 
-### Auth.accessToken(authorization_client, authorization_secret)
+### TravellingAuth.accessToken(authorization_client, authorization_secret)
 accessToken - Oauth2 `client_credentials` access token flow. Body must be `application/x-www-form-urlencoded` and must contain the `grant_type`. `client_id` & `client_secret` will be sent in a `Basic` Authorization header as `base64(client_id:client_secret)`
 
-**Kind**: static method of [<code>Auth</code>](#Auth)  
+**Kind**: static method of [<code>TravellingAuth</code>](#TravellingAuth)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | authorization_client | <code>string</code> | username/client_id |
 | authorization_secret | <code>string</code> | password/client_secret |
 
-<a name="Auth.activate"></a>
+<a name="TravellingAuth.activate"></a>
 
-### Auth.activate(token)
+### TravellingAuth.activate(token)
 activate - Activates and unlocks user
 
-**Kind**: static method of [<code>Auth</code>](#Auth)  
+**Kind**: static method of [<code>TravellingAuth</code>](#TravellingAuth)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | token | <code>any</code> | (example: activation_token) |
 
-<a name="Auth.resetPassword"></a>
+<a name="TravellingAuth.resetPassword"></a>
 
-### Auth.resetPassword(body, token)
+### TravellingAuth.resetPassword(body, token)
 resetPassword - Resets the password if the recovery token is vaild of the user.
 
-**Kind**: static method of [<code>Auth</code>](#Auth)  
+**Kind**: static method of [<code>TravellingAuth</code>](#TravellingAuth)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -844,12 +902,12 @@ body
     "password": "asdf"
 }
 ```
-<a name="Auth.forgotPassword"></a>
+<a name="TravellingAuth.forgotPassword"></a>
 
-### Auth.forgotPassword(body)
+### TravellingAuth.forgotPassword(body)
 forgotPassword - Generates a recovery token and sends a email to the attached user (if they exist)
 
-**Kind**: static method of [<code>Auth</code>](#Auth)  
+**Kind**: static method of [<code>TravellingAuth</code>](#TravellingAuth)  
 
 | Param | Type |
 | --- | --- |
@@ -862,18 +920,18 @@ body
     "email": "joseph@abe.ai"
 }
 ```
-<a name="Auth.logout"></a>
+<a name="TravellingAuth.logout"></a>
 
-### Auth.logout()
+### TravellingAuth.logout()
 logout -
 
-**Kind**: static method of [<code>Auth</code>](#Auth)  
-<a name="Auth.login"></a>
+**Kind**: static method of [<code>TravellingAuth</code>](#TravellingAuth)  
+<a name="TravellingAuth.login"></a>
 
-### Auth.login(body)
+### TravellingAuth.login(body)
 login - Register a user
 
-**Kind**: static method of [<code>Auth</code>](#Auth)  
+**Kind**: static method of [<code>TravellingAuth</code>](#TravellingAuth)  
 
 | Param | Type |
 | --- | --- |
@@ -887,14 +945,14 @@ body
     "password": "swagmoney69xd420"
 }
 ```
-<a name="Auth.register"></a>
+<a name="TravellingAuth.register"></a>
 
-### Auth.register(body)
+### TravellingAuth.register(body)
 register - Register a user
 
     `group_request`	is optional.
 
-**Kind**: static method of [<code>Auth</code>](#Auth)  
+**Kind**: static method of [<code>TravellingAuth</code>](#TravellingAuth)  
 
 | Param | Type |
 | --- | --- |

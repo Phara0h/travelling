@@ -175,13 +175,13 @@ var routes = function(app, opts, done) {
     };
 
 
-    app.get('/user/id/:id', async (req, res)=>{await getUser(req, res, router);});
-    app.get('/user/id/:id/:prop', async (req, res)=>{await getUser(req, res, router);});
+    app.get('/user/id/:id', async (req, res)=>{return await getUser(req, res, router);});
+    app.get('/user/id/:id/:prop', async (req, res)=>{return await getUser(req, res, router);});
 
-    app.put('/user/id/:id', async (req, res)=>{await editUser(req, res, router);});
-    app.put('/user/id/:id/:prop', async (req, res)=>{await editUser(req, res, router);});
+    app.put('/user/id/:id', async (req, res)=>{return await editUser(req, res, router);});
+    app.put('/user/id/:id/:prop', async (req, res)=>{return await editUser(req, res, router);});
 
-    app.delete('/user/id/:id', async (req, res)=>{await deleteUser(req, res, router);});
+    app.delete('/user/id/:id', async (req, res)=>{return await deleteUser(req, res, router);});
 
 
     // app.get('/user/resolve/group/username/:username', getUserResolveGroup);
@@ -296,7 +296,7 @@ var routes = function(app, opts, done) {
                     type: 'token-error',
                     msg: 'Unabled to delete token.',
                 });
-                return; s;
+                return;
             }
             res.code(200).send();
             return;
