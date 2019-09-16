@@ -17,8 +17,7 @@ module.exports = () => {
 
       describe('Invaild', () => {
 
-
-      })
+      });
     });
 
 };

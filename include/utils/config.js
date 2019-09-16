@@ -1,8 +1,6 @@
 'use strict';
 const misc = require('./misc');
 
-
-
 const config = {
     port: misc.isSetDefault(Number(process.env.TRAVELLING_PORT), 443),
     ip: misc.isSetDefault(process.env.TRAVELLING_IP, '0.0.0.0'),
@@ -19,7 +17,12 @@ const config = {
     log: {
       enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_LOG_ENABLE), true),
       colors: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_LOG_COLORS), true),
-      fastifyLogger: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_LOG_FASTIFY_LOGGER), true),
+      fastify: {
+        logger: misc.isSetDefault(process.env.TRAVELLING_LOG_FASTIFY_LOGGER, true),
+        disableRequestLogging: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_LOG_FASTIFY_LOGGER_DISABLE_REQUEST), true),
+        requestIdHeader: misc.isSetDefault(process.env.TRAVELLING_LOG_FASTIFY_LOGGER_REQ_ID_HEADER, 'travelling-req-id'),
+        requestIdLogLabel: misc.isSetDefault(process.env.TRAVELLING_LOG_FASTIFY_LOGGER_REQ_ID_LOG_LABEL,'travellingReqID')
+      },
       logger: misc.isSetDefault(process.env.TRAVELLING_LOG_LOGGER, __dirname+'/logger.js'),
       requests: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_LOG_REQUESTS), true),
       unauthorizedAccess: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_LOG_UNAUTHORIZED_ACCESS), true)
@@ -86,10 +89,10 @@ const config = {
         expiration: misc.isSetDefault(Number(process.env.TRAVELLING_EMAIL_ACTIVATION_EXPIRATION), 86400) //seconds
       },
       template: {
-        passwordResetBody:misc.isSetDefault(process.env.TRAVELLING_EMAIL_RESET_PASSWORD_TEMPLATE_BODY, './templates/email-reset-password-body.html'),
-        passwordResetSubject: misc.isSetDefault(process.env.TRAVELLING_EMAIL_RESET_PASSWOR_TEMPLATE_SUBJECT, './templates/email-reset-password-subject.html'),
-        activationBody:misc.isSetDefault(process.env.TRAVELLING_EMAIL_ACTIVATION_TEMPLATE_BODY, './templates/email-activation-body.html'),
-        activationSubject: misc.isSetDefault(process.env.TRAVELLING_EMAIL_ACTIVATION_TEMPLATE_SUBJECT, './templates/email-activation-subject.html')
+        passwordResetBody:misc.isSetDefault(process.env.TRAVELLING_EMAIL_RESET_PASSWORD_TEMPLATE_BODY,  __dirname+'/../../templates/email-reset-password-body.html'),
+        passwordResetSubject: misc.isSetDefault(process.env.TRAVELLING_EMAIL_RESET_PASSWOR_TEMPLATE_SUBJECT,  __dirname+'/../../templates/email-reset-password-subject.html'),
+        activationBody:misc.isSetDefault(process.env.TRAVELLING_EMAIL_ACTIVATION_TEMPLATE_BODY,  __dirname+'/../../templates/email-activation-body.html'),
+        activationSubject: misc.isSetDefault(process.env.TRAVELLING_EMAIL_ACTIVATION_TEMPLATE_SUBJECT,  __dirname+'/../../templates/email-activation-subject.html')
       },
       test: {
         enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_EMAIL_TEST_ENABLE), false)

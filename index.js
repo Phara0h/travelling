@@ -4,11 +4,16 @@ const config = require('./include/utils/config');
 
 
 config.log.logger = require(config.log.logger);
+if(typeof config.log.fastify.logger == 'string') {
+  config.log.fastify.logger = require(config.log.fastify.logger);
+}
 var fastifyOptions = {
     http2: false,
-    logger: config.log.fastifyLogger,
+    logger: config.log.fastify.logger,
     //logger: true
-    disableRequestLogging: true
+    disableRequestLogging: config.log.fastify.disableRequestLogging,
+    requestIdHeader: config.log.fastify.requestIdHeader,
+    requestIdLogLabel: config.log.fastify.requestIdLogLabel
 };
 
 if(config.https) {
