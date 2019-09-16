@@ -57,13 +57,13 @@ module.exports = () => {
             })
         });
 
-        test("Get user with token as Test User With No Name", async () => {
+        test("Get User With Token as Test User With No Name", async () => {
           var res = await Travelling.User.Current.get(accessToken1)
 
           expect(res.body.username).toEqual('test');
         });
 
-        test("Get user with token as Test User With Name", async () => {
+        test("Get User With Token as Test User With Name", async () => {
           var res = await Travelling.User.Current.get(accessToken2)
 
           expect(res.body.username).toEqual('test');
@@ -72,7 +72,22 @@ module.exports = () => {
       });
 
       describe('Invaild', () => {
+        test("Register OAuth2 Credentials Token as Test User With Invaild Name", async () => {
+          var res = await Travelling.User.Current.registerToken({name:"(*&$#^%(@*#$&^%*Y)*&()*&)"}, null, {
+              headers: {
+                  cookie: userContainer.user1Cookie(),
+              },
+          });
+          token1 = res.body;
+          expect(res.statusCode).toEqual(400);
+        });
 
-      })
+        test("Get User With Invaild Token as Test User With Name", async () => {
+          var res = await Travelling.User.Current.get(accessToken2.slice(3)+'aaa')
+
+          expect(res.body.username).toEqual('test');
+        });
+
+      });
 
 };
