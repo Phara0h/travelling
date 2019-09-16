@@ -135,10 +135,20 @@ app.addHook('preHandler', function(req, res, next) {
         req.isAuthenticated = auth.auth;
 
         if (!auth.route) {
-            res.code(401).send();
-            if (config.log.requests) {
-                config.log.logger.warn('Unauthorized', 'Unregistered User' + ' (anonymous)' + ' | ' + req.ip + ' | [' + req.raw.method + '] ' + req.req.url);
+            res.code(401)
+            if(auth.invaildToken) {
+              res.send({
+                  error: 'invaild_client',
+                  error_description: 'Invaild Access Token',
+              });
             }
+            else {
+              res.send();
+              if (config.log.requests) {
+                  config.log.logger.warn('Unauthorized', 'Unregistered User' + ' (anonymous)' + ' | ' + req.ip + ' | [' + req.raw.method + '] ' + req.req.url);
+              }
+            }
+
 
         } else {
             router.routeUrl(req, res).then(route=>{

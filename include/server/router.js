@@ -29,6 +29,7 @@ class Router {
 
         this.groups = [];
         this.unmergedGroups = [];
+        this.mappedGroups = {};
         this.needsGroupUpdate = true;
 
         // websocket listener
@@ -51,8 +52,10 @@ class Router {
 
     async updateGroupList() {
       var grps = await Group.findAll();
+      this.mappedGroups = {};
         for (var i = 0; i < grps.length; i++) {
             this.groups[grps[i].name] = database.groupInheritedMerge(grps[i], grps);
+            this.mappedGroups[grps[i].id] = grps[i]._;
         }
         this.unmergedGroups = grps;
         this.needsGroupUpdate = false;
@@ -325,6 +328,16 @@ class Router {
       }
 
       return this.unmergedGroups;
+    }
+
+    async getMappedGroups() {
+
+      if(this.needsGroupUpdate) {
+        log.debug('updating groups')
+        await this.updateGroupList();
+      }
+
+      return this.mappedGroups;
     }
 
     setBackurl(res,req) {

@@ -8,6 +8,39 @@ const regex = require('../../utils/regex');
 const userUtils = require('../../utils/user.js');
 const userRoutes = require('./users');
 
+function isCircularPath(id, group, groups, nodes = []) {
+    if(nodes.indexOf(id) == 0) {
+      console.log(nodes, id)
+      console.log(groups)
+      return true;
+    }
+    nodes.push(id);
+
+    if(group.inherited) {
+      for (var i = 0; i < group.inherited.length; i++) {
+        nodes.push(group.inherited[i])
+        if(isCircularPath(group.inherited[i], groups[group.inherited[i]], groups, nodes)){
+          return true;
+        }
+      }
+    }
+
+    return false;
+}
+
+var checkCircularGroupRef = function(group, groups, found = []) {
+
+  if(group.inherited) {
+    for (var i = 0; i < group.inherited.length; i++) {
+        if(isCircularPath(group.inherited[i],groups[group.inherited[i]], groups, [group.id])){
+          return true;
+        }
+
+    }
+  }
+  return false;
+}
+
 var setGroup = async function(req, group, router) {
     var invalidGroup = false;
 
@@ -51,6 +84,8 @@ var setGroup = async function(req, group, router) {
                 };
             }
         }
+
+
     }
 
     if (req.body.type) {
@@ -220,6 +255,14 @@ var addGroup = async function(req, res, router) {
         return;
     }
 
+    if(checkCircularGroupRef(group, await router.getMappedGroups())) {
+      res.code(400).send({
+          type: 'group-inherited-circular-error',
+          msg: 'Inherited groups array contains a cicular ref.',
+      });
+      return;
+    }
+
     if (group.is_default) {
         var dgroup = await router.defaultGroup();
 
@@ -255,10 +298,18 @@ var editGroup = async function(req, res, router) {
     var group;
 
     try {
-        group = await setGroup(req, fgroup, router);
+        group = await setGroup(req, new Group(fgroup._), router);
     } catch (e) {
         res.code(400).send(e);
         return;
+    }
+
+    if(checkCircularGroupRef(group, await router.getMappedGroups())) {
+      res.code(400).send({
+          type: 'group-inherited-circular-error',
+          msg: 'Inherited groups array contains a cicular ref.',
+      });
+      return;
     }
 
     if (group.is_default) {

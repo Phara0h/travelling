@@ -40,7 +40,7 @@ var checkAuthHeader = async (req, res, router) => {
         var user = await TokenHandler.checkAccessToken(splitAuth[1]);
 
         if (!user) {
-            return {auth: false, route: false};
+            return {auth: false, route: false, invaildToken: true};
         }
 
         await user.resolveGroup(router);
