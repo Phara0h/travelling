@@ -6,7 +6,7 @@ module.exports = () => {
 
     test('Lock User Test1 While Test1 is Logged In', async () =>{
 
-        var res = await Travelling.User.editPropertyByUsername('true', 'test', 'locked', null, {
+        var res = await Travelling.User.editProperty('true', 'test', 'locked', null, {
                 headers: {
                 cookie: userContainer.user2Cookie(),
             },
@@ -15,7 +15,7 @@ module.exports = () => {
 
         expect(res.body).toEqual(true);
 
-        var res2 = await Travelling.User.editPropertyByUsername('false', 'test', 'locked', null, {
+        var res2 = await Travelling.User.editProperty('false', 'test', 'locked', null, {
                 headers: {
                 cookie: userContainer.user1Cookie(),
             },
@@ -23,13 +23,13 @@ module.exports = () => {
 
         expect(res2.body).not.toEqual(false);
 
-        await Travelling.User.editPropertyByUsername('false', 'test', 'locked', null, {
+        await Travelling.User.editProperty('false', 'test', 'locked', null, {
                 headers: {
                 cookie: userContainer.user2Cookie(),
             },
         });
 
-        res2 = await Travelling.User.Current.getUser(null, {
+        res2 = await Travelling.User.Current.get(null, {
                 headers: {
                 cookie: userContainer.user1Cookie(),
             },
@@ -40,7 +40,7 @@ module.exports = () => {
 
     test('Delete User Test1 While Test1 is Logged In', async () =>{
 
-        var res = await Travelling.User.deleteByUsername('test', null, {
+        var res = await Travelling.User.delete('test', null, {
                 headers: {
                 cookie: userContainer.user2Cookie(),
             },
@@ -49,7 +49,7 @@ module.exports = () => {
 
         expect(res.statusCode).toEqual(200);
 
-        var res2 = await Travelling.User.editPropertyByUsername('false', 'test', 'locked', null, {
+        var res2 = await Travelling.User.editProperty('false', 'test', 'locked', null, {
                 headers: {
                 cookie: userContainer.user1Cookie(),
             },
