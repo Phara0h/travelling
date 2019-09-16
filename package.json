@@ -50,6 +50,6 @@
     "eslint-plugin-security": "^1.4.0",
     "jest": "^24.9.0",
     "jsdoc-to-markdown": "^5.0.1",
-    "postgen": "^1.7.1"
+    "postgen": "^1.8.0"
   }
 }
