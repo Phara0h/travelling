@@ -9,7 +9,7 @@ const TokenHandler = require('../../token');
 
 const {checkVaildUser} = require('../../utils/user');
 
-var login = async (user, req, res) => {
+var login = async (user, req, res, router) => {
     /** *
       @TODO add check to ip to see if they are differnt then email the user of possible
       redflag activity on their account
@@ -21,6 +21,7 @@ var login = async (user, req, res) => {
 
     user.failed_login_attempts = 0;
     await user.save();
+    user.resolveGroup(router)
 
     req.createSession(user.id, {user});
     res = await CookieToken.newTokenInCookie(user.username, user.password, req, res);
@@ -101,7 +102,7 @@ module.exports = function(app, opts, done) {
                 try {
                     var user = await Database.checkAuth(username, email, req.body.password);
 
-                    await login(user.user, req, res);
+                    await login(user.user, req, res, router);
                 } catch (e) {
                     res.code(400).send(e.err.type == 'locked' ? {type: e.err.type, msg: e.err.msg, email: e.email} : {
                         type: 'login-error',
@@ -136,7 +137,7 @@ module.exports = function(app, opts, done) {
             });
             return;
         }
-        
+
         if (isVaild !== true) {
             res.code(400).send(isVaild);
             return;
@@ -242,10 +243,53 @@ module.exports = function(app, opts, done) {
         return 'Account activated, please login.';
     });
 
-    // app.post('/auth/oauth/authorize', async (req,res) =>{
-    //
-    // })
 
+    // Authorization Code Grant
+    app.get('/auth/oauth/authorize', (req,res) =>{
+      TokenHandler.getRandomToken().then(token=>{
+        res.setCookie('trav:codecheck', token , {
+            expires: new Date(Date.now() + 12000),
+            secure: config.https,
+            path: '/travelling/api/v1/auth/oauth/authorize',
+        });
+        res.sendFile('index.html');
+      })
+    })
+
+
+    app.post('/auth/oauth/authorize', async (req,res) => {
+      var token = null;
+
+      var codechecked = null;
+      if(req.cookies['trav:codecheck']) {
+       codechecked = await TokenHandler.checkRandomToken(req.cookies['trav:codecheck']);
+      }
+
+      if(!codechecked) {
+        res.code(401).send({
+            type: 'oauth-code-check-fail',
+            msg: 'Failed to have a vaild CSRF token',
+        });
+        return
+      }
+
+      try {
+          token = await TokenHandler.getOAuthToken(req.session.data.user.id, 'code', req.query.client_id || null);
+          token = {client_id: token.name || token.id, client_secret: token.secret};
+          var code =  Buffer.from(`${token.client_id}:${token.client_secret}`, 'ascii').toString('base64');
+
+          res.redirect(encodeURI(req.query.redirect_uri+`?code=${code}&${req.req.url.split('?')[1]}`))
+          return;
+      } catch (e) {
+          res.code(400).send({
+              type: 'token-error',
+              msg: 'Tokens name needs to have [A-Za-z0-9_@.] as the only vaild characters and not already exist.',
+          });
+          return;
+      }
+    })
+
+    // Authorization Client Credentials
     app.post('/auth/token', async (req, res) =>{
         if (req.body.grant_type != 'client_credentials') {
             res.code(400);

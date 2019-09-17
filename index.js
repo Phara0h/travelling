@@ -133,7 +133,7 @@ app.decorateRequest('logout', auth.logout);
 app.decorateRequest('isAuthenticated', false);
 app.addHook('preHandler', function(req, res, next) {
 
-    req.checkLoggedIn(req, res).then(auth=>{
+    req.checkLoggedIn(req, res,router).then(auth=>{
         req.isAuthenticated = auth.auth;
 
         if (!auth.route) {

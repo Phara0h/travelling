@@ -74,8 +74,7 @@ class TokenHandler {
               if(name) {
                 var fToken = await Token.findLimtedBy({user_id,name}, 'AND', 1);
                 if(fToken && fToken.length > 0) {
-                  reject(true);
-                  return;
+                  await Token.deleteAllBy({id:fToken.id})
                 }
               }
               var token = await Token.create({
@@ -105,6 +104,32 @@ class TokenHandler {
               resolve({access_token: secret, expires_in: config.token.access.expiration*60, token_type:"bearer"}); // min to seconds
           });
       });
+    }
+
+    static getRandomToken() {
+      return new Promise((resolve, reject)=>{
+          crypto.randomBytes(8, async (err, secret) => {
+
+              if (err) {
+                  reject(err);
+                  return;
+              }
+
+              await TokenStore.set(null, 'random', secret.toString('hex'), 60000) // min to ms
+              resolve(secret.toString('hex')); // min to seconds
+          });
+      });
+    }
+
+    static async checkRandomToken(token) {
+        var token = await TokenStore.get(token);
+
+        if(!token) {
+          return false;
+        }
+
+        await TokenStore.destroy(token);
+        return true;
     }
 
     static async checkAccessToken(token) {
