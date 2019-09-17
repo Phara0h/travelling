@@ -30,7 +30,7 @@ class Router {
         this.groups = [];
         this.unmergedGroups = [];
         this.mappedGroups = {};
-        this.needsGroupUpdate = true;
+        this.redis = require('../redis');
 
         // websocket listener
         server.on('upgrade', function(req, socket, head) {
@@ -58,23 +58,24 @@ class Router {
             this.mappedGroups[grps[i].id] = grps[i]._;
         }
         this.unmergedGroups = grps;
-        this.needsGroupUpdate = false;
+        this.redis.needsGroupUpdate = false;
     }
 
     async hookRequest(req,res) {
-      if (this.needsGroupUpdate) {
-          this.needsGroupUpdate = false;
+      if (this.redis.needsGroupUpdate) {
+          this.redis.needsGroupUpdate = false;
           await this.updateGroupList();
       }
       this.routeUrl(req, res);
       return;
     }
+    
     async routeUrl(req, res) {
         var authenticated = req.isAuthenticated;
         var sessionUser = req.session.data ? req.session.data.user : null;
 
-        if(this.needsGroupUpdate) {
-          log.debug('updating groups')
+        if(this.redis.needsGroupUpdate) {
+          log.debug('Updating Groups')
           await this.updateGroupList();
         }
 
@@ -269,7 +270,7 @@ class Router {
 
     async currentGroup(req,res) {
 
-      if(this.needsGroupUpdate) {
+      if(this.redis.needsGroupUpdate) {
         log.debug('updating groups')
         await this.updateGroupList();
       }
@@ -279,7 +280,7 @@ class Router {
 
     async defaultGroup() {
 
-      if(this.needsGroupUpdate) {
+      if(this.redis.needsGroupUpdate) {
         log.debug('updating groups')
         await this.updateGroupList();
       }
@@ -293,7 +294,7 @@ class Router {
 
     async getGroup(id) {
 
-      if(this.needsGroupUpdate) {
+      if(this.redis.needsGroupUpdate) {
         log.debug('updating groups')
         await this.updateGroupList();
       }
@@ -308,7 +309,7 @@ class Router {
 
     async getGroupByType(type) {
 
-      if(this.needsGroupUpdate) {
+      if(this.redis.needsGroupUpdate) {
         log.debug('updating groups')
         await this.updateGroupList();
       }
@@ -322,7 +323,7 @@ class Router {
 
     async getGroups() {
 
-      if(this.needsGroupUpdate) {
+      if(this.redis.needsGroupUpdate) {
         log.debug('updating groups')
         await this.updateGroupList();
       }
@@ -332,7 +333,7 @@ class Router {
 
     async getMappedGroups() {
 
-      if(this.needsGroupUpdate) {
+      if(this.redis.needsGroupUpdate) {
         log.debug('updating groups')
         await this.updateGroupList();
       }

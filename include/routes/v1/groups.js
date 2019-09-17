@@ -10,8 +10,6 @@ const userRoutes = require('./users');
 
 function isCircularPath(id, group, groups, nodes = []) {
     if(nodes.indexOf(id) == 0) {
-      console.log(nodes, id)
-      console.log(groups)
       return true;
     }
     nodes.push(id);
@@ -19,7 +17,7 @@ function isCircularPath(id, group, groups, nodes = []) {
     if(group.inherited) {
       for (var i = 0; i < group.inherited.length; i++) {
         nodes.push(group.inherited[i])
-        if(isCircularPath(group.inherited[i], groups[group.inherited[i]], groups, nodes)){
+        if(isCircularPath(group.inherited[i], groups[group.inherited[i]], groups, nodes)) {
           return true;
         }
       }
@@ -75,7 +73,7 @@ var setGroup = async function(req, group, router) {
                 msg: 'Inherited groups array contain duplicate ids or its own id',
             };
         } else {
-            var groupIds = router.unmergedGroups.map(g=> g.id);
+            var groupIds = (await router.getGroups()).map(g=> g.id);
 
             if (!group.inherited.every(id => groupIds.includes(id))) {
                 throw {
@@ -85,7 +83,12 @@ var setGroup = async function(req, group, router) {
             }
         }
 
-
+        if(checkCircularGroupRef(group, await router.getMappedGroups())) {
+          throw {
+              type: 'group-inherited-circular-error',
+              msg: 'Inherited groups array contains a cicular ref.',
+          };
+        }
     }
 
     if (req.body.type) {
@@ -255,13 +258,7 @@ var addGroup = async function(req, res, router) {
         return;
     }
 
-    if(checkCircularGroupRef(group, await router.getMappedGroups())) {
-      res.code(400).send({
-          type: 'group-inherited-circular-error',
-          msg: 'Inherited groups array contains a cicular ref.',
-      });
-      return;
-    }
+
 
     if (group.is_default) {
         var dgroup = await router.defaultGroup();
@@ -274,7 +271,7 @@ var addGroup = async function(req, res, router) {
 
     var ngroup = await Group.create(group.changedProps);
 
-    router.needsGroupUpdate = true;
+    router.redis.needsGroupUpdate = true;
     res.code(200).send(ngroup);
 
 };
@@ -304,13 +301,6 @@ var editGroup = async function(req, res, router) {
         return;
     }
 
-    if(checkCircularGroupRef(group, await router.getMappedGroups())) {
-      res.code(400).send({
-          type: 'group-inherited-circular-error',
-          msg: 'Inherited groups array contains a cicular ref.',
-      });
-      return;
-    }
 
     if (group.is_default) {
         var dgroup = await router.defaultGroup();
@@ -318,12 +308,12 @@ var editGroup = async function(req, res, router) {
         if (group.id != dgroup.id) {
             dgroup.is_default = false;
             await dgroup.save();
-            router.needsGroupUpdate = true;
+            router.redis.needsGroupUpdate = true;
         }
     }
 
     await group.save();
-    router.needsGroupUpdate = true;
+    router.redis.needsGroupUpdate = true;
 
     res.code(200).send(await router.getGroup(group.id));
 };
@@ -354,7 +344,7 @@ var addRouteGroup = async function(req, res, router) {
     }
 
     await group.save();
-    router.needsGroupUpdate = true;
+    router.redis.needsGroupUpdate = true;
     res.code(200).send(group);
 };
 
@@ -375,7 +365,7 @@ var deleteGroup = async function(req, res, router) {
     }
 
     await fgroup.delete();
-    router.needsGroupUpdate = true;
+    router.redis.needsGroupUpdate = true;
     res.code(200).send();
 };
 
@@ -529,6 +519,8 @@ module.exports = function(app, opts, done) {
         res.send(await router.getGroups());
     });
 
+
+
     app.get('/groups/type/:grouptype', async (req, res) => {
         var groups = await router.getGroups();
 
@@ -542,6 +534,16 @@ module.exports = function(app, opts, done) {
         var groups = await router.getGroups();
 
         res.send(Array.from(new Set(groups.map(g=> g.type))));
+    });
+
+    // import/export Groups
+
+    app.put('/groups/import',async (req, res) => {
+
+    });
+
+    app.put('/groups/export',async (req, res) => {
+      var groups = await router.getGroups();
     });
 
     // Get Users

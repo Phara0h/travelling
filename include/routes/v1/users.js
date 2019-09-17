@@ -219,8 +219,8 @@ var routes = function(app, opts, done) {
     });
 
     app.get('/user/me/:prop', (req, res) => {
-        if (req.session.data.user._.hasOwnProperty(req.params.prop)) {
-            res.code(200).send(req.session.data.user._[req.params.prop]);
+        if (req.session.data.user[req.params.prop] !== undefined) {
+            res.code(200).send(req.session.data.user[req.params.prop]);
         } else {
             res.code(400).send({
                 type: 'user-prop-error',
@@ -232,30 +232,11 @@ var routes = function(app, opts, done) {
     app.put('/user/me', async (req, res) => {
         req.params.id = req.session.data.user.id;
         return await editUser(req, res, router);
-        // var isVaild = await userUtils.checkVaildUser(req.body);
-        // if(isVaild !== true) {
-        //     res.code(400).send(isVaild);
-        // } else {
-        //   userUtils.setUser(req.session.data.user,req.body)
-        //   await req.session.data.user.save();
-        //   await req.session.data.user.resolveGroup(router);
-        //   res.send(req.session.data.user);
-        // }
     });
 
     app.put('/user/me/:prop', async (req, res) => {
         req.params.id = req.session.data.user.id;
         return await editUser(req, res, router);
-        // var prop = {[req.params.prop]:req.body};
-        // var isVaild = await userUtils.checkVaildUser(prop);
-        // if(isVaild !== true) {
-        //     res.code(400).send(isVaild);
-        // } else {
-        //   userUtils.setUser(req.session.data.user,prop)
-        //   await req.session.data.user.save();
-        //   await req.session.data.user.resolveGroup(router);
-        //   res.send(req.session.data.user);
-        // }
     });
 
     app.get('/user/me/route/allowed', async (req, res) => {

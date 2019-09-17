@@ -41,6 +41,7 @@
     "fastify-static": "^2.5.0",
     "handlebars": "^4.1.2",
     "http-proxy": "^1.17.0",
+    "ioredis": "^4.14.1",
     "nodemailer": "^6.3.0",
     "nstats": "^2.1.5"
   },
