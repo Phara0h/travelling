@@ -8,7 +8,7 @@ const User = require('../database/models/user');
 const Token = require('../database/models/token');
 const Email = require('../utils/email');
 const CookieToken = require('../utils/cookietoken');
-const TokenStore = new (require('./tokenstore'))();
+const TokenStore = require('../redis').tokenStore;
 
 class TokenHandler {
     constructor() {

@@ -32,7 +32,7 @@ const app = require('fastify')(fastifyOptions);
 
 const fastifySession = require('fastify-good-sessions');
 const fastifyCookie = require('fastify-cookie');
-const MemoryStore = require('./include/utils/memorystore');
+
 
 const PGConnecter = require('@abeai/node-utils').PGConnecter;
 
@@ -48,6 +48,8 @@ const Group = require('./include/database/models/group');
 const User = require('./include/database/models/user');
 const Token = require('./include/database/models/token');
 
+const redis = require('./include/redis');
+
 const Router = require('./include/server/router');
 const router = new Router(app.server);
 
@@ -57,7 +59,7 @@ const Email = require('./include/utils/email');
 const nstats = require('nstats')();
 
 app.setErrorHandler(function(error, request, reply) {
-    console.log(error);
+    config.log.logger.error(error)
     reply.code(500).send({
         type: 'error',
         msg: 'Please report this issue to the site admin',
@@ -116,7 +118,7 @@ app.register(fastifyCookie);
 // Add removing tokens if user needs updated (removed, locked, etc)
 app.register(fastifySession, {
     secret: config.cookie.session.secret,
-    store: new MemoryStore(),
+    store: redis.sessionStore,
     cookie: {
         secure: config.https,
         httpOnly: true,

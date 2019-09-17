@@ -36,6 +36,13 @@ const config = {
     proxy: {
       timeout: misc.isSetDefault(Number(process.env.TRAVELLING_PROXY_TIMEOUT), 0)
     },
+    redis: {
+      enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_REDIS_ENABLE), false),
+      url: misc.isSetDefault(process.env.TRAVELLING_REDIS_URL, 'redis://127.0.0.1:6379/'),
+      events: {
+        url: misc.isSetDefault(process.env.TRAVELLING_REDIS_EVENTS_URL, misc.isSetDefault(process.env.TRAVELLING_REDIS_URL, 'redis://127.0.0.1:6379/')),
+      }
+    },
     cookie: {
       session: {
           secret: misc.isSetDefault(process.env.TRAVELLING_COOKIE_SESSION_SECRET, null),

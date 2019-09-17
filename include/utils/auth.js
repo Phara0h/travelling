@@ -5,10 +5,7 @@ const config = require('./config');
 
 
 var logout = (req, res) => {
-    req.session.data.user = null;
-    req.sessionStore.destroy(req.session.sessionId, ()=>{
-
-    });
+    req.sessionStore.destroy(req.session.sessionId)
     CookieToken.removeAuthCookie(res);
     res.setCookie('trav:ssid', null, {
         expires: Date.now(),
@@ -52,6 +49,7 @@ var checkAuthHeader = async (req, res, router) => {
 };
 
 var checkSession = (req, res, router) => {
+
     if (req.session && req.session.data && req.session.data.user) {
         if (req.session.data.user.locked) {
             return {auth: false, route: true};
@@ -67,8 +65,6 @@ var checkCookie = async (req, res, router) => {
         var user = await CookieToken.checkToken(req, res, router);
 
         if (!user || user.locked) {
-          config.log.logger.debug('no user',req.url, req.raw.url)
-
             return {auth: false, route: true};
         }
 
