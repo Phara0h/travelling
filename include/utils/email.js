@@ -50,7 +50,7 @@ class Email {
 
     static async sendPasswordRecovery(user, ip, email, token) {
         if(!transporter) {
-          config.log.logger.debug('Password Recovery For: ', email, token);
+          config.log.logger.debug(`Password Recovery For: ${email}, ${token}`);
           return;
         }
 
@@ -78,7 +78,7 @@ class Email {
     static async sendActivation(user, email, token) {
 
       if(!transporter) {
-        config.log.logger.debug('Activation Email For: ', email, token);
+        config.log.logger.debug(`Activation Email For: ${email}, ${token}`);
         return;
       }
 

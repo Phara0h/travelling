@@ -1,6 +1,6 @@
 'use strict';
 
-class MemoryStore {
+class SessionStore {
     constructor() {
         this.sessions = {};
     }
@@ -35,4 +35,4 @@ class MemoryStore {
     }
 }
 
-module.exports = MemoryStore;
+module.exports = SessionStore;

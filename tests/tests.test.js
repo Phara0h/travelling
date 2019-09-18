@@ -3,6 +3,8 @@ const Group = require('../include/database/models/group');
 const User = require('../include/database/models/user');
 const Token = require('../include/database/models/token');
 
+const Redis = require('../include/redis');
+
 const Base = require('@abeai/node-utils').Base;
 const PGConnecter = require('@abeai/node-utils').PGConnecter;
 const PGBaseModel = require('@abeai/node-utils').PGBaseModel;
@@ -32,6 +34,9 @@ beforeAll(async () => {
       console.error(e)
     }
 
+    console.log('Flushing Redis...');
+    await Redis.flushAll();
+
     const server = require('../index.js');
 
     await server;
@@ -40,6 +45,10 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+
+    console.log('Flushing Redis...');
+    await Redis.flushAll();
+
     await User.deleteAll();
     await Group.deleteAll();
     await Token.deleteAll();
