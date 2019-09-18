@@ -246,13 +246,26 @@ module.exports = function(app, opts, done) {
 
     // Authorization Code Grant
     app.get('/auth/oauth/authorize', (req,res) =>{
-      TokenHandler.getRandomToken().then(token=>{
-        res.setCookie('trav:codecheck', token , {
-            expires: new Date(Date.now() + 12000),
-            secure: config.https,
-            path: '/travelling/api/v1/auth/oauth/authorize',
-        });
-        res.sendFile('index.html');
+
+      TokenHandler.isOAuthCodeExist(req.session.data.user.id, req.query.client_id).then(async token=>{
+        if(token || !config.token.code.authorizeFlow) {
+          if(!token) {
+            token = await TokenHandler.getOAuthCode(req.session.data.user.id, req.query.client_id);
+          }
+          var code = Buffer.from(`${token.id}:${token.secret}`, 'ascii').toString('base64');
+
+          res.redirect(encodeURI(req.query.redirect_uri+`?code=${code}&state=${req.query.state}&client_id=${req.query.client_id}`))
+        }
+        else {
+          TokenHandler.getRandomToken().then(token=>{
+            res.setCookie('trav:codecheck', token , {
+                expires: new Date(Date.now() + 12000),
+                secure: config.https,
+                path: '/travelling/api/v1/auth/oauth/authorize',
+            });
+            res.sendFile('index.html');
+          })
+        }
       })
     })
 
@@ -273,12 +286,16 @@ module.exports = function(app, opts, done) {
         return
       }
 
+
+      // check client_id
+      //if(!req.query.client_id || )
+
       try {
-          token = await TokenHandler.getOAuthToken(req.session.data.user.id, 'code', req.query.client_id || null);
-          token = {client_id: token.name || token.id, client_secret: token.secret};
+          token = await TokenHandler.getOAuthCode(req.session.data.user.id, req.query.client_id);
+          token = {client_id: token.id, client_secret: token.secret};
           var code =  Buffer.from(`${token.client_id}:${token.client_secret}`, 'ascii').toString('base64');
 
-          res.redirect(encodeURI(req.query.redirect_uri+`?code=${code}&${req.req.url.split('?')[1]}`))
+          res.redirect(encodeURI(req.query.redirect_uri+`?code=${code}&state=${req.query.state}&client_id=${req.query.client_id}`))
           return;
       } catch (e) {
           res.code(400).send({

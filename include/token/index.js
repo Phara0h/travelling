@@ -15,7 +15,7 @@ class TokenHandler {
     }
 
 
-    static async checkTempToken(token, expiration) {
+    static async checkTempToken(token, expiration, type) {
         try {
             var dToken = (await CookieToken.decrypt(token.replace(/-/g, '+').replace(/_/g, '\/'))).split('|');
 
@@ -26,7 +26,7 @@ class TokenHandler {
             3 = userId
             */
 
-            var t = await TokenStore.get( await this._hashToken(dToken[3],dToken[0]));
+            var t = await TokenStore.get( await this._hashToken(dToken[3],dToken[0]), type);
 
             if(t.user_id == dToken[3] && t.type == dToken[2] && Date.now() - Number(dToken[1]) < expiration) {
                   return dToken; // secret;
@@ -89,6 +89,35 @@ class TokenHandler {
       });
     }
 
+
+    static getOAuthCode(user_id, client_id, name = null) {
+      return new Promise((resolve, reject)=>{
+          crypto.randomBytes(32, async (err, secret) => {
+
+              if (err) {
+                  reject(err);
+                  return;
+              }
+
+              if(regex.safeName.exec(name) == null) {
+                reject(true);
+                return;
+              }
+
+              if(name) {
+                var fToken = await TokenStore.get(user_id+":"+client_id, 'code')
+                resolve(fToken);
+                return;
+              }
+
+              resolve(await TokenStore.set(secret.toString('hex'), 'code', user_id+":"+client_id, config.token.code.expiration * 60000)); // min to ms);
+          });
+      });
+    }
+
+
+
+
     static getAccessToken(token) {
       return new Promise((resolve, reject)=>{
           crypto.randomBytes(16, async (err, secret) => {
@@ -122,7 +151,7 @@ class TokenHandler {
     }
 
     static async checkRandomToken(token) {
-        var token = await TokenStore.get(token);
+        var token = await TokenStore.get(token, 'random');
 
         if(!token) {
           return false;
@@ -133,7 +162,7 @@ class TokenHandler {
     }
 
     static async checkAccessToken(token) {
-        var token = await TokenStore.get(token);
+        var token = await TokenStore.get(token, 'access');
 
         if(!token) {
           return false;
@@ -157,17 +186,32 @@ class TokenHandler {
         return token[0];
     }
 
+    static async checkOAuthCode(id, secret) {
+        var token = await TokenStore.get(id, 'code');
+
+        if(!token || token.secret != secret) {
+          return false;
+        }
+
+        return token;
+    }
+
+    static async isOAuthCodeExist(user_id, client_id) {
+        var token = await TokenStore.get(user_id+":"+client_id, 'code');
+        return token || false;
+    }
+
     static async deleteOAuthToken(id, user_id) {
       var token = (await Token.deleteAllBy(regex.uuidCheck(id) ? {id, user_id} : {name:id, user_id}))[0];
       return token;
     }
 
     static async checkRecoveryToken(token) {
-      return await this.checkTempToken(token, config.email.recovery.expiration * 1000)
+      return await this.checkTempToken(token, config.email.recovery.expiration * 1000, 'recovery')
     }
 
     static async checkActivationToken(token) {
-      return await this.checkTempToken(token, config.email.activation.expiration * 1000)
+      return await this.checkTempToken(token, config.email.activation.expiration * 1000, 'activation')
     }
 
     static async getRecoveryToken(userId) {
