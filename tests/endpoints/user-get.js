@@ -1,5 +1,5 @@
 const config = require('../../include/utils/config');
-const Travelling = require('../include/Travelling')('https://127.0.0.1:6969');
+const Travelling = require('../../sdk')('https://127.0.0.1:6969');
 var userContainer = require('../include/UserContainer.js');
 
 module.exports = () => {
@@ -7,7 +7,7 @@ module.exports = () => {
     describe('Current User', () => {
         describe('Vaild', () => {
         test('Get User Test', async () => {
-          var res = await Travelling.User.Current.getUser({
+          var res = await Travelling.User.Current.get(null,{
               headers: {
                   cookie: userContainer.user1Cookie(),
               },
@@ -17,7 +17,7 @@ module.exports = () => {
         });
 
         test('Get User Test2', async () => {
-          var res = await Travelling.User.Current.getUser({
+          var res = await Travelling.User.Current.get(null,{
               headers: {
                   cookie: userContainer.user2Cookie(),
               },
@@ -29,7 +29,7 @@ module.exports = () => {
         });
 
         test("Get Test's Email", async () => {
-          var res = await Travelling.User.Current.getUserProperty('email', {
+          var res = await Travelling.User.Current.getProperty('email', null, {
               headers: {
                   cookie: userContainer.user1Cookie(),
               },
@@ -39,7 +39,7 @@ module.exports = () => {
         });
 
         test("Get Test's Password", async () => {
-          var res = await Travelling.User.Current.getUserProperty('password', {
+          var res = await Travelling.User.Current.getProperty('password', null, {
               headers: {
                   cookie: userContainer.user1Cookie(),
               },
@@ -50,7 +50,7 @@ module.exports = () => {
 
 
         test("Check Test's Permission", async () => {
-          var res = await Travelling.User.Current.permissionCheck('get-travelling', {
+          var res = await Travelling.User.Current.permissionCheck('get-travelling', null,{
               headers: {
                   cookie: userContainer.user1Cookie(),
               },
@@ -60,7 +60,7 @@ module.exports = () => {
         });
 
         test("Check Test's Route", async () => {
-          var res = await Travelling.User.Current.routeCheck('get','/travelling/api/v1/user/me', {
+          var res = await Travelling.User.Current.routeCheck('get','/travelling/api/v1/user/me', null, {
               headers: {
                   cookie: userContainer.user1Cookie(),
               },
@@ -85,7 +85,7 @@ module.exports = () => {
 
         describe('Invaild', () => {
           test("Check Permission With No Permission", async () => {
-            var res = await Travelling.User.Current.permissionCheck('', {
+            var res = await Travelling.User.Current.permissionCheck('', null, {
                 headers: {
                     cookie: userContainer.user1Cookie(),
                 },
@@ -95,7 +95,7 @@ module.exports = () => {
           });
 
           test("Check Route With No Route & No Method", async () => {
-            var res = await Travelling.User.Current.routeCheck('','', {
+            var res = await Travelling.User.Current.routeCheck('','', null, {
                 headers: {
                     cookie: userContainer.user1Cookie(),
                 },
@@ -111,7 +111,7 @@ module.exports = () => {
     describe('Non-Current User', () => {
         describe('Vaild', () => {
         test('Get All Users', async () => {
-            var res = await Travelling.User.getAll({
+            var res = await Travelling.Users.get(null, {
                 headers: {
                     cookie: userContainer.user1Cookie(),
                 },
@@ -121,7 +121,7 @@ module.exports = () => {
         });
 
         test('Get By Id', async () => {
-            var res = await Travelling.User.getById(userContainer.user1.id,{
+            var res = await Travelling.User.get(userContainer.user1.id,null, {
                 headers: {
                     cookie: userContainer.user1Cookie(),
                 },
@@ -131,7 +131,7 @@ module.exports = () => {
         });
 
         test('Get By Username', async () => {
-            var res = await Travelling.User.getByUsername(userContainer.user1.username,{
+            var res = await Travelling.User.get(userContainer.user1.username,null, {
                 headers: {
                     cookie: userContainer.user1Cookie(),
                 },
@@ -142,7 +142,7 @@ module.exports = () => {
 
 
         test("Get Test2's Password By Id ", async () => {
-            var res = await Travelling.User.getPropertyById(userContainer.user2.id, 'password', {
+            var res = await Travelling.User.getProperty(userContainer.user2.id, 'password', null, {
                 headers: {
                     cookie: userContainer.user2Cookie(),
                 },
@@ -152,7 +152,7 @@ module.exports = () => {
         });
 
         test("Get Test2's Email By Username ", async () => {
-            var res = await Travelling.User.getPropertyByUsername( userContainer.user2.username, 'email',{
+            var res = await Travelling.User.getProperty( userContainer.user2.username, 'email',null, {
                 headers: {
                     cookie: userContainer.user2Cookie(),
                 },
@@ -164,7 +164,7 @@ module.exports = () => {
 
       describe('Invaild', () => {
         test('Get By Invalid Id', async () => {
-            var res = await Travelling.User.getById(0,{
+            var res = await Travelling.User.get(0,null, {
                 headers: {
                     cookie: userContainer.user1Cookie(),
                 },
@@ -174,17 +174,19 @@ module.exports = () => {
         });
 
         test('Get By No Id', async () => {
-            var res = await Travelling.User.getById('',{
+            var res = await Travelling.User.get('',null, {
                 headers: {
                     cookie: userContainer.user1Cookie(),
                 },
             });
 
+            console.log(res.body)
+
             expect(res.statusCode).toEqual(400);
         });
 
         test('Get By Invalid Username', async () => {
-            var res = await Travelling.User.getByUsername('coolusername',{
+            var res = await Travelling.User.get('coolusername',null, {
                 headers: {
                     cookie: userContainer.user1Cookie(),
                 },
@@ -194,7 +196,7 @@ module.exports = () => {
         });
 
         test('Get By No Username', async () => {
-            var res = await Travelling.User.getByUsername('',{
+            var res = await Travelling.User.get('',null, {
                 headers: {
                     cookie: userContainer.user1Cookie(),
                 },

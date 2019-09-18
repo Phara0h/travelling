@@ -29,7 +29,8 @@ class Router {
 
         this.groups = [];
         this.unmergedGroups = [];
-        this.needsGroupUpdate = true;
+        this.mappedGroups = {};
+        this.redis = require('../redis');
 
         // websocket listener
         server.on('upgrade', function(req, socket, head) {
@@ -46,32 +47,39 @@ class Router {
             if (res.status) {res.status(504);}
             res.end();
         });
+
     }
 
 
     async updateGroupList() {
+      log.debug('Updating Groups')
       var grps = await Group.findAll();
+      this.mappedGroups = {};
+      this.unmergedGroups = grps;
         for (var i = 0; i < grps.length; i++) {
-            this.groups[grps[i].name] = database.groupInheritedMerge(grps[i], grps);
+            this.mappedGroups[grps[i].id] = grps[i]._;
+            this.groups[grps[i].name] = database.groupInheritedMerge(new Group(grps[i]._), grps);
         }
-        this.unmergedGroups = grps;
-        this.needsGroupUpdate = false;
+
+        this.redis.needsGroupUpdate = false;
     }
 
+
+
     async hookRequest(req,res) {
-      if (this.needsGroupUpdate) {
-          this.needsGroupUpdate = false;
+      if (this.redis.needsGroupUpdate) {
+          this.redis.needsGroupUpdate = false;
           await this.updateGroupList();
       }
       this.routeUrl(req, res);
       return;
     }
+
     async routeUrl(req, res) {
         var authenticated = req.isAuthenticated;
         var sessionUser = req.session.data ? req.session.data.user : null;
 
-        if(this.needsGroupUpdate) {
-          log.debug('updating groups')
+        if(this.redis.needsGroupUpdate) {
           await this.updateGroupList();
         }
 
@@ -85,9 +93,6 @@ class Router {
             var r = this.isRouteAllowed(req.raw.method, req.raw.url, group, sessionUser);
             if (r) {
                 // sets user id cookie every time to protect against tampering.
-                // res.cookie('travelling:aid', sessionUser._id);
-                // res.cookie('travelling:un', sessionUser.username);
-                // res.cookie('travelling:g', sessionUser.group.name)
                 if (authenticated) {
                     req.headers['un'] = sessionUser.username;
                     req.headers['g'] = sessionUser.group.name;
@@ -95,41 +100,47 @@ class Router {
                     req.headers['aid'] = sessionUser.id;
                 }
 
-                if (req.raw.url.indexOf('/travelling/') == 0) {
+                if (req.raw.url.indexOf('/travelling/api/') == 0) {
                   if (config.log.requests) {
                       if (authenticated) {
-                          log.info(sessionUser.username + ' (' + sessionUser.group.name + ') | ' + req.ip + ' | [' + req.raw.method + '] '+req.req.url);
+
+                          log.info(sessionUser.username + ' (' + sessionUser.group.name + ') | ' + req.raw.ip + ' | [' + req.raw.method + '] '+req.req.url);
                       } else {
-                          log.info('Unregistered User' + ' (anonymous)' + ' | ' + req.ip + ' | [' + req.raw.method + '] '+req.req.url);
+                          log.info('Unregistered User' + ' (anonymous)' + ' | ' + req.raw.ip + ' | [' + req.raw.method + '] '+req.req.url);
                       }
                     }
                     return false;
                 } else {
-
                     var target = {
-                        target: this.transformRoute(sessionUser, r, r.host == null ? req.protocol + '://' + req.headers.host : r.host),
+                        target: this.transformRoute(sessionUser, r, r.host || `${config.https ? 'https' : 'http'}://127.0.0.1:${config.port}`),
                     };
 
                     if (r.removeFromPath) {
                         req.raw.url = req.raw.url.replace(this.transformRoute(sessionUser, r, r.removeFromPath), '');
                     }
 
-                    if (req._wssocket) {
-                        if (target.target.indexOf('wss') > -1) {
-                          this.proxyssl.ws(req.raw, req._wssocket, target);
-                        } else {
-                          this.proxy.ws(req.raw, req._wssocket, target);
-                        }
-                    } else {
-                        // This gets around websites host checking / blocking
-                        //delete req.raw.headers.host;
+                    if(r.host)
+                    {
+                      if (req._wssocket) {
+                          if (target.target.indexOf('wss') > -1) {
+                            this.proxyssl.ws(req.raw, req._wssocket, target);
+                          } else {
+                            this.proxy.ws(req.raw, req._wssocket, target);
+                          }
+                      } else {
+                          // This gets around websites host checking / blocking
+                          //delete req.raw.headers.host;
 
-                        if (target.target.indexOf('https') > -1) {
-                          this.proxyssl.web(req.req, res.res, target);
-                        } else {
-                          this.proxy.web(req.req, res.res, target);
-                        }
+                          if (target.target.indexOf('https') > -1) {
+                            this.proxyssl.web(req.req, res.res, target);
+                          } else {
+                            this.proxy.web(req.req, res.res, target);
+                          }
+                      }
+                      return true;
                     }
+
+                    return false;
                 }
                 if (config.log.requests) {
                     if (authenticated) {
@@ -145,6 +156,7 @@ class Router {
                 //     res.code(401).send('Access Denied');
                 // }
                 if(req.req.url != config.portal.path) {
+                  //console.log(req.raw.url, req.raw.url, config.portal.path)
                   this.setBackurl(res,req);
                   res.redirect(config.portal.path);
                 }
@@ -234,7 +246,7 @@ class Router {
 
     transformRoute(usr, route, path) {
       var user = !usr ? {group:{}} : usr;
-        return path.replace(/(:id|:username|:email|:group|:permission)/g, (a, b, c)=>{
+        return path.replace(/(:id|:username|:email|:group|:grouptype|:permission)/g, (a, b, c)=>{
             var prop = '';
             switch (a) {
                 case ':id':
@@ -249,6 +261,9 @@ class Router {
                 case ':group':
                     prop = user.group.name || prop;
                     break;
+                case ':grouptype':
+                    prop = user.group.type || prop;
+                    break;
                 case ':permission':
                     prop = this.transformRoute(usr, route, route.name || prop);
                     break;
@@ -259,8 +274,7 @@ class Router {
 
     async currentGroup(req,res) {
 
-      if(this.needsGroupUpdate) {
-        log.debug('updating groups')
+      if(this.redis.needsGroupUpdate) {
         await this.updateGroupList();
       }
 
@@ -269,8 +283,7 @@ class Router {
 
     async defaultGroup() {
 
-      if(this.needsGroupUpdate) {
-        log.debug('updating groups')
+      if(this.redis.needsGroupUpdate) {
         await this.updateGroupList();
       }
 
@@ -283,11 +296,9 @@ class Router {
 
     async getGroup(id) {
 
-      if(this.needsGroupUpdate) {
-        log.debug('updating groups')
+      if(this.redis.needsGroupUpdate) {
         await this.updateGroupList();
       }
-      //console.log(this.unmergedGroups)
       for (var i = 0; i < this.unmergedGroups.length; i++) {
           if(this.unmergedGroups[i].id == id || this.unmergedGroups[i].name == id) {
             return this.unmergedGroups[i];
@@ -298,8 +309,7 @@ class Router {
 
     async getGroupByType(type) {
 
-      if(this.needsGroupUpdate) {
-        log.debug('updating groups')
+      if(this.redis.needsGroupUpdate) {
         await this.updateGroupList();
       }
 
@@ -312,12 +322,20 @@ class Router {
 
     async getGroups() {
 
-      if(this.needsGroupUpdate) {
-        log.debug('updating groups')
+      if(this.redis.needsGroupUpdate) {
         await this.updateGroupList();
       }
 
       return this.unmergedGroups;
+    }
+
+    async getMappedGroups() {
+
+      if(this.redis.needsGroupUpdate) {
+        await this.updateGroupList();
+      }
+
+      return this.mappedGroups;
     }
 
     setBackurl(res,req) {
