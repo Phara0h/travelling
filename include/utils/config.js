@@ -76,6 +76,10 @@ const config = {
     token: {
       access: {
           expiration: misc.isSetDefault(Number(process.env.TRAVELLING_TOKEN_ACCESS_EXPIRATION), 1440) //minutes
+      },
+      code: {
+          expiration: misc.isSetDefault(Number(process.env.TRAVELLING_TOKEN_CODE_EXPIRATION), 5), //minutes
+          authorizeFlow: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_TOKEN_CODE_AUTHORIZE_FLOW), true),
       }
     },
     pg: {
