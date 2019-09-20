@@ -10,13 +10,13 @@ class RedisTokenStore {
     }
 
     async set(secret, type, id, expiration, name = '') {
-        var nToken = {id:type+':'+id, secret, expires: new Date(expiration), name}
-        await this.redis.set(nToken.id, JSON.stringify(nToken), 'PX', expiration);
+        var nToken = {id, secret, expires: new Date(Date.now() + expiration), name}
+        await this.redis.set(type+'_'+nToken.id, JSON.stringify(nToken), 'PX', expiration);
         return nToken;
     }
 
     async get(token, type) {
-      var fToken = await this.redis.get(type+':'+token);
+      var fToken = await this.redis.get(type+'_'+token);
       if(fToken) {
         fToken = JSON.parse(fToken);
       }
@@ -24,7 +24,7 @@ class RedisTokenStore {
     }
 
     async destroy(token, type) {
-        await this.redis.del(type+':'+token);
+        await this.redis.del(type+'_'+token);
     }
 }
 

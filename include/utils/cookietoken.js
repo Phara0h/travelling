@@ -1,7 +1,8 @@
+'use strict';
+
 const config = require('./config');
 const crypto = require('crypto');
 const encryptKey = crypto.scryptSync(config.cookie.token.secret, config.cookie.token.salt, 32);
-const encryptIV = config.cookie.token.secret;
 
 const User = require('../database/models/user');
 
@@ -21,12 +22,11 @@ class CookieToken {
             var dToken = await this.decrypt(tok.toString('ascii'));
             var cred = dToken.split(':');
 
-            if(config.cookie.security.ipHijackProtection && cred[3] != ip) {
-              return false;
+            if (config.cookie.security.ipHijackProtection && cred[3] != ip) {
+                return false;
             }
 
-            if (Date.now() - Number(cred[2]) < config.cookie.token.expiration * 86400000) // 90 days in millls
-            {
+            if (Date.now() - Number(cred[2]) < config.cookie.token.expiration * 86400000) { // 90 days in millls
                 var user = await User.findAllBy({username: cred[0], password: cred[1]});
 
                 if (!user || user.length < 1) {
@@ -48,6 +48,7 @@ class CookieToken {
         res.setCookie('trav:tok', tok, {
             expires: new Date(date.getTime() + config.cookie.token.expiration * 86400000),
             secure: config.https,
+            httpOnly: true,
             path: '/',
         });
         return res;

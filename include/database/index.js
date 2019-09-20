@@ -131,7 +131,7 @@ class Database {
     }
 
     static async resetPassword(token, password) {
-        var user = await User.findLimtedBy({id: token[3]}, 'AND', 1);
+        var user = await User.findLimtedBy({id: token[2]}, 'AND', 1);
 
         if (!user || user.length < 1) {
             return false;
@@ -145,7 +145,7 @@ class Database {
     }
 
     static async activateAccount(token) {
-        var user = await User.findLimtedBy({id: token[3]}, 'AND', 1);
+        var user = await User.findLimtedBy({id: token[2]}, 'AND', 1);
 
         if (!user || user.length < 1) {
             return false;
@@ -181,7 +181,6 @@ class Database {
             anon.addRoute({
                 route: config.portal.path + '*',
                 host: config.portal.host,
-                removeFromPath: config.portal.path.slice(0, -1),
             });
             anon.addRoute({
                 route: '/travelling/api/v1/auth/*',
@@ -194,6 +193,17 @@ class Database {
             });
             anon.addRoute({
                 route: '/travelling/api/v1/user/me/permission/allowed/*',
+                host: null,
+                method: 'GET',
+            });
+            anon.addRoute({
+                route: '/travelling/assets/*',
+                host: null,
+                removeFromPath: '/travelling/assets/',
+                method: 'GET',
+            });
+            anon.addRoute({
+                route: '/travelling/api/v1/config/password',
                 host: null,
                 method: 'GET',
             });

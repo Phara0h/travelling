@@ -1,3 +1,5 @@
+'use strict';
+
 const regex = require('../../utils/regex');
 const User = require('../../database/models/user');
 const TokenHandler = require('../../token');
@@ -5,7 +7,7 @@ const userUtils = require('../../utils/user');
 const config = require('../../utils/config');
 const misc = require('../../utils/misc');
 
-var deleteUser = async (req, res, router) => {
+async function deleteUser(req, res, router) {
 
     if (!req.params.id) {
         res.code(400);
@@ -52,9 +54,9 @@ var deleteUser = async (req, res, router) => {
         type: 'user-delete-error',
         msg: 'No user by that username or id was found.',
     };
-};
+}
 
-var editUser = async (req, res, router) => {
+async function editUser(req, res, router) {
 
     if (!req.params.id) {
         res.code(400);
@@ -116,9 +118,9 @@ var editUser = async (req, res, router) => {
         type: 'user-edit-error',
         msg: 'No user by that username or id was found.',
     };
-};
+}
 
-var getUser = async (req, res, router) => {
+async function getUser(req, res, router) {
 
     if (!req.params.id) {
         res.code(400);
@@ -168,15 +170,14 @@ var getUser = async (req, res, router) => {
         type: 'user-find-by-error',
         msg: 'No user by that username or id was found.',
     };
-};
+}
 
-var routes = function(app, opts, done) {
+function routes(app, opts, done) {
     const router = opts.router;
 
-    var getUserResolveGroup = async (req, res) => {
-        return await getUser(req, res, true);
-    };
-
+    // var getUserResolveGroup = async (req, res) => {
+    //     return await getUser(req, res, true);
+    // };
 
     app.get('/user/id/:id', async (req, res)=>{return await getUser(req, res, router);});
     app.get('/user/id/:id/:prop', async (req, res)=>{return await getUser(req, res, router);});
@@ -185,7 +186,6 @@ var routes = function(app, opts, done) {
     app.put('/user/id/:id/:prop', async (req, res)=>{return await editUser(req, res, router);});
 
     app.delete('/user/id/:id', async (req, res)=>{return await deleteUser(req, res, router);});
-
 
     // app.get('/user/resolve/group/username/:username', getUserResolveGroup);
     // app.get('/user/resolve/group/username/:username/:prop', getUserResolveGroup);
@@ -293,12 +293,10 @@ var routes = function(app, opts, done) {
             config.log.logger.debug(e);
             return;
         }
-        res.code(200).send();
-        return;
     });
 
     done();
-};
+}
 
 module.exports = {
     routes,

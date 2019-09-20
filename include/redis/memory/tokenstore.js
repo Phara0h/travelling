@@ -11,25 +11,26 @@ class TokenStore {
     async set(secret, type, id, expiration, name = '') {
 
         setTimeout(()=>{
-          this.destroy(id);
-        },expiration);
+            this.destroy(id);
+        }, expiration);
+        var nToken = {id, secret, expires: new Date(Date.now() + expiration), name};
 
-        this.tokens[type+':'+id] = {id:type+':'+id, expires: new Date(expiration), name};
+        this.tokens[type + '_' + nToken.id] = nToken;
 
-        return this.tokens[type+':'+id];
+        return this.tokens[type + '_' + secret];
     }
 
     async get(token, type) {
 
-      return this.tokens[type+':'+token];
+        return this.tokens[type + '_' + token];
     }
 
     async destroy(token, type) {
-      try {
-        delete this.tokens[type+':'+token];
-        return true;
-      } catch(_){}
-      return false;
+        try {
+            delete this.tokens[type + '_' + token];
+            return true;
+        } catch (_) {}
+        return false;
     }
 }
 

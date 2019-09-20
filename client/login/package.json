@@ -1,0 +1,33 @@
+{
+  "name": "login",
+  "version": "1.0.0",
+  "description": "",
+  "main": "login.js",
+  "scripts": {
+    "copyindex": "cp index.html build",
+    "copywc": "cp -r node_modules/@webcomponents/webcomponentsjs/bundles build && cp node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js build",
+    "build": "rm -rf build && mkdir build && npm run copyindex && npm run copywc && rollup -c",
+    "start": "serve build"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@material/mwc-button": "^0.8.0",
+    "@material/mwc-icon": "^0.8.0",
+    "@material/mwc-snackbar": "^0.8.0",
+    "@material/mwc-textfield": "^0.8.0",
+    "browser-request": "^0.3.3",
+    "lit-element": "^2.2.1",
+    "request": "^2.88.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.2.3",
+    "@babel/plugin-proposal-decorators": "^7.2.3",
+    "rollup": "^1.1.0",
+    "rollup-plugin-babel": "^4.3.0",
+    "rollup-plugin-node-resolve": "^4.0.0",
+    "@webcomponents/webcomponentsjs": "^2.2.4",
+    "serve": "^10.1.1"
+  }
+}
