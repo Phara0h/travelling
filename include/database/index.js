@@ -207,6 +207,11 @@ class Database {
                 host: null,
                 method: 'GET',
             });
+            anon.addRoute({
+                route: '/favicon.ico',
+                host: null,
+                method: 'GET',
+            });
 
             await anon.save();
 
