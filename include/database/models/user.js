@@ -5,7 +5,6 @@ const Base = require('@abeai/node-utils').Base;
 const PGTypes = require('@abeai/node-utils').PGTypes;
 const Group = require('./group');
 const config = require('../../utils/config');
-const regex = require('../../utils/regex');
 
 class User extends Base(BaseModel, 'users', {
     id: PGTypes.PK,
@@ -25,7 +24,7 @@ class User extends Base(BaseModel, 'users', {
     created_on: null,
     last_login: null,
     user_data: config.pg.crypto.encryptUserData ? PGTypes.AutoCrypt : null,
-    eprofile: PGTypes.EncryptProfile
+    eprofile: PGTypes.EncryptProfile,
 }) {
     constructor(...args) {
         super(...args);
@@ -33,7 +32,8 @@ class User extends Base(BaseModel, 'users', {
 
     static async createTable() {
         const pg = new (require('@abeai/node-utils').PGConnecter)();
-          await pg.query(`CREATE TABLE users (
+
+        await pg.query(`CREATE TABLE users (
                   id UUID DEFAULT uuid_generate_v4(),
                   username character varying(100),
                   password character varying(258),
@@ -60,26 +60,26 @@ class User extends Base(BaseModel, 'users', {
     }
 
     async resolveGroup(router) {
-      var group = router ? await router.getGroup(this.group_id) : await Group.findById(this.group_id);
-      if(!this.group) {
-        this.addProperty('group', group);
-      }
-      else {
-        this.group = group;
-      }
+        var group = router ? await router.getGroup(this.group_id) : await Group.findById(this.group_id);
 
-      return this;
+        if (!this.group) {
+            this.addProperty('group', group);
+        } else {
+            this.group = group;
+        }
+
+        return this;
     }
 
-
     toJSON() {
-      var u = {...this._};
-      if(u.avatar != null) {
-        u.avatar = u.avatar.toString('utf8')
-      }
-      if(u.user_data != null) {
-        u.user_data = JSON.parse(u.user_data.toString('utf8'));
-      }
+        var u = {...this._};
+
+        if (u.avatar != null) {
+            u.avatar = u.avatar.toString('utf8');
+        }
+        if (u.user_data != null) {
+            u.user_data = JSON.parse(u.user_data.toString('utf8'));
+        }
         return u;
     }
 

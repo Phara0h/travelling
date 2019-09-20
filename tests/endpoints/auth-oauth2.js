@@ -40,7 +40,7 @@ module.exports = () => {
           var res = await Travelling.Auth.accessToken('client_credentials',token1.client_id, token1.client_secret);
           accessToken1 = res.body.access_token;
           userContainer.user1Token = res.body.access_token;
-          
+
           expect(res.body).toMatchObject({
               expires_in: config.token.access.expiration*60, // seconds
               access_token: expect.any(String),

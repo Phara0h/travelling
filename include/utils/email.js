@@ -1,4 +1,5 @@
-const crypto = require('crypto');
+'use strict';
+
 const config = require('./config');
 const nodemailer = require('nodemailer');
 const fs = require('fs');
@@ -15,18 +16,19 @@ class Email {
     static async init() {
         if (config.email.test.enable) {
 
-          var ta = await nodemailer.createTestAccount();
-              config.log.logger.debug('Test Email Account:',ta);
+            var ta = await nodemailer.createTestAccount();
 
-              transporter = nodemailer.createTransport({
-                  host: 'smtp.ethereal.email',
-                  port: 587,
-                  secure: false, // true for 465, false for other ports
-                  auth: {
-                      user: ta.user, // generated ethereal user
-                      pass: ta.pass, // generated ethereal password
-                  },
-              });
+            config.log.logger.debug('Test Email Account:', ta);
+
+            transporter = nodemailer.createTransport({
+                host: 'smtp.ethereal.email',
+                port: 587,
+                secure: false, // true for 465, false for other ports
+                auth: {
+                    user: ta.user, // generated ethereal user
+                    pass: ta.pass, // generated ethereal password
+                },
+            });
 
         } else if (config.email.smtp.enable) {
             transporter = nodemailer.createTransport(config.email.smtp);
@@ -46,12 +48,10 @@ class Email {
         };
     }
 
-
-
     static async sendPasswordRecovery(user, ip, email, token) {
-        if(!transporter) {
-          config.log.logger.debug(`Password Recovery For: ${email}, ${token}`);
-          return;
+        if (!transporter) {
+            config.log.logger.debug(`Password Recovery For: ${email}, ${token}`);
+            return;
         }
 
         ip = await Fasquest.request({
@@ -60,44 +60,50 @@ class Email {
         var body = templates.resetPasswordBody({user, ip, config, token});
         var subject = templates.resetPasswordSubject({user});
 
-          var info = await transporter.sendMail({
+        var info = await transporter.sendMail({
             from: config.email.from,
             to: email,
             subject: subject,
             html: body,
         });
-        if(config.email.test.enable) {
-          var testInfo = {info, url: await nodemailer.getTestMessageUrl(info)};
-          config.log.logger.debug(testInfo)
-          var tc = require('../../tests/include/TestContainer');
-          tc.passwordEmail = testInfo;
-          return testInfo;
+
+        if (config.email.test.enable) {
+            var testInfo = {info, url: await nodemailer.getTestMessageUrl(info)};
+
+            config.log.logger.debug(testInfo);
+            var tc = require('../../tests/include/TestContainer');
+
+            tc.passwordEmail = testInfo;
+            return testInfo;
         }
     }
 
     static async sendActivation(user, email, token) {
 
-      if(!transporter) {
-        config.log.logger.debug(`Activation Email For: ${email}, ${token}`);
-        return;
-      }
+        if (!transporter) {
+            config.log.logger.debug(`Activation Email For: ${email}, ${token}`);
+            return;
+        }
 
-      var body = templates.activationBody({user, config, token});
-      var subject = templates.activationSubject({user});
+        var body = templates.activationBody({user, config, token});
+        var subject = templates.activationSubject({user});
 
-      var info = await transporter.sendMail({
-          from: config.email.from,
-          to: email,
-          subject: subject,
-          html: body,
-      });
-      if(config.email.test.enable) {
-        var testInfo = {info, url: await nodemailer.getTestMessageUrl(info)};
-        config.log.logger.debug(testInfo)
-        var tc = require('../../tests/include/TestContainer');
-        tc.activationEmail = testInfo;
-        return testInfo;
-      }
+        var info = await transporter.sendMail({
+            from: config.email.from,
+            to: email,
+            subject: subject,
+            html: body,
+        });
+
+        if (config.email.test.enable) {
+            var testInfo = {info, url: await nodemailer.getTestMessageUrl(info)};
+
+            config.log.logger.debug(testInfo);
+            var tc = require('../../tests/include/TestContainer');
+
+            tc.activationEmail = testInfo;
+            return testInfo;
+        }
     }
 
 }

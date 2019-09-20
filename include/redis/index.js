@@ -22,15 +22,16 @@ class Redis {
             // Sub
             this.redisSub = new IORedis(config.redis.events.url);
 
-            this.redisSub.subscribe("groupUpdate");
+            this.redisSub.subscribe('groupUpdate');
 
-            this.redisSub.on("message", (channel,message)=>{
-              if(this[channel]) {
-                var msg = message.split(':');
-                if(msg[0] != this.redisPub.uuid) {
-                  this[channel](msg[1]);
+            this.redisSub.on('message', (channel, message)=>{
+                if (this[channel]) {
+                    var msg = message.split(':');
+
+                    if (msg[0] != this.redisPub.uuid) {
+                        this[channel](msg[1]);
+                    }
                 }
-              }
             });
 
             // Pub
@@ -50,14 +51,14 @@ class Redis {
     }
 
     set needsGroupUpdate(value) {
-      if(config.redis.enable && value) {
-        this.redisPub.publish("groupUpdate", `${this.redisPub.uuid}:${value}`);
-      }
-      return this._needsGroupUpdate = value;
+        if (config.redis.enable && value) {
+            this.redisPub.publish('groupUpdate', `${this.redisPub.uuid}:${value}`);
+        }
+        return this._needsGroupUpdate = value;
     }
 
     groupUpdate(msg) {
-        config.log.logger.debug('Group update message received')
+        config.log.logger.debug('Group update message received');
         this._needsGroupUpdate = misc.stringToBool(msg);
     }
 
@@ -66,7 +67,6 @@ class Redis {
             await this.redis.flushall();
         }
     }
-
 
 }
 const redis = new Redis();

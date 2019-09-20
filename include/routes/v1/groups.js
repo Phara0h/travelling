@@ -335,7 +335,7 @@ var addRouteGroup = async function(req, res, router) {
         return;
     }
 
-    if (!group.addRoute(req.body)) {
+    if (!fgroup.addRoute(req.body)) {
         res.code(400).send({
             type: 'error',
             msg: 'Group already has that route or name/permission',
@@ -343,9 +343,9 @@ var addRouteGroup = async function(req, res, router) {
         return;
     }
 
-    await group.save();
+    await fgroup.save();
     router.redis.needsGroupUpdate = true;
-    res.code(200).send(group);
+    res.code(200).send(fgroup);
 };
 
 var deleteGroup = async function(req, res, router) {

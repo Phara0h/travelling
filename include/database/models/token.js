@@ -3,14 +3,13 @@
 const BaseModel = require('@abeai/node-utils').PGActiveModel;
 const Base = require('@abeai/node-utils').Base;
 const PGTypes = require('@abeai/node-utils').PGTypes;
-const pg = new (require('@abeai/node-utils').PGConnecter)();
 
 class Token extends Base(BaseModel, 'tokens', {
     id: PGTypes.PK,
     user_id: null,
     name: null,
     type: null,
-    secret: PGTypes.Hash
+    secret: PGTypes.Hash,
 }) {
     constructor(...args) {
         super(...args);

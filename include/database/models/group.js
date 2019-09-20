@@ -3,12 +3,12 @@
 const BaseModel = require('@abeai/node-utils').PGActiveModel;
 const Base = require('@abeai/node-utils').Base;
 const PGTypes = require('@abeai/node-utils').PGTypes;
-const pg = new (require('@abeai/node-utils').PGConnecter)();
 
 class Group extends Base(BaseModel, 'groups', {
     id: PGTypes.PK,
     name: null,
     type: null,
+
     /**
     allowed is an array of objects with this struct:
     {
@@ -30,7 +30,7 @@ class Group extends Base(BaseModel, 'groups', {
     static async createTable() {
         const pg = new (require('@abeai/node-utils').PGConnecter)();
 
-          await pg.query(`CREATE TABLE groups (
+        await pg.query(`CREATE TABLE groups (
                   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
                   name character varying(350),
                   type character varying(350),
@@ -57,18 +57,18 @@ class Group extends Base(BaseModel, 'groups', {
         }
         route.name = route.name.toLowerCase();
 
-        if(!this.allowed || this.allowed.length <= 0) {
-          this.allowed = [];
+        if (!this.allowed || this.allowed.length <= 0) {
+            this.allowed = [];
         }
 
         for (var i = 0; i < this.allowed.length; i++) {
-          if(this.allowed[i].name == route.name || this.allowed[i].route == route.route) {
-            return false;
-          }
+            if (this.allowed[i].name == route.name || this.allowed[i].route == route.route) {
+                return false;
+            }
         }
 
         this.allowed.push(route);
-        this.allowed = [...this.allowed]
+        this.allowed = [...this.allowed];
         return true;
     }
 

@@ -1,16 +1,17 @@
+'use strict';
+
 const config = require('../../utils/config');
-const regex = require('../../utils/regex');
 const qs = require('qs');
 
 const Database = require('../../database');
 const CookieToken = require('../../utils/cookietoken');
-const Email = require('../../utils/email');
 const TokenHandler = require('../../token');
 
 const {checkVaildUser} = require('../../utils/user');
 
 var login = async (user, req, res, router) => {
-    /** *
+
+    /**
       @TODO add check to ip to see if they are differnt then email the user of possible
       redflag activity on their account
     **/
@@ -21,7 +22,7 @@ var login = async (user, req, res, router) => {
 
     user.failed_login_attempts = 0;
     await user.save();
-    user.resolveGroup(router)
+    user.resolveGroup(router);
 
     req.createSession(user.id, {user});
     res = await CookieToken.newTokenInCookie(user.username, user.password, req, res);
@@ -39,7 +40,7 @@ var login = async (user, req, res, router) => {
         });
         res.redirect(url[0] === 'GET' ? 301 : 303, url[1]);
         return;
-      }
+    }
 
     res.code(200).send({
         msg: 'Access Granted',
@@ -143,7 +144,6 @@ module.exports = function(app, opts, done) {
             return;
         }
 
-
         var username = req.body.username.toLowerCase();
         var password = req.body.password;
         var email = req.body.email.toLowerCase();
@@ -243,72 +243,67 @@ module.exports = function(app, opts, done) {
         return 'Account activated, please login.';
     });
 
-
     // Authorization Code Grant
-    app.get('/auth/oauth/authorize', (req,res) =>{
+    app.get('/auth/oauth/authorize', (req, res) =>{
+        var userID = req.session && req.session.data && req.session.data.user ? req.session.data.user.id : '';
 
-      TokenHandler.isOAuthCodeExist(req.session.data.user.id, req.query.client_id).then(async token=>{
-        if(token || !config.token.code.authorizeFlow) {
-          if(!token) {
-            token = await TokenHandler.getOAuthCode(req.session.data.user.id, req.query.client_id);
-          }
-          var code = Buffer.from(`${token.id}:${token.secret}`, 'ascii').toString('base64');
+        TokenHandler.isOAuthCodeExist(userID, req.query.client_id).then(async token=>{
+            if (token || !config.token.code.authorizeFlow && userID != '') {
+                if (!token) {
+                    token = await TokenHandler.getOAuthCode(req.session.data.user.id, req.query.client_id);
+                }
+                var code = Buffer.from(`${token.id}:${token.secret}`, 'ascii').toString('base64');
 
-          res.redirect(encodeURI(req.query.redirect_uri+`?code=${code}&state=${req.query.state}&client_id=${req.query.client_id}`))
-        }
-        else {
-          TokenHandler.getRandomToken().then(token=>{
-            res.setCookie('trav:codecheck', token , {
-                expires: new Date(Date.now() + 12000),
-                secure: config.https,
-                path: '/travelling/api/v1/auth/oauth/authorize',
-            });
-            res.sendFile('index.html');
-          })
-        }
-      })
-    })
-
-
-    app.post('/auth/oauth/authorize', async (req,res) => {
-      var token = null;
-
-      var codechecked = null;
-      if(req.cookies['trav:codecheck']) {
-       codechecked = await TokenHandler.checkRandomToken(req.cookies['trav:codecheck']);
-      }
-
-      if(!codechecked) {
-        res.code(401).send({
-            type: 'oauth-code-check-fail',
-            msg: 'Failed to have a vaild CSRF token',
+                res.redirect(encodeURI(req.query.redirect_uri + `?code=${code}&state=${req.query.state}&client_id=${req.query.client_id}`));
+            } else {
+                TokenHandler.getRandomToken().then(token=>{
+                    res.setCookie('trav:codecheck', token, {
+                        expires: new Date(Date.now() + 12000),
+                        secure: config.https,
+                        path: '/travelling/api/v1/auth/oauth/authorize',
+                    });
+                    res.sendFile('index.html');
+                });
+            }
         });
-        return
-      }
+    });
 
+    app.post('/auth/oauth/authorize', async (req, res) => {
+        var token = null;
 
-      // check client_id
-      //if(!req.query.client_id || )
+        var codechecked = null;
 
-      try {
-          token = await TokenHandler.getOAuthCode(req.session.data.user.id, req.query.client_id);
-          token = {client_id: token.id, client_secret: token.secret};
-          var code =  Buffer.from(`${token.client_id}:${token.client_secret}`, 'ascii').toString('base64');
+        if (req.cookies['trav:codecheck']) {
+            codechecked = await TokenHandler.checkRandomToken(req.cookies['trav:codecheck']);
+        }
 
-          res.redirect(encodeURI(req.query.redirect_uri+`?code=${code}&state=${req.query.state}&client_id=${req.query.client_id}`))
-          return;
-      } catch (e) {
-          res.code(400).send({
-              type: 'token-error',
-              msg: 'Tokens name needs to have [A-Za-z0-9_@.] as the only vaild characters and not already exist.',
-          });
-          return;
-      }
-    })
+        if (!codechecked) {
+            res.code(401).send({
+                type: 'oauth-code-check-fail',
+                msg: 'Failed to have a vaild CSRF token',
+            });
+            return;
+        }
+
+        try {
+            token = await TokenHandler.getOAuthCode(req.session.data.user.id, req.query.client_id);
+            token = {client_id: token.id, client_secret: token.secret};
+            var code = Buffer.from(`${token.client_id}:${token.client_secret}`, 'ascii').toString('base64');
+
+            res.redirect(encodeURI(req.query.redirect_uri + `?code=${code}&state=${req.query.state}&client_id=${req.query.client_id}`));
+            return;
+        } catch (e) {
+            res.code(400).send({
+                type: 'token-error',
+                msg: 'Tokens name needs to have [A-Za-z0-9_@.] as the only vaild characters and not already exist.',
+            });
+            return;
+        }
+    });
 
     // Authorization Client Credentials
     app.post('/auth/token', async (req, res) =>{
-        if (req.body.grant_type != 'client_credentials') {
+        if (req.body.grant_type != 'client_credentials' && req.body.grant_type != 'authorization_code') {
             res.code(400);
             return {
                 error: 'invalid_request',
@@ -337,8 +332,13 @@ module.exports = function(app, opts, done) {
                 msg: 'client_id and/or client_secret are invaild',
             };
         }
+        var token;
 
-        var token = await TokenHandler.checkOAuthToken(client_id, client_secret);
+        if (req.body.grant_type == 'authorization_code') {
+            token = await TokenHandler.checkOAuthCode(client_id, client_secret);
+        } else {
+            token = await TokenHandler.checkOAuthToken(client_id, client_secret);
+        }
 
         if (!token) {
             res.code(401);
@@ -346,6 +346,11 @@ module.exports = function(app, opts, done) {
                 type: 'invalid_client',
                 msg: 'client_id and/or client_secret are invaild',
             };
+        }
+
+        if (req.body.grant_type == 'authorization_code') {
+            token.user_id = token.id.split('_')[1];
+            await TokenHandler.deleteOAuthCode(client_id, client_secret);
         }
 
         res.code(200);
