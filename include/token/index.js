@@ -208,7 +208,7 @@ class TokenHandler {
     }
 
     static async deleteOAuthCode(id) {
-        return await TokenStore.delete(id, 'code');
+        return await TokenStore.destroy(id, 'code');
     }
 
     static async checkRecoveryToken(token) {

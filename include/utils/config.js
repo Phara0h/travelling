@@ -34,6 +34,7 @@ const config = {
         filePath: misc.isSetDefault(process.env.TRAVELLING_PORTAL_FILE_PATH, __dirname + '/../../client/login//build/default'),
         logo: misc.isSetDefault(process.env.TRAVELLING_PORTAL_LOGO, __dirname + '/../../client/assets/logo.svg'),
         styles: misc.isSetDefault(process.env.TRAVELLING_PORTAL_STYLES, __dirname + '/../../client/assets/styles.css'),
+        icon: misc.isSetDefault(process.env.TRAVELLING_PORTAL_ICON, __dirname + '/../../client/assets/favicon.ico'),
     },
     proxy: {
         timeout: misc.isSetDefault(Number(process.env.TRAVELLING_PROXY_TIMEOUT), 0),
