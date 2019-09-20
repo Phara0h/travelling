@@ -2,9 +2,10 @@ import resolve from 'rollup-plugin-node-resolve';
 import babel from 'rollup-plugin-babel';
 
 export default {
-	input: ['index.js'],
+	input: ['src/index.js','src/misc.js'],
 	output: {
-		file: 'build/index.js',
+		dir: '../dist',
+		// file: 'index.html',
     format: 'es',
 		sourcemap: true
 	},

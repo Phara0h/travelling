@@ -60,7 +60,7 @@ const Email = require('./include/utils/email');
 const nstats = require('nstats')();
 
 app.setErrorHandler(function(error, request, reply) {
-    // config.log.logger.error(error);
+    config.log.logger.error(error);
     reply.code(500).send(JSON.stringify({
         type: 'error',
         msg: 'Please report this issue to the site admin',
@@ -113,7 +113,23 @@ app.use((req, res, next)=>{
     next();
 });
 
-app.get('/favicon.ico', (req, res) => res.code(500).send());
+app.get('/favicon.ico', (req, res)=> {
+    try {
+        fs.readFile(config.portal.icon, (err, data) => {
+            let stream;
+
+            if (err && err.code === 'ENOENT') {
+                stream = fs.createReadStream(__dirname + '/client/assets/favicon.ico');
+            } else {
+                stream = fs.createReadStream(config.portal.icon);
+            }
+            res.type('image/x-icon').send(stream);
+        });
+    } catch (e) {
+        config.log.logger.error(e);
+        res.code(500).send();
+    }
+});
 
 app.register(fastifyCookie);
 

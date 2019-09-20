@@ -4,10 +4,12 @@
   "description": "",
   "main": "login.js",
   "scripts": {
-    "copyindex": "cp index.html build",
+    "start": "nodemon -i \"build\" -x \"polymer build\"",
+    "build-watch": "nodemon -i \"build\" -x \"polymer build --bundle\"",
+    "build": "polymer build --bundle",
+    "copyindex": "cp src/index.html build",
     "copywc": "cp -r node_modules/@webcomponents/webcomponentsjs/bundles build && cp node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js build",
-    "build": "rm -rf build && mkdir build && npm run copyindex && npm run copywc && rollup -c",
-    "start": "serve build"
+    "build-dist": "rm -rf build && mkdir build && npm run copyindex && npm run copywc && rollup -c"
   },
   "author": "",
   "license": "ISC",
@@ -18,7 +20,7 @@
     "@material/mwc-textfield": "^0.8.0",
     "browser-request": "^0.3.3",
     "lit-element": "^2.2.1",
-    "request": "^2.88.0"
+    "material-design-icons": "^3.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",

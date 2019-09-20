@@ -170,8 +170,9 @@ module.exports = function(app, opts, done) {
             return;
         }
 
-        var isVaild = checkVaildUser(req.body, false);
+        var isVaild = await checkVaildUser(req.body, false);
 
+        console.log(isVaild);
         if (isVaild !== true) {
             res.code(400).send(isVaild);
             return;
@@ -191,7 +192,7 @@ module.exports = function(app, opts, done) {
             return;
         }
 
-        var isVaild = checkVaildUser(req.body, false);
+        var isVaild = await checkVaildUser(req.body, false);
 
         if (isVaild !== true) {
             res.code(400).send(isVaild);
@@ -262,7 +263,7 @@ module.exports = function(app, opts, done) {
                         secure: config.https,
                         path: '/travelling/api/v1/auth/oauth/authorize',
                     });
-                    res.sendFile('index.html');
+                    res.sendFile(config.portal.filePath + '/index.html');
                 });
             }
         });
