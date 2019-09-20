@@ -17,7 +17,7 @@ class TokenStore {
 
         this.tokens[type + '_' + nToken.id] = nToken;
 
-        return this.tokens[type + '_' + secret];
+        return this.tokens[type + '_' + nToken.id];
     }
 
     async get(token, type) {
