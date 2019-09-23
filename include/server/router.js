@@ -7,6 +7,7 @@ const config = require('../utils/config');
 const database = require('../database');
 const Group = require('../database/models/group');
 const log = config.log.logger;
+const regex = require('../utils/regex');
 
 class Router {
     constructor(server) {
@@ -249,7 +250,7 @@ class Router {
     transformRoute(usr, route, path) {
         var user = !usr ? {group: {}} : usr;
 
-        return path.replace(/(:id|:username|:email|:group|:grouptype|:permission)/g, (a, b, c)=>{
+        return path.replace(regex.transformRoute, (a, b, c)=>{
             var prop = '';
 
             switch (a) {

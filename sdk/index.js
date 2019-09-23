@@ -657,13 +657,50 @@ class Group {
     /**
      * edit - Edits a group
      * @param {Object} body
-     * @param {any} name  
+     * @param {any} name  (example: ab31efc8-40a5-4d38-a347-adb4e38d0075)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      * @example
      * body
      * ```js
      * {
-     *     "inherited": ["a717b880-b17b-4995-9610-cf451a06d015", "7ec8c351-7b8a-4ea8-95cc-0d990b225768"]
+     *     "allowed": [{
+     *             "route": "/travelling/portal/*",
+     *             "host": null,
+     *             "removeFromPath": "/travelling/portal",
+     *             "method": "*",
+     *             "name": "*-travelling-portal-*"
+     *         },
+     *         {
+     *             "route": "/travelling/api/v1/auth/*",
+     *             "host": null,
+     *             "method": "*",
+     *             "name": "*-travelling-api-v1-auth-*"
+     *         },
+     *         {
+     *             "route": "/travelling/api/v1/user/me/route/allowed",
+     *             "host": null,
+     *             "method": "GET",
+     *             "name": "get-travelling-api-v1-user-me-route-allowed"
+     *         },
+     *         {
+     *             "route": "/travelling/api/v1/user/me/permission/allowed/*",
+     *             "host": null,
+     *             "method": "GET",
+     *             "name": "get-travelling-api-v1-user-me-permission-allowed-*"
+     *         },
+     *         {
+     *             "route": "/travelling/assets/*",
+     *             "host": null,
+     *             "removeFromPath": "/travelling/assets/",
+     *             "method": "*",
+     *             "name": "*-travelling-assets-*"
+     *         },
+     *         {
+     *             "route": "travelling/api/v1/config/password",
+     *             "host": null,
+     *             "method": "get"
+     *         }
+     *     ]
      * }
      * ```
      */
@@ -1218,23 +1255,19 @@ class Auth {
 
     /**
      * accessToken - Oauth2 `client_credentials` access token flow. Body must be `application/x-www-form-urlencoded` and must contain the `grant_type`. `client_id` & `client_secret` will be sent in a `Basic` Authorization header as `base64(client_id:client_secret)`
-     * @param {string} authorization_client username/client_id
-     * @param {string} authorization_secret password/client_secret
      */
-    static async accessToken(grant_type, authorization_client, authorization_secret, opts) {
+    static async accessToken(grant_type, code, client_id, client_secret, redirect_uri, opts) {
         var options = {
             method: 'POST',
             resolveWithFullResponse: true,
             simple: false,
             uri: hostUrl + "/" + `travelling/api/v1/auth/token`,
             form: {
-                grant_type
-            },
-            authorization: {
-                basic: {
-                    client: authorization_client,
-                    secret: authorization_secret
-                }
+                grant_type,
+                code,
+                client_id,
+                client_secret,
+                redirect_uri
             },
         };
         if (opts) {

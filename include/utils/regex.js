@@ -33,6 +33,7 @@ const regex = {
 
         return ['8', '9', 'a', 'b'].indexOf(id.charAt(19)) !== -1;
     },
+    transformRoute: new RegExp(/(:id|:username|:email|:group|:grouptype|:permission)/g),
 };
 
 console.log(regex.password);
