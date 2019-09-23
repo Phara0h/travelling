@@ -7,7 +7,7 @@ import {TextField} from '@material/mwc-textfield';
 import {Snackbar} from '@material/mwc-snackbar';
 import {ripple} from '@material/mwc-ripple/ripple-directive.js';
 import {classMap} from 'lit-html/directives/class-map';
-
+import {ifDefined} from 'lit-html/directives/if-defined.js';
 // Extend the LitElement base class
 class Login extends LitElement {
     static get styles() {
@@ -117,7 +117,7 @@ class Login extends LitElement {
         return html`
             <div class="container" @keyup="${this._onKeyUp}">
                 <img src="/travelling/assets/logo" ></img>
-                <form>
+                <form id="form1">
                     <div class="logo-container">
                         <div class="form-header">
                             <h1 style="display: ${this.isLogin ? 'block' : 'none'};">Log in to your account</h1>
@@ -136,14 +136,14 @@ class Login extends LitElement {
                         </div>
                     </div>
                     <div class="login-fields" style="display: ${!this.isLogout ? 'block' : 'none'};">
-                        <trav-text autofocus required outlined iconTrailing="account_circle" id="username" label="Username" autofocus style="display: ${this.isRegister || this.isLogin ? 'flex' : 'none'};"></trav-text>
-                        <trav-text  autofocus required outlined iconTrailing="lock" id="password" name="password" type="password" validationMessage="${this.passwordHelper}" label="Password" style="display: ${this.isRegister || this.isLogin ? 'block' : 'none'};"></trav-text>
-                        <trav-text autofocus required id="email" outlined iconTrailing="email" type="email" label="Email" style="display: ${this.isRegister || this.isForgotPassword ? 'flex' : 'none'};"></trav-text>
+                        <trav-text autocomplete="username" autofocus required outlined iconTrailing="account_circle" id="username" label="Username" style="display: ${this.isRegister || this.isLogin ? 'flex' : 'none'};"></trav-text>
+                        <trav-text  autocomplete="current-password" autofocus required outlined iconTrailing="lock" id="password" type="password" validationMessage="${this.passwordHelper}" label="Password" style="display: ${this.isRegister || this.isLogin ? 'block' : 'none'};"></trav-text>
+                        <trav-text autocomplete="email" autofocus required id="email" outlined iconTrailing="email" type="email" label="Email" style="display: ${this.isRegister || this.isForgotPassword ? 'flex' : 'none'};"></trav-text>
                     </div>
                     <div class="options">
-                    <span class="subButtons" style="display: ${!this.isRegister && !this.isLogout ? 'flex' : 'none'};" @click="${this.showRegistration}">Create an account</span>
-                    <span class="subButtons" style="display: ${!this.isLogin && !this.isLogout ? 'flex' : 'none'};" @click="${this.showLogin}">Log in to account</span>
-                    <span class="subButtons" style="display: ${!this.isForgotPassword && !this.isLogout ? 'flex' : 'none'};" @click="${this.showForgotPassword}">Forgot your password?</span>
+                      <span class="subButtons" style="display: ${!this.isRegister && !this.isLogout ? 'flex' : 'none'};" @click="${this.showRegistration}">Create an account</span>
+                      <span class="subButtons" style="display: ${!this.isLogin && !this.isLogout ? 'flex' : 'none'};" @click="${this.showLogin}">Log in to account</span>
+                      <span class="subButtons" style="display: ${!this.isForgotPassword && !this.isLogout ? 'flex' : 'none'};" @click="${this.showForgotPassword}">Forgot your password?</span>
                     </div>
 
                     <trav-button raised @click="${this.login}" style="display: ${this.isLogin ? 'flex' : 'none'};">Log in</trav-button>
@@ -151,7 +151,8 @@ class Login extends LitElement {
                     <trav-button id="resetpassword" raised @click="${this.resetPassword}" style="display: ${this.isForgotPassword ? 'flex' : 'none'};">Reset Password</trav-button>
                     <trav-form-button type="submit"  formaction="${window.location.href}" formMethod="post" raised  style="display: ${this.isOauth ? 'flex' : 'none'};">Authorize</trav-form-button>
                     <trav-button raised @click="${this.logout}" style="display: ${this.isLogout ? 'flex' : 'none'};">Logout</trav-button>
-                </form>
+
+              </form>
                 <trav-snack id="error"
                       labelText="${this.errorMsg}">
                 </trav-snack>
@@ -207,6 +208,7 @@ class Login extends LitElement {
         this._username = this.shadowRoot.getElementById('username');
         this._password = this.shadowRoot.getElementById('password');
         this._email = this.shadowRoot.getElementById('email');
+;
 
         if (res.status === 200) {
             this._user = await res.json();
@@ -299,19 +301,21 @@ class Login extends LitElement {
         this._password.reportValidity();
         if (this._username.validity.valid && this._password.validity.valid) {
 
-            var res = await fetch(new Request('http://127.0.0.1:6969/travelling/api/v1/auth/login', {method: 'PUT', body: JSON.stringify({
+            var res = await fetch(new Request('/travelling/api/v1/auth/login', {method: 'PUT', body: JSON.stringify({
                 username: this._username.value,
                 password: this._password.value,
             }),
             headers: {
                 'Content-Type': 'application/json',
             },
+            credentials: 'same-origin'
             }));
 
             if (res.status === 200) {
-                this.resetFields();
-                this.checkLoggedIn();
-                this.showSuccess('Successfully logged in.');
+                // this.resetFields();
+                // this.checkLoggedIn();
+                // this.showSuccess('Successfully logged in.');
+                window.location = window.location.href;
             } else {
                 this._password.formElement.focus();
                 this._password.getLabelAdapterMethods().shakeLabel(true);
@@ -358,7 +362,7 @@ class Login extends LitElement {
             if (this.groupRequest) {
                 user.group_request = this.groupRequest;
             }
-            var res = await fetch(new Request('http://127.0.0.1:6969/travelling/api/v1/auth/register', {method: 'post', body: JSON.stringify(user),
+            var res = await fetch(new Request('/travelling/api/v1/auth/register', {method: 'post', body: JSON.stringify(user),
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -413,7 +417,7 @@ class Login extends LitElement {
         if (this._email.validity.valid) {
             this.shadowRoot.getElementById('resetpassword').disabled = true;
 
-            var res = await fetch(new Request('http://127.0.0.1:6969/travelling/api/v1/auth/password/forgot', {method: 'put', body: JSON.stringify({email: this._email.value}),
+            var res = await fetch(new Request('/travelling/api/v1/auth/password/forgot', {method: 'put', body: JSON.stringify({email: this._email.value}),
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -492,6 +496,7 @@ class TravButton extends Button {
             }
         `;
     }
+
 }
 customElements.define('trav-button', TravButton);
 
@@ -514,7 +519,7 @@ class TravFormButton extends TravButton {
       return html`
       <form style="display: flex;flex: 1;">
         <button
-            id="button"
+            id="button_${this.label}"
             type="submit"
             formAction="${this.formAction}"
             formMethod="${this.formMethod}"
@@ -567,6 +572,32 @@ class TravText extends TextField {
             }
         `;
     }
+    static get properties() { return {
+       autocomplete: { type: String, reflect: true },
+     };}
+    renderInput() {
+
+        //const maxOrUndef = this.maxLength === -1 ? 'maxlength="-1"' : 'maxlength="'+this.maxLength+'"';
+         const maxOrUndef = this.maxLength === -1 ? undefined : this.maxLength;
+        return html`
+     <input
+         id="input_${this.type}"
+         class="mdc-text-field__input"
+         type="${this.type}"
+         .value="${this.value}"
+         .autocomplete="${ifDefined(this.autocomplete ? this.autocomplete : undefined)}"
+         ?disabled="${this.disabled}"
+         placeholder="${ifDefined(this.placeholder)}"
+         ?required="${this.required}"
+         maxlength="${ifDefined(maxOrUndef)}"
+         pattern="${ifDefined(this.pattern ? this.pattern : undefined)}"
+         min="${ifDefined(this.min === '' ? undefined : Number(this.min))}"
+         max="${ifDefined(this.max === '' ? undefined : Number(this.max))}"
+         step="${ifDefined(this.step === null ? undefined : this.step)}"
+         @input="${this.handleInputChange}"
+         @blur="${this.onInputBlur}">`;
+      }
+
     getRootAdapterMethods() {
         return Object.assign({
           registerTextFieldInteractionHandler: (evtType, handler) => this.addEventListener(evtType, handler),

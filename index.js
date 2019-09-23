@@ -67,31 +67,7 @@ app.setErrorHandler(function(error, request, reply) {
     }));
 });
 
-if (config.cors.enable) {
-    app.use((req, res, next) => {
-        if (req.headers['origin']) {
-            res.setHeader('access-control-allow-origin', config.cors.origin || req.headers['origin'] || '*');
-        }
-
-        if (req.headers['access-control-request-method']) {
-            res.setHeader('access-control-allow-methods', config.cors.methods || req.headers['access-control-request-method'] || '*');
-        }
-
-        if (req.headers['access-control-request-headers']) {
-            res.setHeader('access-control-allow-headers', config.cors.headers || req.headers['access-control-request-headers'] || '*');
-        }
-
-        if (req.url.indexOf('/travelling/api/v1/auth') > -1) {
-            res.setHeader('access-control-allow-credentials', true);
-        }
-        next();
-    });
-    app.options('/travelling/api/v1/*', (req, res) => {
-
-        res.header('access-control-max-age', config.cors.age);
-        res.code(204).send();
-    });
-}
+app.register(require('./include/server/cors.js'), {router});
 
 app.get('/travelling/metrics', (req, res) => {res.code(200).send(nstats.toPrometheus());});
 app.get('/travelling/_health', (req, res) => res.code(200).send('OK'));

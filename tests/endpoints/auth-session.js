@@ -81,7 +81,7 @@ module.exports = () => {
             });
             userContainer.user2.tok = tok;
             userContainer.user2.ssid = ssid;
-            expect(res.req.path).toEqual(config.portal.path)
+            expect(res.req.path).toEqual('/travelling/api/v1/user/me')
 
             expect(res.headers['set-cookie']).toContainEqual(expect.stringContaining('trav:tok=null'))
         });

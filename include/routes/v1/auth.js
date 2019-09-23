@@ -311,6 +311,16 @@ module.exports = function(app, opts, done) {
                 error_description: 'grant_type is not supported.',
             };
         }
+
+        if (req.body.grant_type == 'client_credentials') {
+            return await clientCredentialsToken(req, res);
+        }
+
+        return await authorizationCodeToken(req, res);
+
+    });
+
+    var clientCredentialsToken = async (req, res) => {
         var client_id = null;
         var client_secret = null;
 
@@ -324,7 +334,13 @@ module.exports = function(app, opts, done) {
                 client_id = req.body.client_id;
                 client_secret = req.body.client_secret;
             }
-        } catch (e) {}
+        } catch (e) {
+            res.code(401);
+            return {
+                type: 'invalid_client',
+                msg: 'client_id and/or client_secret are invaild',
+            };
+        }
 
         if (!client_id || !client_secret) {
             res.code(401);
@@ -333,13 +349,7 @@ module.exports = function(app, opts, done) {
                 msg: 'client_id and/or client_secret are invaild',
             };
         }
-        var token;
-
-        if (req.body.grant_type == 'authorization_code') {
-            token = await TokenHandler.checkOAuthCode(client_id, client_secret);
-        } else {
-            token = await TokenHandler.checkOAuthToken(client_id, client_secret);
-        }
+        var token = await TokenHandler.checkOAuthToken(client_id, client_secret);
 
         if (!token) {
             res.code(401);
@@ -349,14 +359,85 @@ module.exports = function(app, opts, done) {
             };
         }
 
-        if (req.body.grant_type == 'authorization_code') {
-            token.user_id = token.id.split('_')[1];
-            await TokenHandler.deleteOAuthCode(client_id, client_secret);
-        }
-
         res.code(200);
         return await TokenHandler.getAccessToken(token);
-    });
+    };
+
+    var authorizationCodeToken = async (req, res) => {
+        var code = null;
+        var client_id = null;
+        var client_secret = null;
+
+        try {
+            if (req.headers.authorization) {
+                var details = Buffer.from(req.headers.authorization.split(' ')[1], 'base64').toString('utf8').split(':');
+
+                client_id = details[0];
+                client_secret = details[1];
+            } else if (req.body.client_id && req.body.client_secret) {
+                client_id = req.body.client_id;
+                client_secret = req.body.client_secret;
+            }
+            code = Buffer.from(req.body.code, 'base64').toString('utf8').split(':');
+        } catch (e) {
+            res.code(401);
+            return {
+                type: 'invalid_client',
+                msg: 'client_id and/or client_secret are invaild',
+            };
+        }
+
+        // console.log(client_id, client_secret, code[0], code[1]);
+
+        if (!client_id || !client_secret) {
+            res.code(401);
+            return {
+                type: 'invalid_client',
+                msg: 'client_id and/or client_secret are invaild',
+            };
+        }
+
+        var checkedCode = await TokenHandler.checkOAuthCode(code[0], code[1]);
+
+        if (!checkedCode) {
+            res.code(401);
+            return {
+                type: 'invalid_client',
+                msg: 'client_id and/or client_secret are invaild',
+            };
+        }
+
+        // console.log('checkdCode', checkedCode);
+
+        var codeUserId = checkedCode.id.split('_'); // tokenid, userid
+
+        var checkedToken = await TokenHandler.checkOAuthToken(client_id, client_secret);
+
+        if (!checkedToken) {
+            res.code(401);
+            return {
+                type: 'invalid_client',
+                msg: 'client_id and/or client_secret are invaild',
+            };
+        }
+
+        // console.log('checkedToken', checkedToken);
+        // console.log('ID  CHECK: ', checkedToken.user_id, codeUserId[1], codeUserId[0], checkedToken.user_id != codeUserId[1], checkedToken.name != codeUserId[0] && checkedToken.id != codeUserId[0]);
+
+        if (checkedToken.name != codeUserId[0] && checkedToken.id != codeUserId[0]) {
+            res.code(401);
+            return {
+                type: 'invalid_client',
+                msg: 'client_id and/or client_secret are invaild',
+            };
+        }
+
+        checkedCode.user_id = checkedCode.id.split('_')[1];
+        await TokenHandler.deleteOAuthCode(client_id, client_secret);
+
+        res.code(200);
+        return await TokenHandler.getAccessToken(checkedCode);
+    };
 
     done();
 };

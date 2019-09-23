@@ -37,7 +37,7 @@ module.exports = () => {
 
         test("Get New OAuth2 Access Token as Test User With No Name", async () => {
 
-          var res = await Travelling.Auth.accessToken('client_credentials',token1.client_id, token1.client_secret);
+          var res = await Travelling.Auth.accessToken('client_credentials',null,token1.client_id, token1.client_secret);
           accessToken1 = res.body.access_token;
           userContainer.user1Token = res.body.access_token;
 
@@ -49,7 +49,7 @@ module.exports = () => {
         });
 
         test("Get New OAuth2 Token as Test User With Name", async () => {
-          var res = await Travelling.Auth.accessToken('client_credentials',token2.client_id, token2.client_secret);
+          var res = await Travelling.Auth.accessToken('client_credentials',null,token2.client_id, token2.client_secret);
           accessToken2 = res.body.access_token;
 
           expect(res.body).toMatchObject({
@@ -95,7 +95,7 @@ module.exports = () => {
             var oldTokenExpiration = config.token.access.expiration;
             config.token.access.expiration = 0.050 // mins 3 seconds worth
 
-          var res = await Travelling.Auth.accessToken('client_credentials',token2.client_id, token2.client_secret);
+          var res = await Travelling.Auth.accessToken('client_credentials',null,token2.client_id, token2.client_secret);
           var accessToken3 = res.body.access_token;
 
           expect(res.body).toMatchObject({
