@@ -1,0 +1,11 @@
+trav-login {
+  --travelling-primary-color:  rgb(141, 145, 155);
+  --travelling-secondary-color: #80d1f4;
+  --travelling-trinary-color: rgba(56, 56, 56, 1);
+  --travelling--field-text-color: rgba(255, 255, 255, 0.87);
+  --travelling--button-text-color:rgba(56, 56, 56, 1);
+  --travelling-background: linear-gradient(45deg, rgba(0, 0, 0, 0.85) 0%, rgba(56, 65, 82, 0.57) 100%);
+  --mdc-text-field-outlined-idle-border-color: rgba(0, 0, 0, 0.38);
+  --mdc-text-field-outlined-hover-border-color: rgba(0, 0, 0, 0.87);
+  --mdc-text-field-outlined-disabled-border-color: rgba(0, 0, 0, 0.06);
+}
