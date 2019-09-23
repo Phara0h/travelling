@@ -93,12 +93,10 @@ class Login extends LitElement {
 
             #success {
                 --toast-text-color: #4caf50 !important;
-                text-transform: capitalize;
                 text-align: center;
             }
             #error {
                 --toast-text-color: #f44336 !important;
-                text-transform: capitalize;
                 text-align: center;
             }
             .options {
@@ -546,6 +544,9 @@ class TravSnack extends Snackbar {
             .mdc-snackbar__label {
               color: var(--toast-text-color, rgba(255, 255, 255, 0.87));
               white-space: pre-line;
+            }
+            .mdc-snackbar__surface  {
+              background-color: var(--travelling-trinary-color, rgba(51, 51, 51,0.87)) !important;
             }
         `;
     }

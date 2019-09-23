@@ -5,7 +5,6 @@ trav-login {
   --travelling--field-text-color: rgba(0, 0, 0, 0.87);
   --travelling--button-text-color: #FFFFFF;
   --travelling-background: linear-gradient(45deg, rgba(66, 183, 245, 0.8) 0%, rgba(66, 245, 189, 0.4) 100%);
-
   --mdc-text-field-outlined-idle-border-color: rgba(0, 0, 0, 0.38);
   --mdc-text-field-outlined-hover-border-color: rgba(0, 0, 0, 0.87);
   --mdc-text-field-outlined-disabled-border-color: rgba(0, 0, 0, 0.06);
