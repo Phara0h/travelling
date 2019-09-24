@@ -14,11 +14,11 @@ https://documenter.getpostman.com/view/7072151/SVfJUrSZ?version=latest
 1. Download the latest release or run `git clone https://github.com/abeai/travelling.git`
 2. Inside the root Travelling folder run: `npm install`
 3. Set the `TRAVELLING_DATABASE_URL` environment variable which needs to be pointing to a new PostgreSQL database to start. Do this by creating a `.env` file inside the root Travelling folder. For example:
-```shell
+```EditorConfig
 TRAVELLING_DATABASE_URL=postgres://postgres@localhost/travelling
 ```
 4. Set the salts and secrets for the following:
-```shell
+```EditorConfig
   ## Cookie Session Settings
   TRAVELLING_COOKIE_SESSION_SECRET=Yzy)8EbJOUJf+~e^%#7-lo1)RJUs.UVPBu4d3qqd0ZDQ!A~ti%Sq<kPy)nfVSn0;TRBeD0_QeMxKzp]Yn{hQe4j#ZtQ{L$0O>+hBJl^-%TKX<S>u|~xz;hFS(DO32tw#
 
@@ -39,39 +39,42 @@ See [Configuration](#Configuration) for all other configurable options.
 
 Configuration is done through environment variables. All variables have a default values except for what is stated in [Minimum New Setup](#MinimumNewSetup)
 
+___
+
 ### Basic
 
 ##### TRAVELLING_PORT
 *Travelling's serving port.* </br>
-Default: `443`
+**Default**: `443`
 
 ##### TRAVELLING_IP
 *Travelling's serving IP.* </br>
-Default: `0.0.0.0`
+**Default**: `0.0.0.0`
 
 ##### TRAVELLING_KEY
 *The path to the SSL key that is used for [https](#TRAVELLING_HTTPS)* </br>
-Default: `travelling/localhost.key`
+**Default**: `travelling/localhost.key`
 
 ##### TRAVELLING_CERT
 *The path to the SSL cert that is used for [https](#TRAVELLING_HTTPS)* </br>
-Default: `travelling/localhost.csr`
+**Default**: `travelling/localhost.csr`
 
 ##### TRAVELLING_HTTPS
 *Enables https serving.* </br>
-Default: `travelling/localhost.csr`
+**Default**: `travelling/localhost.csr`
 
+___
 
 ### Cors
 
 ##### TRAVELLING_CORS_ENABLE
 *Allows external services to make api calls to Travelling.* </br>
-Default: `false`
+**Default**: `false`
 
 ##### TRAVELLING_CORS_HEADER_ORIGIN
 *Full host path or wildstar * host pathed subdomains to allow.* </br>
-Default: Rewrites the origin to whatever external host is making the call. This allows all external calls allowed and is not recommended.  </br>
-Example: `*.domain.com`
+**Default**: Rewrites the origin to whatever external host is making the call. This allows all external calls allowed and is not recommended.  </br>
+**Example**: `*.domain.com`
 
 
 ## Security
