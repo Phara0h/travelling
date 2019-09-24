@@ -39,7 +39,7 @@ const PGConnecter = require('@abeai/node-utils').PGConnecter;
 
 const pg = new PGConnecter({
     pg: {
-        connectionString: process.env.DATABASE_URL,
+        connectionString: config.pg.url,
     },
     crypto: require(config.pg.crypto.implementation),
 });

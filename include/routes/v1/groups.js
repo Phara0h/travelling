@@ -9,39 +9,37 @@ const userUtils = require('../../utils/user.js');
 const userRoutes = require('./users');
 
 function isCircularPath(id, group, groups, nodes = []) {
-    if(nodes.indexOf(id) == 0) {
-      return true;
+    if (nodes.indexOf(id) == 0) {
+        return true;
     }
     nodes.push(id);
 
-    if(group.inherited) {
-      for (var i = 0; i < group.inherited.length; i++) {
-        nodes.push(group.inherited[i])
-        if(isCircularPath(group.inherited[i], groups[group.inherited[i]], groups, nodes)) {
-          return true;
+    if (group.inherited) {
+        for (var i = 0; i < group.inherited.length; i++) {
+            nodes.push(group.inherited[i]);
+            if (isCircularPath(group.inherited[i], groups[group.inherited[i]], groups, nodes)) {
+                return true;
+            }
         }
-      }
     }
 
     return false;
 }
 
-var checkCircularGroupRef = function(group, groups, found = []) {
+function checkCircularGroupRef(group, groups, found = []) {
 
-  if(group.inherited) {
-    for (var i = 0; i < group.inherited.length; i++) {
-        if(isCircularPath(group.inherited[i],groups[group.inherited[i]], groups, [group.id])){
-          return true;
+    if (group.inherited) {
+        for (var i = 0; i < group.inherited.length; i++) {
+            if (isCircularPath(group.inherited[i], groups[group.inherited[i]], groups, [group.id])) {
+                return true;
+            }
+
         }
-
     }
-  }
-  return false;
+    return false;
 }
 
-var setGroup = async function(req, group, router) {
-    var invalidGroup = false;
-
+async function setGroup(req, group, router) {
     if (req.body.name) {
         if (regex.safeName.exec(req.body.name) == null) {
             throw {
@@ -83,11 +81,11 @@ var setGroup = async function(req, group, router) {
             }
         }
 
-        if(checkCircularGroupRef(group, await router.getMappedGroups())) {
-          throw {
-              type: 'group-inherited-circular-error',
-              msg: 'Inherited groups array contains a cicular ref.',
-          };
+        if (checkCircularGroupRef(group, await router.getMappedGroups())) {
+            throw {
+                type: 'group-inherited-circular-error',
+                msg: 'Inherited groups array contains a cicular ref.',
+            };
         }
     }
 
@@ -113,15 +111,14 @@ var setGroup = async function(req, group, router) {
                     type: 'group-route-duplicate-error',
                     msg: 'Duplicate Route with same route or name/permission',
                 };
-                break;
             }
         }
     }
 
     return group;
-};
+}
 
-var getGroup = async function(req, res, router) {
+async function getGroup(req, res, router) {
     var name = req.params.groupname.toLowerCase();
     var fgroup = await router.getGroup(name);
 
@@ -133,9 +130,9 @@ var getGroup = async function(req, res, router) {
         return false;
     }
     return fgroup;
-};
+}
 
-var getUserByGroup = async function(req, res, router) {
+async function getUserByGroup(req, res, router) {
 
     var groups = await getGroupsByType(req, res, router);
 
@@ -181,45 +178,47 @@ var getUserByGroup = async function(req, res, router) {
     }
     res.code(200);
     return user;
-};
+}
 
-var getGroupsByType = async function(req, res, router) {
+async function getGroupsByType(req, res, router) {
     var groups = await router.getGroups();
 
     return groups.filter(g=>g.type == req.params.grouptype);
-};
-
-var editUserByGroup = async function(req,res,router) {
-  var user = await getUserByGroup(req, res, router);
-  if(!user) {
-    return false;
-  }
-  var editedUser = userRoutes.editUser(req,res,router);
-
-  if(!editedUser) {
-    return false;
-  }
-
-  res.code(200);
-  return editedUser;
 }
 
-var deleteUserByGroup = async function(req,res,router) {
-  var user = await getUserByGroup(req, res, router);
-  if(!user) {
-    return false;
-  }
-  var deletedUser = userRoutes.deleteUser(req,res,router);
+async function editUserByGroup(req, res, router) {
+    var user = await getUserByGroup(req, res, router);
 
-  if(!deletedUser) {
-    return false;
-  }
+    if (!user) {
+        return false;
+    }
+    var editedUser = userRoutes.editUser(req, res, router);
 
-  res.code(200);
-  return deletedUser;
+    if (!editedUser) {
+        return false;
+    }
+
+    res.code(200);
+    return editedUser;
 }
 
-var addGroup = async function(req, res, router) {
+async function deleteUserByGroup(req, res, router) {
+    var user = await getUserByGroup(req, res, router);
+
+    if (!user) {
+        return false;
+    }
+    var deletedUser = userRoutes.deleteUser(req, res, router);
+
+    if (!deletedUser) {
+        return false;
+    }
+
+    res.code(200);
+    return deletedUser;
+}
+
+async function addGroup(req, res, router) {
     if (!req.body.name) {
         res.code(400).send(
             {
@@ -258,8 +257,6 @@ var addGroup = async function(req, res, router) {
         return;
     }
 
-
-
     if (group.is_default) {
         var dgroup = await router.defaultGroup();
 
@@ -274,9 +271,9 @@ var addGroup = async function(req, res, router) {
     router.redis.needsGroupUpdate = true;
     res.code(200).send(ngroup);
 
-};
+}
 
-var editGroup = async function(req, res, router) {
+async function editGroup(req, res, router) {
     if (!req.params.groupname) {
         res.code(400).send(
             {
@@ -301,7 +298,6 @@ var editGroup = async function(req, res, router) {
         return;
     }
 
-
     if (group.is_default) {
         var dgroup = await router.defaultGroup();
 
@@ -316,9 +312,9 @@ var editGroup = async function(req, res, router) {
     router.redis.needsGroupUpdate = true;
 
     res.code(200).send(await router.getGroup(group.id));
-};
+}
 
-var addRouteGroup = async function(req, res, router) {
+async function addRouteGroup(req, res, router) {
 
     if (!req.params.groupname) {
         res.code(400).send(
@@ -346,9 +342,9 @@ var addRouteGroup = async function(req, res, router) {
     await fgroup.save();
     router.redis.needsGroupUpdate = true;
     res.code(200).send(fgroup);
-};
+}
 
-var deleteGroup = async function(req, res, router) {
+async function deleteGroup(req, res, router) {
     if (!req.params.groupname) {
         res.code(400).send(
             {
@@ -367,9 +363,9 @@ var deleteGroup = async function(req, res, router) {
     await fgroup.delete();
     router.redis.needsGroupUpdate = true;
     res.code(200).send();
-};
+}
 
-var getInhertedUsers = async function(group, users, query = {}) {
+async function getInhertedUsers(group, users, query = {}) {
     if (group.inheritedGroups) {
 
         for (var i = 0; i < group.inheritedGroups.length; i++) {
@@ -380,7 +376,7 @@ var getInhertedUsers = async function(group, users, query = {}) {
     }
 
     return users = users.concat(await User.findAllBy(userUtils.setUser({group_id: group.id}, query)));
-};
+}
 
 module.exports = function(app, opts, done) {
     const router = opts.router;
@@ -519,8 +515,6 @@ module.exports = function(app, opts, done) {
         res.send(await router.getGroups());
     });
 
-
-
     app.get('/groups/type/:grouptype', async (req, res) => {
         var groups = await router.getGroups();
 
@@ -538,12 +532,13 @@ module.exports = function(app, opts, done) {
 
     // import/export Groups
 
-    app.put('/groups/import',async (req, res) => {
+    app.put('/groups/import', async (req, res) => {
 
     });
 
-    app.put('/groups/export',async (req, res) => {
-      var groups = await router.getGroups();
+    app.put('/groups/export', async (req, res) => {
+        var groups = await router.getGroups();
+
     });
 
     // Get Users
@@ -556,14 +551,14 @@ module.exports = function(app, opts, done) {
     // Edit Users
 
     app.put('/group/type/:grouptype/name/:groupname/user/:id', async (req, res) => {return await editUserByGroup(req, res, router);});
-    app.put('/group/type/:grouptype/name/:groupname/user/:id/:prop',async (req, res) => {return await editUserByGroup(req, res, router);});
-    app.put('/group/type/:grouptype/user/:id',async (req, res) => {return await editUserByGroup(req, res, router);});
-    app.put('/group/type/:grouptype/user/:id/:prop',async (req, res) => {return await editUserByGroup(req, res, router);});
+    app.put('/group/type/:grouptype/name/:groupname/user/:id/:prop', async (req, res) => {return await editUserByGroup(req, res, router);});
+    app.put('/group/type/:grouptype/user/:id', async (req, res) => {return await editUserByGroup(req, res, router);});
+    app.put('/group/type/:grouptype/user/:id/:prop', async (req, res) => {return await editUserByGroup(req, res, router);});
 
     // Delete Users
 
-    app.delete('/group/type/:grouptype/name/:groupname/user/:id',async (req, res) => {return await deleteUserByGroup(req, res, router);});
-    app.delete('/group/type/:grouptype/user/:id',async (req, res) => {return await deleteUserByGroup(req, res, router);});
+    app.delete('/group/type/:grouptype/name/:groupname/user/:id', async (req, res) => {return await deleteUserByGroup(req, res, router);});
+    app.delete('/group/type/:grouptype/user/:id', async (req, res) => {return await deleteUserByGroup(req, res, router);});
 
     done();
 };
