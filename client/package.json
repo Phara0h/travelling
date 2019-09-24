@@ -4,12 +4,10 @@
   "description": "",
   "main": "login.js",
   "scripts": {
-    "start": "nodemon -i \"build\" -x \"polymer build\"",
-    "build-watch": "nodemon -i \"build\" -x \"polymer build --bundle\"",
-    "build": "polymer build --bundle",
-    "copyindex": "cp src/index.html build",
-    "copywc": "cp -r node_modules/@webcomponents/webcomponentsjs/bundles build && cp node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js build",
-    "build-dist": "rm -rf build && mkdir build && npm run copyindex && npm run copywc && rollup -c"
+    "start": "nodemon -i build -i dist -e js -e html -x \"polymer build && npm run cp\"",
+    "build-watch": "nodemon -i build -i dist -e js -e html -x \"npm run build\"",
+    "build": "polymer build --bundle && npm run cp",
+    "cp": "pwd && rm -rf dist/* && cp -r build/default/ dist/ && rm -rf build/*"
   },
   "author": "",
   "license": "ISC",

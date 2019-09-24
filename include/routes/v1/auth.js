@@ -172,7 +172,6 @@ module.exports = function(app, opts, done) {
 
         var isVaild = await checkVaildUser(req.body, false);
 
-        console.log(isVaild);
         if (isVaild !== true) {
             res.code(400).send(isVaild);
             return;
@@ -249,23 +248,17 @@ module.exports = function(app, opts, done) {
         var userID = req.session && req.session.data && req.session.data.user ? req.session.data.user.id : '';
 
         TokenHandler.isOAuthCodeExist(userID, req.query.client_id).then(async token=>{
-            if (token || !config.token.code.authorizeFlow && userID != '') {
-                if (!token) {
-                    token = await TokenHandler.getOAuthCode(req.session.data.user.id, req.query.client_id);
-                }
-                var code = Buffer.from(`${token.id}:${token.secret}`, 'ascii').toString('base64');
+            TokenHandler.getRandomToken().then(token=>{
 
-                res.redirect(encodeURI(req.query.redirect_uri + `?code=${code}&state=${req.query.state}&client_id=${req.query.client_id}`));
-            } else {
-                TokenHandler.getRandomToken().then(token=>{
-                    res.setCookie('trav:codecheck', token, {
-                        expires: new Date(Date.now() + 12000),
-                        secure: config.https,
-                        path: '/travelling/api/v1/auth/oauth/authorize',
-                    });
-                    res.sendFile(config.portal.filePath + '/index.html');
+                res.setCookie('trav:codecheck', token, {
+                    expires: new Date(Date.now() + 12000),
+                    secure: config.https,
+                    httpOnly: true,
+                    path: '/travelling/api/v1/auth/oauth/authorize',
                 });
-            }
+
+                res.sendFile(!config.token.code.authorizeFlow && userID != '' ? config.portal.filePath + '/src/redirect.html' : config.portal.filePath + '/index.html');
+            });
         });
     });
 
@@ -280,23 +273,23 @@ module.exports = function(app, opts, done) {
 
         if (!codechecked) {
             res.code(401).send({
-                type: 'oauth-code-check-fail',
-                msg: 'Failed to have a vaild CSRF token',
+                error: 'invalid_request',
+                error_description: 'Failed to have a vaild CSRF token',
             });
             return;
         }
 
         try {
-            token = await TokenHandler.getOAuthCode(req.session.data.user.id, req.query.client_id);
+            token = await TokenHandler.getOAuthCode(req.session.data.user.id, req.query.client_id, req.query.redirect_uri);
             token = {client_id: token.id, client_secret: token.secret};
             var code = Buffer.from(`${token.client_id}:${token.client_secret}`, 'ascii').toString('base64');
 
+            res.headers['Cache-Control'] = 'no-cache';
             res.redirect(encodeURI(req.query.redirect_uri + `?code=${code}&state=${req.query.state}&client_id=${req.query.client_id}`));
             return;
         } catch (e) {
             res.code(400).send({
-                type: 'token-error',
-                msg: 'Tokens name needs to have [A-Za-z0-9_@.] as the only vaild characters and not already exist.',
+                error: 'invalid_request',
             });
             return;
         }

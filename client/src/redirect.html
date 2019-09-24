@@ -1,0 +1,10 @@
+<html>
+  <form>
+    <button style="display:none;" id="sub" type="submit" formMethod="post"></button>
+  </form>
+  <script>
+    var button = document.getElementById('sub');
+    button.formaction = window.location.href;
+    button.click();
+  </script>
+</html>

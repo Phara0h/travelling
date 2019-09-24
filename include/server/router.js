@@ -92,11 +92,16 @@ class Router {
             // the route object
             var r = this.isRouteAllowed(req.raw.method, req.raw.url, group, sessionUser);
 
+            if (req.req.url.indexOf(config.portal.path) == 0) {
+                return false;
+            }
+
             if (!r && !authenticated) {
                 // if (req.raw.url.indexOf('api') > -1) {
                 //     res.code(401).send('Access Denied');
                 // }
-                if (req.req.url != config.portal.path && req.raw.url.indexOf('/travelling/') != 0) {
+
+                if (req.req.url != config.portal.path && (req.raw.url.indexOf('/travelling/api/') != 0 && req.raw.url.indexOf('/travelling/assets/') != 0)) {
                     // console.log(req.raw.url, req.raw.url, config.portal.path)
                     this.setBackurl(res, req);
                     res.redirect(config.portal.path);

@@ -201,7 +201,7 @@ class Login extends LitElement {
         };
     }
     async checkLoggedIn() {
-        var res = await fetch(new Request('/travelling/api/v1/user/me', {method: 'GET'}));
+        var res = await fetch(new Request(window.location.origin+'/travelling/api/v1/user/me', {method: 'GET'}));
 
         this._username = this.shadowRoot.getElementById('username');
         this._password = this.shadowRoot.getElementById('password');
@@ -224,7 +224,7 @@ class Login extends LitElement {
     }
 
     async getPasswordRegex() {
-        var res = await fetch(new Request('/travelling/api/v1/config/password', {method: 'GET'}));
+        var res = await fetch(new Request(window.location.origin+'/travelling/api/v1/config/password', {method: 'GET'}));
 
         var options = await res.json();
 
@@ -299,7 +299,7 @@ class Login extends LitElement {
         this._password.reportValidity();
         if (this._username.validity.valid && this._password.validity.valid) {
 
-            var res = await fetch(new Request('/travelling/api/v1/auth/login', {method: 'PUT', body: JSON.stringify({
+            var res = await fetch(new Request(window.location.origin+'/travelling/api/v1/auth/login', {method: 'PUT', body: JSON.stringify({
                 username: this._username.value,
                 password: this._password.value,
             }),
@@ -338,9 +338,10 @@ class Login extends LitElement {
 
     }
     async logout() {
-        await fetch(new Request('/travelling/api/v1/auth/logout', {method: 'GET'}));
-        this.checkLoggedIn();
-        this.showSuccess('Successfully logged out.');
+        await fetch(new Request(window.location.origin+'/travelling/api/v1/auth/logout', {method: 'GET'}));
+        window.location = window.location.href;
+        // this.checkLoggedIn();
+        // this.showSuccess('Successfully logged out.');
     }
 
     async registerAccount(e) {
@@ -360,7 +361,7 @@ class Login extends LitElement {
             if (this.groupRequest) {
                 user.group_request = this.groupRequest;
             }
-            var res = await fetch(new Request('/travelling/api/v1/auth/register', {method: 'post', body: JSON.stringify(user),
+            var res = await fetch(new Request(window.location.origin+'/travelling/api/v1/auth/register', {method: 'post', body: JSON.stringify(user),
                 headers: {
                     'Content-Type': 'application/json',
                 },

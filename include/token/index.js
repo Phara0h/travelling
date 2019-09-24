@@ -3,6 +3,8 @@ const crypto = require('crypto');
 const config = require('../utils/config');
 const cryptoInterface = require('../utils/cryptointerface');
 const regex = require('../utils/regex');
+const url = require('url');
+const URL = url.URL;
 
 const User = require('../database/models/user');
 const Token = require('../database/models/token');
@@ -25,7 +27,6 @@ class TokenHandler {
 
             var t = await TokenStore.get(await this._hashToken(dToken[2], dToken[0]), type);
 
-            console.log(dToken, t);
             if (t.secret == dToken[2] && Date.now() - dToken[1] < expiration) {
                 return dToken; // secret;
             }
@@ -55,30 +56,50 @@ class TokenHandler {
         });
     }
 
-    static getOAuthToken(user_id, type = 'oauth', name = null) {
+    static getOAuthToken(user_id, type = 'oauth', name = null, urls) {
         return new Promise((resolve, reject)=>{
+
+            if (!urls || urls.length < 1 || urls.length > 100) {
+                reject('urls array is required with at least 1 and no more than 100 valid urls');
+                return;
+            }
+
+            for (var i = 0; i < urls.length; i++) {
+                var currentURL = new URL(urls[i]);
+
+                if (currentURL.hash.length != 0) {
+                    reject(`Invalid url "${urls[i]}"`);
+                    return;
+                }
+
+                urls[i] = url.format(currentURL, {fragment: false});
+            }
+
             crypto.randomBytes(64, async (err, secret) => {
 
                 if (err) {
-                    reject(err);
+                    config.logger.log.error(err);
+                    reject('Unknown error');
                     return;
                 }
 
                 if (regex.safeName.exec(name) == null) {
-                    reject(true);
+                    reject('Invalid name');
                     return;
                 }
                 if (name) {
-                    var fToken = await Token.findLimtedBy({user_id, name}, 'AND', 1);
+                    var fToken = await Token.findLimtedBy({name}, 'AND', 1);
 
                     if (fToken && fToken.length > 0) {
-                        await Token.deleteAllBy({id: fToken.id});
+                        reject('Name already exists');
+                        return;
                     }
                 }
                 var token = await Token.create({
                     user_id,
                     type,
                     name,
+                    urls,
                     secret: secret.toString('hex'),
                 });
 
@@ -88,23 +109,27 @@ class TokenHandler {
         });
     }
 
-    static getOAuthCode(user_id, client_id, name = null) {
-        return new Promise((resolve, reject)=>{
+    static getOAuthCode(user_id, client_id, redirectURI) {
+        return new Promise(async (resolve, reject)=>{
+
+            var token = (await Token.findLimtedBy(regex.uuidCheck(client_id) ? {id: client_id} : {name: client_id}, 'AND', 1))[0];
+
+            if (!token || !token.urls || token.urls.indexOf(redirectURI) < 0) {
+                reject(true);
+                return;
+            }
+
             crypto.randomBytes(32, async (err, secret) => {
 
                 if (err) {
-                    reject(err);
+                    config.logger.log.error(err);
+                    reject('Unknown error');
                     return;
                 }
 
-                if (regex.safeName.exec(name) == null) {
-                    reject(true);
-                    return;
-                }
+                var fToken = await TokenStore.get(client_id + '_' + user_id, 'code');
 
-                if (name) {
-                    var fToken = await TokenStore.get(client_id + '_' + user_id, 'code');
-
+                if (fToken) {
                     resolve(fToken);
                     return;
                 }
@@ -173,9 +198,7 @@ class TokenHandler {
     static async checkOAuthToken(id, secret) {
 
         var hashedSecret = await cryptoInterface.hash(secret);
-        // console.log("UUID CHECK : ",regex.uuidCheck(id) ? {id, hashedSecret} : {name:id, hashedSecret})
         var token = await Token.findLimtedBy(regex.uuidCheck(id) ? {id, secret: hashedSecret} : {name: id, secret: hashedSecret}, 'AND', 1);
-        // console.log(token, secret)
 
         if (!token || token.length <= 0) {
             return false;
