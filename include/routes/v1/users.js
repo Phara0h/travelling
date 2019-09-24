@@ -257,13 +257,13 @@ function routes(app, opts, done) {
         var token = null;
 
         try {
-            token = await TokenHandler.getOAuthToken(req.session.data.user.id, req.body.type || 'oauth', req.body.name || null);
+            token = await TokenHandler.getOAuthToken(req.session.data.user.id, req.body.type || 'oauth', req.body.name || null, req.body.urls);
             res.code(200).send({client_id: token.name || token.id, client_secret: token.secret});
             return;
         } catch (e) {
             res.code(400).send({
                 type: 'token-error',
-                msg: 'Tokens name needs to have [A-Za-z0-9_@.] as the only vaild characters and not already exist.',
+                msg: e,
             });
             return;
         }

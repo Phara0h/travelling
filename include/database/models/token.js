@@ -9,6 +9,7 @@ class Token extends Base(BaseModel, 'tokens', {
     user_id: null,
     name: null,
     type: null,
+    urls: null,
     secret: PGTypes.Hash,
 }) {
     constructor(...args) {
@@ -23,6 +24,7 @@ class Token extends Base(BaseModel, 'tokens', {
                 user_id UUID,
                 name CHARACTER varying(350),
                 type CHARACTER varying(50),
+                urls CHARACTER varying(2000)[],
                 secret CHARACTER varying(350),
                 PRIMARY KEY (id, user_id)
               );`);

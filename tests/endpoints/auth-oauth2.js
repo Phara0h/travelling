@@ -8,7 +8,7 @@ module.exports = () => {
 
       describe('Vaild', () => {
         test("Register OAuth2 Credentials Token as Test User With No Name", async () => {
-          var res = await Travelling.User.Current.registerToken({}, null, {
+          var res = await Travelling.User.Current.registerToken({urls:['http://localhost:6969']}, null, {
               headers: {
                   cookie: userContainer.user1Cookie(),
               },
@@ -22,7 +22,7 @@ module.exports = () => {
         });
 
         test("Register New OAuth2 Credentials Token as Test User With Name", async () => {
-          var res = await Travelling.User.Current.registerToken({name: 'MyServiceName'}, null, {
+          var res = await Travelling.User.Current.registerToken({name: 'MyServiceName', urls:['http://localhost:6969']}, null, {
               headers: {
                   cookie: userContainer.user1Cookie(),
               },
@@ -75,7 +75,7 @@ module.exports = () => {
 
       describe('Invaild', () => {
         test("Register OAuth2 Credentials Token as Test User With Invaild Name", async () => {
-          var res = await Travelling.User.Current.registerToken({name:"(*&$#^%(@*#$&^%*Y)*&()*&)"}, null, {
+          var res = await Travelling.User.Current.registerToken({name:"(*&$#^%(@*#$&^%*Y)*&()*&)", urls:['http://localhost:6969']}, null, {
               headers: {
                   cookie: userContainer.user1Cookie(),
               },

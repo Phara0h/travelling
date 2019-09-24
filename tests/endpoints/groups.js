@@ -55,7 +55,7 @@ module.exports = () => {
 
           test('Circular Group Inheritance', async () => {
 
-            console.log((await Travelling.Groups.get(userContainer.user1Token)).body)
+            //console.log((await Travelling.Groups.get(userContainer.user1Token)).body)
             var res = await Travelling.Group.edit({inherited:[group4.id]}, 'group1', userContainer.user1Token);
 
             expect(res.statusCode).toEqual(400);
