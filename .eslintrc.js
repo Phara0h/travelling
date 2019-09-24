@@ -19,6 +19,7 @@ module.exports = {
         'jquery': true,
         'prototypejs': true,
         'shelljs': true,
+        "es6": true
     },
 
     'globals': {
@@ -52,7 +53,7 @@ module.exports = {
         'cordova': false,
         'StatusBar': false,
         'stripe': false,
-        'Map': false,
+        'Map': false
 
     },
 

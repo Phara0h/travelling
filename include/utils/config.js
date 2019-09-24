@@ -86,7 +86,7 @@ const config = {
         },
     },
     pg: {
-        url: misc.isSetDefault(process.env.DATABASE_URL, null),
+        url: misc.isSetDefault(process.env.TRAVELLING_DATABASE_URL, null),
         crypto: {
             implementation: misc.isSetDefault(process.env.TRAVELLING_PG_CRYPTO_IMPLEMENTATION, __dirname + '/cryptointerface.js'),
             secret: misc.isSetDefault(process.env.TRAVELLING_PG_CRYPTO_IMPLEMENTATION_SECRET, null),
