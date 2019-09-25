@@ -4,28 +4,30 @@ const misc = require('./misc');
 const config = {
     port: misc.isSetDefault(Number(process.env.TRAVELLING_PORT), 443),
     ip: misc.isSetDefault(process.env.TRAVELLING_IP, '0.0.0.0'),
-    key: process.env.TRAVELLING_KEY,
-    cert: process.env.TRAVELLING_CERT,
+    key: misc.isSetDefault(process.env.TRAVELLING_KEY, __dirname + '/localhost.key'),
+    cert: misc.isSetDefault(process.env.TRAVELLING_CERT, __dirname + '/localhost.csr'),
     cors: {
         enable: misc.isSetDefault(process.env.TRAVELLING_CORS_ENABLE, false),
         origin: misc.isSetDefault(process.env.TRAVELLING_CORS_HEADER_ORIGIN, null),
         methods: misc.isSetDefault(process.env.TRAVELLING_CORS_HEADER_METHODS, null),
         headers: misc.isSetDefault(process.env.TRAVELLING_CORS_HEADER_HEADERS, null),
+        credentials: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_CORS_HEADER_CREDENTIALS), true),
         age: misc.isSetDefault(Number(process.env.TRAVELLING_CORS_HEADER_MAX_AGE), 3600),
     },
     https: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_HTTPS), true),
     log: {
         enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_LOG_ENABLE), true),
         colors: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_LOG_COLORS), true),
-        fastify: {
-            logger: misc.isSetDefault(process.env.TRAVELLING_LOG_FASTIFY_LOGGER, true),
-            disableRequestLogging: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_LOG_FASTIFY_LOGGER_DISABLE_REQUEST), true),
-            requestIdHeader: misc.isSetDefault(process.env.TRAVELLING_LOG_FASTIFY_LOGGER_REQ_ID_HEADER, 'travelling-req-id'),
-            requestIdLogLabel: misc.isSetDefault(process.env.TRAVELLING_LOG_FASTIFY_LOGGER_REQ_ID_LOG_LABEL, 'travellingReqID'),
-        },
+        level: misc.isSetDefault(process.env.TRAVELLING_LOG_LEVEL, 'info'),
         logger: misc.isSetDefault(process.env.TRAVELLING_LOG_LOGGER, __dirname + '/logger.js'),
         requests: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_LOG_REQUESTS), true),
         unauthorizedAccess: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_LOG_UNAUTHORIZED_ACCESS), true),
+        fastify: {
+            logger: misc.isSetDefault(process.env.TRAVELLING_LOG_FASTIFY_LOGGER, false),
+            requestLogging: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_LOG_FASTIFY_LOGGER_REQUEST), true),
+            requestIdHeader: misc.isSetDefault(process.env.TRAVELLING_LOG_FASTIFY_LOGGER_REQ_ID_HEADER, 'travelling-req-id'),
+            requestIdLogLabel: misc.isSetDefault(process.env.TRAVELLING_LOG_FASTIFY_LOGGER_REQ_ID_LOG_LABEL, 'travellingReqID'),
+        },
     },
     portal: {
         enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_PORTAL_ENABLE), true),

@@ -36,5 +36,4 @@ const regex = {
     transformRoute: new RegExp(/(:id|:username|:email|:group|:grouptype|:permission)/g),
 };
 
-console.log(regex.password);
 module.exports = regex;
