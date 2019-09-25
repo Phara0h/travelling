@@ -17,7 +17,7 @@ var fastifyOptions = {
     http2: false,
     logger: config.log.fastify.logger,
     // logger: true
-    disableRequestLogging: config.log.fastify.disableRequestLogging,
+    disableRequestLogging: !config.log.fastify.requestLogging,
     requestIdHeader: config.log.fastify.requestIdHeader,
     requestIdLogLabel: config.log.fastify.requestIdLogLabel,
 };
