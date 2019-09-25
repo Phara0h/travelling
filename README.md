@@ -1,4 +1,9 @@
-<h1 style="display:flex;"><span style=" background-color: black !important; filter: invert(100%); margin-right:10px"> <img src="/client/assets/logo.svg" data-canonical-src="/client/assets/logo.svg" width="42" height="42"/></span>Travelling</h1>
+<h1 style="display:flex;">
+  <span style="background-color: black; filter: invert(100%); margin-right:10px">
+    <img src="/client/assets/logo.svg" data-canonical-src="/client/assets/logo.svg" width="42" height="42"/>
+  </span>
+  Travelling
+</h1>
 
 A blazing fast dynamic route level groups/permissions api gateway.
 
@@ -36,9 +41,10 @@ A blazing fast dynamic route level groups/permissions api gateway.
         * [TRAVELLING_PORTAL_ENABLE](#travelling-portal-enable)
         * [TRAVELLING_PORTAL_PATH](#travelling-portal-path)
         * [TRAVELLING_PORTAL_HOST](#travelling-portal-host)
-        * [TRAVELLING_CERT](#travelling-cert-1)
-        * [TRAVELLING_HTTPS](#travelling-https-1)
+        * [TRAVELLING_PORTAL_FILE_PATH](#travelling-portal-file-path)
+        * [TRAVELLING_PORTAL_LOGO](#travelling-portal-logo)
   * [Security](#security)
+
 
 #### REST Docs found at
 https://documenter.getpostman.com/view/7072151/SVfJUrSZ?version=latest
