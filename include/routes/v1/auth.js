@@ -36,6 +36,7 @@ var login = async (user, req, res, router) => {
             expires: Date.now(),
             secure: config.https,
             httpOnly: true,
+            domain: config.cookie.domain,
             path: '/',
         });
         res.redirect(url[0] === 'GET' ? 301 : 303, url[1]);
@@ -253,6 +254,7 @@ module.exports = function(app, opts, done) {
                 res.setCookie('trav:codecheck', token, {
                     expires: new Date(Date.now() + 12000),
                     secure: config.https,
+                    domain: config.cookie.domain,
                     httpOnly: true,
                     path: '/travelling/api/v1/auth/oauth/authorize',
                 });

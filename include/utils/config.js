@@ -51,12 +51,12 @@ const config = {
     cookie: {
         session: {
             secret: misc.isSetDefault(process.env.TRAVELLING_COOKIE_SESSION_SECRET, null),
-            expiration: misc.isSetDefault(Number(process.env.TRAVELLING_COOKIE_SESSION_EXPIRATION), 10), // seconds
+            expiration: misc.isSetDefault(Number(process.env.TRAVELLING_COOKIE_SESSION_EXPIRATION), 300), // seconds
         },
         token: {
             secret: misc.isSetDefault(process.env.TRAVELLING_COOKIE_TOKEN_SECRET, null),
             salt: misc.isSetDefault(process.env.TRAVELLING_COOKIE_TOKEN_SALT, null),
-            expiration: misc.isSetDefault(Number(process.env.TRAVELLING_COOKIE_TOKEN_EXPIRATION), 90), // days
+            expiration: misc.isSetDefault(Number(process.env.TRAVELLING_COOKIE_TOKEN_EXPIRATION), 30), // days
         },
         domain: misc.isSetDefault(process.env.TRAVELLING_COOKIE_DOMAIN, null),
         security: {

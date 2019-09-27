@@ -9,7 +9,9 @@ var logout = (req, res) => {
     CookieToken.removeAuthCookie(res);
     res.setCookie('trav:ssid', null, {
         expires: Date.now(),
+        httpOnly: true,
         secure: config.https,
+        domain: config.cookie.domain,
         path: '/',
     });
     req.isAuthenticated = false;

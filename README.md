@@ -1,6 +1,6 @@
 <h1 style="display:flex;">
-  <span style="background-color: black; filter: invert(100%); margin-right:10px">
-    <img src="/client/assets/logo.svg" data-canonical-src="/client/assets/logo.svg" width="42" height="42"/>
+  <span style="margin-right:10px">
+    <img src="/client/assets/logo-invert.svg" data-canonical-src="/client/assets/logo-invert.svg" width="42" height="42"/>
   </span>
   Travelling
 </h1>
@@ -217,5 +217,67 @@ ___
 *The absolute filepath to the logo to be displayed on the client side.* </br>
 > **Default**: `travelling/client/assets/logo.svg`
 
+##### TRAVELLING_PORTAL_STYLES
+*The absolute filepath to the css file to be displayed on the client side.* </br>
+> **Default**: `travelling/client/assets/styles.css`
+
+##### TRAVELLING_PORTAL_ICON
+*The absolute filepath to the faveicon to be displayed on the client side.* </br>
+> **Default**: `travelling/client/assets/favicon.ico`
+___
+
+### Proxy
+
+##### TRAVELLING_PROXY_TIMEOUT
+*How long in seconds the proxy should wait on a request to finish. `0` is Infinity* </br>
+> **Default**: `0`
+___
+
+### Redis
+
+##### TRAVELLING_REDIS_ENABLE
+*Enables redis to be used when multiple instances of travelling are running and being load balanced against.* </br>
+> **Default**: `false` Uses in memory store which could be problematic depending on how many groups and routes there are.
+
+##### TRAVELLING_REDIS_URL
+*The URL to a redis instance to be used by travelling as a data store.* </br>
+> **Default**: `redis://127.0.0.1:6379/`
+
+##### TRAVELLING_REDIS_EVENTS_URL
+*The URL to a redis instance to be used by travelling as a pub/sub event system.* </br>
+> **Default**: `redis://127.0.0.1:6379/`
+___
+
+### Cookie
+
+Travelling uses a dual cookie system. One is a persistent token cookie for longterm login and the other is a short lived session cookie made to put less load on the system and speed things up making it not need to decrypt the token cookie every request.
+
+##### TRAVELLING_COOKIE_SESSION_SECRET
+*The session secret used to generate the session cookie with. This needs to stay a secret and should be changed ever so often for [security](#Security) reasons* </br>
+> **Default**: ` ` This needs to be set!
+
+##### TRAVELLING_COOKIE_SESSION_EXPIRATION
+*How long the session cookie will last for in seconds. Recommended to set it to the average number of seconds a user tends to use your service for.* </br>
+> **Default**: `300`
+
+##### TRAVELLING_COOKIE_TOKEN_SECRET
+*The token secret used to generate the persistent token cookie with. This needs to stay a secret and should be changed ever so often for [security](#Security) reasons* </br>
+> **Default**: ` ` This needs to be set!
+
+##### TRAVELLING_COOKIE_DOMAIN
+*How long the persistent token cookie will last for in days.* </br>
+> **Default**: `30`
+
+##### TRAVELLING_COOKIE_TOKEN_EXPIRATION
+*How long the persistent token cookie will last for in days.* </br>
+> **Default**: `30`
+
+##### TRAVELLING_COOKIE_TOKEN_EXPIRATION
+*How long the persistent token cookie will last for in days.* </br>
+> **Default**: `30`
+
+
+
+___
 
 ## Security
