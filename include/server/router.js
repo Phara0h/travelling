@@ -55,8 +55,9 @@ class Router {
         var grps = await Group.findAll();
 
         this.mappedGroups = {};
-        this.unmergedGroups = grps;
+        this.unmergedGroups = [];
         for (var i = 0; i < grps.length; i++) {
+            this.unmergedGroups.push(grps[i]);
             this.mappedGroups[grps[i].id] = grps[i]._;
             this.groups[grps[i].name] = database.groupInheritedMerge(new Group(grps[i]._), grps);
         }
@@ -353,6 +354,7 @@ class Router {
             expires: new Date(Date.now() + 240000),
             secure: config.https,
             httpOnly: true,
+            domain: config.cookie.domain,
             path: '/',
         });
     }

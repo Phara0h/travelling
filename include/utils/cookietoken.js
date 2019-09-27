@@ -49,6 +49,7 @@ class CookieToken {
             expires: new Date(date.getTime() + config.cookie.token.expiration * 86400000),
             secure: config.https,
             httpOnly: true,
+            domain: config.cookie.domain,
             path: '/',
         });
         return res;
@@ -59,6 +60,7 @@ class CookieToken {
             expires: Date.now(),
             secure: config.https,
             httpOnly: true,
+            domain: config.cookie.domain,
             path: '/',
         });
         return res;

@@ -118,6 +118,7 @@ app.register(fastifySession, {
         secure: config.https,
         httpOnly: true,
         maxAge: config.cookie.session.expiration * 1000,
+        domain: config.cookie.domain,
     },
     cookieName: 'trav:ssid',
     saveUninitialized: false,
