@@ -22,7 +22,12 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"username\":\"user5\",\n\t\"password\":\"swagmoney69xd420\",\n\t\"email\": \"jt@abe.ai\",\n\t\"group_request\": \"superadmin\"\n}"
+							"raw": "{\n\t\"username\":\"user5\",\n\t\"password\":\"swagmoney69xd420\",\n\t\"email\": \"test@test.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{TRAV}}/travelling/api/v1/auth/register",
@@ -112,13 +117,18 @@
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
+								"value": "application/json",
+								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"username\":\"user5\",\n\t\"password\":\"swagmoney69xd420\"\n}"
+							"raw": "{\n\t\"username\":\"user5\",\n\t\"password\":\"swagmoney69xd420\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{TRAV}}/travelling/api/v1/auth/login",
@@ -287,7 +297,12 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"email\":\"joseph@abe.ai\"\n}"
+							"raw": "{\n\t\"email\":\"joseph@abe.ai\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{TRAV}}/travelling/api/v1/auth/password/forgot",
@@ -327,7 +342,12 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"password\":\"asdf\"\n}"
+							"raw": "{\n\t\"password\":\"asdf\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{TRAV}}/travelling/api/v1/auth/password/reset?token=[thegeneratedtoken]",
@@ -716,7 +736,12 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n\t\"locked\": false\n}"
+											"raw": "{\n\t\"locked\": false\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
 										},
 										"url": {
 											"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/user/:id",
@@ -1141,8 +1166,8 @@
 									{
 										"key": "Content-Type",
 										"name": "Content-Type",
-										"type": "text",
-										"value": "application/json"
+										"value": "application/json",
+										"type": "text"
 									},
 									{
 										"key": "Authorization",
@@ -1153,7 +1178,12 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\"inherited\":[\"a717b880-b17b-4995-9610-cf451a06d015\",\"7ec8c351-7b8a-4ea8-95cc-0d990b225768\"]}"
+									"raw": "{\"inherited\":[\"a717b880-b17b-4995-9610-cf451a06d015\",\"7ec8c351-7b8a-4ea8-95cc-0d990b225768\"]}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
 								},
 								"url": {
 									"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/name/:name",
@@ -1722,8 +1752,8 @@
 									{
 										"key": "Content-Type",
 										"name": "Content-Type",
-										"type": "text",
-										"value": "application/json"
+										"value": "application/json",
+										"type": "text"
 									},
 									{
 										"description": "The client_credentials generated OAUth2 access token.",
@@ -1734,7 +1764,12 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "   {\n            \"route\": \"cui/permissions/*\",\n            \"host\": null,\n            \"method\": \"*\",\n            \"name\": \"cui-*\"\n        }"
+									"raw": "{\n    \"route\": \"cui/permissions/*\",\n    \"host\": null,\n    \"method\": \"*\",\n    \"name\": \"cui-*\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
 								},
 								"url": {
 									"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/name/:name/insert/route",
@@ -1988,8 +2023,8 @@
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
+								"value": "application/json",
+								"type": "text"
 							},
 							{
 								"key": "Authorization",
@@ -2000,7 +2035,12 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": " {\"allowed\": [\n        {\n            \"route\": \"/travelling/portal/*\",\n            \"host\": null,\n            \"removeFromPath\": \"/travelling/portal\",\n            \"method\": \"*\",\n            \"name\": \"*-travelling-portal-*\"\n        },\n        {\n            \"route\": \"/travelling/api/v1/auth/*\",\n            \"host\": null,\n            \"method\": \"*\",\n            \"name\": \"*-travelling-api-v1-auth-*\"\n        },\n        {\n            \"route\": \"/travelling/api/v1/user/me/route/allowed\",\n            \"host\": null,\n            \"method\": \"GET\",\n            \"name\": \"get-travelling-api-v1-user-me-route-allowed\"\n        },\n        {\n            \"route\": \"/travelling/api/v1/user/me/permission/allowed/*\",\n            \"host\": null,\n            \"method\": \"GET\",\n            \"name\": \"get-travelling-api-v1-user-me-permission-allowed-*\"\n        },\n        {\n            \"route\": \"/travelling/assets/*\",\n            \"host\": null,\n            \"removeFromPath\": \"/travelling/assets/\",\n            \"method\": \"*\",\n            \"name\": \"*-travelling-assets-*\"\n        },\n           {\n            \"route\": \"travelling/api/v1/config/password\",\n            \"host\": null,\n            \"method\": \"get\"\n        }\n    ]}"
+							"raw": "{\n    \"allowed\": [\n        {\n            \"route\": \"/travelling/portal/*\",\n            \"host\": null,\n            \"removeFromPath\": \"/travelling/portal\",\n            \"method\": \"*\",\n            \"name\": \"*-travelling-portal-*\"\n        },\n        {\n            \"route\": \"/travelling/api/v1/auth/*\",\n            \"host\": null,\n            \"method\": \"*\",\n            \"name\": \"*-travelling-api-v1-auth-*\"\n        },\n        {\n            \"route\": \"/travelling/api/v1/user/me/route/allowed\",\n            \"host\": null,\n            \"method\": \"GET\",\n            \"name\": \"get-travelling-api-v1-user-me-route-allowed\"\n        },\n        {\n            \"route\": \"/travelling/api/v1/user/me/permission/allowed/*\",\n            \"host\": null,\n            \"method\": \"GET\",\n            \"name\": \"get-travelling-api-v1-user-me-permission-allowed-*\"\n        },\n        {\n            \"route\": \"/travelling/assets/*\",\n            \"host\": null,\n            \"removeFromPath\": \"/travelling/assets/\",\n            \"method\": \"*\",\n            \"name\": \"*-travelling-assets-*\"\n        },\n        {\n            \"route\": \"travelling/api/v1/config/password\",\n            \"host\": null,\n            \"method\": \"get\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{TRAV}}/travelling/api/v1/group/name/:name",
@@ -2195,8 +2235,8 @@
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
+								"value": "application/json",
+								"type": "text"
 							},
 							{
 								"key": "Authorization",
@@ -2207,7 +2247,12 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "   {\n            \"route\": \"cui/permissions/*\",\n            \"host\": null,\n            \"method\": \"*\",\n            \"name\": \"cui-*\"\n        }"
+							"raw": "{\n    \"route\": \"cui/permissions/*\",\n    \"host\": null,\n    \"method\": \"*\",\n    \"name\": \"cui-*\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{TRAV}}/travelling/api/v1/group/name/:name/insert/route",
@@ -2410,6 +2455,237 @@
 						"description": "Get all the groups"
 					},
 					"response": []
+				},
+				{
+					"name": "Import",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"anonymous\": {\n        \"type\": \"group\",\n        \"allowed\": [\n            {\n                \"route\": \"/travelling/portal/*\",\n                \"host\": null,\n                \"removeFromPath\": \"/travelling/portal\",\n                \"method\": \"*\",\n                \"name\": \"*-travelling-portal-*\"\n            },\n            {\n                \"route\": \"/travelling/api/v1/auth/*\",\n                \"host\": null,\n                \"method\": \"*\",\n                \"name\": \"*-travelling-api-v1-auth-*\"\n            },\n            {\n                \"route\": \"/travelling/api/v1/user/me/route/allowed\",\n                \"host\": null,\n                \"method\": \"GET\",\n                \"name\": \"get-travelling-api-v1-user-me-route-allowed\"\n            },\n            {\n                \"route\": \"/travelling/api/v1/user/me/permission/allowed/*\",\n                \"host\": null,\n                \"method\": \"GET\",\n                \"name\": \"get-travelling-api-v1-user-me-permission-allowed-*\"\n            },\n            {\n                \"route\": \"/travelling/assets/*\",\n                \"host\": null,\n                \"removeFromPath\": \"/travelling/assets/\",\n                \"method\": \"*\",\n                \"name\": \"*-travelling-assets-*\"\n            },\n            {\n                \"route\": \"travelling/api/v1/config/password\",\n                \"host\": null,\n                \"method\": \"GET\",\n                \"name\": \"gettravelling-api-v1-config-password\"\n            },\n            {\n                \"route\": \"/favicon.ico\",\n                \"host\": null,\n                \"method\": \"GET\",\n                \"name\": \"get-favicon.ico\"\n            }\n        ],\n        \"inherited\": null,\n        \"is_default\": false\n    },\n    \"group2\": {\n        \"type\": \"accounts\",\n        \"allowed\": null,\n        \"inherited\": [\n            \"group1\"\n        ],\n        \"is_default\": false\n    },\n    \"group4\": {\n        \"type\": \"accounts\",\n        \"allowed\": null,\n        \"inherited\": [\n            \"group2\",\n            \"group3\"\n        ],\n        \"is_default\": false\n    },\n    \"group1\": {\n        \"type\": \"accounts\",\n        \"allowed\": null,\n        \"inherited\": null,\n        \"is_default\": false\n    },\n    \"group3\": {\n        \"type\": \"accounts\",\n        \"allowed\": null,\n        \"inherited\": [\n            \"group9\"\n        ],\n        \"is_default\": false\n    },\n    \"group9\": {\n        \"type\": \"swag2\",\n        \"allowed\": null,\n        \"inherited\": null,\n        \"is_default\": true\n    },\n    \"superadmin\": {\n        \"type\": \"group\",\n        \"allowed\": [\n            {\n                \"host\": null,\n                \"route\": \"/travelling/*\",\n                \"method\": \"*\",\n                \"name\": \"*-travelling-*\"\n            }\n        ],\n        \"inherited\": [\n            \"anonymous\"\n        ],\n        \"is_default\": false\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/groups/import",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"groups",
+								"import"
+							]
+						},
+						"description": "Imports all groups from the exported format."
+					},
+					"response": [
+						{
+							"name": "Failed Inheritances",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"anonymous\": {\n        \"type\": \"group\",\n        \"allowed\": [\n            {\n                \"route\": \"/travelling/portal/*\",\n                \"host\": null,\n                \"removeFromPath\": \"/travelling/portal\",\n                \"method\": \"*\",\n                \"name\": \"*-travelling-portal-*\"\n            },\n            {\n                \"route\": \"/travelling/api/v1/auth/*\",\n                \"host\": null,\n                \"method\": \"*\",\n                \"name\": \"*-travelling-api-v1-auth-*\"\n            },\n            {\n                \"route\": \"/travelling/api/v1/user/me/route/allowed\",\n                \"host\": null,\n                \"method\": \"GET\",\n                \"name\": \"get-travelling-api-v1-user-me-route-allowed\"\n            },\n            {\n                \"route\": \"/travelling/api/v1/user/me/permission/allowed/*\",\n                \"host\": null,\n                \"method\": \"GET\",\n                \"name\": \"get-travelling-api-v1-user-me-permission-allowed-*\"\n            },\n            {\n                \"route\": \"/travelling/assets/*\",\n                \"host\": null,\n                \"removeFromPath\": \"/travelling/assets/\",\n                \"method\": \"*\",\n                \"name\": \"*-travelling-assets-*\"\n            },\n            {\n                \"route\": \"travelling/api/v1/config/password\",\n                \"host\": null,\n                \"method\": \"GET\",\n                \"name\": \"gettravelling-api-v1-config-password\"\n            },\n            {\n                \"route\": \"/favicon.ico\",\n                \"host\": null,\n                \"method\": \"GET\",\n                \"name\": \"get-favicon.ico\"\n            }\n        ],\n        \"inherited\": null,\n        \"is_default\": false\n    },\n    \"group2\": {\n        \"type\": \"accounts\",\n        \"allowed\": null,\n        \"inherited\": [\n            \"group1\"\n        ],\n        \"is_default\": false\n    },\n    \"group4\": {\n        \"type\": \"accounts\",\n        \"allowed\": null,\n        \"inherited\": [\n            \"group2\",\n            \"group3\"\n        ],\n        \"is_default\": false\n    },\n    \"group1\": {\n        \"type\": \"accounts\",\n        \"allowed\": null,\n        \"inherited\": null,\n        \"is_default\": false\n    },\n    \"group3\": {\n        \"type\": \"accounts\",\n        \"allowed\": null,\n        \"inherited\": [\n            \"group9\"\n        ],\n        \"is_default\": false\n    },\n    \"group9\": {\n        \"type\": \"swag2\",\n        \"allowed\": null,\n        \"inherited\": null,\n        \"is_default\": true\n    },\n    \"superadmin\": {\n        \"type\": \"group\",\n        \"allowed\": [\n            {\n                \"host\": null,\n                \"route\": \"/travelling/*\",\n                \"method\": \"*\",\n                \"name\": \"*-travelling-*\"\n            }\n        ],\n        \"inherited\": [\n            \"anonymouss\"\n        ],\n        \"is_default\": false\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/groups/import",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"groups",
+										"import"
+									]
+								}
+							},
+							"status": "unknown",
+							"code": 240,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "set-cookie",
+									"value": "trav:ssid=8b65a9a7-3dc2-4690-9d1b-6b2d5ce56e77%3AmD6v3LUcKsaUbtb9XVkJmA%3D%3D.21UuitXNaHR3CFX%2Bymdbu3oa3z7P%2F68Z2ystjDgy2nk; Max-Age=10000; Path=/; Expires=Mon, 30 Sep 2019 17:30:26 GMT; HttpOnly"
+								},
+								{
+									"key": "content-length",
+									"value": "216"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 30 Sep 2019 17:30:16 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"type\": \"group-export-failed-inheritances\",\n    \"msg\": \"All groups imported but these inheritances were not done since the group names do not exist.\",\n    \"failedInheritance\": [\n        {\n            \"group\": \"superadmin\",\n            \"inheritance\": \"anonymouss\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Export",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"description": "The client_credentials generated OAUth2 access token.",
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"anonymous\": {\n        \"type\": \"group\",\n        \"allowed\": [\n            {\n                \"route\": \"/travelling/portal/*\",\n                \"host\": null,\n                \"removeFromPath\": \"/travelling/portal\",\n                \"method\": \"*\",\n                \"name\": \"*-travelling-portal-*\"\n            },\n            {\n                \"route\": \"/travelling/api/v1/auth/*\",\n                \"host\": null,\n                \"method\": \"*\",\n                \"name\": \"*-travelling-api-v1-auth-*\"\n            },\n            {\n                \"route\": \"/travelling/api/v1/user/me/route/allowed\",\n                \"host\": null,\n                \"method\": \"GET\",\n                \"name\": \"get-travelling-api-v1-user-me-route-allowed\"\n            },\n            {\n                \"route\": \"/travelling/api/v1/user/me/permission/allowed/*\",\n                \"host\": null,\n                \"method\": \"GET\",\n                \"name\": \"get-travelling-api-v1-user-me-permission-allowed-*\"\n            },\n            {\n                \"route\": \"/travelling/assets/*\",\n                \"host\": null,\n                \"removeFromPath\": \"/travelling/assets/\",\n                \"method\": \"*\",\n                \"name\": \"*-travelling-assets-*\"\n            },\n            {\n                \"route\": \"travelling/api/v1/config/password\",\n                \"host\": null,\n                \"method\": \"GET\",\n                \"name\": \"gettravelling-api-v1-config-password\"\n            },\n            {\n                \"route\": \"/favicon.ico\",\n                \"host\": null,\n                \"method\": \"GET\",\n                \"name\": \"get-favicon.ico\"\n            }\n        ],\n        \"inherited\": null,\n        \"is_default\": false\n    },\n    \"group2\": {\n        \"type\": \"accounts\",\n        \"allowed\": null,\n        \"inherited\": [\n            \"group1\"\n        ],\n        \"is_default\": false\n    },\n    \"group4\": {\n        \"type\": \"accounts\",\n        \"allowed\": null,\n        \"inherited\": [\n            \"group2\",\n            \"group3\"\n        ],\n        \"is_default\": false\n    },\n    \"group1\": {\n        \"type\": \"accounts\",\n        \"allowed\": null,\n        \"inherited\": null,\n        \"is_default\": false\n    },\n    \"group3\": {\n        \"type\": \"accounts\",\n        \"allowed\": null,\n        \"inherited\": [\n            \"group9\"\n        ],\n        \"is_default\": false\n    },\n    \"group9\": {\n        \"type\": \"swag2\",\n        \"allowed\": null,\n        \"inherited\": null,\n        \"is_default\": true\n    },\n    \"superadmin\": {\n        \"type\": \"group\",\n        \"allowed\": [\n            {\n                \"host\": null,\n                \"route\": \"/travelling/*\",\n                \"method\": \"*\",\n                \"name\": \"*-travelling-*\"\n            }\n        ],\n        \"inherited\": [\n            \"anonymous\"\n        ],\n        \"is_default\": false\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/groups/export",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"groups",
+								"export"
+							]
+						},
+						"description": "Exports all groups in the proper format to be imported."
+					},
+					"response": [
+						{
+							"name": "Failed Inheritances",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"anonymous\": {\n        \"type\": \"group\",\n        \"allowed\": [\n            {\n                \"route\": \"/travelling/portal/*\",\n                \"host\": null,\n                \"removeFromPath\": \"/travelling/portal\",\n                \"method\": \"*\",\n                \"name\": \"*-travelling-portal-*\"\n            },\n            {\n                \"route\": \"/travelling/api/v1/auth/*\",\n                \"host\": null,\n                \"method\": \"*\",\n                \"name\": \"*-travelling-api-v1-auth-*\"\n            },\n            {\n                \"route\": \"/travelling/api/v1/user/me/route/allowed\",\n                \"host\": null,\n                \"method\": \"GET\",\n                \"name\": \"get-travelling-api-v1-user-me-route-allowed\"\n            },\n            {\n                \"route\": \"/travelling/api/v1/user/me/permission/allowed/*\",\n                \"host\": null,\n                \"method\": \"GET\",\n                \"name\": \"get-travelling-api-v1-user-me-permission-allowed-*\"\n            },\n            {\n                \"route\": \"/travelling/assets/*\",\n                \"host\": null,\n                \"removeFromPath\": \"/travelling/assets/\",\n                \"method\": \"*\",\n                \"name\": \"*-travelling-assets-*\"\n            },\n            {\n                \"route\": \"travelling/api/v1/config/password\",\n                \"host\": null,\n                \"method\": \"GET\",\n                \"name\": \"gettravelling-api-v1-config-password\"\n            },\n            {\n                \"route\": \"/favicon.ico\",\n                \"host\": null,\n                \"method\": \"GET\",\n                \"name\": \"get-favicon.ico\"\n            }\n        ],\n        \"inherited\": null,\n        \"is_default\": false\n    },\n    \"group2\": {\n        \"type\": \"accounts\",\n        \"allowed\": null,\n        \"inherited\": [\n            \"group1\"\n        ],\n        \"is_default\": false\n    },\n    \"group4\": {\n        \"type\": \"accounts\",\n        \"allowed\": null,\n        \"inherited\": [\n            \"group2\",\n            \"group3\"\n        ],\n        \"is_default\": false\n    },\n    \"group1\": {\n        \"type\": \"accounts\",\n        \"allowed\": null,\n        \"inherited\": null,\n        \"is_default\": false\n    },\n    \"group3\": {\n        \"type\": \"accounts\",\n        \"allowed\": null,\n        \"inherited\": [\n            \"group9\"\n        ],\n        \"is_default\": false\n    },\n    \"group9\": {\n        \"type\": \"swag2\",\n        \"allowed\": null,\n        \"inherited\": null,\n        \"is_default\": true\n    },\n    \"superadmin\": {\n        \"type\": \"group\",\n        \"allowed\": [\n            {\n                \"host\": null,\n                \"route\": \"/travelling/*\",\n                \"method\": \"*\",\n                \"name\": \"*-travelling-*\"\n            }\n        ],\n        \"inherited\": [\n            \"anonymouss\"\n        ],\n        \"is_default\": false\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/groups/import",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"groups",
+										"import"
+									]
+								}
+							},
+							"status": "unknown",
+							"code": 240,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "set-cookie",
+									"value": "trav:ssid=8b65a9a7-3dc2-4690-9d1b-6b2d5ce56e77%3AmD6v3LUcKsaUbtb9XVkJmA%3D%3D.21UuitXNaHR3CFX%2Bymdbu3oa3z7P%2F68Z2ystjDgy2nk; Max-Age=10000; Path=/; Expires=Mon, 30 Sep 2019 17:30:26 GMT; HttpOnly"
+								},
+								{
+									"key": "content-length",
+									"value": "216"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 30 Sep 2019 17:30:16 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"type\": \"group-export-failed-inheritances\",\n    \"msg\": \"All groups imported but these inheritances were not done since the group names do not exist.\",\n    \"failedInheritance\": [\n        {\n            \"group\": \"superadmin\",\n            \"inheritance\": \"anonymouss\"\n        }\n    ]\n}"
+						}
+					]
 				}
 			]
 		},
@@ -2590,7 +2866,12 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"username\" : \"user6\",\n\t\"password\" : \"Awickednewawesomepasword4242!@\"\n}"
+									"raw": "{\n    \"username\": \"user6\",\n    \"password\": \"Awickednewawesomepasword4242!@\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
 								},
 								"url": {
 									"raw": "{{TRAV}}/travelling/api/v1/user/me",
@@ -2671,13 +2952,16 @@
 						{
 							"name": "Register Token",
 							"request": {
+								"auth": {
+									"type": "noauth"
+								},
 								"method": "POST",
 								"header": [
 									{
 										"key": "Content-Type",
 										"name": "Content-Type",
-										"type": "text",
-										"value": "application/json"
+										"value": "application/json",
+										"type": "text"
 									},
 									{
 										"description": "The client_credentials generated OAUth2 access token.",
@@ -2688,7 +2972,12 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"name\": \"test\"\n}"
+									"raw": "{\n\t\"name\": \"conversate\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
 								},
 								"url": {
 									"raw": "{{TRAV}}/travelling/api/v1/user/me/token",
@@ -3002,8 +3291,8 @@
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
+								"value": "application/json",
+								"type": "text"
 							},
 							{
 								"key": "Authorization",
@@ -3014,7 +3303,12 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"username\" : \"user6\",\n\t\"password\" : \"Awickednewawesomepasword4242!@\"\n}"
+							"raw": "{\n\t\"username\" : \"user6\",\n\t\"password\" : \"Awickednewawesomepasword4242!@\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{TRAV}}/travelling/api/v1/user/id/:id",
@@ -3060,7 +3354,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"username\" : \"user6\",\n\t\"password\" : \"Awickednewawesomepasword4242!@\"\n}"
+							"raw": "user6"
 						},
 						"url": {
 							"raw": "{{TRAV}}/travelling/api/v1/user/id/:id/:prop",

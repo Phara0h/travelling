@@ -22,31 +22,31 @@ class Logger {
             if (config.log.enable && config.log.colors) {
                 var color = 'magenta';
 
-                switch (level.toLowerCase()) {
-                    case 'info':
+                switch (level) {
+                    case levels.info:
                         color = 'white';
                         break;
-                    case 'warn':
+                    case levels.warn:
                         color = 'yellow';
                         break;
-                    case 'error':
+                    case levels.error:
                         color = 'red';
                         break;
-                    case 'debug':
+                    case levels.debug:
                         color = 'blue';
                         break;
-                    case 'fatal':
+                    case levels.fatal:
                         color = 'red';
                         break;
-                    case 'trace':
+                    case levels.trace:
                         color = 'green';
                         break;
                     default:
                         break;
                 }
-                this.logger.log(colors.cyan('Travelling:') + ' [' + colors[color](level.toUpperCase()) + '] ', ...msg);
+                this.logger.log(colors.cyan('Travelling:') + ' [' + colors[color](this.getLevelString(level)) + '] ', ...msg);
             } else if (config.log.enable) {
-                this.logger.log('Travelling: [' + level.toUpperCase() + '] ', ...msg);
+                this.logger.log('Travelling: [' + this.getLevelString(level) + '] ', ...msg);
             }
         }
     }
@@ -68,6 +68,25 @@ class Logger {
     }
     trace(...msg) {
         this.log(levels.trace, ...msg);
+    }
+
+    getLevelString(level) {
+        switch (level) {
+            case levels.info:
+                return 'INFO';
+            case levels.warn:
+                return 'WARN';
+            case levels.error:
+                return 'ERROR';
+            case levels.debug:
+                return 'DEBUG';
+            case levels.fatal:
+                return 'FATAL';
+            case levels.trace:
+                return 'TRACE';
+            default:
+                break;
+        }
     }
 
 }
