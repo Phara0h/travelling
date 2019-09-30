@@ -30,7 +30,7 @@ function checkCircularGroupRef(group, groups, found = []) {
 
     if (group.inherited) {
         for (var i = 0; i < group.inherited.length; i++) {
-            if (isCircularPath(group.inherited[i], groups[group.inherited[i]], groups, [group.id])) {
+            if (isCircularPath(group.inherited[i], groups[group.inherited[i]], groups, [group.id || group.name])) {
                 return true;
             }
 
@@ -39,7 +39,7 @@ function checkCircularGroupRef(group, groups, found = []) {
     return false;
 }
 
-async function setGroup(req, group, router) {
+async function setGroup(req, group, router, groups = null) {
     if (req.body.name) {
         if (regex.safeName.exec(req.body.name) == null) {
             throw {
@@ -81,7 +81,7 @@ async function setGroup(req, group, router) {
             }
         }
 
-        if (checkCircularGroupRef(group, await router.getMappedGroups())) {
+        if (checkCircularGroupRef(group, groups || await router.getMappedGroups())) {
             throw {
                 type: 'group-inherited-circular-error',
                 msg: 'Inherited groups array contains a cicular ref.',
@@ -533,12 +533,103 @@ module.exports = function(app, opts, done) {
     // import/export Groups
 
     app.put('/groups/import', async (req, res) => {
+        // Possibly should put a check or lock to stop all group editing until import is done.
 
+        var keys = Object.keys(req.body);
+        var groups = [];
+        var inheritance = {};
+        var savedGroups = {};
+
+        for (var i = 0; i < keys.length; i++) {
+            req.body[keys[i]].name = keys[i];
+            var group = req.body[keys[i]];
+
+            try {
+                if (group.inherited && group.inherited.length > 0) {
+                    inheritance[group.name] = [];
+                    for (var j = 0; j < group.inherited.length; j++) {
+                        inheritance[group.name].push(group.inherited[j]);
+                    }
+                }
+                var fgroup = await router.getGroup(group.name);
+
+                if (fgroup) {
+                    fgroup._.inherited = null;
+                    fgroup = fgroup._;
+                } else {
+                    fgroup = {};
+                }
+                groups.push(await setGroup({body: group}, new Group(fgroup), router, req.body));
+            } catch (e) {
+                res.code(400).send(e);
+            }
+        }
+
+        for (var i = 0; i < groups.length; i++) {
+            if (groups[i].id) {
+                await groups[i].save();
+            } else {
+                await groups[i].create();
+            }
+
+            savedGroups[groups[i].name] = groups[i];
+        }
+
+        var inheritanceKeys = Object.keys(inheritance);
+
+        var failedInheritance = [];
+
+        for (var i = 0; i < inheritanceKeys.length; i++) {
+            savedGroups[inheritanceKeys[i]].inherited = [];
+            for (var j = 0; j < inheritance[inheritanceKeys[i]].length; j++) {
+                if (savedGroups[inheritance[inheritanceKeys[i]][j]]) {
+                    savedGroups[inheritanceKeys[i]].inherited.push(savedGroups[inheritance[inheritanceKeys[i]][j]].id);
+                } else {
+                    failedInheritance.push({group: inheritanceKeys[i], inheritance: inheritance[inheritanceKeys[i]][j]});
+                }
+            }
+            await savedGroups[inheritanceKeys[i]].save();
+        }
+        router.redis.needsGroupUpdate = true;
+
+        if (failedInheritance.length > 0) {
+            res.code(240).send({
+                type: 'group-export-failed-inheritances',
+                msg: 'All groups imported but these inheritances were not done since the group names do not exist.',
+                failedInheritance,
+            });
+            return;
+        }
+
+        res.code(200).send();
     });
 
-    app.put('/groups/export', async (req, res) => {
+    app.get('/groups/export', async (req, res) => {
         var groups = await router.getGroups();
+        var mappedGroups = await router.getMappedGroups();
+        var exported = {
+            //  inheritance: {},
+        };
 
+        for (var i = 0; i < groups.length; i++) {
+            var group = {...groups[i]._};
+
+            if (group.inheritedGroups) {
+                group.inheritedGroups = undefined;
+            }
+            if (group.inherited && group.inherited.length > 0) {
+                // exported.inheritance[group.name] = [];
+                for (var j = 0; j < group.inherited.length; j++) {
+                    group.inherited[j] = mappedGroups[group.inherited[j]].name; // exported.inheritance[group.name].push(mappedGroups[group.inherited[j]].name);
+                }
+
+            }
+            group.id = undefined;
+            exported[group.name] = group;
+            exported[group.name].name = undefined;
+        }
+
+        res.code(200).send(exported);
     });
 
     // Get Users
