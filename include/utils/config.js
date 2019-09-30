@@ -104,12 +104,6 @@ const config = {
         activation: {
             expiration: misc.isSetDefault(Number(process.env.TRAVELLING_EMAIL_ACTIVATION_EXPIRATION), 86400), // seconds
         },
-        template: {
-            passwordResetBody: misc.isSetDefault(process.env.TRAVELLING_EMAIL_RESET_PASSWORD_TEMPLATE_BODY, __dirname + '/../../templates/email-reset-password-body.html'),
-            passwordResetSubject: misc.isSetDefault(process.env.TRAVELLING_EMAIL_RESET_PASSWOR_TEMPLATE_SUBJECT, __dirname + '/../../templates/email-reset-password-subject.html'),
-            activationBody: misc.isSetDefault(process.env.TRAVELLING_EMAIL_ACTIVATION_TEMPLATE_BODY, __dirname + '/../../templates/email-activation-body.html'),
-            activationSubject: misc.isSetDefault(process.env.TRAVELLING_EMAIL_ACTIVATION_TEMPLATE_SUBJECT, __dirname + '/../../templates/email-activation-subject.html'),
-        },
         test: {
             enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_EMAIL_TEST_ENABLE), false),
         },
@@ -124,12 +118,18 @@ const config = {
             },
             tls: {
                 // do not fail on invalid certs
-                rejectUnauthorized: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_EMAIL_SMTP_TLS_REJECT_UNAUTHORIZED), false),
+                rejectUnauthorized: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_EMAIL_SMTP_TLS_REJECT_UNAUTHORIZED), true),
             },
         },
         aws: {
             enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_EMAIL_AWS_ENABLE), false),
             config: misc.isSetDefault(process.env.TRAVELLING_EMAIL_AWS_CONFIG, null),
+        },
+        template: {
+            passwordResetBody: misc.isSetDefault(process.env.TRAVELLING_EMAIL_RESET_PASSWORD_TEMPLATE_BODY, __dirname + '/../../templates/email-reset-password-body.html'),
+            passwordResetSubject: misc.isSetDefault(process.env.TRAVELLING_EMAIL_RESET_PASSWORD_TEMPLATE_SUBJECT, __dirname + '/../../templates/email-reset-password-subject.html'),
+            activationBody: misc.isSetDefault(process.env.TRAVELLING_EMAIL_ACTIVATION_TEMPLATE_BODY, __dirname + '/../../templates/email-activation-body.html'),
+            activationSubject: misc.isSetDefault(process.env.TRAVELLING_EMAIL_ACTIVATION_TEMPLATE_SUBJECT, __dirname + '/../../templates/email-activation-subject.html'),
         },
     },
     registration: {
