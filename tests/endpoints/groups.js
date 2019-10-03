@@ -1,5 +1,5 @@
 const config = require('../../include/utils/config');
-const Travelling = require('../../sdk')('https://127.0.0.1:6969');
+const { Travelling } =  require('../../sdk')('https://127.0.0.1:6969');
 var userContainer = require('../include/UserContainer.js');
 
 module.exports = () => {
@@ -125,6 +125,6 @@ module.exports = () => {
     afterAll(async () => {
       //reset groups
       console.log('Reset Groups')
-      //await Travelling.Groups.import(exported,userContainer.user1Token);
+      await Travelling.Groups.import(exported,userContainer.user1Token);
     });
 };

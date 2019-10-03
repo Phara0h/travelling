@@ -1628,5 +1628,17 @@ module.exports = function(host) {
     if (host) {
         hostUrl = host;
     }
-    return Travelling;
+    return {
+        Travelling,
+        Users,
+        User,
+        UserCurrent,
+        Groups,
+        Group,
+        GroupUsers,
+        GroupType,
+        TypeUsers,
+        TypeUser,
+        Auth
+    };
 }
