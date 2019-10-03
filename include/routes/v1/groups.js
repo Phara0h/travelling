@@ -3,6 +3,7 @@
 const Group = require('../../database/models/group');
 const User = require('../../database/models/user');
 
+const config = require('../../utils/config');
 const misc = require('../../utils/misc');
 const regex = require('../../utils/regex');
 const userUtils = require('../../utils/user.js');
@@ -27,13 +28,12 @@ function isCircularPath(id, group, groups, nodes = []) {
 }
 
 function checkCircularGroupRef(group, groups, found = []) {
-
+    // config.log.logger.debug(group, groups);
     if (group.inherited) {
         for (var i = 0; i < group.inherited.length; i++) {
             if (isCircularPath(group.inherited[i], groups[group.inherited[i]], groups, [group.id || group.name])) {
                 return true;
             }
-
         }
     }
     return false;
@@ -608,26 +608,28 @@ module.exports = function(app, opts, done) {
         var groups = await router.getGroups();
         var mappedGroups = await router.getMappedGroups();
         var exported = {
-            //  inheritance: {},
         };
 
+        // console.log('Groups Before', groups);
+        // console.log('Merge Groups Before', mappedGroups);
         for (var i = 0; i < groups.length; i++) {
-            var group = {...groups[i]._};
+            var group = new Group({...groups[i]._});
 
             if (group.inheritedGroups) {
                 group.inheritedGroups = undefined;
             }
             if (group.inherited && group.inherited.length > 0) {
-                // exported.inheritance[group.name] = [];
                 for (var j = 0; j < group.inherited.length; j++) {
-                    group.inherited[j] = mappedGroups[group.inherited[j]].name; // exported.inheritance[group.name].push(mappedGroups[group.inherited[j]].name);
+                    group.inherited[j] = mappedGroups[group.inherited[j]].name;
                 }
-
             }
             group.id = undefined;
             exported[group.name] = group;
             exported[group.name].name = undefined;
         }
+
+        // console.log('Groups After', groups);
+        // console.log('Merge Groups After', mappedGroups);
 
         res.code(200).send(exported);
     });

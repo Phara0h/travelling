@@ -47,14 +47,17 @@ class Redis {
     }
 
     get needsGroupUpdate() {
+        // config.log.logger.debug('Get NeedsGroupUpdate', this._needsGroupUpdate);
         return this._needsGroupUpdate;
     }
 
     set needsGroupUpdate(value) {
+        this._needsGroupUpdate = value;
+        // config.log.logger.debug('Set NeedsGroupUpdate', this._needsGroupUpdate);
         if (config.redis.enable && value) {
             this.redisPub.publish('groupUpdate', `${this.redisPub.uuid}:${value}`);
         }
-        return this._needsGroupUpdate = value;
+        return this._needsGroupUpdate;
     }
 
     groupUpdate(msg) {

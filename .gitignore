@@ -5,4 +5,4 @@ node_modules
 agents.json
 .DS_Store
 coverage
-localhost.*
+./localhost.*

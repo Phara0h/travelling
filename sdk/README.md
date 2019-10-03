@@ -3,23 +3,25 @@
 <dl>
 <dt><a href="#Travelling">Travelling</a></dt>
 <dd></dd>
-<dt><a href="#TravellingUsers">TravellingUsers</a></dt>
+<dt><a href="#Users">Users</a></dt>
 <dd></dd>
-<dt><a href="#TravellingUser">TravellingUser</a></dt>
+<dt><a href="#User">User</a></dt>
 <dd></dd>
 <dt><a href="#UserCurrent">UserCurrent</a></dt>
 <dd></dd>
-<dt><a href="#TravellingGroups">TravellingGroups</a></dt>
+<dt><a href="#Groups">Groups</a></dt>
 <dd></dd>
-<dt><a href="#GroupsUsers">GroupsUsers</a></dt>
+<dt><a href="#Group">Group</a></dt>
 <dd></dd>
-<dt><a href="#GroupsType">GroupsType</a></dt>
+<dt><a href="#GroupUsers">GroupUsers</a></dt>
+<dd></dd>
+<dt><a href="#GroupType">GroupType</a></dt>
 <dd></dd>
 <dt><a href="#TypeUsers">TypeUsers</a></dt>
 <dd></dd>
 <dt><a href="#TypeUser">TypeUser</a></dt>
 <dd></dd>
-<dt><a href="#TravellingAuth">TravellingAuth</a></dt>
+<dt><a href="#Auth">Auth</a></dt>
 <dd><h4 id="auth-endpoints">Auth endpoints</h4>
 </dd>
 </dl>
@@ -55,19 +57,19 @@ metrics - servers metrics
 | --- | --- | --- |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
-<a name="TravellingUsers"></a>
+<a name="Users"></a>
 
-## TravellingUsers
+## Users
 **Kind**: global class  
 
-* [TravellingUsers](#TravellingUsers)
-    * [.allByGroupRequest(group_request, authorization_bearer)](#TravellingUsers.allByGroupRequest)
-    * [.all(authorization_bearer)](#TravellingUsers.all)
+* [Users](#Users)
+    * [.byGroupRequest(group_request, authorization_bearer)](#Users.byGroupRequest)
+    * [.get(authorization_bearer)](#Users.get)
 
-<a name="TravellingUsers.allByGroupRequest"></a>
+<a name="Users.byGroupRequest"></a>
 
-### TravellingUsers.allByGroupRequest(group_request, authorization_bearer)
-allByGroupRequest - Gets all the users that have the specified group request
+### Users.byGroupRequest(group_request, authorization_bearer)
+byGroupRequest - Gets all the users that have the specified group request
 
     ##### Optional Query Params
 
@@ -88,17 +90,17 @@ allByGroupRequest - Gets all the users that have the specified group request
     | created_on | *optional* (example:  1568419646794) |
     | last_login | *optional* (example:  null) |
 
-**Kind**: static method of [<code>TravellingUsers</code>](#TravellingUsers)  
+**Kind**: static method of [<code>Users</code>](#Users)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | group_request | <code>any</code> | name of the group  (example: superadmin) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
-<a name="TravellingUsers.all"></a>
+<a name="Users.get"></a>
 
-### TravellingUsers.all(authorization_bearer)
-all - Gets all the users
+### Users.get(authorization_bearer)
+get - Gets all the users
 
     ##### Optional Query Params
 
@@ -119,42 +121,42 @@ all - Gets all the users
     | created_on | *optional* (example:  1568419646794) |
     | last_login | *optional* (example:  null) |
 
-**Kind**: static method of [<code>TravellingUsers</code>](#TravellingUsers)  
+**Kind**: static method of [<code>Users</code>](#Users)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
-<a name="TravellingUser"></a>
+<a name="User"></a>
 
-## TravellingUser
+## User
 **Kind**: global class  
 
-* [TravellingUser](#TravellingUser)
-    * [.delete(id, authorization_bearer)](#TravellingUser.delete)
-    * [.editProperty(body, id, prop, authorization_bearer)](#TravellingUser.editProperty)
-    * [.edit(body, id, authorization_bearer)](#TravellingUser.edit)
-    * [.getProperty(id, prop, authorization_bearer)](#TravellingUser.getProperty)
-    * [.get(id, authorization_bearer)](#TravellingUser.get)
+* [User](#User)
+    * [.delete(id, authorization_bearer)](#User.delete)
+    * [.editProperty(body, id, prop, authorization_bearer)](#User.editProperty)
+    * [.edit(body, id, authorization_bearer)](#User.edit)
+    * [.getProperty(id, prop, authorization_bearer)](#User.getProperty)
+    * [.get(id, authorization_bearer)](#User.get)
 
-<a name="TravellingUser.delete"></a>
+<a name="User.delete"></a>
 
-### TravellingUser.delete(id, authorization_bearer)
+### User.delete(id, authorization_bearer)
 delete - Delete a user by it's Id.
 
-**Kind**: static method of [<code>TravellingUser</code>](#TravellingUser)  
+**Kind**: static method of [<code>User</code>](#User)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | id | <code>any</code> | (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
-<a name="TravellingUser.editProperty"></a>
+<a name="User.editProperty"></a>
 
-### TravellingUser.editProperty(body, id, prop, authorization_bearer)
+### User.editProperty(body, id, prop, authorization_bearer)
 editProperty - Edit a user's property by id.
 
-**Kind**: static method of [<code>TravellingUser</code>](#TravellingUser)  
+**Kind**: static method of [<code>User</code>](#User)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -166,17 +168,14 @@ editProperty - Edit a user's property by id.
 **Example**  
 body
 ```js
-{
-    "username": "user6",
-    "password": "Awickednewawesomepasword4242!@"
-}
+user6
 ```
-<a name="TravellingUser.edit"></a>
+<a name="User.edit"></a>
 
-### TravellingUser.edit(body, id, authorization_bearer)
+### User.edit(body, id, authorization_bearer)
 edit - Edit a user's by id.
 
-**Kind**: static method of [<code>TravellingUser</code>](#TravellingUser)  
+**Kind**: static method of [<code>User</code>](#User)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -192,12 +191,12 @@ body
     "password": "Awickednewawesomepasword4242!@"
 }
 ```
-<a name="TravellingUser.getProperty"></a>
+<a name="User.getProperty"></a>
 
-### TravellingUser.getProperty(id, prop, authorization_bearer)
+### User.getProperty(id, prop, authorization_bearer)
 getProperty - Get a user's property by it's id.
 
-**Kind**: static method of [<code>TravellingUser</code>](#TravellingUser)  
+**Kind**: static method of [<code>User</code>](#User)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -205,12 +204,12 @@ getProperty - Get a user's property by it's id.
 | prop | <code>any</code> | (example: username) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
-<a name="TravellingUser.get"></a>
+<a name="User.get"></a>
 
-### TravellingUser.get(id, authorization_bearer)
+### User.get(id, authorization_bearer)
 get - Get a user by it's id.
 
-**Kind**: static method of [<code>TravellingUser</code>](#TravellingUser)  
+**Kind**: static method of [<code>User</code>](#User)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -227,10 +226,10 @@ get - Get a user by it's id.
     * [.deleteToken(body, id, authorization_bearer)](#UserCurrent.deleteToken)
     * [.registerToken(body, authorization_bearer)](#UserCurrent.registerToken)
     * [.edit(body, authorization_bearer)](#UserCurrent.edit)
-    * [.getUserProperty(property, authorization_bearer)](#UserCurrent.getUserProperty)
+    * [.getProperty(property, authorization_bearer)](#UserCurrent.getProperty)
     * [.routeCheck(method, route, authorization_bearer)](#UserCurrent.routeCheck)
     * [.permissionCheck(permission, authorization_bearer)](#UserCurrent.permissionCheck)
-    * [.getUser(authorization_bearer)](#UserCurrent.getUser)
+    * [.get(authorization_bearer)](#UserCurrent.get)
 
 <a name="UserCurrent.editProperty"></a>
 
@@ -288,7 +287,7 @@ registerToken - Registers a new credentials service for client_credentials based
 body
 ```js
 {
-    "name": "test"
+    "name": "conversate"
 }
 ```
 <a name="UserCurrent.edit"></a>
@@ -311,10 +310,10 @@ body
     "password": "Awickednewawesomepasword4242!@"
 }
 ```
-<a name="UserCurrent.getUserProperty"></a>
+<a name="UserCurrent.getProperty"></a>
 
-### UserCurrent.getUserProperty(property, authorization_bearer)
-getUserProperty - Gets the currently logged in user's single property
+### UserCurrent.getProperty(property, authorization_bearer)
+getProperty - Gets the currently logged in user's single property
 
 **Kind**: static method of [<code>UserCurrent</code>](#UserCurrent)  
 
@@ -348,10 +347,10 @@ permissionCheck - Checks to see if the current user can access content based on 
 | permission | <code>any</code> | name of the route/permission (example: get-travelling) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
-<a name="UserCurrent.getUser"></a>
+<a name="UserCurrent.get"></a>
 
-### UserCurrent.getUser(authorization_bearer)
-getUser - Gets the currently logged in user
+### UserCurrent.get(authorization_bearer)
+get - Gets the currently logged in user
 
 **Kind**: static method of [<code>UserCurrent</code>](#UserCurrent)  
 
@@ -359,25 +358,282 @@ getUser - Gets the currently logged in user
 | --- | --- | --- |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
-<a name="TravellingGroups"></a>
+<a name="Groups"></a>
 
-## TravellingGroups
+## Groups
 **Kind**: global class  
 
-* [TravellingGroups](#TravellingGroups)
-    * [.delete(body, name, authorization_bearer)](#TravellingGroups.delete)
-    * [.all(authorization_bearer)](#TravellingGroups.all)
-    * [.addRoute(body, name, authorization_bearer)](#TravellingGroups.addRoute)
-    * [.setDefault(name)](#TravellingGroups.setDefault)
-    * [.editByName(body, name, authorization_bearer)](#TravellingGroups.editByName)
-    * [.create(body, authorization_bearer)](#TravellingGroups.create)
+* [Groups](#Groups)
+    * [.export(body, authorization_bearer)](#Groups.export)
+    * [.import(body, authorization_bearer)](#Groups.import)
+    * [.get(authorization_bearer)](#Groups.get)
 
-<a name="TravellingGroups.delete"></a>
+<a name="Groups.export"></a>
 
-### TravellingGroups.delete(body, name, authorization_bearer)
+### Groups.export(body, authorization_bearer)
+export - Exports all groups in the proper format to be imported.
+
+**Kind**: static method of [<code>Groups</code>](#Groups)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+**Example**  
+body
+```js
+{
+    "anonymous": {
+        "type": "group",
+        "allowed": [{
+                "route": "/travelling/portal/*",
+                "host": null,
+                "removeFromPath": "/travelling/portal",
+                "method": "*",
+                "name": "*-travelling-portal-*"
+            },
+            {
+                "route": "/travelling/api/v1/auth/*",
+                "host": null,
+                "method": "*",
+                "name": "*-travelling-api-v1-auth-*"
+            },
+            {
+                "route": "/travelling/api/v1/user/me/route/allowed",
+                "host": null,
+                "method": "GET",
+                "name": "get-travelling-api-v1-user-me-route-allowed"
+            },
+            {
+                "route": "/travelling/api/v1/user/me/permission/allowed/*",
+                "host": null,
+                "method": "GET",
+                "name": "get-travelling-api-v1-user-me-permission-allowed-*"
+            },
+            {
+                "route": "/travelling/assets/*",
+                "host": null,
+                "removeFromPath": "/travelling/assets/",
+                "method": "*",
+                "name": "*-travelling-assets-*"
+            },
+            {
+                "route": "travelling/api/v1/config/password",
+                "host": null,
+                "method": "GET",
+                "name": "gettravelling-api-v1-config-password"
+            },
+            {
+                "route": "/favicon.ico",
+                "host": null,
+                "method": "GET",
+                "name": "get-favicon.ico"
+            }
+        ],
+        "inherited": null,
+        "is_default": false
+    },
+    "group2": {
+        "type": "accounts",
+        "allowed": null,
+        "inherited": [
+            "group1"
+        ],
+        "is_default": false
+    },
+    "group4": {
+        "type": "accounts",
+        "allowed": null,
+        "inherited": [
+            "group2",
+            "group3"
+        ],
+        "is_default": false
+    },
+    "group1": {
+        "type": "accounts",
+        "allowed": null,
+        "inherited": null,
+        "is_default": false
+    },
+    "group3": {
+        "type": "accounts",
+        "allowed": null,
+        "inherited": [
+            "group9"
+        ],
+        "is_default": false
+    },
+    "group9": {
+        "type": "swag2",
+        "allowed": null,
+        "inherited": null,
+        "is_default": true
+    },
+    "superadmin": {
+        "type": "group",
+        "allowed": [{
+            "host": null,
+            "route": "/travelling/*",
+            "method": "*",
+            "name": "*-travelling-*"
+        }],
+        "inherited": [
+            "anonymous"
+        ],
+        "is_default": false
+    }
+}
+```
+<a name="Groups.import"></a>
+
+### Groups.import(body, authorization_bearer)
+import - Imports all groups from the exported format.
+
+**Kind**: static method of [<code>Groups</code>](#Groups)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+**Example**  
+body
+```js
+{
+    "anonymous": {
+        "type": "group",
+        "allowed": [{
+                "route": "/travelling/portal/*",
+                "host": null,
+                "removeFromPath": "/travelling/portal",
+                "method": "*",
+                "name": "*-travelling-portal-*"
+            },
+            {
+                "route": "/travelling/api/v1/auth/*",
+                "host": null,
+                "method": "*",
+                "name": "*-travelling-api-v1-auth-*"
+            },
+            {
+                "route": "/travelling/api/v1/user/me/route/allowed",
+                "host": null,
+                "method": "GET",
+                "name": "get-travelling-api-v1-user-me-route-allowed"
+            },
+            {
+                "route": "/travelling/api/v1/user/me/permission/allowed/*",
+                "host": null,
+                "method": "GET",
+                "name": "get-travelling-api-v1-user-me-permission-allowed-*"
+            },
+            {
+                "route": "/travelling/assets/*",
+                "host": null,
+                "removeFromPath": "/travelling/assets/",
+                "method": "*",
+                "name": "*-travelling-assets-*"
+            },
+            {
+                "route": "travelling/api/v1/config/password",
+                "host": null,
+                "method": "GET",
+                "name": "gettravelling-api-v1-config-password"
+            },
+            {
+                "route": "/favicon.ico",
+                "host": null,
+                "method": "GET",
+                "name": "get-favicon.ico"
+            }
+        ],
+        "inherited": null,
+        "is_default": false
+    },
+    "group2": {
+        "type": "accounts",
+        "allowed": null,
+        "inherited": [
+            "group1"
+        ],
+        "is_default": false
+    },
+    "group4": {
+        "type": "accounts",
+        "allowed": null,
+        "inherited": [
+            "group2",
+            "group3"
+        ],
+        "is_default": false
+    },
+    "group1": {
+        "type": "accounts",
+        "allowed": null,
+        "inherited": null,
+        "is_default": false
+    },
+    "group3": {
+        "type": "accounts",
+        "allowed": null,
+        "inherited": [
+            "group9"
+        ],
+        "is_default": false
+    },
+    "group9": {
+        "type": "swag2",
+        "allowed": null,
+        "inherited": null,
+        "is_default": true
+    },
+    "superadmin": {
+        "type": "group",
+        "allowed": [{
+            "host": null,
+            "route": "/travelling/*",
+            "method": "*",
+            "name": "*-travelling-*"
+        }],
+        "inherited": [
+            "anonymous"
+        ],
+        "is_default": false
+    }
+}
+```
+<a name="Groups.get"></a>
+
+### Groups.get(authorization_bearer)
+get - Get all the groups
+
+**Kind**: static method of [<code>Groups</code>](#Groups)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="Group"></a>
+
+## Group
+**Kind**: global class  
+
+* [Group](#Group)
+    * [.delete(body, name, authorization_bearer)](#Group.delete)
+    * [.addRoute(body, name, authorization_bearer)](#Group.addRoute)
+    * [.setDefault(name)](#Group.setDefault)
+    * [.get(id, authorization_bearer)](#Group.get)
+    * [.edit(body, name, authorization_bearer)](#Group.edit)
+    * [.create(body, authorization_bearer)](#Group.create)
+
+<a name="Group.delete"></a>
+
+### Group.delete(body, name, authorization_bearer)
 delete - delete group by its id or name
 
-**Kind**: static method of [<code>TravellingGroups</code>](#TravellingGroups)  
+**Kind**: static method of [<code>Group</code>](#Group)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -401,23 +657,12 @@ body
     "is_default": false
 }
 ```
-<a name="TravellingGroups.all"></a>
+<a name="Group.addRoute"></a>
 
-### TravellingGroups.all(authorization_bearer)
-all - Get all the groups
-
-**Kind**: static method of [<code>TravellingGroups</code>](#TravellingGroups)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
-
-<a name="TravellingGroups.addRoute"></a>
-
-### TravellingGroups.addRoute(body, name, authorization_bearer)
+### Group.addRoute(body, name, authorization_bearer)
 addRoute - Adds a route to a group.
 
-**Kind**: static method of [<code>TravellingGroups</code>](#TravellingGroups)  
+**Kind**: static method of [<code>Group</code>](#Group)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -435,43 +680,92 @@ body
     "name": "cui-*"
 }
 ```
-<a name="TravellingGroups.setDefault"></a>
+<a name="Group.setDefault"></a>
 
-### TravellingGroups.setDefault(name)
+### Group.setDefault(name)
 setDefault - Sets the group to be the default group for new users.
 
-**Kind**: static method of [<code>TravellingGroups</code>](#TravellingGroups)  
+**Kind**: static method of [<code>Group</code>](#Group)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | name | <code>any</code> | id or name (example: group6) |
 
-<a name="TravellingGroups.editByName"></a>
+<a name="Group.get"></a>
 
-### TravellingGroups.editByName(body, name, authorization_bearer)
-editByName - Edits a group
+### Group.get(id, authorization_bearer)
+get - Get a group by it's id or name.
 
-**Kind**: static method of [<code>TravellingGroups</code>](#TravellingGroups)  
+**Kind**: static method of [<code>Group</code>](#Group)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>any</code> | id or name  (example: group1) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="Group.edit"></a>
+
+### Group.edit(body, name, authorization_bearer)
+edit - Edits a group
+
+**Kind**: static method of [<code>Group</code>](#Group)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | body | <code>Object</code> |  |
-| name | <code>any</code> |  |
+| name | <code>any</code> | (example: ab31efc8-40a5-4d38-a347-adb4e38d0075) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
 body
 ```js
 {
-    "inherited": ["a717b880-b17b-4995-9610-cf451a06d015", "7ec8c351-7b8a-4ea8-95cc-0d990b225768"]
+    "allowed": [{
+            "route": "/travelling/portal/*",
+            "host": null,
+            "removeFromPath": "/travelling/portal",
+            "method": "*",
+            "name": "*-travelling-portal-*"
+        },
+        {
+            "route": "/travelling/api/v1/auth/*",
+            "host": null,
+            "method": "*",
+            "name": "*-travelling-api-v1-auth-*"
+        },
+        {
+            "route": "/travelling/api/v1/user/me/route/allowed",
+            "host": null,
+            "method": "GET",
+            "name": "get-travelling-api-v1-user-me-route-allowed"
+        },
+        {
+            "route": "/travelling/api/v1/user/me/permission/allowed/*",
+            "host": null,
+            "method": "GET",
+            "name": "get-travelling-api-v1-user-me-permission-allowed-*"
+        },
+        {
+            "route": "/travelling/assets/*",
+            "host": null,
+            "removeFromPath": "/travelling/assets/",
+            "method": "*",
+            "name": "*-travelling-assets-*"
+        },
+        {
+            "route": "travelling/api/v1/config/password",
+            "host": null,
+            "method": "get"
+        }
+    ]
 }
 ```
-<a name="TravellingGroups.create"></a>
+<a name="Group.create"></a>
 
-### TravellingGroups.create(body, authorization_bearer)
+### Group.create(body, authorization_bearer)
 create - Add a new group
 
-**Kind**: static method of [<code>TravellingGroups</code>](#TravellingGroups)  
+**Kind**: static method of [<code>Group</code>](#Group)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -494,19 +788,19 @@ body
     "is_default": false
 }
 ```
-<a name="GroupsUsers"></a>
+<a name="GroupUsers"></a>
 
-## GroupsUsers
+## GroupUsers
 **Kind**: global class  
 
-* [GroupsUsers](#GroupsUsers)
-    * [.all_Inherited(name)](#GroupsUsers.all_Inherited)
-    * [.all(name)](#GroupsUsers.all)
+* [GroupUsers](#GroupUsers)
+    * [.inherited(name)](#GroupUsers.inherited)
+    * [.get(name)](#GroupUsers.get)
 
-<a name="GroupsUsers.all_Inherited"></a>
+<a name="GroupUsers.inherited"></a>
 
-### GroupsUsers.all\_Inherited(name)
-all_Inherited - Gets all the users that belong to the group and all of its inherited groups.
+### GroupUsers.inherited(name)
+inherited - Gets all the users that belong to the group and all of its inherited groups.
 
     ##### Optional Query Params
 
@@ -527,16 +821,16 @@ all_Inherited - Gets all the users that belong to the group and all of its inher
     | created_on | *optional* (example:  1568419646794) |
     | last_login | *optional* (example:  null) |
 
-**Kind**: static method of [<code>GroupsUsers</code>](#GroupsUsers)  
+**Kind**: static method of [<code>GroupUsers</code>](#GroupUsers)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | name | <code>any</code> | id or name (example: superadmin) |
 
-<a name="GroupsUsers.all"></a>
+<a name="GroupUsers.get"></a>
 
-### GroupsUsers.all(name)
-all - Gets all the users that belong to the group.
+### GroupUsers.get(name)
+get - Gets all the users that belong to the group.
 
     ##### Optional Query Params
 
@@ -557,32 +851,33 @@ all - Gets all the users that belong to the group.
     | created_on | *optional* (example:  1568419646794) |
     | last_login | *optional* (example:  null) |
 
-**Kind**: static method of [<code>GroupsUsers</code>](#GroupsUsers)  
+**Kind**: static method of [<code>GroupUsers</code>](#GroupUsers)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | name | <code>any</code> | id or name (example: superadmin) |
 
-<a name="GroupsType"></a>
+<a name="GroupType"></a>
 
-## GroupsType
+## GroupType
 **Kind**: global class  
 
-* [GroupsType](#GroupsType)
-    * [.addRoute(body, type, name, authorization_bearer)](#GroupsType.addRoute)
-    * [.setDefault(type, name)](#GroupsType.setDefault)
-    * [.delete(body, type, name, authorization_bearer)](#GroupsType.delete)
-    * [.create(body, type, authorization_bearer)](#GroupsType.create)
-    * [.getTypesList(authorization_bearer)](#GroupsType.getTypesList)
-    * [.all(type, authorization_bearer)](#GroupsType.all)
-    * [.editByName(body, type, name, authorization_bearer)](#GroupsType.editByName)
+* [GroupType](#GroupType)
+    * [.addRoute(body, type, name, authorization_bearer)](#GroupType.addRoute)
+    * [.setDefault(type, name)](#GroupType.setDefault)
+    * [.delete(body, type, name, authorization_bearer)](#GroupType.delete)
+    * [.create(body, type, authorization_bearer)](#GroupType.create)
+    * [.getTypesList(authorization_bearer)](#GroupType.getTypesList)
+    * [.get(type, id, authorization_bearer)](#GroupType.get)
+    * [.all(type, authorization_bearer)](#GroupType.all)
+    * [.editByName(body, type, name, authorization_bearer)](#GroupType.editByName)
 
-<a name="GroupsType.addRoute"></a>
+<a name="GroupType.addRoute"></a>
 
-### GroupsType.addRoute(body, type, name, authorization_bearer)
+### GroupType.addRoute(body, type, name, authorization_bearer)
 addRoute - Adds a route to a group of a particular type.
 
-**Kind**: static method of [<code>GroupsType</code>](#GroupsType)  
+**Kind**: static method of [<code>GroupType</code>](#GroupType)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -601,24 +896,24 @@ body
     "name": "cui-*"
 }
 ```
-<a name="GroupsType.setDefault"></a>
+<a name="GroupType.setDefault"></a>
 
-### GroupsType.setDefault(type, name)
+### GroupType.setDefault(type, name)
 setDefault - Sets the group of a particular type to be the default group for new users.
 
-**Kind**: static method of [<code>GroupsType</code>](#GroupsType)  
+**Kind**: static method of [<code>GroupType</code>](#GroupType)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | type | <code>any</code> | (example: account) |
 | name | <code>any</code> | id or name (example: group1) |
 
-<a name="GroupsType.delete"></a>
+<a name="GroupType.delete"></a>
 
-### GroupsType.delete(body, type, name, authorization_bearer)
+### GroupType.delete(body, type, name, authorization_bearer)
 delete - delete group of a particular type by its name or id
 
-**Kind**: static method of [<code>GroupsType</code>](#GroupsType)  
+**Kind**: static method of [<code>GroupType</code>](#GroupType)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -643,17 +938,17 @@ body
     "is_default": false
 }
 ```
-<a name="GroupsType.create"></a>
+<a name="GroupType.create"></a>
 
-### GroupsType.create(body, type, authorization_bearer)
+### GroupType.create(body, type, authorization_bearer)
 create - Add a new group of a particular type
 
-**Kind**: static method of [<code>GroupsType</code>](#GroupsType)  
+**Kind**: static method of [<code>GroupType</code>](#GroupType)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | body | <code>Object</code> |  |
-| type | <code>any</code> |  |
+| type | <code>any</code> | The type of the group |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
@@ -672,41 +967,54 @@ body
     "is_default": false
 }
 ```
-<a name="GroupsType.getTypesList"></a>
+<a name="GroupType.getTypesList"></a>
 
-### GroupsType.getTypesList(authorization_bearer)
+### GroupType.getTypesList(authorization_bearer)
 getTypesList - Gets all the types of groups currently made.
 
-**Kind**: static method of [<code>GroupsType</code>](#GroupsType)  
+**Kind**: static method of [<code>GroupType</code>](#GroupType)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
-<a name="GroupsType.all"></a>
+<a name="GroupType.get"></a>
 
-### GroupsType.all(type, authorization_bearer)
+### GroupType.get(type, id, authorization_bearer)
+get - Get a group by it's id or name of a particular type.
+
+**Kind**: static method of [<code>GroupType</code>](#GroupType)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| type | <code>any</code> | The type of the group (example: accounts) |
+| id | <code>any</code> | id or name  (example: group1) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="GroupType.all"></a>
+
+### GroupType.all(type, authorization_bearer)
 all - Gets all groups of a particular type
 
-**Kind**: static method of [<code>GroupsType</code>](#GroupsType)  
+**Kind**: static method of [<code>GroupType</code>](#GroupType)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| type | <code>any</code> |  |
+| type | <code>any</code> | The type of the group |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
-<a name="GroupsType.editByName"></a>
+<a name="GroupType.editByName"></a>
 
-### GroupsType.editByName(body, type, name, authorization_bearer)
+### GroupType.editByName(body, type, name, authorization_bearer)
 editByName - Edits a group of a particular type
 
-**Kind**: static method of [<code>GroupsType</code>](#GroupsType)  
+**Kind**: static method of [<code>GroupType</code>](#GroupType)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | body | <code>Object</code> |  |
-| type | <code>any</code> |  |
-| name | <code>any</code> |  |
+| type | <code>any</code> | The type of the group |
+| name | <code>any</code> | id or name |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
@@ -722,13 +1030,13 @@ body
 **Kind**: global class  
 
 * [TypeUsers](#TypeUsers)
-    * [.all(type, name)](#TypeUsers.all)
-    * [.all_Inherited(type, name)](#TypeUsers.all_Inherited)
+    * [.get(type, name)](#TypeUsers.get)
+    * [.inherited(type, name)](#TypeUsers.inherited)
 
-<a name="TypeUsers.all"></a>
+<a name="TypeUsers.get"></a>
 
-### TypeUsers.all(type, name)
-all - Gets all the users that belong to the group  of a particular type by its name or id.
+### TypeUsers.get(type, name)
+get - Gets all the users that belong to the group  of a particular type by its name or id.
 
     ##### Optional Query Params
 
@@ -756,10 +1064,10 @@ all - Gets all the users that belong to the group  of a particular type by its n
 | type | <code>any</code> | 
 | name | <code>any</code> | 
 
-<a name="TypeUsers.all_Inherited"></a>
+<a name="TypeUsers.inherited"></a>
 
-### TypeUsers.all\_Inherited(type, name)
-all_Inherited - Gets all the users that belong to the group  of a particular type by its name or id and all of its inherited groups.
+### TypeUsers.inherited(type, name)
+inherited - Gets all the users that belong to the group  of a particular type by its name or id and all of its inherited groups.
 
     ##### Optional Query Params
 
@@ -844,51 +1152,45 @@ get - Get a user by it's id or username from group of a particular type.
 | id | <code>any</code> | (example: user6) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
-<a name="TravellingAuth"></a>
+<a name="Auth"></a>
 
-## TravellingAuth
+## Auth
 #### Auth endpoints
 
 **Kind**: global class  
 
-* [TravellingAuth](#TravellingAuth)
-    * [.accessToken(authorization_client, authorization_secret)](#TravellingAuth.accessToken)
-    * [.activate(token)](#TravellingAuth.activate)
-    * [.resetPassword(body, token)](#TravellingAuth.resetPassword)
-    * [.forgotPassword(body)](#TravellingAuth.forgotPassword)
-    * [.logout()](#TravellingAuth.logout)
-    * [.login(body)](#TravellingAuth.login)
-    * [.register(body)](#TravellingAuth.register)
+* [Auth](#Auth)
+    * [.accessToken()](#Auth.accessToken)
+    * [.activate(token)](#Auth.activate)
+    * [.resetPassword(body, token)](#Auth.resetPassword)
+    * [.forgotPassword(body)](#Auth.forgotPassword)
+    * [.logout()](#Auth.logout)
+    * [.login(body)](#Auth.login)
+    * [.register(body)](#Auth.register)
 
-<a name="TravellingAuth.accessToken"></a>
+<a name="Auth.accessToken"></a>
 
-### TravellingAuth.accessToken(authorization_client, authorization_secret)
+### Auth.accessToken()
 accessToken - Oauth2 `client_credentials` access token flow. Body must be `application/x-www-form-urlencoded` and must contain the `grant_type`. `client_id` & `client_secret` will be sent in a `Basic` Authorization header as `base64(client_id:client_secret)`
 
-**Kind**: static method of [<code>TravellingAuth</code>](#TravellingAuth)  
+**Kind**: static method of [<code>Auth</code>](#Auth)  
+<a name="Auth.activate"></a>
 
-| Param | Type | Description |
-| --- | --- | --- |
-| authorization_client | <code>string</code> | username/client_id |
-| authorization_secret | <code>string</code> | password/client_secret |
-
-<a name="TravellingAuth.activate"></a>
-
-### TravellingAuth.activate(token)
+### Auth.activate(token)
 activate - Activates and unlocks user
 
-**Kind**: static method of [<code>TravellingAuth</code>](#TravellingAuth)  
+**Kind**: static method of [<code>Auth</code>](#Auth)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | token | <code>any</code> | (example: activation_token) |
 
-<a name="TravellingAuth.resetPassword"></a>
+<a name="Auth.resetPassword"></a>
 
-### TravellingAuth.resetPassword(body, token)
+### Auth.resetPassword(body, token)
 resetPassword - Resets the password if the recovery token is vaild of the user.
 
-**Kind**: static method of [<code>TravellingAuth</code>](#TravellingAuth)  
+**Kind**: static method of [<code>Auth</code>](#Auth)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -902,12 +1204,12 @@ body
     "password": "asdf"
 }
 ```
-<a name="TravellingAuth.forgotPassword"></a>
+<a name="Auth.forgotPassword"></a>
 
-### TravellingAuth.forgotPassword(body)
+### Auth.forgotPassword(body)
 forgotPassword - Generates a recovery token and sends a email to the attached user (if they exist)
 
-**Kind**: static method of [<code>TravellingAuth</code>](#TravellingAuth)  
+**Kind**: static method of [<code>Auth</code>](#Auth)  
 
 | Param | Type |
 | --- | --- |
@@ -920,18 +1222,18 @@ body
     "email": "joseph@abe.ai"
 }
 ```
-<a name="TravellingAuth.logout"></a>
+<a name="Auth.logout"></a>
 
-### TravellingAuth.logout()
+### Auth.logout()
 logout -
 
-**Kind**: static method of [<code>TravellingAuth</code>](#TravellingAuth)  
-<a name="TravellingAuth.login"></a>
+**Kind**: static method of [<code>Auth</code>](#Auth)  
+<a name="Auth.login"></a>
 
-### TravellingAuth.login(body)
+### Auth.login(body)
 login - Register a user
 
-**Kind**: static method of [<code>TravellingAuth</code>](#TravellingAuth)  
+**Kind**: static method of [<code>Auth</code>](#Auth)  
 
 | Param | Type |
 | --- | --- |
@@ -945,14 +1247,14 @@ body
     "password": "swagmoney69xd420"
 }
 ```
-<a name="TravellingAuth.register"></a>
+<a name="Auth.register"></a>
 
-### TravellingAuth.register(body)
+### Auth.register(body)
 register - Register a user
 
     `group_request`	is optional.
 
-**Kind**: static method of [<code>TravellingAuth</code>](#TravellingAuth)  
+**Kind**: static method of [<code>Auth</code>](#Auth)  
 
 | Param | Type |
 | --- | --- |
@@ -964,7 +1266,6 @@ body
 {
     "username": "user5",
     "password": "swagmoney69xd420",
-    "email": "jt@abe.ai",
-    "group_request": "superadmin"
+    "email": "test@test.com"
 }
 ```

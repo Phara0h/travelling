@@ -8,6 +8,7 @@ const database = require('../database');
 const Group = require('../database/models/group');
 const log = config.log.logger;
 const regex = require('../utils/regex');
+const redis = require('../redis');
 
 class Router {
     constructor(server) {
@@ -30,7 +31,7 @@ class Router {
         this.groups = [];
         this.unmergedGroups = [];
         this.mappedGroups = {};
-        this.redis = require('../redis');
+        this.redis = redis;
 
         // websocket listener
         server.on('upgrade', function(req, socket, head) {
@@ -58,10 +59,13 @@ class Router {
         this.unmergedGroups = [];
         for (var i = 0; i < grps.length; i++) {
             this.unmergedGroups.push(grps[i]);
-            this.mappedGroups[grps[i].id] = grps[i]._;
+            // this.mappedGroups[grps[i].id] = {...grps[i]._, inherited: grps[i]._.inherited ? [...grps[i]._.inherited] : []};
+            this.mappedGroups[grps[i].id] = new Group(grps[i]._);
+            // this.groups[grps[i].name] = database.groupInheritedMerge(new Group({...grps[i]._, inherited: grps[i]._.inherited ? [...grps[i]._.inherited] : []}), grps);
             this.groups[grps[i].name] = database.groupInheritedMerge(new Group(grps[i]._), grps);
         }
-
+        // console.log(this.groups);
+        // console.log(this.mappedGroups);
         this.redis.needsGroupUpdate = false;
     }
 
