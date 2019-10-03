@@ -37,9 +37,13 @@ beforeAll(async () => {
     console.log('Flushing Redis...');
     await Redis.flushAll();
 
+    require('./include/start-test-servers.js');
     const server = require('../index.js');
 
     await server;
+
+
+
 
     return;
 });
@@ -69,8 +73,9 @@ afterAll(async () => {
 
 
 describe('Endpoints', require('./endpoints'));
-describe('Email', require('./email'));
-describe('Flows', require('./flow-tests.js'));
+//describe('Email', require('./email'));
+describe('Routes', require('./routes'));
+describe('Flows', require('./flow-tests'));
 
 test('Waste Time', async ()=>{
   var p = new Promise((resolve, reject)=>{

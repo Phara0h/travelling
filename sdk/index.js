@@ -532,123 +532,14 @@ class Groups {
 
     /**
      * export - Exports all groups in the proper format to be imported.
-     * @param {Object} body
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
-     * @example
-     * body
-     * ```js
-     * {
-     *     "anonymous": {
-     *         "type": "group",
-     *         "allowed": [{
-     *                 "route": "/travelling/portal/*",
-     *                 "host": null,
-     *                 "removeFromPath": "/travelling/portal",
-     *                 "method": "*",
-     *                 "name": "*-travelling-portal-*"
-     *             },
-     *             {
-     *                 "route": "/travelling/api/v1/auth/*",
-     *                 "host": null,
-     *                 "method": "*",
-     *                 "name": "*-travelling-api-v1-auth-*"
-     *             },
-     *             {
-     *                 "route": "/travelling/api/v1/user/me/route/allowed",
-     *                 "host": null,
-     *                 "method": "GET",
-     *                 "name": "get-travelling-api-v1-user-me-route-allowed"
-     *             },
-     *             {
-     *                 "route": "/travelling/api/v1/user/me/permission/allowed/*",
-     *                 "host": null,
-     *                 "method": "GET",
-     *                 "name": "get-travelling-api-v1-user-me-permission-allowed-*"
-     *             },
-     *             {
-     *                 "route": "/travelling/assets/*",
-     *                 "host": null,
-     *                 "removeFromPath": "/travelling/assets/",
-     *                 "method": "*",
-     *                 "name": "*-travelling-assets-*"
-     *             },
-     *             {
-     *                 "route": "travelling/api/v1/config/password",
-     *                 "host": null,
-     *                 "method": "GET",
-     *                 "name": "gettravelling-api-v1-config-password"
-     *             },
-     *             {
-     *                 "route": "/favicon.ico",
-     *                 "host": null,
-     *                 "method": "GET",
-     *                 "name": "get-favicon.ico"
-     *             }
-     *         ],
-     *         "inherited": null,
-     *         "is_default": false
-     *     },
-     *     "group2": {
-     *         "type": "accounts",
-     *         "allowed": null,
-     *         "inherited": [
-     *             "group1"
-     *         ],
-     *         "is_default": false
-     *     },
-     *     "group4": {
-     *         "type": "accounts",
-     *         "allowed": null,
-     *         "inherited": [
-     *             "group2",
-     *             "group3"
-     *         ],
-     *         "is_default": false
-     *     },
-     *     "group1": {
-     *         "type": "accounts",
-     *         "allowed": null,
-     *         "inherited": null,
-     *         "is_default": false
-     *     },
-     *     "group3": {
-     *         "type": "accounts",
-     *         "allowed": null,
-     *         "inherited": [
-     *             "group9"
-     *         ],
-     *         "is_default": false
-     *     },
-     *     "group9": {
-     *         "type": "swag2",
-     *         "allowed": null,
-     *         "inherited": null,
-     *         "is_default": true
-     *     },
-     *     "superadmin": {
-     *         "type": "group",
-     *         "allowed": [{
-     *             "host": null,
-     *             "route": "/travelling/*",
-     *             "method": "*",
-     *             "name": "*-travelling-*"
-     *         }],
-     *         "inherited": [
-     *             "anonymous"
-     *         ],
-     *         "is_default": false
-     *     }
-     * }
-     * ```
      */
-    static async export (body, authorization_bearer, opts) {
+    static async export (authorization_bearer, opts) {
         var options = {
             method: 'GET',
             resolveWithFullResponse: true,
             simple: false,
             uri: hostUrl + "/" + `travelling/api/v1/groups/export`,
-            body,
-            json: true,
             authorization: {
                 bearer: authorization_bearer
             },
@@ -903,6 +794,28 @@ class Group {
             resolveWithFullResponse: true,
             simple: false,
             uri: hostUrl + "/" + `travelling/api/v1/group/name/${name}/set/default`,
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+
+
+    /**
+     * get - Get a group by it's id or name.
+     * @param {any} id id or name  (example: group1)
+     * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+     */
+    static async get(id, authorization_bearer, opts) {
+        var options = {
+            method: 'GET',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/group/name/${id}`,
+            authorization: {
+                bearer: authorization_bearer
+            },
         };
         if (opts) {
             options = Object.assign(options, opts);
@@ -1214,7 +1127,7 @@ class GroupType {
     /**
      * create - Add a new group of a particular type
      * @param {Object} body
-     * @param {any} type  
+     * @param {any} type The type of the group 
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      * @example
      * body
@@ -1274,8 +1187,31 @@ class GroupType {
 
 
     /**
+     * get - Get a group by it's id or name of a particular type.
+     * @param {any} type The type of the group (example: accounts)
+     * @param {any} id id or name  (example: group1)
+     * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+     */
+    static async get(type, id, authorization_bearer, opts) {
+        var options = {
+            method: 'GET',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/group/type/${type}/name/${id}`,
+            authorization: {
+                bearer: authorization_bearer
+            },
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+
+
+    /**
      * all - Gets all groups of a particular type
-     * @param {any} type  
+     * @param {any} type The type of the group 
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
     static async all(type, authorization_bearer, opts) {
@@ -1298,8 +1234,8 @@ class GroupType {
     /**
      * editByName - Edits a group of a particular type
      * @param {Object} body
-     * @param {any} type  
-     * @param {any} name  
+     * @param {any} type The type of the group 
+     * @param {any} name id or name  
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      * @example
      * body

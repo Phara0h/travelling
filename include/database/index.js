@@ -251,7 +251,8 @@ class Database {
             for (var i = 0; i < group.inherited.length; ++i) {
                 for (var j = 0; j < groups.length; ++j) {
                     if (groups[j].id == group.inherited[i]) {
-                        group.inheritedGroups[i] = groups[j];
+                        // group.inheritedGroups[i] = new Group({...groups[j]._, inherited: groups[j]._.inherited ? [...groups[j]._.inherited] : []});
+                        group.inheritedGroups[i] = new Group(groups[j]._);
                         break;
                     }
                 }
