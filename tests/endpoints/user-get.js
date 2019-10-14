@@ -160,6 +160,18 @@ module.exports = () => {
 
               expect(res.body).toEqual(userContainer.user2.email);
         });
+
+
+        test("Get Test2's Email By Username By Grouptype ", async () => {
+            var res = await Travelling.Group.Type.User.getProperty('group', userContainer.user2.username, 'email',null, {
+                headers: {
+                    cookie: userContainer.user2Cookie(),
+                },
+            });
+
+              expect(res.body).toEqual(userContainer.user2.email);
+        });
+
       });
 
       describe('Invalid', () => {
@@ -179,8 +191,6 @@ module.exports = () => {
                     cookie: userContainer.user1Cookie(),
                 },
             });
-
-            console.log(res.body)
 
             expect(res.statusCode).toEqual(400);
         });
@@ -203,6 +213,17 @@ module.exports = () => {
             });
 
             expect(res.statusCode).toEqual(400);
+        });
+
+        test("Get Test2's Email By Username By Invaild Grouptype ", async () => {
+            var res = await Travelling.Group.Type.User.getProperty('testgroup', userContainer.user2.username, 'email',null, {
+                headers: {
+                    cookie: userContainer.user2Cookie(),
+                },
+            });
+
+              expect(res.statusCode).toEqual(400);
+              expect(res.body).not.toEqual(userContainer.user2.email);
         });
 
       })
