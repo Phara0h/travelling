@@ -169,7 +169,7 @@ async function getUserByGroup(req, res, router) {
         });
         return false;
     }
-    console.log(groups, user.group.type, user.group_request, req.params.grouptype);
+    // console.log(groups, user.group.type, user.group_request, req.params.grouptype);
     groups = groups.filter(g=>g.type === user.group.type || groupRequest && user.group_request === req.params.grouptype);
 
     if (req.params.groupname) {
