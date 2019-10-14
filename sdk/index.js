@@ -1276,7 +1276,7 @@ class GroupType {
     }
 }
 /**
- * 
+ * Both requests are disabled. Dont use.
  */
 class TypeUsers {
     constructor() {}
@@ -1455,6 +1455,30 @@ class TypeUser {
 
 
     /**
+     * getProperty - Get a user's property by it's id or username from group of a particular type.
+     * @param {any} type  (example: accounts)
+     * @param {any} id  (example: user6)
+     * @param {any} property  (example: email)
+     * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+     */
+    static async getProperty(type, id, property, authorization_bearer, opts) {
+        var options = {
+            method: 'GET',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/group/type/${type}/user/${id}/${property}`,
+            authorization: {
+                bearer: authorization_bearer
+            },
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+
+
+    /**
      * get - Get a user by it's id or username from group of a particular type.
      * @param {any} type  (example: accounts)
      * @param {any} id  (example: user6)
@@ -1613,7 +1637,7 @@ class Auth {
 
 
     /**
-     * resetPassword - Resets the password if the recovery token is valid of the user.
+     * resetPassword - Resets the password if the recovery token is vaild of the user.
      * @param {Object} body
      * @param {any} token  (example: [thegeneratedtoken])
      * @example
