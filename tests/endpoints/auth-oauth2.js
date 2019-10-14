@@ -6,7 +6,7 @@ module.exports = () => {
   var token1, token2;
   var accessToken1, accessToken2;
 
-      describe('Vaild', () => {
+      describe('Valid', () => {
         test("Register OAuth2 Credentials Token as Test User With No Name", async () => {
           var res = await Travelling.User.Current.registerToken({urls:['http://localhost:6969']}, null, {
               headers: {
@@ -21,10 +21,10 @@ module.exports = () => {
             })
         });
 
-        test("Register New OAuth2 Credentials Token as Test User With Name", async () => {
+        test("Register New OAuth2 Credentials Token as Test 2 User With Name", async () => {
           var res = await Travelling.User.Current.registerToken({name: 'MyServiceName', urls:['http://localhost:6969']}, null, {
               headers: {
-                  cookie: userContainer.user1Cookie(),
+                  cookie: userContainer.user2Cookie(),
               },
           });
           token2 = res.body;
@@ -51,7 +51,7 @@ module.exports = () => {
         test("Get New OAuth2 Token as Test User With Name", async () => {
           var res = await Travelling.Auth.accessToken('client_credentials',null,token2.client_id, token2.client_secret);
           accessToken2 = res.body.access_token;
-
+          userContainer.user2Token = res.body.access_token;
           expect(res.body).toMatchObject({
               expires_in: config.token.access.expiration*60, // seconds
               access_token: expect.any(String),
@@ -68,13 +68,13 @@ module.exports = () => {
         test("Get User With Token as Test User With Name", async () => {
           var res = await Travelling.User.Current.get(accessToken2)
 
-          expect(res.body.username).toEqual('test');
+          expect(res.body.username).toEqual('test2');
         });
 
       });
 
-      describe('Invaild', () => {
-        test("Register OAuth2 Credentials Token as Test User With Invaild Name", async () => {
+      describe('Invalid', () => {
+        test("Register OAuth2 Credentials Token as Test User With Invalid Name", async () => {
           var res = await Travelling.User.Current.registerToken({name:"(*&$#^%(@*#$&^%*Y)*&()*&)", urls:['http://localhost:6969']}, null, {
               headers: {
                   cookie: userContainer.user1Cookie(),
@@ -84,7 +84,7 @@ module.exports = () => {
           expect(res.statusCode).toEqual(400);
         });
 
-        test("Get User With Invaild Token as Test User With Name", async () => {
+        test("Get User With Invalid Token as Test User With Name", async () => {
           var res = await Travelling.User.Current.get(accessToken2.slice(3)+'aaa')
 
           expect(res.statusCode).toEqual(401);
@@ -116,7 +116,7 @@ module.exports = () => {
 
             var user = await Travelling.User.Current.get(accessToken3);
 
-            expect(user.body.error).toEqual('invaild_client');
+            expect(user.body.error).toEqual('invalid_client');
 
             config.token.access.expiration = oldTokenExpiration;
         });

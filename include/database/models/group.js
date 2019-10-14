@@ -3,6 +3,7 @@
 const BaseModel = require('@abeai/node-utils').PGActiveModel;
 const Base = require('@abeai/node-utils').Base;
 const PGTypes = require('@abeai/node-utils').PGTypes;
+const {URL} = require('url');
 
 class Group extends Base(BaseModel, 'groups', {
     id: PGTypes.PK,
@@ -53,8 +54,14 @@ class Group extends Base(BaseModel, 'groups', {
         route.method = route.method.toUpperCase();
 
         if (!route.name) {
-            route.name = route.method + route.route.replace(/\//g, '-');
+            const url = new URL('http://localhost' + route.route);
+
+            route.name = route.method + url.pathname.replace(/\//g, '-');
+            // try {
+            //     route.name = route.name + '-' + [...url.searchParams.keys()].join('-');
+            // } catch (_) {}
         }
+
         route.name = route.name.toLowerCase();
 
         if (!this.allowed || this.allowed.length <= 0) {

@@ -7,7 +7,7 @@ const Database = require('../../database');
 const CookieToken = require('../../utils/cookietoken');
 const TokenHandler = require('../../token');
 
-const {checkVaildUser} = require('../../utils/user');
+const {checkValidUser} = require('../../utils/user');
 
 var login = async (user, req, res, router) => {
 
@@ -91,15 +91,15 @@ module.exports = function(app, opts, done) {
             if (!req.body.email && !req.body.username || !req.body.password) {
                 res.code(400).send({
                     type: 'body-login-error',
-                    msg: 'A vaild username or email and password is required.',
+                    msg: 'A valid username or email and password is required.',
                 });
                 return;
             }
 
-            var isVaild = await checkVaildUser(req.body, false);
+            var isValid = await checkValidUser(req.body, false);
 
-            if (isVaild !== true) {
-                res.code(400).send(isVaild);
+            if (isValid !== true) {
+                res.code(400).send(isValid);
             } else {
                 try {
                     var user = await Database.checkAuth(username, email, req.body.password);
@@ -130,18 +130,18 @@ module.exports = function(app, opts, done) {
             return;
         }
 
-        var isVaild = await checkVaildUser(req.body);
+        var isValid = await checkValidUser(req.body);
 
         if (!req.body.username || !req.body.password || !req.body.email) {
             res.code(400).send({
                 type: 'register-error',
-                msg: 'A vaild username, password and email are required.',
+                msg: 'A valid username, password and email are required.',
             });
             return;
         }
 
-        if (isVaild !== true) {
-            res.code(400).send(isVaild);
+        if (isValid !== true) {
+            res.code(400).send(isValid);
             return;
         }
 
@@ -166,15 +166,15 @@ module.exports = function(app, opts, done) {
         if (!req.body.email) {
             res.code(400).send({
                 type: 'forgot-password-error',
-                msg: 'A vaild email is required.',
+                msg: 'A valid email is required.',
             });
             return;
         }
 
-        var isVaild = await checkVaildUser(req.body, false);
+        var isValid = await checkValidUser(req.body, false);
 
-        if (isVaild !== true) {
-            res.code(400).send(isVaild);
+        if (isValid !== true) {
+            res.code(400).send(isValid);
             return;
         }
 
@@ -187,15 +187,15 @@ module.exports = function(app, opts, done) {
         if (!req.body.password) {
             res.code(400).send({
                 type: 'reset-error',
-                msg: 'A vaild password is required.',
+                msg: 'A valid password is required.',
             });
             return;
         }
 
-        var isVaild = await checkVaildUser(req.body, false);
+        var isValid = await checkValidUser(req.body, false);
 
-        if (isVaild !== true) {
-            res.code(400).send(isVaild);
+        if (isValid !== true) {
+            res.code(400).send(isValid);
             return;
         }
         var token = await TokenHandler.checkRecoveryToken(req.query.token);
@@ -203,7 +203,7 @@ module.exports = function(app, opts, done) {
         if (!token) {
             res.code(400).send({
                 type: 'password-reset-token-error',
-                msg: 'Token is invaild, please click on forgot password again.',
+                msg: 'Token is invalid, please click on forgot password again.',
             });
             return;
         }
@@ -213,7 +213,7 @@ module.exports = function(app, opts, done) {
         if (!cPassword) {
             res.code(400).send({
                 type: 'password-reset-token-error',
-                msg: 'Token is invaild, please click on forgot password again.',
+                msg: 'Token is invalid, please click on forgot password again.',
             });
             return;
         }
@@ -228,7 +228,7 @@ module.exports = function(app, opts, done) {
             res.code(400);
             return {
                 type: 'activation-token-error',
-                msg: 'Token is invaild, please login again for a new activation link sent to your email.',
+                msg: 'Token is invalid, please login again for a new activation link sent to your email.',
             };
         }
 
@@ -237,7 +237,7 @@ module.exports = function(app, opts, done) {
         if (!isActivated) {
             return {
                 type: 'activation-token-error',
-                msg: 'Token is invaild, please login again for a new activation link sent to your email.',
+                msg: 'Token is invalid, please login again for a new activation link sent to your email.',
             };
         }
 
@@ -276,7 +276,7 @@ module.exports = function(app, opts, done) {
         if (!codechecked) {
             res.code(401).send({
                 error: 'invalid_request',
-                error_description: 'Failed to have a vaild CSRF token',
+                error_description: 'Failed to have a valid CSRF token',
             });
             return;
         }
@@ -333,7 +333,7 @@ module.exports = function(app, opts, done) {
             res.code(401);
             return {
                 type: 'invalid_client',
-                msg: 'client_id and/or client_secret are invaild',
+                msg: 'client_id and/or client_secret are invalid',
             };
         }
 
@@ -341,7 +341,7 @@ module.exports = function(app, opts, done) {
             res.code(401);
             return {
                 type: 'invalid_client',
-                msg: 'client_id and/or client_secret are invaild',
+                msg: 'client_id and/or client_secret are invalid',
             };
         }
         var token = await TokenHandler.checkOAuthToken(client_id, client_secret);
@@ -350,7 +350,7 @@ module.exports = function(app, opts, done) {
             res.code(401);
             return {
                 type: 'invalid_client',
-                msg: 'client_id and/or client_secret are invaild',
+                msg: 'client_id and/or client_secret are invalid',
             };
         }
 
@@ -378,7 +378,7 @@ module.exports = function(app, opts, done) {
             res.code(401);
             return {
                 type: 'invalid_client',
-                msg: 'client_id and/or client_secret are invaild',
+                msg: 'client_id and/or client_secret are invalid',
             };
         }
 
@@ -388,7 +388,7 @@ module.exports = function(app, opts, done) {
             res.code(401);
             return {
                 type: 'invalid_client',
-                msg: 'client_id and/or client_secret are invaild',
+                msg: 'client_id and/or client_secret are invalid',
             };
         }
 
@@ -398,7 +398,7 @@ module.exports = function(app, opts, done) {
             res.code(401);
             return {
                 type: 'invalid_client',
-                msg: 'client_id and/or client_secret are invaild',
+                msg: 'client_id and/or client_secret are invalid',
             };
         }
 
@@ -412,7 +412,7 @@ module.exports = function(app, opts, done) {
             res.code(401);
             return {
                 type: 'invalid_client',
-                msg: 'client_id and/or client_secret are invaild',
+                msg: 'client_id and/or client_secret are invalid',
             };
         }
 
@@ -423,7 +423,7 @@ module.exports = function(app, opts, done) {
             res.code(401);
             return {
                 type: 'invalid_client',
-                msg: 'client_id and/or client_secret are invaild',
+                msg: 'client_id and/or client_secret are invalid',
             };
         }
 

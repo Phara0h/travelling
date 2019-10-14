@@ -105,7 +105,7 @@ class Users {
             method: 'GET',
             resolveWithFullResponse: true,
             simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/users/${group_request}`,
+            uri: hostUrl + "/" + `travelling/api/v1/users/group/request/${group_request}`,
             authorization: {
                 bearer: authorization_bearer
             },
@@ -939,6 +939,10 @@ class Group {
     static get Type() {
         return GroupType;
     }
+
+    static get Request() {
+        return GroupRequest;
+    }
 }
 /**
  * 
@@ -1384,6 +1388,40 @@ class TypeUser {
 
 
     /**
+     * editProperty - Edit a user's property by it's id or username from group of a particular type.
+     * @param {Object} body
+     * @param {any} type  (example: accounts)
+     * @param {any} id  (example: user6)
+     * @param {any} property  (example: email)
+     * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+     * @example
+     * body
+     * ```js
+     * {
+     *     "locked": false
+     * }
+     * ```
+     */
+    static async editProperty(body, type, id, property, authorization_bearer, opts) {
+        var options = {
+            method: 'PUT',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/group/type/${type}/user/${id}/${property}`,
+            body,
+            authorization: {
+                bearer: authorization_bearer
+            },
+            json: true,
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+
+
+    /**
      * edit - Edit a user by it's id or username from group of a particular type.
      * @param {Object} body
      * @param {any} type  (example: accounts)
@@ -1431,6 +1469,89 @@ class TypeUser {
             authorization: {
                 bearer: authorization_bearer
             },
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+}
+/**
+ * 
+ */
+class GroupRequest {
+    constructor() {}
+
+    static get User() {
+        return RequestUser;
+    }
+}
+/**
+ * 
+ */
+class RequestUser {
+    constructor() {}
+
+
+    /**
+     * edit - Edit a user by it's id or username from the user's `group_request` of a particular type.
+     * @param {Object} body
+     * @param {any} type  (example: accounts)
+     * @param {any} id  (example: user6)
+     * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+     * @example
+     * body
+     * ```js
+     * {
+     *     "locked": false
+     * }
+     * ```
+     */
+    static async edit(body, type, id, authorization_bearer, opts) {
+        var options = {
+            method: 'PUT',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/group/request/type/${type}/user/${id}`,
+            body,
+            authorization: {
+                bearer: authorization_bearer
+            },
+            json: true,
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+
+
+    /**
+     * editProperty - Edit a user's property by it's id or username from the user's `group_request` of a particular type.
+     * @param {Object} body
+     * @param {any} type  (example: accounts)
+     * @param {any} id  (example: user6)
+     * @param {any} property  (example: email)
+     * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+     * @example
+     * body
+     * ```js
+     * {
+     *     "locked": false
+     * }
+     * ```
+     */
+    static async editProperty(body, type, id, property, authorization_bearer, opts) {
+        var options = {
+            method: 'PUT',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/group/request/type/${type}/user/${id}/${property}`,
+            body,
+            authorization: {
+                bearer: authorization_bearer
+            },
+            json: true,
         };
         if (opts) {
             options = Object.assign(options, opts);
@@ -1492,7 +1613,7 @@ class Auth {
 
 
     /**
-     * resetPassword - Resets the password if the recovery token is vaild of the user.
+     * resetPassword - Resets the password if the recovery token is valid of the user.
      * @param {Object} body
      * @param {any} token  (example: [thegeneratedtoken])
      * @example
@@ -1639,6 +1760,8 @@ module.exports = function(host) {
         GroupType,
         TypeUsers,
         TypeUser,
+        GroupRequest,
+        RequestUser,
         Auth
     };
 }

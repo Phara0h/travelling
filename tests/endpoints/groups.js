@@ -5,7 +5,7 @@ var userContainer = require('../include/UserContainer.js');
 module.exports = () => {
       var group1,group2,group3,group4,group5;
       var exported;
-      describe('Vaild', () => {
+      describe('Valid', () => {
 
         describe('Create', ()=>{
 
@@ -26,7 +26,7 @@ module.exports = () => {
 
 
           test('Create a Group With Name group1', async () => {
-            var res = await Travelling.Group.create({name:"group1"}, userContainer.user1Token);
+            var res = await Travelling.Group.create({name:"group1", type: "testgroup"}, userContainer.user1Token);
             group1 =  res.body;
             expect(res.body).toMatchObject({name:'group1', id: expect.any(String), is_default: false});
           });
@@ -76,24 +76,24 @@ module.exports = () => {
         })
 
         describe('Edit', ()=>{
-            // test('Edit Group 4 to Inherit Superadmin', async () => {
-            //     var superadmin = (await Travelling.Group.get('superadmin', userContainer.user1Token)).body.id;
-            //     var res = await Travelling.Group.edit({
-            //       inherited:[
-            //         group3.id,
-            //         superadmin
-            //       ]
-            //     },'group4', userContainer.user1Token);
-            //     group4 =  res.body;
-            //
-            //         console.log((await Travelling.Group.get('group4', userContainer.user1Token)).body);
-            //     expect(res.body).toMatchObject({name:'group4', id: expect.any(String), is_default: false, inherited:[group3.id,superadmin]});
-            // });
+            test('Edit Group 4 to Inherit Superadmin', async () => {
+                var superadmin = (await Travelling.Group.get('superadmin', userContainer.user1Token)).body.id;
+                var res = await Travelling.Group.edit({
+                  inherited:[
+                    group3.id,
+                    superadmin
+                  ]
+                },'group4', userContainer.user1Token);
+                group4 =  res.body;
+
+                    //console.log((await Travelling.Group.get('group4', userContainer.user1Token)).body);
+                expect(res.body).toMatchObject({name:'group4', id: expect.any(String), is_default: false, inherited:[group3.id,superadmin]});
+            });
         })
 
       });
 
-      describe('Invaild', () => {
+      describe('Invalid', () => {
         describe('Edit', ()=>{
 
           test('Circular Group Inheritance', async () => {

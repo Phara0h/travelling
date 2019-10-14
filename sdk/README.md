@@ -1188,7 +1188,7 @@ activate - Activates and unlocks user
 <a name="Auth.resetPassword"></a>
 
 ### Auth.resetPassword(body, token)
-resetPassword - Resets the password if the recovery token is vaild of the user.
+resetPassword - Resets the password if the recovery token is valid of the user.
 
 **Kind**: static method of [<code>Auth</code>](#Auth)  
 

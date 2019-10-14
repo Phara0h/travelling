@@ -369,7 +369,7 @@
 								}
 							]
 						},
-						"description": "Resets the password if the recovery token is vaild of the user."
+						"description": "Resets the password if the recovery token is valid of the user."
 					},
 					"response": []
 				},
@@ -601,6 +601,297 @@
 			"name": "Group",
 			"item": [
 				{
+					"name": "Request",
+					"item": [
+						{
+							"name": "User",
+							"item": [
+								{
+									"name": "Edit Property",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"description": "The client_credentials generated OAUth2 access token.",
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer"
+											},
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"locked\": false\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{TRAV}}/travelling/api/v1/group/request/type/:type/user/:id/:property",
+											"host": [
+												"{{TRAV}}"
+											],
+											"path": [
+												"travelling",
+												"api",
+												"v1",
+												"group",
+												"request",
+												"type",
+												":type",
+												"user",
+												":id",
+												":property"
+											],
+											"variable": [
+												{
+													"key": "type",
+													"value": "accounts"
+												},
+												{
+													"key": "id",
+													"value": "user6"
+												},
+												{
+													"key": "property",
+													"value": "email"
+												}
+											]
+										},
+										"description": "Edit a user's property by it's id or username from the user's `group_request` of a particular type."
+									},
+									"response": [
+										{
+											"name": "Edit User",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"description": "The client_credentials generated OAUth2 access token.",
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer"
+													},
+													{
+														"key": "Content-Type",
+														"name": "Content-Type",
+														"value": "application/json",
+														"type": "text"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n\t\"locked\": false\n}"
+												},
+												"url": {
+													"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/user/:id",
+													"host": [
+														"{{TRAV}}"
+													],
+													"path": [
+														"travelling",
+														"api",
+														"v1",
+														"group",
+														"type",
+														":type",
+														"user",
+														":id"
+													],
+													"variable": [
+														{
+															"key": "type",
+															"value": "accounts"
+														},
+														{
+															"key": "id",
+															"value": "user6"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "content-type",
+													"value": "application/json; charset=utf-8"
+												},
+												{
+													"key": "set-cookie",
+													"value": "trav:ssid=8b65a9a7-3dc2-4690-9d1b-6b2d5ce56e77%3ATD78c7YjQLqyGFYZrT5WNg%3D%3D.bqmACTOEBKAobbdkFW%2FhPYR56dLeftgbRWh8VKve48Q; Max-Age=10000; Path=/; Expires=Mon, 16 Sep 2019 16:11:36 GMT; HttpOnly"
+												},
+												{
+													"key": "content-length",
+													"value": "693"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 16 Sep 2019 16:11:26 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"id\": \"bda05e2c-a8de-464e-949c-656e527c374c\",\n    \"username\": \"user6\",\n    \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n    \"avatar\": null,\n    \"locked\": false,\n    \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n    \"group_request\": \"superadmin\",\n    \"failed_login_attempts\": 0,\n    \"change_username\": false,\n    \"change_password\": false,\n    \"reset_password\": false,\n    \"email_verify\": false,\n    \"group_id\": \"6b88967a-1b9e-41ae-8140-9cc3969c3345\",\n    \"email\": \"jt6@abe.ai\",\n    \"created_on\": \"1568648238097\",\n    \"last_login\": null,\n    \"user_data\": null,\n    \"eprofile\": null,\n    \"group\": {\n        \"id\": \"6b88967a-1b9e-41ae-8140-9cc3969c3345\",\n        \"name\": \"group9\",\n        \"type\": \"accounts\",\n        \"allowed\": null,\n        \"inherited\": null,\n        \"is_default\": true\n    }\n}"
+										}
+									]
+								},
+								{
+									"name": "Edit",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"description": "The client_credentials generated OAUth2 access token.",
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer"
+											},
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"locked\": false\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{TRAV}}/travelling/api/v1/group/request/type/:type/user/:id",
+											"host": [
+												"{{TRAV}}"
+											],
+											"path": [
+												"travelling",
+												"api",
+												"v1",
+												"group",
+												"request",
+												"type",
+												":type",
+												"user",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "type",
+													"value": "accounts"
+												},
+												{
+													"key": "id",
+													"value": "user6"
+												}
+											]
+										},
+										"description": "Edit a user by it's id or username from the user's `group_request` of a particular type."
+									},
+									"response": [
+										{
+											"name": "Edit User",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"description": "The client_credentials generated OAUth2 access token.",
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer"
+													},
+													{
+														"key": "Content-Type",
+														"name": "Content-Type",
+														"value": "application/json",
+														"type": "text"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n\t\"locked\": false\n}"
+												},
+												"url": {
+													"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/user/:id",
+													"host": [
+														"{{TRAV}}"
+													],
+													"path": [
+														"travelling",
+														"api",
+														"v1",
+														"group",
+														"type",
+														":type",
+														"user",
+														":id"
+													],
+													"variable": [
+														{
+															"key": "type",
+															"value": "accounts"
+														},
+														{
+															"key": "id",
+															"value": "user6"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "content-type",
+													"value": "application/json; charset=utf-8"
+												},
+												{
+													"key": "set-cookie",
+													"value": "trav:ssid=8b65a9a7-3dc2-4690-9d1b-6b2d5ce56e77%3ATD78c7YjQLqyGFYZrT5WNg%3D%3D.bqmACTOEBKAobbdkFW%2FhPYR56dLeftgbRWh8VKve48Q; Max-Age=10000; Path=/; Expires=Mon, 16 Sep 2019 16:11:36 GMT; HttpOnly"
+												},
+												{
+													"key": "content-length",
+													"value": "693"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 16 Sep 2019 16:11:26 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"id\": \"bda05e2c-a8de-464e-949c-656e527c374c\",\n    \"username\": \"user6\",\n    \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n    \"avatar\": null,\n    \"locked\": false,\n    \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n    \"group_request\": \"superadmin\",\n    \"failed_login_attempts\": 0,\n    \"change_username\": false,\n    \"change_password\": false,\n    \"reset_password\": false,\n    \"email_verify\": false,\n    \"group_id\": \"6b88967a-1b9e-41ae-8140-9cc3969c3345\",\n    \"email\": \"jt6@abe.ai\",\n    \"created_on\": \"1568648238097\",\n    \"last_login\": null,\n    \"user_data\": null,\n    \"eprofile\": null,\n    \"group\": {\n        \"id\": \"6b88967a-1b9e-41ae-8140-9cc3969c3345\",\n        \"name\": \"group9\",\n        \"type\": \"accounts\",\n        \"allowed\": null,\n        \"inherited\": null,\n        \"is_default\": true\n    }\n}"
+										}
+									]
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
 					"name": "Type",
 					"item": [
 						{
@@ -770,6 +1061,146 @@
 											]
 										},
 										"description": "Edit a user by it's id or username from group of a particular type."
+									},
+									"response": [
+										{
+											"name": "Edit User",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"description": "The client_credentials generated OAUth2 access token.",
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer"
+													},
+													{
+														"key": "Content-Type",
+														"name": "Content-Type",
+														"value": "application/json",
+														"type": "text"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n\t\"locked\": false\n}"
+												},
+												"url": {
+													"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/user/:id",
+													"host": [
+														"{{TRAV}}"
+													],
+													"path": [
+														"travelling",
+														"api",
+														"v1",
+														"group",
+														"type",
+														":type",
+														"user",
+														":id"
+													],
+													"variable": [
+														{
+															"key": "type",
+															"value": "accounts"
+														},
+														{
+															"key": "id",
+															"value": "user6"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "content-type",
+													"value": "application/json; charset=utf-8"
+												},
+												{
+													"key": "set-cookie",
+													"value": "trav:ssid=8b65a9a7-3dc2-4690-9d1b-6b2d5ce56e77%3ATD78c7YjQLqyGFYZrT5WNg%3D%3D.bqmACTOEBKAobbdkFW%2FhPYR56dLeftgbRWh8VKve48Q; Max-Age=10000; Path=/; Expires=Mon, 16 Sep 2019 16:11:36 GMT; HttpOnly"
+												},
+												{
+													"key": "content-length",
+													"value": "693"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 16 Sep 2019 16:11:26 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"id\": \"bda05e2c-a8de-464e-949c-656e527c374c\",\n    \"username\": \"user6\",\n    \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n    \"avatar\": null,\n    \"locked\": false,\n    \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n    \"group_request\": \"superadmin\",\n    \"failed_login_attempts\": 0,\n    \"change_username\": false,\n    \"change_password\": false,\n    \"reset_password\": false,\n    \"email_verify\": false,\n    \"group_id\": \"6b88967a-1b9e-41ae-8140-9cc3969c3345\",\n    \"email\": \"jt6@abe.ai\",\n    \"created_on\": \"1568648238097\",\n    \"last_login\": null,\n    \"user_data\": null,\n    \"eprofile\": null,\n    \"group\": {\n        \"id\": \"6b88967a-1b9e-41ae-8140-9cc3969c3345\",\n        \"name\": \"group9\",\n        \"type\": \"accounts\",\n        \"allowed\": null,\n        \"inherited\": null,\n        \"is_default\": true\n    }\n}"
+										}
+									]
+								},
+								{
+									"name": "Edit Property",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"description": "The client_credentials generated OAUth2 access token.",
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer"
+											},
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"locked\": false\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/user/:id/:property",
+											"host": [
+												"{{TRAV}}"
+											],
+											"path": [
+												"travelling",
+												"api",
+												"v1",
+												"group",
+												"type",
+												":type",
+												"user",
+												":id",
+												":property"
+											],
+											"variable": [
+												{
+													"key": "type",
+													"value": "accounts"
+												},
+												{
+													"key": "id",
+													"value": "user6"
+												},
+												{
+													"key": "property",
+													"value": "email"
+												}
+											]
+										},
+										"description": "Edit a user's property by it's id or username from group of a particular type."
 									},
 									"response": [
 										{
@@ -3692,7 +4123,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{TRAV}}/travelling/api/v1/users/:group_request",
+							"raw": "{{TRAV}}/travelling/api/v1/users/group/request/:group_request",
 							"host": [
 								"{{TRAV}}"
 							],
@@ -3701,6 +4132,8 @@
 								"api",
 								"v1",
 								"users",
+								"group",
+								"request",
 								":group_request"
 							],
 							"variable": [

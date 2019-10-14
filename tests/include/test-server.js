@@ -16,7 +16,19 @@ function server(options = {}) {
 
     function response(req, res) {
       var urlParsed = new URL( `${options.https ? 'https' : 'http'}://${options.ip}:${options.port}${req.raw.url}`)
-
+        console.log({
+                body: req.body,
+                query: req.query,
+                params: req.params,
+                  url:req.req.url,
+                method: req.raw.method,
+                headers: req.headers,
+                //raw: req.raw,
+                id: req.id,
+                ip: req.ip,
+                ips: req.ips,
+                hostname: req.hostname,
+            })
         res.code(200).send({
                 body: req.body,
                 query: req.query,
@@ -31,7 +43,7 @@ function server(options = {}) {
                 hostname: req.hostname,
             });
     }
-
+    app.all(['/'], response);
     app.all(['/:param1'], response);
     app.all(['/:param1/:param2'], response);
     app.all(['/:param1/:param2/:param3'], response);

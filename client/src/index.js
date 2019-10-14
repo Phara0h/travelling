@@ -327,13 +327,13 @@ class Login extends LitElement {
         if (!this._username.validity.valid) {
             this._username.formElement.focus();
             this._username.invalidate();
-            this.showError('Invaild user');
+            this.showError('Invalid user');
         }
 
         if (!this._password.validity.valid) {
             this._password.formElement.focus();
             this._password.invalidate();
-            this.showError('Invaild password');
+            this.showError('Invalid password');
         }
 
     }
@@ -387,19 +387,19 @@ class Login extends LitElement {
         if (!this._username.validity.valid) {
             this._username.formElement.focus();
             this._username.invalidate();
-            this.showError('Invaild user');
+            this.showError('Invalid user');
         }
 
         if (!this._password.validity.valid) {
             this._password.formElement.focus();
             this._password.invalidate();
-            this.showError('Invaild password');
+            this.showError('Invalid password');
         }
 
         if (!this._email.validity.valid) {
             this._email.formElement.focus();
             this._email.invalidate();
-            this.showError('Invaild email');
+            this.showError('Invalid email');
         }
     }
 
@@ -438,7 +438,7 @@ class Login extends LitElement {
         if (!this._email.validity.valid) {
             this._email.formElement.focus();
             this._email.invalidate();
-            this.showError('Invaild email');
+            this.showError('Invalid email');
         }
     }
 
