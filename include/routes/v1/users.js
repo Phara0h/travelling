@@ -57,9 +57,7 @@ async function deleteUser(req, res, router) {
 }
 
 async function editUser(req, res, router) {
-    if (req.body == 'asdfs@asdf.memes') {
-        console.log('HKLSJDHFKJSDHF LKSj');
-    }
+
     if (!req.params.id) {
         res.code(400);
         return {
