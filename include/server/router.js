@@ -69,15 +69,6 @@ class Router {
         this.redis.needsGroupUpdate = false;
     }
 
-    async hookRequest(req, res) {
-        if (this.redis.needsGroupUpdate) {
-            this.redis.needsGroupUpdate = false;
-            await this.updateGroupList();
-        }
-        this.routeUrl(req, res);
-        return;
-    }
-
     async routeUrl(req, res) {
         var authenticated = req.isAuthenticated;
         var sessionUser = req.session.data ? req.session.data.user : null;
@@ -166,6 +157,7 @@ class Router {
             }
 
             if (r.host) {
+
                 if (req._wssocket) {
                     if (target.target.indexOf('wss') > -1) {
                         this.proxyssl.ws(req.raw, req._wssocket, target);
@@ -188,13 +180,18 @@ class Router {
             return false;
         }
 
-        await this.updateGroupList();
-        this.setBackurl(res, req);
-        res.redirect(config.portal.path);
+        // await this.updateGroupList();
+        // this.setBackurl(res, req);
+        // res.redirect(config.portal.path);
 
+        // Should never get here;
+        return false;
     }
 
-    isRouteAllowed(method, url, routes, user) {/* eslint-disable */
+    // @TODO Change these regex to precompiled ones inside regex.js
+
+    /* eslint-disable */
+    isRouteAllowed(method, url, routes, user) {
 
         var surl = url.split('?')[0].split(/[\/]/g).filter(String);
 
@@ -273,11 +270,11 @@ class Router {
                 case ':email':
                     prop = user.email || prop;
                     break;
-                case ':group':
-                    prop = user.group.name || prop;
-                    break;
                 case ':grouptype':
                     prop = user.group.type || prop;
+                    break;
+                case ':group':
+                    prop = user.group.name || prop;
                     break;
                 case ':permission':
                     prop = this.transformRoute(usr, route, route.name || prop);

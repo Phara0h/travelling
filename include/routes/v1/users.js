@@ -57,7 +57,9 @@ async function deleteUser(req, res, router) {
 }
 
 async function editUser(req, res, router) {
-
+    if (req.body == 'asdfs@asdf.memes') {
+        console.log('HKLSJDHFKJSDHF LKSj');
+    }
     if (!req.params.id) {
         res.code(400);
         return {
@@ -88,14 +90,14 @@ async function editUser(req, res, router) {
         model = {[req.params.prop]: req.body};
     }
 
-    var isVaild = await userUtils.checkVaildUser(model);
+    var isValid = await userUtils.checkValidUser(model);
 
-    if (isVaild !== true) {
+    if (isValid !== true) {
         res.code(400);
-        return isVaild;
+        return isValid;
     }
 
-    var user = await User.updateLimitedBy(id, model, 'AND', 1);
+    var user = await User.updateLimitedBy(id, userUtils.setUser({}, model), 'AND', 1);
 
     if (user && user.length > 0) {
 
@@ -153,7 +155,7 @@ async function getUser(req, res, router) {
 
         await user[0].resolveGroup(router);
 
-        if (req.params.prop && !user[0]._[req.params.prop]) {
+        if (req.params.prop && user[0]._[req.params.prop] === undefined) {
             res.code(400);
             return {
                 type: 'user-prop-error',
@@ -194,7 +196,7 @@ function routes(app, opts, done) {
 
     app.get('/users', async (req, res) => {
 
-        if (!misc.isEmpty(req.query) && userUtils.checkVaildUser(req.query, false)) {
+        if (!misc.isEmpty(req.query) && userUtils.checkValidUser(req.query, false)) {
             var query = userUtils.setUser({}, req.query);
 
             return await User.findAllBy(query);
@@ -204,7 +206,7 @@ function routes(app, opts, done) {
 
     app.get('/users/group/request/:group_request', async (req, res) => {
 
-        if (!misc.isEmpty(req.query) && userUtils.checkVaildUser(req.query, false)) {
+        if (!misc.isEmpty(req.query) && userUtils.checkValidUser(req.query, false)) {
             req.query.group_request = req.params.group_request;
             var query = userUtils.setUser({}, req.query);
 
@@ -254,7 +256,11 @@ function routes(app, opts, done) {
     });
 
     app.post('/user/me/token', async (req, res) => {
-        var token = null;
+        let token;
+
+        if (token) {
+
+        }
 
         try {
             token = await TokenHandler.getOAuthToken(req.session.data.user.id, req.body.type || 'oauth', req.body.name || null, req.body.urls);

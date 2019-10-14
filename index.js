@@ -127,17 +127,18 @@ app.register(fastifySession, {
 app.decorateRequest('checkLoggedIn', async function(req, res) {return await auth.checkLoggedIn(req, res, router);});
 app.decorateRequest('logout', auth.logout);
 app.decorateRequest('isAuthenticated', false);
-app.addHook('preHandler', function(req, res, next) {
+
+app.addHook('preParsing', function(req, res, next) {
 
     req.checkLoggedIn(req, res, router).then(auth=>{
         req.isAuthenticated = auth.auth;
 
         if (!auth.route) {
             res.code(401);
-            if (auth.invaildToken) {
+            if (auth.invalidToken) {
                 res.send({
-                    error: 'invaild_client',
-                    error_description: 'Invaild Access Token',
+                    error: 'invalid_client',
+                    error_description: 'Invalid Access Token',
                 });
             } else {
                 res.send();

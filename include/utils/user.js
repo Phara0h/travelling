@@ -6,7 +6,7 @@ const regex = require('./regex');
 const User = require('../database/models/user');
 
 module.exports = {
-    checkVaildUser: async function checkVaildUser(user, checkDupe = true) {
+    checkValidUser: async function checkValidUser(user, checkDupe = true) {
 
         if (!user) {
             return {
@@ -46,14 +46,14 @@ module.exports = {
         if (user.avatar && regex.base64Image.exec(user.avatar) == null) {
             return {
                 type: 'avatar-error',
-                msg: 'Must be a vaild base64 image.',
+                msg: 'Must be a valid base64 image.',
             };
         }
 
         if (user.group_request && regex.safeName.exec(user.group_request) == null) {
             return {
                 type: 'group-request-error',
-                msg: 'Invaild group name.',
+                msg: 'Invalid group name.',
             };
         }
 
@@ -63,7 +63,7 @@ module.exports = {
             } catch (e) {
                 return {
                     type: 'user-data-error',
-                    msg: 'Must be a vaild json.',
+                    msg: 'Must be a valid json.',
                 };
             }
         }

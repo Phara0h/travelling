@@ -3,7 +3,6 @@
 const Group = require('../../database/models/group');
 const User = require('../../database/models/user');
 
-const config = require('../../utils/config');
 const misc = require('../../utils/misc');
 const regex = require('../../utils/regex');
 const userUtils = require('../../utils/user.js');
@@ -44,7 +43,7 @@ async function setGroup(req, group, router, groups = null) {
         if (regex.safeName.exec(req.body.name) == null) {
             throw {
                 type: 'group-name-error',
-                msg: 'Group name contain invaild characters.',
+                msg: 'Group name contain invalid characters.',
             };
         }
         group.name = req.body.name;
@@ -54,7 +53,7 @@ async function setGroup(req, group, router, groups = null) {
         if (regex.uuidv4.exec(req.body.id) == null) {
             throw {
                 type: 'group-name-error',
-                msg: 'Group name contain invaild characters.',
+                msg: 'Group name contain invalid characters.',
             };
         }
         group.id = req.body.id;
@@ -93,7 +92,7 @@ async function setGroup(req, group, router, groups = null) {
         if (regex.safeName.exec(req.body.type) == null) {
             throw {
                 type: 'group-type-error',
-                msg: 'Group type contain invaild characters.',
+                msg: 'Group type contain invalid characters.',
             };
         }
         group.type = req.body.type;
@@ -133,6 +132,7 @@ async function getGroup(req, res, router) {
 }
 
 async function getUserByGroup(req, res, router) {
+    const groupRequest = req.req.url.indexOf('/group/request/type/') > -1;
 
     var groups = await getGroupsByType(req, res, router);
 
@@ -148,9 +148,16 @@ async function getUserByGroup(req, res, router) {
         return false;
     }
 
+    const prop = req.params.prop;
+
+    // delete prop so we get back full user
+    delete req.params.prop;
     var user = await userRoutes.getUser(req, res, router);
 
-    if (!user.id) {
+    // set prop back for other functions to use\
+    req.params.prop = prop;
+
+    if (user.msg) {
         res.code(400).send(user);
         return false;
     }
@@ -162,11 +169,12 @@ async function getUserByGroup(req, res, router) {
         });
         return false;
     }
-
-    groups = groups.filter(g=>g.type == user.group.type);
+    console.log(groups, user.group.type, user.group_request, req.params.grouptype);
+    groups = groups.filter(g=>g.type === user.group.type || groupRequest && user.group_request === req.params.grouptype);
 
     if (req.params.groupname) {
-        groups = groups.filter(g=>user.group_id == req.params.groupname && user.group.name == req.params.groupname);
+
+        groups = groups.filter(g=>user.group_id === req.params.groupname || user.group.name === req.params.groupname);
     }
 
     if (groups.length < 1) {
@@ -177,7 +185,7 @@ async function getUserByGroup(req, res, router) {
         return false;
     }
     res.code(200);
-    return user;
+    return prop ? user[prop] : user;
 }
 
 async function getGroupsByType(req, res, router) {
@@ -194,8 +202,8 @@ async function editUserByGroup(req, res, router) {
     }
     var editedUser = userRoutes.editUser(req, res, router);
 
-    if (!editedUser) {
-        return false;
+    if (editedUser.msg) {
+        return editedUser;
     }
 
     res.code(200);
@@ -210,8 +218,8 @@ async function deleteUserByGroup(req, res, router) {
     }
     var deletedUser = userRoutes.deleteUser(req, res, router);
 
-    if (!deletedUser) {
-        return false;
+    if (deletedUser.msg) {
+        return deletedUser;
     }
 
     res.code(200);
@@ -457,7 +465,7 @@ module.exports = function(app, opts, done) {
         if (!group) {
             return;
         }
-        if (!misc.isEmpty(req.query) && userUtils.checkVaildUser(req.query, false)) {
+        if (!misc.isEmpty(req.query) && userUtils.checkValidUser(req.query, false)) {
             var query = userUtils.setUser({group_id: group.id}, req.query);
 
             res.code(200).send(await User.findAllBy(query));
@@ -466,37 +474,37 @@ module.exports = function(app, opts, done) {
 
     });
 
-    app.get('/group/type/:grouptype/users', async (req, res) => {
-        var group = await getGroup(req, res, router);
-
-        if (!group) {
-            return;
-        }
-
-        if (!misc.isEmpty(req.query) && userUtils.checkVaildUser(req.query, false)) {
-            var query = userUtils.setUser({group_id: group.id}, req.query);
-
-            res.code(200).send(await User.findAllBy(query));
-        }
-        res.code(200).send(await User.findAllBy({group_id: group.id}));
-    });
-
-    app.get('/group/type/:grouptype/users/inherited', async (req, res) => {
-        var group = await getGroup(req, res, router);
-
-        if (!group) {
-            return;
-        }
-
-        if (!misc.isEmpty(req.query) && userUtils.checkVaildUser(req.query, false)) {
-            var query = userUtils.setUser({group_id: group.id}, req.query);
-
-            res.code(200).send(await User.findAllBy(query));
-        }
-
-        res.code(200).send(await getInhertedUsers(group, []));
-
-    });
+    // app.get('/group/type/:grouptype/users', async (req, res) => {
+    //     var group = await getGroup(req, res, router);
+    //
+    //     if (!group) {
+    //         return;
+    //     }
+    //
+    //     if (!misc.isEmpty(req.query) && userUtils.checkValidUser(req.query, false)) {
+    //         var query = userUtils.setUser({group_id: group.id}, req.query);
+    //
+    //         res.code(200).send(await User.findAllBy(query));
+    //     }
+    //     res.code(200).send(await User.findAllBy({group_id: group.id}));
+    // });
+    //
+    // app.get('/group/type/:grouptype/users/inherited', async (req, res) => {
+    //     var group = await getGroup(req, res, router);
+    //
+    //     if (!group) {
+    //         return;
+    //     }
+    //
+    //     if (!misc.isEmpty(req.query) && userUtils.checkValidUser(req.query, false)) {
+    //         var query = userUtils.setUser({group_id: group.id}, req.query);
+    //
+    //         res.code(200).send(await User.findAllBy(query));
+    //     }
+    //
+    //     res.code(200).send(await getInhertedUsers(group, []));
+    //
+    // });
 
     app.get('/group/type/:grouptype/name/:groupname/users/inherited', async (req, res) => {
         var group = await getGroup(req, res, router);
@@ -505,7 +513,7 @@ module.exports = function(app, opts, done) {
             return;
         }
 
-        var query = !misc.isEmpty(req.query) && userUtils.checkVaildUser(req.query, false) ? req.query : {};
+        var query = !misc.isEmpty(req.query) && userUtils.checkValidUser(req.query, false) ? req.query : {};
 
         res.code(200).send(await getInhertedUsers(group, [], query));
     });
@@ -647,6 +655,13 @@ module.exports = function(app, opts, done) {
     app.put('/group/type/:grouptype/name/:groupname/user/:id/:prop', async (req, res) => {return await editUserByGroup(req, res, router);});
     app.put('/group/type/:grouptype/user/:id', async (req, res) => {return await editUserByGroup(req, res, router);});
     app.put('/group/type/:grouptype/user/:id/:prop', async (req, res) => {return await editUserByGroup(req, res, router);});
+
+    // Edit Users Group request
+
+    app.put('/group/request/type/:grouptype/user/:id', async (req, res) => {return await editUserByGroup(req, res, router);});
+    app.put('/group/request/type/:grouptype/user/:id/:prop', async (req, res) => {
+        return await editUserByGroup(req, res, router);
+    });
 
     // Delete Users
 

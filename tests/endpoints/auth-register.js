@@ -3,13 +3,14 @@ const { Travelling } =  require('../../sdk')('https://127.0.0.1:6969');
 var userContainer = require('../include/UserContainer.js');
 module.exports = () => {
 
-    describe('Vaild', () => {
+    describe('Valid', () => {
 
         test('Create Test User [test]', async () => {
             var res = await Travelling.Auth.register({
                 username: 'test',
                 password: 'Pas5w0r!d',
                 email: 'test@test.com',
+                group_request: 'testgroup'
             });
             expect(res.statusCode).toEqual(200);
         });
@@ -18,17 +19,17 @@ module.exports = () => {
             var res = await Travelling.Auth.register({
                 username: 'test2',
                 password: 'Pas5w0r!d2',
-                email: 'test2@test.com',
+                email: 'test2@test.com'
             });
             expect(res.statusCode).toEqual(200);
         });
 
-        test('Create Test User [test3] Manual Activaation', async () => {
+        test('Create Test User [test3] Manual Activation Request Group Type Test', async () => {
             config.registration.requireManualActivation = true;
             var res = await Travelling.Auth.register({
                 username: 'test3',
                 password: 'Pas5w0r!d3',
-                email: 'test3@test.com',
+                email: 'test3@test.com'
             });
             config.registration.requireManualActivation = false;
             expect(res.statusCode).toEqual(200);
@@ -49,7 +50,7 @@ module.exports = () => {
 
     });
 
-    describe('Invaild', () => {
+    describe('Invalid', () => {
 
         test('No Body', async () => {
             var res = await Travelling.Auth.register({
@@ -68,7 +69,7 @@ module.exports = () => {
             expect(res.statusCode).toEqual(400);
         });
 
-        test('Username Invaild Characters', async () => {
+        test('Username Invalid Characters', async () => {
             var res = await Travelling.Auth.register({
                 username: '$w@g',
                 password: 'Pas5w0r!d',
@@ -97,7 +98,7 @@ module.exports = () => {
             expect(res.statusCode).toEqual(400);
         });
 
-        test('Email Invaild Characters', async () => {
+        test('Email Invalid Characters', async () => {
             var res = await Travelling.Auth.register({
                 username: 'test1',
                 password: 'Pas5w0r!d',

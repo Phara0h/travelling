@@ -5,7 +5,7 @@ var userContainer = require('../include/UserContainer.js');
 module.exports = () => {
 
     describe('Current User', () => {
-        describe('Vaild', () => {
+        describe('Valid', () => {
         test('Get User Test', async () => {
           var res = await Travelling.User.Current.get(null,{
               headers: {
@@ -83,7 +83,7 @@ module.exports = () => {
 
       });
 
-        describe('Invaild', () => {
+        describe('Invalid', () => {
           test("Check Permission With No Permission", async () => {
             var res = await Travelling.User.Current.permissionCheck('', null, {
                 headers: {
@@ -109,7 +109,7 @@ module.exports = () => {
     });
 
     describe('Non-Current User', () => {
-        describe('Vaild', () => {
+        describe('Valid', () => {
         test('Get All Users', async () => {
             var res = await Travelling.Users.get(null, {
                 headers: {
@@ -162,7 +162,7 @@ module.exports = () => {
         });
       });
 
-      describe('Invaild', () => {
+      describe('Invalid', () => {
         test('Get By Invalid Id', async () => {
             var res = await Travelling.User.get(0,null, {
                 headers: {

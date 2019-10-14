@@ -3,7 +3,7 @@ const { Travelling } =  require('../../sdk')('https://127.0.0.1:6969');
 var userContainer = require('../include/UserContainer.js');
 
 module.exports = () => {
-    describe('Vaild', () => {
+    describe('Valid', () => {
 
         test('Login with Test2 User Again', async () => {
             var res = await Travelling.Auth.login({
@@ -63,7 +63,7 @@ module.exports = () => {
         });
     });
 
-    describe('Invaild', () => {
+    describe('Invalid', () => {
 
         test('Token and No Session', async () => {
             var ssid = userContainer.user2.ssid;

@@ -5,17 +5,51 @@ var userContainer = require('../include/UserContainer.js');
 module.exports = () => {
 
     describe('Current User', () => {
-        describe('Vaild', () => {
+        describe('Valid', () => {
+          test('Edit Test User 1 Email Property ', async () => {
+            var res = await Travelling.User.Current.editProperty('asdf@asdf.memes','email',userContainer.user1Token);
 
+            expect(res.body).toEqual('asdf@asdf.memes')
+          });
+
+          test('Edit Test User 1 Email and UserData', async () => {
+            var res = await Travelling.User.Current.edit({email: 'testasdf2@fd.foo', user_data: {test: 1, foo: 'bar'}},userContainer.user1Token);
+
+            expect(res.body).toMatchObject({email: 'testasdf2@fd.foo', user_data: {test: 1, foo: 'bar'}});
+          });
       });
     });
 
     describe('Non-Current User', () => {
-        describe('Vaild', () => {
+        describe('Valid', () => {
+          test('Edit Test User 2 Email Property ', async () => {
+            var res = await Travelling.User.editProperty('asdf@asdf.memes','test2','email',userContainer.user1Token);
+
+            expect(res.body).toEqual('asdf@asdf.memes')
+          });
+
+          test('Edit Test User 2 Email and UserData', async () => {
+            var res = await Travelling.User.edit({email: 'asdfa@fd.foo', user_data: {test: 1, foo: 'bar'}},'test2',userContainer.user1Token);
+
+            expect(res.body).toMatchObject({email: 'asdfa@fd.foo', user_data: {test: 1, foo: 'bar'}});
+          });
+
+          test('Edit Test User 1 Email Property By GroupRequest', async () => {
+            var res = await Travelling.Group.Request.User.editProperty('asdfs@asdf.memes','testgroup','test','email',userContainer.user2Token);
+            console.log(res.body);
+            expect(res.statusCode).toEqual(200);
+            expect(res.body).toEqual('asdfs@asdf.memes')
+          });
+
+          test('Edit Test User 1 Email and UserData By GroupRequest', async () => {
+            var res = await Travelling.Group.Request.User.edit({email: 'gr@fd.foo', user_data: {test: 1, foo: 'bar'}},'testgroup','test',userContainer.user2Token);
+
+            expect(res.body).toMatchObject({email: 'gr@fd.foo', user_data: {test: 1, foo: 'bar'}});
+          });
 
       });
 
-      describe('Invaild', () => {
+      describe('Invalid', () => {
 
       });
     });

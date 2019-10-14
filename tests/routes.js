@@ -4,46 +4,35 @@ var userContainer = require('./include/UserContainer.js');
 const fasq = require('fasquest');
 
 module.exports = () => {
-    describe('Vaild', () => {
-        var token;
+    describe('Valid',  () => {
+
         var accessToken;
+        var user;
 
-
-
-        // test('Login with Test3 User [Locked]', async () => {
-        //     var res = await Travelling.Auth.login({
-        //         password: 'Pas5w0r!d3',
-        //         email: 'test3@test.com',
-        //     });
-        //
-        //     expect(res.body.type).toEqual('locked');
-        // });
-
-
-
-
-
-        test('Test Get With Username and Group 1 in Path Params', async () => {
+        beforeAll(async () => {
           await Travelling.Auth.register({
               username: 'routes',
               password: 'Pas5w0r!d3',
               email: 'routes@test.com',
           });
 
-          var user = userContainer.parseCookie((await Travelling.Auth.login({
+          let userRes = userContainer.parseCookie((await Travelling.Auth.login({
               username: 'routes',
               password: 'Pas5w0r!d3',
           })).headers['set-cookie'], {});
 
-          //console.log((await Travelling.Group.get('group5', userContainer.user1Token)).body);
 
-          token = (await Travelling.User.Current.registerToken({ urls: ['http://127.0.0.1:6969']}, null, {
+          var token = (await Travelling.User.Current.registerToken({ urls: ['http://127.0.0.1:6969']}, null, {
               headers: {
-                  cookie: userContainer.getCookie(user),
+                  cookie: userContainer.getCookie(userRes),
               },
           })).body;
-        //console.log((await Travelling.Groups.get(accessToken)).body)
+
           accessToken = (await Travelling.Auth.accessToken('client_credentials', null, token.client_id, token.client_secret)).body.access_token;
+          user = (await Travelling.User.Current.get(accessToken)).body;
+        });
+
+        test('[GET] with Username and Group 1 in Path Params HTTPS', async () => {
 
           await Travelling.Group.addRoute({
                           route: "/test/get",
@@ -51,7 +40,7 @@ module.exports = () => {
                           removeFromPath: '/test/get',
                           method: "get"
                         }, 'group2',accessToken);
-          //console.log(sdf.statusCode, sdf.body, userContainer.getCookie(user), token, accessToken)
+
           var res = await fasq.request({
            method: 'GET',
            resolveWithFullResponse: true,
@@ -62,10 +51,65 @@ module.exports = () => {
            }
          });
 
-          console.log(res.body)
+          //console.log(res.body)
           //var res = await Travelling.Group.edit({inherited:[group4.id]}, 'group1', userContainer.user1Token);
 
           expect(res.statusCode).toEqual(200);
+          expect(res.body.params).toEqual({ param1: 'routes', param2: 'group5' });
+        });
+
+        test('[POST] with ID and Permission in Query Params HTTP', async () => {
+
+          await Travelling.Group.addRoute({
+                          route: "/test/post",
+                          host: "http://127.0.0.1:4267/?id=:id&permission=:permission",
+                          removeFromPath: '/test/post',
+                          method: "post"
+                        }, 'group2',accessToken);
+
+          var res = await fasq.request({
+           method: 'POST',
+           resolveWithFullResponse: true,
+           simple: false,
+           uri: 'https://127.0.0.1:6969/test/post',
+           json: true,
+           body: {test:"swag"},
+           authorization: {
+               bearer: accessToken
+           }
+         });
+
+
+          //var res = await Travelling.Group.edit({inherited:[group4.id]}, 'group1', userContainer.user1Token);
+
+          expect(res.statusCode).toEqual(200);
+          expect(res.body.query).toEqual({ id: user.id, permission: 'post-test-post' });
+        });
+
+
+        test('[DELETE] with Grouptype in Route Dynamic Permissions HTTPS', async () => {
+
+          await Travelling.Group.addRoute({
+                          route: "/test/delete/:grouptype",
+                          host: "https://127.0.0.1:4268",
+                          removeFromPath: '/test/delete',
+                          method: "delete"
+                        }, 'group5',accessToken);
+
+          var res = await fasq.request({
+           method: 'DELETE',
+           resolveWithFullResponse: true,
+           simple: false,
+           uri: 'https://127.0.0.1:6969/test/delete/'+user.group.type,
+           authorization: {
+               bearer: accessToken
+           }
+         });
+
+          //var res = await Travelling.Group.edit({inherited:[group4.id]}, 'group1', userContainer.user1Token);
+
+          expect(res.statusCode).toEqual(200);
+          expect(res.body.params).toEqual({ param1: user.group.type});
         });
 
     });

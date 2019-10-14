@@ -33,7 +33,7 @@ const regex = {
 
         return ['8', '9', 'a', 'b'].indexOf(id.charAt(19)) !== -1;
     },
-    transformRoute: new RegExp(/(:id|:username|:email|:group|:grouptype|:permission)/g),
+    transformRoute: new RegExp(/(:id|:username|:email|:grouptype|:group|:permission)/g),
 };
 
 module.exports = regex;
