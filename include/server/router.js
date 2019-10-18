@@ -45,7 +45,13 @@ class Router {
 
         this.proxy.on('error', function(err, req, res) {
             log.error(err);
-            if (res.status) {res.status(504);}
+            res.statusCode = 504;
+            res.end();
+        });
+
+        this.proxyssl.on('error', function(err, req, res) {
+            log.error(err);
+            res.statusCode = 504;
             res.end();
         });
 
@@ -156,23 +162,23 @@ class Router {
                 log.info('Unregistered User' + ' (anonymous)' + ' | ' + req.ip + ' | [' + req.raw.method + '] ' + req.req.url + ' -> ' + target.target);
             }
 
-            if (r.host) {
-
-                if (req._wssocket) {
-                    if (target.target.indexOf('wss') > -1) {
-                        this.proxyssl.ws(req.raw, req._wssocket, target);
-                    } else {
-                        this.proxy.ws(req.raw, req._wssocket, target);
-                    }
+            if (r.host && req._wssocket) {
+                if (target.target.indexOf('wss') > -1) {
+                    this.proxyssl.ws(req.raw, req._wssocket, target);
                 } else {
-                    // This gets around websites host checking / blocking
-                    delete req.raw.headers.host;
+                    this.proxy.ws(req.raw, req._wssocket, target);
+                }
+                return true;
+            }
 
-                    if (target.target.indexOf('https') > -1) {
-                        this.proxyssl.web(req.req, res.res, target);
-                    } else {
-                        this.proxy.web(req.req, res.res, target);
-                    }
+            if (r.host) {
+                // This gets around websites host checking / blocking
+                delete req.raw.headers.host;
+
+                if (target.target.indexOf('https') > -1) {
+                    this.proxyssl.web(req.req, res.res, target);
+                } else {
+                    this.proxy.web(req.req, res.res, target);
                 }
                 return true;
             }

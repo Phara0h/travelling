@@ -6,3 +6,4 @@ agents.json
 .DS_Store
 coverage
 ./localhost.*
+test.export.json

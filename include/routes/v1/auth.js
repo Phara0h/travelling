@@ -106,7 +106,8 @@ module.exports = function(app, opts, done) {
 
                     await login(user.user, req, res, router);
                 } catch (e) {
-                    res.code(400).send(e.err.type == 'locked' ? {type: e.err.type, msg: e.err.msg, email: e.email} : {
+
+                    res.code(400).send(e.err && e.err.type == 'locked' ? {type: e.err.type, msg: e.err.msg, email: e.email} : {
                         type: 'login-error',
                         msg: 'Invalid login',
                     });
@@ -290,6 +291,7 @@ module.exports = function(app, opts, done) {
             res.redirect(encodeURI(req.query.redirect_uri + `?code=${code}&state=${req.query.state}&client_id=${req.query.client_id}`));
             return;
         } catch (e) {
+            config.log.logger.debug(e);
             res.code(400).send({
                 error: 'invalid_request',
             });
