@@ -114,8 +114,36 @@ class TokenHandler {
 
             var token = (await Token.findLimtedBy(regex.uuidCheck(client_id) ? {id: client_id} : {name: client_id}, 'AND', 1))[0];
 
-            if (!token || !token.urls || token.urls.indexOf(redirectURI) < 0) {
-                reject(true);
+            if (!token || !token.urls) {
+                reject('No token found for the client_id ' + client_id);
+                return;
+            }
+
+            var redirectUrl = new URL(redirectURI);
+            var found = false;
+
+            for (var i = 0; i < token.urls.length; i++) {
+                var tokenUrl = new URL(token.urls[i]);
+
+                if (tokenUrl.host !== redirectUrl.host) {
+                    continue;
+                }
+
+                if (tokenUrl.protocol !== redirectUrl.protocol) {
+                    continue;
+                }
+
+                var tokenUrlPath = tokenUrl.pathname.split(/[\/]/g);
+                var redirectUrlPath = redirectUrl.pathname.split(/[\/]/g);
+
+                if (tokenUrlPath.length == redirectUrlPath.length || tokenUrlPath.length <= redirectUrlPath.length + 1 && (tokenUrlPath[tokenUrlPath.length - 1] == '*' || tokenUrlPath[0] == '*')) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                reject('Redirect Url does not match any of the token\'s urls');
                 return;
             }
 
