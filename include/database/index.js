@@ -7,6 +7,7 @@ const crypto = require('../utils/cryptointerface');
 const config = require('../utils/config');
 const Email = require('../utils/email');
 const TokenHandler = require('../token');
+const gm = require('../server/groupmanager.js');
 
 class Database {
     constructor() {
@@ -215,7 +216,7 @@ class Database {
 
             await anon.save();
 
-            // router.groups[anon.name] = this.groupInheritedMerge(anon, grps);
+            // gm.groups[anon.name] = this.groupInheritedMerge(anon, grps);
 
             var admin = await Group.create({
                 name: 'superadmin',
@@ -231,36 +232,15 @@ class Database {
             });
             await admin.save();
             // console.log(admin)
-            // router.groups[admin.name] = this.groupInheritedMerge(admin, grps);
+            // gm.groups[admin.name] = this.groupInheritedMerge(admin, grps);
 
-            await router.updateGroupList();
+            await gm.updateGroupList();
             return true;
         }
-
-        await router.updateGroupList();
+        await gm.updateGroupList();
         return false;
     }
 
-    static groupInheritedMerge(group, groups) {
-        var nallowed = group.allowed ? [...group.allowed] : [];
-
-        if (group.inherited && group.inherited.length > 0) {
-            if (!group.inheritedGroups) {
-                group.addProperty('inheritedGroups', []);
-            }
-            for (var i = 0; i < group.inherited.length; ++i) {
-                for (var j = 0; j < groups.length; ++j) {
-                    if (groups[j].id == group.inherited[i]) {
-                        // group.inheritedGroups[i] = new Group({...groups[j]._, inherited: groups[j]._.inherited ? [...groups[j]._.inherited] : []});
-                        group.inheritedGroups[i] = new Group(groups[j]._);
-                        break;
-                    }
-                }
-                nallowed.push(...this.groupInheritedMerge(group.inheritedGroups[i], groups));
-            }
-        }
-        return nallowed;
-    }
 }
 
 module.exports = Database;

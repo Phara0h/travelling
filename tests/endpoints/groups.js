@@ -56,27 +56,44 @@ module.exports = () => {
             expect(res.body).toMatchObject({name:'group5', id: expect.any(String), is_default: true, inherited:[group4.id, superadmin]});
           });
 
-        })
+        });
 
         describe('Import/Export', ()=>{
             test('Export Groups', async () => {
                 var res = await Travelling.Groups.export(userContainer.user1Token);
+
                 expect(res.statusCode).toEqual(200);
                 expect(res.body).toMatchObject({
-                 group1: expect.anything(),
-                 group2: expect.anything(),
-                 group3: expect.anything(),
-                 group4: expect.anything(),
-                 group5: expect.anything(),
-                 anonymous: expect.anything(),
-                 superadmin: expect.anything()
+                group: {
+                   group2: expect.anything(),
+                   group3: expect.anything(),
+                   group4: expect.anything(),
+                   group5: expect.anything(),
+                   anonymous: expect.anything(),
+                   superadmin: expect.anything()
+                 },
+                testgroup: {
+                   group1: expect.anything(),
+                }
                }),
                 exported = res.body;
-            })
-        })
+            });
+        });
 
         describe('Edit', ()=>{
-            test('Edit Group 4 to Inherit Superadmin', async () => {
+
+          test('Add route to superadmin and test permission', async () => {
+              var addPerm = await Travelling.Group.addPermission('superadmin','test-one-*-three', userContainer.user1Token)
+              expect(addPerm.statusCode).toEqual(200);
+
+              var permCheck = await Travelling.User.Current.permissionCheck('test-one-fish-three',userContainer.user1Token);
+              expect(permCheck.statusCode).toEqual(200);
+
+              var failPermCheck = await Travelling.User.Current.permissionCheck('test-one-fish-blue',userContainer.user1Token);
+              expect(failPermCheck.statusCode).toEqual(401);
+          });
+
+            test('Group 4 to Inherit Superadmin', async () => {
                 var superadmin = (await Travelling.Group.get('superadmin', userContainer.user1Token)).body.id;
                 var res = await Travelling.Group.edit({
                   inherited:[
@@ -86,19 +103,102 @@ module.exports = () => {
                 },'group4', userContainer.user1Token);
                 group4 =  res.body;
 
-                    //console.log((await Travelling.Group.get('group4', userContainer.user1Token)).body);
+                expect(res.statusCode).toEqual(200);
                 expect(res.body).toMatchObject({name:'group4', id: expect.any(String), is_default: false, inherited:[group3.id,superadmin]});
+            });
+
+            test('Group 1 to Inherit Superadmin', async () => {
+                var superadmin = (await Travelling.Group.get('superadmin', userContainer.user1Token)).body.id;
+                var res = await Travelling.Group.Type.inheritFrom('testgroup','group1', 'superadmin', userContainer.user1Token);
+
+
+                expect(res.statusCode).toEqual(200);
+                expect(res.body).toMatchObject({name:'group1', id: expect.any(String), is_default: false, inherited:[superadmin]});
+            });
+
+            test('Group 1 to Remove Inheritance of Superadmin', async () => {
+
+                var res = await Travelling.Group.Type.removeInheritance('testgroup','group1', 'superadmin', userContainer.user1Token)
+
+
+                expect(res.statusCode).toEqual(200);
+                expect(res.body).toMatchObject({name:'group1', id: expect.any(String), is_default: false, inherited:[]});
             });
         })
 
+
+        describe('Get', ()=>{
+
+          test('All Groups', async () => {
+              var res = await Travelling.Groups.get(userContainer.user1Token);
+
+              expect(res.statusCode).toEqual(200);
+              expect(res.body).toHaveLength(7);
+          });
+
+          test('Group2 by Name', async () => {
+              var res = await Travelling.Group.get('group2', userContainer.user1Token);
+
+              expect(res.statusCode).toEqual(200);
+              expect(res.body).toMatchObject({
+                    allowed: group2.allowed,
+                    id: group2.id,
+                    inherited: group2.inherited,
+                    is_default: group2.is_default,
+                    name: group2.name,
+                    type: group2.type,
+                  })
+          });
+
+          test('Group2 by id', async () => {
+              var res = await Travelling.Group.get(group2.id, userContainer.user1Token);
+
+              expect(res.statusCode).toEqual(200);
+              expect(res.body).toMatchObject({
+                    allowed: group2.allowed,
+                    id: group2.id,
+                    inherited: group2.inherited,
+                    is_default: group2.is_default,
+                    name: group2.name,
+                    type: group2.type,
+                  })
+          });
+
+          test('Group1 by id and Type', async () => {
+              var res = await Travelling.Group.Type.get(group1.type, group1.id, userContainer.user1Token);
+
+              expect(res.statusCode).toEqual(200);
+              expect(res.body).toMatchObject({
+                    allowed: group1.allowed,
+                    id: group1.id,
+                    inherited: [],
+                    is_default: group1.is_default,
+                    name: group1.name,
+                    type: group1.type,
+                  })
+          });
+
+          test('Group1 by Name and Type', async () => {
+              var res = await Travelling.Group.Type.get(group1.type, 'group1', userContainer.user1Token);
+
+              expect(res.statusCode).toEqual(200);
+              expect(res.body).toMatchObject({
+                    allowed: group1.allowed,
+                    id: group1.id,
+                    inherited: [],
+                    is_default: group1.is_default,
+                    name: group1.name,
+                    type: group1.type,
+                  })
+          });
+
+        });
       });
 
       describe('Invalid', () => {
         describe('Edit', ()=>{
 
           test('Circular Group Inheritance', async () => {
-
-            //console.log((await Travelling.Groups.get(userContainer.user1Token)).body)
             var res = await Travelling.Group.edit({inherited:[group4.id]}, 'group1', userContainer.user1Token);
 
             expect(res.statusCode).toEqual(400);
@@ -106,9 +206,12 @@ module.exports = () => {
 
           test('Circular Group Inheritance Inverse', async () => {
             var res = await Travelling.Group.edit({inherited:[]}, 'group4', userContainer.user1Token);
-            res = await Travelling.Group.edit({inherited:[group4.id]}, 'group1', userContainer.user1Token);
+            expect(res.statusCode).toEqual(200);
+
+            res = await Travelling.Group.edit({inherited:[group4.id]}, group1.id, userContainer.user1Token); //id instead of name since its not 'group' type
+            expect(res.statusCode).toEqual(200);
+
             res = await Travelling.Group.edit({inherited:[group2.id]}, 'group4', userContainer.user1Token);
-            //console.log((await Travelling.Groups.get(userContainer.user1Token)).body)
             expect(res.statusCode).toEqual(400);
           });
 
@@ -117,9 +220,14 @@ module.exports = () => {
 
             expect(res.statusCode).toEqual(400);
           });
-        })
-      })
 
+          test('Invaild Name Group1', async () => {
+            var res = await Travelling.Group.edit({name:`SELECT * FROM members WHERE username = 'admin'--' AND password = 'password'`}, 'group1', userContainer.user1Token);
+
+            expect(res.statusCode).toEqual(400);
+          });
+        });
+      });
 
 
     afterAll(async () => {

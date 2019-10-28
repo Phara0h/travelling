@@ -7,6 +7,7 @@ const misc = require('../../utils/misc');
 const regex = require('../../utils/regex');
 const userUtils = require('../../utils/user.js');
 const userRoutes = require('./users');
+const gm = require('../../server/groupmanager');
 
 function isCircularPath(id, group, groups, nodes = []) {
     if (nodes.indexOf(id) == 0) {
@@ -52,8 +53,8 @@ async function setGroup(req, group, router, groups = null) {
     if (req.body.id) {
         if (regex.uuidv4.exec(req.body.id) == null) {
             throw {
-                type: 'group-name-error',
-                msg: 'Group name contain invalid characters.',
+                type: 'group-id-error',
+                msg: 'Group id contain invalid characters.',
             };
         }
         group.id = req.body.id;
@@ -70,7 +71,7 @@ async function setGroup(req, group, router, groups = null) {
                 msg: 'Inherited groups array contain duplicate ids or its own id',
             };
         } else {
-            var groupIds = (await router.getGroups()).map(g=> g.id);
+            var groupIds = (await gm.getGroups()).map(g=> g.id);
 
             if (!group.inherited.every(id => groupIds.includes(id))) {
                 throw {
@@ -80,7 +81,7 @@ async function setGroup(req, group, router, groups = null) {
             }
         }
 
-        if (checkCircularGroupRef(group, groups || await router.getMappedGroups())) {
+        if (checkCircularGroupRef(group, groups || await gm.getMappedGroups())) {
             throw {
                 type: 'group-inherited-circular-error',
                 msg: 'Inherited groups array contains a cicular ref.',
@@ -119,7 +120,7 @@ async function setGroup(req, group, router, groups = null) {
 
 async function getGroup(req, res, router) {
     var name = req.params.groupname.toLowerCase();
-    var fgroup = await router.getGroup(name);
+    var fgroup = await gm.getGroup(name, req.params.grouptype);
 
     if (!fgroup || req.params.grouptype && fgroup.type != req.params.grouptype.toLowerCase()) {
         res.code(400).send({
@@ -189,7 +190,7 @@ async function getUserByGroup(req, res, router) {
 }
 
 async function getGroupsByType(req, res, router) {
-    var groups = await router.getGroups();
+    var groups = await gm.getGroups();
 
     return groups.filter(g=>g.type == req.params.grouptype);
 }
@@ -245,7 +246,7 @@ async function addGroup(req, res, router) {
     if (!req.body.type) {
         req.body.type = 'group';
     }
-    var fgroup = await router.getGroup(req.body.id || req.body.name);
+    var fgroup = await gm.getGroup(req.body.id || req.body.name, req.body.type);
 
     if (fgroup) {
         res.code(400).send(
@@ -266,7 +267,7 @@ async function addGroup(req, res, router) {
     }
 
     if (group.is_default) {
-        var dgroup = await router.defaultGroup();
+        var dgroup = await gm.defaultGroup();
 
         if (group.id != dgroup.id) {
             dgroup.is_default = false;
@@ -276,7 +277,7 @@ async function addGroup(req, res, router) {
 
     var ngroup = await Group.create(group.changedProps);
 
-    router.redis.needsGroupUpdate = true;
+    gm.redis.needsGroupUpdate = true;
     res.code(200).send(ngroup);
 
 }
@@ -307,19 +308,19 @@ async function editGroup(req, res, router) {
     }
 
     if (group.is_default) {
-        var dgroup = await router.defaultGroup();
+        var dgroup = await gm.defaultGroup();
 
         if (group.id != dgroup.id) {
             dgroup.is_default = false;
             await dgroup.save();
-            router.redis.needsGroupUpdate = true;
+            gm.redis.needsGroupUpdate = true;
         }
     }
 
     await group.save();
-    router.redis.needsGroupUpdate = true;
+    gm.redis.needsGroupUpdate = true;
 
-    res.code(200).send(await router.getGroup(group.id));
+    res.code(200).send(await gm.getGroup(group.id));
 }
 
 async function addRouteGroup(req, res, router) {
@@ -348,7 +349,37 @@ async function addRouteGroup(req, res, router) {
     }
 
     await fgroup.save();
-    router.redis.needsGroupUpdate = true;
+    gm.redis.needsGroupUpdate = true;
+    res.code(200).send(fgroup);
+}
+
+async function deleteRouteGroup(req, res, router) {
+
+    if (!req.params.groupname) {
+        res.code(400).send(
+            {
+                type: 'error',
+                msg: 'A group requires a name',
+            });
+        return;
+    }
+
+    var fgroup = await getGroup(req, res, router);
+
+    if (!fgroup) {
+        return;
+    }
+
+    if (!fgroup.removeRoute(req.body)) {
+        res.code(400).send({
+            type: 'error',
+            msg: 'Group does not have that route/permission',
+        });
+        return;
+    }
+
+    await fgroup.save();
+    gm.redis.needsGroupUpdate = true;
     res.code(200).send(fgroup);
 }
 
@@ -369,7 +400,7 @@ async function deleteGroup(req, res, router) {
     }
 
     await fgroup.delete();
-    router.redis.needsGroupUpdate = true;
+    gm.redis.needsGroupUpdate = true;
     res.code(200).send();
 }
 
@@ -386,6 +417,69 @@ async function getInhertedUsers(group, users, query = {}) {
     return users = users.concat(await User.findAllBy(userUtils.setUser({group_id: group.id}, query)));
 }
 
+async function addInheritedToGroup(req, res, router) {
+    var group = await getGroup(req, res, router);
+
+    if (!group) {
+        return;
+    }
+
+    var inhertedGroup = await gm.getGroup(req.params.inheritedGroupName.toLowerCase());
+
+    if (!inhertedGroup) {
+        res.code(400).send({
+            type: 'error',
+            msg: 'No group to inherit from by that name.',
+        });
+        return;
+    }
+
+    if (!group.inherited) {
+        group.inherited = [];
+    }
+
+    group.inherited.push(inhertedGroup.id);
+
+    req.body = {
+        inherited: group.inherited,
+    };
+    await editGroup(req, res, router);
+}
+
+async function removeInheritance(req, res, router) {
+    var group = await getGroup(req, res, router);
+
+    if (!group) {
+        return;
+    }
+
+    var inhertedGroup = await gm.getGroup(req.params.inheritedGroupName.toLowerCase());
+
+    if (!inhertedGroup) {
+        res.code(400).send({
+            type: 'error',
+            msg: 'No group to remove inheritance from by that name.',
+        });
+        return;
+    }
+    var inheritedIndex = group.inherited.indexOf(inhertedGroup.id);
+
+    if (!group.inherited || inheritedIndex == -1) {
+        res.code(400).send({
+            type: 'error',
+            msg: 'No group to remove inheritance from by that name.',
+        });
+        return;
+    }
+
+    group.inherited.splice(inheritedIndex, 1);
+
+    req.body = {
+        inherited: group.inherited,
+    };
+    await editGroup(req, res, router);
+}
+
 module.exports = function(app, opts, done) {
     const router = opts.router;
 
@@ -399,8 +493,30 @@ module.exports = function(app, opts, done) {
         await addGroup(req, res, router);
     });
 
-    // Edit Group
+    app.post('/group/name/:groupname', async (req, res) => {
+        req.body = {
+            name: req.params.groupname,
+        };
+        await addGroup(req, res, router);
+    });
+
+    app.post('/group/type/:grouptype/name/:groupname', async (req, res) => {
+        req.body = {
+            name: req.params.groupname,
+            type: req.params.grouptype,
+        };
+        await addGroup(req, res, router);
+    });
+
+    // Edit Group Routes
     app.put('/group/name/:groupname/insert/route', async (req, res) => {
+        await addRouteGroup(req, res, router);
+    });
+
+    app.put('/group/name/:groupname/insert/permission/:permission', async (req, res) => {
+        req.body = {
+            name: req.params.permission,
+        };
         await addRouteGroup(req, res, router);
     });
 
@@ -408,6 +524,29 @@ module.exports = function(app, opts, done) {
         await addRouteGroup(req, res, router);
     });
 
+    app.put('/group/type/:grouptype/name/:groupname/insert/permission/:permission', async (req, res) => {
+        req.body = {
+            name: req.params.permission,
+        };
+        await addRouteGroup(req, res, router);
+    });
+
+    // Delete Group Routes
+    app.delete('/group/name/:groupname/permission/:permission', async (req, res) => {
+        req.body = {
+            name: req.params.permission,
+        };
+        await deleteRouteGroup(req, res, router);
+    });
+
+    app.delete('/group/type/:grouptype/name/:groupname/permission/:permission', async (req, res) => {
+        req.body = {
+            name: req.params.permission,
+        };
+        await deleteRouteGroup(req, res, router);
+    });
+
+    // Edit Groups
     app.put('/group/name/:groupname', async (req, res) => {
         await editGroup(req, res, router);
     });
@@ -428,6 +567,22 @@ module.exports = function(app, opts, done) {
             is_default: true,
         };
         await editGroup(req, res, router);
+    });
+
+    app.put('/group/name/:groupname/inherit/from/:inheritedGroupName', async (req, res) => {
+        await addInheritedToGroup(req, res, router);
+    });
+
+    app.put('/group/type/:grouptype/name/:groupname/inherit/from/:inheritedGroupName', async (req, res) => {
+        await addInheritedToGroup(req, res, router);
+    });
+
+    app.delete('/group/name/:groupname/remove/inheritance/:inheritedGroupName', async (req, res) => {
+        await removeInheritance(req, res, router);
+    });
+
+    app.delete('/group/type/:grouptype/name/:groupname/remove/inheritance/:inheritedGroupName', async (req, res) => {
+        await removeInheritance(req, res, router);
     });
 
     // Delete Group
@@ -474,39 +629,33 @@ module.exports = function(app, opts, done) {
 
     });
 
-    // app.get('/group/type/:grouptype/users', async (req, res) => {
-    //     var group = await getGroup(req, res, router);
-    //
-    //     if (!group) {
-    //         return;
-    //     }
-    //
-    //     if (!misc.isEmpty(req.query) && userUtils.checkValidUser(req.query, false)) {
-    //         var query = userUtils.setUser({group_id: group.id}, req.query);
-    //
-    //         res.code(200).send(await User.findAllBy(query));
-    //     }
-    //     res.code(200).send(await User.findAllBy({group_id: group.id}));
-    // });
-    //
-    // app.get('/group/type/:grouptype/users/inherited', async (req, res) => {
-    //     var group = await getGroup(req, res, router);
-    //
-    //     if (!group) {
-    //         return;
-    //     }
-    //
-    //     if (!misc.isEmpty(req.query) && userUtils.checkValidUser(req.query, false)) {
-    //         var query = userUtils.setUser({group_id: group.id}, req.query);
-    //
-    //         res.code(200).send(await User.findAllBy(query));
-    //     }
-    //
-    //     res.code(200).send(await getInhertedUsers(group, []));
-    //
-    // });
-
     app.get('/group/type/:grouptype/name/:groupname/users/inherited', async (req, res) => {
+        var group = await getGroup(req, res, router);
+
+        if (!group) {
+            return;
+        }
+
+        var query = !misc.isEmpty(req.query) && userUtils.checkValidUser(req.query, false) ? req.query : {};
+
+        res.code(200).send(await getInhertedUsers(group, [], query));
+    });
+    app.get('/group/name/:groupname/users', async (req, res) => {
+        var group = await getGroup(req, res, router);
+
+        if (!group) {
+            return;
+        }
+        if (!misc.isEmpty(req.query) && userUtils.checkValidUser(req.query, false)) {
+            var query = userUtils.setUser({group_id: group.id}, req.query);
+
+            res.code(200).send(await User.findAllBy(query));
+        }
+        res.code(200).send(await User.findAllBy({group_id: group.id}));
+
+    });
+
+    app.get('/group/name/:groupname/users/inherited', async (req, res) => {
         var group = await getGroup(req, res, router);
 
         if (!group) {
@@ -520,11 +669,11 @@ module.exports = function(app, opts, done) {
 
     // Get Groups
     app.get('/groups', async (req, res) => {
-        res.send(await router.getGroups());
+        res.send(await gm.getGroups());
     });
 
     app.get('/groups/type/:grouptype', async (req, res) => {
-        var groups = await router.getGroups();
+        var groups = await gm.getGroups();
 
         req.params.grouptype = req.params.grouptype.toLowerCase();
         res.send(groups.filter(e=>{
@@ -533,7 +682,7 @@ module.exports = function(app, opts, done) {
     });
 
     app.get('/groups/types', async (req, res) => {
-        var groups = await router.getGroups();
+        var groups = await gm.getGroups();
 
         res.send(Array.from(new Set(groups.map(g=> g.type))));
     });
@@ -542,45 +691,49 @@ module.exports = function(app, opts, done) {
 
     app.put('/groups/import', async (req, res) => {
         // Possibly should put a check or lock to stop all group editing until import is done.
-
-        var keys = Object.keys(req.body);
+        var grouptypes = Object.keys(req.body);
         var groups = [];
         var inheritance = {};
         var savedGroups = {};
 
-        for (var i = 0; i < keys.length; i++) {
-            req.body[keys[i]].name = keys[i];
-            var group = req.body[keys[i]];
+        for (var k = 0; k < grouptypes.length; k++) {
+            var keys = Object.keys(req.body[grouptypes[k]]);
 
-            try {
-                if (group.inherited && group.inherited.length > 0) {
-                    inheritance[group.name] = [];
-                    for (var j = 0; j < group.inherited.length; j++) {
-                        inheritance[group.name].push(group.inherited[j]);
+            for (var i = 0; i < keys.length; i++) {
+                req.body[grouptypes[k]][keys[i]].name = keys[i];
+                var group = req.body[grouptypes[k]][keys[i]];
+                var keyGroupName = group.type + '|' + group.name;
+
+                try {
+                    if (group.inherited && group.inherited.length > 0) {
+                        inheritance[keyGroupName] = [];
+                        for (var j = 0; j < group.inherited.length; j++) {
+                            inheritance[keyGroupName].push(group.inherited[j]);
+                        }
                     }
-                }
-                var fgroup = await router.getGroup(group.name);
+                    var fgroup = await gm.getGroup(group.name, group.type);
 
-                if (fgroup) {
-                    fgroup._.inherited = null;
-                    fgroup = fgroup._;
+                    if (fgroup) {
+                        fgroup._.inherited = null;
+                        fgroup = fgroup._;
+                    } else {
+                        fgroup = {};
+                    }
+                    groups.push(await setGroup({body: group}, new Group(fgroup), router, req.body));
+                } catch (e) {
+                    res.code(400).send(e);
+                }
+            }
+
+            for (var i = 0; i < groups.length; i++) {
+                if (groups[i].id) {
+                    await groups[i].save();
                 } else {
-                    fgroup = {};
+                    await groups[i].create();
                 }
-                groups.push(await setGroup({body: group}, new Group(fgroup), router, req.body));
-            } catch (e) {
-                res.code(400).send(e);
-            }
-        }
 
-        for (var i = 0; i < groups.length; i++) {
-            if (groups[i].id) {
-                await groups[i].save();
-            } else {
-                await groups[i].create();
+                savedGroups[groups[i].type + '|' + groups[i].name] = groups[i];
             }
-
-            savedGroups[groups[i].name] = groups[i];
         }
 
         var inheritanceKeys = Object.keys(inheritance);
@@ -598,7 +751,7 @@ module.exports = function(app, opts, done) {
             }
             await savedGroups[inheritanceKeys[i]].save();
         }
-        router.redis.needsGroupUpdate = true;
+        gm.redis.needsGroupUpdate = true;
 
         if (failedInheritance.length > 0) {
             res.code(240).send({
@@ -613,8 +766,8 @@ module.exports = function(app, opts, done) {
     });
 
     app.get('/groups/export', async (req, res) => {
-        var groups = await router.getGroups();
-        var mappedGroups = await router.getMappedGroups();
+        var groups = await gm.getGroups();
+        var mappedGroups = await gm.getMappedGroups();
         var exported = {
         };
 
@@ -628,12 +781,15 @@ module.exports = function(app, opts, done) {
             }
             if (group.inherited && group.inherited.length > 0) {
                 for (var j = 0; j < group.inherited.length; j++) {
-                    group.inherited[j] = mappedGroups[group.inherited[j]].name;
+                    group.inherited[j] = mappedGroups[group.inherited[j]].type + '|' + mappedGroups[group.inherited[j]].name;
                 }
             }
             group.id = undefined;
-            exported[group.name] = group;
-            exported[group.name].name = undefined;
+            if (!exported[group.type]) {
+                exported[group.type] = {};
+            }
+            exported[group.type][group.name] = group;
+            exported[group.type][group.name].name = undefined;
         }
 
         // console.log('Groups After', groups);

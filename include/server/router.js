@@ -4,11 +4,9 @@ const httpProxy = require('http-proxy');
 const http = require('http');
 const https = require('https');
 const config = require('../utils/config');
-const database = require('../database');
-const Group = require('../database/models/group');
+const gm = require('./groupmanager');
 const log = config.log.logger;
 const regex = require('../utils/regex');
-const redis = require('../redis');
 
 class Router {
     constructor(server) {
@@ -27,11 +25,6 @@ class Router {
                 agent: new https.Agent({keepAlive: true, timeout: config.proxy.timeout}),
                 timeout: 0,
             });
-
-        this.groups = [];
-        this.unmergedGroups = [];
-        this.mappedGroups = {};
-        this.redis = redis;
 
         // websocket listener
         server.on('upgrade', function(req, socket, head) {
@@ -57,33 +50,13 @@ class Router {
 
     }
 
-    async updateGroupList() {
-        log.debug('Updating Groups');
-        var grps = await Group.findAll();
-
-        this.mappedGroups = {};
-        this.unmergedGroups = [];
-        for (var i = 0; i < grps.length; i++) {
-            this.unmergedGroups.push(grps[i]);
-            // this.mappedGroups[grps[i].id] = {...grps[i]._, inherited: grps[i]._.inherited ? [...grps[i]._.inherited] : []};
-            this.mappedGroups[grps[i].id] = new Group(grps[i]._);
-            // this.groups[grps[i].name] = database.groupInheritedMerge(new Group({...grps[i]._, inherited: grps[i]._.inherited ? [...grps[i]._.inherited] : []}), grps);
-            this.groups[grps[i].name] = database.groupInheritedMerge(new Group(grps[i]._), grps);
-        }
-        // console.log(this.groups);
-        // console.log(this.mappedGroups);
-        this.redis.needsGroupUpdate = false;
-    }
-
     async routeUrl(req, res) {
         var authenticated = req.isAuthenticated;
         var sessionUser = req.session.data ? req.session.data.user : null;
 
-        if (this.redis.needsGroupUpdate) {
-            await this.updateGroupList();
-        }
+        await gm.updateGroupsIfNeeeded();
 
-        var group = await this.currentGroup(req, res);
+        var group = await gm.currentGroup(req, res);
 
         if (sessionUser && sessionUser.locked) {
             req.logout(req, res);
@@ -204,7 +177,12 @@ class Router {
         for (var i = 0; i < routes.length; i++) {
 
             if (!routes[i].method || !method || method == routes[i].method || routes[i].method == '*') {
-                var route = this.transformRoute(user, routes[i], routes[i].route).split(/[\/]/g).filter(String);
+                var route = this.transformRoute(user, routes[i], routes[i].route);
+
+                if(!route) {
+                  continue;
+                }
+                route = route.split(/[\/]/g).filter(String);
 
                 if (route.length == surl.length || route.length <= surl.length + 1 && (route[route.length - 1] == '*' || route[0] == '*')) {
                     var allowed = true;
@@ -262,7 +240,9 @@ class Router {
 
     transformRoute(usr, route, path) {
         var user = !usr ? {group: {}} : usr;
-
+        if(!path) {
+          return path;
+        }
         return path.replace(regex.transformRoute, (a, b, c)=>{
             var prop = '';
 
@@ -288,72 +268,6 @@ class Router {
             }
             return prop;
         });
-    }
-
-    async currentGroup(req, res) {
-
-        if (this.redis.needsGroupUpdate) {
-            await this.updateGroupList();
-        }
-
-        return !req.isAuthenticated ? this.groups['anonymous'] : this.groups[req.session.data.user.group.name];
-    }
-
-    async defaultGroup() {
-
-        if (this.redis.needsGroupUpdate) {
-            await this.updateGroupList();
-        }
-
-        for (var i = 0; i < this.unmergedGroups.length; i++) {
-            if (this.unmergedGroups[i].is_default) {
-                return this.unmergedGroups[i];
-            }
-        }
-    }
-
-    async getGroup(id) {
-
-        if (this.redis.needsGroupUpdate) {
-            await this.updateGroupList();
-        }
-        for (var i = 0; i < this.unmergedGroups.length; i++) {
-            if (this.unmergedGroups[i].id == id || this.unmergedGroups[i].name == id) {
-                return this.unmergedGroups[i];
-            }
-        }
-        return null;
-    }
-
-    async getGroupByType(type) {
-
-        if (this.redis.needsGroupUpdate) {
-            await this.updateGroupList();
-        }
-
-        for (var i = 0; i < this.unmergedGroups.length; i++) {
-            if (this.unmergedGroups[i].type == type) {
-                return this.unmergedGroups[i];
-            }
-        }
-    }
-
-    async getGroups() {
-
-        if (this.redis.needsGroupUpdate) {
-            await this.updateGroupList();
-        }
-
-        return this.unmergedGroups;
-    }
-
-    async getMappedGroups() {
-
-        if (this.redis.needsGroupUpdate) {
-            await this.updateGroupList();
-        }
-
-        return this.mappedGroups;
     }
 
     setBackurl(res, req) {

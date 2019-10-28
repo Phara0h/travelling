@@ -159,7 +159,7 @@ module.exports = {
         'spaced-comment': [2, 'always', {'block': {'exceptions': ['-+*']} }],
         ////////// Legacy //////////
 
-        'max-depth': [1, 4],
+        'max-depth': [1, 5],
         'max-len': [2, MAX_CHARS, SPACES_PER_TAB]
     },
 };

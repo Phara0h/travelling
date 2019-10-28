@@ -3,7 +3,7 @@
 const config = require('./config');
 const regex = {
     email: new RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/),
-    username: new RegExp(`^[A-Za-z0-9_@\..]{${config.username.minchar},}$`),
+    username: new RegExp(`^[A-Za-z0-9_@\.]{${config.username.minchar},}$`),
     password: new RegExp('^' + (config.password.consecutive ? '' : '(?!.*(.)\\1{1})')
         + '(?=(.*[\\d]){' + config.password.number + ',})(?=(.*[a-z]){'
         + config.password.lowercase

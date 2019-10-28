@@ -48,15 +48,14 @@ class Group extends Base(BaseModel, 'groups', {
     }
 
     addRoute(route) {
-        if (!route.method) {
-            route.method = '*';
+        if (route.method) {
+            route.method = route.method.toUpperCase();
         }
-        route.method = route.method.toUpperCase();
 
         if (!route.name) {
             const url = new URL('http://localhost' + route.route);
 
-            route.name = route.method + url.pathname.replace(/\//g, '-');
+            route.name = (route.method || '*') + url.pathname.replace(/\//g, '-');
             // try {
             //     route.name = route.name + '-' + [...url.searchParams.keys()].join('-');
             // } catch (_) {}
@@ -69,13 +68,43 @@ class Group extends Base(BaseModel, 'groups', {
         }
 
         for (var i = 0; i < this.allowed.length; i++) {
-            if (this.allowed[i].name == route.name || this.allowed[i].route == route.route) {
+            if (this.allowed[i].name == route.name || route.route && this.allowed[i].route == route.route) {
                 return false;
             }
         }
 
         this.allowed.push(route);
         this.allowed = [...this.allowed];
+        return true;
+    }
+
+    removeRoute(route) {
+        if (!route.name) {
+            return false;
+        }
+
+        route.name = route.name.toLowerCase();
+
+        if (!this.allowed || this.allowed.length <= 0) {
+            this.allowed = [];
+        }
+
+        let found = false;
+
+        for (var i = 0; i < this.allowed.length; i++) {
+            if (this.allowed[i].name == route.name || this.allowed[i].route == route.name) {
+                found = i;
+                break;
+            }
+        }
+
+        if (found === false) {
+            return false;
+        }
+
+        this.allowed.splice(found, 1);
+        this.allowed = [...this.allowed];
+
         return true;
     }
 
