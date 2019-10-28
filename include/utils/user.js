@@ -57,6 +57,15 @@ module.exports = {
             };
         }
 
+        if (user.group_id) {
+            if (regex.uuidv4.exec(user.group_id) == null) {
+                return {
+                    type: 'group-id-error',
+                    msg: 'Group id contain invalid characters.',
+                };
+            }
+        }
+
         if (user.user_data) {
             try {
                 user.user_data = JSON.stringify(user.user_data);
@@ -108,7 +117,7 @@ module.exports = {
         }
 
         if (props.group_id) {
-            user.group_id = Number(props.group_id);
+            user.group_id = props.group_id;
         }
 
         if (props.group_request !== undefined) {

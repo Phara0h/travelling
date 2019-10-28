@@ -6,6 +6,7 @@ const TokenHandler = require('../../token');
 const userUtils = require('../../utils/user');
 const config = require('../../utils/config');
 const misc = require('../../utils/misc');
+const gm = require('../../server/groupmanager');
 
 async function deleteUser(req, res, router) {
 
@@ -241,14 +242,14 @@ function routes(app, opts, done) {
 
     app.get('/user/me/route/allowed', async (req, res) => {
 
-        var isAllowed = req.session ? router.isRouteAllowed(req.query.method, req.query.route, await router.currentGroup(req, res), !req.isAuthenticated ? null : req.session.data.user) : false;
+        var isAllowed = req.session ? router.isRouteAllowed(req.query.method, req.query.route, await gm.currentGroup(req, res), !req.isAuthenticated ? null : req.session.data.user) : false;
 
         res.code(isAllowed ? 200 : 401).send();
     });
 
     app.get('/user/me/permission/allowed/:permission', async (req, res) => {
 
-        var isAllowed = req.session ? router.isPermissionAllowed(req.params.permission, await router.currentGroup(req, res), !req.isAuthenticated ? null : req.session.data.user) : false;
+        var isAllowed = req.session ? router.isPermissionAllowed(req.params.permission, await gm.currentGroup(req, res), !req.isAuthenticated ? null : req.session.data.user) : false;
 
         res.code(isAllowed ? 200 : 401).send();
     });

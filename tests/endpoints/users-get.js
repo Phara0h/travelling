@@ -9,6 +9,7 @@ module.exports = () => {
         test('Get Users', async () => {
           var res = await Travelling.Users.get(userContainer.user1Token);
           expect(res.statusCode).toEqual(200);
+          expect(res.body).toHaveLength(4);
         });
 
         test('Get Users By GroupRequest', async () => {

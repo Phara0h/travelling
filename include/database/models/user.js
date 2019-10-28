@@ -5,6 +5,7 @@ const Base = require('@abeai/node-utils').Base;
 const PGTypes = require('@abeai/node-utils').PGTypes;
 const Group = require('./group');
 const config = require('../../utils/config');
+const gm = require('../../server/groupmanager');
 
 class User extends Base(BaseModel, 'users', {
     id: PGTypes.PK,
@@ -59,8 +60,8 @@ class User extends Base(BaseModel, 'users', {
 
     }
 
-    async resolveGroup(router) {
-        var group = router ? await router.getGroup(this.group_id) : await Group.findById(this.group_id);
+    async resolveGroup() {
+        var group = await gm.getGroup(this.group_id) || await Group.findById(this.group_id);
 
         if (!this.group) {
             this.addProperty('group', group);

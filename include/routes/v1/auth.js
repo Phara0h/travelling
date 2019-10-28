@@ -8,6 +8,7 @@ const CookieToken = require('../../utils/cookietoken');
 const TokenHandler = require('../../token');
 
 const {checkValidUser} = require('../../utils/user');
+const gm = require('../../server/groupmanager');
 
 var login = async (user, req, res, router) => {
 
@@ -123,13 +124,13 @@ module.exports = function(app, opts, done) {
 
     app.post('/auth/register', async (req, res) =>{
 
-        if (req.isAuthenticated) {
-            res.code(200).send({
-                type: 'register-session-error',
-                msg: 'Logged in already, logout first to register',
-            });
-            return;
-        }
+        // if (req.isAuthenticated) {
+        //     res.code(200).send({
+        //         type: 'register-session-error',
+        //         msg: 'Logged in already, logout first to register',
+        //     });
+        //     return;
+        // }
 
         var isValid = await checkValidUser(req.body);
 
@@ -155,7 +156,7 @@ module.exports = function(app, opts, done) {
             groupRequest = req.body.group_request.toLowerCase();
         }
 
-        var dGroup = await router.defaultGroup();
+        var dGroup = await gm.defaultGroup();
         var user = await Database.createAccount(username, password, email, dGroup.id, groupRequest);
 
         config.log.logger.info('New User Created: ' + user.username + ' | ' + req.connection);
