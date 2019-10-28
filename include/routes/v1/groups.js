@@ -700,8 +700,12 @@ module.exports = function(app, opts, done) {
             var keys = Object.keys(req.body[grouptypes[k]]);
 
             for (var i = 0; i < keys.length; i++) {
-                req.body[grouptypes[k]][keys[i]].name = keys[i];
+
                 var group = req.body[grouptypes[k]][keys[i]];
+
+                group.name = keys[i];
+                group.type = grouptypes[k];
+
                 var keyGroupName = group.type + '|' + group.name;
 
                 try {
@@ -719,6 +723,7 @@ module.exports = function(app, opts, done) {
                     } else {
                         fgroup = {};
                     }
+
                     groups.push(await setGroup({body: group}, new Group(fgroup), router, req.body));
                 } catch (e) {
                     res.code(400).send(e);
@@ -788,8 +793,16 @@ module.exports = function(app, opts, done) {
             if (!exported[group.type]) {
                 exported[group.type] = {};
             }
-            exported[group.type][group.name] = group;
-            exported[group.type][group.name].name = undefined;
+            exported[group.type][group.name] = {};
+            if (group.allowed && group.allowed.length > 0) {
+                exported[group.type][group.name].allowed = group.allowed;
+            }
+            if (group.inherited && group.inherited.length > 0) {
+                exported[group.type][group.name].inherited = group.inherited;
+            }
+            if (group.is_default) {
+                exported[group.type][group.name].is_default = group.is_default;
+            }
         }
 
         // console.log('Groups After', groups);
