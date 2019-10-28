@@ -123,8 +123,8 @@ class Router {
                 target: this.transformRoute(sessionUser, r, r.host || `${config.https ? 'https' : 'http'}://127.0.0.1:${config.port}`),
             };
 
-            if (r.removeFromPath) {
-                req.raw.url = req.raw.url.replace(this.transformRoute(sessionUser, r, r.removeFromPath), '');
+            if (r.remove_from_path) {
+                req.raw.url = req.raw.url.replace(this.transformRoute(sessionUser, r, r.remove_from_path), '');
             }
 
             if (config.log.requests && authenticated) {

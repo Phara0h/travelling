@@ -200,7 +200,7 @@ class Database {
             anon.addRoute({
                 route: '/travelling/assets/*',
                 host: null,
-                removeFromPath: '/travelling/assets/',
+                remove_from_path: '/travelling/assets/',
                 method: 'GET',
             });
             anon.addRoute({

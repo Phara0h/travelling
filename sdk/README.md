@@ -421,105 +421,115 @@ import - Imports all groups from the exported format.
 body
 ```js
 {
-    "anonymous": {
-        "type": "group",
-        "allowed": [{
-                "route": "/travelling/portal/*",
-                "host": null,
-                "removeFromPath": "/travelling/portal",
-                "method": "*",
-                "name": "*-travelling-portal-*"
-            },
-            {
-                "route": "/travelling/api/v1/auth/*",
-                "host": null,
-                "method": "*",
-                "name": "*-travelling-api-v1-auth-*"
-            },
-            {
-                "route": "/travelling/api/v1/user/me/route/allowed",
-                "host": null,
-                "method": "GET",
-                "name": "get-travelling-api-v1-user-me-route-allowed"
-            },
-            {
-                "route": "/travelling/api/v1/user/me/permission/allowed/*",
-                "host": null,
-                "method": "GET",
-                "name": "get-travelling-api-v1-user-me-permission-allowed-*"
-            },
-            {
-                "route": "/travelling/assets/*",
-                "host": null,
-                "removeFromPath": "/travelling/assets/",
-                "method": "*",
-                "name": "*-travelling-assets-*"
-            },
-            {
-                "route": "travelling/api/v1/config/password",
-                "host": null,
-                "method": "GET",
-                "name": "gettravelling-api-v1-config-password"
-            },
-            {
-                "route": "/favicon.ico",
-                "host": null,
-                "method": "GET",
-                "name": "get-favicon.ico"
-            }
-        ],
-        "inherited": null,
-        "is_default": false
+    "testgroup": {
+        "group1": {
+            "inherited": [
+                "group|group4"
+            ]
+        },
+        "superadmin": {}
     },
-    "group2": {
-        "type": "accounts",
-        "allowed": null,
-        "inherited": [
-            "group1"
-        ],
-        "is_default": false
-    },
-    "group4": {
-        "type": "accounts",
-        "allowed": null,
-        "inherited": [
-            "group2",
-            "group3"
-        ],
-        "is_default": false
-    },
-    "group1": {
-        "type": "accounts",
-        "allowed": null,
-        "inherited": null,
-        "is_default": false
-    },
-    "group3": {
-        "type": "accounts",
-        "allowed": null,
-        "inherited": [
-            "group9"
-        ],
-        "is_default": false
-    },
-    "group9": {
-        "type": "swag2",
-        "allowed": null,
-        "inherited": null,
-        "is_default": true
-    },
-    "superadmin": {
-        "type": "group",
-        "allowed": [{
-            "host": null,
-            "route": "/travelling/*",
-            "method": "*",
-            "name": "*-travelling-*"
-        }],
-        "inherited": [
-            "anonymous"
-        ],
-        "is_default": false
+    "group": {
+        "anonymous": {
+            "allowed": [{
+                    "route": "/travelling/portal/*",
+                    "host": null,
+                    "name": "*-travelling-portal-*"
+                },
+                {
+                    "route": "/travelling/api/v1/auth/*",
+                    "host": null,
+                    "name": "*-travelling-api-v1-auth-*"
+                },
+                {
+                    "route": "/travelling/api/v1/user/me/route/allowed",
+                    "host": null,
+                    "method": "GET",
+                    "name": "get-travelling-api-v1-user-me-route-allowed"
+                },
+                {
+                    "route": "/travelling/api/v1/user/me/permission/allowed/*",
+                    "host": null,
+                    "method": "GET",
+                    "name": "get-travelling-api-v1-user-me-permission-allowed-*"
+                },
+                {
+                    "route": "/travelling/assets/*",
+                    "host": null,
+                    "remove_from_path": "/travelling/assets/",
+                    "method": "GET",
+                    "name": "get-travelling-assets-*"
+                },
+                {
+                    "route": "/travelling/api/v1/config/password",
+                    "host": null,
+                    "method": "GET",
+                    "name": "get-travelling-api-v1-config-password"
+                },
+                {
+                    "route": "/favicon.ico",
+                    "host": null,
+                    "method": "GET",
+                    "name": "get-favicon.ico"
+                }
+            ]
+        },
+        "group4": {},
+        "group1": {},
+        "group3": {
+            "inherited": [
+                "testgroup|group1",
+                "group|group2"
+            ]
+        },
+        "superadmin": {
+            "allowed": [{
+                    "host": null,
+                    "route": "/travelling/*",
+                    "name": "*-travelling-*"
+                },
+                {
+                    "name": "test-one-*-three"
+                }
+            ],
+            "inherited": [
+                "group|anonymous"
+            ]
+        },
+        "group2": {
+            "allowed": [{
+                    "route": "/test/get",
+                    "host": "https://127.0.0.1:4268/:username/:group",
+                    "remove_from_path": "/test/get",
+                    "method": "GET",
+                    "name": "get-test-get"
+                },
+                {
+                    "route": "/test/post",
+                    "host": "http://127.0.0.1:4267/?id=:id&permission=:permission",
+                    "remove_from_path": "/test/post",
+                    "method": "POST",
+                    "name": "post-test-post"
+                }
+            ],
+            "inherited": [
+                "testgroup|group1"
+            ]
+        },
+        "group5": {
+            "allowed": [{
+                "route": "/test/delete/:grouptype",
+                "host": "https://127.0.0.1:4268",
+                "remove_from_path": "/test/delete",
+                "method": "DELETE",
+                "name": "delete-test-delete-:grouptype"
+            }],
+            "inherited": [
+                "group|group4",
+                "group|superadmin"
+            ],
+            "is_default": true
+        }
     }
 }
 ```
@@ -540,30 +550,17 @@ get - Get all the groups
 **Kind**: global class  
 
 * [Group](#Group)
-    * [.deletePermission(name, permission, authorization_bearer)](#Group.deletePermission)
     * [.addPermission(name, permission, authorization_bearer)](#Group.addPermission)
+    * [.deletePermission(name, permission, authorization_bearer)](#Group.deletePermission)
     * [.addRoute(body, name, authorization_bearer)](#Group.addRoute)
     * [.removeInheritance(name, inherited, authorization_bearer)](#Group.removeInheritance)
     * [.inheritFrom(name, inherited, authorization_bearer)](#Group.inheritFrom)
     * [.setDefault(name)](#Group.setDefault)
-    * [.delete(body, name, authorization_bearer)](#Group.delete)
+    * [.delete(name, authorization_bearer)](#Group.delete)
     * [.edit(body, name, authorization_bearer)](#Group.edit)
     * [.get(id, authorization_bearer)](#Group.get)
     * [.createByName(name, authorization_bearer)](#Group.createByName)
     * [.create(body, authorization_bearer)](#Group.create)
-
-<a name="Group.deletePermission"></a>
-
-### Group.deletePermission(name, permission, authorization_bearer)
-deletePermission - Removes a permission/route from a group.
-
-**Kind**: static method of [<code>Group</code>](#Group)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| name | <code>any</code> | Name of the group (example: anonymous) |
-| permission | <code>any</code> | Name or Route (example: test-one-two-*) |
-| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="Group.addPermission"></a>
 
@@ -578,6 +575,19 @@ addPermission - Adds a permission to a group.
 | permission | <code>any</code> | Permission (example: test-one-two-*) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
+<a name="Group.deletePermission"></a>
+
+### Group.deletePermission(name, permission, authorization_bearer)
+deletePermission - Removes a permission/route from a group.
+
+**Kind**: static method of [<code>Group</code>](#Group)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| name | <code>any</code> | Name of the group (example: anonymous) |
+| permission | <code>any</code> | Name or Route (example: test-one-two-*) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
 <a name="Group.addRoute"></a>
 
 ### Group.addRoute(body, name, authorization_bearer)
@@ -588,7 +598,7 @@ addRoute - Adds a route to a group.
         "route": "test/permissions/*", // optional
         "host": null, // optional, defaults to travelling host
         "method": "*", // optional, defaults to '*'
-        "removeFromPath": 'test/', // optional 
+        "remove_from_path": 'test/', // optional 
         "name": "test-permissions-*"  // Required and needs to be unqiue, defaults to method + route seperated by '-' instead of `/`
     }
     ```
@@ -650,33 +660,16 @@ setDefault - Sets the group to be the default group for new users.
 
 <a name="Group.delete"></a>
 
-### Group.delete(body, name, authorization_bearer)
+### Group.delete(name, authorization_bearer)
 delete - delete group by its id or name
 
 **Kind**: static method of [<code>Group</code>](#Group)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| body | <code>Object</code> |  |
 | name | <code>any</code> | id or name |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
-**Example**  
-body
-```js
-{
-    "name": "group1",
-    "type": "accounts",
-    "allowed": [{
-        "route": "/test",
-        "host": "http://127.0.0.1:1237/",
-        "removeFromPath": "test",
-        "method": "*",
-        "name": "all-test"
-    }],
-    "is_default": false
-}
-```
 <a name="Group.edit"></a>
 
 ### Group.edit(body, name, authorization_bearer)
@@ -697,7 +690,7 @@ body
     "allowed": [{
             "route": "/travelling/portal/*",
             "host": null,
-            "removeFromPath": "/travelling/portal",
+            "remove_from_path": "/travelling/portal",
             "method": "*",
             "name": "*-travelling-portal-*"
         },
@@ -722,7 +715,7 @@ body
         {
             "route": "/travelling/assets/*",
             "host": null,
-            "removeFromPath": "/travelling/assets/",
+            "remove_from_path": "/travelling/assets/",
             "method": "*",
             "name": "*-travelling-assets-*"
         },
@@ -779,7 +772,7 @@ body
     "allowed": [{
         "route": "/test",
         "host": "http://127.0.0.1:1237/",
-        "removeFromPath": "test",
+        "remove_from_path": "test",
         "method": "*",
         "name": "all-test"
     }],
@@ -869,7 +862,7 @@ get - Gets all the users that belong to the group.
     * [.setDefault(type, name)](#GroupType.setDefault)
     * [.all(type, authorization_bearer)](#GroupType.all)
     * [.getTypesList(authorization_bearer)](#GroupType.getTypesList)
-    * [.delete(body, type, name, authorization_bearer)](#GroupType.delete)
+    * [.delete(type, name, authorization_bearer)](#GroupType.delete)
     * [.get(type, id, authorization_bearer)](#GroupType.get)
     * [.edit(body, type, name, authorization_bearer)](#GroupType.edit)
     * [.createByName(type, name, authorization_bearer)](#GroupType.createByName)
@@ -913,7 +906,7 @@ addRoute - Adds a route to a group of a particular type.
         "route": "test/permissions/*", // optional
         "host": null, // optional, defaults to travelling host
         "method": "*", // optional, defaults to '*'
-        "removeFromPath": 'test/', // optional 
+        "remove_from_path": 'test/', // optional 
         "name": "test-permissions-*"  // Required and needs to be unqiue, defaults to method + route seperated by '-' instead of `/`
     }
     ```
@@ -1002,34 +995,17 @@ getTypesList - Gets all the types of groups currently made.
 
 <a name="GroupType.delete"></a>
 
-### GroupType.delete(body, type, name, authorization_bearer)
+### GroupType.delete(type, name, authorization_bearer)
 delete - delete group of a particular type by its name or id
 
 **Kind**: static method of [<code>GroupType</code>](#GroupType)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| body | <code>Object</code> |  |
 | type | <code>any</code> | The type of the group |
 | name | <code>any</code> | id or name |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
-**Example**  
-body
-```js
-{
-    "name": "group1",
-    "type": "accounts",
-    "allowed": [{
-        "route": "/test",
-        "host": "http://127.0.0.1:1237/",
-        "removeFromPath": "test",
-        "method": "*",
-        "name": "all-test"
-    }],
-    "is_default": false
-}
-```
 <a name="GroupType.get"></a>
 
 ### GroupType.get(type, id, authorization_bearer)
@@ -1099,7 +1075,7 @@ body
     "allowed": [{
         "route": "/test",
         "host": "http://127.0.0.1:1237/",
-        "removeFromPath": "test",
+        "remove_from_path": "test",
         "method": "*",
         "name": "all-test"
     }],

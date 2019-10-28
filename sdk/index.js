@@ -593,105 +593,115 @@ class Groups {
      * body
      * ```js
      * {
-     *     "anonymous": {
-     *         "type": "group",
-     *         "allowed": [{
-     *                 "route": "/travelling/portal/*",
-     *                 "host": null,
-     *                 "removeFromPath": "/travelling/portal",
-     *                 "method": "*",
-     *                 "name": "*-travelling-portal-*"
-     *             },
-     *             {
-     *                 "route": "/travelling/api/v1/auth/*",
-     *                 "host": null,
-     *                 "method": "*",
-     *                 "name": "*-travelling-api-v1-auth-*"
-     *             },
-     *             {
-     *                 "route": "/travelling/api/v1/user/me/route/allowed",
-     *                 "host": null,
-     *                 "method": "GET",
-     *                 "name": "get-travelling-api-v1-user-me-route-allowed"
-     *             },
-     *             {
-     *                 "route": "/travelling/api/v1/user/me/permission/allowed/*",
-     *                 "host": null,
-     *                 "method": "GET",
-     *                 "name": "get-travelling-api-v1-user-me-permission-allowed-*"
-     *             },
-     *             {
-     *                 "route": "/travelling/assets/*",
-     *                 "host": null,
-     *                 "removeFromPath": "/travelling/assets/",
-     *                 "method": "*",
-     *                 "name": "*-travelling-assets-*"
-     *             },
-     *             {
-     *                 "route": "travelling/api/v1/config/password",
-     *                 "host": null,
-     *                 "method": "GET",
-     *                 "name": "gettravelling-api-v1-config-password"
-     *             },
-     *             {
-     *                 "route": "/favicon.ico",
-     *                 "host": null,
-     *                 "method": "GET",
-     *                 "name": "get-favicon.ico"
-     *             }
-     *         ],
-     *         "inherited": null,
-     *         "is_default": false
+     *     "testgroup": {
+     *         "group1": {
+     *             "inherited": [
+     *                 "group|group4"
+     *             ]
+     *         },
+     *         "superadmin": {}
      *     },
-     *     "group2": {
-     *         "type": "accounts",
-     *         "allowed": null,
-     *         "inherited": [
-     *             "group1"
-     *         ],
-     *         "is_default": false
-     *     },
-     *     "group4": {
-     *         "type": "accounts",
-     *         "allowed": null,
-     *         "inherited": [
-     *             "group2",
-     *             "group3"
-     *         ],
-     *         "is_default": false
-     *     },
-     *     "group1": {
-     *         "type": "accounts",
-     *         "allowed": null,
-     *         "inherited": null,
-     *         "is_default": false
-     *     },
-     *     "group3": {
-     *         "type": "accounts",
-     *         "allowed": null,
-     *         "inherited": [
-     *             "group9"
-     *         ],
-     *         "is_default": false
-     *     },
-     *     "group9": {
-     *         "type": "swag2",
-     *         "allowed": null,
-     *         "inherited": null,
-     *         "is_default": true
-     *     },
-     *     "superadmin": {
-     *         "type": "group",
-     *         "allowed": [{
-     *             "host": null,
-     *             "route": "/travelling/*",
-     *             "method": "*",
-     *             "name": "*-travelling-*"
-     *         }],
-     *         "inherited": [
-     *             "anonymous"
-     *         ],
-     *         "is_default": false
+     *     "group": {
+     *         "anonymous": {
+     *             "allowed": [{
+     *                     "route": "/travelling/portal/*",
+     *                     "host": null,
+     *                     "name": "*-travelling-portal-*"
+     *                 },
+     *                 {
+     *                     "route": "/travelling/api/v1/auth/*",
+     *                     "host": null,
+     *                     "name": "*-travelling-api-v1-auth-*"
+     *                 },
+     *                 {
+     *                     "route": "/travelling/api/v1/user/me/route/allowed",
+     *                     "host": null,
+     *                     "method": "GET",
+     *                     "name": "get-travelling-api-v1-user-me-route-allowed"
+     *                 },
+     *                 {
+     *                     "route": "/travelling/api/v1/user/me/permission/allowed/*",
+     *                     "host": null,
+     *                     "method": "GET",
+     *                     "name": "get-travelling-api-v1-user-me-permission-allowed-*"
+     *                 },
+     *                 {
+     *                     "route": "/travelling/assets/*",
+     *                     "host": null,
+     *                     "remove_from_path": "/travelling/assets/",
+     *                     "method": "GET",
+     *                     "name": "get-travelling-assets-*"
+     *                 },
+     *                 {
+     *                     "route": "/travelling/api/v1/config/password",
+     *                     "host": null,
+     *                     "method": "GET",
+     *                     "name": "get-travelling-api-v1-config-password"
+     *                 },
+     *                 {
+     *                     "route": "/favicon.ico",
+     *                     "host": null,
+     *                     "method": "GET",
+     *                     "name": "get-favicon.ico"
+     *                 }
+     *             ]
+     *         },
+     *         "group4": {},
+     *         "group1": {},
+     *         "group3": {
+     *             "inherited": [
+     *                 "testgroup|group1",
+     *                 "group|group2"
+     *             ]
+     *         },
+     *         "superadmin": {
+     *             "allowed": [{
+     *                     "host": null,
+     *                     "route": "/travelling/*",
+     *                     "name": "*-travelling-*"
+     *                 },
+     *                 {
+     *                     "name": "test-one-*-three"
+     *                 }
+     *             ],
+     *             "inherited": [
+     *                 "group|anonymous"
+     *             ]
+     *         },
+     *         "group2": {
+     *             "allowed": [{
+     *                     "route": "/test/get",
+     *                     "host": "https://127.0.0.1:4268/:username/:group",
+     *                     "remove_from_path": "/test/get",
+     *                     "method": "GET",
+     *                     "name": "get-test-get"
+     *                 },
+     *                 {
+     *                     "route": "/test/post",
+     *                     "host": "http://127.0.0.1:4267/?id=:id&permission=:permission",
+     *                     "remove_from_path": "/test/post",
+     *                     "method": "POST",
+     *                     "name": "post-test-post"
+     *                 }
+     *             ],
+     *             "inherited": [
+     *                 "testgroup|group1"
+     *             ]
+     *         },
+     *         "group5": {
+     *             "allowed": [{
+     *                 "route": "/test/delete/:grouptype",
+     *                 "host": "https://127.0.0.1:4268",
+     *                 "remove_from_path": "/test/delete",
+     *                 "method": "DELETE",
+     *                 "name": "delete-test-delete-:grouptype"
+     *             }],
+     *             "inherited": [
+     *                 "group|group4",
+     *                 "group|superadmin"
+     *             ],
+     *             "is_default": true
+     *         }
      *     }
      * }
      * ```
@@ -743,29 +753,6 @@ class Group {
 
 
     /**
-     * deletePermission - Removes a permission/route from a group.
-     * @param {any} name Name of the group (example: anonymous)
-     * @param {any} permission Name or Route (example: test-one-two-*)
-     * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
-     */
-    static async deletePermission(name, permission, authorization_bearer, opts) {
-        var options = {
-            method: 'DELETE',
-            resolveWithFullResponse: true,
-            simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/group/name/${name}/permission/${permission}`,
-            authorization: {
-                bearer: authorization_bearer
-            },
-        };
-        if (opts) {
-            options = Object.assign(options, opts);
-        }
-        return await fasq.request(options)
-    }
-
-
-    /**
      * addPermission - Adds a permission to a group.
      * @param {any} name Name of the group (example: anonymous)
      * @param {any} permission Permission (example: test-one-two-*)
@@ -789,6 +776,29 @@ class Group {
 
 
     /**
+     * deletePermission - Removes a permission/route from a group.
+     * @param {any} name Name of the group (example: anonymous)
+     * @param {any} permission Name or Route (example: test-one-two-*)
+     * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+     */
+    static async deletePermission(name, permission, authorization_bearer, opts) {
+        var options = {
+            method: 'DELETE',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/group/name/${name}/permission/${permission}`,
+            authorization: {
+                bearer: authorization_bearer
+            },
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+
+
+    /**
       * addRoute - Adds a route to a group.
 
     ```javascript
@@ -796,7 +806,7 @@ class Group {
         "route": "test/permissions/*", // optional
         "host": null, // optional, defaults to travelling host
         "method": "*", // optional, defaults to '*'
-        "removeFromPath": 'test/', // optional 
+        "remove_from_path": 'test/', // optional 
         "name": "test-permissions-*"  // Required and needs to be unqiue, defaults to method + route seperated by '-' instead of `/`
     }
     ```
@@ -899,34 +909,15 @@ class Group {
 
     /**
      * delete - delete group by its id or name
-     * @param {Object} body
      * @param {any} name id or name  
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
-     * @example
-     * body
-     * ```js
-     * {
-     *     "name": "group1",
-     *     "type": "accounts",
-     *     "allowed": [{
-     *         "route": "/test",
-     *         "host": "http://127.0.0.1:1237/",
-     *         "removeFromPath": "test",
-     *         "method": "*",
-     *         "name": "all-test"
-     *     }],
-     *     "is_default": false
-     * }
-     * ```
      */
-    static async delete(body, name, authorization_bearer, opts) {
+    static async delete(name, authorization_bearer, opts) {
         var options = {
             method: 'DELETE',
             resolveWithFullResponse: true,
             simple: false,
             uri: hostUrl + "/" + `travelling/api/v1/group/name/${name}`,
-            body,
-            json: true,
             authorization: {
                 bearer: authorization_bearer
             },
@@ -950,7 +941,7 @@ class Group {
      *     "allowed": [{
      *             "route": "/travelling/portal/*",
      *             "host": null,
-     *             "removeFromPath": "/travelling/portal",
+     *             "remove_from_path": "/travelling/portal",
      *             "method": "*",
      *             "name": "*-travelling-portal-*"
      *         },
@@ -975,7 +966,7 @@ class Group {
      *         {
      *             "route": "/travelling/assets/*",
      *             "host": null,
-     *             "removeFromPath": "/travelling/assets/",
+     *             "remove_from_path": "/travelling/assets/",
      *             "method": "*",
      *             "name": "*-travelling-assets-*"
      *         },
@@ -1064,7 +1055,7 @@ class Group {
      *     "allowed": [{
      *         "route": "/test",
      *         "host": "http://127.0.0.1:1237/",
-     *         "removeFromPath": "test",
+     *         "remove_from_path": "test",
      *         "method": "*",
      *         "name": "all-test"
      *     }],
@@ -1245,7 +1236,7 @@ class GroupType {
         "route": "test/permissions/*", // optional
         "host": null, // optional, defaults to travelling host
         "method": "*", // optional, defaults to '*'
-        "removeFromPath": 'test/', // optional 
+        "remove_from_path": 'test/', // optional 
         "name": "test-permissions-*"  // Required and needs to be unqiue, defaults to method + route seperated by '-' instead of `/`
     }
     ```
@@ -1395,35 +1386,16 @@ class GroupType {
 
     /**
      * delete - delete group of a particular type by its name or id
-     * @param {Object} body
      * @param {any} type The type of the group 
      * @param {any} name id or name  
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
-     * @example
-     * body
-     * ```js
-     * {
-     *     "name": "group1",
-     *     "type": "accounts",
-     *     "allowed": [{
-     *         "route": "/test",
-     *         "host": "http://127.0.0.1:1237/",
-     *         "removeFromPath": "test",
-     *         "method": "*",
-     *         "name": "all-test"
-     *     }],
-     *     "is_default": false
-     * }
-     * ```
      */
-    static async delete(body, type, name, authorization_bearer, opts) {
+    static async delete(type, name, authorization_bearer, opts) {
         var options = {
             method: 'DELETE',
             resolveWithFullResponse: true,
             simple: false,
             uri: hostUrl + "/" + `travelling/api/v1/group/type/${type}/name/${name}`,
-            body,
-            json: true,
             authorization: {
                 bearer: authorization_bearer
             },
@@ -1528,7 +1500,7 @@ class GroupType {
      *     "allowed": [{
      *         "route": "/test",
      *         "host": "http://127.0.0.1:1237/",
-     *         "removeFromPath": "test",
+     *         "remove_from_path": "test",
      *         "method": "*",
      *         "name": "all-test"
      *     }],

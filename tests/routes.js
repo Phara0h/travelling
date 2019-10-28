@@ -37,7 +37,7 @@ module.exports = () => {
           await Travelling.Group.addRoute({
                           route: "/test/get",
                           host: "https://127.0.0.1:4268/:username/:group",
-                          removeFromPath: '/test/get',
+                          remove_from_path: '/test/get',
                           method: "get"
                         }, 'group2',accessToken);
 
@@ -63,7 +63,7 @@ module.exports = () => {
           await Travelling.Group.addRoute({
                           route: "/test/post",
                           host: "http://127.0.0.1:4267/?id=:id&permission=:permission",
-                          removeFromPath: '/test/post',
+                          remove_from_path: '/test/post',
                           method: "post"
                         }, 'group2',accessToken);
 
@@ -92,7 +92,7 @@ module.exports = () => {
           await Travelling.Group.addRoute({
                           route: "/test/delete/:grouptype",
                           host: "https://127.0.0.1:4268",
-                          removeFromPath: '/test/delete',
+                          remove_from_path: '/test/delete',
                           method: "delete"
                         }, 'group5',accessToken);
 
