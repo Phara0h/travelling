@@ -27,15 +27,13 @@ class GroupManager {
 
         this.mappedGroups = {};
         this.unmergedGroups = [];
+
         for (var i = 0; i < grps.length; i++) {
             this.unmergedGroups.push(grps[i]);
-            // this.mappedGroups[grps[i].id] = {...grps[i]._, inherited: grps[i]._.inherited ? [...grps[i]._.inherited] : []};
             this.mappedGroups[grps[i].id] = new Group(grps[i]._);
-            // this.groups[grps[i].name] = this.groupInheritedMerge(new Group({...grps[i]._, inherited: grps[i]._.inherited ? [...grps[i]._.inherited] : []}), grps);
             this.groups[grps[i].name] = this.groupInheritedMerge(new Group(grps[i]._), grps);
         }
-        // console.log(this.groups);
-        // console.log(this.mappedGroups);
+
         this.redis.needsGroupUpdate = false;
     }
 
