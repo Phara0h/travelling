@@ -57,6 +57,20 @@ async function deleteUser(req, res, router) {
     };
 }
 
+function filterUser(req) {
+    if (!req.body) {
+        return req.body;
+    }
+    if (req.body.group_id) {
+        if (req.params.prop == 'group_id' && req.params.propdata) {
+            req.body.group_id = req.params.propdata;
+        } else {
+            delete req.body.group_id;
+        }
+    }
+    return req.body;
+}
+
 async function editUser(req, res, router) {
 
     if (!req.params.id) {
@@ -83,10 +97,13 @@ async function editUser(req, res, router) {
         id = {id: req.params.id};
     }
 
+    // filter group_id
+    req.body = filterUser(req);
+
     var model = req.body;
 
     if (req.params.prop) {
-        model = {[req.params.prop]: req.body};
+        model = req.params.propdata ? {[req.params.prop]: req.params.propdata} : {[req.params.prop]: req.body};
     }
 
     var isValid = await userUtils.checkValidUser(model);
@@ -96,9 +113,26 @@ async function editUser(req, res, router) {
         return isValid;
     }
 
-    var user = await User.updateLimitedBy(id, userUtils.setUser({}, model), 'AND', 1);
+    var updatedProps = userUtils.setUser({}, model);
+
+    if (misc.isEmpty(updatedProps)) {
+        res.code(400);
+        return {
+            type: 'user-prop-error',
+            msg: 'Not a property of user',
+        };
+    }
+
+    var user = await User.updateLimitedBy(id, updatedProps, 'AND', 1);
 
     if (user && user.length > 0) {
+        if (req.params.prop && user[0][req.params.prop] === undefined) {
+            res.code(400);
+            return {
+                type: 'user-prop-error',
+                msg: 'Not a property of user',
+            };
+        }
 
         await user[0].resolveGroup(router);
 
@@ -148,19 +182,17 @@ async function getUser(req, res, router) {
     }
 
     var user = await User.findLimtedBy(id, 'AND', 1);
-    // console.log(id, user, user.length)
 
     if (user && user.length > 0) {
-
-        await user[0].resolveGroup(router);
-
-        if (req.params.prop && user[0]._[req.params.prop] === undefined) {
+        if (req.params.prop && user[0][req.params.prop] === undefined) {
             res.code(400);
             return {
                 type: 'user-prop-error',
                 msg: 'Not a property of user',
             };
         }
+
+        await user[0].resolveGroup(router);
 
         res.code(200);
         return req.params.prop ? user[0][req.params.prop] : user[0];
@@ -185,6 +217,7 @@ function routes(app, opts, done) {
 
     app.put('/user/id/:id', async (req, res)=>{return await editUser(req, res, router);});
     app.put('/user/id/:id/:prop', async (req, res)=>{return await editUser(req, res, router);});
+    app.put('/user/id/:id/:prop/:propdata', async (req, res)=>{return await editUser(req, res, router);});
 
     app.delete('/user/id/:id', async (req, res)=>{return await deleteUser(req, res, router);});
 
@@ -240,6 +273,11 @@ function routes(app, opts, done) {
         return await editUser(req, res, router);
     });
 
+    app.put('/user/me/:prop/:propdata', async (req, res) => {
+        req.params.id = req.session.data.user.id;
+        return await editUser(req, res, router);
+    });
+
     app.get('/user/me/route/allowed', async (req, res) => {
 
         var isAllowed = req.session ? router.isRouteAllowed(req.query.method, req.query.route, await gm.currentGroup(req, res), !req.isAuthenticated ? null : req.session.data.user) : false;
@@ -256,10 +294,6 @@ function routes(app, opts, done) {
 
     app.post('/user/me/token', async (req, res) => {
         let token;
-
-        if (token) {
-
-        }
 
         try {
             token = await TokenHandler.getOAuthToken(req.session.data.user.id, req.body.type || 'oauth', req.body.name || null, req.body.urls);
