@@ -30,6 +30,7 @@ class Crypto {
                 checkHash.write(field);
                 checkHash.end();
             } catch (e) {
+                config.log.logger.debug(e);
                 reject(e);
             }
         });
@@ -50,6 +51,7 @@ class Crypto {
                 hmac.write(field);
                 hmac.end();
             } catch (e) {
+                config.log.logger.debug(e);
                 reject(e);
             }
         });

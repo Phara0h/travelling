@@ -12,7 +12,7 @@ const pg = new PGConnecter({
     pg: {
         connectionString: config.pg.url,
     },
-    crypto: require('../include/utils/cryptointerface'),
+    crypto: require(config.pg.crypto.implementation),
 });
 
 var deletedUsers = [];

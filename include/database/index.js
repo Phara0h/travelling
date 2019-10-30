@@ -3,8 +3,8 @@
 const Group = require('./models/group');
 const User = require('./models/user');
 
-const crypto = require('../utils/cryptointerface');
 const config = require('../utils/config');
+const crypto = require(config.pg.crypto.implementation);
 const Email = require('../utils/email');
 const TokenHandler = require('../token');
 const gm = require('../server/groupmanager.js');
@@ -48,7 +48,7 @@ class Database {
         }
 
         // Password check
-        if (user.password == await crypto.hash(password)) {
+        if (user.password == await crypto.hash(password, null, user.getEncryptedProfile(user))) {
             user.failed_login_attempts = 0;
             await user.save();
             user.addProperty('group', await Group.findById(user.group_id));

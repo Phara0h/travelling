@@ -3,6 +3,8 @@
 <dl>
 <dt><a href="#Travelling">Travelling</a></dt>
 <dd></dd>
+<dt><a href="#Config">Config</a></dt>
+<dd></dd>
 <dt><a href="#Users">Users</a></dt>
 <dd></dd>
 <dt><a href="#User">User</a></dt>
@@ -60,6 +62,22 @@ metrics - servers metrics
 
 | Param | Type | Description |
 | --- | --- | --- |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="Config"></a>
+
+## Config
+**Kind**: global class  
+<a name="Config.getProperty"></a>
+
+### Config.getProperty(property, authorization_bearer)
+getProperty - Gets a property from travellings config.
+
+**Kind**: static method of [<code>Config</code>](#Config)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| property | <code>any</code> | (example: password) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="Users"></a>

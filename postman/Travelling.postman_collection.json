@@ -4609,60 +4609,6 @@
 					},
 					"response": [
 						{
-							"name": "Export",
-							"originalRequest": {
-								"method": "GET",
-								"header": [
-									{
-										"description": "The client_credentials generated OAUth2 access token.",
-										"key": "Authorization",
-										"type": "text",
-										"value": "Bearer"
-									}
-								],
-								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/groups/export",
-									"host": [
-										"{{TRAV}}"
-									],
-									"path": [
-										"travelling",
-										"api",
-										"v1",
-										"groups",
-										"export"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "content-type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "set-cookie",
-									"value": "trav:ssid=b211afcc-816d-43b2-afc6-4ef61e50860b%3AZa9002mdhdnTkJ11hpULIQ%3D%3D.bOigttv2f%2BZsNhFgCGa0daVnaVuJtJEYbPPE8vuwEFM; Max-Age=4000; Path=/; Expires=Mon, 28 Oct 2019 21:16:12 GMT; HttpOnly"
-								},
-								{
-									"key": "content-length",
-									"value": "1854"
-								},
-								{
-									"key": "Date",
-									"value": "Mon, 28 Oct 2019 21:16:08 GMT"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"testgroup\": {\n        \"superadmin\": {},\n        \"group1\": {\n            \"inherited\": [\n                \"group|group4\"\n            ]\n        }\n    },\n    \"group\": {\n        \"anonymous\": {\n            \"allowed\": [\n                {\n                    \"route\": \"/travelling/portal/*\",\n                    \"host\": null,\n                    \"name\": \"*-travelling-portal-*\"\n                },\n                {\n                    \"route\": \"/travelling/api/v1/auth/*\",\n                    \"host\": null,\n                    \"name\": \"*-travelling-api-v1-auth-*\"\n                },\n                {\n                    \"route\": \"/travelling/api/v1/user/me/route/allowed\",\n                    \"host\": null,\n                    \"method\": \"GET\",\n                    \"name\": \"get-travelling-api-v1-user-me-route-allowed\"\n                },\n                {\n                    \"route\": \"/travelling/api/v1/user/me/permission/allowed/*\",\n                    \"host\": null,\n                    \"method\": \"GET\",\n                    \"name\": \"get-travelling-api-v1-user-me-permission-allowed-*\"\n                },\n                {\n                    \"route\": \"/travelling/assets/*\",\n                    \"host\": null,\n                    \"removeFromPath\": \"/travelling/assets/\",\n                    \"method\": \"GET\",\n                    \"name\": \"get-travelling-assets-*\"\n                },\n                {\n                    \"route\": \"/travelling/api/v1/config/password\",\n                    \"host\": null,\n                    \"method\": \"GET\",\n                    \"name\": \"get-travelling-api-v1-config-password\"\n                },\n                {\n                    \"route\": \"/favicon.ico\",\n                    \"host\": null,\n                    \"method\": \"GET\",\n                    \"name\": \"get-favicon.ico\"\n                }\n            ]\n        },\n        \"group4\": {},\n        \"group1\": {},\n        \"group3\": {\n            \"inherited\": [\n                \"testgroup|group1\",\n                \"group|group2\"\n            ]\n        },\n        \"superadmin\": {\n            \"allowed\": [\n                {\n                    \"host\": null,\n                    \"route\": \"/travelling/*\",\n                    \"name\": \"*-travelling-*\"\n                },\n                {\n                    \"name\": \"test-one-*-three\"\n                }\n            ],\n            \"inherited\": [\n                \"group|anonymous\"\n            ]\n        },\n        \"group2\": {\n            \"allowed\": [\n                {\n                    \"route\": \"/test/get\",\n                    \"host\": \"https://127.0.0.1:4268/:username/:group\",\n                    \"remove_from_path\": \"/test/get\",\n                    \"method\": \"GET\",\n                    \"name\": \"get-test-get\"\n                },\n                {\n                    \"route\": \"/test/post\",\n                    \"host\": \"http://127.0.0.1:4267/?id=:id&permission=:permission\",\n                    \"remove_from_path\": \"/test/post\",\n                    \"method\": \"POST\",\n                    \"name\": \"post-test-post\"\n                }\n            ],\n            \"inherited\": [\n                \"testgroup|group1\"\n            ]\n        },\n        \"group5\": {\n            \"allowed\": [\n                {\n                    \"route\": \"/test/delete/:grouptype\",\n                    \"host\": \"https://127.0.0.1:4268\",\n                    \"remove_from_path\": \"/test/delete\",\n                    \"method\": \"DELETE\",\n                    \"name\": \"delete-test-delete-:grouptype\"\n                }\n            ],\n            \"inherited\": [\n                \"group|group4\",\n                \"group|superadmin\"\n            ],\n            \"is_default\": true\n        }\n    },\n    \"accounts\": {\n        \"group1\": {\n            \"allowed\": [\n                {\n                    \"route\": \"/test\",\n                    \"host\": \"http://127.0.0.1:1237/\",\n                    \"remove_from_path\": \"test\",\n                    \"method\": \"*\",\n                    \"name\": \"all-test\"\n                }\n            ]\n        }\n    }\n}"
-						},
-						{
 							"name": "Failed Inheritances",
 							"originalRequest": {
 								"method": "PUT",
@@ -4730,6 +4676,56 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"type\": \"group-export-failed-inheritances\",\n    \"msg\": \"All groups imported but these inheritances were not done since the group names do not exist.\",\n    \"failedInheritance\": [\n        {\n            \"group\": \"superadmin\",\n            \"inheritance\": \"anonymouss\"\n        }\n    ]\n}"
+						},
+						{
+							"name": "Export",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "The client_credentials generated OAUth2 access token.",
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer"
+									}
+								],
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/groups/export",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"groups",
+										"export"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "content-length",
+									"value": "1856"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 28 Oct 2019 21:19:32 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"testgroup\": {\n        \"superadmin\": {},\n        \"group1\": {\n            \"inherited\": [\n                \"group|group4\"\n            ]\n        }\n    },\n    \"group\": {\n        \"anonymous\": {\n            \"allowed\": [\n                {\n                    \"route\": \"/travelling/portal/*\",\n                    \"host\": null,\n                    \"name\": \"*-travelling-portal-*\"\n                },\n                {\n                    \"route\": \"/travelling/api/v1/auth/*\",\n                    \"host\": null,\n                    \"name\": \"*-travelling-api-v1-auth-*\"\n                },\n                {\n                    \"route\": \"/travelling/api/v1/user/me/route/allowed\",\n                    \"host\": null,\n                    \"method\": \"GET\",\n                    \"name\": \"get-travelling-api-v1-user-me-route-allowed\"\n                },\n                {\n                    \"route\": \"/travelling/api/v1/user/me/permission/allowed/*\",\n                    \"host\": null,\n                    \"method\": \"GET\",\n                    \"name\": \"get-travelling-api-v1-user-me-permission-allowed-*\"\n                },\n                {\n                    \"route\": \"/travelling/assets/*\",\n                    \"host\": null,\n                    \"remove_from_path\": \"/travelling/assets/\",\n                    \"method\": \"GET\",\n                    \"name\": \"get-travelling-assets-*\"\n                },\n                {\n                    \"route\": \"/travelling/api/v1/config/password\",\n                    \"host\": null,\n                    \"method\": \"GET\",\n                    \"name\": \"get-travelling-api-v1-config-password\"\n                },\n                {\n                    \"route\": \"/favicon.ico\",\n                    \"host\": null,\n                    \"method\": \"GET\",\n                    \"name\": \"get-favicon.ico\"\n                }\n            ]\n        },\n        \"group4\": {},\n        \"group1\": {},\n        \"group3\": {\n            \"inherited\": [\n                \"testgroup|group1\",\n                \"group|group2\"\n            ]\n        },\n        \"superadmin\": {\n            \"allowed\": [\n                {\n                    \"host\": null,\n                    \"route\": \"/travelling/*\",\n                    \"name\": \"*-travelling-*\"\n                },\n                {\n                    \"name\": \"test-one-*-three\"\n                }\n            ],\n            \"inherited\": [\n                \"group|anonymous\"\n            ]\n        },\n        \"group2\": {\n            \"allowed\": [\n                {\n                    \"route\": \"/test/get\",\n                    \"host\": \"https://127.0.0.1:4268/:username/:group\",\n                    \"remove_from_path\": \"/test/get\",\n                    \"method\": \"GET\",\n                    \"name\": \"get-test-get\"\n                },\n                {\n                    \"route\": \"/test/post\",\n                    \"host\": \"http://127.0.0.1:4267/?id=:id&permission=:permission\",\n                    \"remove_from_path\": \"/test/post\",\n                    \"method\": \"POST\",\n                    \"name\": \"post-test-post\"\n                }\n            ],\n            \"inherited\": [\n                \"testgroup|group1\"\n            ]\n        },\n        \"group5\": {\n            \"allowed\": [\n                {\n                    \"route\": \"/test/delete/:grouptype\",\n                    \"host\": \"https://127.0.0.1:4268\",\n                    \"remove_from_path\": \"/test/delete\",\n                    \"method\": \"DELETE\",\n                    \"name\": \"delete-test-delete-:grouptype\"\n                }\n            ],\n            \"inherited\": [\n                \"group|group4\",\n                \"group|superadmin\"\n            ],\n            \"is_default\": true\n        }\n    },\n    \"accounts\": {\n        \"group1\": {\n            \"allowed\": [\n                {\n                    \"route\": \"/test\",\n                    \"host\": \"http://127.0.0.1:1237/\",\n                    \"remove_from_path\": \"test\",\n                    \"method\": \"*\",\n                    \"name\": \"all-test\"\n                }\n            ]\n        }\n    }\n}"
 						}
 					]
 				}
@@ -5607,6 +5603,108 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Config",
+			"item": [
+				{
+					"name": "Get Property",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"description": "The client_credentials generated OAUth2 access token.",
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer"
+							}
+						],
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/config/:property",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"config",
+								":property"
+							],
+							"variable": [
+								{
+									"key": "property",
+									"value": "password"
+								}
+							]
+						},
+						"description": "Gets a property from travellings config."
+					},
+					"response": [
+						{
+							"name": "Get Property",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "The client_credentials generated OAUth2 access token.",
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer"
+									}
+								],
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/config/:property",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"config",
+										":property"
+									],
+									"variable": [
+										{
+											"key": "property",
+											"value": "password"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "set-cookie",
+									"value": "trav:ssid=b211afcc-816d-43b2-afc6-4ef61e50860b%3A1rnP8xl85C1OIMeMCpoXtA%3D%3D.kaIJP4XkIbZnaWU3y0VvwbiDNKmhdGpfcg4c39oPgNk; Max-Age=4000; Path=/; Expires=Wed, 30 Oct 2019 14:25:28 GMT; HttpOnly"
+								},
+								{
+									"key": "content-length",
+									"value": "98"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 30 Oct 2019 14:25:24 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"consecutive\": false,\n    \"minchar\": 3,\n    \"maxchar\": 100,\n    \"special\": 0,\n    \"number\": 0,\n    \"lowercase\": 1,\n    \"uppercase\": 0\n}"
+						}
+					]
+				}
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Metrics",
