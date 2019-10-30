@@ -1,7 +1,7 @@
 'use strict';
 const crypto = require('crypto');
 const config = require('../utils/config');
-const cryptoInterface = require('../utils/cryptointerface');
+const cryptoInterface = require(config.pg.crypto.implementation);
 const regex = require('../utils/regex');
 const url = require('url');
 const URL = url.URL;
@@ -33,6 +33,7 @@ class TokenHandler {
 
             return false;
         } catch (e) {
+            config.log.logger.debug(e);
             return false;
         }
     }
@@ -225,10 +226,15 @@ class TokenHandler {
 
     static async checkOAuthToken(id, secret) {
 
-        var hashedSecret = await cryptoInterface.hash(secret);
-        var token = await Token.findLimtedBy(regex.uuidCheck(id) ? {id, secret: hashedSecret} : {name: id, secret: hashedSecret}, 'AND', 1);
+        var token = await Token.findLimtedBy(regex.uuidCheck(id) ? {id} : {name: id}, 'AND', 1);
 
         if (!token || token.length <= 0) {
+            return false;
+        }
+
+        var hashedSecret = await cryptoInterface.hash(secret, null, token[0].getEncryptedProfile(token));
+
+        if (hashedSecret !== token[0].secret) {
             return false;
         }
 
@@ -294,6 +300,8 @@ class TokenHandler {
                 hmac.write(token);
                 hmac.end();
             } catch (e) {
+
+                config.log.logger.debug(e);
                 reject(e);
             }
         });

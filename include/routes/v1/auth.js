@@ -107,6 +107,7 @@ module.exports = function(app, opts, done) {
 
                     await login(user.user, req, res, router);
                 } catch (e) {
+                    console.log(e);
 
                     res.code(400).send(e.err && e.err.type == 'locked' ? {type: e.err.type, msg: e.err.msg, email: e.email} : {
                         type: 'login-error',
@@ -333,6 +334,7 @@ module.exports = function(app, opts, done) {
                 client_secret = req.body.client_secret;
             }
         } catch (e) {
+            config.log.logger.debug(e);
             res.code(401);
             return {
                 type: 'invalid_client',
@@ -378,6 +380,7 @@ module.exports = function(app, opts, done) {
             }
             code = Buffer.from(req.body.code, 'base64').toString('utf8').split(':');
         } catch (e) {
+            config.log.logger.debug(e);
             res.code(401);
             return {
                 type: 'invalid_client',

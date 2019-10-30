@@ -40,6 +40,7 @@ class CookieToken {
             }
         } catch (e) {
             this.removeAuthCookie(res);
+            config.log.logger.debug(e);
             return false;
         }
     }

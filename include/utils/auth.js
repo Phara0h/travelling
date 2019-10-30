@@ -77,7 +77,7 @@ var checkCookie = async (req, res, router) => {
 
             return {auth: true, route: true};
         } catch (e) {
-            config.log.logger.debug.log(e);
+            config.log.logger.debug(e);
             return {auth: false, route: true};
         }
     }

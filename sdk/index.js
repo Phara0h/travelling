@@ -213,6 +213,10 @@ class Travelling {
         return await fasq.request(options)
     }
 
+    static get Config() {
+        return Config;
+    }
+
     static get Users() {
         return Users;
     }
@@ -231,6 +235,34 @@ class Travelling {
 
     static get Auth() {
         return Auth;
+    }
+}
+/**
+ * 
+ */
+class Config {
+    constructor() {}
+
+
+    /**
+     * getProperty - Gets a property from travellings config.
+     * @param {any} property  (example: password)
+     * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+     */
+    static async getProperty(property, authorization_bearer, opts) {
+        var options = {
+            method: 'GET',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/config/${property}`,
+            authorization: {
+                bearer: authorization_bearer
+            },
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
     }
 }
 /**
@@ -2196,6 +2228,7 @@ module.exports = function(host) {
     }
     return {
         Travelling,
+        Config,
         Users,
         User,
         UserCurrent,

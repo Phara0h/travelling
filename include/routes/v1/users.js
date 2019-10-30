@@ -270,6 +270,7 @@ function routes(app, opts, done) {
                 type: 'token-error',
                 msg: e,
             });
+            config.log.logger.debug(e);
             return;
         }
 
