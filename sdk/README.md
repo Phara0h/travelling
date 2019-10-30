@@ -13,6 +13,8 @@
 <dd></dd>
 <dt><a href="#Groups">Groups</a></dt>
 <dd></dd>
+<dt><a href="#GroupsType">GroupsType</a></dt>
+<dd></dd>
 <dt><a href="#Group">Group</a></dt>
 <dd></dd>
 <dt><a href="#GroupUsers">GroupUsers</a></dt>
@@ -156,11 +158,26 @@ get - Gets all the users
 **Kind**: global class  
 
 * [User](#User)
+    * [.editPropertyValue(id, property, value, authorization_bearer)](#User.editPropertyValue)
     * [.delete(id, authorization_bearer)](#User.delete)
     * [.editProperty(body, id, prop, authorization_bearer)](#User.editProperty)
     * [.edit(body, id, authorization_bearer)](#User.edit)
     * [.getProperty(id, prop, authorization_bearer)](#User.getProperty)
     * [.get(id, authorization_bearer)](#User.get)
+
+<a name="User.editPropertyValue"></a>
+
+### User.editPropertyValue(id, property, value, authorization_bearer)
+editPropertyValue - Edit a current user's property data as a path param.
+
+**Kind**: static method of [<code>User</code>](#User)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>any</code> | Id or Username |
+| property | <code>any</code> | (example: group_id) |
+| value | <code>any</code> | (example: 595d3f9a-5383-4da9-a465-b975d8a5e28e) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="User.delete"></a>
 
@@ -171,7 +188,7 @@ delete - Delete a user by it's Id.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| id | <code>any</code> | (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA) |
+| id | <code>any</code> | Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="User.editProperty"></a>
@@ -184,7 +201,7 @@ editProperty - Edit a user's property by id.
 | Param | Type | Description |
 | --- | --- | --- |
 | body | <code>Object</code> |  |
-| id | <code>any</code> | (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA) |
+| id | <code>any</code> | Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA) |
 | prop | <code>any</code> | (example: username) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
@@ -203,7 +220,7 @@ edit - Edit a user's by id.
 | Param | Type | Description |
 | --- | --- | --- |
 | body | <code>Object</code> |  |
-| id | <code>any</code> | (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA) |
+| id | <code>any</code> | Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
@@ -223,7 +240,7 @@ getProperty - Get a user's property by it's id.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| id | <code>any</code> | (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA) |
+| id | <code>any</code> | Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA) |
 | prop | <code>any</code> | (example: username) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
@@ -245,7 +262,7 @@ get - Get a user by it's id.
 **Kind**: global class  
 
 * [UserCurrent](#UserCurrent)
-    * [.editPropertyValue(body, property, authorization_bearer)](#UserCurrent.editPropertyValue)
+    * [.editPropertyValue(property, value, authorization_bearer)](#UserCurrent.editPropertyValue)
     * [.editProperty(body, property, authorization_bearer)](#UserCurrent.editProperty)
     * [.deleteToken(body, id, authorization_bearer)](#UserCurrent.deleteToken)
     * [.registerToken(body, authorization_bearer)](#UserCurrent.registerToken)
@@ -257,24 +274,17 @@ get - Get a user by it's id.
 
 <a name="UserCurrent.editPropertyValue"></a>
 
-### UserCurrent.editPropertyValue(body, property, authorization_bearer)
+### UserCurrent.editPropertyValue(property, value, authorization_bearer)
 editPropertyValue - Edit a current user's property data as a path param.
 
 **Kind**: static method of [<code>UserCurrent</code>](#UserCurrent)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| body | <code>Object</code> |  |
-| property | <code>any</code> | (example: user_data) |
+| property | <code>any</code> | (example: group_id) |
+| value | <code>any</code> | (example: 595d3f9a-5383-4da9-a465-b975d8a5e28e) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
-**Example**  
-body
-```js
-{
-    "test": 123
-}
-```
 <a name="UserCurrent.editProperty"></a>
 
 ### UserCurrent.editProperty(body, property, authorization_bearer)
@@ -557,6 +567,38 @@ body
 get - Get all the groups
 
 **Kind**: static method of [<code>Groups</code>](#Groups)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="GroupsType"></a>
+
+## GroupsType
+**Kind**: global class  
+
+* [GroupsType](#GroupsType)
+    * [.all(type, authorization_bearer)](#GroupsType.all)
+    * [.getTypesList(authorization_bearer)](#GroupsType.getTypesList)
+
+<a name="GroupsType.all"></a>
+
+### GroupsType.all(type, authorization_bearer)
+all - Gets all groups of a particular type
+
+**Kind**: static method of [<code>GroupsType</code>](#GroupsType)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| type | <code>any</code> | The type of the group |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="GroupsType.getTypesList"></a>
+
+### GroupsType.getTypesList(authorization_bearer)
+getTypesList - Gets all the types of groups currently made.
+
+**Kind**: static method of [<code>GroupsType</code>](#GroupsType)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -878,8 +920,6 @@ get - Gets all the users that belong to the group.
     * [.removeInheritance(type, name, inherited, authorization_bearer)](#GroupType.removeInheritance)
     * [.inheritFrom(type, name, inherited, authorization_bearer)](#GroupType.inheritFrom)
     * [.setDefault(type, name)](#GroupType.setDefault)
-    * [.all(type, authorization_bearer)](#GroupType.all)
-    * [.getTypesList(authorization_bearer)](#GroupType.getTypesList)
     * [.delete(type, name, authorization_bearer)](#GroupType.delete)
     * [.get(type, id, authorization_bearer)](#GroupType.get)
     * [.edit(body, type, name, authorization_bearer)](#GroupType.edit)
@@ -935,7 +975,7 @@ addRoute - Adds a route to a group of a particular type.
 | --- | --- | --- |
 | body | <code>Object</code> |  |
 | type | <code>any</code> |  |
-| name | <code>any</code> |  |
+| name | <code>any</code> | Name of the group |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
@@ -987,29 +1027,6 @@ setDefault - Sets the group of a particular type to be the default group for new
 | --- | --- | --- |
 | type | <code>any</code> | The type of the group (example: account) |
 | name | <code>any</code> | id or name (example: group1) |
-
-<a name="GroupType.all"></a>
-
-### GroupType.all(type, authorization_bearer)
-all - Gets all groups of a particular type
-
-**Kind**: static method of [<code>GroupType</code>](#GroupType)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| type | <code>any</code> | The type of the group |
-| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
-
-<a name="GroupType.getTypesList"></a>
-
-### GroupType.getTypesList(authorization_bearer)
-getTypesList - Gets all the types of groups currently made.
-
-**Kind**: static method of [<code>GroupType</code>](#GroupType)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="GroupType.delete"></a>
 
@@ -1180,6 +1197,7 @@ inherited - Gets all the users that belong to the group  of a particular type by
 
 * [GroupTypeUser](#GroupTypeUser)
     * [.delete(type, id, authorization_bearer)](#GroupTypeUser.delete)
+    * [.editPropertyValue(type, id, property, value, authorization_bearer)](#GroupTypeUser.editPropertyValue)
     * [.editProperty(body, type, id, property, authorization_bearer)](#GroupTypeUser.editProperty)
     * [.edit(body, type, id, authorization_bearer)](#GroupTypeUser.edit)
     * [.getProperty(type, id, property, authorization_bearer)](#GroupTypeUser.getProperty)
@@ -1194,8 +1212,23 @@ delete - Delete a user by it's id or username from group of a particular type.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| type | <code>any</code> | (example: accounts) |
-| id | <code>any</code> | (example: user7) |
+| type | <code>any</code> | The type of the group (example: accounts) |
+| id | <code>any</code> | id or name (example: user7) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="GroupTypeUser.editPropertyValue"></a>
+
+### GroupTypeUser.editPropertyValue(type, id, property, value, authorization_bearer)
+editPropertyValue - Edit a current user's property data as a path param.
+
+**Kind**: static method of [<code>GroupTypeUser</code>](#GroupTypeUser)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| type | <code>any</code> | The type of the group (example: group) |
+| id | <code>any</code> | id or name (example: user5) |
+| property | <code>any</code> | (example: email) |
+| value | <code>any</code> | (example: swag@yolo.com) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="GroupTypeUser.editProperty"></a>
@@ -1208,8 +1241,8 @@ editProperty - Edit a user's property by it's id or username from group of a par
 | Param | Type | Description |
 | --- | --- | --- |
 | body | <code>Object</code> |  |
-| type | <code>any</code> | (example: accounts) |
-| id | <code>any</code> | (example: user6) |
+| type | <code>any</code> | The type of the group (example: accounts) |
+| id | <code>any</code> | id or name (example: user6) |
 | property | <code>any</code> | (example: email) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
@@ -1230,8 +1263,8 @@ edit - Edit a user by it's id or username from group of a particular type.
 | Param | Type | Description |
 | --- | --- | --- |
 | body | <code>Object</code> |  |
-| type | <code>any</code> | (example: accounts) |
-| id | <code>any</code> | (example: user6) |
+| type | <code>any</code> | The type of the group (example: accounts) |
+| id | <code>any</code> | id or name (example: user6) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
@@ -1250,8 +1283,8 @@ getProperty - Get a user's property by it's id or username from group of a parti
 
 | Param | Type | Description |
 | --- | --- | --- |
-| type | <code>any</code> | (example: accounts) |
-| id | <code>any</code> | (example: user6) |
+| type | <code>any</code> | The type of the group (example: accounts) |
+| id | <code>any</code> | id or name (example: user6) |
 | property | <code>any</code> | (example: email) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
@@ -1264,8 +1297,8 @@ get - Get a user by it's id or username from group of a particular type.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| type | <code>any</code> | (example: accounts) |
-| id | <code>any</code> | (example: user6) |
+| type | <code>any</code> | The type of the group (example: accounts) |
+| id | <code>any</code> | id or name (example: user6) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="GroupRequest"></a>

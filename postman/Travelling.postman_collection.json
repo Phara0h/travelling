@@ -927,11 +927,13 @@
 											"variable": [
 												{
 													"key": "type",
-													"value": "accounts"
+													"value": "accounts",
+													"description": "The type of the group"
 												},
 												{
 													"key": "id",
-													"value": "user6"
+													"value": "user6",
+													"description": "id or name"
 												}
 											]
 										},
@@ -1038,11 +1040,13 @@
 											"variable": [
 												{
 													"key": "type",
-													"value": "accounts"
+													"value": "accounts",
+													"description": "The type of the group"
 												},
 												{
 													"key": "id",
-													"value": "user6"
+													"value": "user6",
+													"description": "id or name"
 												},
 												{
 													"key": "property",
@@ -1167,11 +1171,13 @@
 											"variable": [
 												{
 													"key": "type",
-													"value": "accounts"
+													"value": "accounts",
+													"description": "The type of the group"
 												},
 												{
 													"key": "id",
-													"value": "user6"
+													"value": "user6",
+													"description": "id or name"
 												}
 											]
 										},
@@ -1303,11 +1309,13 @@
 											"variable": [
 												{
 													"key": "type",
-													"value": "accounts"
+													"value": "accounts",
+													"description": "The type of the group"
 												},
 												{
 													"key": "id",
-													"value": "user6"
+													"value": "user6",
+													"description": "id or name"
 												},
 												{
 													"key": "property",
@@ -1398,6 +1406,60 @@
 									]
 								},
 								{
+									"name": "Edit Property Value",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"description": "The client_credentials generated OAUth2 access token.",
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer"
+											}
+										],
+										"url": {
+											"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/user/:id/:property/:value",
+											"host": [
+												"{{TRAV}}"
+											],
+											"path": [
+												"travelling",
+												"api",
+												"v1",
+												"group",
+												"type",
+												":type",
+												"user",
+												":id",
+												":property",
+												":value"
+											],
+											"variable": [
+												{
+													"description": "The type of the group",
+													"key": "type",
+													"value": "group"
+												},
+												{
+													"description": "id or name",
+													"key": "id",
+													"value": "user5"
+												},
+												{
+													"key": "property",
+													"value": "email"
+												},
+												{
+													"key": "value",
+													"value": "swag@yolo.com"
+												}
+											]
+										},
+										"description": "Edit a current user's property data as a path param."
+									},
+									"response": []
+								},
+								{
 									"name": "Delete",
 									"request": {
 										"method": "DELETE",
@@ -1427,11 +1489,13 @@
 											"variable": [
 												{
 													"key": "type",
-													"value": "accounts"
+													"value": "accounts",
+													"description": "The type of the group"
 												},
 												{
 													"key": "id",
-													"value": "user7"
+													"value": "user7",
+													"description": "id or name"
 												}
 											]
 										},
@@ -2250,127 +2314,6 @@
 							"response": []
 						},
 						{
-							"name": "Get Types List",
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"description": "The client_credentials generated OAUth2 access token.",
-										"key": "Authorization",
-										"type": "text",
-										"value": "Bearer"
-									}
-								],
-								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/groups/types",
-									"host": [
-										"{{TRAV}}"
-									],
-									"path": [
-										"travelling",
-										"api",
-										"v1",
-										"groups",
-										"types"
-									]
-								},
-								"description": "Gets all the types of groups currently made."
-							},
-							"response": []
-						},
-						{
-							"name": "All",
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer",
-										"description": "The client_credentials generated OAUth2 access token.",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/groups/type/:type",
-									"host": [
-										"{{TRAV}}"
-									],
-									"path": [
-										"travelling",
-										"api",
-										"v1",
-										"groups",
-										"type",
-										":type"
-									],
-									"variable": [
-										{
-											"key": "type",
-											"value": "",
-											"description": "The type of the group"
-										}
-									]
-								},
-								"description": "Gets all groups of a particular type"
-							},
-							"response": [
-								{
-									"name": "Get Type of Groups",
-									"originalRequest": {
-										"method": "GET",
-										"header": [],
-										"url": {
-											"raw": "{{TRAV}}/travelling/api/v1/groups/type/:type",
-											"host": [
-												"{{TRAV}}"
-											],
-											"path": [
-												"travelling",
-												"api",
-												"v1",
-												"groups",
-												"type",
-												":type"
-											],
-											"variable": [
-												{
-													"key": "type",
-													"value": ""
-												}
-											]
-										}
-									},
-									"status": "OK",
-									"code": 200,
-									"_postman_previewlanguage": "json",
-									"header": [
-										{
-											"key": "content-type",
-											"value": "application/json; charset=utf-8"
-										},
-										{
-											"key": "set-cookie",
-											"value": "trav:ssid=9UDLGJpD307kZSLAeKHvBBRfyl-d2J6u.VS080%2BKNf3y280f2XW%2FThFKGGjPrzkFnjIL7yCMPKQE; Path=/; HttpOnly; Secure"
-										},
-										{
-											"key": "content-length",
-											"value": "198"
-										},
-										{
-											"key": "Date",
-											"value": "Tue, 20 Aug 2019 19:58:27 GMT"
-										},
-										{
-											"key": "Connection",
-											"value": "keep-alive"
-										}
-									],
-									"cookie": [],
-									"body": "[\n    {\n        \"id\": 53,\n        \"name\": \"group1\",\n        \"type\": \"accounts\",\n        \"allowed\": [\n            {\n                \"route\": \"/test\",\n                \"host\": \"http://127.0.0.1:1237/\",\n                \"removeFromPath\": \"test\",\n                \"method\": \"*\",\n                \"name\": \"all-test\"\n            }\n        ],\n        \"inherited\": null,\n        \"is_default\": false\n    }\n]"
-								}
-							]
-						},
-						{
 							"name": "Set Default",
 							"request": {
 								"method": "PUT",
@@ -2699,7 +2642,8 @@
 										},
 										{
 											"key": "name",
-											"value": ""
+											"value": "",
+											"description": "Name of the group"
 										}
 									]
 								},
@@ -4374,6 +4318,134 @@
 			"name": "Groups",
 			"item": [
 				{
+					"name": "Type",
+					"item": [
+						{
+							"name": "Get Types List",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "The client_credentials generated OAUth2 access token.",
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer"
+									}
+								],
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/groups/types",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"groups",
+										"types"
+									]
+								},
+								"description": "Gets all the types of groups currently made."
+							},
+							"response": []
+						},
+						{
+							"name": "All",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/groups/type/:type",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"groups",
+										"type",
+										":type"
+									],
+									"variable": [
+										{
+											"key": "type",
+											"value": "",
+											"description": "The type of the group"
+										}
+									]
+								},
+								"description": "Gets all groups of a particular type"
+							},
+							"response": [
+								{
+									"name": "Get Type of Groups",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{TRAV}}/travelling/api/v1/groups/type/:type",
+											"host": [
+												"{{TRAV}}"
+											],
+											"path": [
+												"travelling",
+												"api",
+												"v1",
+												"groups",
+												"type",
+												":type"
+											],
+											"variable": [
+												{
+													"key": "type",
+													"value": ""
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "content-type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "set-cookie",
+											"value": "trav:ssid=9UDLGJpD307kZSLAeKHvBBRfyl-d2J6u.VS080%2BKNf3y280f2XW%2FThFKGGjPrzkFnjIL7yCMPKQE; Path=/; HttpOnly; Secure"
+										},
+										{
+											"key": "content-length",
+											"value": "198"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 20 Aug 2019 19:58:27 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "[\n    {\n        \"id\": 53,\n        \"name\": \"group1\",\n        \"type\": \"accounts\",\n        \"allowed\": [\n            {\n                \"route\": \"/test\",\n                \"host\": \"http://127.0.0.1:1237/\",\n                \"removeFromPath\": \"test\",\n                \"method\": \"*\",\n                \"name\": \"all-test\"\n            }\n        ],\n        \"inherited\": null,\n        \"is_default\": false\n    }\n]"
+								}
+							]
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
 					"name": "Get",
 					"request": {
 						"method": "GET",
@@ -5251,24 +5323,14 @@
 								"method": "PUT",
 								"header": [
 									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									},
-									{
 										"key": "Authorization",
 										"value": "Bearer",
 										"description": "The client_credentials generated OAUth2 access token.",
 										"type": "text"
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"test\": 123\n}"
-								},
 								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/user/me/:property",
+									"raw": "{{TRAV}}/travelling/api/v1/user/me/:property/:value",
 									"host": [
 										"{{TRAV}}"
 									],
@@ -5278,12 +5340,17 @@
 										"v1",
 										"user",
 										"me",
-										":property"
+										":property",
+										":value"
 									],
 									"variable": [
 										{
 											"key": "property",
-											"value": "user_data"
+											"value": "group_id"
+										},
+										{
+											"key": "value",
+											"value": "595d3f9a-5383-4da9-a465-b975d8a5e28e"
 										}
 									]
 								},
@@ -5359,7 +5426,8 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "39A2BC37-61AE-434C-B245-A731A27CF8DA"
+									"value": "39A2BC37-61AE-434C-B245-A731A27CF8DA",
+									"description": "Id or Username "
 								},
 								{
 									"key": "prop",
@@ -5414,7 +5482,8 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "39A2BC37-61AE-434C-B245-A731A27CF8DA"
+									"value": "39A2BC37-61AE-434C-B245-A731A27CF8DA",
+									"description": "Id or Username "
 								}
 							]
 						},
@@ -5461,7 +5530,8 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "39A2BC37-61AE-434C-B245-A731A27CF8DA"
+									"value": "39A2BC37-61AE-434C-B245-A731A27CF8DA",
+									"description": "Id or Username "
 								},
 								{
 									"key": "prop",
@@ -5501,11 +5571,59 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "39A2BC37-61AE-434C-B245-A731A27CF8DA"
+									"value": "39A2BC37-61AE-434C-B245-A731A27CF8DA",
+									"description": "Id or Username "
 								}
 							]
 						},
 						"description": "Delete a user by it's Id."
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Property Value",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/user/id/:id/:property/:value",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"user",
+								"id",
+								":id",
+								":property",
+								":value"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"description": "Id or Username "
+								},
+								{
+									"key": "property",
+									"value": "group_id"
+								},
+								{
+									"key": "value",
+									"value": "595d3f9a-5383-4da9-a465-b975d8a5e28e"
+								}
+							]
+						},
+						"description": "Edit a current user's property data as a path param."
 					},
 					"response": []
 				}

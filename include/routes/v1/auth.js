@@ -107,8 +107,6 @@ module.exports = function(app, opts, done) {
 
                     await login(user.user, req, res, router);
                 } catch (e) {
-                    console.log(e);
-
                     res.code(400).send(e.err && e.err.type == 'locked' ? {type: e.err.type, msg: e.err.msg, email: e.email} : {
                         type: 'login-error',
                         msg: 'Invalid login',

@@ -360,8 +360,32 @@ class User {
 
 
     /**
+     * editPropertyValue - Edit a current user's property data as a path param.
+     * @param {any} id Id or Username  
+     * @param {any} property  (example: group_id)
+     * @param {any} value  (example: 595d3f9a-5383-4da9-a465-b975d8a5e28e)
+     * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+     */
+    static async editPropertyValue(id, property, value, authorization_bearer, opts) {
+        var options = {
+            method: 'PUT',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/user/id/${id}/${property}/${value}`,
+            authorization: {
+                bearer: authorization_bearer
+            },
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+
+
+    /**
      * delete - Delete a user by it's Id.
-     * @param {any} id  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA)
+     * @param {any} id Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
     static async delete(id, authorization_bearer, opts) {
@@ -384,7 +408,7 @@ class User {
     /**
      * editProperty - Edit a user's property by id.
      * @param {Object} body
-     * @param {any} id  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA)
+     * @param {any} id Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA)
      * @param {any} prop  (example: username)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      * @example
@@ -415,7 +439,7 @@ class User {
     /**
      * edit - Edit a user's by id.
      * @param {Object} body
-     * @param {any} id  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA)
+     * @param {any} id Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      * @example
      * body
@@ -447,7 +471,7 @@ class User {
 
     /**
      * getProperty - Get a user's property by it's id.
-     * @param {any} id  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA)
+     * @param {any} id Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA)
      * @param {any} prop  (example: username)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
@@ -502,25 +526,16 @@ class UserCurrent {
 
     /**
      * editPropertyValue - Edit a current user's property data as a path param.
-     * @param {Object} body
-     * @param {any} property  (example: user_data)
+     * @param {any} property  (example: group_id)
+     * @param {any} value  (example: 595d3f9a-5383-4da9-a465-b975d8a5e28e)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
-     * @example
-     * body
-     * ```js
-     * {
-     *     "test": 123
-     * }
-     * ```
      */
-    static async editPropertyValue(body, property, authorization_bearer, opts) {
+    static async editPropertyValue(property, value, authorization_bearer, opts) {
         var options = {
             method: 'PUT',
             resolveWithFullResponse: true,
             simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/user/me/${property}`,
-            body,
-            json: true,
+            uri: hostUrl + "/" + `travelling/api/v1/user/me/${property}/${value}`,
             authorization: {
                 bearer: authorization_bearer
             },
@@ -929,6 +944,59 @@ class Groups {
             resolveWithFullResponse: true,
             simple: false,
             uri: hostUrl + "/" + `travelling/api/v1/groups`,
+            authorization: {
+                bearer: authorization_bearer
+            },
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+
+    static get Type() {
+        return GroupsType;
+    }
+}
+/**
+ * 
+ */
+class GroupsType {
+    constructor() {}
+
+
+    /**
+     * all - Gets all groups of a particular type
+     * @param {any} type The type of the group 
+     * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+     */
+    static async all(type, authorization_bearer, opts) {
+        var options = {
+            method: 'GET',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/groups/type/${type}`,
+            authorization: {
+                bearer: authorization_bearer
+            },
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+
+
+    /**
+     * getTypesList - Gets all the types of groups currently made.
+     * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+     */
+    static async getTypesList(authorization_bearer, opts) {
+        var options = {
+            method: 'GET',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/groups/types`,
             authorization: {
                 bearer: authorization_bearer
             },
@@ -1436,7 +1504,7 @@ class GroupType {
     ```
       * @param {Object} body
       * @param {any} type  
-      * @param {any} name  
+      * @param {any} name Name of the group 
       * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
       * @example
       * body
@@ -1527,49 +1595,6 @@ class GroupType {
             resolveWithFullResponse: true,
             simple: false,
             uri: hostUrl + "/" + `travelling/api/v1/group/type/${type}/name/${name}/set/default`,
-        };
-        if (opts) {
-            options = Object.assign(options, opts);
-        }
-        return await fasq.request(options)
-    }
-
-
-    /**
-     * all - Gets all groups of a particular type
-     * @param {any} type The type of the group 
-     * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
-     */
-    static async all(type, authorization_bearer, opts) {
-        var options = {
-            method: 'GET',
-            resolveWithFullResponse: true,
-            simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/groups/type/${type}`,
-            authorization: {
-                bearer: authorization_bearer
-            },
-        };
-        if (opts) {
-            options = Object.assign(options, opts);
-        }
-        return await fasq.request(options)
-    }
-
-
-    /**
-     * getTypesList - Gets all the types of groups currently made.
-     * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
-     */
-    static async getTypesList(authorization_bearer, opts) {
-        var options = {
-            method: 'GET',
-            resolveWithFullResponse: true,
-            simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/groups/types`,
-            authorization: {
-                bearer: authorization_bearer
-            },
         };
         if (opts) {
             options = Object.assign(options, opts);
@@ -1819,8 +1844,8 @@ class GroupTypeUser {
 
     /**
      * delete - Delete a user by it's id or username from group of a particular type.
-     * @param {any} type  (example: accounts)
-     * @param {any} id  (example: user7)
+     * @param {any} type The type of the group (example: accounts)
+     * @param {any} id id or name (example: user7)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
     static async delete(type, id, authorization_bearer, opts) {
@@ -1841,10 +1866,35 @@ class GroupTypeUser {
 
 
     /**
+     * editPropertyValue - Edit a current user's property data as a path param.
+     * @param {any} type The type of the group (example: group)
+     * @param {any} id id or name (example: user5)
+     * @param {any} property  (example: email)
+     * @param {any} value  (example: swag@yolo.com)
+     * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+     */
+    static async editPropertyValue(type, id, property, value, authorization_bearer, opts) {
+        var options = {
+            method: 'PUT',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/group/type/${type}/user/${id}/${property}/${value}`,
+            authorization: {
+                bearer: authorization_bearer
+            },
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+
+
+    /**
      * editProperty - Edit a user's property by it's id or username from group of a particular type.
      * @param {Object} body
-     * @param {any} type  (example: accounts)
-     * @param {any} id  (example: user6)
+     * @param {any} type The type of the group (example: accounts)
+     * @param {any} id id or name (example: user6)
      * @param {any} property  (example: email)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      * @example
@@ -1877,8 +1927,8 @@ class GroupTypeUser {
     /**
      * edit - Edit a user by it's id or username from group of a particular type.
      * @param {Object} body
-     * @param {any} type  (example: accounts)
-     * @param {any} id  (example: user6)
+     * @param {any} type The type of the group (example: accounts)
+     * @param {any} id id or name (example: user6)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      * @example
      * body
@@ -1909,8 +1959,8 @@ class GroupTypeUser {
 
     /**
      * getProperty - Get a user's property by it's id or username from group of a particular type.
-     * @param {any} type  (example: accounts)
-     * @param {any} id  (example: user6)
+     * @param {any} type The type of the group (example: accounts)
+     * @param {any} id id or name (example: user6)
      * @param {any} property  (example: email)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
@@ -1933,8 +1983,8 @@ class GroupTypeUser {
 
     /**
      * get - Get a user by it's id or username from group of a particular type.
-     * @param {any} type  (example: accounts)
-     * @param {any} id  (example: user6)
+     * @param {any} type The type of the group (example: accounts)
+     * @param {any} id id or name (example: user6)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
     static async get(type, id, authorization_bearer, opts) {
@@ -2233,6 +2283,7 @@ module.exports = function(host) {
         User,
         UserCurrent,
         Groups,
+        GroupsType,
         Group,
         GroupUsers,
         GroupType,

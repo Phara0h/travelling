@@ -158,6 +158,14 @@ async function getUserByGroup(req, res, router) {
     // set prop back for other functions to use\
     req.params.prop = prop;
 
+    if (req.params.prop && user[req.params.prop] === undefined) {
+        res.code(400);
+        return {
+            type: 'user-prop-error',
+            msg: 'Not a property of user',
+        };
+    }
+
     if (user.msg) {
         res.code(400).send(user);
         return false;
@@ -196,11 +204,11 @@ async function getGroupsByType(req, res, router) {
 }
 
 async function editUserByGroup(req, res, router) {
-    var user = await getUserByGroup(req, res, router);
-
-    if (!user) {
-        return false;
-    }
+    // var user = await getUserByGroup(req, res, router);
+    //
+    // if (!user) {
+    //     return false;
+    // }
     var editedUser = userRoutes.editUser(req, res, router);
 
     if (editedUser.msg) {
@@ -822,8 +830,10 @@ module.exports = function(app, opts, done) {
 
     app.put('/group/type/:grouptype/name/:groupname/user/:id', async (req, res) => {return await editUserByGroup(req, res, router);});
     app.put('/group/type/:grouptype/name/:groupname/user/:id/:prop', async (req, res) => {return await editUserByGroup(req, res, router);});
+    app.put('/group/type/:grouptype/name/:groupname/user/:id/:prop/:propdata', async (req, res) => {return await editUserByGroup(req, res, router);});
     app.put('/group/type/:grouptype/user/:id', async (req, res) => {return await editUserByGroup(req, res, router);});
     app.put('/group/type/:grouptype/user/:id/:prop', async (req, res) => {return await editUserByGroup(req, res, router);});
+    app.put('/group/type/:grouptype/user/:id/:prop/:propdata', async (req, res) => {return await editUserByGroup(req, res, router);});
 
     // Edit Users Group request
 
