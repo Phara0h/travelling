@@ -40,6 +40,7 @@ const config = {
     },
     proxy: {
         timeout: misc.isSetDefault(Number(process.env.TRAVELLING_PROXY_TIMEOUT), 0),
+        sendTravellingHeaders: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_PROXY_SEND_TRAVELLING_HEADERS), false),
     },
     redis: {
         enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_REDIS_ENABLE), false),

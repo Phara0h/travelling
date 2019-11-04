@@ -42,8 +42,9 @@ var checkAuthHeader = async (req, res, router) => {
             return {auth: false, route: false, invalidToken: true};
         }
 
-        await user.resolveGroup(router);
-        req.session = {data: {user}};
+        var groups = await user.resolveGroup(router);
+
+        req.session = {data: {user, groups}};
 
         return {auth: true, route: true};
     }
@@ -69,11 +70,11 @@ var checkCookie = async (req, res, router) => {
             if (!user || user.locked) {
                 return {auth: false, route: true};
             }
+            const groupsData = await user.resolveGroup();
 
-            user.resolveGroup(router);
-            req.createSession(user.id, {user});
+            req.createSession(user.id, {user, groupsData});
 
-            config.log.logger.info('User Token Session Refreshed: ' + user.username + ' (' + user._.group.name + ')' + ' | ' + req.ip);
+            config.log.logger.info('User Token Session Refreshed: ' + user.username + ' (' + groupsData.names + ')' + ' | ' + req.ip);
 
             return {auth: true, route: true};
         } catch (e) {

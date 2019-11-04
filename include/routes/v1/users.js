@@ -56,27 +56,71 @@ async function deleteUser(req, res, router) {
         msg: 'No user by that username or id was found.',
     };
 }
+async function updateSessionUser(user, req) {
+    const groupsData = await user.resolveGroup();
+    // Update any current logged in users
+    var session = await req.sessionStore.get(user.id);
 
+    if (session) {
+        session.data = {user, groupsData};
+        await req.sessionStore.set(session.sessionId, session);
+    }
+}
+async function getGroup(res, req) {
+    var group = null;
+
+    if (req.params.groupid && req.params.grouptype) {
+        group = await gm.getGroup(req.params.groupid, req.params.grouptype);
+    }
+
+    if (!group) {
+        return {
+            type: 'user-edit-group-error',
+            msg: 'No group with that type by that name or id was found.',
+        };
+    }
+}
+async function addRemoveGroupInheritance(user, group, add = true) {
+    if (user && user.length > 0) {
+
+        user = user[0];
+
+        user = add ? await user.addGroup(group) : await user.removeGroup(group);
+
+        if (!user) {
+            return {
+                type: `user-${add ? 'add' : 'remove'}-group-error`,
+                msg: `User could not ${add ? 'add' : 'remove'} group.`,
+            };
+        }
+        await updateSessionUser(user);
+        return user;
+    }
+    return {
+        type: 'user-edit-error',
+        msg: 'No user by that username or id was found.',
+    };
+}
 function filterUser(req) {
     if (!req.body) {
         return req.body;
     }
-    if (req.body.group_id) {
-        if (req.params.prop == 'group_id' && req.params.propdata) {
-            req.body.group_id = req.params.propdata;
-        } else {
-            delete req.body.group_id;
-        }
+
+    if (req.body.group_ids) {
+        // if (req.params.prop == 'group_ids' && req.params.propdata) {
+        // req.body.group_ids = req.params.propdata;
+        // } else {
+        delete req.body.group_ids;
+        // }
     }
     return req.body;
 }
-
 async function editUser(req, res, router) {
 
     if (!req.params.id) {
         res.code(400);
         return {
-            type: 'user-find-by-error',
+            type: 'user-edit-id-error',
             msg: 'No user by that username or id was found.',
         };
     }
@@ -134,14 +178,14 @@ async function editUser(req, res, router) {
             };
         }
 
-        await user[0].resolveGroup(router);
+        const groupsData = await user[0].resolveGroup(router);
 
         res.code(200);
         // Update any current logged in users
         var session = await req.sessionStore.get(user[0].id);
 
         if (session) {
-            session.data = {user: user[0]};
+            session.data = {user: user[0], groupsData};
             await req.sessionStore.set(session.sessionId, session);
         }
 
@@ -155,7 +199,7 @@ async function editUser(req, res, router) {
     };
 }
 
-async function getUser(req, res, router) {
+async function getUser(req, res) {
 
     if (!req.params.id) {
         res.code(400);
@@ -192,7 +236,7 @@ async function getUser(req, res, router) {
             };
         }
 
-        await user[0].resolveGroup(router);
+        await user[0].resolveGroup();
 
         res.code(200);
         return req.params.prop ? user[0][req.params.prop] : user[0];
@@ -215,6 +259,48 @@ function routes(app, opts, done) {
     app.get('/user/id/:id', async (req, res)=>{return await getUser(req, res, router);});
     app.get('/user/id/:id/:prop', async (req, res)=>{return await getUser(req, res, router);});
 
+    app.put('/user/id/:id/inheritance/group/:groupid/type/:grouptype', async (req, res) => {
+        const group = await getGroup(req, res);
+
+        if (group && group.msg) {
+            res.code(400);
+            return group;
+        }
+
+        const user = await getUser(req, res);
+
+        if (user && user.msg) {
+            res.code(400);
+            return user;
+        }
+
+        user = await addRemoveGroupInheritance(user, group, true);
+        res.code(user && user.msg ? 400 : 200);
+
+        return user;
+    });
+
+    app.delete('/user/id/:id/inheritance/group/:groupid/type/:grouptype', async (req, res) => {
+        const group = await getGroup(req, res);
+
+        if (group && group.msg) {
+            res.code(400);
+            return group;
+        }
+
+        var user = await getUser(req, res);
+
+        if (user && user.msg) {
+            res.code(400);
+            return user;
+        }
+
+        user = await addRemoveGroupInheritance(user, group, false);
+        res.code(user && user.msg ? 400 : 200);
+
+        return user;
+    });
+
     app.put('/user/id/:id', async (req, res)=>{return await editUser(req, res, router);});
     app.put('/user/id/:id/:prop', async (req, res)=>{return await editUser(req, res, router);});
     app.put('/user/id/:id/:prop/:propdata', async (req, res)=>{return await editUser(req, res, router);});
@@ -223,8 +309,8 @@ function routes(app, opts, done) {
 
     // app.get('/user/resolve/group/username/:username', getUserResolveGroup);
     // app.get('/user/resolve/group/username/:username/:prop', getUserResolveGroup);
-    // app.get('/user/resolve/group/id/:id', getUserResolveGroup);
-    // app.get('/user/resolve/group/id/:id/:prop', getUserResolveGroup);
+    // app.get('/user/resolve/group/name/:id', getUserResolveGroup);
+    // app.get('/user/resolve/group/name/:id/:prop', getUserResolveGroup);
 
     app.get('/users', async (req, res) => {
 
@@ -263,6 +349,52 @@ function routes(app, opts, done) {
         }
     });
 
+    app.put('/user/me/inheritance/group/:groupid/type/:grouptype', async (req, res) => {
+        req.params.id = req.session.data.user.id;
+
+        const group = await getGroup(req, res);
+
+        if (group && group.msg) {
+            res.code(400);
+            return group;
+        }
+
+        const user = await getUser(req, res);
+
+        if (user && user.msg) {
+            res.code(400);
+            return user;
+        }
+
+        user = await addRemoveGroupInheritance(user, group, true);
+        res.code(user && user.msg ? 400 : 200);
+
+        return user;
+    });
+
+    app.delete('/user/me/inheritance/group/:groupid/type/:grouptype', async (req, res) => {
+        req.params.id = req.session.data.user.id;
+
+        const group = await getGroup(req, res);
+
+        if (group && group.msg) {
+            res.code(400);
+            return group;
+        }
+
+        const user = await getUser(req, res);
+
+        if (user && user.msg) {
+            res.code(400);
+            return user;
+        }
+
+        user = await addRemoveGroupInheritance(user, group, false);
+        res.code(user && user.msg ? 400 : 200);
+
+        return user;
+    });
+
     app.put('/user/me', async (req, res) => {
         req.params.id = req.session.data.user.id;
         return await editUser(req, res, router);
@@ -279,17 +411,35 @@ function routes(app, opts, done) {
     });
 
     app.get('/user/me/route/allowed', async (req, res) => {
+        if (req.session) {
+            const groups = await gm.currentGroup(req, res);
 
-        var isAllowed = req.session ? router.isRouteAllowed(req.query.method, req.query.route, await gm.currentGroup(req, res), !req.isAuthenticated ? null : req.session.data.user) : false;
+            for (var i = 0; i < groups.length; i++) {
+                if (router.isRouteAllowed(req.query.method, req.query.route, groups[i].routes, !req.isAuthenticated ? null : req.session.data.user, groups[i].group)) {
+                    res.code(200);
+                    return true;
+                }
+            }
+        }
 
-        res.code(isAllowed ? 200 : 401).send();
+        res.code(401);
+        return false;
     });
 
     app.get('/user/me/permission/allowed/:permission', async (req, res) => {
+        if (req.session) {
+            const groups = await gm.currentGroup(req, res);
 
-        var isAllowed = req.session ? router.isPermissionAllowed(req.params.permission, await gm.currentGroup(req, res), !req.isAuthenticated ? null : req.session.data.user) : false;
+            for (var i = 0; i < groups.length; i++) {
+                if (router.isPermissionAllowed(req.params.permission, groups[i].routes, !req.isAuthenticated ? null : req.session.data.user, groups[i].group)) {
+                    res.code(200);
+                    return true;
+                }
+            }
+        }
 
-        res.code(isAllowed ? 200 : 401).send();
+        res.code(401);
+        return false;
     });
 
     app.post('/user/me/token', async (req, res) => {
@@ -307,7 +457,6 @@ function routes(app, opts, done) {
             config.log.logger.debug(e);
             return;
         }
-
     });
 
     app.delete('/user/me/token/:id', async (req, res) => {

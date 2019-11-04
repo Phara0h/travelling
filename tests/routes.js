@@ -100,7 +100,7 @@ module.exports = () => {
            method: 'DELETE',
            resolveWithFullResponse: true,
            simple: false,
-           uri: 'https://127.0.0.1:6969/test/delete/'+user.group.type,
+           uri: 'https://127.0.0.1:6969/test/delete/'+user.groups[0].type,
            authorization: {
                bearer: accessToken
            }
@@ -109,7 +109,7 @@ module.exports = () => {
           //var res = await Travelling.Group.edit({inherited:[group4.id]}, 'group1', userContainer.user1Token);
 
           expect(res.statusCode).toEqual(200);
-          expect(res.body.params).toEqual({ param1: user.group.type});
+          expect(res.body.params).toEqual({ param1: user.groups[0].type});
         });
 
     });

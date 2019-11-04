@@ -50,7 +50,7 @@ module.exports = () => {
 
 
         test("Check Test's Permission", async () => {
-          var res = await Travelling.User.Current.permissionCheck('get-travelling', null,{
+          var res = await Travelling.User.Current.permissionCheck('get-travelling', null, {
               headers: {
                   cookie: userContainer.user1Cookie(),
               },
@@ -60,11 +60,7 @@ module.exports = () => {
         });
 
         test("Check Test's Route", async () => {
-          var res = await Travelling.User.Current.routeCheck('get','/travelling/api/v1/user/me', null, {
-              headers: {
-                  cookie: userContainer.user1Cookie(),
-              },
-          });
+          var res = await Travelling.User.Current.routeCheck('get','/travelling/api/v1/user/me', userContainer.user1Token);
 
           expect(res.statusCode).toEqual(200);
         });

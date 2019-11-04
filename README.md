@@ -48,6 +48,7 @@ A blazing fast dynamic route level groups/permissions api gateway.
         - [TRAVELLING_PORTAL_ICON](#travelling_portal_icon)
     - [Proxy](#proxy)
         - [TRAVELLING_PROXY_TIMEOUT](#travelling_proxy_timeout)
+        - [TRAVELLING_PROXY_SEND_TRAVELLING_HEADERS](#travelling_proxy_send_travelling_headers)
     - [Redis](#redis)
         - [TRAVELLING_REDIS_ENABLE](#travelling_redis_enable)
         - [TRAVELLING_REDIS_URL](#travelling_redis_url)
@@ -311,6 +312,19 @@ ___
 ##### TRAVELLING_PROXY_TIMEOUT
 *How long in seconds the proxy should wait on a request to finish. `0` is Infinity* </br>
 > **Default**: `0`
+
+##### TRAVELLING_PROXY_SEND_TRAVELLING_HEADERS
+*Allows Travelling to send permission/user/group based headers along with the proxy route* </br>
+> **Default**: `false`
+
+Header  |  Description
+----------|-------------
+`un` |  User's Username.
+`uid` |  User's Id.
+`gn` |  User's Group's name that allowed the request.
+`gt `|  User's Group's type that allowed the request.  
+`perm` |  Permission's name that allowed the request.
+
 ___
 
 ### Redis

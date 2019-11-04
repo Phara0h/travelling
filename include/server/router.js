@@ -53,19 +53,29 @@ class Router {
     async routeUrl(req, res) {
         var authenticated = req.isAuthenticated;
         var sessionUser = req.session.data ? req.session.data.user : null;
+        var sessionGroupsData = req.session.data ? req.session.data.groupsData : null;
 
         await gm.updateGroupsIfNeeeded();
 
-        var group = await gm.currentGroup(req, res);
+        var groups = await gm.currentGroup(req, res);
 
         if (sessionUser && sessionUser.locked) {
             req.logout(req, res);
             res.code(401).send('Account Locked');
             return false;
         }
-        if (group) {
+        if (groups) {
             // the route object
-            var r = this.isRouteAllowed(req.raw.method, req.raw.url, group, sessionUser);
+            var r = null;
+            var routedGroup = null;
+
+            for (var i = 0; i < groups.length; i++) {
+                routedGroup = groups[i].group;
+                r = this.isRouteAllowed(req.raw.method, req.raw.url, groups[i].routes, sessionUser, routedGroup);
+                if (r) {
+                    break;
+                }
+            }
 
             if (req.req.url.indexOf(config.portal.path) == 0) {
                 return false;
@@ -95,14 +105,15 @@ class Router {
                 res.code(401).send('Access Denied');
 
                 if (config.log.unauthorizedAccess) {
-                    log.warn('Unauthorized', sessionUser.username + ' (' + sessionUser.group.name + ') | ' + req.ip + ' | [' + req.raw.method + '] ' + req.req.url);
+                    log.warn('Unauthorized', sessionUser.username + ' (' + sessionGroupsData.names + ') | ' + req.ip + ' | [' + req.raw.method + '] ' + req.req.url);
                 }
                 return false;
             }
             // sets user id cookie every time to protect against tampering.
-            if (authenticated) {
+            if (authenticated && config.proxy.sendTravellingHeaders) {
                 req.headers['un'] = sessionUser.username;
-                req.headers['g'] = sessionUser.group.name;
+                req.headers['gn'] = routedGroup.name;
+                req.headers['gt'] = routedGroup.type;
                 req.headers['perm'] = r.name;
                 req.headers['aid'] = sessionUser.id;
             }
@@ -111,7 +122,7 @@ class Router {
                 if (config.log.requests) {
                     if (authenticated) {
 
-                        log.info(sessionUser.username + ' (' + sessionUser.group.name + ') | ' + req.raw.ip + ' | [' + req.raw.method + '] ' + req.req.url);
+                        log.info(sessionUser.username + ' (' + routedGroup.name + ') | ' + req.raw.ip + ' | [' + req.raw.method + '] ' + req.req.url);
                     } else {
                         log.info('Unregistered User' + ' (anonymous)' + ' | ' + req.raw.ip + ' | [' + req.raw.method + '] ' + req.req.url);
                     }
@@ -120,15 +131,15 @@ class Router {
             }
 
             var target = {
-                target: this.transformRoute(sessionUser, r, r.host || `${config.https ? 'https' : 'http'}://127.0.0.1:${config.port}`),
+                target: this.transformRoute(sessionUser, r, r.host || `${config.https ? 'https' : 'http'}://127.0.0.1:${config.port}`, routedGroup),
             };
 
             if (r.remove_from_path) {
-                req.raw.url = req.raw.url.replace(this.transformRoute(sessionUser, r, r.remove_from_path), '');
+                req.raw.url = req.raw.url.replace(this.transformRoute(sessionUser, r, r.remove_from_path, routedGroup), '');
             }
 
             if (config.log.requests && authenticated) {
-                log.info(sessionUser.username + ' (' + sessionUser.group.name + ') | ' + req.ip + ' | [' + req.raw.method + '] ' + req.req.url + ' -> ' + target.target + req.raw.url);
+                log.info(sessionUser.username + ' (' + routedGroup.name + ') | ' + req.ip + ' | [' + req.raw.method + '] ' + req.req.url + ' -> ' + target.target + req.raw.url);
             }
 
             if (config.log.requests && !authenticated) {
@@ -170,14 +181,14 @@ class Router {
     // @TODO Change these regex to precompiled ones inside regex.js
 
     /* eslint-disable */
-    isRouteAllowed(method, url, routes, user) {
+    isRouteAllowed(method, url, routes, user, currentGroup) {
 
         var surl = url.split('?')[0].split(/[\/]/g).filter(String);
 
         for (var i = 0; i < routes.length; i++) {
 
             if (!routes[i].method || !method || method == routes[i].method || routes[i].method == '*') {
-                var route = this.transformRoute(user, routes[i], routes[i].route);
+                var route = this.transformRoute(user, routes[i], routes[i].route, currentGroup);
 
                 if(!route) {
                   continue;
@@ -214,11 +225,11 @@ class Router {
         return false;
     }
 
-    isPermissionAllowed(perm, routes, user) {
+    isPermissionAllowed(perm, routes, user, currentGroup) {
         var permRoute = perm.split(/[\-]/g).filter(String);
 
         for (var i = 0; i < routes.length; i++) {
-            var permission = this.transformRoute(user, routes[i], routes[i].name).split(/[\-]/g);
+            var permission = this.transformRoute(user, routes[i], routes[i].name, currentGroup).split(/[\-]/g);
 
             if (permission.length == permRoute.length || permission.length <= permRoute.length + 1 && (permission[permission.length - 1] == '*' || permission[0] == '*')) {
                 var allowed = true;
@@ -238,7 +249,7 @@ class Router {
         return false;
     }
 
-    transformRoute(usr, route, path) {
+    transformRoute(usr, route, path, group) {
         var user = !usr ? {group: {}} : usr;
         if(!path) {
           return path;
@@ -257,13 +268,13 @@ class Router {
                     prop = user.email || prop;
                     break;
                 case ':grouptype':
-                    prop = user.group.type || prop;
+                    prop = group.type || prop;
                     break;
                 case ':group':
-                    prop = user.group.name || prop;
+                    prop = group.name || prop;
                     break;
                 case ':permission':
-                    prop = this.transformRoute(usr, route, route.name || prop);
+                    prop = this.transformRoute(usr, route, route.name || prop, group);
                     break;
             }
             return prop;
