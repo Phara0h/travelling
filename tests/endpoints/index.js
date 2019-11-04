@@ -15,4 +15,8 @@ module.exports = () => {
       describe('Get', require('./users-get.js'))
   });
 
+    describe('Misc', () =>{
+        describe('Server', require('./misc.js'))
+    });
+
 };

@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "ed1cc233-466f-4b13-80db-86aeee516062",
+		"_postman_id": "5ba1d705-0f69-4ddf-ac26-9091ce778355",
 		"name": "Travelling",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -316,12 +316,6 @@
 								"auth",
 								"password",
 								"forgot"
-							],
-							"query": [
-								{
-									"key": "",
-									"value": ""
-								}
 							]
 						},
 						"description": "Generates a recovery token and sends a email to the attached user (if they exist) "
@@ -595,7 +589,1114 @@
 						]
 					}
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Current",
+					"item": [
+						{
+							"name": "Get",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/user/me",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"user",
+										"me"
+									]
+								},
+								"description": "Gets the currently logged in user"
+							},
+							"response": []
+						},
+						{
+							"name": "Permission Check",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/user/me/permission/allowed/:permission",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"user",
+										"me",
+										"permission",
+										"allowed",
+										":permission"
+									],
+									"variable": [
+										{
+											"key": "permission",
+											"value": "get-travelling",
+											"description": "name of the route/permission"
+										}
+									]
+								},
+								"description": "Checks to see if the current user can access content based on permission."
+							},
+							"response": []
+						},
+						{
+							"name": "Route Check",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/user/me/route/allowed?method=get&route=/travelling/api/v1/users/me",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"user",
+										"me",
+										"route",
+										"allowed"
+									],
+									"query": [
+										{
+											"key": "method",
+											"value": "get"
+										},
+										{
+											"key": "route",
+											"value": "/travelling/api/v1/users/me"
+										}
+									]
+								},
+								"description": "Checks if current logged in user can access the route with method."
+							},
+							"response": []
+						},
+						{
+							"name": "Get Property",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/user/me/:property",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"user",
+										"me",
+										":property"
+									],
+									"variable": [
+										{
+											"key": "property",
+											"value": "username"
+										}
+									]
+								},
+								"description": "Gets the currently logged in user's single property "
+							},
+							"response": []
+						},
+						{
+							"name": "Edit",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"user6\",\n    \"password\": \"Awickednewawesomepasword4242!@\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/user/me",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"user",
+										"me"
+									]
+								},
+								"description": "Updates the current logged in user."
+							},
+							"response": [
+								{
+									"name": "Edit User",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"username\" : \"user6\",\n\t\"password\" : \"Awickednewawesomepasword4242!@\"\n}"
+										},
+										"url": {
+											"raw": "{{TRAV}}/travelling/api/v1/user/me",
+											"host": [
+												"{{TRAV}}"
+											],
+											"path": [
+												"travelling",
+												"api",
+												"v1",
+												"user",
+												"me"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "content-type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "set-cookie",
+											"value": "trav:ssid=10%3AEIOmCFPwdTBcahxDDZVEAA%3D%3D.gSEo0VoNAWsiU9tQjtwtcz5sLKfIpwQGEP5cuqec40Y; Max-Age=10000; Path=/; Expires=Wed, 28 Aug 2019 15:19:01 GMT; HttpOnly; Secure"
+										},
+										{
+											"key": "content-length",
+											"value": "769"
+										},
+										{
+											"key": "Date",
+											"value": "Wed, 28 Aug 2019 15:18:51 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": 10,\n    \"username\": \"user6\",\n    \"password\": \"bcc690dfa35c3214ef67a63383e0420e177c47577c8e31a90b3ba94e2b923b93\",\n    \"avatar\": null,\n    \"locked\": false,\n    \"locked_reason\": null,\n    \"failed_login_attempts\": 0,\n    \"change_username\": false,\n    \"change_password\": false,\n    \"reset_password_token\": null,\n    \"email_verify_token\": null,\n    \"group_id\": 2,\n    \"email\": \"joseph@abe.ai\",\n    \"created_on\": \"1567005382100\",\n    \"last_login\": null,\n    \"client_id\": null,\n    \"client_secret\": null,\n    \"client_refresh\": null,\n    \"user_data\": null,\n    \"eprofile\": null,\n    \"group\": {\n        \"id\": 2,\n        \"name\": \"superadmin\",\n        \"type\": \"group\",\n        \"allowed\": [\n            {\n                \"host\": null,\n                \"route\": \"/travelling/*\",\n                \"method\": \"*\",\n                \"name\": \"*-travelling-*\"\n            },\n            {\n                \"route\": \"/test/:username\",\n                \"host\": \"http://127.0.0.1:1237/:permission\",\n                \"removeFromPath\": \"test\",\n                \"method\": \"*\",\n                \"name\": \"*-test-:username\"\n            }\n        ],\n        \"inherited\": null,\n        \"is_default\": true\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Register Token",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"description": "The client_credentials generated OAUth2 access token.",
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"conversate\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/user/me/token",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"user",
+										"me",
+										"token"
+									]
+								},
+								"description": "Registers a new credentials service for client_credentials based access token auth."
+							},
+							"response": [
+								{
+									"name": "Add Token",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"name\": \"test\"\n}"
+										},
+										"url": {
+											"raw": "{{TRAV}}/travelling/api/v1/user/me/token",
+											"host": [
+												"{{TRAV}}"
+											],
+											"path": [
+												"travelling",
+												"api",
+												"v1",
+												"user",
+												"me",
+												"token"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "content-type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "content-length",
+											"value": "171"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 10 Sep 2019 17:22:33 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"client_id\": \"tesadasd\",\n    \"client_secret\": \"e0352d359201aa574d17c41f8f65dbf987569e4c52cc05c47dec91323d2bdbc70a8d3189fb435970c8621d92da0ebd0a998bb42a9e0336eb43fd351ed68ee00d\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Delete Token",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "The client_credentials generated OAUth2 access token.",
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer"
+									}
+								],
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/user/me/token/:id",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"user",
+										"me",
+										"token",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "",
+											"description": "id or name of the token"
+										}
+									]
+								},
+								"description": "Deletes a client_credentials based access token auth."
+							},
+							"response": [
+								{
+									"name": "Add Token",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"name\": \"test\"\n}"
+										},
+										"url": {
+											"raw": "{{TRAV}}/travelling/api/v1/user/me/token",
+											"host": [
+												"{{TRAV}}"
+											],
+											"path": [
+												"travelling",
+												"api",
+												"v1",
+												"user",
+												"me",
+												"token"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "content-type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "content-length",
+											"value": "171"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 10 Sep 2019 17:22:33 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"client_id\": \"tesadasd\",\n    \"client_secret\": \"e0352d359201aa574d17c41f8f65dbf987569e4c52cc05c47dec91323d2bdbc70a8d3189fb435970c8621d92da0ebd0a998bb42a9e0336eb43fd351ed68ee00d\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Edit Property",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"test\": 123\n}"
+								},
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/user/me/:property",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"user",
+										"me",
+										":property"
+									],
+									"variable": [
+										{
+											"key": "property",
+											"value": "user_data"
+										}
+									]
+								},
+								"description": "Edit a current user's property data."
+							},
+							"response": []
+						},
+						{
+							"name": "Edit Property Value",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/user/me/:property/:value",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"user",
+										"me",
+										":property",
+										":value"
+									],
+									"variable": [
+										{
+											"key": "property",
+											"value": "group_id"
+										},
+										{
+											"key": "value",
+											"value": "595d3f9a-5383-4da9-a465-b975d8a5e28e"
+										}
+									]
+								},
+								"description": "Edit a current user's property data as a path param."
+							},
+							"response": []
+						},
+						{
+							"name": "Add Group Inheritance",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"description": "The client_credentials generated OAUth2 access token.",
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer"
+									}
+								],
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/user/me/inheritance/group/:inheritgroupid/type/:inheritgrouptype",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"user",
+										"me",
+										"inheritance",
+										"group",
+										":inheritgroupid",
+										"type",
+										":inheritgrouptype"
+									],
+									"variable": [
+										{
+											"key": "inheritgroupid",
+											"value": "group2",
+											"description": "id or name of the  group to inherit"
+										},
+										{
+											"key": "inheritgrouptype",
+											"value": "group",
+											"description": "type of the  group to inherit"
+										}
+									]
+								},
+								"description": "Add a user to a group."
+							},
+							"response": []
+						},
+						{
+							"name": "Remove Group Inheritance",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "The client_credentials generated OAUth2 access token.",
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer"
+									}
+								],
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/user/me/inheritance/group/:inheritgroupid/type/:inheritgrouptype",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"user",
+										"me",
+										"inheritance",
+										"group",
+										":inheritgroupid",
+										"type",
+										":inheritgrouptype"
+									],
+									"variable": [
+										{
+											"description": "id or name of the  group to inherit",
+											"key": "inheritgroupid",
+											"value": "group2"
+										},
+										{
+											"description": "type of the  group to inherit",
+											"key": "inheritgrouptype",
+											"value": "group"
+										}
+									]
+								},
+								"description": "Remove a user from a group."
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/user/id/:id",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"user",
+								"id",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "39A2BC37-61AE-434C-B245-A731A27CF8DA"
+								}
+							]
+						},
+						"description": "Get a user by it's id."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Property",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/user/id/:id/:prop",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"user",
+								"id",
+								":id",
+								":prop"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "39A2BC37-61AE-434C-B245-A731A27CF8DA",
+									"description": "Id or Username "
+								},
+								{
+									"key": "prop",
+									"value": "username"
+								}
+							]
+						},
+						"description": "Get a user's property by it's id."
+					},
+					"response": []
+				},
+				{
+					"name": "Edit",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\" : \"user6\",\n\t\"password\" : \"Awickednewawesomepasword4242!@\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/user/id/:id",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"user",
+								"id",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "39A2BC37-61AE-434C-B245-A731A27CF8DA",
+									"description": "Id or Username "
+								}
+							]
+						},
+						"description": "Edit a user's by id."
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Property",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "user6"
+						},
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/user/id/:id/:prop",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"user",
+								"id",
+								":id",
+								":prop"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "39A2BC37-61AE-434C-B245-A731A27CF8DA",
+									"description": "Id or Username "
+								},
+								{
+									"key": "prop",
+									"value": "username"
+								}
+							]
+						},
+						"description": "Edit a user's property by id."
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Property Value",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/user/id/:id/:property/:value",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"user",
+								"id",
+								":id",
+								":property",
+								":value"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "",
+									"description": "Id or Username "
+								},
+								{
+									"key": "property",
+									"value": "group_id"
+								},
+								{
+									"key": "value",
+									"value": "595d3f9a-5383-4da9-a465-b975d8a5e28e"
+								}
+							]
+						},
+						"description": "Edit a current user's property data as a path param."
+					},
+					"response": []
+				},
+				{
+					"name": "Add Group Inheritance",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"description": "The client_credentials generated OAUth2 access token.",
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer"
+							}
+						],
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"user",
+								":id",
+								"inheritance",
+								"group",
+								":inheritgroupid",
+								"type",
+								":inheritgrouptype"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "user5",
+									"description": "id or name of the user"
+								},
+								{
+									"key": "inheritgroupid",
+									"value": "group2",
+									"description": "id or name of the  group to inherit"
+								},
+								{
+									"key": "inheritgrouptype",
+									"value": "group",
+									"description": "type of the  group to inherit"
+								}
+							]
+						},
+						"description": "Add a user to a group."
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Group Inheritance",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"description": "The client_credentials generated OAUth2 access token.",
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer"
+							}
+						],
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"user",
+								":id",
+								"inheritance",
+								"group",
+								":inheritgroupid",
+								"type",
+								":inheritgrouptype"
+							],
+							"variable": [
+								{
+									"description": "id or name of the user",
+									"key": "id",
+									"value": "user5"
+								},
+								{
+									"description": "id or name of the  group to inherit",
+									"key": "inheritgroupid",
+									"value": "group2"
+								},
+								{
+									"description": "type of the  group to inherit",
+									"key": "inheritgrouptype",
+									"value": "group"
+								}
+							]
+						},
+						"description": "Remove a user from a group."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/user/id/:id",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"user",
+								"id",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "39A2BC37-61AE-434C-B245-A731A27CF8DA",
+									"description": "Id or Username "
+								}
+							]
+						},
+						"description": "Delete a user by it's Id."
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "0b3e6723-6ffb-4326-be64-49cc7183f6cc",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "654fb8fd-53f2-43fc-9926-ca02ad2d7427",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/users",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"users"
+							]
+						},
+						"description": "Gets all the users\n\n##### Optional Query Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | *optional* (example:  user7) |\n| locked | *optional* (example:  true) |\n| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |\n| group_request | *optional* (example:  superadmin) |\n| failed_login_attempts | *optional* (example:  0) |\n| change_username | *optional* (example:  false) |\n| change_password | *optional* (example:  false) |\n| reset_password | *optional* (example:  false) |\n| email_verify | *optional* (example:  false) |\n| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | *optional* (example:  test@test.ai) |\n| created_on | *optional* (example:  1568419646794) |\n| last_login | *optional* (example:  null) |"
+					},
+					"response": []
+				},
+				{
+					"name": "By Group Request",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{TRAV}}/travelling/api/v1/users/group/request/:group_request",
+							"host": [
+								"{{TRAV}}"
+							],
+							"path": [
+								"travelling",
+								"api",
+								"v1",
+								"users",
+								"group",
+								"request",
+								":group_request"
+							],
+							"variable": [
+								{
+									"key": "group_request",
+									"value": "superadmin",
+									"description": "name of the group "
+								}
+							]
+						},
+						"description": "Gets all the users that have the specified group request\n\n##### Optional Query Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | *optional* (example:  user7) |\n| locked | *optional* (example:  true) |\n| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |\n| group_request | *optional* (example:  superadmin) |\n| failed_login_attempts | *optional* (example:  0) |\n| change_username | *optional* (example:  false) |\n| change_password | *optional* (example:  false) |\n| reset_password | *optional* (example:  false) |\n| email_verify | *optional* (example:  false) |\n| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | *optional* (example:  test@test.ai) |\n| created_on | *optional* (example:  1568419646794) |\n| last_login | *optional* (example:  null) |"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Group",
@@ -1323,7 +2424,7 @@
 												}
 											]
 										},
-										"description": "Edit a user's property by it's id or username from group of a particular type."
+										"description": "Edit a user's property by it's id or username from a group of a particular type."
 									},
 									"response": [
 										{
@@ -1436,14 +2537,14 @@
 											],
 											"variable": [
 												{
-													"description": "The type of the group",
 													"key": "type",
-													"value": "group"
+													"value": "group",
+													"description": "The type of the group"
 												},
 												{
-													"description": "id or name",
 													"key": "id",
-													"value": "user5"
+													"value": "user5",
+													"description": "id or name"
 												},
 												{
 													"key": "property",
@@ -1455,7 +2556,125 @@
 												}
 											]
 										},
-										"description": "Edit a current user's property data as a path param."
+										"description": "Edit a current user's property data as a path param from a group of a particular type."
+									},
+									"response": []
+								},
+								{
+									"name": "Add Group Inheritance",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"description": "The client_credentials generated OAUth2 access token.",
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer"
+											}
+										],
+										"url": {
+											"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype",
+											"host": [
+												"{{TRAV}}"
+											],
+											"path": [
+												"travelling",
+												"api",
+												"v1",
+												"group",
+												"type",
+												":type",
+												"user",
+												":id",
+												"inheritance",
+												"group",
+												":inheritgroupid",
+												"type",
+												":inheritgrouptype"
+											],
+											"variable": [
+												{
+													"key": "type",
+													"value": "group",
+													"description": "type of group"
+												},
+												{
+													"key": "id",
+													"value": "user5",
+													"description": "id or name of the user"
+												},
+												{
+													"key": "inheritgroupid",
+													"value": "group2",
+													"description": "id or name of the  group to inherit"
+												},
+												{
+													"key": "inheritgrouptype",
+													"value": "group",
+													"description": "type of the  group to inherit"
+												}
+											]
+										},
+										"description": "Add a user to a group of a particular type of group."
+									},
+									"response": []
+								},
+								{
+									"name": "Remove Group Inheritance",
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"description": "The client_credentials generated OAUth2 access token.",
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer"
+											}
+										],
+										"url": {
+											"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype",
+											"host": [
+												"{{TRAV}}"
+											],
+											"path": [
+												"travelling",
+												"api",
+												"v1",
+												"group",
+												"type",
+												":type",
+												"user",
+												":id",
+												"inheritance",
+												"group",
+												":inheritgroupid",
+												"type",
+												":inheritgrouptype"
+											],
+											"variable": [
+												{
+													"key": "type",
+													"value": "group",
+													"description": "type of group"
+												},
+												{
+													"description": "id or name of the user",
+													"key": "id",
+													"value": "user5"
+												},
+												{
+													"description": "id or name of the  group to inherit",
+													"key": "inheritgroupid",
+													"value": "group2"
+												},
+												{
+													"description": "type of the  group to inherit",
+													"key": "inheritgrouptype",
+													"value": "group"
+												}
+											]
+										},
+										"description": "Remove a user to a group of a particular type of group."
 									},
 									"response": []
 								},
@@ -1582,6 +2801,7 @@
 									]
 								}
 							],
+							"protocolProfileBehavior": {},
 							"_postman_isSubFolder": true
 						},
 						{
@@ -1593,7 +2813,7 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/name/:name/users/inherited",
+											"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/type/:type/users/inherited",
 											"host": [
 												"{{TRAV}}"
 											],
@@ -1602,22 +2822,22 @@
 												"api",
 												"v1",
 												"group",
+												"id",
+												":id",
 												"type",
 												":type",
-												"name",
-												":name",
 												"users",
 												"inherited"
 											],
 											"variable": [
 												{
-													"description": "The type of the group",
-													"key": "type",
-													"value": "groups"
+													"key": "id",
+													"value": "group4"
 												},
 												{
-													"key": "name",
-													"value": "group4"
+													"key": "type",
+													"value": "groups",
+													"description": "The type of the group"
 												}
 											]
 										},
@@ -1630,7 +2850,7 @@
 												"method": "GET",
 												"header": [],
 												"url": {
-													"raw": "{{TRAV}}/travelling/api/v1/group/:name/users/inherited",
+													"raw": "{{TRAV}}/travelling/api/v1/group/:id/users/inherited",
 													"host": [
 														"{{TRAV}}"
 													],
@@ -1639,13 +2859,13 @@
 														"api",
 														"v1",
 														"group",
-														":name",
+														":id",
 														"users",
 														"inherited"
 													],
 													"variable": [
 														{
-															"key": "name",
+															"key": "id",
 															"value": "superadmin"
 														}
 													]
@@ -1683,7 +2903,7 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/name/:name/users",
+											"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/type/:type/users",
 											"host": [
 												"{{TRAV}}"
 											],
@@ -1692,19 +2912,19 @@
 												"api",
 												"v1",
 												"group",
+												"id",
+												":id",
 												"type",
 												":type",
-												"name",
-												":name",
 												"users"
 											],
 											"variable": [
 												{
-													"key": "type",
+													"key": "id",
 													"value": ""
 												},
 												{
-													"key": "name",
+													"key": "type",
 													"value": ""
 												}
 											]
@@ -1718,7 +2938,7 @@
 												"method": "GET",
 												"header": [],
 												"url": {
-													"raw": "{{TRAV}}/travelling/api/v1/group/:name/users",
+													"raw": "{{TRAV}}/travelling/api/v1/group/:id/users",
 													"host": [
 														"{{TRAV}}"
 													],
@@ -1727,12 +2947,12 @@
 														"api",
 														"v1",
 														"group",
-														":name",
+														":id",
 														"users"
 													],
 													"variable": [
 														{
-															"key": "name",
+															"key": "id",
 															"value": "superadmin",
 															"description": "id or name"
 														}
@@ -1925,7 +3145,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/name/:name",
+									"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/type/:type",
 									"host": [
 										"{{TRAV}}"
 									],
@@ -1934,21 +3154,21 @@
 										"api",
 										"v1",
 										"group",
+										"id",
+										":id",
 										"type",
-										":type",
-										"name",
-										":name"
+										":type"
 									],
 									"variable": [
+										{
+											"key": "id",
+											"value": "test1234",
+											"description": "Name of the new group"
+										},
 										{
 											"key": "type",
 											"value": "accounts",
 											"description": "Type of the new group"
-										},
-										{
-											"key": "name",
-											"value": "test1234",
-											"description": "Name of the new group"
 										}
 									]
 								},
@@ -1968,7 +3188,7 @@
 											}
 										],
 										"url": {
-											"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/name/:name",
+											"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/type/:type",
 											"host": [
 												"{{TRAV}}"
 											],
@@ -1977,21 +3197,21 @@
 												"api",
 												"v1",
 												"group",
+												"id",
+												":id",
 												"type",
-												":type",
-												"name",
-												":name"
+												":type"
 											],
 											"variable": [
+												{
+													"key": "id",
+													"value": "test1234",
+													"description": "Name of the new group"
+												},
 												{
 													"key": "type",
 													"value": "accounts",
 													"description": "Type of the new group"
-												},
-												{
-													"key": "name",
-													"value": "test1234",
-													"description": "Name of the new group"
 												}
 											]
 										}
@@ -2054,7 +3274,7 @@
 									}
 								},
 								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/name/:name",
+									"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/type/:type",
 									"host": [
 										"{{TRAV}}"
 									],
@@ -2063,21 +3283,21 @@
 										"api",
 										"v1",
 										"group",
+										"id",
+										":id",
 										"type",
-										":type",
-										"name",
-										":name"
+										":type"
 									],
 									"variable": [
+										{
+											"key": "id",
+											"value": "",
+											"description": "id or name "
+										},
 										{
 											"key": "type",
 											"value": "",
 											"description": "The type of the group"
-										},
-										{
-											"key": "name",
-											"value": "",
-											"description": "id or name "
 										}
 									]
 								},
@@ -2170,7 +3390,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/name/:id",
+									"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/type/:type",
 									"host": [
 										"{{TRAV}}"
 									],
@@ -2179,21 +3399,21 @@
 										"api",
 										"v1",
 										"group",
+										"id",
+										":id",
 										"type",
-										":type",
-										"name",
-										":id"
+										":type"
 									],
 									"variable": [
-										{
-											"key": "type",
-											"value": "accounts",
-											"description": "The type of the group"
-										},
 										{
 											"key": "id",
 											"value": "group1",
 											"description": "id or name "
+										},
+										{
+											"key": "type",
+											"value": "accounts",
+											"description": "The type of the group"
 										}
 									]
 								},
@@ -2282,7 +3502,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/name/:name",
+									"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/type/:type",
 									"host": [
 										"{{TRAV}}"
 									],
@@ -2291,21 +3511,21 @@
 										"api",
 										"v1",
 										"group",
+										"id",
+										":id",
 										"type",
-										":type",
-										"name",
-										":name"
+										":type"
 									],
 									"variable": [
 										{
-											"description": "The type of the group",
-											"key": "type",
-											"value": ""
+											"key": "id",
+											"value": "",
+											"description": "id or name "
 										},
 										{
-											"description": "id or name ",
-											"key": "name",
-											"value": ""
+											"key": "type",
+											"value": "",
+											"description": "The type of the group"
 										}
 									]
 								},
@@ -2319,7 +3539,7 @@
 								"method": "PUT",
 								"header": [],
 								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/name/:name/set/default",
+									"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/type/:type/set/default",
 									"host": [
 										"{{TRAV}}"
 									],
@@ -2328,23 +3548,23 @@
 										"api",
 										"v1",
 										"group",
+										"id",
+										":id",
 										"type",
 										":type",
-										"name",
-										":name",
 										"set",
 										"default"
 									],
 									"variable": [
 										{
+											"key": "id",
+											"value": "group1",
+											"description": "id or name"
+										},
+										{
 											"key": "type",
 											"value": "account",
 											"description": "The type of the group"
-										},
-										{
-											"description": "id or name",
-											"key": "name",
-											"value": "group1"
 										}
 									]
 								},
@@ -2357,7 +3577,7 @@
 										"method": "PUT",
 										"header": [],
 										"url": {
-											"raw": "{{TRAV}}/travelling/api/v1/group/:name/set/default",
+											"raw": "{{TRAV}}/travelling/api/v1/group/:id/set/default",
 											"host": [
 												"{{TRAV}}"
 											],
@@ -2366,13 +3586,13 @@
 												"api",
 												"v1",
 												"group",
-												":name",
+												":id",
 												"set",
 												"default"
 											],
 											"variable": [
 												{
-													"key": "name",
+													"key": "id",
 													"value": "group6",
 													"description": "id or name"
 												}
@@ -2422,7 +3642,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/name/:name/inherit/from/:inherited",
+									"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/type/:type/inherit/from/:inherited",
 									"host": [
 										"{{TRAV}}"
 									],
@@ -2431,29 +3651,29 @@
 										"api",
 										"v1",
 										"group",
+										"id",
+										":id",
 										"type",
 										":type",
-										"name",
-										":name",
 										"inherit",
 										"from",
 										":inherited"
 									],
 									"variable": [
 										{
+											"key": "id",
+											"value": "group1",
+											"description": "Name of the group"
+										},
+										{
 											"key": "type",
 											"value": "testgroup",
 											"description": "The type of the group"
 										},
 										{
-											"description": "Name of the group",
-											"key": "name",
-											"value": "group1"
-										},
-										{
-											"description": "Name of the group to inherit from",
 											"key": "inherited",
-											"value": "test123"
+											"value": "test123",
+											"description": "Name of the group to inherit from"
 										}
 									]
 								},
@@ -2474,7 +3694,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/name/:name/remove/inheritance/:inherited",
+									"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/type/:type/remove/inheritance/:inherited",
 									"host": [
 										"{{TRAV}}"
 									],
@@ -2483,24 +3703,24 @@
 										"api",
 										"v1",
 										"group",
+										"id",
+										":id",
 										"type",
 										":type",
-										"name",
-										":name",
 										"remove",
 										"inheritance",
 										":inherited"
 									],
 									"variable": [
 										{
+											"key": "id",
+											"value": "test1234",
+											"description": "Name of the group"
+										},
+										{
 											"key": "type",
 											"value": "accounts",
 											"description": "The type of the group"
-										},
-										{
-											"key": "name",
-											"value": "test1234",
-											"description": "Name of the group"
 										},
 										{
 											"key": "inherited",
@@ -2525,7 +3745,7 @@
 											}
 										],
 										"url": {
-											"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/name/:name/remove/inheritance/:inherited",
+											"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/type/:type/remove/inheritance/:inherited",
 											"host": [
 												"{{TRAV}}"
 											],
@@ -2534,24 +3754,24 @@
 												"api",
 												"v1",
 												"group",
+												"id",
+												":id",
 												"type",
 												":type",
-												"name",
-												":name",
 												"remove",
 												"inheritance",
 												":inherited"
 											],
 											"variable": [
 												{
+													"key": "id",
+													"value": "test1234",
+													"description": "Name of the group"
+												},
+												{
 													"key": "type",
 													"value": "accounts",
 													"description": "The type of the group"
-												},
-												{
-													"key": "name",
-													"value": "test1234",
-													"description": "Name of the group"
 												},
 												{
 													"key": "inherited",
@@ -2619,7 +3839,7 @@
 									}
 								},
 								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/name/:name/insert/route",
+									"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/type/:type/insert/route",
 									"host": [
 										"{{TRAV}}"
 									],
@@ -2628,22 +3848,22 @@
 										"api",
 										"v1",
 										"group",
+										"id",
+										":id",
 										"type",
 										":type",
-										"name",
-										":name",
 										"insert",
 										"route"
 									],
 									"variable": [
 										{
-											"key": "type",
-											"value": ""
-										},
-										{
-											"key": "name",
+											"key": "id",
 											"value": "",
 											"description": "Name of the group"
+										},
+										{
+											"key": "type",
+											"value": ""
 										}
 									]
 								},
@@ -2664,7 +3884,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/name/:name/insert/permission/:permission",
+									"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/type/:type/insert/permission/:permission",
 									"host": [
 										"{{TRAV}}"
 									],
@@ -2673,24 +3893,24 @@
 										"api",
 										"v1",
 										"group",
+										"id",
+										":id",
 										"type",
 										":type",
-										"name",
-										":name",
 										"insert",
 										"permission",
 										":permission"
 									],
 									"variable": [
 										{
+											"key": "id",
+											"value": "anonymous",
+											"description": "Name of the group"
+										},
+										{
 											"key": "type",
 											"value": "group",
 											"description": "Type of the group"
-										},
-										{
-											"key": "name",
-											"value": "anonymous",
-											"description": "Name of the group"
 										},
 										{
 											"key": "permission",
@@ -2715,7 +3935,7 @@
 											}
 										],
 										"url": {
-											"raw": "{{TRAV}}/travelling/api/v1/group/name/:name/insert/permission/:permission",
+											"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/insert/permission/:permission",
 											"host": [
 												"{{TRAV}}"
 											],
@@ -2724,15 +3944,15 @@
 												"api",
 												"v1",
 												"group",
-												"name",
-												":name",
+												"id",
+												":id",
 												"insert",
 												"permission",
 												":permission"
 											],
 											"variable": [
 												{
-													"key": "name",
+													"key": "id",
 													"value": "anonymous"
 												},
 												{
@@ -2785,7 +4005,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/name/:name/permission/:permission",
+									"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/type/:type/permission/:permission",
 									"host": [
 										"{{TRAV}}"
 									],
@@ -2794,34 +4014,110 @@
 										"api",
 										"v1",
 										"group",
+										"id",
+										":id",
 										"type",
 										":type",
-										"name",
-										":name",
 										"permission",
 										":permission"
 									],
 									"variable": [
+										{
+											"key": "id",
+											"value": "anonymous",
+											"description": "Name of the group"
+										},
 										{
 											"key": "type",
 											"value": "group",
 											"description": "Type of the group"
 										},
 										{
-											"description": "Name of the group",
-											"key": "name",
-											"value": "anonymous"
-										},
-										{
-											"description": "Name or Route",
 											"key": "permission",
-											"value": "test-one-three-*"
+											"value": "test-one-three-*",
+											"description": "Name or Route"
 										}
 									]
 								},
 								"description": "Removes a permission/route from a group of a particular type."
 							},
 							"response": [
+								{
+									"name": "Delete Permission",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [
+											{
+												"description": "The client_credentials generated OAUth2 access token.",
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer"
+											}
+										],
+										"url": {
+											"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/type/:type/permission/:permission",
+											"host": [
+												"{{TRAV}}"
+											],
+											"path": [
+												"travelling",
+												"api",
+												"v1",
+												"group",
+												"id",
+												":id",
+												"type",
+												":type",
+												"permission",
+												":permission"
+											],
+											"variable": [
+												{
+													"key": "type",
+													"value": "group",
+													"description": "Type of the group"
+												},
+												{
+													"key": "id",
+													"value": "anonymous",
+													"description": "Name of the group"
+												},
+												{
+													"key": "permission",
+													"value": "test-one-three-*",
+													"description": "Name or Route"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "content-type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "set-cookie",
+											"value": "trav:ssid=4c500734-f080-482a-a748-edb57258a95c%3AHM45sGkrR9bCxsusGQpMGw%3D%3D.e3Ppi8ipPtyXzkYODSCFNc7hgPnB2KWio%2F%2FpPpbmkM0; Max-Age=4000; Path=/; Expires=Wed, 23 Oct 2019 17:16:24 GMT; HttpOnly"
+										},
+										{
+											"key": "content-length",
+											"value": "1146"
+										},
+										{
+											"key": "Date",
+											"value": "Wed, 23 Oct 2019 17:16:20 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": \"13ee374e-f7c1-403b-b8a8-a930845d068a\",\n    \"name\": \"anonymous\",\n    \"type\": \"group\",\n    \"allowed\": [\n        {\n            \"route\": \"/travelling/portal/*\",\n            \"host\": null,\n            \"method\": \"*\",\n            \"name\": \"*-travelling-portal-*\"\n        },\n        {\n            \"route\": \"/travelling/api/v1/auth/*\",\n            \"host\": null,\n            \"method\": \"*\",\n            \"name\": \"*-travelling-api-v1-auth-*\"\n        },\n        {\n            \"route\": \"/travelling/api/v1/user/me/route/allowed\",\n            \"host\": null,\n            \"method\": \"GET\",\n            \"name\": \"get-travelling-api-v1-user-me-route-allowed\"\n        },\n        {\n            \"route\": \"/travelling/api/v1/user/me/permission/allowed/*\",\n            \"host\": null,\n            \"method\": \"GET\",\n            \"name\": \"get-travelling-api-v1-user-me-permission-allowed-*\"\n        },\n        {\n            \"route\": \"/travelling/assets/*\",\n            \"host\": null,\n            \"removeFromPath\": \"/travelling/assets/\",\n            \"method\": \"GET\",\n            \"name\": \"get-travelling-assets-*\"\n        },\n        {\n            \"route\": \"/travelling/api/v1/config/password\",\n            \"host\": null,\n            \"method\": \"GET\",\n            \"name\": \"get-travelling-api-v1-config-password\"\n        },\n        {\n            \"route\": \"/favicon.ico\",\n            \"host\": null,\n            \"method\": \"GET\",\n            \"name\": \"get-favicon.ico\"\n        },\n        {\n            \"route\": \"/test/get/noauth/nossl\",\n            \"host\": \"http://127.0.0.1:4267\",\n            \"method\": \"GET\",\n            \"name\": \"get-test-get-noauth-nossl\"\n        },\n        {\n            \"name\": \"cui-*\"\n        },\n        {\n            \"route\": \"/test/get/noauth\",\n            \"host\": \"https://127.0.0.1:4268\",\n            \"name\": \"*-test-get-noauth\"\n        }\n    ],\n    \"inherited\": null,\n    \"is_default\": false\n}"
+								},
 								{
 									"name": "Add Permission",
 									"originalRequest": {
@@ -2835,7 +4131,7 @@
 											}
 										],
 										"url": {
-											"raw": "{{TRAV}}/travelling/api/v1/group/name/:name/insert/permission/:permission",
+											"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/insert/permission/:permission",
 											"host": [
 												"{{TRAV}}"
 											],
@@ -2844,15 +4140,15 @@
 												"api",
 												"v1",
 												"group",
-												"name",
-												":name",
+												"id",
+												":id",
 												"insert",
 												"permission",
 												":permission"
 											],
 											"variable": [
 												{
-													"key": "name",
+													"key": "id",
 													"value": "anonymous"
 												},
 												{
@@ -2903,7 +4199,7 @@
 											}
 										],
 										"url": {
-											"raw": "{{TRAV}}/travelling/api/v1/group/name/:name/permission/:permission",
+											"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/permission/:permission",
 											"host": [
 												"{{TRAV}}"
 											],
@@ -2912,21 +4208,21 @@
 												"api",
 												"v1",
 												"group",
-												"name",
-												":name",
+												"id",
+												":id",
 												"permission",
 												":permission"
 											],
 											"variable": [
 												{
-													"description": "Name of the group",
-													"key": "name",
-													"value": "anonymous"
+													"key": "id",
+													"value": "anonymous",
+													"description": "Name of the group"
 												},
 												{
-													"description": "Name or Route",
 													"key": "permission",
-													"value": "test-one-two-*"
+													"value": "test-one-two-*",
+													"description": "Name or Route"
 												}
 											]
 										}
@@ -2958,11 +4254,70 @@
 									],
 									"cookie": [],
 									"body": "{\n    \"id\": \"13ee374e-f7c1-403b-b8a8-a930845d068a\",\n    \"name\": \"anonymous\",\n    \"type\": \"group\",\n    \"allowed\": [\n        {\n            \"route\": \"/travelling/portal/*\",\n            \"host\": null,\n            \"method\": \"*\",\n            \"name\": \"*-travelling-portal-*\"\n        },\n        {\n            \"route\": \"/travelling/api/v1/auth/*\",\n            \"host\": null,\n            \"method\": \"*\",\n            \"name\": \"*-travelling-api-v1-auth-*\"\n        },\n        {\n            \"route\": \"/travelling/api/v1/user/me/route/allowed\",\n            \"host\": null,\n            \"method\": \"GET\",\n            \"name\": \"get-travelling-api-v1-user-me-route-allowed\"\n        },\n        {\n            \"route\": \"/travelling/api/v1/user/me/permission/allowed/*\",\n            \"host\": null,\n            \"method\": \"GET\",\n            \"name\": \"get-travelling-api-v1-user-me-permission-allowed-*\"\n        },\n        {\n            \"route\": \"/travelling/assets/*\",\n            \"host\": null,\n            \"removeFromPath\": \"/travelling/assets/\",\n            \"method\": \"GET\",\n            \"name\": \"get-travelling-assets-*\"\n        },\n        {\n            \"route\": \"/travelling/api/v1/config/password\",\n            \"host\": null,\n            \"method\": \"GET\",\n            \"name\": \"get-travelling-api-v1-config-password\"\n        },\n        {\n            \"route\": \"/favicon.ico\",\n            \"host\": null,\n            \"method\": \"GET\",\n            \"name\": \"get-favicon.ico\"\n        },\n        {\n            \"route\": \"/test/get/noauth/nossl\",\n            \"host\": \"http://127.0.0.1:4267\",\n            \"method\": \"GET\",\n            \"name\": \"get-test-get-noauth-nossl\"\n        },\n        {\n            \"name\": \"cui-*\"\n        },\n        {\n            \"route\": \"/test/get/noauth\",\n            \"host\": \"https://127.0.0.1:4268\",\n            \"name\": \"*-test-get-noauth\"\n        },\n        {\n            \"name\": \"test-one-three-*\"\n        }\n    ],\n    \"inherited\": null,\n    \"is_default\": false\n}"
+								}
+							]
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "Get",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "The client_credentials generated OAUth2 access token.",
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer"
+									}
+								],
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/group/id/:group/type/:type/user/:id",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"group",
+										"id",
+										":group",
+										"type",
+										":type",
+										"user",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "group",
+											"value": "",
+											"description": "id or name of the group"
+										},
+										{
+											"key": "type",
+											"value": "accounts",
+											"description": "The type of the group"
+										},
+										{
+											"key": "id",
+											"value": "user6",
+											"description": "id or name"
+										}
+									]
 								},
+								"description": "Get a user by it's id or username from group of a particular type."
+							},
+							"response": [
 								{
-									"name": "Delete Permission",
+									"name": "Get User",
 									"originalRequest": {
-										"method": "DELETE",
+										"method": "GET",
 										"header": [
 											{
 												"description": "The client_credentials generated OAUth2 access token.",
@@ -2972,7 +4327,7 @@
 											}
 										],
 										"url": {
-											"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/name/:name/permission/:permission",
+											"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/user/:id",
 											"host": [
 												"{{TRAV}}"
 											],
@@ -2983,26 +4338,17 @@
 												"group",
 												"type",
 												":type",
-												"name",
-												":name",
-												"permission",
-												":permission"
+												"user",
+												":id"
 											],
 											"variable": [
 												{
 													"key": "type",
-													"value": "group",
-													"description": "Type of the group"
+													"value": "accounts"
 												},
 												{
-													"description": "Name of the group",
-													"key": "name",
-													"value": "anonymous"
-												},
-												{
-													"description": "Name or Route",
-													"key": "permission",
-													"value": "test-one-three-*"
+													"key": "id",
+													"value": "user6"
 												}
 											]
 										}
@@ -3017,15 +4363,15 @@
 										},
 										{
 											"key": "set-cookie",
-											"value": "trav:ssid=4c500734-f080-482a-a748-edb57258a95c%3AHM45sGkrR9bCxsusGQpMGw%3D%3D.e3Ppi8ipPtyXzkYODSCFNc7hgPnB2KWio%2F%2FpPpbmkM0; Max-Age=4000; Path=/; Expires=Wed, 23 Oct 2019 17:16:24 GMT; HttpOnly"
+											"value": "trav:ssid=8b65a9a7-3dc2-4690-9d1b-6b2d5ce56e77%3AcFbTWvWMtztGLpLvm06t7Q%3D%3D.hqi8Fw1aUqhKts6T1b%2BlAiHj1kmkEhLJYw7WK9BpcNY; Max-Age=10000; Path=/; Expires=Mon, 16 Sep 2019 15:57:33 GMT; HttpOnly"
 										},
 										{
 											"key": "content-length",
-											"value": "1146"
+											"value": "692"
 										},
 										{
 											"key": "Date",
-											"value": "Wed, 23 Oct 2019 17:16:20 GMT"
+											"value": "Mon, 16 Sep 2019 15:57:23 GMT"
 										},
 										{
 											"key": "Connection",
@@ -3033,11 +4379,751 @@
 										}
 									],
 									"cookie": [],
-									"body": "{\n    \"id\": \"13ee374e-f7c1-403b-b8a8-a930845d068a\",\n    \"name\": \"anonymous\",\n    \"type\": \"group\",\n    \"allowed\": [\n        {\n            \"route\": \"/travelling/portal/*\",\n            \"host\": null,\n            \"method\": \"*\",\n            \"name\": \"*-travelling-portal-*\"\n        },\n        {\n            \"route\": \"/travelling/api/v1/auth/*\",\n            \"host\": null,\n            \"method\": \"*\",\n            \"name\": \"*-travelling-api-v1-auth-*\"\n        },\n        {\n            \"route\": \"/travelling/api/v1/user/me/route/allowed\",\n            \"host\": null,\n            \"method\": \"GET\",\n            \"name\": \"get-travelling-api-v1-user-me-route-allowed\"\n        },\n        {\n            \"route\": \"/travelling/api/v1/user/me/permission/allowed/*\",\n            \"host\": null,\n            \"method\": \"GET\",\n            \"name\": \"get-travelling-api-v1-user-me-permission-allowed-*\"\n        },\n        {\n            \"route\": \"/travelling/assets/*\",\n            \"host\": null,\n            \"removeFromPath\": \"/travelling/assets/\",\n            \"method\": \"GET\",\n            \"name\": \"get-travelling-assets-*\"\n        },\n        {\n            \"route\": \"/travelling/api/v1/config/password\",\n            \"host\": null,\n            \"method\": \"GET\",\n            \"name\": \"get-travelling-api-v1-config-password\"\n        },\n        {\n            \"route\": \"/favicon.ico\",\n            \"host\": null,\n            \"method\": \"GET\",\n            \"name\": \"get-favicon.ico\"\n        },\n        {\n            \"route\": \"/test/get/noauth/nossl\",\n            \"host\": \"http://127.0.0.1:4267\",\n            \"method\": \"GET\",\n            \"name\": \"get-test-get-noauth-nossl\"\n        },\n        {\n            \"name\": \"cui-*\"\n        },\n        {\n            \"route\": \"/test/get/noauth\",\n            \"host\": \"https://127.0.0.1:4268\",\n            \"name\": \"*-test-get-noauth\"\n        }\n    ],\n    \"inherited\": null,\n    \"is_default\": false\n}"
+									"body": "{\n    \"id\": \"bda05e2c-a8de-464e-949c-656e527c374c\",\n    \"username\": \"user6\",\n    \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n    \"avatar\": null,\n    \"locked\": true,\n    \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n    \"group_request\": \"superadmin\",\n    \"failed_login_attempts\": 0,\n    \"change_username\": false,\n    \"change_password\": false,\n    \"reset_password\": false,\n    \"email_verify\": false,\n    \"group_id\": \"6b88967a-1b9e-41ae-8140-9cc3969c3345\",\n    \"email\": \"jt6@abe.ai\",\n    \"created_on\": \"1568648238097\",\n    \"last_login\": null,\n    \"user_data\": null,\n    \"eprofile\": null,\n    \"group\": {\n        \"id\": \"6b88967a-1b9e-41ae-8140-9cc3969c3345\",\n        \"name\": \"group9\",\n        \"type\": \"accounts\",\n        \"allowed\": null,\n        \"inherited\": null,\n        \"is_default\": true\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Get Property",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "The client_credentials generated OAUth2 access token.",
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer"
+									}
+								],
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/group/id/:group/type/:type/user/:id/:property",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"group",
+										"id",
+										":group",
+										"type",
+										":type",
+										"user",
+										":id",
+										":property"
+									],
+									"variable": [
+										{
+											"key": "group",
+											"value": "",
+											"description": "id or name of the group"
+										},
+										{
+											"key": "type",
+											"value": "accounts",
+											"description": "The type of the group"
+										},
+										{
+											"key": "id",
+											"value": "user6",
+											"description": "id or name"
+										},
+										{
+											"key": "property",
+											"value": "email"
+										}
+									]
+								},
+								"description": "Get a user's property by it's id or username from group of a particular type."
+							},
+							"response": [
+								{
+									"name": "Get User",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "The client_credentials generated OAUth2 access token.",
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer"
+											}
+										],
+										"url": {
+											"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/user/:id",
+											"host": [
+												"{{TRAV}}"
+											],
+											"path": [
+												"travelling",
+												"api",
+												"v1",
+												"group",
+												"type",
+												":type",
+												"user",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "type",
+													"value": "accounts"
+												},
+												{
+													"key": "id",
+													"value": "user6"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "content-type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "set-cookie",
+											"value": "trav:ssid=8b65a9a7-3dc2-4690-9d1b-6b2d5ce56e77%3AcFbTWvWMtztGLpLvm06t7Q%3D%3D.hqi8Fw1aUqhKts6T1b%2BlAiHj1kmkEhLJYw7WK9BpcNY; Max-Age=10000; Path=/; Expires=Mon, 16 Sep 2019 15:57:33 GMT; HttpOnly"
+										},
+										{
+											"key": "content-length",
+											"value": "692"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 16 Sep 2019 15:57:23 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": \"bda05e2c-a8de-464e-949c-656e527c374c\",\n    \"username\": \"user6\",\n    \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n    \"avatar\": null,\n    \"locked\": true,\n    \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n    \"group_request\": \"superadmin\",\n    \"failed_login_attempts\": 0,\n    \"change_username\": false,\n    \"change_password\": false,\n    \"reset_password\": false,\n    \"email_verify\": false,\n    \"group_id\": \"6b88967a-1b9e-41ae-8140-9cc3969c3345\",\n    \"email\": \"jt6@abe.ai\",\n    \"created_on\": \"1568648238097\",\n    \"last_login\": null,\n    \"user_data\": null,\n    \"eprofile\": null,\n    \"group\": {\n        \"id\": \"6b88967a-1b9e-41ae-8140-9cc3969c3345\",\n        \"name\": \"group9\",\n        \"type\": \"accounts\",\n        \"allowed\": null,\n        \"inherited\": null,\n        \"is_default\": true\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Edit",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"description": "The client_credentials generated OAUth2 access token.",
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"locked\": false\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/group/id/:group/type/:type/user/:id",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"group",
+										"id",
+										":group",
+										"type",
+										":type",
+										"user",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "group",
+											"value": "",
+											"description": "id or name of the group"
+										},
+										{
+											"key": "type",
+											"value": "accounts",
+											"description": "The type of the group"
+										},
+										{
+											"key": "id",
+											"value": "user6",
+											"description": "id or name"
+										}
+									]
+								},
+								"description": "Edit a user by it's id or username from group of a particular type."
+							},
+							"response": [
+								{
+									"name": "Edit User",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"description": "The client_credentials generated OAUth2 access token.",
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer"
+											},
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"locked\": false\n}"
+										},
+										"url": {
+											"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/user/:id",
+											"host": [
+												"{{TRAV}}"
+											],
+											"path": [
+												"travelling",
+												"api",
+												"v1",
+												"group",
+												"type",
+												":type",
+												"user",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "type",
+													"value": "accounts"
+												},
+												{
+													"key": "id",
+													"value": "user6"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "content-type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "set-cookie",
+											"value": "trav:ssid=8b65a9a7-3dc2-4690-9d1b-6b2d5ce56e77%3ATD78c7YjQLqyGFYZrT5WNg%3D%3D.bqmACTOEBKAobbdkFW%2FhPYR56dLeftgbRWh8VKve48Q; Max-Age=10000; Path=/; Expires=Mon, 16 Sep 2019 16:11:36 GMT; HttpOnly"
+										},
+										{
+											"key": "content-length",
+											"value": "693"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 16 Sep 2019 16:11:26 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": \"bda05e2c-a8de-464e-949c-656e527c374c\",\n    \"username\": \"user6\",\n    \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n    \"avatar\": null,\n    \"locked\": false,\n    \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n    \"group_request\": \"superadmin\",\n    \"failed_login_attempts\": 0,\n    \"change_username\": false,\n    \"change_password\": false,\n    \"reset_password\": false,\n    \"email_verify\": false,\n    \"group_id\": \"6b88967a-1b9e-41ae-8140-9cc3969c3345\",\n    \"email\": \"jt6@abe.ai\",\n    \"created_on\": \"1568648238097\",\n    \"last_login\": null,\n    \"user_data\": null,\n    \"eprofile\": null,\n    \"group\": {\n        \"id\": \"6b88967a-1b9e-41ae-8140-9cc3969c3345\",\n        \"name\": \"group9\",\n        \"type\": \"accounts\",\n        \"allowed\": null,\n        \"inherited\": null,\n        \"is_default\": true\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Edit Property",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"description": "The client_credentials generated OAUth2 access token.",
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"locked\": false\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/group/id/:group/type/:type/user/:id/:property",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"group",
+										"id",
+										":group",
+										"type",
+										":type",
+										"user",
+										":id",
+										":property"
+									],
+									"variable": [
+										{
+											"key": "group",
+											"value": "",
+											"description": "id or name of the group"
+										},
+										{
+											"key": "type",
+											"value": "accounts",
+											"description": "The type of the group"
+										},
+										{
+											"key": "id",
+											"value": "user6",
+											"description": "id or name"
+										},
+										{
+											"key": "property",
+											"value": "email"
+										}
+									]
+								},
+								"description": "Edit a user's property by it's id or username from a group of a particular type."
+							},
+							"response": [
+								{
+									"name": "Edit User",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"description": "The client_credentials generated OAUth2 access token.",
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer"
+											},
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"locked\": false\n}"
+										},
+										"url": {
+											"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/user/:id",
+											"host": [
+												"{{TRAV}}"
+											],
+											"path": [
+												"travelling",
+												"api",
+												"v1",
+												"group",
+												"type",
+												":type",
+												"user",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "type",
+													"value": "accounts"
+												},
+												{
+													"key": "id",
+													"value": "user6"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "content-type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "set-cookie",
+											"value": "trav:ssid=8b65a9a7-3dc2-4690-9d1b-6b2d5ce56e77%3ATD78c7YjQLqyGFYZrT5WNg%3D%3D.bqmACTOEBKAobbdkFW%2FhPYR56dLeftgbRWh8VKve48Q; Max-Age=10000; Path=/; Expires=Mon, 16 Sep 2019 16:11:36 GMT; HttpOnly"
+										},
+										{
+											"key": "content-length",
+											"value": "693"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 16 Sep 2019 16:11:26 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": \"bda05e2c-a8de-464e-949c-656e527c374c\",\n    \"username\": \"user6\",\n    \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n    \"avatar\": null,\n    \"locked\": false,\n    \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n    \"group_request\": \"superadmin\",\n    \"failed_login_attempts\": 0,\n    \"change_username\": false,\n    \"change_password\": false,\n    \"reset_password\": false,\n    \"email_verify\": false,\n    \"group_id\": \"6b88967a-1b9e-41ae-8140-9cc3969c3345\",\n    \"email\": \"jt6@abe.ai\",\n    \"created_on\": \"1568648238097\",\n    \"last_login\": null,\n    \"user_data\": null,\n    \"eprofile\": null,\n    \"group\": {\n        \"id\": \"6b88967a-1b9e-41ae-8140-9cc3969c3345\",\n        \"name\": \"group9\",\n        \"type\": \"accounts\",\n        \"allowed\": null,\n        \"inherited\": null,\n        \"is_default\": true\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Edit Property Value",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"description": "The client_credentials generated OAUth2 access token.",
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer"
+									}
+								],
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/group/id/:group/type/:type/user/:id/:property/:value",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"group",
+										"id",
+										":group",
+										"type",
+										":type",
+										"user",
+										":id",
+										":property",
+										":value"
+									],
+									"variable": [
+										{
+											"key": "group",
+											"value": "",
+											"description": "id or name of the group"
+										},
+										{
+											"key": "type",
+											"value": "group",
+											"description": "The type of the group"
+										},
+										{
+											"key": "id",
+											"value": "user5",
+											"description": "id or name"
+										},
+										{
+											"key": "property",
+											"value": "email"
+										},
+										{
+											"key": "value",
+											"value": "swag@yolo.com"
+										}
+									]
+								},
+								"description": "Edit a current user's property data as a path param from a group of a particular type."
+							},
+							"response": []
+						},
+						{
+							"name": "Add Group Inheritance",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"description": "The client_credentials generated OAUth2 access token.",
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer"
+									}
+								],
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/group/id/:group/type/:type/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"group",
+										"id",
+										":group",
+										"type",
+										":type",
+										"user",
+										":id",
+										"inheritance",
+										"group",
+										":inheritgroupid",
+										"type",
+										":inheritgrouptype"
+									],
+									"variable": [
+										{
+											"key": "group",
+											"value": "group1",
+											"description": "id or name of the group"
+										},
+										{
+											"key": "type",
+											"value": "group",
+											"description": "type of group"
+										},
+										{
+											"key": "id",
+											"value": "user5",
+											"description": "id or name of the user"
+										},
+										{
+											"key": "inheritgroupid",
+											"value": "group2",
+											"description": "id or name of the  group to inherit"
+										},
+										{
+											"key": "inheritgrouptype",
+											"value": "group",
+											"description": "type of the  group to inherit"
+										}
+									]
+								},
+								"description": "Add a group for the current user from a group of a particular type."
+							},
+							"response": []
+						},
+						{
+							"name": "Remove Group Inheritance",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "The client_credentials generated OAUth2 access token.",
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer"
+									}
+								],
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/group/id/:group/type/:type/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"group",
+										"id",
+										":group",
+										"type",
+										":type",
+										"user",
+										":id",
+										"inheritance",
+										"group",
+										":inheritgroupid",
+										"type",
+										":inheritgrouptype"
+									],
+									"variable": [
+										{
+											"key": "group",
+											"value": "group1",
+											"description": "id or name of the group"
+										},
+										{
+											"description": "type of group",
+											"key": "type",
+											"value": "group"
+										},
+										{
+											"description": "id or name of the user",
+											"key": "id",
+											"value": "user5"
+										},
+										{
+											"description": "id or name of the  group to inherit",
+											"key": "inheritgroupid",
+											"value": "group2"
+										},
+										{
+											"description": "type of the  group to inherit",
+											"key": "inheritgrouptype",
+											"value": "group"
+										}
+									]
+								},
+								"description": "Remove a user to a group of a particular type of group."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "The client_credentials generated OAUth2 access token.",
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer"
+									}
+								],
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/group/id/:group/type/:type/user/:id",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"group",
+										"id",
+										":group",
+										"type",
+										":type",
+										"user",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "group",
+											"value": "",
+											"description": "id or name of the group"
+										},
+										{
+											"key": "type",
+											"value": "accounts",
+											"description": "The type of the group"
+										},
+										{
+											"key": "id",
+											"value": "user7",
+											"description": "id or name"
+										}
+									]
+								},
+								"description": "Delete a user by it's id or username from group of a particular type."
+							},
+							"response": [
+								{
+									"name": "Edit User",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"description": "The client_credentials generated OAUth2 access token.",
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer"
+											},
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"locked\": false\n}"
+										},
+										"url": {
+											"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/user/:id",
+											"host": [
+												"{{TRAV}}"
+											],
+											"path": [
+												"travelling",
+												"api",
+												"v1",
+												"group",
+												"type",
+												":type",
+												"user",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "type",
+													"value": "accounts"
+												},
+												{
+													"key": "id",
+													"value": "user6"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "content-type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "set-cookie",
+											"value": "trav:ssid=8b65a9a7-3dc2-4690-9d1b-6b2d5ce56e77%3ATD78c7YjQLqyGFYZrT5WNg%3D%3D.bqmACTOEBKAobbdkFW%2FhPYR56dLeftgbRWh8VKve48Q; Max-Age=10000; Path=/; Expires=Mon, 16 Sep 2019 16:11:36 GMT; HttpOnly"
+										},
+										{
+											"key": "content-length",
+											"value": "693"
+										},
+										{
+											"key": "Date",
+											"value": "Mon, 16 Sep 2019 16:11:26 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": \"bda05e2c-a8de-464e-949c-656e527c374c\",\n    \"username\": \"user6\",\n    \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n    \"avatar\": null,\n    \"locked\": false,\n    \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n    \"group_request\": \"superadmin\",\n    \"failed_login_attempts\": 0,\n    \"change_username\": false,\n    \"change_password\": false,\n    \"reset_password\": false,\n    \"email_verify\": false,\n    \"group_id\": \"6b88967a-1b9e-41ae-8140-9cc3969c3345\",\n    \"email\": \"jt6@abe.ai\",\n    \"created_on\": \"1568648238097\",\n    \"last_login\": null,\n    \"user_data\": null,\n    \"eprofile\": null,\n    \"group\": {\n        \"id\": \"6b88967a-1b9e-41ae-8140-9cc3969c3345\",\n        \"name\": \"group9\",\n        \"type\": \"accounts\",\n        \"allowed\": null,\n        \"inherited\": null,\n        \"is_default\": true\n    }\n}"
 								}
 							]
 						}
 					],
+					"protocolProfileBehavior": {},
 					"_postman_isSubFolder": true
 				},
 				{
@@ -3049,7 +5135,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/group/name/:name/users",
+									"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/users",
 									"host": [
 										"{{TRAV}}"
 									],
@@ -3058,13 +5144,13 @@
 										"api",
 										"v1",
 										"group",
-										"name",
-										":name",
+										"id",
+										":id",
 										"users"
 									],
 									"variable": [
 										{
-											"key": "name",
+											"key": "id",
 											"value": "superadmin",
 											"description": "id or name"
 										}
@@ -3079,7 +5165,7 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{TRAV}}/travelling/api/v1/group/:name/users",
+											"raw": "{{TRAV}}/travelling/api/v1/group/:id/users",
 											"host": [
 												"{{TRAV}}"
 											],
@@ -3088,12 +5174,12 @@
 												"api",
 												"v1",
 												"group",
-												":name",
+												":id",
 												"users"
 											],
 											"variable": [
 												{
-													"key": "name",
+													"key": "id",
 													"value": "superadmin",
 													"description": "id or name"
 												}
@@ -3132,7 +5218,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/group/name/:name/users/inherited",
+									"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/users/inherited",
 									"host": [
 										"{{TRAV}}"
 									],
@@ -3141,16 +5227,16 @@
 										"api",
 										"v1",
 										"group",
-										"name",
-										":name",
+										"id",
+										":id",
 										"users",
 										"inherited"
 									],
 									"variable": [
 										{
-											"description": "id or name",
-											"key": "name",
-											"value": "superadmin"
+											"key": "id",
+											"value": "superadmin",
+											"description": "id or name"
 										}
 									]
 								},
@@ -3163,7 +5249,7 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{TRAV}}/travelling/api/v1/group/:name/users/inherited",
+											"raw": "{{TRAV}}/travelling/api/v1/group/:id/users/inherited",
 											"host": [
 												"{{TRAV}}"
 											],
@@ -3172,13 +5258,13 @@
 												"api",
 												"v1",
 												"group",
-												":name",
+												":id",
 												"users",
 												"inherited"
 											],
 											"variable": [
 												{
-													"key": "name",
+													"key": "id",
 													"value": "superadmin"
 												}
 											]
@@ -3211,6 +5297,7 @@
 							]
 						}
 					],
+					"protocolProfileBehavior": {},
 					"_postman_isSubFolder": true
 				},
 				{
@@ -3264,7 +5351,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{TRAV}}/travelling/api/v1/group/name/:name",
+							"raw": "{{TRAV}}/travelling/api/v1/group/id/:id",
 							"host": [
 								"{{TRAV}}"
 							],
@@ -3273,12 +5360,12 @@
 								"api",
 								"v1",
 								"group",
-								"name",
-								":name"
+								"id",
+								":id"
 							],
 							"variable": [
 								{
-									"key": "name",
+									"key": "id",
 									"value": "test123",
 									"description": "Name of the new group"
 								}
@@ -3300,7 +5387,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/group/name/:groupname",
+									"raw": "{{TRAV}}/travelling/api/v1/group/id/:groupname",
 									"host": [
 										"{{TRAV}}"
 									],
@@ -3309,7 +5396,7 @@
 										"api",
 										"v1",
 										"group",
-										"name",
+										"id",
 										":groupname"
 									],
 									"variable": [
@@ -3364,7 +5451,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{TRAV}}/travelling/api/v1/group/name/:id",
+							"raw": "{{TRAV}}/travelling/api/v1/group/id/:id",
 							"host": [
 								"{{TRAV}}"
 							],
@@ -3373,14 +5460,14 @@
 								"api",
 								"v1",
 								"group",
-								"name",
+								"id",
 								":id"
 							],
 							"variable": [
 								{
-									"description": "id or name ",
 									"key": "id",
-									"value": "group1"
+									"value": "group1",
+									"description": "id or name "
 								}
 							]
 						},
@@ -3484,7 +5571,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{TRAV}}/travelling/api/v1/group/name/:name",
+							"raw": "{{TRAV}}/travelling/api/v1/group/id/:id",
 							"host": [
 								"{{TRAV}}"
 							],
@@ -3493,12 +5580,12 @@
 								"api",
 								"v1",
 								"group",
-								"name",
-								":name"
+								"id",
+								":id"
 							],
 							"variable": [
 								{
-									"key": "name",
+									"key": "id",
 									"value": "ab31efc8-40a5-4d38-a347-adb4e38d0075"
 								}
 							]
@@ -3592,7 +5679,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{TRAV}}/travelling/api/v1/group/name/:name",
+							"raw": "{{TRAV}}/travelling/api/v1/group/id/:id",
 							"host": [
 								"{{TRAV}}"
 							],
@@ -3601,14 +5688,14 @@
 								"api",
 								"v1",
 								"group",
-								"name",
-								":name"
+								"id",
+								":id"
 							],
 							"variable": [
 								{
-									"description": "id or name ",
-									"key": "name",
-									"value": ""
+									"key": "id",
+									"value": "",
+									"description": "id or name "
 								}
 							]
 						},
@@ -3620,9 +5707,16 @@
 					"name": "Set Default",
 					"request": {
 						"method": "PUT",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{TRAV}}/travelling/api/v1/group/name/:name/set/default",
+							"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/set/default",
 							"host": [
 								"{{TRAV}}"
 							],
@@ -3631,14 +5725,14 @@
 								"api",
 								"v1",
 								"group",
-								"name",
-								":name",
+								"id",
+								":id",
 								"set",
 								"default"
 							],
 							"variable": [
 								{
-									"key": "name",
+									"key": "id",
 									"value": "group6",
 									"description": "id or name"
 								}
@@ -3653,7 +5747,7 @@
 								"method": "PUT",
 								"header": [],
 								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/group/:name/set/default",
+									"raw": "{{TRAV}}/travelling/api/v1/group/:id/set/default",
 									"host": [
 										"{{TRAV}}"
 									],
@@ -3662,13 +5756,13 @@
 										"api",
 										"v1",
 										"group",
-										":name",
+										":id",
 										"set",
 										"default"
 									],
 									"variable": [
 										{
-											"key": "name",
+											"key": "id",
 											"value": "group6",
 											"description": "id or name"
 										}
@@ -3718,7 +5812,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{TRAV}}/travelling/api/v1/group/name/:name/inherit/from/:inherited",
+							"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/inherit/from/:inherited",
 							"host": [
 								"{{TRAV}}"
 							],
@@ -3727,15 +5821,15 @@
 								"api",
 								"v1",
 								"group",
-								"name",
-								":name",
+								"id",
+								":id",
 								"inherit",
 								"from",
 								":inherited"
 							],
 							"variable": [
 								{
-									"key": "name",
+									"key": "id",
 									"value": "test1234",
 									"description": "Name of the group"
 								},
@@ -3835,7 +5929,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{TRAV}}/travelling/api/v1/group/name/:name/remove/inheritance/:inherited",
+							"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/remove/inheritance/:inherited",
 							"host": [
 								"{{TRAV}}"
 							],
@@ -3844,15 +5938,15 @@
 								"api",
 								"v1",
 								"group",
-								"name",
-								":name",
+								"id",
+								":id",
 								"remove",
 								"inheritance",
 								":inherited"
 							],
 							"variable": [
 								{
-									"key": "name",
+									"key": "id",
 									"value": "test1234",
 									"description": "Name of the group"
 								},
@@ -3879,7 +5973,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/group/name/:name/remove/inheritance/:inherited",
+									"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/remove/inheritance/:inherited",
 									"host": [
 										"{{TRAV}}"
 									],
@@ -3888,15 +5982,15 @@
 										"api",
 										"v1",
 										"group",
-										"name",
-										":name",
+										"id",
+										":id",
 										"remove",
 										"inheritance",
 										":inherited"
 									],
 									"variable": [
 										{
-											"key": "name",
+											"key": "id",
 											"value": "test1234",
 											"description": "Name of the group"
 										},
@@ -3966,7 +6060,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{TRAV}}/travelling/api/v1/group/name/:name/insert/route",
+							"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/insert/route",
 							"host": [
 								"{{TRAV}}"
 							],
@@ -3975,14 +6069,14 @@
 								"api",
 								"v1",
 								"group",
-								"name",
-								":name",
+								"id",
+								":id",
 								"insert",
 								"route"
 							],
 							"variable": [
 								{
-									"key": "name",
+									"key": "id",
 									"value": ""
 								}
 							]
@@ -4004,7 +6098,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{TRAV}}/travelling/api/v1/group/name/:name/permission/:permission",
+							"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/permission/:permission",
 							"host": [
 								"{{TRAV}}"
 							],
@@ -4013,27 +6107,96 @@
 								"api",
 								"v1",
 								"group",
-								"name",
-								":name",
+								"id",
+								":id",
 								"permission",
 								":permission"
 							],
 							"variable": [
 								{
-									"description": "Name of the group",
-									"key": "name",
-									"value": "anonymous"
+									"key": "id",
+									"value": "anonymous",
+									"description": "Name of the group"
 								},
 								{
-									"description": "Name or Route",
 									"key": "permission",
-									"value": "test-one-two-*"
+									"value": "test-one-two-*",
+									"description": "Name or Route"
 								}
 							]
 						},
 						"description": "Removes a permission/route from a group."
 					},
 					"response": [
+						{
+							"name": "Delete Permission",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "The client_credentials generated OAUth2 access token.",
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer"
+									}
+								],
+								"url": {
+									"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/permission/:permission",
+									"host": [
+										"{{TRAV}}"
+									],
+									"path": [
+										"travelling",
+										"api",
+										"v1",
+										"group",
+										"id",
+										":id",
+										"permission",
+										":permission"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "anonymous",
+											"description": "Name of the group"
+										},
+										{
+											"key": "permission",
+											"value": "test-one-two-*",
+											"description": "Name or Route"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "set-cookie",
+									"value": "trav:ssid=4c500734-f080-482a-a748-edb57258a95c%3AxMjNGy7eeynjnYdI6AatPw%3D%3D.t%2BWdKm3abf%2B9SunhWBWUdC8H5RQgXjOaBNmSLQWdN9g; Max-Age=4000; Path=/; Expires=Wed, 23 Oct 2019 17:14:35 GMT; HttpOnly"
+								},
+								{
+									"key": "content-length",
+									"value": "1174"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 23 Oct 2019 17:14:31 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"13ee374e-f7c1-403b-b8a8-a930845d068a\",\n    \"name\": \"anonymous\",\n    \"type\": \"group\",\n    \"allowed\": [\n        {\n            \"route\": \"/travelling/portal/*\",\n            \"host\": null,\n            \"method\": \"*\",\n            \"name\": \"*-travelling-portal-*\"\n        },\n        {\n            \"route\": \"/travelling/api/v1/auth/*\",\n            \"host\": null,\n            \"method\": \"*\",\n            \"name\": \"*-travelling-api-v1-auth-*\"\n        },\n        {\n            \"route\": \"/travelling/api/v1/user/me/route/allowed\",\n            \"host\": null,\n            \"method\": \"GET\",\n            \"name\": \"get-travelling-api-v1-user-me-route-allowed\"\n        },\n        {\n            \"route\": \"/travelling/api/v1/user/me/permission/allowed/*\",\n            \"host\": null,\n            \"method\": \"GET\",\n            \"name\": \"get-travelling-api-v1-user-me-permission-allowed-*\"\n        },\n        {\n            \"route\": \"/travelling/assets/*\",\n            \"host\": null,\n            \"removeFromPath\": \"/travelling/assets/\",\n            \"method\": \"GET\",\n            \"name\": \"get-travelling-assets-*\"\n        },\n        {\n            \"route\": \"/travelling/api/v1/config/password\",\n            \"host\": null,\n            \"method\": \"GET\",\n            \"name\": \"get-travelling-api-v1-config-password\"\n        },\n        {\n            \"route\": \"/favicon.ico\",\n            \"host\": null,\n            \"method\": \"GET\",\n            \"name\": \"get-favicon.ico\"\n        },\n        {\n            \"route\": \"/test/get/noauth/nossl\",\n            \"host\": \"http://127.0.0.1:4267\",\n            \"method\": \"GET\",\n            \"name\": \"get-test-get-noauth-nossl\"\n        },\n        {\n            \"name\": \"cui-*\"\n        },\n        {\n            \"route\": \"/test/get/noauth\",\n            \"host\": \"https://127.0.0.1:4268\",\n            \"name\": \"*-test-get-noauth\"\n        },\n        {\n            \"name\": \"test-one-three-*\"\n        }\n    ],\n    \"inherited\": null,\n    \"is_default\": false\n}"
+						},
 						{
 							"name": "Add Permission",
 							"originalRequest": {
@@ -4047,7 +6210,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/group/name/:name/insert/permission/:permission",
+									"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/insert/permission/:permission",
 									"host": [
 										"{{TRAV}}"
 									],
@@ -4056,15 +6219,15 @@
 										"api",
 										"v1",
 										"group",
-										"name",
-										":name",
+										"id",
+										":id",
 										"insert",
 										"permission",
 										":permission"
 									],
 									"variable": [
 										{
-											"key": "name",
+											"key": "id",
 											"value": "anonymous"
 										},
 										{
@@ -4101,75 +6264,6 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"id\": \"13ee374e-f7c1-403b-b8a8-a930845d068a\",\n    \"name\": \"anonymous\",\n    \"type\": \"group\",\n    \"allowed\": [\n        {\n            \"route\": \"/travelling/portal/*\",\n            \"host\": null,\n            \"method\": \"*\",\n            \"name\": \"*-travelling-portal-*\"\n        },\n        {\n            \"route\": \"/travelling/api/v1/auth/*\",\n            \"host\": null,\n            \"method\": \"*\",\n            \"name\": \"*-travelling-api-v1-auth-*\"\n        },\n        {\n            \"route\": \"/travelling/api/v1/user/me/route/allowed\",\n            \"host\": null,\n            \"method\": \"GET\",\n            \"name\": \"get-travelling-api-v1-user-me-route-allowed\"\n        },\n        {\n            \"route\": \"/travelling/api/v1/user/me/permission/allowed/*\",\n            \"host\": null,\n            \"method\": \"GET\",\n            \"name\": \"get-travelling-api-v1-user-me-permission-allowed-*\"\n        },\n        {\n            \"route\": \"/travelling/assets/*\",\n            \"host\": null,\n            \"removeFromPath\": \"/travelling/assets/\",\n            \"method\": \"GET\",\n            \"name\": \"get-travelling-assets-*\"\n        },\n        {\n            \"route\": \"/travelling/api/v1/config/password\",\n            \"host\": null,\n            \"method\": \"GET\",\n            \"name\": \"get-travelling-api-v1-config-password\"\n        },\n        {\n            \"route\": \"/favicon.ico\",\n            \"host\": null,\n            \"method\": \"GET\",\n            \"name\": \"get-favicon.ico\"\n        },\n        {\n            \"route\": \"/test/get/noauth/nossl\",\n            \"host\": \"http://127.0.0.1:4267\",\n            \"method\": \"GET\",\n            \"name\": \"get-test-get-noauth-nossl\"\n        },\n        {\n            \"name\": \"cui-*\"\n        },\n        {\n            \"route\": \"/test/get/noauth\",\n            \"host\": \"https://127.0.0.1:4268\",\n            \"name\": \"*-test-get-noauth\"\n        },\n        {\n            \"name\": \"test-one-two-*\"\n        }\n    ],\n    \"inherited\": null,\n    \"is_default\": false\n}"
-						},
-						{
-							"name": "Delete Permission",
-							"originalRequest": {
-								"method": "DELETE",
-								"header": [
-									{
-										"description": "The client_credentials generated OAUth2 access token.",
-										"key": "Authorization",
-										"type": "text",
-										"value": "Bearer"
-									}
-								],
-								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/group/name/:name/permission/:permission",
-									"host": [
-										"{{TRAV}}"
-									],
-									"path": [
-										"travelling",
-										"api",
-										"v1",
-										"group",
-										"name",
-										":name",
-										"permission",
-										":permission"
-									],
-									"variable": [
-										{
-											"description": "Name of the group",
-											"key": "name",
-											"value": "anonymous"
-										},
-										{
-											"description": "Name or Route",
-											"key": "permission",
-											"value": "test-one-two-*"
-										}
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "content-type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "set-cookie",
-									"value": "trav:ssid=4c500734-f080-482a-a748-edb57258a95c%3AxMjNGy7eeynjnYdI6AatPw%3D%3D.t%2BWdKm3abf%2B9SunhWBWUdC8H5RQgXjOaBNmSLQWdN9g; Max-Age=4000; Path=/; Expires=Wed, 23 Oct 2019 17:14:35 GMT; HttpOnly"
-								},
-								{
-									"key": "content-length",
-									"value": "1174"
-								},
-								{
-									"key": "Date",
-									"value": "Wed, 23 Oct 2019 17:14:31 GMT"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"id\": \"13ee374e-f7c1-403b-b8a8-a930845d068a\",\n    \"name\": \"anonymous\",\n    \"type\": \"group\",\n    \"allowed\": [\n        {\n            \"route\": \"/travelling/portal/*\",\n            \"host\": null,\n            \"method\": \"*\",\n            \"name\": \"*-travelling-portal-*\"\n        },\n        {\n            \"route\": \"/travelling/api/v1/auth/*\",\n            \"host\": null,\n            \"method\": \"*\",\n            \"name\": \"*-travelling-api-v1-auth-*\"\n        },\n        {\n            \"route\": \"/travelling/api/v1/user/me/route/allowed\",\n            \"host\": null,\n            \"method\": \"GET\",\n            \"name\": \"get-travelling-api-v1-user-me-route-allowed\"\n        },\n        {\n            \"route\": \"/travelling/api/v1/user/me/permission/allowed/*\",\n            \"host\": null,\n            \"method\": \"GET\",\n            \"name\": \"get-travelling-api-v1-user-me-permission-allowed-*\"\n        },\n        {\n            \"route\": \"/travelling/assets/*\",\n            \"host\": null,\n            \"removeFromPath\": \"/travelling/assets/\",\n            \"method\": \"GET\",\n            \"name\": \"get-travelling-assets-*\"\n        },\n        {\n            \"route\": \"/travelling/api/v1/config/password\",\n            \"host\": null,\n            \"method\": \"GET\",\n            \"name\": \"get-travelling-api-v1-config-password\"\n        },\n        {\n            \"route\": \"/favicon.ico\",\n            \"host\": null,\n            \"method\": \"GET\",\n            \"name\": \"get-favicon.ico\"\n        },\n        {\n            \"route\": \"/test/get/noauth/nossl\",\n            \"host\": \"http://127.0.0.1:4267\",\n            \"method\": \"GET\",\n            \"name\": \"get-test-get-noauth-nossl\"\n        },\n        {\n            \"name\": \"cui-*\"\n        },\n        {\n            \"route\": \"/test/get/noauth\",\n            \"host\": \"https://127.0.0.1:4268\",\n            \"name\": \"*-test-get-noauth\"\n        },\n        {\n            \"name\": \"test-one-three-*\"\n        }\n    ],\n    \"inherited\": null,\n    \"is_default\": false\n}"
 						}
 					]
 				},
@@ -4186,7 +6280,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{TRAV}}/travelling/api/v1/group/name/:name/insert/permission/:permission",
+							"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/insert/permission/:permission",
 							"host": [
 								"{{TRAV}}"
 							],
@@ -4195,15 +6289,15 @@
 								"api",
 								"v1",
 								"group",
-								"name",
-								":name",
+								"id",
+								":id",
 								"insert",
 								"permission",
 								":permission"
 							],
 							"variable": [
 								{
-									"key": "name",
+									"key": "id",
 									"value": "anonymous",
 									"description": "Name of the group"
 								},
@@ -4230,7 +6324,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/group/name/:name/insert/permission/:permission",
+									"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/insert/permission/:permission",
 									"host": [
 										"{{TRAV}}"
 									],
@@ -4239,15 +6333,15 @@
 										"api",
 										"v1",
 										"group",
-										"name",
-										":name",
+										"id",
+										":id",
 										"insert",
 										"permission",
 										":permission"
 									],
 									"variable": [
 										{
-											"key": "name",
+											"key": "id",
 											"value": "anonymous"
 										},
 										{
@@ -4312,7 +6406,8 @@
 						]
 					}
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Groups",
@@ -4579,7 +6674,7 @@
 								}
 							],
 							"cookie": [],
-							"body": null
+							"body": ""
 						},
 						{
 							"name": "Failed Inheritances",
@@ -4801,926 +6896,8 @@
 						}
 					]
 				}
-			]
-		},
-		{
-			"name": "User",
-			"item": [
-				{
-					"name": "Current",
-					"item": [
-						{
-							"name": "Get",
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									},
-									{
-										"key": "Authorization",
-										"value": "Bearer",
-										"description": "The client_credentials generated OAUth2 access token.",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/user/me",
-									"host": [
-										"{{TRAV}}"
-									],
-									"path": [
-										"travelling",
-										"api",
-										"v1",
-										"user",
-										"me"
-									]
-								},
-								"description": "Gets the currently logged in user"
-							},
-							"response": []
-						},
-						{
-							"name": "Permission Check",
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer",
-										"description": "The client_credentials generated OAUth2 access token.",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/user/me/permission/allowed/:permission",
-									"host": [
-										"{{TRAV}}"
-									],
-									"path": [
-										"travelling",
-										"api",
-										"v1",
-										"user",
-										"me",
-										"permission",
-										"allowed",
-										":permission"
-									],
-									"variable": [
-										{
-											"key": "permission",
-											"value": "get-travelling",
-											"description": "name of the route/permission"
-										}
-									]
-								},
-								"description": "Checks to see if the current user can access content based on permission."
-							},
-							"response": []
-						},
-						{
-							"name": "Route Check",
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer",
-										"description": "The client_credentials generated OAUth2 access token.",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/user/me/route/allowed?method=get&route=/travelling/api/v1/users/me",
-									"host": [
-										"{{TRAV}}"
-									],
-									"path": [
-										"travelling",
-										"api",
-										"v1",
-										"user",
-										"me",
-										"route",
-										"allowed"
-									],
-									"query": [
-										{
-											"key": "method",
-											"value": "get"
-										},
-										{
-											"key": "route",
-											"value": "/travelling/api/v1/users/me"
-										}
-									]
-								},
-								"description": "Checks if current logged in user can access the route with method."
-							},
-							"response": []
-						},
-						{
-							"name": "Get Property",
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer",
-										"description": "The client_credentials generated OAUth2 access token.",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/user/me/:property",
-									"host": [
-										"{{TRAV}}"
-									],
-									"path": [
-										"travelling",
-										"api",
-										"v1",
-										"user",
-										"me",
-										":property"
-									],
-									"variable": [
-										{
-											"key": "property",
-											"value": "username"
-										}
-									]
-								},
-								"description": "Gets the currently logged in user's single property "
-							},
-							"response": []
-						},
-						{
-							"name": "Edit",
-							"request": {
-								"method": "PUT",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									},
-									{
-										"key": "Authorization",
-										"value": "Bearer",
-										"description": "The client_credentials generated OAUth2 access token.",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"username\": \"user6\",\n    \"password\": \"Awickednewawesomepasword4242!@\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/user/me",
-									"host": [
-										"{{TRAV}}"
-									],
-									"path": [
-										"travelling",
-										"api",
-										"v1",
-										"user",
-										"me"
-									]
-								},
-								"description": "Updates the current logged in user."
-							},
-							"response": [
-								{
-									"name": "Edit User",
-									"originalRequest": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "Content-Type",
-												"name": "Content-Type",
-												"value": "application/json",
-												"type": "text"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n\t\"username\" : \"user6\",\n\t\"password\" : \"Awickednewawesomepasword4242!@\"\n}"
-										},
-										"url": {
-											"raw": "{{TRAV}}/travelling/api/v1/user/me",
-											"host": [
-												"{{TRAV}}"
-											],
-											"path": [
-												"travelling",
-												"api",
-												"v1",
-												"user",
-												"me"
-											]
-										}
-									},
-									"status": "OK",
-									"code": 200,
-									"_postman_previewlanguage": "json",
-									"header": [
-										{
-											"key": "content-type",
-											"value": "application/json; charset=utf-8"
-										},
-										{
-											"key": "set-cookie",
-											"value": "trav:ssid=10%3AEIOmCFPwdTBcahxDDZVEAA%3D%3D.gSEo0VoNAWsiU9tQjtwtcz5sLKfIpwQGEP5cuqec40Y; Max-Age=10000; Path=/; Expires=Wed, 28 Aug 2019 15:19:01 GMT; HttpOnly; Secure"
-										},
-										{
-											"key": "content-length",
-											"value": "769"
-										},
-										{
-											"key": "Date",
-											"value": "Wed, 28 Aug 2019 15:18:51 GMT"
-										},
-										{
-											"key": "Connection",
-											"value": "keep-alive"
-										}
-									],
-									"cookie": [],
-									"body": "{\n    \"id\": 10,\n    \"username\": \"user6\",\n    \"password\": \"bcc690dfa35c3214ef67a63383e0420e177c47577c8e31a90b3ba94e2b923b93\",\n    \"avatar\": null,\n    \"locked\": false,\n    \"locked_reason\": null,\n    \"failed_login_attempts\": 0,\n    \"change_username\": false,\n    \"change_password\": false,\n    \"reset_password_token\": null,\n    \"email_verify_token\": null,\n    \"group_id\": 2,\n    \"email\": \"joseph@abe.ai\",\n    \"created_on\": \"1567005382100\",\n    \"last_login\": null,\n    \"client_id\": null,\n    \"client_secret\": null,\n    \"client_refresh\": null,\n    \"user_data\": null,\n    \"eprofile\": null,\n    \"group\": {\n        \"id\": 2,\n        \"name\": \"superadmin\",\n        \"type\": \"group\",\n        \"allowed\": [\n            {\n                \"host\": null,\n                \"route\": \"/travelling/*\",\n                \"method\": \"*\",\n                \"name\": \"*-travelling-*\"\n            },\n            {\n                \"route\": \"/test/:username\",\n                \"host\": \"http://127.0.0.1:1237/:permission\",\n                \"removeFromPath\": \"test\",\n                \"method\": \"*\",\n                \"name\": \"*-test-:username\"\n            }\n        ],\n        \"inherited\": null,\n        \"is_default\": true\n    }\n}"
-								}
-							]
-						},
-						{
-							"name": "Register Token",
-							"request": {
-								"auth": {
-									"type": "noauth"
-								},
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									},
-									{
-										"description": "The client_credentials generated OAUth2 access token.",
-										"key": "Authorization",
-										"type": "text",
-										"value": "Bearer"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"name\": \"conversate\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/user/me/token",
-									"host": [
-										"{{TRAV}}"
-									],
-									"path": [
-										"travelling",
-										"api",
-										"v1",
-										"user",
-										"me",
-										"token"
-									]
-								},
-								"description": "Registers a new credentials service for client_credentials based access token auth."
-							},
-							"response": [
-								{
-									"name": "Add Token",
-									"originalRequest": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"name": "Content-Type",
-												"type": "text",
-												"value": "application/json"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n\t\"name\": \"test\"\n}"
-										},
-										"url": {
-											"raw": "{{TRAV}}/travelling/api/v1/user/me/token",
-											"host": [
-												"{{TRAV}}"
-											],
-											"path": [
-												"travelling",
-												"api",
-												"v1",
-												"user",
-												"me",
-												"token"
-											]
-										}
-									},
-									"status": "OK",
-									"code": 200,
-									"_postman_previewlanguage": "json",
-									"header": [
-										{
-											"key": "content-type",
-											"value": "application/json; charset=utf-8"
-										},
-										{
-											"key": "content-length",
-											"value": "171"
-										},
-										{
-											"key": "Date",
-											"value": "Tue, 10 Sep 2019 17:22:33 GMT"
-										},
-										{
-											"key": "Connection",
-											"value": "keep-alive"
-										}
-									],
-									"cookie": [],
-									"body": "{\n    \"client_id\": \"tesadasd\",\n    \"client_secret\": \"e0352d359201aa574d17c41f8f65dbf987569e4c52cc05c47dec91323d2bdbc70a8d3189fb435970c8621d92da0ebd0a998bb42a9e0336eb43fd351ed68ee00d\"\n}"
-								}
-							]
-						},
-						{
-							"name": "Delete Token",
-							"request": {
-								"method": "DELETE",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"type": "text",
-										"value": "application/json"
-									},
-									{
-										"description": "The client_credentials generated OAUth2 access token.",
-										"key": "Authorization",
-										"type": "text",
-										"value": "Bearer"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"name\": \"test\"\n}"
-								},
-								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/user/me/token/:id",
-									"host": [
-										"{{TRAV}}"
-									],
-									"path": [
-										"travelling",
-										"api",
-										"v1",
-										"user",
-										"me",
-										"token",
-										":id"
-									],
-									"variable": [
-										{
-											"key": "id",
-											"value": "",
-											"description": "id or name of the token"
-										}
-									]
-								},
-								"description": "Deletes a client_credentials based access token auth."
-							},
-							"response": [
-								{
-									"name": "Add Token",
-									"originalRequest": {
-										"method": "POST",
-										"header": [
-											{
-												"key": "Content-Type",
-												"name": "Content-Type",
-												"type": "text",
-												"value": "application/json"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n\t\"name\": \"test\"\n}"
-										},
-										"url": {
-											"raw": "{{TRAV}}/travelling/api/v1/user/me/token",
-											"host": [
-												"{{TRAV}}"
-											],
-											"path": [
-												"travelling",
-												"api",
-												"v1",
-												"user",
-												"me",
-												"token"
-											]
-										}
-									},
-									"status": "OK",
-									"code": 200,
-									"_postman_previewlanguage": "json",
-									"header": [
-										{
-											"key": "content-type",
-											"value": "application/json; charset=utf-8"
-										},
-										{
-											"key": "content-length",
-											"value": "171"
-										},
-										{
-											"key": "Date",
-											"value": "Tue, 10 Sep 2019 17:22:33 GMT"
-										},
-										{
-											"key": "Connection",
-											"value": "keep-alive"
-										}
-									],
-									"cookie": [],
-									"body": "{\n    \"client_id\": \"tesadasd\",\n    \"client_secret\": \"e0352d359201aa574d17c41f8f65dbf987569e4c52cc05c47dec91323d2bdbc70a8d3189fb435970c8621d92da0ebd0a998bb42a9e0336eb43fd351ed68ee00d\"\n}"
-								}
-							]
-						},
-						{
-							"name": "Edit Property",
-							"request": {
-								"method": "PUT",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									},
-									{
-										"key": "Authorization",
-										"value": "Bearer",
-										"description": "The client_credentials generated OAUth2 access token.",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"test\": 123\n}"
-								},
-								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/user/me/:property",
-									"host": [
-										"{{TRAV}}"
-									],
-									"path": [
-										"travelling",
-										"api",
-										"v1",
-										"user",
-										"me",
-										":property"
-									],
-									"variable": [
-										{
-											"key": "property",
-											"value": "user_data"
-										}
-									]
-								},
-								"description": "Edit a current user's property data."
-							},
-							"response": []
-						},
-						{
-							"name": "Edit Property Value",
-							"request": {
-								"method": "PUT",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Bearer",
-										"description": "The client_credentials generated OAUth2 access token.",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/user/me/:property/:value",
-									"host": [
-										"{{TRAV}}"
-									],
-									"path": [
-										"travelling",
-										"api",
-										"v1",
-										"user",
-										"me",
-										":property",
-										":value"
-									],
-									"variable": [
-										{
-											"key": "property",
-											"value": "group_id"
-										},
-										{
-											"key": "value",
-											"value": "595d3f9a-5383-4da9-a465-b975d8a5e28e"
-										}
-									]
-								},
-								"description": "Edit a current user's property data as a path param."
-							},
-							"response": []
-						}
-					],
-					"_postman_isSubFolder": true
-				},
-				{
-					"name": "Get",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer",
-								"description": "The client_credentials generated OAUth2 access token.",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{TRAV}}/travelling/api/v1/user/id/:id",
-							"host": [
-								"{{TRAV}}"
-							],
-							"path": [
-								"travelling",
-								"api",
-								"v1",
-								"user",
-								"id",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "39A2BC37-61AE-434C-B245-A731A27CF8DA"
-								}
-							]
-						},
-						"description": "Get a user by it's id."
-					},
-					"response": []
-				},
-				{
-					"name": "Get Property",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer",
-								"description": "The client_credentials generated OAUth2 access token.",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{TRAV}}/travelling/api/v1/user/id/:id/:prop",
-							"host": [
-								"{{TRAV}}"
-							],
-							"path": [
-								"travelling",
-								"api",
-								"v1",
-								"user",
-								"id",
-								":id",
-								":prop"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "39A2BC37-61AE-434C-B245-A731A27CF8DA",
-									"description": "Id or Username "
-								},
-								{
-									"key": "prop",
-									"value": "username"
-								}
-							]
-						},
-						"description": "Get a user's property by it's id."
-					},
-					"response": []
-				},
-				{
-					"name": "Edit",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer",
-								"description": "The client_credentials generated OAUth2 access token.",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"username\" : \"user6\",\n\t\"password\" : \"Awickednewawesomepasword4242!@\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{TRAV}}/travelling/api/v1/user/id/:id",
-							"host": [
-								"{{TRAV}}"
-							],
-							"path": [
-								"travelling",
-								"api",
-								"v1",
-								"user",
-								"id",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "39A2BC37-61AE-434C-B245-A731A27CF8DA",
-									"description": "Id or Username "
-								}
-							]
-						},
-						"description": "Edit a user's by id."
-					},
-					"response": []
-				},
-				{
-					"name": "Edit Property",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"value": "Bearer",
-								"description": "The client_credentials generated OAUth2 access token.",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "user6"
-						},
-						"url": {
-							"raw": "{{TRAV}}/travelling/api/v1/user/id/:id/:prop",
-							"host": [
-								"{{TRAV}}"
-							],
-							"path": [
-								"travelling",
-								"api",
-								"v1",
-								"user",
-								"id",
-								":id",
-								":prop"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "39A2BC37-61AE-434C-B245-A731A27CF8DA",
-									"description": "Id or Username "
-								},
-								{
-									"key": "prop",
-									"value": "username"
-								}
-							]
-						},
-						"description": "Edit a user's property by id."
-					},
-					"response": []
-				},
-				{
-					"name": "Delete",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer",
-								"description": "The client_credentials generated OAUth2 access token.",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{TRAV}}/travelling/api/v1/user/id/:id",
-							"host": [
-								"{{TRAV}}"
-							],
-							"path": [
-								"travelling",
-								"api",
-								"v1",
-								"user",
-								"id",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "39A2BC37-61AE-434C-B245-A731A27CF8DA",
-									"description": "Id or Username "
-								}
-							]
-						},
-						"description": "Delete a user by it's Id."
-					},
-					"response": []
-				},
-				{
-					"name": "Edit Property Value",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer",
-								"description": "The client_credentials generated OAUth2 access token.",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{TRAV}}/travelling/api/v1/user/id/:id/:property/:value",
-							"host": [
-								"{{TRAV}}"
-							],
-							"path": [
-								"travelling",
-								"api",
-								"v1",
-								"user",
-								"id",
-								":id",
-								":property",
-								":value"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "",
-									"description": "Id or Username "
-								},
-								{
-									"key": "property",
-									"value": "group_id"
-								},
-								{
-									"key": "value",
-									"value": "595d3f9a-5383-4da9-a465-b975d8a5e28e"
-								}
-							]
-						},
-						"description": "Edit a current user's property data as a path param."
-					},
-					"response": []
-				}
 			],
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"id": "0b3e6723-6ffb-4326-be64-49cc7183f6cc",
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"id": "654fb8fd-53f2-43fc-9926-ca02ad2d7427",
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				}
-			]
-		},
-		{
-			"name": "Users",
-			"item": [
-				{
-					"name": "Get",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer",
-								"description": "The client_credentials generated OAUth2 access token.",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{TRAV}}/travelling/api/v1/users",
-							"host": [
-								"{{TRAV}}"
-							],
-							"path": [
-								"travelling",
-								"api",
-								"v1",
-								"users"
-							]
-						},
-						"description": "Gets all the users\n\n##### Optional Query Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | *optional* (example:  user7) |\n| locked | *optional* (example:  true) |\n| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |\n| group_request | *optional* (example:  superadmin) |\n| failed_login_attempts | *optional* (example:  0) |\n| change_username | *optional* (example:  false) |\n| change_password | *optional* (example:  false) |\n| reset_password | *optional* (example:  false) |\n| email_verify | *optional* (example:  false) |\n| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | *optional* (example:  test@test.ai) |\n| created_on | *optional* (example:  1568419646794) |\n| last_login | *optional* (example:  null) |"
-					},
-					"response": []
-				},
-				{
-					"name": "By Group Request",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer",
-								"description": "The client_credentials generated OAUth2 access token.",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{TRAV}}/travelling/api/v1/users/group/request/:group_request",
-							"host": [
-								"{{TRAV}}"
-							],
-							"path": [
-								"travelling",
-								"api",
-								"v1",
-								"users",
-								"group",
-								"request",
-								":group_request"
-							],
-							"variable": [
-								{
-									"key": "group_request",
-									"value": "superadmin",
-									"description": "name of the group "
-								}
-							]
-						},
-						"description": "Gets all the users that have the specified group request\n\n##### Optional Query Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | *optional* (example:  user7) |\n| locked | *optional* (example:  true) |\n| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |\n| group_request | *optional* (example:  superadmin) |\n| failed_login_attempts | *optional* (example:  0) |\n| change_username | *optional* (example:  false) |\n| change_password | *optional* (example:  false) |\n| reset_password | *optional* (example:  false) |\n| email_verify | *optional* (example:  false) |\n| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | *optional* (example:  test@test.ai) |\n| created_on | *optional* (example:  1568419646794) |\n| last_login | *optional* (example:  null) |"
-					},
-					"response": []
-				}
-			]
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Config",
@@ -5898,5 +7075,6 @@
 				]
 			}
 		}
-	]
+	],
+	"protocolProfileBehavior": {}
 }

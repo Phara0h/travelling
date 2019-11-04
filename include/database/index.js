@@ -51,7 +51,6 @@ class Database {
         if (user.password == await crypto.hash(password, null, user.getEncryptedProfile(user))) {
             user.failed_login_attempts = 0;
             await user.save();
-            user.addProperty('group', await Group.findById(user.group_id));
 
             return {user, err: null};
         }
@@ -82,13 +81,13 @@ class Database {
 
     }
 
-    static async createAccount(username, password, email, group_id, group_request = null) {
+    static async createAccount(username, password, email, group_ids, group_request = null) {
         var userProp = {
             username,
             password,
             email,
             group_request,
-            group_id,
+            group_ids,
             change_username: false,
             change_password: false,
             created_on: Date.now(),
@@ -159,10 +158,6 @@ class Database {
         user.locked_reason = null;
         await user.save();
         return true;
-    }
-
-    static async getDefaultGroup() {
-        return await Group.getDefaultGroup();
     }
 
     static async initGroups(router) {

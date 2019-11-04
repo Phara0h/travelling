@@ -41,7 +41,19 @@ class GroupManager {
 
         await this.updateGroupsIfNeeeded();
 
-        return !req.isAuthenticated ? this.groups['anonymous'] : this.groups[req.session.data.user.group.name];
+        if (!req.isAuthenticated) {
+            return [{routes: this.groups['anonymous'], group: {name: 'anonymous', type: 'group'}}];
+        }
+
+        var mroutes = [];
+
+        for (var i = 0; i < req.session.data.user.groups.length; i++) {
+            const group = req.session.data.user.groups[i];
+
+            mroutes.push({routes: this.groups[group.name], group: {name: group.name, type: group.type}});
+        }
+
+        return mroutes;
     }
 
     async defaultGroup() {

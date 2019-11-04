@@ -20,7 +20,7 @@ class User extends Base(BaseModel, 'users', {
     change_password: null,
     reset_password: null,
     email_verify: null,
-    group_id: null,
+    group_ids: null,
     email: PGTypes.AutoCrypt,
     created_on: null,
     last_login: null,
@@ -44,7 +44,7 @@ class User extends Base(BaseModel, 'users', {
                   locked_reason text,
                   locked boolean DEFAULT false,
                   last_login json,
-                  group_id UUID,
+                  group_ids UUID[],
                   failed_login_attempts int DEFAULT 0,
                   change_username boolean DEFAULT false,
                   change_password boolean DEFAULT false,
@@ -55,21 +55,87 @@ class User extends Base(BaseModel, 'users', {
                   user_data bytea,
                   __user_data character varying(258),
                   eprofile character varying(350),
-                  PRIMARY KEY (id, group_id)
+                  PRIMARY KEY (id)
                 );`);
 
     }
 
     async resolveGroup() {
-        var group = await gm.getGroup(this.group_id) || await Group.findById(this.group_id);
+        var groups = [];
+        var groupsNames = [];
+        var groupsTypes = [];
 
-        if (!this.group) {
-            this.addProperty('group', group);
-        } else {
-            this.group = group;
+        if (!this.groups) {
+            this.addProperty('groups', groups);
         }
 
-        return this;
+        // groups.name = '';
+        // groups.type = '';
+
+        for (var i = 0; i < this.group_ids.length; i++) {
+            const group = await gm.getGroup(this.group_ids[i]) || await Group.findById(this.group_ids[i]);
+
+            groups.push(group);
+            groupsNames.push(group.name);
+            groupsTypes.push(group.type);
+            // groups.name += group.name;
+            // if (this.group_ids.length < i + 1) {
+            //     groups.name += '|';
+            // }
+            //
+            // groups.type += group.type;
+            // if (this.group_ids.length < i + 1) {
+            //     groups.type += '|';
+            // }
+        }
+
+        this.groups = groups;
+
+        return {names: groupsNames, types: groupsTypes};
+    }
+
+    async addGroup(group) {
+        if (this.groups_id.indexOf(group.id) > -1) {
+            return false;
+        }
+        this.groups_id.push(group.id);
+        this.groups_id = [...this.groups_id];
+
+        return await this.save();
+    }
+
+    async removeGroup(group) {
+        var found = this.groups_id.indexOf(group.id);
+
+        if (found == -1) {
+            return false;
+        }
+        this.groups_id.splice(found, 1);
+        this.groups_id = [...this.groups_id];
+
+        return await this.save();
+    }
+
+    hasGroupId(id) {
+        return this.group_ids.indexOf(id) > -1;
+    }
+
+    hasGroupName(name) {
+        for (var i = 0; i < this.groups.length; i++) {
+            if (this.groups[i].name === name) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    hasGroupType(type) {
+        for (var i = 0; i < this.groups.length; i++) {
+            if (this.groups[i].type === type) {
+                return true;
+            }
+        }
+        return false;
     }
 
     toJSON() {

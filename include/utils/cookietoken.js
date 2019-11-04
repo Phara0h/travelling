@@ -32,7 +32,7 @@ class CookieToken {
                 if (!user || user.length < 1) {
                     return false;
                 } else {
-                    return await user[0].resolveGroup(router);
+                    return user[0];
                 }
             } else {
                 this.removeAuthCookie(res);

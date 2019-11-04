@@ -142,11 +142,11 @@ async function getUserByGroup(req, res, router) {
     }
 
     if (groups.length < 1) {
-        res.code(400).send({
+        res.code(400);
+        return {
             type: 'group-nonexistent-error',
             msg: 'No groups with that name or id exists.',
-        });
-        return false;
+        };
     }
 
     const prop = req.params.prop;
@@ -155,7 +155,7 @@ async function getUserByGroup(req, res, router) {
     delete req.params.prop;
     var user = await userRoutes.getUser(req, res, router);
 
-    // set prop back for other functions to use\
+    // set prop back for other functions to use
     req.params.prop = prop;
 
     if (req.params.prop && user[req.params.prop] === undefined) {
@@ -179,11 +179,11 @@ async function getUserByGroup(req, res, router) {
         return false;
     }
     // console.log(groups, user.group.type, user.group_request, req.params.grouptype);
-    groups = groups.filter(g=>g.type === user.group.type || groupRequest && user.group_request === req.params.grouptype);
+    groups = groups.filter(g=>user.hasGroupType(g.type) || groupRequest && user.group_request === req.params.grouptype);
 
     if (req.params.groupname) {
 
-        groups = groups.filter(g=>user.group_id === req.params.groupname || user.group.name === req.params.groupname);
+        groups = groups.filter(g=>user.hasGroupId(req.params.groupname) || user.hasGroupName(req.params.groupname));
     }
 
     if (groups.length < 1) {
@@ -204,12 +204,13 @@ async function getGroupsByType(req, res, router) {
 }
 
 async function editUserByGroup(req, res, router) {
-    // var user = await getUserByGroup(req, res, router);
-    //
-    // if (!user) {
-    //     return false;
-    // }
-    var editedUser = userRoutes.editUser(req, res, router);
+    var user = await getUserByGroup(req, res, router);
+
+    if (user.msg) {
+        return user;
+    }
+
+    var editedUser = await userRoutes.editUser(req, res, router);
 
     if (editedUser.msg) {
         return editedUser;
@@ -217,6 +218,29 @@ async function editUserByGroup(req, res, router) {
 
     res.code(200);
     return editedUser;
+}
+
+async function addRemoveGroupInheritanceByGroup(req, res, add = true) {
+    const group = await gm.getGroup(req.params.inheritgroupid, req.params.inheritgrouptype);
+
+    if (group && group.msg) {
+        res.code(400);
+        return group;
+    }
+
+    var user = await getUserByGroup(req, res);
+
+    if (user.msg) {
+        return user;
+    }
+
+    // req.params.grouptype = req.params.inheritgrouptype;
+    // req.params.groupid = req.params.inheritgroupid;
+
+    user = await userRoutes.addRemoveGroupInheritance(user, group, add);
+    res.code(user && user.msg ? 400 : 200);
+
+    return user;
 }
 
 async function deleteUserByGroup(req, res, router) {
@@ -287,7 +311,6 @@ async function addGroup(req, res, router) {
 
     gm.redis.needsGroupUpdate = true;
     res.code(200).send(ngroup);
-
 }
 
 async function editGroup(req, res, router) {
@@ -422,7 +445,7 @@ async function getInhertedUsers(group, users, query = {}) {
 
     }
 
-    return users = users.concat(await User.findAllBy(userUtils.setUser({group_id: group.id}, query)));
+    return users = users.concat(await User.findAllBy(userUtils.setUser({group_ids: [group.id]}, query)));
 }
 
 async function addInheritedToGroup(req, res, router) {
@@ -432,7 +455,7 @@ async function addInheritedToGroup(req, res, router) {
         return;
     }
 
-    var inhertedGroup = await gm.getGroup(req.params.inheritedGroupName.toLowerCase());
+    var inhertedGroup = await gm.getGroup(req.params.inheritedgroupname.toLowerCase());
 
     if (!inhertedGroup) {
         res.code(400).send({
@@ -461,7 +484,7 @@ async function removeInheritance(req, res, router) {
         return;
     }
 
-    var inhertedGroup = await gm.getGroup(req.params.inheritedGroupName.toLowerCase());
+    var inhertedGroup = await gm.getGroup(req.params.inheritedgroupname.toLowerCase());
 
     if (!inhertedGroup) {
         res.code(400).send({
@@ -501,14 +524,14 @@ module.exports = function(app, opts, done) {
         await addGroup(req, res, router);
     });
 
-    app.post('/group/name/:groupname', async (req, res) => {
+    app.post('/group/id/:groupname', async (req, res) => {
         req.body = {
             name: req.params.groupname,
         };
         await addGroup(req, res, router);
     });
 
-    app.post('/group/type/:grouptype/name/:groupname', async (req, res) => {
+    app.post('/group/id/:groupname/type/:grouptype', async (req, res) => {
         req.body = {
             name: req.params.groupname,
             type: req.params.grouptype,
@@ -517,22 +540,22 @@ module.exports = function(app, opts, done) {
     });
 
     // Edit Group Routes
-    app.put('/group/name/:groupname/insert/route', async (req, res) => {
+    app.put('/group/id/:groupname/insert/route', async (req, res) => {
         await addRouteGroup(req, res, router);
     });
 
-    app.put('/group/name/:groupname/insert/permission/:permission', async (req, res) => {
+    app.put('/group/id/:groupname/insert/permission/:permission', async (req, res) => {
         req.body = {
             name: req.params.permission,
         };
         await addRouteGroup(req, res, router);
     });
 
-    app.put('/group/type/:grouptype/name/:groupname/insert/route', async (req, res) => {
+    app.put('/group/id/:groupname/type/:grouptype/insert/route', async (req, res) => {
         await addRouteGroup(req, res, router);
     });
 
-    app.put('/group/type/:grouptype/name/:groupname/insert/permission/:permission', async (req, res) => {
+    app.put('/group/id/:groupname/type/:grouptype/insert/permission/:permission', async (req, res) => {
         req.body = {
             name: req.params.permission,
         };
@@ -540,14 +563,14 @@ module.exports = function(app, opts, done) {
     });
 
     // Delete Group Routes
-    app.delete('/group/name/:groupname/permission/:permission', async (req, res) => {
+    app.delete('/group/id/:groupname/permission/:permission', async (req, res) => {
         req.body = {
             name: req.params.permission,
         };
         await deleteRouteGroup(req, res, router);
     });
 
-    app.delete('/group/type/:grouptype/name/:groupname/permission/:permission', async (req, res) => {
+    app.delete('/group/id/:groupname/type/:grouptype/permission/:permission', async (req, res) => {
         req.body = {
             name: req.params.permission,
         };
@@ -555,55 +578,55 @@ module.exports = function(app, opts, done) {
     });
 
     // Edit Groups
-    app.put('/group/name/:groupname', async (req, res) => {
+    app.put('/group/id/:groupname', async (req, res) => {
         await editGroup(req, res, router);
     });
 
-    app.put('/group//type/:grouptype/name/:groupname', async (req, res) => {
+    app.put('/group/id/:groupname/type/:grouptype', async (req, res) => {
         await editGroup(req, res, router);
     });
 
-    app.put('/group/name/:groupname/set/default', async (req, res) => {
+    app.put('/group/id/:groupname/set/default', async (req, res) => {
         req.body = {
             is_default: true,
         };
         await editGroup(req, res, router);
     });
 
-    app.put('/group/type/:grouptype/name/:groupname/set/default', async (req, res) => {
+    app.put('/group/id/:groupname/type/:grouptype/set/default', async (req, res) => {
         req.body = {
             is_default: true,
         };
         await editGroup(req, res, router);
     });
 
-    app.put('/group/name/:groupname/inherit/from/:inheritedGroupName', async (req, res) => {
+    app.put('/group/id/:groupname/inherit/from/:inheritedgroupname', async (req, res) => {
         await addInheritedToGroup(req, res, router);
     });
 
-    app.put('/group/type/:grouptype/name/:groupname/inherit/from/:inheritedGroupName', async (req, res) => {
+    app.put('/group/id/:groupname/type/:grouptype/inherit/from/:inheritedgroupname', async (req, res) => {
         await addInheritedToGroup(req, res, router);
     });
 
-    app.delete('/group/name/:groupname/remove/inheritance/:inheritedGroupName', async (req, res) => {
+    app.delete('/group/id/:groupname/remove/inheritance/:inheritedgroupname', async (req, res) => {
         await removeInheritance(req, res, router);
     });
 
-    app.delete('/group/type/:grouptype/name/:groupname/remove/inheritance/:inheritedGroupName', async (req, res) => {
+    app.delete('/group/id/:groupname/type/:grouptype/remove/inheritance/:inheritedgroupname', async (req, res) => {
         await removeInheritance(req, res, router);
     });
 
     // Delete Group
-    app.delete('/group/name/:groupname', async (req, res) => {
+    app.delete('/group/id/:groupname', async (req, res) => {
         await deleteGroup(req, res, router);
     });
 
-    app.delete('/group/type/:grouptype/name/:groupname', async (req, res) => {
+    app.delete('/group/id/:groupname/type/:grouptype', async (req, res) => {
         await deleteGroup(req, res, router);
     });
 
     // Get Group
-    app.get('/group/name/:groupname', async (req, res) => {
+    app.get('/group/id/:groupname', async (req, res) => {
         var group = await getGroup(req, res, router);
 
         if (!group) {
@@ -612,7 +635,7 @@ module.exports = function(app, opts, done) {
         res.code(200).send(group);
     });
 
-    app.get('/group/type/:grouptype/name/:groupname', async (req, res) => {
+    app.get('/group/id/:groupname/type/:grouptype', async (req, res) => {
         var group = await getGroup(req, res, router);
 
         if (!group) {
@@ -622,22 +645,24 @@ module.exports = function(app, opts, done) {
     });
 
     // Get Group's User
-    app.get('/group/type/:grouptype/name/:groupname/users', async (req, res) => {
+    app.get('/group/id/:groupname/type/:grouptype/users', async (req, res) => {
         var group = await getGroup(req, res, router);
 
         if (!group) {
             return;
         }
+
         if (!misc.isEmpty(req.query) && userUtils.checkValidUser(req.query, false)) {
-            var query = userUtils.setUser({group_id: group.id}, req.query);
+            var query = userUtils.setUser({group_ids: [group.id]}, req.query);
 
             res.code(200).send(await User.findAllBy(query));
+            return;
         }
-        res.code(200).send(await User.findAllBy({group_id: group.id}));
 
+        res.code(200).send(await User.findAllBy({group_ids: [group.id]}));
     });
 
-    app.get('/group/type/:grouptype/name/:groupname/users/inherited', async (req, res) => {
+    app.get('/group/id/:groupname/type/:grouptype/users/inherited', async (req, res) => {
         var group = await getGroup(req, res, router);
 
         if (!group) {
@@ -648,22 +673,24 @@ module.exports = function(app, opts, done) {
 
         res.code(200).send(await getInhertedUsers(group, [], query));
     });
-    app.get('/group/name/:groupname/users', async (req, res) => {
+
+    app.get('/group/id/:groupname/users', async (req, res) => {
         var group = await getGroup(req, res, router);
 
         if (!group) {
             return;
         }
         if (!misc.isEmpty(req.query) && userUtils.checkValidUser(req.query, false)) {
-            var query = userUtils.setUser({group_id: group.id}, req.query);
+            var query = userUtils.setUser({group_ids: [group.id]}, req.query);
 
             res.code(200).send(await User.findAllBy(query));
+            return;
         }
-        res.code(200).send(await User.findAllBy({group_id: group.id}));
 
+        res.code(200).send(await User.findAllBy({group_ids: [group.id]}));
     });
 
-    app.get('/group/name/:groupname/users/inherited', async (req, res) => {
+    app.get('/group/id/:groupname/users/inherited', async (req, res) => {
         var group = await getGroup(req, res, router);
 
         if (!group) {
@@ -819,21 +846,33 @@ module.exports = function(app, opts, done) {
         res.code(200).send(exported);
     });
 
-    // Get Users
+    // Users by group type and group id
+    app.get('/group/id/:groupname/type/:grouptype/user/:id', async (req, res) => {return await getUserByGroup(req, res, router);});
+    app.get('/group/id/:groupname/type/:grouptype/user/:id/:prop', async (req, res) => {return await getUserByGroup(req, res, router);});
+    app.put('/group/id/:groupname/type/:grouptype/user/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype', async (req, res) => {
+        return await addRemoveGroupInheritanceByGroup(req, res, true);
+    });
+    app.delete('/group/id/:groupname/type/:grouptype/user/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype', async (req, res) => {
+        return await addRemoveGroupInheritanceByGroup(req, res, false);
+    });
+    app.put('/group/id/:groupname/type/:grouptype/user/:id', async (req, res) => {return await editUserByGroup(req, res, router);});
+    app.put('/group/id/:groupname/type/:grouptype/user/:id/:prop', async (req, res) => {return await editUserByGroup(req, res, router);});
+    app.put('/group/id/:groupname/type/:grouptype/user/:id/:prop/:propdata', async (req, res) => {return await editUserByGroup(req, res, router);});
+    app.delete('/group/id/:groupname/type/:grouptype/user/:id', async (req, res) => {return await deleteUserByGroup(req, res, router);});
 
-    app.get('/group/type/:grouptype/name/:groupname/user/:id', async (req, res) => {return await getUserByGroup(req, res, router);});
-    app.get('/group/type/:grouptype/name/:groupname/user/:id/:prop', async (req, res) => {return await getUserByGroup(req, res, router);});
+    // Users by group type
     app.get('/group/type/:grouptype/user/:id', async (req, res) => {return await getUserByGroup(req, res, router);});
     app.get('/group/type/:grouptype/user/:id/:prop', async (req, res) => {return await getUserByGroup(req, res, router);});
-
-    // Edit Users
-
-    app.put('/group/type/:grouptype/name/:groupname/user/:id', async (req, res) => {return await editUserByGroup(req, res, router);});
-    app.put('/group/type/:grouptype/name/:groupname/user/:id/:prop', async (req, res) => {return await editUserByGroup(req, res, router);});
-    app.put('/group/type/:grouptype/name/:groupname/user/:id/:prop/:propdata', async (req, res) => {return await editUserByGroup(req, res, router);});
+    app.put('/group/type/:grouptype/user/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype', async (req, res) => {
+        return await addRemoveGroupInheritanceByGroup(req, res, true);
+    });
+    app.delete('/group/type/:grouptype/user/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype', async (req, res) => {
+        return await addRemoveGroupInheritanceByGroup(req, res, false);
+    });
     app.put('/group/type/:grouptype/user/:id', async (req, res) => {return await editUserByGroup(req, res, router);});
     app.put('/group/type/:grouptype/user/:id/:prop', async (req, res) => {return await editUserByGroup(req, res, router);});
     app.put('/group/type/:grouptype/user/:id/:prop/:propdata', async (req, res) => {return await editUserByGroup(req, res, router);});
+    app.delete('/group/type/:grouptype/user/:id', async (req, res) => {return await deleteUserByGroup(req, res, router);});
 
     // Edit Users Group request
 
@@ -841,11 +880,6 @@ module.exports = function(app, opts, done) {
     app.put('/group/request/type/:grouptype/user/:id/:prop', async (req, res) => {
         return await editUserByGroup(req, res, router);
     });
-
-    // Delete Users
-
-    app.delete('/group/type/:grouptype/name/:groupname/user/:id', async (req, res) => {return await deleteUserByGroup(req, res, router);});
-    app.delete('/group/type/:grouptype/user/:id', async (req, res) => {return await deleteUserByGroup(req, res, router);});
 
     done();
 };

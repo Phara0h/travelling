@@ -10,7 +10,7 @@ const TokenHandler = require('../../token');
 const {checkValidUser} = require('../../utils/user');
 const gm = require('../../server/groupmanager');
 
-var login = async (user, req, res, router) => {
+var login = async (user, req, res) => {
 
     /**
       @TODO add check to ip to see if they are differnt then email the user of possible
@@ -23,12 +23,12 @@ var login = async (user, req, res, router) => {
 
     user.failed_login_attempts = 0;
     await user.save();
-    user.resolveGroup(router);
+    const groupsData = await user.resolveGroup();
 
-    req.createSession(user.id, {user});
+    req.createSession(user.id, {user, groupsData});
     res = await CookieToken.newTokenInCookie(user.username, user.password, req, res);
 
-    config.log.logger.info('User Logged in: ' + user.username + ' (' + user.group.name + ')' + ' | ' + req.ip);
+    config.log.logger.info('User Logged in: ' + user.username + ' (' + groupsData.names + ')' + ' | ' + req.ip);
 
     if (req.cookies['trav:backurl']) {
         var url = req.cookies['trav:backurl'].split('|');
@@ -51,7 +51,6 @@ var login = async (user, req, res, router) => {
 };
 
 module.exports = function(app, opts, done) {
-    const router = opts.router;
     // if(config.cors.enable) {
     //   app.use((req,res,next)=> {
     //     res.setHeader('access-control-allow-credentials', true)
@@ -105,7 +104,7 @@ module.exports = function(app, opts, done) {
                 try {
                     var user = await Database.checkAuth(username, email, req.body.password);
 
-                    await login(user.user, req, res, router);
+                    await login(user.user, req, res);
                 } catch (e) {
                     res.code(400).send(e.err && e.err.type == 'locked' ? {type: e.err.type, msg: e.err.msg, email: e.email} : {
                         type: 'login-error',
@@ -156,7 +155,7 @@ module.exports = function(app, opts, done) {
         }
 
         var dGroup = await gm.defaultGroup();
-        var user = await Database.createAccount(username, password, email, dGroup.id, groupRequest);
+        var user = await Database.createAccount(username, password, email, [dGroup.id], groupRequest);
 
         config.log.logger.info('New User Created: ' + user.username + ' | ' + req.connection);
         res.code(200).send('Account Created');

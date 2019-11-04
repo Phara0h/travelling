@@ -57,12 +57,14 @@ module.exports = {
             };
         }
 
-        if (user.group_id) {
-            if (regex.uuidv4.exec(user.group_id) == null) {
-                return {
-                    type: 'group-id-error',
-                    msg: 'Group id contain invalid characters.',
-                };
+        if (user.group_ids) {
+            for (var i = 0; i < user.group_ids.length; i++) {
+                if (regex.uuidv4.exec(user.group_ids[i]) == null) {
+                    return {
+                        type: 'group-id-error',
+                        msg: 'Group id contain invalid characters.',
+                    };
+                }
             }
         }
 
@@ -116,8 +118,8 @@ module.exports = {
             }
         }
 
-        if (props.group_id) {
-            user.group_id = props.group_id;
+        if (props.group_ids) {
+            user.group_ids = props.group_ids;
         }
 
         if (props.group_request !== undefined) {
