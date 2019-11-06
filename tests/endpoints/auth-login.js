@@ -77,7 +77,6 @@ module.exports = () => {
                    uri: activationUrl[1].replace(']', '').replace(/&#x3D;/g, '='),
                  });
 
-                console.log(activationRes.body)
                  expect(activationRes.statusCode).toEqual(200);
 
                  var res2 = await Travelling.Auth.login({

@@ -84,7 +84,7 @@ async function getGroup(req, res) {
 }
 async function addRemoveGroupInheritance(user, group, add = true, req) {
     if (user) {
-        console.log(group);
+        // console.log(group);
         user = add ? await user.addGroup(group) : await user.removeGroup(group);
 
         if (!user) {
@@ -97,7 +97,7 @@ async function addRemoveGroupInheritance(user, group, add = true, req) {
         return user;
     }
 
-    console.log(user);
+    // console.log(user);
 
     return {
         type: 'user-edit-error',
@@ -265,7 +265,7 @@ function routes(app, opts, done) {
     app.put('/user/id/:id/inheritance/group/:groupid/type/:grouptype', async (req, res) => {
         const group = await getGroup(req, res);
 
-        console.log(group);
+        // console.log(group);
         if (group && group.msg) {
             res.code(400);
             return group;
