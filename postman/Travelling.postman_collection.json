@@ -685,7 +685,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/user/me/route/allowed?method=get&route=/travelling/api/v1/users/me",
+									"raw": "{{TRAV}}/travelling/api/v1/user/me/route/allowed?method=get&route= /travelling/api/v1/group/request/type/anonymous/user/",
 									"host": [
 										"{{TRAV}}"
 									],
@@ -705,7 +705,7 @@
 										},
 										{
 											"key": "route",
-											"value": "/travelling/api/v1/users/me"
+											"value": " /travelling/api/v1/group/request/type/anonymous/user/"
 										}
 									]
 								},
@@ -726,7 +726,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/user/me/:property",
+									"raw": "{{TRAV}}/travelling/api/v1/user/me/property/:property",
 									"host": [
 										"{{TRAV}}"
 									],
@@ -736,6 +736,7 @@
 										"v1",
 										"user",
 										"me",
+										"property",
 										":property"
 									],
 									"variable": [
@@ -1073,7 +1074,7 @@
 									"raw": "{\n\t\"test\": 123\n}"
 								},
 								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/user/me/:property",
+									"raw": "{{TRAV}}/travelling/api/v1/user/me/property/:property",
 									"host": [
 										"{{TRAV}}"
 									],
@@ -1083,6 +1084,7 @@
 										"v1",
 										"user",
 										"me",
+										"property",
 										":property"
 									],
 									"variable": [
@@ -1109,7 +1111,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/user/me/:property/:value",
+									"raw": "{{TRAV}}/travelling/api/v1/user/me/property/:property/:value",
 									"host": [
 										"{{TRAV}}"
 									],
@@ -1119,6 +1121,7 @@
 										"v1",
 										"user",
 										"me",
+										"property",
 										":property",
 										":value"
 									],
@@ -1282,7 +1285,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{TRAV}}/travelling/api/v1/user/id/:id/:prop",
+							"raw": "{{TRAV}}/travelling/api/v1/user/id/:id/property/:property",
 							"host": [
 								"{{TRAV}}"
 							],
@@ -1293,7 +1296,8 @@
 								"user",
 								"id",
 								":id",
-								":prop"
+								"property",
+								":property"
 							],
 							"variable": [
 								{
@@ -1302,8 +1306,8 @@
 									"description": "Id or Username "
 								},
 								{
-									"key": "prop",
-									"value": "username"
+									"key": "property",
+									"value": ""
 								}
 							]
 						},
@@ -1386,7 +1390,7 @@
 							"raw": "user6"
 						},
 						"url": {
-							"raw": "{{TRAV}}/travelling/api/v1/user/id/:id/:prop",
+							"raw": "{{TRAV}}/travelling/api/v1/user/id/:id/property/:property",
 							"host": [
 								"{{TRAV}}"
 							],
@@ -1397,7 +1401,8 @@
 								"user",
 								"id",
 								":id",
-								":prop"
+								"property",
+								":property"
 							],
 							"variable": [
 								{
@@ -1406,8 +1411,8 @@
 									"description": "Id or Username "
 								},
 								{
-									"key": "prop",
-									"value": "username"
+									"key": "property",
+									"value": ""
 								}
 							]
 						},
@@ -1428,7 +1433,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{TRAV}}/travelling/api/v1/user/id/:id/:property/:value",
+							"raw": "{{TRAV}}/travelling/api/v1/user/id/:id/property/:property/:value",
 							"host": [
 								"{{TRAV}}"
 							],
@@ -1439,6 +1444,7 @@
 								"user",
 								"id",
 								":id",
+								"property",
 								":property",
 								":value"
 							],
@@ -1475,7 +1481,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{TRAV}}/travelling/api/v1/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype",
+							"raw": "{{TRAV}}/travelling/api/v1/user/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype",
 							"host": [
 								"{{TRAV}}"
 							],
@@ -1484,6 +1490,7 @@
 								"api",
 								"v1",
 								"user",
+								"id",
 								":id",
 								"inheritance",
 								"group",
@@ -1493,19 +1500,19 @@
 							],
 							"variable": [
 								{
+									"description": "id or name of the user",
 									"key": "id",
-									"value": "user5",
-									"description": "id or name of the user"
+									"value": "user5"
 								},
 								{
+									"description": "id or name of the  group to inherit",
 									"key": "inheritgroupid",
-									"value": "group2",
-									"description": "id or name of the  group to inherit"
+									"value": "group2"
 								},
 								{
+									"description": "type of the  group to inherit",
 									"key": "inheritgrouptype",
-									"value": "group",
-									"description": "type of the  group to inherit"
+									"value": "group"
 								}
 							]
 						},
@@ -1526,7 +1533,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{TRAV}}/travelling/api/v1/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype",
+							"raw": "{{TRAV}}/travelling/api/v1/user/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype",
 							"host": [
 								"{{TRAV}}"
 							],
@@ -1535,6 +1542,7 @@
 								"api",
 								"v1",
 								"user",
+								"id",
 								":id",
 								"inheritance",
 								"group",
@@ -1708,6 +1716,142 @@
 							"name": "User",
 							"item": [
 								{
+									"name": "Edit",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"description": "The client_credentials generated OAUth2 access token.",
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer"
+											},
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"locked\": false\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{TRAV}}/travelling/api/v1/group/request/type/:type/user/:id",
+											"host": [
+												"{{TRAV}}"
+											],
+											"path": [
+												"travelling",
+												"api",
+												"v1",
+												"group",
+												"request",
+												"type",
+												":type",
+												"user",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "type",
+													"value": "accounts"
+												},
+												{
+													"key": "id",
+													"value": "user6"
+												}
+											]
+										},
+										"description": "Edit a user by it's id or username from the user's `group_request` of a particular type."
+									},
+									"response": [
+										{
+											"name": "Edit User",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"description": "The client_credentials generated OAUth2 access token.",
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer"
+													},
+													{
+														"key": "Content-Type",
+														"name": "Content-Type",
+														"value": "application/json",
+														"type": "text"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n\t\"locked\": false\n}"
+												},
+												"url": {
+													"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/user/:id",
+													"host": [
+														"{{TRAV}}"
+													],
+													"path": [
+														"travelling",
+														"api",
+														"v1",
+														"group",
+														"type",
+														":type",
+														"user",
+														":id"
+													],
+													"variable": [
+														{
+															"key": "type",
+															"value": "accounts"
+														},
+														{
+															"key": "id",
+															"value": "user6"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "content-type",
+													"value": "application/json; charset=utf-8"
+												},
+												{
+													"key": "set-cookie",
+													"value": "trav:ssid=8b65a9a7-3dc2-4690-9d1b-6b2d5ce56e77%3ATD78c7YjQLqyGFYZrT5WNg%3D%3D.bqmACTOEBKAobbdkFW%2FhPYR56dLeftgbRWh8VKve48Q; Max-Age=10000; Path=/; Expires=Mon, 16 Sep 2019 16:11:36 GMT; HttpOnly"
+												},
+												{
+													"key": "content-length",
+													"value": "693"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 16 Sep 2019 16:11:26 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"id\": \"bda05e2c-a8de-464e-949c-656e527c374c\",\n    \"username\": \"user6\",\n    \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n    \"avatar\": null,\n    \"locked\": false,\n    \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n    \"group_request\": \"superadmin\",\n    \"failed_login_attempts\": 0,\n    \"change_username\": false,\n    \"change_password\": false,\n    \"reset_password\": false,\n    \"email_verify\": false,\n    \"group_id\": \"6b88967a-1b9e-41ae-8140-9cc3969c3345\",\n    \"email\": \"jt6@abe.ai\",\n    \"created_on\": \"1568648238097\",\n    \"last_login\": null,\n    \"user_data\": null,\n    \"eprofile\": null,\n    \"group\": {\n        \"id\": \"6b88967a-1b9e-41ae-8140-9cc3969c3345\",\n        \"name\": \"group9\",\n        \"type\": \"accounts\",\n        \"allowed\": null,\n        \"inherited\": null,\n        \"is_default\": true\n    }\n}"
+										}
+									]
+								},
+								{
 									"name": "Edit Property",
 									"request": {
 										"method": "PUT",
@@ -1735,7 +1879,7 @@
 											}
 										},
 										"url": {
-											"raw": "{{TRAV}}/travelling/api/v1/group/request/type/:type/user/:id/:property",
+											"raw": "{{TRAV}}/travelling/api/v1/group/request/type/:type/user/:id/property/:property",
 											"host": [
 												"{{TRAV}}"
 											],
@@ -1749,6 +1893,7 @@
 												":type",
 												"user",
 												":id",
+												"property",
 												":property"
 											],
 											"variable": [
@@ -1849,9 +1994,69 @@
 									]
 								},
 								{
-									"name": "Edit",
+									"name": "Add Group Inheritance",
 									"request": {
 										"method": "PUT",
+										"header": [
+											{
+												"description": "The client_credentials generated OAUth2 access token.",
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer"
+											}
+										],
+										"url": {
+											"raw": "{{TRAV}}/travelling/api/v1/group/request/type/:type/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype",
+											"host": [
+												"{{TRAV}}"
+											],
+											"path": [
+												"travelling",
+												"api",
+												"v1",
+												"group",
+												"request",
+												"type",
+												":type",
+												"user",
+												":id",
+												"inheritance",
+												"group",
+												":inheritgroupid",
+												"type",
+												":inheritgrouptype"
+											],
+											"variable": [
+												{
+													"key": "type",
+													"value": "group",
+													"description": "type of group"
+												},
+												{
+													"key": "id",
+													"value": "user5",
+													"description": "id or name of the user"
+												},
+												{
+													"key": "inheritgroupid",
+													"value": "group2",
+													"description": "id or name of the  group to inherit"
+												},
+												{
+													"key": "inheritgrouptype",
+													"value": "group",
+													"description": "type of the  group to inherit"
+												}
+											]
+										},
+										"description": "Add a user to a group from the user's `group_request` of a particular type."
+									},
+									"response": []
+								},
+								{
+									"name": "Delete",
+									"request": {
+										"method": "DELETE",
 										"header": [
 											{
 												"description": "The client_credentials generated OAUth2 access token.",
@@ -1862,8 +2067,8 @@
 											{
 												"key": "Content-Type",
 												"name": "Content-Type",
-												"value": "application/json",
-												"type": "text"
+												"type": "text",
+												"value": "application/json"
 											}
 										],
 										"body": {
@@ -1894,15 +2099,15 @@
 											"variable": [
 												{
 													"key": "type",
-													"value": "accounts"
+													"value": "testgroup"
 												},
 												{
 													"key": "id",
-													"value": "user6"
+													"value": "user69"
 												}
 											]
 										},
-										"description": "Edit a user by it's id or username from the user's `group_request` of a particular type."
+										"description": "Delete a user by it's id or username from the user's `group_request` of a particular type."
 									},
 									"response": [
 										{
@@ -2123,7 +2328,7 @@
 											}
 										],
 										"url": {
-											"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/user/:id/:property",
+											"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/user/:id/property/:property",
 											"host": [
 												"{{TRAV}}"
 											],
@@ -2136,6 +2341,7 @@
 												":type",
 												"user",
 												":id",
+												"property",
 												":property"
 											],
 											"variable": [
@@ -2392,7 +2598,7 @@
 											}
 										},
 										"url": {
-											"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/user/:id/:property",
+											"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/user/:id/property/:property",
 											"host": [
 												"{{TRAV}}"
 											],
@@ -2405,6 +2611,7 @@
 												":type",
 												"user",
 												":id",
+												"property",
 												":property"
 											],
 											"variable": [
@@ -2519,7 +2726,7 @@
 											}
 										],
 										"url": {
-											"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/user/:id/:property/:value",
+											"raw": "{{TRAV}}/travelling/api/v1/group/type/:type/user/:id/property/:property/:value",
 											"host": [
 												"{{TRAV}}"
 											],
@@ -2532,6 +2739,7 @@
 												":type",
 												"user",
 												":id",
+												"property",
 												":property",
 												":value"
 											],
@@ -3642,7 +3850,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/type/:type/inherit/from/:inherited",
+									"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/type/:type/inherit/from/:inherited/type/:grouptype",
 									"host": [
 										"{{TRAV}}"
 									],
@@ -3657,7 +3865,9 @@
 										":type",
 										"inherit",
 										"from",
-										":inherited"
+										":inherited",
+										"type",
+										":grouptype"
 									],
 									"variable": [
 										{
@@ -3674,6 +3884,11 @@
 											"key": "inherited",
 											"value": "test123",
 											"description": "Name of the group to inherit from"
+										},
+										{
+											"key": "grouptype",
+											"value": "",
+											"description": "The type of the inherited group"
 										}
 									]
 								},
@@ -3694,7 +3909,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/type/:type/remove/inheritance/:inherited",
+									"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/type/:type/remove/inheritance/:inherited/type/:grouptype",
 									"host": [
 										"{{TRAV}}"
 									],
@@ -3709,7 +3924,9 @@
 										":type",
 										"remove",
 										"inheritance",
-										":inherited"
+										":inherited",
+										"type",
+										":grouptype"
 									],
 									"variable": [
 										{
@@ -3726,6 +3943,11 @@
 											"key": "inherited",
 											"value": "superadmin",
 											"description": "Name of the group to inherit from"
+										},
+										{
+											"key": "grouptype",
+											"value": "",
+											"description": "The type of the inherited group"
 										}
 									]
 								},
@@ -4396,7 +4618,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/group/id/:group/type/:type/user/:id/:property",
+									"raw": "{{TRAV}}/travelling/api/v1/group/id/:group/type/:type/user/:id/property/:property",
 									"host": [
 										"{{TRAV}}"
 									],
@@ -4411,6 +4633,7 @@
 										":type",
 										"user",
 										":id",
+										"property",
 										":property"
 									],
 									"variable": [
@@ -4679,7 +4902,7 @@
 									}
 								},
 								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/group/id/:group/type/:type/user/:id/:property",
+									"raw": "{{TRAV}}/travelling/api/v1/group/id/:group/type/:type/user/:id/property/:property",
 									"host": [
 										"{{TRAV}}"
 									],
@@ -4694,6 +4917,7 @@
 										":type",
 										"user",
 										":id",
+										"property",
 										":property"
 									],
 									"variable": [
@@ -4813,7 +5037,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{TRAV}}/travelling/api/v1/group/id/:group/type/:type/user/:id/:property/:value",
+									"raw": "{{TRAV}}/travelling/api/v1/group/id/:group/type/:type/user/:id/property/:property/:value",
 									"host": [
 										"{{TRAV}}"
 									],
@@ -4828,6 +5052,7 @@
 										":type",
 										"user",
 										":id",
+										"property",
 										":property",
 										":value"
 									],
@@ -5812,7 +6037,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/inherit/from/:inherited",
+							"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/inherit/from/:inherited/type/:grouptype",
 							"host": [
 								"{{TRAV}}"
 							],
@@ -5825,7 +6050,9 @@
 								":id",
 								"inherit",
 								"from",
-								":inherited"
+								":inherited",
+								"type",
+								":grouptype"
 							],
 							"variable": [
 								{
@@ -5837,6 +6064,11 @@
 									"key": "inherited",
 									"value": "group4",
 									"description": "Name of the group to inherit from"
+								},
+								{
+									"key": "grouptype",
+									"value": "",
+									"description": "The type of the inherited group"
 								}
 							]
 						},
@@ -5929,7 +6161,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/remove/inheritance/:inherited",
+							"raw": "{{TRAV}}/travelling/api/v1/group/id/:id/remove/inheritance/:inherited/type/:grouptype",
 							"host": [
 								"{{TRAV}}"
 							],
@@ -5942,7 +6174,9 @@
 								":id",
 								"remove",
 								"inheritance",
-								":inherited"
+								":inherited",
+								"type",
+								":grouptype"
 							],
 							"variable": [
 								{
@@ -5954,6 +6188,11 @@
 									"key": "inherited",
 									"value": "group4",
 									"description": "Name of the group to inherit from"
+								},
+								{
+									"key": "grouptype",
+									"value": "",
+									"description": "The type of the inherited group"
 								}
 							]
 						},

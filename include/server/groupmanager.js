@@ -11,7 +11,7 @@ class GroupManager {
             return GroupManager.instance;
         }
 
-        this.groups = [];
+        this.mergedRoutes = [];
         this.unmergedGroups = [];
         this.mappedGroups = {};
         this.redis = redis;
@@ -31,7 +31,12 @@ class GroupManager {
         for (var i = 0; i < grps.length; i++) {
             this.unmergedGroups.push(grps[i]);
             this.mappedGroups[grps[i].id] = new Group(grps[i]._);
-            this.groups[grps[i].name] = this.groupInheritedMerge(new Group(grps[i]._), grps);
+
+            if (!this.mergedRoutes[grps[i].type]) {
+                this.mergedRoutes[grps[i].type] = {};
+            }
+
+            this.mergedRoutes[grps[i].type][grps[i].name] = this.groupInheritedMerge(new Group(grps[i]._), grps);
         }
 
         this.redis.needsGroupUpdate = false;
@@ -42,7 +47,7 @@ class GroupManager {
         await this.updateGroupsIfNeeeded();
 
         if (!req.isAuthenticated) {
-            return [{routes: this.groups['anonymous'], group: {name: 'anonymous', type: 'group'}}];
+            return [{routes: this.mergedRoutes['group']['anonymous'], group: {name: 'anonymous', type: 'group'}}];
         }
 
         var mroutes = [];
@@ -50,7 +55,7 @@ class GroupManager {
         for (var i = 0; i < req.session.data.user.groups.length; i++) {
             const group = req.session.data.user.groups[i];
 
-            mroutes.push({routes: this.groups[group.name], group: {name: group.name, type: group.type}});
+            mroutes.push({routes: this.mergedRoutes[group.type][group.name], group: {name: group.name, type: group.type}});
         }
 
         return mroutes;

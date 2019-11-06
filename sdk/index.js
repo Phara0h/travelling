@@ -608,14 +608,15 @@ class Group {
      * removeInheritance - Removes an inheritance from a group.
      * @param {any} id Name of the group (example: test1234)
      * @param {any} inherited Name of the group to inherit from (example: group4)
+     * @param {any} grouptype The type of the inherited group 
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
-    static async removeInheritance(id, inherited, authorization_bearer, opts) {
+    static async removeInheritance(id, inherited, grouptype, authorization_bearer, opts) {
         var options = {
             method: 'DELETE',
             resolveWithFullResponse: true,
             simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/group/id/${id}/remove/inheritance/${inherited}`,
+            uri: hostUrl + "/" + `travelling/api/v1/group/id/${id}/remove/inheritance/${inherited}/type/${grouptype}`,
             authorization: {
                 bearer: authorization_bearer
             },
@@ -631,14 +632,15 @@ class Group {
      * inheritFrom - Adds an inheritance to a group.
      * @param {any} id Name of the group (example: test1234)
      * @param {any} inherited Name of the group to inherit from (example: group4)
+     * @param {any} grouptype The type of the inherited group 
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
-    static async inheritFrom(id, inherited, authorization_bearer, opts) {
+    static async inheritFrom(id, inherited, grouptype, authorization_bearer, opts) {
         var options = {
             method: 'PUT',
             resolveWithFullResponse: true,
             simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/group/id/${id}/inherit/from/${inherited}`,
+            uri: hostUrl + "/" + `travelling/api/v1/group/id/${id}/inherit/from/${inherited}/type/${grouptype}`,
             authorization: {
                 bearer: authorization_bearer
             },
@@ -1039,7 +1041,7 @@ class GroupUser {
             method: 'PUT',
             resolveWithFullResponse: true,
             simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/group/id/${group}/type/${type}/user/${id}/${property}/${value}`,
+            uri: hostUrl + "/" + `travelling/api/v1/group/id/${group}/type/${type}/user/${id}/property/${property}/${value}`,
             authorization: {
                 bearer: authorization_bearer
             },
@@ -1072,7 +1074,7 @@ class GroupUser {
             method: 'PUT',
             resolveWithFullResponse: true,
             simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/group/id/${group}/type/${type}/user/${id}/${property}`,
+            uri: hostUrl + "/" + `travelling/api/v1/group/id/${group}/type/${type}/user/${id}/property/${property}`,
             body,
             authorization: {
                 bearer: authorization_bearer
@@ -1133,7 +1135,7 @@ class GroupUser {
             method: 'GET',
             resolveWithFullResponse: true,
             simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/group/id/${group}/type/${type}/user/${id}/${property}`,
+            uri: hostUrl + "/" + `travelling/api/v1/group/id/${group}/type/${type}/user/${id}/property/${property}`,
             authorization: {
                 bearer: authorization_bearer
             },
@@ -1274,14 +1276,15 @@ class GroupType {
      * @param {any} id Name of the group (example: test1234)
      * @param {any} type The type of the group (example: accounts)
      * @param {any} inherited Name of the group to inherit from (example: superadmin)
+     * @param {any} grouptype The type of the inherited group 
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
-    static async removeInheritance(id, type, inherited, authorization_bearer, opts) {
+    static async removeInheritance(id, type, inherited, grouptype, authorization_bearer, opts) {
         var options = {
             method: 'DELETE',
             resolveWithFullResponse: true,
             simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/group/id/${id}/type/${type}/remove/inheritance/${inherited}`,
+            uri: hostUrl + "/" + `travelling/api/v1/group/id/${id}/type/${type}/remove/inheritance/${inherited}/type/${grouptype}`,
             authorization: {
                 bearer: authorization_bearer
             },
@@ -1298,14 +1301,15 @@ class GroupType {
      * @param {any} id Name of the group (example: group1)
      * @param {any} type The type of the group (example: testgroup)
      * @param {any} inherited Name of the group to inherit from (example: test123)
+     * @param {any} grouptype The type of the inherited group 
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
-    static async inheritFrom(id, type, inherited, authorization_bearer, opts) {
+    static async inheritFrom(id, type, inherited, grouptype, authorization_bearer, opts) {
         var options = {
             method: 'PUT',
             resolveWithFullResponse: true,
             simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/group/id/${id}/type/${type}/inherit/from/${inherited}`,
+            uri: hostUrl + "/" + `travelling/api/v1/group/id/${id}/type/${type}/inherit/from/${inherited}/type/${grouptype}`,
             authorization: {
                 bearer: authorization_bearer
             },
@@ -1661,7 +1665,7 @@ class GroupTypeUser {
             method: 'PUT',
             resolveWithFullResponse: true,
             simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/group/type/${type}/user/${id}/${property}/${value}`,
+            uri: hostUrl + "/" + `travelling/api/v1/group/type/${type}/user/${id}/property/${property}/${value}`,
             authorization: {
                 bearer: authorization_bearer
             },
@@ -1693,7 +1697,7 @@ class GroupTypeUser {
             method: 'PUT',
             resolveWithFullResponse: true,
             simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/group/type/${type}/user/${id}/${property}`,
+            uri: hostUrl + "/" + `travelling/api/v1/group/type/${type}/user/${id}/property/${property}`,
             body,
             authorization: {
                 bearer: authorization_bearer
@@ -1752,7 +1756,7 @@ class GroupTypeUser {
             method: 'GET',
             resolveWithFullResponse: true,
             simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/group/type/${type}/user/${id}/${property}`,
+            uri: hostUrl + "/" + `travelling/api/v1/group/type/${type}/user/${id}/property/${property}`,
             authorization: {
                 bearer: authorization_bearer
             },
@@ -1804,10 +1808,10 @@ class GroupRequestUser {
 
 
     /**
-     * edit - Edit a user by it's id or username from the user's `group_request` of a particular type.
+     * delete - Delete a user by it's id or username from the user's `group_request` of a particular type.
      * @param {Object} body
-     * @param {any} type  (example: accounts)
-     * @param {any} id  (example: user6)
+     * @param {any} type  (example: testgroup)
+     * @param {any} id  (example: user69)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      * @example
      * body
@@ -1817,9 +1821,9 @@ class GroupRequestUser {
      * }
      * ```
      */
-    static async edit(body, type, id, authorization_bearer, opts) {
+    static async delete(body, type, id, authorization_bearer, opts) {
         var options = {
-            method: 'PUT',
+            method: 'DELETE',
             resolveWithFullResponse: true,
             simple: false,
             uri: hostUrl + "/" + `travelling/api/v1/group/request/type/${type}/user/${id}`,
@@ -1828,6 +1832,31 @@ class GroupRequestUser {
                 bearer: authorization_bearer
             },
             json: true,
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+
+
+    /**
+     * addGroupInheritance - Add a user to a group from the user's `group_request` of a particular type.
+     * @param {any} type type of group (example: group)
+     * @param {any} id id or name of the user (example: user5)
+     * @param {any} inheritgroupid id or name of the  group to inherit (example: group2)
+     * @param {any} inheritgrouptype type of the  group to inherit (example: group)
+     * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+     */
+    static async addGroupInheritance(type, id, inheritgroupid, inheritgrouptype, authorization_bearer, opts) {
+        var options = {
+            method: 'PUT',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/group/request/type/${type}/user/${id}/inheritance/group/${inheritgroupid}/type/${inheritgrouptype}`,
+            authorization: {
+                bearer: authorization_bearer
+            },
         };
         if (opts) {
             options = Object.assign(options, opts);
@@ -1856,7 +1885,40 @@ class GroupRequestUser {
             method: 'PUT',
             resolveWithFullResponse: true,
             simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/group/request/type/${type}/user/${id}/${property}`,
+            uri: hostUrl + "/" + `travelling/api/v1/group/request/type/${type}/user/${id}/property/${property}`,
+            body,
+            authorization: {
+                bearer: authorization_bearer
+            },
+            json: true,
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+
+
+    /**
+     * edit - Edit a user by it's id or username from the user's `group_request` of a particular type.
+     * @param {Object} body
+     * @param {any} type  (example: accounts)
+     * @param {any} id  (example: user6)
+     * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+     * @example
+     * body
+     * ```js
+     * {
+     *     "locked": false
+     * }
+     * ```
+     */
+    static async edit(body, type, id, authorization_bearer, opts) {
+        var options = {
+            method: 'PUT',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/group/request/type/${type}/user/${id}`,
             body,
             authorization: {
                 bearer: authorization_bearer
@@ -1997,7 +2059,7 @@ class User {
             method: 'DELETE',
             resolveWithFullResponse: true,
             simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/user/${id}/inheritance/group/${inheritgroupid}/type/${inheritgrouptype}`,
+            uri: hostUrl + "/" + `travelling/api/v1/user/id/${id}/inheritance/group/${inheritgroupid}/type/${inheritgrouptype}`,
             authorization: {
                 bearer: authorization_bearer
             },
@@ -2021,7 +2083,7 @@ class User {
             method: 'PUT',
             resolveWithFullResponse: true,
             simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/user/${id}/inheritance/group/${inheritgroupid}/type/${inheritgrouptype}`,
+            uri: hostUrl + "/" + `travelling/api/v1/user/id/${id}/inheritance/group/${inheritgroupid}/type/${inheritgrouptype}`,
             authorization: {
                 bearer: authorization_bearer
             },
@@ -2045,7 +2107,7 @@ class User {
             method: 'PUT',
             resolveWithFullResponse: true,
             simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/user/id/${id}/${property}/${value}`,
+            uri: hostUrl + "/" + `travelling/api/v1/user/id/${id}/property/${property}/${value}`,
             authorization: {
                 bearer: authorization_bearer
             },
@@ -2061,7 +2123,7 @@ class User {
      * editProperty - Edit a user's property by id.
      * @param {Object} body
      * @param {any} id Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA)
-     * @param {any} prop  (example: username)
+     * @param {any} property  
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      * @example
      * body
@@ -2069,12 +2131,12 @@ class User {
      * user6
      * ```
      */
-    static async editProperty(body, id, prop, authorization_bearer, opts) {
+    static async editProperty(body, id, property, authorization_bearer, opts) {
         var options = {
             method: 'PUT',
             resolveWithFullResponse: true,
             simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/user/id/${id}/${prop}`,
+            uri: hostUrl + "/" + `travelling/api/v1/user/id/${id}/property/${property}`,
             body,
             json: true,
             authorization: {
@@ -2124,15 +2186,15 @@ class User {
     /**
      * getProperty - Get a user's property by it's id.
      * @param {any} id Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA)
-     * @param {any} prop  (example: username)
+     * @param {any} property  
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
-    static async getProperty(id, prop, authorization_bearer, opts) {
+    static async getProperty(id, property, authorization_bearer, opts) {
         var options = {
             method: 'GET',
             resolveWithFullResponse: true,
             simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/user/id/${id}/${prop}`,
+            uri: hostUrl + "/" + `travelling/api/v1/user/id/${id}/property/${property}`,
             authorization: {
                 bearer: authorization_bearer
             },
@@ -2233,7 +2295,7 @@ class UserCurrent {
             method: 'PUT',
             resolveWithFullResponse: true,
             simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/user/me/${property}/${value}`,
+            uri: hostUrl + "/" + `travelling/api/v1/user/me/property/${property}/${value}`,
             authorization: {
                 bearer: authorization_bearer
             },
@@ -2263,7 +2325,7 @@ class UserCurrent {
             method: 'PUT',
             resolveWithFullResponse: true,
             simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/user/me/${property}`,
+            uri: hostUrl + "/" + `travelling/api/v1/user/me/property/${property}`,
             body,
             json: true,
             authorization: {
@@ -2372,7 +2434,7 @@ class UserCurrent {
             method: 'GET',
             resolveWithFullResponse: true,
             simple: false,
-            uri: hostUrl + "/" + `travelling/api/v1/user/me/${property}`,
+            uri: hostUrl + "/" + `travelling/api/v1/user/me/property/${property}`,
             authorization: {
                 bearer: authorization_bearer
             },
@@ -2387,7 +2449,7 @@ class UserCurrent {
     /**
      * routeCheck - Checks if current logged in user can access the route with method.
      * @param {any} method  (example: get)
-     * @param {any} route  (example: /travelling/api/v1/users/me)
+     * @param {any} route  (example:  /travelling/api/v1/group/request/type/anonymous/user/)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
     static async routeCheck(method, route, authorization_bearer, opts) {
