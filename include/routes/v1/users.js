@@ -66,11 +66,11 @@ async function updateSessionUser(user, req) {
         await req.sessionStore.set(session.sessionId, session);
     }
 }
-async function getGroup(res, req) {
+async function getGroup(req, res) {
     var group = null;
 
-    if (req.params.groupid && req.params.grouptype) {
-        group = await gm.getGroup(req.params.groupid, req.params.grouptype);
+    if (req.params.groupid) {
+        group = await gm.getGroup(req.params.groupid, req.params.grouptype || 'group');
     }
 
     if (!group) {
@@ -79,12 +79,12 @@ async function getGroup(res, req) {
             msg: 'No group with that type by that name or id was found.',
         };
     }
+
+    return group;
 }
-async function addRemoveGroupInheritance(user, group, add = true) {
-    if (user && user.length > 0) {
-
-        user = user[0];
-
+async function addRemoveGroupInheritance(user, group, add = true, req) {
+    if (user) {
+        console.log(group);
         user = add ? await user.addGroup(group) : await user.removeGroup(group);
 
         if (!user) {
@@ -93,9 +93,12 @@ async function addRemoveGroupInheritance(user, group, add = true) {
                 msg: `User could not ${add ? 'add' : 'remove'} group.`,
             };
         }
-        await updateSessionUser(user);
+        await updateSessionUser(user, req);
         return user;
     }
+
+    console.log(user);
+
     return {
         type: 'user-edit-error',
         msg: 'No user by that username or id was found.',
@@ -257,11 +260,12 @@ function routes(app, opts, done) {
     // };
 
     app.get('/user/id/:id', async (req, res)=>{return await getUser(req, res, router);});
-    app.get('/user/id/:id/:prop', async (req, res)=>{return await getUser(req, res, router);});
+    app.get('/user/id/:id/property/:prop', async (req, res)=>{return await getUser(req, res, router);});
 
     app.put('/user/id/:id/inheritance/group/:groupid/type/:grouptype', async (req, res) => {
         const group = await getGroup(req, res);
 
+        console.log(group);
         if (group && group.msg) {
             res.code(400);
             return group;
@@ -274,7 +278,7 @@ function routes(app, opts, done) {
             return user;
         }
 
-        user = await addRemoveGroupInheritance(user, group, true);
+        user = await addRemoveGroupInheritance(user, group, true, req);
         res.code(user && user.msg ? 400 : 200);
 
         return user;
@@ -295,15 +299,15 @@ function routes(app, opts, done) {
             return user;
         }
 
-        user = await addRemoveGroupInheritance(user, group, false);
+        user = await addRemoveGroupInheritance(user, group, false, req);
         res.code(user && user.msg ? 400 : 200);
 
         return user;
     });
 
     app.put('/user/id/:id', async (req, res)=>{return await editUser(req, res, router);});
-    app.put('/user/id/:id/:prop', async (req, res)=>{return await editUser(req, res, router);});
-    app.put('/user/id/:id/:prop/:propdata', async (req, res)=>{return await editUser(req, res, router);});
+    app.put('/user/id/:id/property/:prop', async (req, res)=>{return await editUser(req, res, router);});
+    app.put('/user/id/:id/property/:prop/:propdata', async (req, res)=>{return await editUser(req, res, router);});
 
     app.delete('/user/id/:id', async (req, res)=>{return await deleteUser(req, res, router);});
 
@@ -338,7 +342,7 @@ function routes(app, opts, done) {
         res.send(req.session.data.user);
     });
 
-    app.get('/user/me/:prop', (req, res) => {
+    app.get('/user/me/property/:prop', (req, res) => {
         if (req.session.data.user[req.params.prop] !== undefined) {
             res.code(200).send(req.session.data.user[req.params.prop]);
         } else {
@@ -359,14 +363,14 @@ function routes(app, opts, done) {
             return group;
         }
 
-        const user = await getUser(req, res);
+        let user = await getUser(req, res);
 
         if (user && user.msg) {
             res.code(400);
             return user;
         }
 
-        user = await addRemoveGroupInheritance(user, group, true);
+        user = await addRemoveGroupInheritance(user, group, true, req);
         res.code(user && user.msg ? 400 : 200);
 
         return user;
@@ -389,7 +393,7 @@ function routes(app, opts, done) {
             return user;
         }
 
-        user = await addRemoveGroupInheritance(user, group, false);
+        user = await addRemoveGroupInheritance(user, group, false, req);
         res.code(user && user.msg ? 400 : 200);
 
         return user;
@@ -400,12 +404,12 @@ function routes(app, opts, done) {
         return await editUser(req, res, router);
     });
 
-    app.put('/user/me/:prop', async (req, res) => {
+    app.put('/user/me/property/:prop', async (req, res) => {
         req.params.id = req.session.data.user.id;
         return await editUser(req, res, router);
     });
 
-    app.put('/user/me/:prop/:propdata', async (req, res) => {
+    app.put('/user/me/property/:prop/:propdata', async (req, res) => {
         req.params.id = req.session.data.user.id;
         return await editUser(req, res, router);
     });
@@ -492,4 +496,5 @@ module.exports = {
     getUser,
     deleteUser,
     editUser,
+    addRemoveGroupInheritance,
 };

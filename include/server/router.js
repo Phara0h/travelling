@@ -268,6 +268,7 @@ class Router {
                     prop = user.email || prop;
                     break;
                 case ':grouptype':
+                    console.log(group,path)
                     prop = group.type || prop;
                     break;
                 case ':group':

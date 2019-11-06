@@ -95,23 +95,34 @@ class User extends Base(BaseModel, 'users', {
     }
 
     async addGroup(group) {
-        if (this.groups_id.indexOf(group.id) > -1) {
+
+        if (this.group_ids && this.group_ids.indexOf(group.id) > -1) {
             return false;
         }
-        this.groups_id.push(group.id);
-        this.groups_id = [...this.groups_id];
+
+        if (!this.group_ids) {
+            this.group_ids = [];
+        }
+
+        this.group_ids.push(group.id);
+        this.group_ids = [...this.group_ids];
 
         return await this.save();
     }
 
     async removeGroup(group) {
-        var found = this.groups_id.indexOf(group.id);
+
+        if (!this.group_ids) {
+            return false;
+        }
+
+        var found = this.group_ids.indexOf(group.id);
 
         if (found == -1) {
             return false;
         }
-        this.groups_id.splice(found, 1);
-        this.groups_id = [...this.groups_id];
+        this.group_ids.splice(found, 1);
+        this.group_ids = [...this.group_ids];
 
         return await this.save();
     }

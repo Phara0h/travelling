@@ -109,7 +109,7 @@ module.exports = () => {
 
             test('Group 1 to Inherit Superadmin', async () => {
                 var superadmin = (await Travelling.Group.get('superadmin', userContainer.user1Token)).body.id;
-                var res = await Travelling.Group.Type.inheritFrom('group1', 'testgroup', 'superadmin', userContainer.user1Token);
+                var res = await Travelling.Group.Type.inheritFrom('group1', 'testgroup', 'superadmin', 'group', userContainer.user1Token);
 
 
                 expect(res.statusCode).toEqual(200);
@@ -118,7 +118,7 @@ module.exports = () => {
 
             test('Group 1 to Remove Inheritance by Group Type of Superadmin ', async () => {
 
-                var res = await Travelling.Group.Type.removeInheritance('group1', 'testgroup', 'superadmin', userContainer.user1Token)
+                var res = await Travelling.Group.Type.removeInheritance('group1', 'testgroup', 'superadmin', 'group', userContainer.user1Token)
 
 
                 expect(res.statusCode).toEqual(200);
@@ -126,10 +126,10 @@ module.exports = () => {
             });
 
             test('Group 1 to Remove Inheritance of Superadmin ', async () => {
-                var res = await Travelling.Group.inheritFrom('group2', 'superadmin', userContainer.user1Token);
+                var res = await Travelling.Group.inheritFrom('group2', 'superadmin', 'group', userContainer.user1Token);
                 expect(res.statusCode).toEqual(200);
 
-                res = await Travelling.Group.removeInheritance('group2', 'superadmin', userContainer.user1Token)
+                res = await Travelling.Group.removeInheritance('group2', 'superadmin', 'group', userContainer.user1Token)
 
                 expect(res.statusCode).toEqual(200);
                 expect(res.body).toMatchObject({name:'group2', id: expect.any(String), is_default: false, inherited:[group1.id]});
