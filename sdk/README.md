@@ -50,6 +50,7 @@
 
 ### Travelling.healthCheck(authorization_bearer)
 healthCheck - server's health check
+Path: travelling/_health
 
 **Kind**: static method of [<code>Travelling</code>](#Travelling)  
 
@@ -61,6 +62,7 @@ healthCheck - server's health check
 
 ### Travelling.metrics(authorization_bearer)
 metrics - servers metrics
+Path: travelling/metrics
 
 **Kind**: static method of [<code>Travelling</code>](#Travelling)  
 
@@ -76,6 +78,7 @@ metrics - servers metrics
 
 ### Config.getProperty(property, authorization_bearer)
 getProperty - Gets a property from travellings config.
+Path: travelling/api/v1/config/:property
 
 **Kind**: static method of [<code>Config</code>](#Config)  
 
@@ -98,6 +101,7 @@ getProperty - Gets a property from travellings config.
 
 ### Groups.export(authorization_bearer)
 export - Exports all groups in the proper format to be imported.
+Path: travelling/api/v1/groups/export
 
 **Kind**: static method of [<code>Groups</code>](#Groups)  
 
@@ -109,6 +113,7 @@ export - Exports all groups in the proper format to be imported.
 
 ### Groups.import(body, authorization_bearer)
 import - Imports all groups from the exported format.
+Path: travelling/api/v1/groups/import
 
 **Kind**: static method of [<code>Groups</code>](#Groups)  
 
@@ -237,6 +242,7 @@ body
 
 ### Groups.get(authorization_bearer)
 get - Get all the groups
+Path: travelling/api/v1/groups
 
 **Kind**: static method of [<code>Groups</code>](#Groups)  
 
@@ -257,6 +263,7 @@ get - Get all the groups
 
 ### GroupsType.all(type, authorization_bearer)
 all - Gets all groups of a particular type
+Path: travelling/api/v1/groups/type/:type
 
 **Kind**: static method of [<code>GroupsType</code>](#GroupsType)  
 
@@ -269,6 +276,7 @@ all - Gets all groups of a particular type
 
 ### GroupsType.getTypesList(authorization_bearer)
 getTypesList - Gets all the types of groups currently made.
+Path: travelling/api/v1/groups/types
 
 **Kind**: static method of [<code>GroupsType</code>](#GroupsType)  
 
@@ -298,6 +306,7 @@ getTypesList - Gets all the types of groups currently made.
 
 ### Group.addPermission(id, permission, authorization_bearer)
 addPermission - Adds a permission to a group.
+Path: travelling/api/v1/group/id/:id/insert/permission/:permission
 
 **Kind**: static method of [<code>Group</code>](#Group)  
 
@@ -311,6 +320,7 @@ addPermission - Adds a permission to a group.
 
 ### Group.deletePermission(id, permission, authorization_bearer)
 deletePermission - Removes a permission/route from a group.
+Path: travelling/api/v1/group/id/:id/permission/:permission
 
 **Kind**: static method of [<code>Group</code>](#Group)  
 
@@ -334,6 +344,7 @@ addRoute - Adds a route to a group.
         "name": "test-permissions-*"  // Required and needs to be unqiue, defaults to method + route seperated by '-' instead of `/`
     }
     ```
+Path: travelling/api/v1/group/id/:id/insert/route
 
 **Kind**: static method of [<code>Group</code>](#Group)  
 
@@ -357,6 +368,7 @@ body
 
 ### Group.removeInheritance(id, inherited, grouptype, authorization_bearer)
 removeInheritance - Removes an inheritance from a group.
+Path: travelling/api/v1/group/id/:id/remove/inheritance/:inherited/type/:grouptype
 
 **Kind**: static method of [<code>Group</code>](#Group)  
 
@@ -371,6 +383,7 @@ removeInheritance - Removes an inheritance from a group.
 
 ### Group.inheritFrom(id, inherited, grouptype, authorization_bearer)
 inheritFrom - Adds an inheritance to a group.
+Path: travelling/api/v1/group/id/:id/inherit/from/:inherited/type/:grouptype
 
 **Kind**: static method of [<code>Group</code>](#Group)  
 
@@ -385,6 +398,7 @@ inheritFrom - Adds an inheritance to a group.
 
 ### Group.setDefault(id, authorization_bearer)
 setDefault - Sets the group to be the default group for new users.
+Path: travelling/api/v1/group/id/:id/set/default
 
 **Kind**: static method of [<code>Group</code>](#Group)  
 
@@ -397,6 +411,7 @@ setDefault - Sets the group to be the default group for new users.
 
 ### Group.delete(id, authorization_bearer)
 delete - delete group by its id or name
+Path: travelling/api/v1/group/id/:id
 
 **Kind**: static method of [<code>Group</code>](#Group)  
 
@@ -409,6 +424,7 @@ delete - delete group by its id or name
 
 ### Group.edit(body, id, authorization_bearer)
 edit - Edits a group
+Path: travelling/api/v1/group/id/:id
 
 **Kind**: static method of [<code>Group</code>](#Group)  
 
@@ -466,6 +482,7 @@ body
 
 ### Group.get(id, authorization_bearer)
 get - Get a group by it's id or name.
+Path: travelling/api/v1/group/id/:id
 
 **Kind**: static method of [<code>Group</code>](#Group)  
 
@@ -478,6 +495,7 @@ get - Get a group by it's id or name.
 
 ### Group.createByName(id, authorization_bearer)
 createByName - Add a new blank group with the set name.
+Path: travelling/api/v1/group/id/:id
 
 **Kind**: static method of [<code>Group</code>](#Group)  
 
@@ -490,6 +508,7 @@ createByName - Add a new blank group with the set name.
 
 ### Group.create(body, authorization_bearer)
 create - Add a new group
+Path: travelling/api/v1/group
 
 **Kind**: static method of [<code>Group</code>](#Group)  
 
@@ -546,6 +565,7 @@ inherited - Gets all the users that belong to the group and all of its inherited
     | email | *optional* (example:  test@test.ai) |
     | created_on | *optional* (example:  1568419646794) |
     | last_login | *optional* (example:  null) |
+Path: travelling/api/v1/group/id/:id/users/inherited
 
 **Kind**: static method of [<code>GroupUsers</code>](#GroupUsers)  
 
@@ -576,6 +596,7 @@ get - Gets all the users that belong to the group.
     | email | *optional* (example:  test@test.ai) |
     | created_on | *optional* (example:  1568419646794) |
     | last_login | *optional* (example:  null) |
+Path: travelling/api/v1/group/id/:id/users
 
 **Kind**: static method of [<code>GroupUsers</code>](#GroupUsers)  
 
@@ -602,6 +623,7 @@ get - Gets all the users that belong to the group.
 
 ### GroupUser.delete(group, type, id, authorization_bearer)
 delete - Delete a user by it's id or username from group of a particular type.
+Path: travelling/api/v1/group/id/:group/type/:type/user/:id
 
 **Kind**: static method of [<code>GroupUser</code>](#GroupUser)  
 
@@ -616,6 +638,7 @@ delete - Delete a user by it's id or username from group of a particular type.
 
 ### GroupUser.removeGroupInheritance(group, type, id, inheritgroupid, inheritgrouptype, authorization_bearer)
 removeGroupInheritance - Remove a user to a group of a particular type of group.
+Path: travelling/api/v1/group/id/:group/type/:type/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype
 
 **Kind**: static method of [<code>GroupUser</code>](#GroupUser)  
 
@@ -632,6 +655,7 @@ removeGroupInheritance - Remove a user to a group of a particular type of group.
 
 ### GroupUser.addGroupInheritance(group, type, id, inheritgroupid, inheritgrouptype, authorization_bearer)
 addGroupInheritance - Add a group for the current user from a group of a particular type.
+Path: travelling/api/v1/group/id/:group/type/:type/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype
 
 **Kind**: static method of [<code>GroupUser</code>](#GroupUser)  
 
@@ -648,6 +672,7 @@ addGroupInheritance - Add a group for the current user from a group of a particu
 
 ### GroupUser.editPropertyValue(group, type, id, property, value, authorization_bearer)
 editPropertyValue - Edit a current user's property data as a path param from a group of a particular type.
+Path: travelling/api/v1/group/id/:group/type/:type/user/:id/property/:property/:value
 
 **Kind**: static method of [<code>GroupUser</code>](#GroupUser)  
 
@@ -664,6 +689,7 @@ editPropertyValue - Edit a current user's property data as a path param from a g
 
 ### GroupUser.editProperty(body, group, type, id, property, authorization_bearer)
 editProperty - Edit a user's property by it's id or username from a group of a particular type.
+Path: travelling/api/v1/group/id/:group/type/:type/user/:id/property/:property
 
 **Kind**: static method of [<code>GroupUser</code>](#GroupUser)  
 
@@ -687,6 +713,7 @@ body
 
 ### GroupUser.edit(body, group, type, id, authorization_bearer)
 edit - Edit a user by it's id or username from group of a particular type.
+Path: travelling/api/v1/group/id/:group/type/:type/user/:id
 
 **Kind**: static method of [<code>GroupUser</code>](#GroupUser)  
 
@@ -709,6 +736,7 @@ body
 
 ### GroupUser.getProperty(group, type, id, property, authorization_bearer)
 getProperty - Get a user's property by it's id or username from group of a particular type.
+Path: travelling/api/v1/group/id/:group/type/:type/user/:id/property/:property
 
 **Kind**: static method of [<code>GroupUser</code>](#GroupUser)  
 
@@ -724,6 +752,7 @@ getProperty - Get a user's property by it's id or username from group of a parti
 
 ### GroupUser.get(group, type, id, authorization_bearer)
 get - Get a user by it's id or username from group of a particular type.
+Path: travelling/api/v1/group/id/:group/type/:type/user/:id
 
 **Kind**: static method of [<code>GroupUser</code>](#GroupUser)  
 
@@ -756,6 +785,7 @@ get - Get a user by it's id or username from group of a particular type.
 
 ### GroupType.deletePermission(id, type, permission, authorization_bearer)
 deletePermission - Removes a permission/route from a group of a particular type.
+Path: travelling/api/v1/group/id/:id/type/:type/permission/:permission
 
 **Kind**: static method of [<code>GroupType</code>](#GroupType)  
 
@@ -770,6 +800,7 @@ deletePermission - Removes a permission/route from a group of a particular type.
 
 ### GroupType.addPermission(id, type, permission, authorization_bearer)
 addPermission - Adds a permission to a group of a particular type.
+Path: travelling/api/v1/group/id/:id/type/:type/insert/permission/:permission
 
 **Kind**: static method of [<code>GroupType</code>](#GroupType)  
 
@@ -794,6 +825,7 @@ addRoute - Adds a route to a group of a particular type.
         "name": "test-permissions-*"  // Required and needs to be unqiue, defaults to method + route seperated by '-' instead of `/`
     }
     ```
+Path: travelling/api/v1/group/id/:id/type/:type/insert/route
 
 **Kind**: static method of [<code>GroupType</code>](#GroupType)  
 
@@ -818,6 +850,7 @@ body
 
 ### GroupType.removeInheritance(id, type, inherited, grouptype, authorization_bearer)
 removeInheritance - Removes an inheritance from a group of a particular type.
+Path: travelling/api/v1/group/id/:id/type/:type/remove/inheritance/:inherited/type/:grouptype
 
 **Kind**: static method of [<code>GroupType</code>](#GroupType)  
 
@@ -833,6 +866,7 @@ removeInheritance - Removes an inheritance from a group of a particular type.
 
 ### GroupType.inheritFrom(id, type, inherited, grouptype, authorization_bearer)
 inheritFrom - Adds an inheritance to a group of a particular type.
+Path: travelling/api/v1/group/id/:id/type/:type/inherit/from/:inherited/type/:grouptype
 
 **Kind**: static method of [<code>GroupType</code>](#GroupType)  
 
@@ -848,6 +882,7 @@ inheritFrom - Adds an inheritance to a group of a particular type.
 
 ### GroupType.setDefault(id, type)
 setDefault - Sets the group of a particular type to be the default group for new users.
+Path: travelling/api/v1/group/id/:id/type/:type/set/default
 
 **Kind**: static method of [<code>GroupType</code>](#GroupType)  
 
@@ -860,6 +895,7 @@ setDefault - Sets the group of a particular type to be the default group for new
 
 ### GroupType.delete(id, type, authorization_bearer)
 delete - delete group of a particular type by its name or id
+Path: travelling/api/v1/group/id/:id/type/:type
 
 **Kind**: static method of [<code>GroupType</code>](#GroupType)  
 
@@ -873,6 +909,7 @@ delete - delete group of a particular type by its name or id
 
 ### GroupType.get(id, type, authorization_bearer)
 get - Get a group by it's id or name of a particular type.
+Path: travelling/api/v1/group/id/:id/type/:type
 
 **Kind**: static method of [<code>GroupType</code>](#GroupType)  
 
@@ -886,6 +923,7 @@ get - Get a group by it's id or name of a particular type.
 
 ### GroupType.edit(body, id, type, authorization_bearer)
 edit - Edits a group of a particular type
+Path: travelling/api/v1/group/id/:id/type/:type
 
 **Kind**: static method of [<code>GroupType</code>](#GroupType)  
 
@@ -907,6 +945,7 @@ body
 
 ### GroupType.createByName(id, type, authorization_bearer)
 createByName - Add a new blank group with the set name and type
+Path: travelling/api/v1/group/id/:id/type/:type
 
 **Kind**: static method of [<code>GroupType</code>](#GroupType)  
 
@@ -920,6 +959,7 @@ createByName - Add a new blank group with the set name and type
 
 ### GroupType.create(body, type, authorization_bearer)
 create - Add a new group of a particular type
+Path: travelling/api/v1/group/type/:type
 
 **Kind**: static method of [<code>GroupType</code>](#GroupType)  
 
@@ -979,6 +1019,7 @@ get - Gets all the users that belong to the group  of a particular type by its n
     | email | *optional* (example:  test@test.ai) |
     | created_on | *optional* (example:  1568419646794) |
     | last_login | *optional* (example:  null) |
+Path: travelling/api/v1/group/id/:id/type/:type/users
 
 **Kind**: static method of [<code>GroupTypeUsers</code>](#GroupTypeUsers)  
 
@@ -1010,6 +1051,7 @@ inherited - Gets all the users that belong to the group  of a particular type by
     | email | *optional* (example:  test@test.ai) |
     | created_on | *optional* (example:  1568419646794) |
     | last_login | *optional* (example:  null) |
+Path: travelling/api/v1/group/id/:id/type/:type/users/inherited
 
 **Kind**: static method of [<code>GroupTypeUsers</code>](#GroupTypeUsers)  
 
@@ -1037,6 +1079,7 @@ inherited - Gets all the users that belong to the group  of a particular type by
 
 ### GroupTypeUser.delete(type, id, authorization_bearer)
 delete - Delete a user by it's id or username from group of a particular type.
+Path: travelling/api/v1/group/type/:type/user/:id
 
 **Kind**: static method of [<code>GroupTypeUser</code>](#GroupTypeUser)  
 
@@ -1050,6 +1093,7 @@ delete - Delete a user by it's id or username from group of a particular type.
 
 ### GroupTypeUser.removeGroupInheritance(type, id, inheritgroupid, inheritgrouptype, authorization_bearer)
 removeGroupInheritance - Remove a user to a group of a particular type of group.
+Path: travelling/api/v1/group/type/:type/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype
 
 **Kind**: static method of [<code>GroupTypeUser</code>](#GroupTypeUser)  
 
@@ -1065,6 +1109,7 @@ removeGroupInheritance - Remove a user to a group of a particular type of group.
 
 ### GroupTypeUser.addGroupInheritance(type, id, inheritgroupid, inheritgrouptype, authorization_bearer)
 addGroupInheritance - Add a user to a group of a particular type of group.
+Path: travelling/api/v1/group/type/:type/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype
 
 **Kind**: static method of [<code>GroupTypeUser</code>](#GroupTypeUser)  
 
@@ -1080,6 +1125,7 @@ addGroupInheritance - Add a user to a group of a particular type of group.
 
 ### GroupTypeUser.editPropertyValue(type, id, property, value, authorization_bearer)
 editPropertyValue - Edit a current user's property data as a path param from a group of a particular type.
+Path: travelling/api/v1/group/type/:type/user/:id/property/:property/:value
 
 **Kind**: static method of [<code>GroupTypeUser</code>](#GroupTypeUser)  
 
@@ -1095,6 +1141,7 @@ editPropertyValue - Edit a current user's property data as a path param from a g
 
 ### GroupTypeUser.editProperty(body, type, id, property, authorization_bearer)
 editProperty - Edit a user's property by it's id or username from a group of a particular type.
+Path: travelling/api/v1/group/type/:type/user/:id/property/:property
 
 **Kind**: static method of [<code>GroupTypeUser</code>](#GroupTypeUser)  
 
@@ -1117,6 +1164,7 @@ body
 
 ### GroupTypeUser.edit(body, type, id, authorization_bearer)
 edit - Edit a user by it's id or username from group of a particular type.
+Path: travelling/api/v1/group/type/:type/user/:id
 
 **Kind**: static method of [<code>GroupTypeUser</code>](#GroupTypeUser)  
 
@@ -1138,6 +1186,7 @@ body
 
 ### GroupTypeUser.getProperty(type, id, property, authorization_bearer)
 getProperty - Get a user's property by it's id or username from group of a particular type.
+Path: travelling/api/v1/group/type/:type/user/:id/property/:property
 
 **Kind**: static method of [<code>GroupTypeUser</code>](#GroupTypeUser)  
 
@@ -1152,6 +1201,7 @@ getProperty - Get a user's property by it's id or username from group of a parti
 
 ### GroupTypeUser.get(type, id, authorization_bearer)
 get - Get a user by it's id or username from group of a particular type.
+Path: travelling/api/v1/group/type/:type/user/:id
 
 **Kind**: static method of [<code>GroupTypeUser</code>](#GroupTypeUser)  
 
@@ -1180,6 +1230,7 @@ get - Get a user by it's id or username from group of a particular type.
 
 ### GroupRequestUser.delete(body, type, id, authorization_bearer)
 delete - Delete a user by it's id or username from the user's `group_request` of a particular type.
+Path: travelling/api/v1/group/request/type/:type/user/:id
 
 **Kind**: static method of [<code>GroupRequestUser</code>](#GroupRequestUser)  
 
@@ -1201,6 +1252,7 @@ body
 
 ### GroupRequestUser.addGroupInheritance(type, id, inheritgroupid, inheritgrouptype, authorization_bearer)
 addGroupInheritance - Add a user to a group from the user's `group_request` of a particular type.
+Path: travelling/api/v1/group/request/type/:type/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype
 
 **Kind**: static method of [<code>GroupRequestUser</code>](#GroupRequestUser)  
 
@@ -1216,6 +1268,7 @@ addGroupInheritance - Add a user to a group from the user's `group_request` of a
 
 ### GroupRequestUser.editProperty(body, type, id, property, authorization_bearer)
 editProperty - Edit a user's property by it's id or username from the user's `group_request` of a particular type.
+Path: travelling/api/v1/group/request/type/:type/user/:id/property/:property
 
 **Kind**: static method of [<code>GroupRequestUser</code>](#GroupRequestUser)  
 
@@ -1238,6 +1291,7 @@ body
 
 ### GroupRequestUser.edit(body, type, id, authorization_bearer)
 edit - Edit a user by it's id or username from the user's `group_request` of a particular type.
+Path: travelling/api/v1/group/request/type/:type/user/:id
 
 **Kind**: static method of [<code>GroupRequestUser</code>](#GroupRequestUser)  
 
@@ -1287,6 +1341,7 @@ byGroupRequest - Gets all the users that have the specified group request
     | email | *optional* (example:  test@test.ai) |
     | created_on | *optional* (example:  1568419646794) |
     | last_login | *optional* (example:  null) |
+Path: travelling/api/v1/users/group/request/:group_request
 
 **Kind**: static method of [<code>Users</code>](#Users)  
 
@@ -1318,6 +1373,7 @@ get - Gets all the users
     | email | *optional* (example:  test@test.ai) |
     | created_on | *optional* (example:  1568419646794) |
     | last_login | *optional* (example:  null) |
+Path: travelling/api/v1/users
 
 **Kind**: static method of [<code>Users</code>](#Users)  
 
@@ -1344,6 +1400,7 @@ get - Gets all the users
 
 ### User.delete(id, authorization_bearer)
 delete - Delete a user by it's Id.
+Path: travelling/api/v1/user/id/:id
 
 **Kind**: static method of [<code>User</code>](#User)  
 
@@ -1356,6 +1413,7 @@ delete - Delete a user by it's Id.
 
 ### User.removeGroupInheritance(id, inheritgroupid, inheritgrouptype, authorization_bearer)
 removeGroupInheritance - Remove a user from a group.
+Path: travelling/api/v1/user/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype
 
 **Kind**: static method of [<code>User</code>](#User)  
 
@@ -1370,6 +1428,7 @@ removeGroupInheritance - Remove a user from a group.
 
 ### User.addGroupInheritance(id, inheritgroupid, inheritgrouptype, authorization_bearer)
 addGroupInheritance - Add a user to a group.
+Path: travelling/api/v1/user/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype
 
 **Kind**: static method of [<code>User</code>](#User)  
 
@@ -1384,6 +1443,7 @@ addGroupInheritance - Add a user to a group.
 
 ### User.editPropertyValue(id, property, value, authorization_bearer)
 editPropertyValue - Edit a current user's property data as a path param.
+Path: travelling/api/v1/user/id/:id/property/:property/:value
 
 **Kind**: static method of [<code>User</code>](#User)  
 
@@ -1398,6 +1458,7 @@ editPropertyValue - Edit a current user's property data as a path param.
 
 ### User.editProperty(body, id, property, authorization_bearer)
 editProperty - Edit a user's property by id.
+Path: travelling/api/v1/user/id/:id/property/:property
 
 **Kind**: static method of [<code>User</code>](#User)  
 
@@ -1417,6 +1478,7 @@ user6
 
 ### User.edit(body, id, authorization_bearer)
 edit - Edit a user's by id.
+Path: travelling/api/v1/user/id/:id
 
 **Kind**: static method of [<code>User</code>](#User)  
 
@@ -1438,6 +1500,7 @@ body
 
 ### User.getProperty(id, property, authorization_bearer)
 getProperty - Get a user's property by it's id.
+Path: travelling/api/v1/user/id/:id/property/:property
 
 **Kind**: static method of [<code>User</code>](#User)  
 
@@ -1451,6 +1514,7 @@ getProperty - Get a user's property by it's id.
 
 ### User.get(id, authorization_bearer)
 get - Get a user by it's id.
+Path: travelling/api/v1/user/id/:id
 
 **Kind**: static method of [<code>User</code>](#User)  
 
@@ -1481,6 +1545,7 @@ get - Get a user by it's id.
 
 ### UserCurrent.removeGroupInheritance(inheritgroupid, inheritgrouptype, authorization_bearer)
 removeGroupInheritance - Remove a user from a group.
+Path: travelling/api/v1/user/me/inheritance/group/:inheritgroupid/type/:inheritgrouptype
 
 **Kind**: static method of [<code>UserCurrent</code>](#UserCurrent)  
 
@@ -1494,6 +1559,7 @@ removeGroupInheritance - Remove a user from a group.
 
 ### UserCurrent.addGroupInheritance(inheritgroupid, inheritgrouptype, authorization_bearer)
 addGroupInheritance - Add a user to a group.
+Path: travelling/api/v1/user/me/inheritance/group/:inheritgroupid/type/:inheritgrouptype
 
 **Kind**: static method of [<code>UserCurrent</code>](#UserCurrent)  
 
@@ -1507,6 +1573,7 @@ addGroupInheritance - Add a user to a group.
 
 ### UserCurrent.editPropertyValue(property, value, authorization_bearer)
 editPropertyValue - Edit a current user's property data as a path param.
+Path: travelling/api/v1/user/me/property/:property/:value
 
 **Kind**: static method of [<code>UserCurrent</code>](#UserCurrent)  
 
@@ -1520,6 +1587,7 @@ editPropertyValue - Edit a current user's property data as a path param.
 
 ### UserCurrent.editProperty(body, property, authorization_bearer)
 editProperty - Edit a current user's property data.
+Path: travelling/api/v1/user/me/property/:property
 
 **Kind**: static method of [<code>UserCurrent</code>](#UserCurrent)  
 
@@ -1540,6 +1608,7 @@ body
 
 ### UserCurrent.deleteToken(id, authorization_bearer)
 deleteToken - Deletes a client_credentials based access token auth.
+Path: travelling/api/v1/user/me/token/:id
 
 **Kind**: static method of [<code>UserCurrent</code>](#UserCurrent)  
 
@@ -1552,6 +1621,7 @@ deleteToken - Deletes a client_credentials based access token auth.
 
 ### UserCurrent.registerToken(body, authorization_bearer)
 registerToken - Registers a new credentials service for client_credentials based access token auth.
+Path: travelling/api/v1/user/me/token
 
 **Kind**: static method of [<code>UserCurrent</code>](#UserCurrent)  
 
@@ -1571,6 +1641,7 @@ body
 
 ### UserCurrent.edit(body, authorization_bearer)
 edit - Updates the current logged in user.
+Path: travelling/api/v1/user/me
 
 **Kind**: static method of [<code>UserCurrent</code>](#UserCurrent)  
 
@@ -1590,7 +1661,8 @@ body
 <a name="UserCurrent.getProperty"></a>
 
 ### UserCurrent.getProperty(property, authorization_bearer)
-getProperty - Gets the currently logged in user's single property
+getProperty - Gets the currently logged in user's single property 
+Path: travelling/api/v1/user/me/property/:property
 
 **Kind**: static method of [<code>UserCurrent</code>](#UserCurrent)  
 
@@ -1603,6 +1675,7 @@ getProperty - Gets the currently logged in user's single property
 
 ### UserCurrent.routeCheck(method, route, authorization_bearer)
 routeCheck - Checks if current logged in user can access the route with method.
+Path: travelling/api/v1/user/me/route/allowed
 
 **Kind**: static method of [<code>UserCurrent</code>](#UserCurrent)  
 
@@ -1616,6 +1689,7 @@ routeCheck - Checks if current logged in user can access the route with method.
 
 ### UserCurrent.permissionCheck(permission, authorization_bearer)
 permissionCheck - Checks to see if the current user can access content based on permission.
+Path: travelling/api/v1/user/me/permission/allowed/:permission
 
 **Kind**: static method of [<code>UserCurrent</code>](#UserCurrent)  
 
@@ -1628,6 +1702,7 @@ permissionCheck - Checks to see if the current user can access content based on 
 
 ### UserCurrent.get(authorization_bearer)
 get - Gets the currently logged in user
+Path: travelling/api/v1/user/me
 
 **Kind**: static method of [<code>UserCurrent</code>](#UserCurrent)  
 
@@ -1655,12 +1730,14 @@ get - Gets the currently logged in user
 
 ### Auth.accessToken()
 accessToken - Oauth2 `client_credentials` access token flow. Body must be `application/x-www-form-urlencoded` and must contain the `grant_type`. `client_id` & `client_secret` will be sent in a `Basic` Authorization header as `base64(client_id:client_secret)`
+Path: travelling/api/v1/auth/token
 
 **Kind**: static method of [<code>Auth</code>](#Auth)  
 <a name="Auth.activate"></a>
 
 ### Auth.activate(token)
 activate - Activates and unlocks user
+Path: travelling/api/v1/auth/activate
 
 **Kind**: static method of [<code>Auth</code>](#Auth)  
 
@@ -1672,6 +1749,7 @@ activate - Activates and unlocks user
 
 ### Auth.resetPassword(body, token)
 resetPassword - Resets the password if the recovery token is vaild of the user.
+Path: travelling/api/v1/auth/password/reset
 
 **Kind**: static method of [<code>Auth</code>](#Auth)  
 
@@ -1690,7 +1768,8 @@ body
 <a name="Auth.forgotPassword"></a>
 
 ### Auth.forgotPassword(body)
-forgotPassword - Generates a recovery token and sends a email to the attached user (if they exist)
+forgotPassword - Generates a recovery token and sends a email to the attached user (if they exist) 
+Path: travelling/api/v1/auth/password/forgot
 
 **Kind**: static method of [<code>Auth</code>](#Auth)  
 
@@ -1708,13 +1787,15 @@ body
 <a name="Auth.logout"></a>
 
 ### Auth.logout()
-logout -
+logout - 
+Path: travelling/api/v1/auth/logout
 
 **Kind**: static method of [<code>Auth</code>](#Auth)  
 <a name="Auth.login"></a>
 
 ### Auth.login(body)
 login - Register a user
+Path: travelling/api/v1/auth/login
 
 **Kind**: static method of [<code>Auth</code>](#Auth)  
 
@@ -1736,6 +1817,7 @@ body
 register - Register a user
 
     `group_request`	is optional.
+Path: travelling/api/v1/auth/register
 
 **Kind**: static method of [<code>Auth</code>](#Auth)  
 

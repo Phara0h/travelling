@@ -170,10 +170,21 @@ var hostUrl = '';
  */
 class Travelling {
     constructor() {}
+    static get _postgenClassUrls() {
+        return {
+            healthcheck: 'travelling/_health',
+            metrics: 'travelling/metrics',
+        };
+    }
+    static getFunctionsPath(name) {
+        return this._postgenClassUrls[name.toLowerCase()];
+    }
+
 
 
     /**
      * healthCheck - server's health check
+     * Path: travelling/_health
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
     static async healthCheck(authorization_bearer, opts) {
@@ -195,6 +206,7 @@ class Travelling {
 
     /**
      * metrics - servers metrics
+     * Path: travelling/metrics
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
     static async metrics(authorization_bearer, opts) {
@@ -236,16 +248,27 @@ class Travelling {
     static get Auth() {
         return Auth;
     }
+
 }
 /**
  * 
  */
 class Config {
     constructor() {}
+    static get _postgenClassUrls() {
+        return {
+            getproperty: 'travelling/api/v1/config/:property',
+        };
+    }
+    static getFunctionsPath(name) {
+        return this._postgenClassUrls[name.toLowerCase()];
+    }
+
 
 
     /**
      * getProperty - Gets a property from travellings config.
+     * Path: travelling/api/v1/config/:property
      * @param {any} property  (example: password)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
@@ -264,16 +287,29 @@ class Config {
         }
         return await fasq.request(options)
     }
+
 }
 /**
  * 
  */
 class Groups {
     constructor() {}
+    static get _postgenClassUrls() {
+        return {
+            export: 'travelling/api/v1/groups/export',
+            import: 'travelling/api/v1/groups/import',
+            get: 'travelling/api/v1/groups',
+        };
+    }
+    static getFunctionsPath(name) {
+        return this._postgenClassUrls[name.toLowerCase()];
+    }
+
 
 
     /**
      * export - Exports all groups in the proper format to be imported.
+     * Path: travelling/api/v1/groups/export
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
     static async export (authorization_bearer, opts) {
@@ -295,6 +331,7 @@ class Groups {
 
     /**
      * import - Imports all groups from the exported format.
+     * Path: travelling/api/v1/groups/import
      * @param {Object} body
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      * @example
@@ -435,6 +472,7 @@ class Groups {
 
     /**
      * get - Get all the groups
+     * Path: travelling/api/v1/groups
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
     static async get(authorization_bearer, opts) {
@@ -456,16 +494,28 @@ class Groups {
     static get Type() {
         return GroupsType;
     }
+
 }
 /**
  * 
  */
 class GroupsType {
     constructor() {}
+    static get _postgenClassUrls() {
+        return {
+            all: 'travelling/api/v1/groups/type/:type',
+            gettypeslist: 'travelling/api/v1/groups/types',
+        };
+    }
+    static getFunctionsPath(name) {
+        return this._postgenClassUrls[name.toLowerCase()];
+    }
+
 
 
     /**
      * all - Gets all groups of a particular type
+     * Path: travelling/api/v1/groups/type/:type
      * @param {any} type The type of the group 
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
@@ -488,6 +538,7 @@ class GroupsType {
 
     /**
      * getTypesList - Gets all the types of groups currently made.
+     * Path: travelling/api/v1/groups/types
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
     static async getTypesList(authorization_bearer, opts) {
@@ -505,16 +556,37 @@ class GroupsType {
         }
         return await fasq.request(options)
     }
+
 }
 /**
  * 
  */
 class Group {
     constructor() {}
+    static get _postgenClassUrls() {
+        return {
+            addpermission: 'travelling/api/v1/group/id/:id/insert/permission/:permission',
+            deletepermission: 'travelling/api/v1/group/id/:id/permission/:permission',
+            addroute: 'travelling/api/v1/group/id/:id/insert/route',
+            removeinheritance: 'travelling/api/v1/group/id/:id/remove/inheritance/:inherited/type/:grouptype',
+            inheritfrom: 'travelling/api/v1/group/id/:id/inherit/from/:inherited/type/:grouptype',
+            setdefault: 'travelling/api/v1/group/id/:id/set/default',
+            delete: 'travelling/api/v1/group/id/:id',
+            edit: 'travelling/api/v1/group/id/:id',
+            get: 'travelling/api/v1/group/id/:id',
+            createbyname: 'travelling/api/v1/group/id/:id',
+            create: 'travelling/api/v1/group',
+        };
+    }
+    static getFunctionsPath(name) {
+        return this._postgenClassUrls[name.toLowerCase()];
+    }
+
 
 
     /**
      * addPermission - Adds a permission to a group.
+     * Path: travelling/api/v1/group/id/:id/insert/permission/:permission
      * @param {any} id Name of the group (example: anonymous)
      * @param {any} permission Permission (example: test-one-two-*)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
@@ -538,6 +610,7 @@ class Group {
 
     /**
      * deletePermission - Removes a permission/route from a group.
+     * Path: travelling/api/v1/group/id/:id/permission/:permission
      * @param {any} id Name of the group (example: anonymous)
      * @param {any} permission Name or Route (example: test-one-two-*)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
@@ -571,6 +644,7 @@ class Group {
         "name": "test-permissions-*"  // Required and needs to be unqiue, defaults to method + route seperated by '-' instead of `/`
     }
     ```
+      * Path: travelling/api/v1/group/id/:id/insert/route
       * @param {Object} body
       * @param {any} id  
       * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
@@ -606,6 +680,7 @@ class Group {
 
     /**
      * removeInheritance - Removes an inheritance from a group.
+     * Path: travelling/api/v1/group/id/:id/remove/inheritance/:inherited/type/:grouptype
      * @param {any} id Name of the group (example: test1234)
      * @param {any} inherited Name of the group to inherit from (example: group4)
      * @param {any} grouptype The type of the inherited group 
@@ -630,6 +705,7 @@ class Group {
 
     /**
      * inheritFrom - Adds an inheritance to a group.
+     * Path: travelling/api/v1/group/id/:id/inherit/from/:inherited/type/:grouptype
      * @param {any} id Name of the group (example: test1234)
      * @param {any} inherited Name of the group to inherit from (example: group4)
      * @param {any} grouptype The type of the inherited group 
@@ -654,6 +730,7 @@ class Group {
 
     /**
      * setDefault - Sets the group to be the default group for new users.
+     * Path: travelling/api/v1/group/id/:id/set/default
      * @param {any} id id or name (example: group6)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
@@ -676,6 +753,7 @@ class Group {
 
     /**
      * delete - delete group by its id or name
+     * Path: travelling/api/v1/group/id/:id
      * @param {any} id id or name  
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
@@ -698,6 +776,7 @@ class Group {
 
     /**
      * edit - Edits a group
+     * Path: travelling/api/v1/group/id/:id
      * @param {Object} body
      * @param {any} id  (example: ab31efc8-40a5-4d38-a347-adb4e38d0075)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
@@ -767,6 +846,7 @@ class Group {
 
     /**
      * get - Get a group by it's id or name.
+     * Path: travelling/api/v1/group/id/:id
      * @param {any} id id or name  (example: group1)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
@@ -789,6 +869,7 @@ class Group {
 
     /**
      * createByName - Add a new blank group with the set name.
+     * Path: travelling/api/v1/group/id/:id
      * @param {any} id Name of the new group (example: test123)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
@@ -811,6 +892,7 @@ class Group {
 
     /**
      * create - Add a new group
+     * Path: travelling/api/v1/group
      * @param {Object} body
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      * @example
@@ -863,12 +945,23 @@ class Group {
     static get Request() {
         return GroupRequest;
     }
+
 }
 /**
  * 
  */
 class GroupUsers {
     constructor() {}
+    static get _postgenClassUrls() {
+        return {
+            inherited: 'travelling/api/v1/group/id/:id/users/inherited',
+            get: 'travelling/api/v1/group/id/:id/users',
+        };
+    }
+    static getFunctionsPath(name) {
+        return this._postgenClassUrls[name.toLowerCase()];
+    }
+
 
 
     /**
@@ -892,6 +985,7 @@ class GroupUsers {
     | email | *optional* (example:  test@test.ai) |
     | created_on | *optional* (example:  1568419646794) |
     | last_login | *optional* (example:  null) |
+      * Path: travelling/api/v1/group/id/:id/users/inherited
       * @param {any} id id or name (example: superadmin)
       */
     static async inherited(id, opts) {
@@ -929,6 +1023,7 @@ class GroupUsers {
     | email | *optional* (example:  test@test.ai) |
     | created_on | *optional* (example:  1568419646794) |
     | last_login | *optional* (example:  null) |
+      * Path: travelling/api/v1/group/id/:id/users
       * @param {any} id id or name (example: superadmin)
       */
     static async get(id, opts) {
@@ -943,16 +1038,34 @@ class GroupUsers {
         }
         return await fasq.request(options)
     }
+
 }
 /**
  * 
  */
 class GroupUser {
     constructor() {}
+    static get _postgenClassUrls() {
+        return {
+            delete: 'travelling/api/v1/group/id/:group/type/:type/user/:id',
+            removegroupinheritance: 'travelling/api/v1/group/id/:group/type/:type/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype',
+            addgroupinheritance: 'travelling/api/v1/group/id/:group/type/:type/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype',
+            editpropertyvalue: 'travelling/api/v1/group/id/:group/type/:type/user/:id/property/:property/:value',
+            editproperty: 'travelling/api/v1/group/id/:group/type/:type/user/:id/property/:property',
+            edit: 'travelling/api/v1/group/id/:group/type/:type/user/:id',
+            getproperty: 'travelling/api/v1/group/id/:group/type/:type/user/:id/property/:property',
+            get: 'travelling/api/v1/group/id/:group/type/:type/user/:id',
+        };
+    }
+    static getFunctionsPath(name) {
+        return this._postgenClassUrls[name.toLowerCase()];
+    }
+
 
 
     /**
      * delete - Delete a user by it's id or username from group of a particular type.
+     * Path: travelling/api/v1/group/id/:group/type/:type/user/:id
      * @param {any} group id or name of the group 
      * @param {any} type The type of the group (example: accounts)
      * @param {any} id id or name (example: user7)
@@ -977,6 +1090,7 @@ class GroupUser {
 
     /**
      * removeGroupInheritance - Remove a user to a group of a particular type of group.
+     * Path: travelling/api/v1/group/id/:group/type/:type/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype
      * @param {any} group id or name of the group (example: group1)
      * @param {any} type type of group (example: group)
      * @param {any} id id or name of the user (example: user5)
@@ -1003,6 +1117,7 @@ class GroupUser {
 
     /**
      * addGroupInheritance - Add a group for the current user from a group of a particular type.
+     * Path: travelling/api/v1/group/id/:group/type/:type/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype
      * @param {any} group id or name of the group (example: group1)
      * @param {any} type type of group (example: group)
      * @param {any} id id or name of the user (example: user5)
@@ -1029,6 +1144,7 @@ class GroupUser {
 
     /**
      * editPropertyValue - Edit a current user's property data as a path param from a group of a particular type.
+     * Path: travelling/api/v1/group/id/:group/type/:type/user/:id/property/:property/:value
      * @param {any} group id or name of the group 
      * @param {any} type The type of the group (example: group)
      * @param {any} id id or name (example: user5)
@@ -1055,6 +1171,7 @@ class GroupUser {
 
     /**
      * editProperty - Edit a user's property by it's id or username from a group of a particular type.
+     * Path: travelling/api/v1/group/id/:group/type/:type/user/:id/property/:property
      * @param {Object} body
      * @param {any} group id or name of the group 
      * @param {any} type The type of the group (example: accounts)
@@ -1090,6 +1207,7 @@ class GroupUser {
 
     /**
      * edit - Edit a user by it's id or username from group of a particular type.
+     * Path: travelling/api/v1/group/id/:group/type/:type/user/:id
      * @param {Object} body
      * @param {any} group id or name of the group 
      * @param {any} type The type of the group (example: accounts)
@@ -1124,6 +1242,7 @@ class GroupUser {
 
     /**
      * getProperty - Get a user's property by it's id or username from group of a particular type.
+     * Path: travelling/api/v1/group/id/:group/type/:type/user/:id/property/:property
      * @param {any} group id or name of the group 
      * @param {any} type The type of the group (example: accounts)
      * @param {any} id id or name (example: user6)
@@ -1149,6 +1268,7 @@ class GroupUser {
 
     /**
      * get - Get a user by it's id or username from group of a particular type.
+     * Path: travelling/api/v1/group/id/:group/type/:type/user/:id
      * @param {any} group id or name of the group 
      * @param {any} type The type of the group (example: accounts)
      * @param {any} id id or name (example: user6)
@@ -1169,16 +1289,37 @@ class GroupUser {
         }
         return await fasq.request(options)
     }
+
 }
 /**
  * 
  */
 class GroupType {
     constructor() {}
+    static get _postgenClassUrls() {
+        return {
+            deletepermission: 'travelling/api/v1/group/id/:id/type/:type/permission/:permission',
+            addpermission: 'travelling/api/v1/group/id/:id/type/:type/insert/permission/:permission',
+            addroute: 'travelling/api/v1/group/id/:id/type/:type/insert/route',
+            removeinheritance: 'travelling/api/v1/group/id/:id/type/:type/remove/inheritance/:inherited/type/:grouptype',
+            inheritfrom: 'travelling/api/v1/group/id/:id/type/:type/inherit/from/:inherited/type/:grouptype',
+            setdefault: 'travelling/api/v1/group/id/:id/type/:type/set/default',
+            delete: 'travelling/api/v1/group/id/:id/type/:type',
+            get: 'travelling/api/v1/group/id/:id/type/:type',
+            edit: 'travelling/api/v1/group/id/:id/type/:type',
+            createbyname: 'travelling/api/v1/group/id/:id/type/:type',
+            create: 'travelling/api/v1/group/type/:type',
+        };
+    }
+    static getFunctionsPath(name) {
+        return this._postgenClassUrls[name.toLowerCase()];
+    }
+
 
 
     /**
      * deletePermission - Removes a permission/route from a group of a particular type.
+     * Path: travelling/api/v1/group/id/:id/type/:type/permission/:permission
      * @param {any} id Name of the group (example: anonymous)
      * @param {any} type Type of the group (example: group)
      * @param {any} permission Name or Route (example: test-one-three-*)
@@ -1203,6 +1344,7 @@ class GroupType {
 
     /**
      * addPermission - Adds a permission to a group of a particular type.
+     * Path: travelling/api/v1/group/id/:id/type/:type/insert/permission/:permission
      * @param {any} id Name of the group (example: anonymous)
      * @param {any} type Type of the group (example: group)
      * @param {any} permission Permission  (example: test-one-three-*)
@@ -1237,6 +1379,7 @@ class GroupType {
         "name": "test-permissions-*"  // Required and needs to be unqiue, defaults to method + route seperated by '-' instead of `/`
     }
     ```
+      * Path: travelling/api/v1/group/id/:id/type/:type/insert/route
       * @param {Object} body
       * @param {any} id Name of the group 
       * @param {any} type  
@@ -1273,6 +1416,7 @@ class GroupType {
 
     /**
      * removeInheritance - Removes an inheritance from a group of a particular type.
+     * Path: travelling/api/v1/group/id/:id/type/:type/remove/inheritance/:inherited/type/:grouptype
      * @param {any} id Name of the group (example: test1234)
      * @param {any} type The type of the group (example: accounts)
      * @param {any} inherited Name of the group to inherit from (example: superadmin)
@@ -1298,6 +1442,7 @@ class GroupType {
 
     /**
      * inheritFrom - Adds an inheritance to a group of a particular type.
+     * Path: travelling/api/v1/group/id/:id/type/:type/inherit/from/:inherited/type/:grouptype
      * @param {any} id Name of the group (example: group1)
      * @param {any} type The type of the group (example: testgroup)
      * @param {any} inherited Name of the group to inherit from (example: test123)
@@ -1323,6 +1468,7 @@ class GroupType {
 
     /**
      * setDefault - Sets the group of a particular type to be the default group for new users.
+     * Path: travelling/api/v1/group/id/:id/type/:type/set/default
      * @param {any} id id or name (example: group1)
      * @param {any} type The type of the group (example: account)
      */
@@ -1342,6 +1488,7 @@ class GroupType {
 
     /**
      * delete - delete group of a particular type by its name or id
+     * Path: travelling/api/v1/group/id/:id/type/:type
      * @param {any} id id or name  
      * @param {any} type The type of the group 
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
@@ -1365,6 +1512,7 @@ class GroupType {
 
     /**
      * get - Get a group by it's id or name of a particular type.
+     * Path: travelling/api/v1/group/id/:id/type/:type
      * @param {any} id id or name  (example: group1)
      * @param {any} type The type of the group (example: accounts)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
@@ -1388,6 +1536,7 @@ class GroupType {
 
     /**
      * edit - Edits a group of a particular type
+     * Path: travelling/api/v1/group/id/:id/type/:type
      * @param {Object} body
      * @param {any} id id or name  
      * @param {any} type The type of the group 
@@ -1421,6 +1570,7 @@ class GroupType {
 
     /**
      * createByName - Add a new blank group with the set name and type
+     * Path: travelling/api/v1/group/id/:id/type/:type
      * @param {any} id Name of the new group (example: test1234)
      * @param {any} type Type of the new group (example: accounts)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
@@ -1444,6 +1594,7 @@ class GroupType {
 
     /**
      * create - Add a new group of a particular type
+     * Path: travelling/api/v1/group/type/:type
      * @param {Object} body
      * @param {any} type The type of the group 
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
@@ -1489,12 +1640,23 @@ class GroupType {
     static get User() {
         return GroupTypeUser;
     }
+
 }
 /**
  * Both requests are disabled. Dont use.
  */
 class GroupTypeUsers {
     constructor() {}
+    static get _postgenClassUrls() {
+        return {
+            get: 'travelling/api/v1/group/id/:id/type/:type/users',
+            inherited: 'travelling/api/v1/group/id/:id/type/:type/users/inherited',
+        };
+    }
+    static getFunctionsPath(name) {
+        return this._postgenClassUrls[name.toLowerCase()];
+    }
+
 
 
     /**
@@ -1518,6 +1680,7 @@ class GroupTypeUsers {
     | email | *optional* (example:  test@test.ai) |
     | created_on | *optional* (example:  1568419646794) |
     | last_login | *optional* (example:  null) |
+      * Path: travelling/api/v1/group/id/:id/type/:type/users
       * @param {any} id  
       * @param {any} type  
       */
@@ -1556,6 +1719,7 @@ class GroupTypeUsers {
     | email | *optional* (example:  test@test.ai) |
     | created_on | *optional* (example:  1568419646794) |
     | last_login | *optional* (example:  null) |
+      * Path: travelling/api/v1/group/id/:id/type/:type/users/inherited
       * @param {any} id  (example: group4)
       * @param {any} type The type of the group (example: groups)
       */
@@ -1571,16 +1735,34 @@ class GroupTypeUsers {
         }
         return await fasq.request(options)
     }
+
 }
 /**
  * 
  */
 class GroupTypeUser {
     constructor() {}
+    static get _postgenClassUrls() {
+        return {
+            delete: 'travelling/api/v1/group/type/:type/user/:id',
+            removegroupinheritance: 'travelling/api/v1/group/type/:type/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype',
+            addgroupinheritance: 'travelling/api/v1/group/type/:type/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype',
+            editpropertyvalue: 'travelling/api/v1/group/type/:type/user/:id/property/:property/:value',
+            editproperty: 'travelling/api/v1/group/type/:type/user/:id/property/:property',
+            edit: 'travelling/api/v1/group/type/:type/user/:id',
+            getproperty: 'travelling/api/v1/group/type/:type/user/:id/property/:property',
+            get: 'travelling/api/v1/group/type/:type/user/:id',
+        };
+    }
+    static getFunctionsPath(name) {
+        return this._postgenClassUrls[name.toLowerCase()];
+    }
+
 
 
     /**
      * delete - Delete a user by it's id or username from group of a particular type.
+     * Path: travelling/api/v1/group/type/:type/user/:id
      * @param {any} type The type of the group (example: accounts)
      * @param {any} id id or name (example: user7)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
@@ -1604,6 +1786,7 @@ class GroupTypeUser {
 
     /**
      * removeGroupInheritance - Remove a user to a group of a particular type of group.
+     * Path: travelling/api/v1/group/type/:type/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype
      * @param {any} type type of group (example: group)
      * @param {any} id id or name of the user (example: user5)
      * @param {any} inheritgroupid id or name of the  group to inherit (example: group2)
@@ -1629,6 +1812,7 @@ class GroupTypeUser {
 
     /**
      * addGroupInheritance - Add a user to a group of a particular type of group.
+     * Path: travelling/api/v1/group/type/:type/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype
      * @param {any} type type of group (example: group)
      * @param {any} id id or name of the user (example: user5)
      * @param {any} inheritgroupid id or name of the  group to inherit (example: group2)
@@ -1654,6 +1838,7 @@ class GroupTypeUser {
 
     /**
      * editPropertyValue - Edit a current user's property data as a path param from a group of a particular type.
+     * Path: travelling/api/v1/group/type/:type/user/:id/property/:property/:value
      * @param {any} type The type of the group (example: group)
      * @param {any} id id or name (example: user5)
      * @param {any} property  (example: email)
@@ -1679,6 +1864,7 @@ class GroupTypeUser {
 
     /**
      * editProperty - Edit a user's property by it's id or username from a group of a particular type.
+     * Path: travelling/api/v1/group/type/:type/user/:id/property/:property
      * @param {Object} body
      * @param {any} type The type of the group (example: accounts)
      * @param {any} id id or name (example: user6)
@@ -1713,6 +1899,7 @@ class GroupTypeUser {
 
     /**
      * edit - Edit a user by it's id or username from group of a particular type.
+     * Path: travelling/api/v1/group/type/:type/user/:id
      * @param {Object} body
      * @param {any} type The type of the group (example: accounts)
      * @param {any} id id or name (example: user6)
@@ -1746,6 +1933,7 @@ class GroupTypeUser {
 
     /**
      * getProperty - Get a user's property by it's id or username from group of a particular type.
+     * Path: travelling/api/v1/group/type/:type/user/:id/property/:property
      * @param {any} type The type of the group (example: accounts)
      * @param {any} id id or name (example: user6)
      * @param {any} property  (example: email)
@@ -1770,6 +1958,7 @@ class GroupTypeUser {
 
     /**
      * get - Get a user by it's id or username from group of a particular type.
+     * Path: travelling/api/v1/group/type/:type/user/:id
      * @param {any} type The type of the group (example: accounts)
      * @param {any} id id or name (example: user6)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
@@ -1789,26 +1978,48 @@ class GroupTypeUser {
         }
         return await fasq.request(options)
     }
+
 }
 /**
  * 
  */
 class GroupRequest {
     constructor() {}
+    static get _postgenClassUrls() {
+        return {};
+    }
+    static getFunctionsPath(name) {
+        return this._postgenClassUrls[name.toLowerCase()];
+    }
+
 
     static get User() {
         return GroupRequestUser;
     }
+
 }
 /**
  * 
  */
 class GroupRequestUser {
     constructor() {}
+    static get _postgenClassUrls() {
+        return {
+            delete: 'travelling/api/v1/group/request/type/:type/user/:id',
+            addgroupinheritance: 'travelling/api/v1/group/request/type/:type/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype',
+            editproperty: 'travelling/api/v1/group/request/type/:type/user/:id/property/:property',
+            edit: 'travelling/api/v1/group/request/type/:type/user/:id',
+        };
+    }
+    static getFunctionsPath(name) {
+        return this._postgenClassUrls[name.toLowerCase()];
+    }
+
 
 
     /**
      * delete - Delete a user by it's id or username from the user's `group_request` of a particular type.
+     * Path: travelling/api/v1/group/request/type/:type/user/:id
      * @param {Object} body
      * @param {any} type  (example: testgroup)
      * @param {any} id  (example: user69)
@@ -1842,6 +2053,7 @@ class GroupRequestUser {
 
     /**
      * addGroupInheritance - Add a user to a group from the user's `group_request` of a particular type.
+     * Path: travelling/api/v1/group/request/type/:type/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype
      * @param {any} type type of group (example: group)
      * @param {any} id id or name of the user (example: user5)
      * @param {any} inheritgroupid id or name of the  group to inherit (example: group2)
@@ -1867,6 +2079,7 @@ class GroupRequestUser {
 
     /**
      * editProperty - Edit a user's property by it's id or username from the user's `group_request` of a particular type.
+     * Path: travelling/api/v1/group/request/type/:type/user/:id/property/:property
      * @param {Object} body
      * @param {any} type  (example: accounts)
      * @param {any} id  (example: user6)
@@ -1901,6 +2114,7 @@ class GroupRequestUser {
 
     /**
      * edit - Edit a user by it's id or username from the user's `group_request` of a particular type.
+     * Path: travelling/api/v1/group/request/type/:type/user/:id
      * @param {Object} body
      * @param {any} type  (example: accounts)
      * @param {any} id  (example: user6)
@@ -1930,12 +2144,23 @@ class GroupRequestUser {
         }
         return await fasq.request(options)
     }
+
 }
 /**
  * 
  */
 class Users {
     constructor() {}
+    static get _postgenClassUrls() {
+        return {
+            bygrouprequest: 'travelling/api/v1/users/group/request/:group_request',
+            get: 'travelling/api/v1/users',
+        };
+    }
+    static getFunctionsPath(name) {
+        return this._postgenClassUrls[name.toLowerCase()];
+    }
+
 
 
     /**
@@ -1959,6 +2184,7 @@ class Users {
     | email | *optional* (example:  test@test.ai) |
     | created_on | *optional* (example:  1568419646794) |
     | last_login | *optional* (example:  null) |
+      * Path: travelling/api/v1/users/group/request/:group_request
       * @param {any} group_request name of the group  (example: superadmin)
       * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
       */
@@ -2000,6 +2226,7 @@ class Users {
     | email | *optional* (example:  test@test.ai) |
     | created_on | *optional* (example:  1568419646794) |
     | last_login | *optional* (example:  null) |
+      * Path: travelling/api/v1/users
       * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
       */
     static async get(authorization_bearer, opts) {
@@ -2017,16 +2244,34 @@ class Users {
         }
         return await fasq.request(options)
     }
+
 }
 /**
  * 
  */
 class User {
     constructor() {}
+    static get _postgenClassUrls() {
+        return {
+            delete: 'travelling/api/v1/user/id/:id',
+            removegroupinheritance: 'travelling/api/v1/user/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype',
+            addgroupinheritance: 'travelling/api/v1/user/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype',
+            editpropertyvalue: 'travelling/api/v1/user/id/:id/property/:property/:value',
+            editproperty: 'travelling/api/v1/user/id/:id/property/:property',
+            edit: 'travelling/api/v1/user/id/:id',
+            getproperty: 'travelling/api/v1/user/id/:id/property/:property',
+            get: 'travelling/api/v1/user/id/:id',
+        };
+    }
+    static getFunctionsPath(name) {
+        return this._postgenClassUrls[name.toLowerCase()];
+    }
+
 
 
     /**
      * delete - Delete a user by it's Id.
+     * Path: travelling/api/v1/user/id/:id
      * @param {any} id Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
@@ -2049,6 +2294,7 @@ class User {
 
     /**
      * removeGroupInheritance - Remove a user from a group.
+     * Path: travelling/api/v1/user/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype
      * @param {any} id id or name of the user (example: user5)
      * @param {any} inheritgroupid id or name of the  group to inherit (example: group2)
      * @param {any} inheritgrouptype type of the  group to inherit (example: group)
@@ -2073,6 +2319,7 @@ class User {
 
     /**
      * addGroupInheritance - Add a user to a group.
+     * Path: travelling/api/v1/user/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype
      * @param {any} id id or name of the user (example: user5)
      * @param {any} inheritgroupid id or name of the  group to inherit (example: group2)
      * @param {any} inheritgrouptype type of the  group to inherit (example: group)
@@ -2097,6 +2344,7 @@ class User {
 
     /**
      * editPropertyValue - Edit a current user's property data as a path param.
+     * Path: travelling/api/v1/user/id/:id/property/:property/:value
      * @param {any} id Id or Username  
      * @param {any} property  (example: group_id)
      * @param {any} value  (example: 595d3f9a-5383-4da9-a465-b975d8a5e28e)
@@ -2121,6 +2369,7 @@ class User {
 
     /**
      * editProperty - Edit a user's property by id.
+     * Path: travelling/api/v1/user/id/:id/property/:property
      * @param {Object} body
      * @param {any} id Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA)
      * @param {any} property  
@@ -2152,6 +2401,7 @@ class User {
 
     /**
      * edit - Edit a user's by id.
+     * Path: travelling/api/v1/user/id/:id
      * @param {Object} body
      * @param {any} id Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
@@ -2185,6 +2435,7 @@ class User {
 
     /**
      * getProperty - Get a user's property by it's id.
+     * Path: travelling/api/v1/user/id/:id/property/:property
      * @param {any} id Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA)
      * @param {any} property  
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
@@ -2208,6 +2459,7 @@ class User {
 
     /**
      * get - Get a user by it's id.
+     * Path: travelling/api/v1/user/id/:id
      * @param {any} id  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
@@ -2230,16 +2482,37 @@ class User {
     static get Current() {
         return UserCurrent;
     }
+
 }
 /**
  * 
  */
 class UserCurrent {
     constructor() {}
+    static get _postgenClassUrls() {
+        return {
+            removegroupinheritance: 'travelling/api/v1/user/me/inheritance/group/:inheritgroupid/type/:inheritgrouptype',
+            addgroupinheritance: 'travelling/api/v1/user/me/inheritance/group/:inheritgroupid/type/:inheritgrouptype',
+            editpropertyvalue: 'travelling/api/v1/user/me/property/:property/:value',
+            editproperty: 'travelling/api/v1/user/me/property/:property',
+            deletetoken: 'travelling/api/v1/user/me/token/:id',
+            registertoken: 'travelling/api/v1/user/me/token',
+            edit: 'travelling/api/v1/user/me',
+            getproperty: 'travelling/api/v1/user/me/property/:property',
+            routecheck: 'travelling/api/v1/user/me/route/allowed',
+            permissioncheck: 'travelling/api/v1/user/me/permission/allowed/:permission',
+            get: 'travelling/api/v1/user/me',
+        };
+    }
+    static getFunctionsPath(name) {
+        return this._postgenClassUrls[name.toLowerCase()];
+    }
+
 
 
     /**
      * removeGroupInheritance - Remove a user from a group.
+     * Path: travelling/api/v1/user/me/inheritance/group/:inheritgroupid/type/:inheritgrouptype
      * @param {any} inheritgroupid id or name of the  group to inherit (example: group2)
      * @param {any} inheritgrouptype type of the  group to inherit (example: group)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
@@ -2263,6 +2536,7 @@ class UserCurrent {
 
     /**
      * addGroupInheritance - Add a user to a group.
+     * Path: travelling/api/v1/user/me/inheritance/group/:inheritgroupid/type/:inheritgrouptype
      * @param {any} inheritgroupid id or name of the  group to inherit (example: group2)
      * @param {any} inheritgrouptype type of the  group to inherit (example: group)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
@@ -2286,6 +2560,7 @@ class UserCurrent {
 
     /**
      * editPropertyValue - Edit a current user's property data as a path param.
+     * Path: travelling/api/v1/user/me/property/:property/:value
      * @param {any} property  (example: group_id)
      * @param {any} value  (example: 595d3f9a-5383-4da9-a465-b975d8a5e28e)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
@@ -2309,6 +2584,7 @@ class UserCurrent {
 
     /**
      * editProperty - Edit a current user's property data.
+     * Path: travelling/api/v1/user/me/property/:property
      * @param {Object} body
      * @param {any} property  (example: user_data)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
@@ -2341,6 +2617,7 @@ class UserCurrent {
 
     /**
      * deleteToken - Deletes a client_credentials based access token auth.
+     * Path: travelling/api/v1/user/me/token/:id
      * @param {any} id id or name of the token 
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
@@ -2363,6 +2640,7 @@ class UserCurrent {
 
     /**
      * registerToken - Registers a new credentials service for client_credentials based access token auth.
+     * Path: travelling/api/v1/user/me/token
      * @param {Object} body
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      * @example
@@ -2394,6 +2672,7 @@ class UserCurrent {
 
     /**
      * edit - Updates the current logged in user.
+     * Path: travelling/api/v1/user/me
      * @param {Object} body
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      * @example
@@ -2426,6 +2705,7 @@ class UserCurrent {
 
     /**
      * getProperty - Gets the currently logged in user's single property 
+     * Path: travelling/api/v1/user/me/property/:property
      * @param {any} property  (example: username)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
@@ -2448,6 +2728,7 @@ class UserCurrent {
 
     /**
      * routeCheck - Checks if current logged in user can access the route with method.
+     * Path: travelling/api/v1/user/me/route/allowed
      * @param {any} method  (example: get)
      * @param {any} route  (example:  /travelling/api/v1/group/request/type/anonymous/user/)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
@@ -2475,6 +2756,7 @@ class UserCurrent {
 
     /**
      * permissionCheck - Checks to see if the current user can access content based on permission.
+     * Path: travelling/api/v1/user/me/permission/allowed/:permission
      * @param {any} permission name of the route/permission (example: get-travelling)
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
@@ -2497,6 +2779,7 @@ class UserCurrent {
 
     /**
      * get - Gets the currently logged in user
+     * Path: travelling/api/v1/user/me
      * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
      */
     static async get(authorization_bearer, opts) {
@@ -2515,6 +2798,7 @@ class UserCurrent {
         }
         return await fasq.request(options)
     }
+
 }
 /**
  * #### Auth endpoints 
@@ -2522,10 +2806,26 @@ class UserCurrent {
  */
 class Auth {
     constructor() {}
+    static get _postgenClassUrls() {
+        return {
+            accesstoken: 'travelling/api/v1/auth/token',
+            activate: 'travelling/api/v1/auth/activate',
+            resetpassword: 'travelling/api/v1/auth/password/reset',
+            forgotpassword: 'travelling/api/v1/auth/password/forgot',
+            logout: 'travelling/api/v1/auth/logout',
+            login: 'travelling/api/v1/auth/login',
+            register: 'travelling/api/v1/auth/register',
+        };
+    }
+    static getFunctionsPath(name) {
+        return this._postgenClassUrls[name.toLowerCase()];
+    }
+
 
 
     /**
      * accessToken - Oauth2 `client_credentials` access token flow. Body must be `application/x-www-form-urlencoded` and must contain the `grant_type`. `client_id` & `client_secret` will be sent in a `Basic` Authorization header as `base64(client_id:client_secret)`
+     * Path: travelling/api/v1/auth/token
      */
     static async accessToken(grant_type, code, client_id, client_secret, redirect_uri, opts) {
         var options = {
@@ -2550,6 +2850,7 @@ class Auth {
 
     /**
      * activate - Activates and unlocks user
+     * Path: travelling/api/v1/auth/activate
      * @param {any} token  (example: activation_token)
      */
     static async activate(token, opts) {
@@ -2571,6 +2872,7 @@ class Auth {
 
     /**
      * resetPassword - Resets the password if the recovery token is vaild of the user.
+     * Path: travelling/api/v1/auth/password/reset
      * @param {Object} body
      * @param {any} token  (example: [thegeneratedtoken])
      * @example
@@ -2602,6 +2904,7 @@ class Auth {
 
     /**
      * forgotPassword - Generates a recovery token and sends a email to the attached user (if they exist) 
+     * Path: travelling/api/v1/auth/password/forgot
      * @param {Object} body
      * @example
      * body
@@ -2629,6 +2932,7 @@ class Auth {
 
     /**
      * logout - 
+     * Path: travelling/api/v1/auth/logout
      */
     static async logout(opts) {
         var options = {
@@ -2646,6 +2950,7 @@ class Auth {
 
     /**
      * login - Register a user
+     * Path: travelling/api/v1/auth/login
      * @param {Object} body
      * @example
      * body
@@ -2676,6 +2981,7 @@ class Auth {
       * register - Register a user
 
     `group_request`	is optional.
+      * Path: travelling/api/v1/auth/register
       * @param {Object} body
       * @example
       * body
@@ -2701,6 +3007,7 @@ class Auth {
         }
         return await fasq.request(options)
     }
+
 }
 module.exports = function(host) {
     if (host) {
