@@ -68,7 +68,9 @@ class Group extends Base(BaseModel, 'groups', {
         }
 
         for (var i = 0; i < this.allowed.length; i++) {
-            if (this.allowed[i].name == route.name || route.route && this.allowed[i].route == route.route) {
+            if (this.allowed[i].name == route.name || route.route && this.allowed[i].route == route.route && route.method && route.method == this.allowed[i].method) {
+
+                console.log(route.name, route.route, this.allowed[i]);
                 return false;
             }
         }

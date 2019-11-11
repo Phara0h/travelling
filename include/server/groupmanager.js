@@ -12,7 +12,7 @@ class GroupManager {
         }
 
         this.mergedRoutes = [];
-        this.unmergedGroups = [];
+        this.groups = [];
         this.mappedGroups = {};
         this.redis = redis;
         this.log = typeof config.log.logger === 'string' ? require(config.log.logger) : config.log.logger;
@@ -26,10 +26,10 @@ class GroupManager {
         var grps = await Group.findAll();
 
         this.mappedGroups = {};
-        this.unmergedGroups = [];
+        this.groups = [];
 
         for (var i = 0; i < grps.length; i++) {
-            this.unmergedGroups.push(grps[i]);
+            this.groups.push(grps[i]);
             this.mappedGroups[grps[i].id] = new Group(grps[i]._);
 
             if (!this.mergedRoutes[grps[i].type]) {
@@ -43,7 +43,6 @@ class GroupManager {
     }
 
     async currentGroup(req, res) {
-
         await this.updateGroupsIfNeeeded();
 
         if (!req.isAuthenticated) {
@@ -62,42 +61,38 @@ class GroupManager {
     }
 
     async defaultGroup() {
-
         await this.updateGroupsIfNeeeded();
 
-        for (var i = 0; i < this.unmergedGroups.length; i++) {
-            if (this.unmergedGroups[i].is_default) {
-                return this.unmergedGroups[i];
+        for (var i = 0; i < this.groups.length; i++) {
+            if (this.groups[i].is_default) {
+                return this.groups[i];
             }
         }
     }
 
     async getGroup(id, type) {
-
         await this.updateGroupsIfNeeeded();
 
-        for (var i = 0; i < this.unmergedGroups.length; i++) {
+        for (var i = 0; i < this.groups.length; i++) {
             if (type === undefined) {
-                if (this.unmergedGroups[i].id == id) {
-                    return this.unmergedGroups[i];
-                } else if (this.unmergedGroups[i].name == id && this.unmergedGroups[i].type == 'group') {
-                    return this.unmergedGroups[i];
+                if (this.groups[i].id == id) {
+                    return this.groups[i];
+                } else if (this.groups[i].name == id && this.groups[i].type == 'group') {
+                    return this.groups[i];
                 }
-            } else if (this.unmergedGroups[i].id == id || this.unmergedGroups[i].name == id && this.unmergedGroups[i].type == type) {
-                return this.unmergedGroups[i];
+            } else if (this.groups[i].id == id || this.groups[i].name == id && this.groups[i].type == type) {
+                return this.groups[i];
             }
         }
     }
 
     async getGroups() {
-
         await this.updateGroupsIfNeeeded();
 
-        return this.unmergedGroups;
+        return this.groups;
     }
 
     async getMappedGroups() {
-
         await this.updateGroupsIfNeeeded();
 
         return this.mappedGroups;
