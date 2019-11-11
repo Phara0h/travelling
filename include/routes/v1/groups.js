@@ -473,10 +473,8 @@ async function addInheritedToGroup(req, res, router) {
         group.inherited = [];
     }
 
-    group.inherited.push(inhertedGroup.id);
-
     req.body = {
-        inherited: group.inherited,
+        inherited: [...group.inherited, inhertedGroup.id],
     };
     await editGroup(req, res, router);
 }
@@ -763,13 +761,24 @@ module.exports = function(app, opts, done) {
                         fgroup = {};
                     }
 
+                    fgroup.is_default = group.is_default;
                     groups.push(await setGroup({body: group}, new Group(fgroup), router, req.body));
                 } catch (e) {
                     res.code(400).send(e);
+                    return;
                 }
             }
 
             for (var i = 0; i < groups.length; i++) {
+
+                if (groups[i].is_default) {
+                    var dgroup = await gm.defaultGroup();
+
+                    if (groups[i].name != dgroup.name && groups[i].type != dgroup.type) {
+                        dgroup.is_default = false;
+                        await dgroup.save();
+                    }
+                }
                 if (groups[i].id) {
                     await groups[i].save();
                 } else {
