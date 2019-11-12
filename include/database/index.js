@@ -204,6 +204,11 @@ class Database {
                 method: 'GET',
             });
             anon.addRoute({
+                route: '/travelling/api/v1/config/portal/webclient',
+                host: null,
+                method: 'GET',
+            });
+            anon.addRoute({
                 route: '/favicon.ico',
                 host: null,
                 method: 'GET',

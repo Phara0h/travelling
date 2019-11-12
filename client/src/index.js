@@ -134,9 +134,9 @@ class Login extends LitElement {
                         </div>
                     </div>
                     <div class="login-fields" style="display: ${!this.isLogout ? 'block' : 'none'};">
-                        <trav-text autocomplete="username" autofocus required outlined iconTrailing="account_circle" id="username" label="Username" style="display: ${this.isRegister || this.isLogin ? 'flex' : 'none'};"></trav-text>
-                        <trav-text  autocomplete="current-password" autofocus required outlined iconTrailing="lock" id="password" type="password" validationMessage="${this.passwordHelper}" label="Password" style="display: ${this.isRegister || this.isLogin ? 'block' : 'none'};"></trav-text>
-                        <trav-text autocomplete="email" autofocus required id="email" outlined iconTrailing="email" type="email" label="Email" style="display: ${this.isRegister || this.isForgotPassword ? 'flex' : 'none'};"></trav-text>
+                        <trav-text autocomplete="username" autofocus required outlined iconTrailing="account_circle" id="username" label="${this.options.translation.username}" style="display: ${this.isRegister || this.isLogin ? 'flex' : 'none'};"></trav-text>
+                        <trav-text  autocomplete="current-password" autofocus required outlined iconTrailing="lock" id="password" type="password" validationMessage="${this.passwordHelper}" label="${this.options.translation.password}" style="display: ${this.isRegister || this.isLogin ? 'block' : 'none'};"></trav-text>
+                        <trav-text autocomplete="email" autofocus required id="email" outlined iconTrailing="email" type="email" label="${this.options.translation.email}" style="display: ${this.isRegister || this.isForgotPassword ? 'flex' : 'none'};"></trav-text>
                     </div>
                     <div class="options">
                       <span class="subButtons" style="display: ${!this.isRegister && !this.isLogout ? 'flex' : 'none'};" @click="${this.showRegistration}">Create an account</span>
@@ -174,6 +174,13 @@ class Login extends LitElement {
         this.isLogout = false;
         this.isOauth = false;
         this._user = {};
+        this.options = {
+          translation : {
+            username: 'Username',
+            password: 'Password',
+            email: 'Email'
+          }
+        };
 
         this.getPasswordRegex();
 
@@ -197,6 +204,7 @@ class Login extends LitElement {
             isLogin: {type: Boolean},
             isLoggout: {type: Boolean},
             isOauth: {type: Boolean},
+            options: {type: Object},
             _user: {type: Object},
         };
     }
@@ -218,6 +226,8 @@ class Login extends LitElement {
             }
 
         } else {
+            var res = await fetch(new Request(window.location.origin+'/travelling/api/v1/config/portal/webclient', {method: 'GET'}));
+            this.options = await res.json();
             this.showLogin();
         }
 
@@ -327,13 +337,13 @@ class Login extends LitElement {
         if (!this._username.validity.valid) {
             this._username.formElement.focus();
             this._username.invalidate();
-            this.showError('Invalid user');
+            this.showError('Invalid '+this.options.translation.username);
         }
 
         if (!this._password.validity.valid) {
             this._password.formElement.focus();
             this._password.invalidate();
-            this.showError('Invalid password');
+            this.showError('Invalid '+this.options.translation.password);
         }
 
     }
@@ -387,19 +397,19 @@ class Login extends LitElement {
         if (!this._username.validity.valid) {
             this._username.formElement.focus();
             this._username.invalidate();
-            this.showError('Invalid user');
+            this.showError('Invalid '+this.options.translation.username);
         }
 
         if (!this._password.validity.valid) {
             this._password.formElement.focus();
             this._password.invalidate();
-            this.showError('Invalid password');
+            this.showError('Invalid '+this.options.translation.password);
         }
 
         if (!this._email.validity.valid) {
             this._email.formElement.focus();
             this._email.invalidate();
-            this.showError('Invalid email');
+            this.showError('Invalid '+this.options.translation.email);
         }
     }
 
@@ -438,7 +448,7 @@ class Login extends LitElement {
         if (!this._email.validity.valid) {
             this._email.formElement.focus();
             this._email.invalidate();
-            this.showError('Invalid email');
+            this.showError('Invalid '+this.options.translation.email);
         }
     }
 

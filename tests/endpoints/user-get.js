@@ -38,15 +38,15 @@ module.exports = () => {
           expect(res.body).toEqual(userContainer.user1.email);
         });
 
-        test("Get Test's Password", async () => {
-          var res = await Travelling.User.Current.getProperty('password', null, {
-              headers: {
-                  cookie: userContainer.user1Cookie(),
-              },
-          });
-
-          expect(res.body).toEqual(userContainer.user1.password);
-        });
+        // test("Get Test's Password", async () => {
+        //   var res = await Travelling.User.Current.getProperty('password', null, {
+        //       headers: {
+        //           cookie: userContainer.user1Cookie(),
+        //       },
+        //   });
+        //
+        //   expect(res.body).toEqual(userContainer.user1.password);
+        // });
 
 
         test("Check Test's Permission", async () => {
@@ -137,14 +137,14 @@ module.exports = () => {
         });
 
 
-        test("Get Test2's Password By Id ", async () => {
-            var res = await Travelling.User.getProperty(userContainer.user2.id, 'password', null, {
+        test("Get Test2's Email By Id ", async () => {
+            var res = await Travelling.User.getProperty(userContainer.user2.id, 'email', null, {
                 headers: {
                     cookie: userContainer.user2Cookie(),
                 },
             });
 
-              expect(res.body).toEqual(userContainer.user2.password);
+              expect(res.body).toEqual(userContainer.user2.email);
         });
 
         test("Get Test2's Email By Username ", async () => {

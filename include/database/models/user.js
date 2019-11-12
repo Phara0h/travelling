@@ -158,6 +158,8 @@ class User extends Base(BaseModel, 'users', {
         if (u.user_data != null) {
             u.user_data = JSON.parse(u.user_data.toString('utf8'));
         }
+
+        delete u.password;
         return u;
     }
 

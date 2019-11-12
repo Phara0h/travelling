@@ -161,9 +161,10 @@ app.register(require('./include/routes/v1/auth'), {prefix: '/travelling/api/v1',
 app.register(require('./include/routes/v1/groups'), {prefix: '/travelling/api/v1', router});
 app.register(require('./include/routes/v1/users').routes, {prefix: '/travelling/api/v1', router});
 app.get('/travelling/api/v1/config/:prop', (req, res) => {
-
     res.code(200).send(config[req.params.prop]);
-
+});
+app.get('/travelling/api/v1/config/:prop/:prop2', (req, res) => {
+    res.code(200).send(config[req.params.prop][req.params.prop2]);
 });
 
 if (config.portal.enable) {

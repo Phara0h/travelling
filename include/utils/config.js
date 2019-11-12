@@ -37,6 +37,13 @@ const config = {
         logo: misc.isSetDefault(process.env.TRAVELLING_PORTAL_LOGO, __dirname + '/../../client/assets/logo.svg'),
         styles: misc.isSetDefault(process.env.TRAVELLING_PORTAL_STYLES, __dirname + '/../../client/assets/styles.css'),
         icon: misc.isSetDefault(process.env.TRAVELLING_PORTAL_ICON, __dirname + '/../../client/assets/favicon.ico'),
+        webclient: {
+            translation: {
+                username: misc.isSetDefault(process.env.TRAVELLING_PORTAL_WEBCLIENT_TRANSLATION_USERNAME, 'Username'),
+                password: misc.isSetDefault(process.env.TRAVELLING_PORTAL_WEBCLIENT_TRANSLATION_PASSWORD, 'Password'),
+                email: misc.isSetDefault(process.env.TRAVELLING_PORTAL_WEBCLIENT_TRANSLATION_EMAIL, 'Email'),
+            },
+        },
     },
     proxy: {
         timeout: misc.isSetDefault(Number(process.env.TRAVELLING_PROXY_TIMEOUT), 0),
