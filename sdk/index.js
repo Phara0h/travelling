@@ -338,16 +338,9 @@ class Groups {
      * body
      * ```js
      * {
-     *     "testgroup": {
-     *         "group1": {
-     *             "inherited": [
-     *                 "group|group4"
-     *             ]
-     *         },
-     *         "superadmin": {}
-     *     },
      *     "group": {
      *         "anonymous": {
+     *             "type": "group",
      *             "allowed": [{
      *                     "route": "/travelling/portal/*",
      *                     "host": null,
@@ -373,7 +366,7 @@ class Groups {
      *                 {
      *                     "route": "/travelling/assets/*",
      *                     "host": null,
-     *                     "remove_from_path": "/travelling/assets/",
+     *                     "removeFromPath": "/travelling/assets/",
      *                     "method": "GET",
      *                     "name": "get-travelling-assets-*"
      *                 },
@@ -389,17 +382,21 @@ class Groups {
      *                     "method": "GET",
      *                     "name": "get-favicon.ico"
      *                 }
-     *             ]
+     *             ],
+     *             "inherited": null,
+     *             "is_default": false
      *         },
-     *         "group4": {},
-     *         "group1": {},
      *         "group3": {
+     *             "type": "group",
+     *             "allowed": null,
      *             "inherited": [
      *                 "testgroup|group1",
      *                 "group|group2"
-     *             ]
+     *             ],
+     *             "is_default": false
      *         },
      *         "superadmin": {
+     *             "type": "group",
      *             "allowed": [{
      *                     "host": null,
      *                     "route": "/travelling/*",
@@ -411,33 +408,43 @@ class Groups {
      *             ],
      *             "inherited": [
      *                 "group|anonymous"
-     *             ]
+     *             ],
+     *             "is_default": false
+     *         },
+     *         "group4": {
+     *             "type": "group",
+     *             "allowed": null,
+     *             "inherited": [],
+     *             "is_default": false
      *         },
      *         "group2": {
+     *             "type": "group",
      *             "allowed": [{
      *                     "route": "/test/get",
      *                     "host": "https://127.0.0.1:4268/:username/:group",
-     *                     "remove_from_path": "/test/get",
+     *                     "removeFromPath": "/test/get",
      *                     "method": "GET",
      *                     "name": "get-test-get"
      *                 },
      *                 {
      *                     "route": "/test/post",
      *                     "host": "http://127.0.0.1:4267/?id=:id&permission=:permission",
-     *                     "remove_from_path": "/test/post",
+     *                     "removeFromPath": "/test/post",
      *                     "method": "POST",
      *                     "name": "post-test-post"
      *                 }
      *             ],
      *             "inherited": [
      *                 "testgroup|group1"
-     *             ]
+     *             ],
+     *             "is_default": false
      *         },
      *         "group5": {
+     *             "type": "group",
      *             "allowed": [{
      *                 "route": "/test/delete/:grouptype",
      *                 "host": "https://127.0.0.1:4268",
-     *                 "remove_from_path": "/test/delete",
+     *                 "removeFromPath": "/test/delete",
      *                 "method": "DELETE",
      *                 "name": "delete-test-delete-:grouptype"
      *             }],
@@ -446,6 +453,28 @@ class Groups {
      *                 "group|superadmin"
      *             ],
      *             "is_default": true
+     *         },
+     *         "group1": {
+     *             "type": "group",
+     *             "allowed": null,
+     *             "inherited": null,
+     *             "is_default": false
+     *         }
+     *     },
+     *     "testgroup": {
+     *         "group1": {
+     *             "type": "testgroup",
+     *             "allowed": null,
+     *             "inherited": [
+     *                 "group|group4"
+     *             ],
+     *             "is_default": false
+     *         },
+     *         "superadmin": {
+     *             "type": "testgroup",
+     *             "allowed": null,
+     *             "inherited": null,
+     *             "is_default": false
      *         }
      *     }
      * }
@@ -2809,6 +2838,7 @@ class Auth {
     static get _postgenClassUrls() {
         return {
             accesstoken: 'travelling/api/v1/auth/token',
+            authorize: 'travelling/api/v1/auth/oauth/authorize',
             activate: 'travelling/api/v1/auth/activate',
             resetpassword: 'travelling/api/v1/auth/password/reset',
             forgotpassword: 'travelling/api/v1/auth/password/forgot',
@@ -2827,7 +2857,7 @@ class Auth {
      * accessToken - Oauth2 `client_credentials` access token flow. Body must be `application/x-www-form-urlencoded` and must contain the `grant_type`. `client_id` & `client_secret` will be sent in a `Basic` Authorization header as `base64(client_id:client_secret)`
      * Path: travelling/api/v1/auth/token
      */
-    static async accessToken(grant_type, code, client_id, client_secret, redirect_uri, opts) {
+    static async accessToken(grant_type, client_id, client_secret, code, opts) {
         var options = {
             method: 'POST',
             resolveWithFullResponse: true,
@@ -2835,10 +2865,39 @@ class Auth {
             uri: hostUrl + "/" + `travelling/api/v1/auth/token`,
             form: {
                 grant_type,
-                code,
                 client_id,
                 client_secret,
-                redirect_uri
+                code
+            },
+        };
+        if (opts) {
+            options = Object.assign(options, opts);
+        }
+        return await fasq.request(options)
+    }
+
+
+    /**
+     * authorize - Authorization Code Grant
+     * Path: travelling/api/v1/auth/oauth/authorize
+     * @param {any} client_id  
+     * @param {any} response_type  
+     * @param {any} state  
+     * @param {any} redirect_uri  
+     * @param {any} group_request  
+     */
+    static async authorize(client_id, response_type, state, redirect_uri, group_request, opts) {
+        var options = {
+            method: 'GET',
+            resolveWithFullResponse: true,
+            simple: false,
+            uri: hostUrl + "/" + `travelling/api/v1/auth/oauth/authorize`,
+            qs: {
+                client_id,
+                response_type,
+                state,
+                redirect_uri,
+                group_request
             },
         };
         if (opts) {

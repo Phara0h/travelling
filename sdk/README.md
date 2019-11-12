@@ -126,16 +126,9 @@ Path: travelling/api/v1/groups/import
 body
 ```js
 {
-    "testgroup": {
-        "group1": {
-            "inherited": [
-                "group|group4"
-            ]
-        },
-        "superadmin": {}
-    },
     "group": {
         "anonymous": {
+            "type": "group",
             "allowed": [{
                     "route": "/travelling/portal/*",
                     "host": null,
@@ -161,7 +154,7 @@ body
                 {
                     "route": "/travelling/assets/*",
                     "host": null,
-                    "remove_from_path": "/travelling/assets/",
+                    "removeFromPath": "/travelling/assets/",
                     "method": "GET",
                     "name": "get-travelling-assets-*"
                 },
@@ -177,17 +170,21 @@ body
                     "method": "GET",
                     "name": "get-favicon.ico"
                 }
-            ]
+            ],
+            "inherited": null,
+            "is_default": false
         },
-        "group4": {},
-        "group1": {},
         "group3": {
+            "type": "group",
+            "allowed": null,
             "inherited": [
                 "testgroup|group1",
                 "group|group2"
-            ]
+            ],
+            "is_default": false
         },
         "superadmin": {
+            "type": "group",
             "allowed": [{
                     "host": null,
                     "route": "/travelling/*",
@@ -199,33 +196,43 @@ body
             ],
             "inherited": [
                 "group|anonymous"
-            ]
+            ],
+            "is_default": false
+        },
+        "group4": {
+            "type": "group",
+            "allowed": null,
+            "inherited": [],
+            "is_default": false
         },
         "group2": {
+            "type": "group",
             "allowed": [{
                     "route": "/test/get",
                     "host": "https://127.0.0.1:4268/:username/:group",
-                    "remove_from_path": "/test/get",
+                    "removeFromPath": "/test/get",
                     "method": "GET",
                     "name": "get-test-get"
                 },
                 {
                     "route": "/test/post",
                     "host": "http://127.0.0.1:4267/?id=:id&permission=:permission",
-                    "remove_from_path": "/test/post",
+                    "removeFromPath": "/test/post",
                     "method": "POST",
                     "name": "post-test-post"
                 }
             ],
             "inherited": [
                 "testgroup|group1"
-            ]
+            ],
+            "is_default": false
         },
         "group5": {
+            "type": "group",
             "allowed": [{
                 "route": "/test/delete/:grouptype",
                 "host": "https://127.0.0.1:4268",
-                "remove_from_path": "/test/delete",
+                "removeFromPath": "/test/delete",
                 "method": "DELETE",
                 "name": "delete-test-delete-:grouptype"
             }],
@@ -234,6 +241,28 @@ body
                 "group|superadmin"
             ],
             "is_default": true
+        },
+        "group1": {
+            "type": "group",
+            "allowed": null,
+            "inherited": null,
+            "is_default": false
+        }
+    },
+    "testgroup": {
+        "group1": {
+            "type": "testgroup",
+            "allowed": null,
+            "inherited": [
+                "group|group4"
+            ],
+            "is_default": false
+        },
+        "superadmin": {
+            "type": "testgroup",
+            "allowed": null,
+            "inherited": null,
+            "is_default": false
         }
     }
 }
@@ -1719,6 +1748,7 @@ Path: travelling/api/v1/user/me
 
 * [Auth](#Auth)
     * [.accessToken()](#Auth.accessToken)
+    * [.authorize(client_id, response_type, state, redirect_uri, group_request)](#Auth.authorize)
     * [.activate(token)](#Auth.activate)
     * [.resetPassword(body, token)](#Auth.resetPassword)
     * [.forgotPassword(body)](#Auth.forgotPassword)
@@ -1733,6 +1763,22 @@ accessToken - Oauth2 `client_credentials` access token flow. Body must be `appli
 Path: travelling/api/v1/auth/token
 
 **Kind**: static method of [<code>Auth</code>](#Auth)  
+<a name="Auth.authorize"></a>
+
+### Auth.authorize(client_id, response_type, state, redirect_uri, group_request)
+authorize - Authorization Code Grant
+Path: travelling/api/v1/auth/oauth/authorize
+
+**Kind**: static method of [<code>Auth</code>](#Auth)  
+
+| Param | Type |
+| --- | --- |
+| client_id | <code>any</code> | 
+| response_type | <code>any</code> | 
+| state | <code>any</code> | 
+| redirect_uri | <code>any</code> | 
+| group_request | <code>any</code> | 
+
 <a name="Auth.activate"></a>
 
 ### Auth.activate(token)

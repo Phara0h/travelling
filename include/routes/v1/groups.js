@@ -96,7 +96,7 @@ async function setGroup(req, group, router, groups = null) {
                 msg: 'Group type contain invalid characters.',
             };
         }
-        group.type = req.body.type;
+        group.type = req.body.type.toLowerCase();
     }
 
     if (req.body.is_default) {
@@ -120,6 +120,9 @@ async function setGroup(req, group, router, groups = null) {
 
 async function getGroup(req, res, router) {
     var name = req.params.groupid.toLowerCase();
+
+    req.params.grouptype = req.params.grouptype.toLowerCase();
+
     var fgroup = await gm.getGroup(name, req.params.grouptype);
 
     if (!fgroup || req.params.grouptype && fgroup.type != req.params.grouptype.toLowerCase()) {
@@ -200,6 +203,7 @@ async function getUserByGroup(req, res, router) {
 async function getGroupsByType(req, res, router) {
     var groups = await gm.getGroups();
 
+    req.params.grouptype = req.params.grouptype.toLowerCase();
     return groups.filter(g=>g.type == req.params.grouptype);
 }
 
@@ -535,8 +539,8 @@ module.exports = function(app, opts, done) {
 
     app.post('/group/id/:groupid/type/:grouptype', async (req, res) => {
         req.body = {
-            name: req.params.groupid,
-            type: req.params.grouptype,
+            name: req.params.groupid.toLowerCase(),
+            type: req.params.grouptype.toLowerCase(),
         };
         await addGroup(req, res, router);
     });
@@ -721,7 +725,7 @@ module.exports = function(app, opts, done) {
     app.get('/groups/types', async (req, res) => {
         var groups = await gm.getGroups();
 
-        res.send(Array.from(new Set(groups.map(g=> g.type))));
+        res.send(Array.from(new Set(groups.map(g=> g.type.toLowerCase()))));
     });
 
     // import/export Groups
