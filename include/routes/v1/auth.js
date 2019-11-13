@@ -102,7 +102,7 @@ module.exports = function(app, opts, done) {
                 res.code(400).send(isValid);
             } else {
                 try {
-                    var user = await Database.checkAuth(username, email, req.body.password);
+                    var user = await Database.checkAuth(username, email, req.body.password, req.hostname);
 
                     await login(user.user, req, res);
                 } catch (e) {
@@ -155,7 +155,7 @@ module.exports = function(app, opts, done) {
         }
 
         var dGroup = await gm.defaultGroup();
-        var user = await Database.createAccount(username, password, email, [dGroup.id], groupRequest);
+        var user = await Database.createAccount(username, password, email, [dGroup.id], groupRequest, req.hostname);
 
         config.log.logger.info('New User Created: ' + user.username + ' | ' + req.connection);
         res.code(200).send('Account Created');
@@ -179,7 +179,7 @@ module.exports = function(app, opts, done) {
         }
 
         res.code(200).send();
-        Database.forgotPassword(req.body.email, req.ip);
+        Database.forgotPassword(req.body.email, req.ip, req.hostname);
 
     });
 
@@ -241,7 +241,10 @@ module.exports = function(app, opts, done) {
             };
         }
 
-        return 'Account activated, please login.';
+        await TokenHandler.deleteTempToken(token[2], token[0], 'activation');
+
+        res.redirect(config.portal.path + '?toast=Account activated, please login.');
+        // return 'Account activated, please login.';
     });
 
     // Authorization Code Grant

@@ -9,6 +9,8 @@ import {ripple} from '@material/mwc-ripple/ripple-directive.js';
 import {classMap} from 'lit-html/directives/class-map';
 import {ifDefined} from 'lit-html/directives/if-defined.js';
 // Extend the LitElement base class
+
+//sorry about this code regrets are had and would of written it in vue.js
 class Login extends LitElement {
     static get styles() {
         return css`
@@ -121,6 +123,7 @@ class Login extends LitElement {
                             <h1 style="display: ${this.isLogin ? 'block' : 'none'};">Log in to your account</h1>
                             <h1 style="display: ${this.isRegister ? 'block' : 'none'};">Create account</h1>
                             <h1 style="display: ${this.isForgotPassword ? 'block' : 'none'};">Forgot Password</h1>
+                            <h1 style="display: ${this.isNewPassword ? 'block' : 'none'};">Set A New Password</h1>
                             <div style="display: ${this.isOauth ? 'block' : 'none'};">
                             <h1 >Authorization</h1>
                               <p>Hello ${this._user.username}, Do you give authorization to <b>${this.oauthClient}</b> for your account details?</p>
@@ -134,19 +137,20 @@ class Login extends LitElement {
                         </div>
                     </div>
                     <div class="login-fields" style="display: ${!this.isLogout ? 'block' : 'none'};">
-                        <trav-text autocomplete="username" autofocus required outlined iconTrailing="account_circle" id="username" label="${this.options.translation.username}" style="display: ${this.isRegister || this.isLogin ? 'flex' : 'none'};"></trav-text>
-                        <trav-text  autocomplete="current-password" autofocus required outlined iconTrailing="lock" id="password" type="password" validationMessage="${this.passwordHelper}" label="${this.options.translation.password}" style="display: ${this.isRegister || this.isLogin ? 'block' : 'none'};"></trav-text>
-                        <trav-text autocomplete="email" autofocus required id="email" outlined iconTrailing="email" type="email" label="${this.options.translation.email}" style="display: ${this.isRegister || this.isForgotPassword ? 'flex' : 'none'};"></trav-text>
+                        <trav-text autocomplete="username" autofocus required outlined iconTrailing="account_circle" id="username" label="${this.isLogin ?this.options.translation.username +' / '+this.options.translation.email : this.options.translation.username}" style="display: ${!this.isNewPassword && this.isRegister || this.isLogin ? 'flex' : 'none'};"></trav-text>
+                        <trav-text  autocomplete="current-password" autofocus required outlined iconTrailing="lock" id="password" type="password" validationMessage="${this.passwordHelper}" label="${this.options.translation.password}" style="display: ${this.isRegister || this.isNewPassword || this.isLogin ? 'block' : 'none'};"></trav-text>
+                        <trav-text autocomplete="email" autofocus required id="email" outlined iconTrailing="email" type="email" label="${this.options.translation.email}" style="display: ${!this.isNewPassword && this.isRegister || this.isForgotPassword ? 'flex' : 'none'};"></trav-text>
                     </div>
                     <div class="options">
-                      <span class="subButtons" style="display: ${!this.isRegister && !this.isLogout ? 'flex' : 'none'};" @click="${this.showRegistration}">Create an account</span>
-                      <span class="subButtons" style="display: ${!this.isLogin && !this.isLogout ? 'flex' : 'none'};" @click="${this.showLogin}">Log in to account</span>
-                      <span class="subButtons" style="display: ${!this.isForgotPassword && !this.isLogout ? 'flex' : 'none'};" @click="${this.showForgotPassword}">Forgot your password?</span>
+                      <span class="subButtons" style="display: ${!this.isRegister && !this.isLogout && !this.isNewPassword? 'flex' : 'none'};" @click="${this.showRegistration}">Create an account</span>
+                      <span class="subButtons" style="display: ${!this.isLogin && !this.isLogout && !this.isNewPassword? 'flex' : 'none'};" @click="${this.showLogin}">Log in to account</span>
+                      <span class="subButtons" style="display: ${!this.isForgotPassword && !this.isLogout  ? 'flex' : 'none'};" @click="${this.showForgotPassword}">Forgot your password?</span>
                     </div>
 
-                    <trav-button raised @click="${this.login}" style="display: ${this.isLogin ? 'flex' : 'none'};">Log in</trav-button>
+                    <trav-button id="login" raised @click="${this.login}" style="display: ${this.isLogin ? 'flex' : 'none'};">Log in</trav-button>
                     <trav-button id="register" raised @click="${this.registerAccount}" style="display: ${this.isRegister ? 'flex' : 'none'};">Register</trav-button>
                     <trav-button id="resetpassword" raised @click="${this.resetPassword}" style="display: ${this.isForgotPassword ? 'flex' : 'none'};">Reset Password</trav-button>
+                    <trav-button id="savepassword" raised @click="${this.savePassword}" style="display: ${this.isNewPassword ? 'flex' : 'none'};">Save Password</trav-button>
                     <trav-form-button type="submit"  formaction="${window.location.href}" formMethod="post" raised  style="display: ${this.isOauth ? 'flex' : 'none'};">Authorize</trav-form-button>
                     <trav-button raised @click="${this.logout}" style="display: ${this.isLogout ? 'flex' : 'none'};">Logout</trav-button>
 
@@ -170,6 +174,7 @@ class Login extends LitElement {
         this.successMsg = '';
         this.isRegister = false;
         this.isForgotPassword = false;
+        this.isNewPassword = false;
         this.isLogin = false;
         this.isLogout = false;
         this.isOauth = false;
@@ -188,9 +193,12 @@ class Login extends LitElement {
 
         this.oauthClient = urlParams.get('client_id');
         this.groupRequest = urlParams.get('group_request');
-
-        this.checkLoggedIn();
-
+        this.resetToken = urlParams.get('tert');
+        this.checkLoggedIn()
+        // var tmsg = urlParams.get('toast');
+        // if(tmsg) {
+        //   this.showSuccess(tmsg);
+        // }
     }
 
     static get properties() {
@@ -199,8 +207,11 @@ class Login extends LitElement {
             _username: {type: String},
             _password: {type: String},
             _email: {type: String},
+            resetToken: {type: String},
+            successMsg: {type: String},
             isRegister: {type: Boolean},
             isForgotPassword: {type: Boolean},
+            isNewPassword: {type: Boolean},
             isLogin: {type: Boolean},
             isLoggout: {type: Boolean},
             isOauth: {type: Boolean},
@@ -209,12 +220,19 @@ class Login extends LitElement {
         };
     }
     async checkLoggedIn() {
-        var res = await fetch(new Request(window.location.origin+'/travelling/api/v1/user/me', {method: 'GET'}));
 
         this._username = this.shadowRoot.getElementById('username');
         this._password = this.shadowRoot.getElementById('password');
         this._email = this.shadowRoot.getElementById('email');
-;
+
+        var ops = await fetch(new Request(window.location.origin+'/travelling/api/v1/config/portal/webclient', {method: 'GET'}));
+        this.options = await ops.json();
+
+        if(this.resetToken) {
+          this.showNewPassword();
+          return;
+        }
+        var res = await fetch(new Request(window.location.origin+'/travelling/api/v1/user/me', {method: 'GET'}));
 
         if (res.status === 200) {
             this._user = await res.json();
@@ -224,11 +242,15 @@ class Login extends LitElement {
             } else {
                 this.showLogout();
             }
-
         } else {
-            var res = await fetch(new Request(window.location.origin+'/travelling/api/v1/config/portal/webclient', {method: 'GET'}));
-            this.options = await res.json();
-            this.showLogin();
+              this.showLogin();
+        }
+        var urlParams = new URLSearchParams(window.location.search);
+        var tmsg = urlParams.get('toast');
+        if(tmsg) {
+          this.showSuccess(tmsg);
+          var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+          window.history.pushState({path:newurl},'',newurl);
         }
 
     }
@@ -264,6 +286,7 @@ class Login extends LitElement {
 
     }
     showRegistration() {
+        this.isNewPassword = false;
         this.isRegister = true;
         this.isForgotPassword = false;
         this.isLogin = false;
@@ -273,6 +296,7 @@ class Login extends LitElement {
     }
 
     showLogin() {
+        this.isNewPassword = false;
         this.isRegister = false;
         this.isForgotPassword = false;
         this.isLogin = true;
@@ -281,6 +305,7 @@ class Login extends LitElement {
         setTimeout(()=>this.shadowRoot.getElementById('username').formElement.focus(), 100);
     }
     showForgotPassword() {
+        this.isNewPassword = false;
         this.isRegister = false;
         this.isForgotPassword = true;
         this.isLogin = false;
@@ -289,7 +314,18 @@ class Login extends LitElement {
         setTimeout(()=>this.shadowRoot.getElementById('email').formElement.focus(), 100);
     }
 
+    showNewPassword() {
+        this.isNewPassword = true;
+        this.isRegister = false;
+        this.isForgotPassword = false;
+        this.isLogin = false;
+        this.isLogout = false;
+        this.isOauth = false;
+        setTimeout(()=>this.shadowRoot.getElementById('password').formElement.focus(), 100);
+    }
+
     showAuthorization() {
+        this.isNewPassword = false;
         this.isRegister = false;
         this.isForgotPassword = false;
         this.isLogin = false;
@@ -297,6 +333,7 @@ class Login extends LitElement {
         this.isOauth = true;
     }
     showLogout() {
+        this.isNewPassword = false;
         this.isRegister = false;
         this.isForgotPassword = false;
         this.isLogin = false;
@@ -305,14 +342,23 @@ class Login extends LitElement {
     }
     async login() {
 
+        this._username = this.shadowRoot.getElementById('username');
+        this._password = this.shadowRoot.getElementById('password');
+        this._email = this.shadowRoot.getElementById('email');
+
         this._username.reportValidity();
         this._password.reportValidity();
+
         if (this._username.validity.valid && this._password.validity.valid) {
 
-            var res = await fetch(new Request(window.location.origin+'/travelling/api/v1/auth/login', {method: 'PUT', body: JSON.stringify({
-                username: this._username.value,
+            this.shadowRoot.getElementById('login').disabled = true;
+            var loginPayload = {
                 password: this._password.value,
-            }),
+            };
+
+            loginPayload[this._username.value.indexOf('@') > -1 ? 'email' : 'username'] = this._username.value;
+
+            var res = await fetch(new Request(window.location.origin+'/travelling/api/v1/auth/login', {method: 'PUT', body: JSON.stringify(loginPayload),
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -346,6 +392,8 @@ class Login extends LitElement {
             this.showError('Invalid '+this.options.translation.password);
         }
 
+          this.shadowRoot.getElementById('login').disabled = false;
+
     }
     async logout() {
         await fetch(new Request(window.location.origin+'/travelling/api/v1/auth/logout', {method: 'GET'}));
@@ -355,7 +403,9 @@ class Login extends LitElement {
     }
 
     async registerAccount(e) {
-
+      this._username = this.shadowRoot.getElementById('username');
+      this._password = this.shadowRoot.getElementById('password');
+      this._email = this.shadowRoot.getElementById('email');
         this._username.reportValidity();
         this._email.reportValidity();
         this._password.reportValidity();
@@ -452,6 +502,43 @@ class Login extends LitElement {
         }
     }
 
+    async savePassword() {
+        this._password = this.shadowRoot.getElementById('password');
+        this._password.reportValidity();
+
+        if (this._password.validity.valid) {
+            this.shadowRoot.getElementById('savepassword').disabled = true;
+
+            var res = await fetch(new Request('/travelling/api/v1/auth/password/reset?token='+this.resetToken, {method: 'put', body: JSON.stringify({password: this._password.value}),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }));
+
+            if (res.status === 200) {
+                var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                window.history.pushState({path:newurl},'',newurl);
+                this.showLogin();
+                this.showSuccess("Your password was reset! Please now log in.");
+                this.password.value = '';
+
+            } else {
+              this._password.formElement.focus();
+                this._password.getLabelAdapterMethods().shakeLabel(true);
+                var body = await res.json();
+
+                this.showError(body.msg);
+            }
+            this.shadowRoot.getElementById('resetpassword').disabled = false;
+        }
+
+        if (!this._password.validity.valid) {
+            this._password.formElement.focus();
+            this._password.invalidate();
+            this.showError('Invalid '+this.options.translation.password);
+        }
+    }
+
     _onKeyUp(event) {
         // If Enter key pressed, fire 'enter-pressed'
         if (event.keyCode != 13) {
@@ -485,7 +572,7 @@ class Login extends LitElement {
 
     showSuccess(msg) {
         var success = this.shadowRoot.getElementById('success');
-
+        console.log(msg)
         this.successMsg = msg;
         success.open();
     }

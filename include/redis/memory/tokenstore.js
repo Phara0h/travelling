@@ -32,6 +32,16 @@ class TokenStore {
         } catch (_) {}
         return false;
     }
+
+    async destroyAllMatching(search) {
+        search.replace(/\*/g, '');
+
+        this.tokens.forEach((key)=> {
+            if (key.indexOf(search) > -1) {
+                delete this.tokens[key];
+            }
+        });
+    }
 }
 
 module.exports = TokenStore;

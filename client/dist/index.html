@@ -7238,7 +7238,7 @@ __decorate([property({
 const style$4 = css`.mdc-snackbar{z-index:8;margin:8px;display:none;position:fixed;right:0;bottom:0;left:0;align-items:center;justify-content:center;box-sizing:border-box;pointer-events:none;-webkit-tap-highlight-color:rgba(0,0,0,0)}.mdc-snackbar__surface{background-color:#333}.mdc-snackbar__label{color:rgba(255,255,255,.87)}.mdc-snackbar__surface{min-width:344px}@media(max-width: 480px),(max-width: 344px){.mdc-snackbar__surface{min-width:100%}}.mdc-snackbar__surface{max-width:672px}.mdc-snackbar__surface{box-shadow:0px 3px 5px -1px rgba(0, 0, 0, 0.2),0px 6px 10px 0px rgba(0, 0, 0, 0.14),0px 1px 18px 0px rgba(0,0,0,.12)}.mdc-snackbar__surface{border-radius:4px}.mdc-snackbar--opening,.mdc-snackbar--open,.mdc-snackbar--closing{display:flex}.mdc-snackbar--leading{justify-content:flex-start}.mdc-snackbar--stacked .mdc-snackbar__surface{flex-direction:column;align-items:flex-start}.mdc-snackbar--stacked .mdc-snackbar__actions{align-self:flex-end;margin-bottom:8px}.mdc-snackbar__surface{display:flex;align-items:center;justify-content:flex-start;box-sizing:border-box;transform:scale(0.8);opacity:0}.mdc-snackbar--open .mdc-snackbar__surface{transform:scale(1);opacity:1;pointer-events:auto;transition:opacity 150ms 0ms cubic-bezier(0, 0, 0.2, 1),transform 150ms 0ms cubic-bezier(0, 0, 0.2, 1)}.mdc-snackbar--closing .mdc-snackbar__surface{transform:scale(1);transition:opacity 75ms 0ms cubic-bezier(0.4, 0, 1, 1)}.mdc-snackbar__label{font-family:Roboto, sans-serif;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-size:.875rem;line-height:1.25rem;font-weight:400;letter-spacing:.0178571429em;text-decoration:inherit;text-transform:inherit;flex-grow:1;box-sizing:border-box;margin:0;padding:14px 16px}.mdc-snackbar__label::before{display:inline;content:attr(data-mdc-snackbar-label-text)}.mdc-snackbar__actions{margin-left:0;margin-right:8px;display:flex;flex-shrink:0;align-items:center;box-sizing:border-box}[dir=rtl] .mdc-snackbar__actions,.mdc-snackbar__actions[dir=rtl]{margin-left:8px;margin-right:0}.mdc-snackbar__action:not(:disabled){color:#bb86fc}.mdc-snackbar__action::before,.mdc-snackbar__action::after{background-color:#bb86fc}.mdc-snackbar__action:hover::before{opacity:.08}.mdc-snackbar__action:not(.mdc-ripple-upgraded):focus::before,.mdc-snackbar__action.mdc-ripple-upgraded--background-focused::before{transition-duration:75ms;opacity:.24}.mdc-snackbar__action:not(.mdc-ripple-upgraded)::after{transition:opacity 150ms linear}.mdc-snackbar__action:not(.mdc-ripple-upgraded):active::after{transition-duration:75ms;opacity:.24}.mdc-snackbar__action.mdc-ripple-upgraded{--mdc-ripple-fg-opacity: 0.24}.mdc-snackbar__dismiss{color:rgba(255,255,255,.87)}.mdc-snackbar__dismiss::before,.mdc-snackbar__dismiss::after{background-color:rgba(255,255,255,.87)}.mdc-snackbar__dismiss:hover::before{opacity:.08}.mdc-snackbar__dismiss:not(.mdc-ripple-upgraded):focus::before,.mdc-snackbar__dismiss.mdc-ripple-upgraded--background-focused::before{transition-duration:75ms;opacity:.24}.mdc-snackbar__dismiss:not(.mdc-ripple-upgraded)::after{transition:opacity 150ms linear}.mdc-snackbar__dismiss:not(.mdc-ripple-upgraded):active::after{transition-duration:75ms;opacity:.24}.mdc-snackbar__dismiss.mdc-ripple-upgraded{--mdc-ripple-fg-opacity: 0.24}.mdc-snackbar__dismiss.mdc-snackbar__dismiss{width:36px;height:36px;padding:9px;font-size:18px}.mdc-snackbar__dismiss.mdc-snackbar__dismiss svg,.mdc-snackbar__dismiss.mdc-snackbar__dismiss img{width:18px;height:18px}.mdc-snackbar__action+.mdc-snackbar__dismiss{margin-left:8px;margin-right:0}[dir=rtl] .mdc-snackbar__action+.mdc-snackbar__dismiss,.mdc-snackbar__action+.mdc-snackbar__dismiss[dir=rtl]{margin-left:0;margin-right:8px}slot[name=action]::slotted(mwc-button){--mdc-theme-primary: var(--mdc-snackbar-action-color, #bb86fc)}slot[name=dismiss]::slotted(mwc-icon-button){--mdc-icon-size: 18px;color:rgba(255, 255, 255, 0.87)}`;
 let Snackbar = class Snackbar extends SnackbarBase {};
 Snackbar.styles = style$4;
-Snackbar = __decorate([customElement('mwc-snackbar')], Snackbar);
+Snackbar = __decorate([customElement('mwc-snackbar')], Snackbar); //sorry about this code regrets are had and would of written it in vue.js
 
 class Login extends LitElement {
   static get styles() {
@@ -7352,6 +7352,7 @@ class Login extends LitElement {
                             <h1 style="display: ${this.isLogin ? 'block' : 'none'};">Log in to your account</h1>
                             <h1 style="display: ${this.isRegister ? 'block' : 'none'};">Create account</h1>
                             <h1 style="display: ${this.isForgotPassword ? 'block' : 'none'};">Forgot Password</h1>
+                            <h1 style="display: ${this.isNewPassword ? 'block' : 'none'};">Set A New Password</h1>
                             <div style="display: ${this.isOauth ? 'block' : 'none'};">
                             <h1 >Authorization</h1>
                               <p>Hello ${this._user.username}, Do you give authorization to <b>${this.oauthClient}</b> for your account details?</p>
@@ -7365,19 +7366,20 @@ class Login extends LitElement {
                         </div>
                     </div>
                     <div class="login-fields" style="display: ${!this.isLogout ? 'block' : 'none'};">
-                        <trav-text autocomplete="username" autofocus required outlined iconTrailing="account_circle" id="username" label="${this.options.translation.username}" style="display: ${this.isRegister || this.isLogin ? 'flex' : 'none'};"></trav-text>
-                        <trav-text  autocomplete="current-password" autofocus required outlined iconTrailing="lock" id="password" type="password" validationMessage="${this.passwordHelper}" label="${this.options.translation.password}" style="display: ${this.isRegister || this.isLogin ? 'block' : 'none'};"></trav-text>
-                        <trav-text autocomplete="email" autofocus required id="email" outlined iconTrailing="email" type="email" label="${this.options.translation.email}" style="display: ${this.isRegister || this.isForgotPassword ? 'flex' : 'none'};"></trav-text>
+                        <trav-text autocomplete="username" autofocus required outlined iconTrailing="account_circle" id="username" label="${this.isLogin ? this.options.translation.username + ' / ' + this.options.translation.email : this.options.translation.username}" style="display: ${!this.isNewPassword && this.isRegister || this.isLogin ? 'flex' : 'none'};"></trav-text>
+                        <trav-text  autocomplete="current-password" autofocus required outlined iconTrailing="lock" id="password" type="password" validationMessage="${this.passwordHelper}" label="${this.options.translation.password}" style="display: ${this.isRegister || this.isNewPassword || this.isLogin ? 'block' : 'none'};"></trav-text>
+                        <trav-text autocomplete="email" autofocus required id="email" outlined iconTrailing="email" type="email" label="${this.options.translation.email}" style="display: ${!this.isNewPassword && this.isRegister || this.isForgotPassword ? 'flex' : 'none'};"></trav-text>
                     </div>
                     <div class="options">
-                      <span class="subButtons" style="display: ${!this.isRegister && !this.isLogout ? 'flex' : 'none'};" @click="${this.showRegistration}">Create an account</span>
-                      <span class="subButtons" style="display: ${!this.isLogin && !this.isLogout ? 'flex' : 'none'};" @click="${this.showLogin}">Log in to account</span>
+                      <span class="subButtons" style="display: ${!this.isRegister && !this.isLogout && !this.isNewPassword ? 'flex' : 'none'};" @click="${this.showRegistration}">Create an account</span>
+                      <span class="subButtons" style="display: ${!this.isLogin && !this.isLogout && !this.isNewPassword ? 'flex' : 'none'};" @click="${this.showLogin}">Log in to account</span>
                       <span class="subButtons" style="display: ${!this.isForgotPassword && !this.isLogout ? 'flex' : 'none'};" @click="${this.showForgotPassword}">Forgot your password?</span>
                     </div>
 
-                    <trav-button raised @click="${this.login}" style="display: ${this.isLogin ? 'flex' : 'none'};">Log in</trav-button>
+                    <trav-button id="login" raised @click="${this.login}" style="display: ${this.isLogin ? 'flex' : 'none'};">Log in</trav-button>
                     <trav-button id="register" raised @click="${this.registerAccount}" style="display: ${this.isRegister ? 'flex' : 'none'};">Register</trav-button>
                     <trav-button id="resetpassword" raised @click="${this.resetPassword}" style="display: ${this.isForgotPassword ? 'flex' : 'none'};">Reset Password</trav-button>
+                    <trav-button id="savepassword" raised @click="${this.savePassword}" style="display: ${this.isNewPassword ? 'flex' : 'none'};">Save Password</trav-button>
                     <trav-form-button type="submit"  formaction="${window.location.href}" formMethod="post" raised  style="display: ${this.isOauth ? 'flex' : 'none'};">Authorize</trav-form-button>
                     <trav-button raised @click="${this.logout}" style="display: ${this.isLogout ? 'flex' : 'none'};">Logout</trav-button>
 
@@ -7401,6 +7403,7 @@ class Login extends LitElement {
     this.successMsg = '';
     this.isRegister = false;
     this.isForgotPassword = false;
+    this.isNewPassword = false;
     this.isLogin = false;
     this.isLogout = false;
     this.isOauth = false;
@@ -7416,7 +7419,11 @@ class Login extends LitElement {
     var urlParams = new URLSearchParams(window.location.search);
     this.oauthClient = urlParams.get('client_id');
     this.groupRequest = urlParams.get('group_request');
-    this.checkLoggedIn();
+    this.resetToken = urlParams.get('tert');
+    this.checkLoggedIn(); // var tmsg = urlParams.get('toast');
+    // if(tmsg) {
+    //   this.showSuccess(tmsg);
+    // }
   }
 
   static get properties() {
@@ -7433,10 +7440,19 @@ class Login extends LitElement {
       _email: {
         type: String
       },
+      resetToken: {
+        type: String
+      },
+      successMsg: {
+        type: String
+      },
       isRegister: {
         type: Boolean
       },
       isForgotPassword: {
+        type: Boolean
+      },
+      isNewPassword: {
         type: Boolean
       },
       isLogin: {
@@ -7458,13 +7474,22 @@ class Login extends LitElement {
   }
 
   async checkLoggedIn() {
-    var res = await fetch(new Request(window.location.origin + '/travelling/api/v1/user/me', {
-      method: 'GET'
-    }));
     this._username = this.shadowRoot.getElementById('username');
     this._password = this.shadowRoot.getElementById('password');
     this._email = this.shadowRoot.getElementById('email');
-    ;
+    var ops = await fetch(new Request(window.location.origin + '/travelling/api/v1/config/portal/webclient', {
+      method: 'GET'
+    }));
+    this.options = await ops.json();
+
+    if (this.resetToken) {
+      this.showNewPassword();
+      return;
+    }
+
+    var res = await fetch(new Request(window.location.origin + '/travelling/api/v1/user/me', {
+      method: 'GET'
+    }));
 
     if (res.status === 200) {
       this._user = await res.json();
@@ -7475,11 +7500,18 @@ class Login extends LitElement {
         this.showLogout();
       }
     } else {
-      var res = await fetch(new Request(window.location.origin + '/travelling/api/v1/config/portal/webclient', {
-        method: 'GET'
-      }));
-      this.options = await res.json();
       this.showLogin();
+    }
+
+    var urlParams = new URLSearchParams(window.location.search);
+    var tmsg = urlParams.get('toast');
+
+    if (tmsg) {
+      this.showSuccess(tmsg);
+      var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+      window.history.pushState({
+        path: newurl
+      }, '', newurl);
     }
   }
 
@@ -7502,6 +7534,7 @@ class Login extends LitElement {
   }
 
   showRegistration() {
+    this.isNewPassword = false;
     this.isRegister = true;
     this.isForgotPassword = false;
     this.isLogin = false;
@@ -7511,6 +7544,7 @@ class Login extends LitElement {
   }
 
   showLogin() {
+    this.isNewPassword = false;
     this.isRegister = false;
     this.isForgotPassword = false;
     this.isLogin = true;
@@ -7520,6 +7554,7 @@ class Login extends LitElement {
   }
 
   showForgotPassword() {
+    this.isNewPassword = false;
     this.isRegister = false;
     this.isForgotPassword = true;
     this.isLogin = false;
@@ -7528,7 +7563,18 @@ class Login extends LitElement {
     setTimeout(() => this.shadowRoot.getElementById('email').formElement.focus(), 100);
   }
 
+  showNewPassword() {
+    this.isNewPassword = true;
+    this.isRegister = false;
+    this.isForgotPassword = false;
+    this.isLogin = false;
+    this.isLogout = false;
+    this.isOauth = false;
+    setTimeout(() => this.shadowRoot.getElementById('password').formElement.focus(), 100);
+  }
+
   showAuthorization() {
+    this.isNewPassword = false;
     this.isRegister = false;
     this.isForgotPassword = false;
     this.isLogin = false;
@@ -7537,6 +7583,7 @@ class Login extends LitElement {
   }
 
   showLogout() {
+    this.isNewPassword = false;
     this.isRegister = false;
     this.isForgotPassword = false;
     this.isLogin = false;
@@ -7545,17 +7592,23 @@ class Login extends LitElement {
   }
 
   async login() {
+    this._username = this.shadowRoot.getElementById('username');
+    this._password = this.shadowRoot.getElementById('password');
+    this._email = this.shadowRoot.getElementById('email');
+
     this._username.reportValidity();
 
     this._password.reportValidity();
 
     if (this._username.validity.valid && this._password.validity.valid) {
+      this.shadowRoot.getElementById('login').disabled = true;
+      var loginPayload = {
+        password: this._password.value
+      };
+      loginPayload[this._username.value.indexOf('@') > -1 ? 'email' : 'username'] = this._username.value;
       var res = await fetch(new Request(window.location.origin + '/travelling/api/v1/auth/login', {
         method: 'PUT',
-        body: JSON.stringify({
-          username: this._username.value,
-          password: this._password.value
-        }),
+        body: JSON.stringify(loginPayload),
         headers: {
           'Content-Type': 'application/json'
         },
@@ -7592,6 +7645,8 @@ class Login extends LitElement {
 
       this.showError('Invalid ' + this.options.translation.password);
     }
+
+    this.shadowRoot.getElementById('login').disabled = false;
   }
 
   async logout() {
@@ -7603,6 +7658,10 @@ class Login extends LitElement {
   }
 
   async registerAccount(e) {
+    this._username = this.shadowRoot.getElementById('username');
+    this._password = this.shadowRoot.getElementById('password');
+    this._email = this.shadowRoot.getElementById('email');
+
     this._username.reportValidity();
 
     this._email.reportValidity();
@@ -7716,6 +7775,52 @@ class Login extends LitElement {
     }
   }
 
+  async savePassword() {
+    this._password = this.shadowRoot.getElementById('password');
+
+    this._password.reportValidity();
+
+    if (this._password.validity.valid) {
+      this.shadowRoot.getElementById('savepassword').disabled = true;
+      var res = await fetch(new Request('/travelling/api/v1/auth/password/reset?token=' + this.resetToken, {
+        method: 'put',
+        body: JSON.stringify({
+          password: this._password.value
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }));
+
+      if (res.status === 200) {
+        var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        window.history.pushState({
+          path: newurl
+        }, '', newurl);
+        this.showLogin();
+        this.showSuccess("Your password was reset! Please now log in.");
+        this.password.value = '';
+      } else {
+        this._password.formElement.focus();
+
+        this._password.getLabelAdapterMethods().shakeLabel(true);
+
+        var body = await res.json();
+        this.showError(body.msg);
+      }
+
+      this.shadowRoot.getElementById('resetpassword').disabled = false;
+    }
+
+    if (!this._password.validity.valid) {
+      this._password.formElement.focus();
+
+      this._password.invalidate();
+
+      this.showError('Invalid ' + this.options.translation.password);
+    }
+  }
+
   _onKeyUp(event) {
     // If Enter key pressed, fire 'enter-pressed'
     if (event.keyCode != 13) {
@@ -7748,6 +7853,7 @@ class Login extends LitElement {
 
   showSuccess(msg) {
     var success = this.shadowRoot.getElementById('success');
+    console.log(msg);
     this.successMsg = msg;
     success.open();
   }
@@ -7926,3 +8032,4 @@ customElements.define('trav-text', TravText);</script>
 </head>
 
 <trav-login></trav-login>
+ 

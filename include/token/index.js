@@ -25,9 +25,9 @@ class TokenHandler {
             2 = userId
             */
 
-            var t = await TokenStore.get(await this._hashToken(dToken[2], dToken[0]), type);
+            var t = await TokenStore.get(await this._hashToken(dToken[2], dToken[0]) + '_' + dToken[2], type);
 
-            if (t.secret == dToken[2] && Date.now() - dToken[1] < expiration) {
+            if (t && t.secret == dToken[2] && Date.now() - dToken[1] < expiration) {
                 return dToken; // secret;
             }
 
@@ -46,7 +46,7 @@ class TokenHandler {
                     reject(err);
                 }
 
-                await TokenStore.set(user_id, type, await this._hashToken(user_id, secret.toString('base64')), expiration);
+                await TokenStore.set(user_id, type, await this._hashToken(user_id, secret.toString('base64')) + '_' + user_id, expiration);
 
                 var secret = secret.toString('base64') + '|' + (new Date(Date.now())).getTime() + '|' + user_id;
 
@@ -266,6 +266,13 @@ class TokenHandler {
 
     static async deleteOAuthCode(id) {
         return await TokenStore.destroy(id, 'code');
+    }
+    static async deleteTempToken(userId, secret, type) {
+        return await TokenStore.destroy(await this._hashToken(userId, secret) + '_' + userId, type);
+    }
+
+    static async deleteAllTempTokens(userId) {
+        return await TokenStore.destroyAllMatching('*_' + userId);
     }
 
     static async checkRecoveryToken(token) {
