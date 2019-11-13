@@ -17,7 +17,7 @@ const regex = {
         + config.password.maxchar
         + '}$'),
     // safeName: new RegExp(/^[A-Za-z0-9_\/\?\-\@\#\$\%\!\^\&\*\.]{1,350}$/g)
-    safeName: new RegExp(/^[A-Za-z0-9_@\.]{1,350}$/),
+    safeName: new RegExp(/^[A-Za-z0-9 .\-_@\.]{1,350}$/),
     base64Image: new RegExp('^(data:\\w+\\/[a-zA-Z\\+\\-\\.]+;base64,)(?:[A-Za-z0-9+\\/]{4})*(?:[A-Za-z0-9+\\/]{2}==|[A-Za-z0-9+\/]{3}=)?$', 'gi'),
     uuidv4: new RegExp(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}$/),
     uuidCheck: (uuid)=>{
