@@ -28,7 +28,7 @@ module.exports = () => {
               },
           })).body;
 
-          accessToken = (await Travelling.Auth.accessToken('client_credentials', null, token.client_id, token.client_secret)).body.access_token;
+          accessToken = (await Travelling.Auth.accessToken('client_credentials', token.client_id, token.client_secret)).body.access_token;
           user = (await Travelling.User.Current.get(accessToken)).body;
         });
 

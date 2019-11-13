@@ -202,8 +202,8 @@ class Router {
                         if (route[j] != surl[j] && route[j] != '*') {
                             if (route[j].length > 0) {
                                 // checking for . - _ in-between for wildcards
-                                var subSurl = surl[j].split(/[\.\-_]/g).reverse();
-                                var subRoute = route[j].split(/[\.\-_]/g).reverse();
+                                var subSurl = surl[j].split(/[\@\.\-_]/g).reverse();
+                                var subRoute = route[j].split(/[\@\.\-_]/g).reverse();
 
                                 for (var k = 0; k < subRoute.length; k++) {
                                     if (subRoute[k] != subSurl[k] && subRoute[k] != '*') {
