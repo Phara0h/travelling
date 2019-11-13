@@ -48,16 +48,16 @@ class Email {
         };
     }
 
-    static async sendPasswordRecovery(user, ip, email, token) {
+    static async sendPasswordRecovery(user, hostname, clientip, email, token) {
         if (!transporter) {
             config.log.logger.debug(`Password Recovery For: ${email}, ${token}`);
             return;
         }
 
-        ip = await Fasquest.request({
-            uri: `http://ip-api.com/json/${ip}?fields=status,country,regionName,city,isp,query`,
+        clientip = await Fasquest.request({
+            uri: `http://ip-api.com/json/${clientip}?fields=status,country,regionName,city,isp,query`,
         });
-        var body = templates.resetPasswordBody({user, ip, config, token});
+        var body = templates.resetPasswordBody({user, hostname, clientip, config, token});
         var subject = templates.resetPasswordSubject({user});
 
         var info = await transporter.sendMail({
@@ -78,14 +78,14 @@ class Email {
         }
     }
 
-    static async sendActivation(user, email, token) {
+    static async sendActivation(user, email, token, hostname) {
 
         if (!transporter) {
             config.log.logger.debug(`Activation Email For: ${email}, ${token}`);
             return;
         }
 
-        var body = templates.activationBody({user, config, token});
+        var body = templates.activationBody({user, config, token, hostname});
         var subject = templates.activationSubject({user});
 
         var info = await transporter.sendMail({

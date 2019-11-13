@@ -25,6 +25,14 @@ class RedisTokenStore {
     async destroy(token, type) {
         await this.redis.del(type + '_' + token);
     }
+
+    async destroyAllMatching(search) {
+        var keys = await this.redis.keys(search);
+
+        for (var i = 0; i < keys.length; i++) {
+            await this.redis.del(keys[i]);
+        }
+    }
 }
 
 module.exports = RedisTokenStore;

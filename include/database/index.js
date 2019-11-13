@@ -13,7 +13,7 @@ class Database {
     constructor() {
     }
 
-    static async checkAuth(name, email, password) {
+    static async checkAuth(name, email, password, hostname) {
 
         var user = await User.findLimtedBy({username: name, email: email}, 'OR', 1);
 
@@ -33,7 +33,7 @@ class Database {
         if (user.email_verify && user.locked) {
             var token = await TokenHandler.getActivationToken(user.id);
 
-            await Email.sendActivation(user, user.email, token.token);
+            await Email.sendActivation(user, user.email, token.token, hostname);
         }
 
         // Locked check
@@ -81,7 +81,7 @@ class Database {
 
     }
 
-    static async createAccount(username, password, email, group_ids, group_request = null) {
+    static async createAccount(username, password, email, group_ids, group_request = null, hostname) {
         var userProp = {
             username,
             password,
@@ -108,14 +108,14 @@ class Database {
             user.email_verify = true;
             await user.save();
 
-            await Email.sendActivation(user, user.email, token.token);
+            await Email.sendActivation(user, user.email, token.token, hostname);
         }
 
         // user.addProperty('group',group[0])
         return user;
     }
 
-    static async forgotPassword(email, ip) {
+    static async forgotPassword(email, ip, hostname) {
         var user = await User.findLimtedBy({email: email}, 'AND', 1);
 
         if (user && user.length > 0) {
@@ -126,7 +126,7 @@ class Database {
             user.reset_password = true;
             await user.save();
 
-            Email.sendPasswordRecovery(user, ip, user.email, rt.token);
+            Email.sendPasswordRecovery(user, hostname, ip, user.email, rt.token);
         }
     }
 
@@ -141,6 +141,9 @@ class Database {
         user.password = password;
         user.reset_password = false;
         await user.save();
+
+        await TokenHandler.deleteAllTempTokens(token[2]);
+
         return true;
     }
 
@@ -157,6 +160,9 @@ class Database {
         user.locked = false;
         user.locked_reason = null;
         await user.save();
+
+        await TokenHandler.deleteAllTempTokens(token[2]);
+
         return true;
     }
 
