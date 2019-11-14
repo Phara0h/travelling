@@ -117,6 +117,12 @@ module.exports = function(app, opts, done) {
 
     app.get('/auth/logout', (req, res) =>{
         req.logout(req, res);
+
+        if (req.query.redirect_uri) {
+            res.sendFile(config.portal.filePath + '/src/redirect.html');
+            return;
+        }
+
         res.code(200).send('Logged Out');
     });
 
@@ -262,7 +268,7 @@ module.exports = function(app, opts, done) {
                     path: '/travelling/api/v1/auth/oauth/authorize',
                 });
 
-                res.sendFile(!config.token.code.authorizeFlow && userID != '' ? config.portal.filePath + '/src/redirect.html' : config.portal.filePath + '/index.html');
+                res.sendFile(!config.token.code.authorizeFlow && userID != '' ? config.portal.filePath + '/src/submit.html' : config.portal.filePath + '/index.html');
             });
         });
     });
