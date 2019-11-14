@@ -18,7 +18,7 @@ module.exports = {
         if (user.username && regex.username.exec(user.username.toLowerCase()) == null) {
             return {
                 type: 'username-error',
-                msg: `Minimum ${config.password.minchar} characters and only have these characters (A-Z, a-z, 0-9, _)`,
+                msg: `Minimum ${config.username.minchar} characters and only have these characters (A-Z, a-z, 0-9, _)`,
             };
         }
 
