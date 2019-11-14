@@ -5,7 +5,9 @@ const path = require('path');
 const config = require('./include/utils/config');
 const misc = require('./include/utils/misc');
 
-config.log.logger = require(config.log.logger);
+if (config.log.logger) {
+    config.log.logger = require(config.log.logger);
+}
 
 if (typeof config.log.fastify.logger == 'string' && misc.stringToBool(config.log.fastify.logger) === null) {
     config.log.fastify.logger = require(config.log.fastify.logger);
