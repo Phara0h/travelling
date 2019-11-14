@@ -1,8 +1,9 @@
-<html><form>
-    <button style="display:none;" id="sub" type="submit" formmethod="post"></button>
-  </form>
-  <script>var button = document.getElementById('sub');
-button.formaction = window.location.href;
-button.click();</script>
+<html><body>
+  <p>Redirecting automatically, <a id="clicklink" href="/">click here</a> if your not automatically redirected.</p>
 
-</html>
+  <script>var redirect_uri = new URLSearchParams(window.location.search).get('redirect_uri');
+var clicklink = document.getElementById('clicklink');
+clicklink.href = redirect_uri;
+window.location = redirect_uri;</script>
+
+</body></html>
