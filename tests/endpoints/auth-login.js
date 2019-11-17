@@ -1,11 +1,11 @@
 const config = require('../../include/utils/config');
-const Travelling = require('../../sdk')('https://127.0.0.1:6969');
+const { Travelling } =  require('../../sdk')('https://127.0.0.1:6969');
 var userContainer = require('../include/UserContainer.js');
 var testContainer = require('../include/TestContainer.js');
 const fasq = require('fasquest');
 
 module.exports = () => {
-    describe('Vaild', () => {
+    describe('Valid', () => {
 
         test('Login with Test User', async () => {
             var res = await Travelling.Auth.login({
@@ -50,43 +50,59 @@ module.exports = () => {
             expect(res.body.type).toEqual('locked');
         });
 
-        test('Login with Test4 User [Locked]', async () => {
-            var res = await Travelling.Auth.login({
-                password: 'Pas5w0r!d4',
-                email: 'test4@test.com',
+          if(config.email.test.enable) {
+
+            test('Login with Test4 User Email Activation Enable [Locked]', async () => {
+                var res = await Travelling.Auth.login({
+                    password: 'Pas5w0r!d4',
+                    email: 'test4@test.com',
+                });
+
+                expect(res.body.type).toEqual('locked');
+
+
+                  var aeRes = await fasq.request({
+                   method: 'GET',
+                   resolveWithFullResponse: true,
+                   simple: false,
+                   uri: testContainer.activationEmail.url,
+                 })
+
+                  var activationUrl = aeRes.body.match(/\bhttps?:\/\/\S+/gi);
+
+                  var activationRes = await fasq.request({
+                   method: 'GET',
+                   resolveWithFullResponse: true,
+                   simple: false,
+                   uri: activationUrl[1].replace(']', '').replace(/&#x3D;/g, '='),
+                 });
+
+                 expect(activationRes.statusCode).toEqual(200);
+
+                 var res2 = await Travelling.Auth.login({
+                     password: 'Pas5w0r!d4',
+                     email: 'test4@test.com',
+                 });
+
+                 expect(res2.statusCode).toEqual(200);
             });
 
-            expect(res.body.type).toEqual('locked');
+          }
+          else {
+            test('Login with Test4 User Email Activation Disabled [Locked]', async () => {
+                var res = await Travelling.Auth.login({
+                    password: 'Pas5w0r!d4',
+                    email: 'test4@test.com',
+                });
+
+                expect(res.body.type).toEqual('locked');
+            });
+          }
 
 
-            var aeRes = await fasq.request({
-             method: 'GET',
-             resolveWithFullResponse: true,
-             simple: false,
-             uri: testContainer.activationEmail.url,
-           })
-
-            var activationUrl = aeRes.body.match(/\bhttps?:\/\/\S+/gi);
-
-            var activationRes = await fasq.request({
-             method: 'GET',
-             resolveWithFullResponse: true,
-             simple: false,
-             uri: activationUrl[1].replace(']', '').replace(/&#x3D;/g, '='),
-           });
-           expect(activationRes.statusCode).toEqual(200);
-
-           var res2 = await Travelling.Auth.login({
-               password: 'Pas5w0r!d4',
-               email: 'test4@test.com',
-           });
-
-           expect(res2.statusCode).toEqual(200);
-
-        });
     });
 
-    describe('Invaild', () => {
+    describe('Invalid', () => {
 
         test('No Body', async () => {
             var res = await Travelling.Auth.login({

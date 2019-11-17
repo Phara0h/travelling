@@ -22,15 +22,16 @@ class Redis {
             // Sub
             this.redisSub = new IORedis(config.redis.events.url);
 
-            this.redisSub.subscribe("groupUpdate");
+            this.redisSub.subscribe('groupUpdate');
 
-            this.redisSub.on("message", (channel,message)=>{
-              if(this[channel]) {
-                var msg = message.split(':');
-                if(msg[0] != this.redisPub.uuid) {
-                  this[channel](msg[1]);
+            this.redisSub.on('message', (channel, message)=>{
+                if (this[channel]) {
+                    var msg = message.split(':');
+
+                    if (msg[0] != this.redisPub.uuid) {
+                        this[channel](msg[1]);
+                    }
                 }
-              }
             });
 
             // Pub
@@ -46,18 +47,21 @@ class Redis {
     }
 
     get needsGroupUpdate() {
+        // config.log.logger.debug('Get NeedsGroupUpdate', this._needsGroupUpdate);
         return this._needsGroupUpdate;
     }
 
     set needsGroupUpdate(value) {
-      if(config.redis.enable && value) {
-        this.redisPub.publish("groupUpdate", `${this.redisPub.uuid}:${value}`);
-      }
-      return this._needsGroupUpdate = value;
+        this._needsGroupUpdate = value;
+        // config.log.logger.debug('Set NeedsGroupUpdate', this._needsGroupUpdate);
+        if (config.redis.enable && value) {
+            this.redisPub.publish('groupUpdate', `${this.redisPub.uuid}:${value}`);
+        }
+        return this._needsGroupUpdate;
     }
 
     groupUpdate(msg) {
-        config.log.logger.debug('Group update message received')
+        config.log.logger.debug('Group update message received');
         this._needsGroupUpdate = misc.stringToBool(msg);
     }
 
@@ -66,7 +70,6 @@ class Redis {
             await this.redis.flushall();
         }
     }
-
 
 }
 const redis = new Redis();

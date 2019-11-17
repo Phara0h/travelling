@@ -5,7 +5,7 @@ const Base = require('@abeai/node-utils').Base;
 const PGTypes = require('@abeai/node-utils').PGTypes;
 const Group = require('./group');
 const config = require('../../utils/config');
-const regex = require('../../utils/regex');
+const gm = require('../../server/groupmanager');
 
 class User extends Base(BaseModel, 'users', {
     id: PGTypes.PK,
@@ -20,12 +20,12 @@ class User extends Base(BaseModel, 'users', {
     change_password: null,
     reset_password: null,
     email_verify: null,
-    group_id: null,
+    group_ids: null,
     email: PGTypes.AutoCrypt,
     created_on: null,
     last_login: null,
     user_data: config.pg.crypto.encryptUserData ? PGTypes.AutoCrypt : null,
-    eprofile: PGTypes.EncryptProfile
+    eprofile: PGTypes.EncryptProfile,
 }) {
     constructor(...args) {
         super(...args);
@@ -33,7 +33,8 @@ class User extends Base(BaseModel, 'users', {
 
     static async createTable() {
         const pg = new (require('@abeai/node-utils').PGConnecter)();
-          await pg.query(`CREATE TABLE users (
+
+        await pg.query(`CREATE TABLE users (
                   id UUID DEFAULT uuid_generate_v4(),
                   username character varying(100),
                   password character varying(258),
@@ -43,7 +44,7 @@ class User extends Base(BaseModel, 'users', {
                   locked_reason text,
                   locked boolean DEFAULT false,
                   last_login json,
-                  group_id UUID,
+                  group_ids UUID[],
                   failed_login_attempts int DEFAULT 0,
                   change_username boolean DEFAULT false,
                   change_password boolean DEFAULT false,
@@ -54,32 +55,111 @@ class User extends Base(BaseModel, 'users', {
                   user_data bytea,
                   __user_data character varying(258),
                   eprofile character varying(350),
-                  PRIMARY KEY (id, group_id)
+                  PRIMARY KEY (id)
                 );`);
 
     }
 
-    async resolveGroup(router) {
-      var group = router ? await router.getGroup(this.group_id) : await Group.findById(this.group_id);
-      if(!this.group) {
-        this.addProperty('group', group);
-      }
-      else {
-        this.group = group;
-      }
+    async resolveGroup() {
+        var groups = [];
+        var groupsNames = [];
+        var groupsTypes = [];
 
-      return this;
+        if (!this.groups) {
+            this.addProperty('groups', groups);
+        }
+
+        // groups.name = '';
+        // groups.type = '';
+
+        for (var i = 0; i < this.group_ids.length; i++) {
+            const group = await gm.getGroup(this.group_ids[i]) || await Group.findById(this.group_ids[i]);
+
+            groups.push(group);
+            groupsNames.push(group.name);
+            groupsTypes.push(group.type);
+            // groups.name += group.name;
+            // if (this.group_ids.length < i + 1) {
+            //     groups.name += '|';
+            // }
+            //
+            // groups.type += group.type;
+            // if (this.group_ids.length < i + 1) {
+            //     groups.type += '|';
+            // }
+        }
+
+        this.groups = groups;
+
+        return {names: groupsNames, types: groupsTypes};
     }
 
+    async addGroup(group) {
+
+        if (this.group_ids && this.group_ids.indexOf(group.id) > -1) {
+            return false;
+        }
+
+        if (!this.group_ids) {
+            this.group_ids = [];
+        }
+
+        this.group_ids.push(group.id);
+        this.group_ids = [...this.group_ids];
+
+        return await this.save();
+    }
+
+    async removeGroup(group) {
+
+        if (!this.group_ids) {
+            return false;
+        }
+
+        var found = this.group_ids.indexOf(group.id);
+
+        if (found == -1) {
+            return false;
+        }
+        this.group_ids.splice(found, 1);
+        this.group_ids = [...this.group_ids];
+
+        return await this.save();
+    }
+
+    hasGroupId(id) {
+        return this.group_ids.indexOf(id) > -1;
+    }
+
+    hasGroupName(name) {
+        for (var i = 0; i < this.groups.length; i++) {
+            if (this.groups[i].name === name) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    hasGroupType(type) {
+        for (var i = 0; i < this.groups.length; i++) {
+            if (this.groups[i].type === type) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     toJSON() {
-      var u = {...this._};
-      if(u.avatar != null) {
-        u.avatar = u.avatar.toString('utf8')
-      }
-      if(u.user_data != null) {
-        u.user_data = JSON.parse(u.user_data.toString('utf8'));
-      }
+        var u = {...this._};
+
+        if (u.avatar != null) {
+            u.avatar = u.avatar.toString('utf8');
+        }
+        if (u.user_data != null) {
+            u.user_data = JSON.parse(u.user_data.toString('utf8'));
+        }
+
+        delete u.password;
         return u;
     }
 

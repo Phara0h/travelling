@@ -1,0 +1,9 @@
+<html><body>
+  <p>Redirecting automatically, <a id="clicklink" href="/">click here</a> if your not automatically redirected.</p>
+
+  <script>var redirect_uri = new URLSearchParams(window.location.search).get('redirect_uri');
+var clicklink = document.getElementById('clicklink');
+clicklink.href = redirect_uri;
+window.location = redirect_uri;</script>
+
+</body></html>

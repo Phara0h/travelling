@@ -1,23 +1,27 @@
+'use strict';
+
 const fs = require('fs');
 const path = require('path');
 const config = require('./include/utils/config');
-const misc = require('./include/utils/misc')
-config.log.logger = require(config.log.logger);
+const misc = require('./include/utils/misc');
+
+if (config.log.logger) {
+    config.log.logger = require(config.log.logger);
+}
 
 if (typeof config.log.fastify.logger == 'string' && misc.stringToBool(config.log.fastify.logger) === null) {
     config.log.fastify.logger = require(config.log.fastify.logger);
-}
-else {
-  config.log.fastify.logger = misc.stringToBool(config.log.fastify.logger)
+} else {
+    config.log.fastify.logger = misc.stringToBool(config.log.fastify.logger);
 }
 
 var fastifyOptions = {
     http2: false,
     logger: config.log.fastify.logger,
     // logger: true
-    disableRequestLogging: config.log.fastify.disableRequestLogging,
+    disableRequestLogging: !config.log.fastify.requestLogging,
     requestIdHeader: config.log.fastify.requestIdHeader,
-    requestIdLogLabel: config.log.fastify.requestIdLogLabel
+    requestIdLogLabel: config.log.fastify.requestIdLogLabel,
 };
 
 if (config.https) {
@@ -33,12 +37,11 @@ const app = require('fastify')(fastifyOptions);
 const fastifySession = require('fastify-good-sessions');
 const fastifyCookie = require('fastify-cookie');
 
-
 const PGConnecter = require('@abeai/node-utils').PGConnecter;
 
 const pg = new PGConnecter({
     pg: {
-        connectionString: process.env.DATABASE_URL,
+        connectionString: config.pg.url,
     },
     crypto: require(config.pg.crypto.implementation),
 });
@@ -59,38 +62,14 @@ const Email = require('./include/utils/email');
 const nstats = require('nstats')();
 
 app.setErrorHandler(function(error, request, reply) {
-    config.log.logger.error(error)
-    reply.code(500).send({
+    config.log.logger.error(error);
+    reply.code(500).send(JSON.stringify({
         type: 'error',
         msg: 'Please report this issue to the site admin',
-    });
+    }));
 });
 
-if (config.cors.enable) {
-    app.use((req, res, next) => {
-        if (req.headers['origin']) {
-            res.setHeader('access-control-allow-origin', config.cors.origin || req.headers['origin'] || '*');
-        }
-
-        if (req.headers['access-control-request-method']) {
-            res.setHeader('access-control-allow-methods', config.cors.methods || req.headers['access-control-request-method'] || '*');
-        }
-
-        if (req.headers['access-control-request-headers']) {
-            res.setHeader('access-control-allow-headers', config.cors.headers || req.headers['access-control-request-headers'] || '*');
-        }
-
-        if (req.url.indexOf('/travelling/api/v1/auth') > -1) {
-            res.setHeader('access-control-allow-credentials', true);
-        }
-        next();
-    });
-    app.options('/travelling/api/v1/*', (req, res) => {
-
-        res.header('access-control-max-age', config.cors.age);
-        res.code(204).send();
-    });
-}
+app.register(require('./include/server/cors.js'), {router});
 
 app.get('/travelling/metrics', (req, res) => {res.code(200).send(nstats.toPrometheus());});
 app.get('/travelling/_health', (req, res) => res.code(200).send('OK'));
@@ -112,6 +91,24 @@ app.use((req, res, next)=>{
     next();
 });
 
+app.get('/favicon.ico', (req, res)=> {
+    try {
+        fs.readFile(config.portal.icon, (err, data) => {
+            let stream;
+
+            if (err && err.code === 'ENOENT') {
+                stream = fs.createReadStream(__dirname + '/client/assets/favicon.ico');
+            } else {
+                stream = fs.createReadStream(config.portal.icon);
+            }
+            res.type('image/x-icon').send(stream);
+        });
+    } catch (e) {
+        config.log.logger.error(e);
+        res.code(500).send();
+    }
+});
+
 app.register(fastifyCookie);
 
 // @TODO later rewrite this for a huge preformance increase.
@@ -123,6 +120,7 @@ app.register(fastifySession, {
         secure: config.https,
         httpOnly: true,
         maxAge: config.cookie.session.expiration * 1000,
+        domain: config.cookie.domain,
     },
     cookieName: 'trav:ssid',
     saveUninitialized: false,
@@ -131,26 +129,25 @@ app.register(fastifySession, {
 app.decorateRequest('checkLoggedIn', async function(req, res) {return await auth.checkLoggedIn(req, res, router);});
 app.decorateRequest('logout', auth.logout);
 app.decorateRequest('isAuthenticated', false);
-app.addHook('preHandler', function(req, res, next) {
 
-    req.checkLoggedIn(req, res,router).then(auth=>{
+app.addHook('preParsing', function(req, res, next) {
+
+    req.checkLoggedIn(req, res, router).then(auth=>{
         req.isAuthenticated = auth.auth;
 
         if (!auth.route) {
-            res.code(401)
-            if(auth.invaildToken) {
-              res.send({
-                  error: 'invaild_client',
-                  error_description: 'Invaild Access Token',
-              });
+            res.code(401);
+            if (auth.invalidToken) {
+                res.send({
+                    error: 'invalid_client',
+                    error_description: 'Invalid Access Token',
+                });
+            } else {
+                res.send();
+                if (config.log.requests) {
+                    config.log.logger.warn('Unauthorized', 'Unregistered User' + ' (anonymous)' + ' | ' + req.ip + ' | [' + req.raw.method + '] ' + req.req.url);
+                }
             }
-            else {
-              res.send();
-              if (config.log.requests) {
-                  config.log.logger.warn('Unauthorized', 'Unregistered User' + ' (anonymous)' + ' | ' + req.ip + ' | [' + req.raw.method + '] ' + req.req.url);
-              }
-            }
-
 
         } else {
             router.routeUrl(req, res).then(route=>{
@@ -165,11 +162,40 @@ app.addHook('preHandler', function(req, res, next) {
 app.register(require('./include/routes/v1/auth'), {prefix: '/travelling/api/v1', router});
 app.register(require('./include/routes/v1/groups'), {prefix: '/travelling/api/v1', router});
 app.register(require('./include/routes/v1/users').routes, {prefix: '/travelling/api/v1', router});
+app.get('/travelling/api/v1/config/:prop', (req, res) => {
+    res.code(200).send(config[req.params.prop]);
+});
+app.get('/travelling/api/v1/config/:prop/:prop2', (req, res) => {
+    res.code(200).send(config[req.params.prop][req.params.prop2]);
+});
 
 if (config.portal.enable) {
+
+    app.get('/travelling/assets/logo', (req, res) => {
+
+        res.sendFile(config.portal.logo);
+        res.code(200);
+        return;
+    });
+
+    app.get('/travelling/assets/styles', (req, res) => {
+        res.sendFile(config.portal.styles);
+        res.code(200);
+        return;
+    });
+
+    app.register(require('fastify-static'), {
+        root: '/',
+        send: {
+            dotfiles: 'allow',
+        },
+        serve: false,
+    });
+
     app.register(require('fastify-static'), {
         root: config.portal.filePath,
         prefix: config.portal.path,
+        decorateReply: false,
     });
 }
 

@@ -1,9 +1,9 @@
 const config = require('../../include/utils/config');
-const Travelling = require('../../sdk')('https://127.0.0.1:6969');
+const { Travelling } =  require('../../sdk')('https://127.0.0.1:6969');
 var userContainer = require('../include/UserContainer.js');
 
 module.exports = () => {
-    describe('Vaild', () => {
+    describe('Valid', () => {
 
         test('Login with Test2 User Again', async () => {
             var res = await Travelling.Auth.login({
@@ -63,7 +63,7 @@ module.exports = () => {
         });
     });
 
-    describe('Invaild', () => {
+    describe('Invalid', () => {
 
         test('Token and No Session', async () => {
             var ssid = userContainer.user2.ssid;
@@ -81,7 +81,7 @@ module.exports = () => {
             });
             userContainer.user2.tok = tok;
             userContainer.user2.ssid = ssid;
-            expect(res.req.path).toEqual(config.portal.path)
+            expect(res.req.path).toEqual('/travelling/api/v1/user/me')
 
             expect(res.headers['set-cookie']).toContainEqual(expect.stringContaining('trav:tok=null'))
         });
