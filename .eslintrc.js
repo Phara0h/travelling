@@ -6,7 +6,7 @@ module.exports = {
     // http://eslint.org/docs/rules/
 
     'parserOptions': {
-        'ecmaVersion': 8
+        'ecmaVersion': 9
     },
 
     'env': {
@@ -19,6 +19,7 @@ module.exports = {
         'jquery': true,
         'prototypejs': true,
         'shelljs': true,
+        "es6": true
     },
 
     'globals': {
@@ -52,17 +53,11 @@ module.exports = {
         'cordova': false,
         'StatusBar': false,
         'stripe': false,
-        'Map': false,
+        'Map': false
 
     },
 
-    'plugins': [
-        'security'
-    ],
 
-    'extends': [
-        'plugin:security/recommended'
-    ],
 
     'rules': {
 
@@ -117,13 +112,13 @@ module.exports = {
         'array-bracket-spacing': [2, 'never'],
         'block-spacing': [2, 'never'],
         'brace-style': [2, '1tbs', {'allowSingleLine': true}],
-        'camelcase': ["error", {properties: 'never'}],
+        'camelcase': [1],
         'comma-spacing': [2, {'before': false, 'after': true}],
         'comma-style': [2, 'last'],
         'computed-property-spacing': [2, 'never'],
         'consistent-this': [2, 'self'],
         'eol-last': 2,
-        'func-style': [2, 'declaration'],
+        'func-style': [2, 'declaration', {"allowArrowFunctions": true}],
         'indent': [2, 4, {'SwitchCase': 1}],
         'key-spacing': [2, {'beforeColon': false, 'afterColon': true}],
         'keyword-spacing': 2,
@@ -132,11 +127,10 @@ module.exports = {
             {'beforeBlockComment': true, 'beforeLineComment': false, 'allowBlockStart': true},
         ],
         'linebreak-style': [2, 'unix'],
-        'new-cap': 2,
+        'new-cap': 1,
         'new-parens': 2,
         'newline-after-var': [2, 'always'],
         'no-array-constructor': 2,
-        'no-inline-comments': 2,
         'no-lonely-if': 2,
         'no-mixed-spaces-and-tabs': 2,
         'no-multiple-empty-lines': [2, {max: 1}],
@@ -144,6 +138,7 @@ module.exports = {
         'no-new-object': 2,
         'no-spaced-func': 2,
         'no-trailing-spaces': 2,
+        'no-inline-comments' : 0,
         'object-curly-spacing': [2, 'never'],
         'one-var': [2, 'never'],
         'operator-linebreak': [2, 'before'],
@@ -162,16 +157,9 @@ module.exports = {
         'space-infix-ops': 2,
         'space-unary-ops': [2, {'words': true, 'nonwords': false}],
         'spaced-comment': [2, 'always', {'block': {'exceptions': ['-+*']} }],
-
-        ////////// Security //////////
-
-        'security/detect-non-literal-fs-filename': 'off',
-        'security/detect-non-literal-require': 'off',
-        'security/detect-object-injection': 'off',
-
         ////////// Legacy //////////
 
-        'max-depth': 2,
+        'max-depth': [1, 5],
         'max-len': [2, MAX_CHARS, SPACES_PER_TAB]
     },
 };

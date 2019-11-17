@@ -10,9 +10,9 @@ const PGConnecter = require('@abeai/node-utils').PGConnecter;
 const PGBaseModel = require('@abeai/node-utils').PGBaseModel;
 const pg = new PGConnecter({
     pg: {
-        connectionString: process.env.DATABASE_URL,
+        connectionString: config.pg.url,
     },
-    crypto: require('../include/utils/cryptointerface'),
+    crypto: require(config.pg.crypto.implementation),
 });
 
 var deletedUsers = [];
@@ -37,6 +37,7 @@ beforeAll(async () => {
     console.log('Flushing Redis...');
     await Redis.flushAll();
 
+    require('./include/start-test-servers.js');
     const server = require('../index.js');
 
     await server;
@@ -69,8 +70,9 @@ afterAll(async () => {
 
 
 describe('Endpoints', require('./endpoints'));
-describe('Email', require('./email'));
-describe('Flows', require('./flow-tests.js'));
+//describe('Email', require('./email'));
+describe('Routes', require('./routes'));
+describe('Flows', require('./flow-tests'));
 
 test('Waste Time', async ()=>{
   var p = new Promise((resolve, reject)=>{

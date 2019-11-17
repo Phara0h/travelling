@@ -3,16 +3,17 @@
 const Group = require('./models/group');
 const User = require('./models/user');
 
-const crypto = require('../utils/cryptointerface');
 const config = require('../utils/config');
+const crypto = require(config.pg.crypto.implementation);
 const Email = require('../utils/email');
 const TokenHandler = require('../token');
+const gm = require('../server/groupmanager.js');
 
 class Database {
     constructor() {
     }
 
-    static async checkAuth(name, email, password) {
+    static async checkAuth(name, email, password, hostname) {
 
         var user = await User.findLimtedBy({username: name, email: email}, 'OR', 1);
 
@@ -32,7 +33,7 @@ class Database {
         if (user.email_verify && user.locked) {
             var token = await TokenHandler.getActivationToken(user.id);
 
-            await Email.sendActivation(user, user.email, token.token);
+            await Email.sendActivation(user, user.email, token.token, hostname);
         }
 
         // Locked check
@@ -47,10 +48,9 @@ class Database {
         }
 
         // Password check
-        if (user.password == await crypto.hash(password)) {
+        if (user.password == await crypto.hash(password, null, user.getEncryptedProfile(user))) {
             user.failed_login_attempts = 0;
             await user.save();
-            user.addProperty('group', await Group.findById(user.group_id));
 
             return {user, err: null};
         }
@@ -81,13 +81,13 @@ class Database {
 
     }
 
-    static async createAccount(username, password, email, group_id, group_request = null) {
+    static async createAccount(username, password, email, group_ids, group_request = null, hostname) {
         var userProp = {
             username,
             password,
             email,
             group_request,
-            group_id,
+            group_ids,
             change_username: false,
             change_password: false,
             created_on: Date.now(),
@@ -108,14 +108,14 @@ class Database {
             user.email_verify = true;
             await user.save();
 
-            await Email.sendActivation(user, user.email, token.token);
+            await Email.sendActivation(user, user.email, token.token, hostname);
         }
 
         // user.addProperty('group',group[0])
         return user;
     }
 
-    static async forgotPassword(email, ip) {
+    static async forgotPassword(email, ip, hostname) {
         var user = await User.findLimtedBy({email: email}, 'AND', 1);
 
         if (user && user.length > 0) {
@@ -126,12 +126,12 @@ class Database {
             user.reset_password = true;
             await user.save();
 
-            Email.sendPasswordRecovery(user, ip, user.email, rt.token);
+            Email.sendPasswordRecovery(user, hostname, ip, user.email, rt.token);
         }
     }
 
     static async resetPassword(token, password) {
-        var user = await User.findLimtedBy({id: token[3]}, 'AND', 1);
+        var user = await User.findLimtedBy({id: token[2]}, 'AND', 1);
 
         if (!user || user.length < 1) {
             return false;
@@ -141,11 +141,14 @@ class Database {
         user.password = password;
         user.reset_password = false;
         await user.save();
+
+        await TokenHandler.deleteAllTempTokens(token[2]);
+
         return true;
     }
 
     static async activateAccount(token) {
-        var user = await User.findLimtedBy({id: token[3]}, 'AND', 1);
+        var user = await User.findLimtedBy({id: token[2]}, 'AND', 1);
 
         if (!user || user.length < 1) {
             return false;
@@ -157,11 +160,10 @@ class Database {
         user.locked = false;
         user.locked_reason = null;
         await user.save();
-        return true;
-    }
 
-    static async getDefaultGroup() {
-        return await Group.getDefaultGroup();
+        await TokenHandler.deleteAllTempTokens(token[2]);
+
+        return true;
     }
 
     static async initGroups(router) {
@@ -181,7 +183,6 @@ class Database {
             anon.addRoute({
                 route: config.portal.path + '*',
                 host: config.portal.host,
-                removeFromPath: config.portal.path.slice(0, -1),
             });
             anon.addRoute({
                 route: '/travelling/api/v1/auth/*',
@@ -197,10 +198,31 @@ class Database {
                 host: null,
                 method: 'GET',
             });
+            anon.addRoute({
+                route: '/travelling/assets/*',
+                host: null,
+                remove_from_path: '/travelling/assets/',
+                method: 'GET',
+            });
+            anon.addRoute({
+                route: '/travelling/api/v1/config/password',
+                host: null,
+                method: 'GET',
+            });
+            anon.addRoute({
+                route: '/travelling/api/v1/config/portal/webclient',
+                host: null,
+                method: 'GET',
+            });
+            anon.addRoute({
+                route: '/favicon.ico',
+                host: null,
+                method: 'GET',
+            });
 
             await anon.save();
 
-            // router.groups[anon.name] = this.groupInheritedMerge(anon, grps);
+            // gm.groups[anon.name] = this.groupInheritedMerge(anon, grps);
 
             var admin = await Group.create({
                 name: 'superadmin',
@@ -216,35 +238,15 @@ class Database {
             });
             await admin.save();
             // console.log(admin)
-            // router.groups[admin.name] = this.groupInheritedMerge(admin, grps);
+            // gm.groups[admin.name] = this.groupInheritedMerge(admin, grps);
 
-            await router.updateGroupList();
+            await gm.updateGroupList();
             return true;
         }
-
-        await router.updateGroupList();
+        await gm.updateGroupList();
         return false;
     }
 
-    static groupInheritedMerge(group, groups) {
-        var nallowed = group.allowed ? [...group.allowed] : [];
-
-        if (group.inherited && group.inherited.length > 0) {
-            if (!group.inheritedGroups) {
-                group.addProperty('inheritedGroups', []);
-            }
-            for (var i = 0; i < group.inherited.length; ++i) {
-                for (var j = 0; j < groups.length; ++j) {
-                    if (groups[j].id == group.inherited[i]) {
-                        group.inheritedGroups[i] = groups[j];
-                        break;
-                    }
-                }
-                nallowed.push(...this.groupInheritedMerge(group.inheritedGroups[i], groups));
-            }
-        }
-        return nallowed;
-    }
 }
 
 module.exports = Database;

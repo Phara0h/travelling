@@ -1,11 +1,11 @@
 const config = require('../../include/utils/config');
-const Travelling = require('../../sdk')('https://127.0.0.1:6969');
+const { Travelling } =  require('../../sdk')('https://127.0.0.1:6969');
 var userContainer = require('../include/UserContainer.js');
 
 module.exports = () => {
 
     describe('Current User', () => {
-        describe('Vaild', () => {
+        describe('Valid', () => {
         test('Get User Test', async () => {
           var res = await Travelling.User.Current.get(null,{
               headers: {
@@ -38,19 +38,19 @@ module.exports = () => {
           expect(res.body).toEqual(userContainer.user1.email);
         });
 
-        test("Get Test's Password", async () => {
-          var res = await Travelling.User.Current.getProperty('password', null, {
-              headers: {
-                  cookie: userContainer.user1Cookie(),
-              },
-          });
-
-          expect(res.body).toEqual(userContainer.user1.password);
-        });
+        // test("Get Test's Password", async () => {
+        //   var res = await Travelling.User.Current.getProperty('password', null, {
+        //       headers: {
+        //           cookie: userContainer.user1Cookie(),
+        //       },
+        //   });
+        //
+        //   expect(res.body).toEqual(userContainer.user1.password);
+        // });
 
 
         test("Check Test's Permission", async () => {
-          var res = await Travelling.User.Current.permissionCheck('get-travelling', null,{
+          var res = await Travelling.User.Current.permissionCheck('get-travelling', null, {
               headers: {
                   cookie: userContainer.user1Cookie(),
               },
@@ -60,11 +60,7 @@ module.exports = () => {
         });
 
         test("Check Test's Route", async () => {
-          var res = await Travelling.User.Current.routeCheck('get','/travelling/api/v1/user/me', null, {
-              headers: {
-                  cookie: userContainer.user1Cookie(),
-              },
-          });
+          var res = await Travelling.User.Current.routeCheck('get','/travelling/api/v1/user/me', userContainer.user1Token);
 
           expect(res.statusCode).toEqual(200);
         });
@@ -83,7 +79,7 @@ module.exports = () => {
 
       });
 
-        describe('Invaild', () => {
+        describe('Invalid', () => {
           test("Check Permission With No Permission", async () => {
             var res = await Travelling.User.Current.permissionCheck('', null, {
                 headers: {
@@ -109,7 +105,7 @@ module.exports = () => {
     });
 
     describe('Non-Current User', () => {
-        describe('Vaild', () => {
+        describe('Valid', () => {
         test('Get All Users', async () => {
             var res = await Travelling.Users.get(null, {
                 headers: {
@@ -141,14 +137,14 @@ module.exports = () => {
         });
 
 
-        test("Get Test2's Password By Id ", async () => {
-            var res = await Travelling.User.getProperty(userContainer.user2.id, 'password', null, {
+        test("Get Test2's Email By Id ", async () => {
+            var res = await Travelling.User.getProperty(userContainer.user2.id, 'email', null, {
                 headers: {
                     cookie: userContainer.user2Cookie(),
                 },
             });
 
-              expect(res.body).toEqual(userContainer.user2.password);
+              expect(res.body).toEqual(userContainer.user2.email);
         });
 
         test("Get Test2's Email By Username ", async () => {
@@ -160,9 +156,21 @@ module.exports = () => {
 
               expect(res.body).toEqual(userContainer.user2.email);
         });
+
+
+        test("Get Test2's Email By Username By Grouptype ", async () => {
+            var res = await Travelling.Group.Type.User.getProperty('group', userContainer.user2.username, 'email',null, {
+                headers: {
+                    cookie: userContainer.user2Cookie(),
+                },
+            });
+
+              expect(res.body).toEqual(userContainer.user2.email);
+        });
+
       });
 
-      describe('Invaild', () => {
+      describe('Invalid', () => {
         test('Get By Invalid Id', async () => {
             var res = await Travelling.User.get(0,null, {
                 headers: {
@@ -179,8 +187,6 @@ module.exports = () => {
                     cookie: userContainer.user1Cookie(),
                 },
             });
-
-            console.log(res.body)
 
             expect(res.statusCode).toEqual(400);
         });
@@ -203,6 +209,17 @@ module.exports = () => {
             });
 
             expect(res.statusCode).toEqual(400);
+        });
+
+        test("Get Test2's Email By Username By Invaild Grouptype ", async () => {
+            var res = await Travelling.Group.Type.User.getProperty('testgroup', userContainer.user2.username, 'email',null, {
+                headers: {
+                    cookie: userContainer.user2Cookie(),
+                },
+            });
+
+              expect(res.statusCode).toEqual(400);
+              expect(res.body).not.toEqual(userContainer.user2.email);
         });
 
       })
