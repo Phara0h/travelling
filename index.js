@@ -37,7 +37,7 @@ const app = require('fastify')(fastifyOptions);
 const fastifySession = require('fastify-good-sessions');
 const fastifyCookie = require('fastify-cookie');
 
-const PGConnecter = require('@abeai/node-utils').PGConnecter;
+const PGConnecter = require('adost').PGConnecter;
 
 const pg = new PGConnecter({
     pg: {

@@ -1,8 +1,8 @@
 'use strict';
 
-const BaseModel = require('@abeai/node-utils').PGActiveModel;
-const Base = require('@abeai/node-utils').Base;
-const PGTypes = require('@abeai/node-utils').PGTypes;
+const BaseModel = require('adost').PGActiveModel;
+const Base = require('adost').Base;
+const PGTypes = require('adost').PGTypes;
 const Group = require('./group');
 const config = require('../../utils/config');
 const gm = require('../../server/groupmanager');
@@ -32,7 +32,7 @@ class User extends Base(BaseModel, 'users', {
     }
 
     static async createTable() {
-        const pg = new (require('@abeai/node-utils').PGConnecter)();
+        const pg = new (require('adost').PGConnecter)();
 
         await pg.query(`CREATE TABLE users (
                   id UUID DEFAULT uuid_generate_v4(),
