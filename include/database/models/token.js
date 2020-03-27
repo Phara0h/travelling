@@ -1,8 +1,8 @@
 'use strict';
 
-const BaseModel = require('@abeai/node-utils').PGActiveModel;
-const Base = require('@abeai/node-utils').Base;
-const PGTypes = require('@abeai/node-utils').PGTypes;
+const BaseModel = require('adost').PGActiveModel;
+const Base = require('adost').Base;
+const PGTypes = require('adost').PGTypes;
 
 class Token extends Base(BaseModel, 'tokens', {
     id: PGTypes.PK,
@@ -17,7 +17,7 @@ class Token extends Base(BaseModel, 'tokens', {
     }
 
     static async createTable() {
-        const pg = new (require('@abeai/node-utils').PGConnecter)();
+        const pg = new (require('adost').PGConnecter)();
 
         await pg.query(`CREATE TABLE tokens (
                 id UUID DEFAULT uuid_generate_v4(),

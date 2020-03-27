@@ -5,9 +5,9 @@ const Token = require('../include/database/models/token');
 
 const Redis = require('../include/redis');
 
-const Base = require('@abeai/node-utils').Base;
-const PGConnecter = require('@abeai/node-utils').PGConnecter;
-const PGBaseModel = require('@abeai/node-utils').PGBaseModel;
+const Base = require('adost').Base;
+const PGConnecter = require('adost').PGConnecter;
+const PGBaseModel = require('adost').PGBaseModel;
 const pg = new PGConnecter({
     pg: {
         connectionString: config.pg.url,
@@ -34,8 +34,11 @@ beforeAll(async () => {
       console.error(e)
     }
 
-    console.log('Flushing Redis...');
-    await Redis.flushAll();
+    if(config.redis.enabled) {
+      console.log('Flushing Redis...');
+      await Redis.flushAll();
+    }
+
 
     require('./include/start-test-servers.js');
     const server = require('../index.js');
@@ -47,8 +50,10 @@ beforeAll(async () => {
 
 afterAll(async () => {
 
-    console.log('Flushing Redis...');
-    await Redis.flushAll();
+    if(config.redis.enabled) {
+      console.log('Flushing Redis...');
+      await Redis.flushAll();
+    }
 
     await User.deleteAll();
     await Group.deleteAll();

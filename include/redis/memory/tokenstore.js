@@ -11,7 +11,7 @@ class TokenStore {
     async set(secret, type, id, expiration, name = '') {
 
         setTimeout(()=>{
-            this.destroy(id);
+            this.destroy(id, type);
         }, expiration);
         var nToken = {id, secret, expires: new Date(Date.now() + expiration), name};
 

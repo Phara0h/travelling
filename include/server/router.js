@@ -105,6 +105,9 @@ class Router {
                 res.code(401).send('Access Denied');
 
                 if (config.log.unauthorizedAccess) {
+                    if (!sessionGroupsData) {
+                        sessionGroupsData = await sessionUser.resolveGroup();
+                    }
                     log.warn('Unauthorized', sessionUser.username + ' (' + sessionGroupsData.names + ') | ' + req.ip + ' | [' + req.raw.method + '] ' + req.req.url);
                 }
                 return false;

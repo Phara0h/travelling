@@ -1,5 +1,5 @@
 const config = require('../include/utils/config');
-const { Travelling } = require('../sdk')('https://127.0.0.1:6969');
+const { Travelling } = require('../sdk')('http://127.0.0.1:6969');
 var userContainer = require('./include/UserContainer.js');
 const fasq = require('fasquest');
 
@@ -45,7 +45,7 @@ module.exports = () => {
            method: 'GET',
            resolveWithFullResponse: true,
            simple: false,
-           uri: 'https://127.0.0.1:6969/test/get',
+           uri: 'http://127.0.0.1:6969/test/get',
            authorization: {
                bearer: accessToken
            }
@@ -71,7 +71,7 @@ module.exports = () => {
            method: 'POST',
            resolveWithFullResponse: true,
            simple: false,
-           uri: 'https://127.0.0.1:6969/test/post',
+           uri: 'http://127.0.0.1:6969/test/post',
            json: true,
            body: {test:"swag"},
            authorization: {
@@ -100,7 +100,7 @@ module.exports = () => {
            method: 'DELETE',
            resolveWithFullResponse: true,
            simple: false,
-           uri: 'https://127.0.0.1:6969/test/delete/'+user.groups[0].type,
+           uri: 'http://127.0.0.1:6969/test/delete/'+user.groups[0].type,
            authorization: {
                bearer: accessToken
            }
