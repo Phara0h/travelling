@@ -1,13 +1,16 @@
 <h4>Hello {{user.username}},</h4>
 <h4>Follow the link below to reset your password:</h4>
-<br>
+<br />
 {{#if config.https}}
-    <a href="https://{{hostname}}/travelling/api/v1/auth/activate?token={{token}}" target="_blank">Activate Account</a>
-{{/if}}
-{{#unless config.https}}
-    <a href="http://{{hostname}}/travelling/api/v1/auth/activate?token={{token}}" target="_blank">Activate Account</a>
+<a href="https://{{hostname}}/'+{{config.serviceName}}+'/api/v1/auth/activate?token={{token}}" target="_blank"
+  >Activate Account</a
+>
+{{/if}} {{#unless config.https}}
+<a href="http://{{hostname}}/'+{{config.serviceName}}+'/api/v1/auth/activate?token={{token}}" target="_blank"
+  >Activate Account</a
+>
 {{/unless}}
 
-<br>
-<br>
+<br />
+<br />
 <b>*Do not reply to this email.*</b>

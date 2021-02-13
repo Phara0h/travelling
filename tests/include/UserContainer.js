@@ -23,18 +23,18 @@ class UserContainer {
   }
 
   parseCookie(carray, user) {
-    if(!carray) {
+    if (!carray) {
       return user;
     }
 
     for (var i = 0; i < carray.length; i++) {
       var pc = cookie.parse(carray[i]);
 
-      if(pc['trav:ssid']) {
+      if (pc['trav:ssid']) {
         user.ssid = pc['trav:ssid'];
       }
 
-      if(pc['trav:tok']) {
+      if (pc['trav:tok']) {
         user.tok = pc['trav:tok'];
       }
     }
@@ -42,15 +42,14 @@ class UserContainer {
   }
 
   getCookie(user) {
-
     var cookies = '';
 
-    if(user.ssid) {
-      cookies += cookie.serialize('trav:ssid', user.ssid) +'; ';
+    if (user.ssid) {
+      cookies += cookie.serialize('trav:ssid', user.ssid) + '; ';
     }
 
-    if(user.tok) {
-      cookies += cookie.serialize('trav:tok', user.tok) +'; ';
+    if (user.tok) {
+      cookies += cookie.serialize('trav:tok', user.tok) + '; ';
     }
     return cookies;
   }

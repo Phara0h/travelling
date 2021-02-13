@@ -1,5 +1,3 @@
-'use strict';
-
 const config = require('./config');
 const nodemailer = require('nodemailer');
 const fs = require('fs');
@@ -10,102 +8,103 @@ var transporter = null;
 var templates = null;
 
 class Email {
-    constructor() {
+  constructor() {}
+
+  static async init() {
+    if (config.email.test.enable) {
+      var ta = await nodemailer.createTestAccount();
+
+      config.log.logger.debug('Test Email Account:', ta);
+
+      transporter = nodemailer.createTransport({
+        host: 'smtp.ethereal.email',
+        port: 587,
+        secure: false, // true for 465, false for other ports
+        auth: {
+          user: ta.user, // generated ethereal user
+          pass: ta.pass // generated ethereal password
+        }
+      });
+    } else if (config.email.smtp.enable) {
+      transporter = nodemailer.createTransport(config.email.smtp);
+    } else if (config.email.aws.enable) {
+      var aws = require('aws-sdk');
+
+      aws.config.loadFromPath(config.email.aws.config);
+      transporter = nodemailer.createTransport({
+        SES: new aws.SES({ apiVersion: '2010-12-01' })
+      });
+    }
+    templates = {
+      resetPasswordBody: Handlebars.compile(
+        fs.readFileSync(require('path').resolve(config.email.template.passwordResetBody), 'utf-8')
+      ),
+      resetPasswordSubject: Handlebars.compile(
+        fs.readFileSync(require('path').resolve(config.email.template.passwordResetSubject), 'utf-8')
+      ),
+      activationBody: Handlebars.compile(fs.readFileSync(require('path').resolve(config.email.template.activationBody), 'utf-8')),
+      activationSubject: Handlebars.compile(
+        fs.readFileSync(require('path').resolve(config.email.template.activationSubject), 'utf-8')
+      )
+    };
+  }
+
+  static async sendPasswordRecovery(user, hostname, clientip, email, token) {
+    if (!transporter) {
+      config.log.logger.debug(`Password Recovery For: ${email}, ${token}`);
+      return;
     }
 
-    static async init() {
-        if (config.email.test.enable) {
+    clientip = await Fasquest.request({
+      uri: `http://ip-api.com/json/${clientip}?fields=status,country,regionName,city,isp,query`
+    });
+    var body = templates.resetPasswordBody({ user, hostname, clientip, config, token });
+    var subject = templates.resetPasswordSubject({ user });
 
-            var ta = await nodemailer.createTestAccount();
+    var info = await transporter.sendMail({
+      from: config.email.from,
+      to: email,
+      subject: subject,
+      html: body
+    });
 
-            config.log.logger.debug('Test Email Account:', ta);
+    if (config.email.test.enable) {
+      var testInfo = { info, url: await nodemailer.getTestMessageUrl(info) };
 
-            transporter = nodemailer.createTransport({
-                host: 'smtp.ethereal.email',
-                port: 587,
-                secure: false, // true for 465, false for other ports
-                auth: {
-                    user: ta.user, // generated ethereal user
-                    pass: ta.pass, // generated ethereal password
-                },
-            });
+      config.log.logger.debug(testInfo);
+      var tc = require('../../tests/include/TestContainer');
 
-        } else if (config.email.smtp.enable) {
-            transporter = nodemailer.createTransport(config.email.smtp);
-        } else if (config.email.aws.enable) {
-            var aws = require('aws-sdk');
+      tc.passwordEmail = testInfo;
+      return testInfo;
+    }
+  }
 
-            aws.config.loadFromPath(config.email.aws.config);
-            transporter = nodemailer.createTransport({
-                SES: new aws.SES({apiVersion: '2010-12-01'}),
-            });
-        }
-        templates = {
-            resetPasswordBody: Handlebars.compile(fs.readFileSync(require('path').resolve(config.email.template.passwordResetBody), 'utf-8')),
-            resetPasswordSubject: Handlebars.compile(fs.readFileSync(require('path').resolve(config.email.template.passwordResetSubject), 'utf-8')),
-            activationBody: Handlebars.compile(fs.readFileSync(require('path').resolve(config.email.template.activationBody), 'utf-8')),
-            activationSubject: Handlebars.compile(fs.readFileSync(require('path').resolve(config.email.template.activationSubject), 'utf-8')),
-        };
+  static async sendActivation(user, email, token, hostname) {
+    if (!transporter) {
+      config.log.logger.debug(`Activation Email For: ${email}, ${token}`);
+      return;
     }
 
-    static async sendPasswordRecovery(user, hostname, clientip, email, token) {
-        if (!transporter) {
-            config.log.logger.debug(`Password Recovery For: ${email}, ${token}`);
-            return;
-        }
+    var body = templates.activationBody({ user, config, token, hostname });
+    var subject = templates.activationSubject({ user });
 
-        clientip = await Fasquest.request({
-            uri: `http://ip-api.com/json/${clientip}?fields=status,country,regionName,city,isp,query`,
-        });
-        var body = templates.resetPasswordBody({user, hostname, clientip, config, token});
-        var subject = templates.resetPasswordSubject({user});
+    var info = await transporter.sendMail({
+      from: config.email.from,
+      to: email,
+      subject: subject,
+      html: body
+    });
 
-        var info = await transporter.sendMail({
-            from: config.email.from,
-            to: email,
-            subject: subject,
-            html: body,
-        });
+    if (config.email.test.enable) {
+      var testInfo = { info, url: await nodemailer.getTestMessageUrl(info) };
 
-        if (config.email.test.enable) {
-            var testInfo = {info, url: await nodemailer.getTestMessageUrl(info)};
+      config.log.logger.debug(testInfo);
+      var tc = require('../../tests/include/TestContainer');
 
-            config.log.logger.debug(testInfo);
-            var tc = require('../../tests/include/TestContainer');
-
-            tc.passwordEmail = testInfo;
-            return testInfo;
-        }
+      tc.activationEmail = testInfo;
+      return testInfo;
     }
-
-    static async sendActivation(user, email, token, hostname) {
-
-        if (!transporter) {
-            config.log.logger.debug(`Activation Email For: ${email}, ${token}`);
-            return;
-        }
-
-        var body = templates.activationBody({user, config, token, hostname});
-        var subject = templates.activationSubject({user});
-
-        var info = await transporter.sendMail({
-            from: config.email.from,
-            to: email,
-            subject: subject,
-            html: body,
-        });
-
-        if (config.email.test.enable) {
-            var testInfo = {info, url: await nodemailer.getTestMessageUrl(info)};
-
-            config.log.logger.debug(testInfo);
-            var tc = require('../../tests/include/TestContainer');
-
-            tc.activationEmail = testInfo;
-            return testInfo;
-        }
-    }
-
+  }
 }
 
 module.exports = Email;

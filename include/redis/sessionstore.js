@@ -1,47 +1,41 @@
-'use strict';
-
 class RedisSessionStore {
-    constructor(redis) {
-        this.redis = redis;
+  constructor(redis) {
+    this.redis = redis;
+  }
+
+  async set(sessionId, session, callback) {
+    this.redis.set(sessionId, JSON.stringify(session), 'PX', session.expires - Date.now());
+
+    if (callback) {
+      callback();
     }
 
-    async set(sessionId, session, callback) {
+    return session;
+  }
 
-        this.redis.set(sessionId, JSON.stringify(session), 'PX', session.expires - Date.now());
+  async get(sessionId, callback) {
+    var session = await this.redis.get(sessionId);
 
-        if (callback) {
-            callback();
-        }
-
-        return session;
-
+    if (session) {
+      session = JSON.parse(session);
+      if (session._data) {
+        session.data = session._data;
+        delete session._data;
+      }
+    }
+    if (callback) {
+      callback(null, session);
     }
 
-    async get(sessionId, callback) {
-        var session = await this.redis.get(sessionId);
+    return session;
+  }
 
-        if (session) {
-            session = JSON.parse(session);
-            if (session._data) {
-                session.data = session._data;
-                delete session._data;
-            }
-        }
-        if (callback) {
-            callback(null, session);
-        }
-
-        return session;
+  async destroy(sessionId, callback) {
+    await this.redis.del(sessionId);
+    if (callback) {
+      callback();
     }
-
-    async destroy(sessionId, callback) {
-
-        await this.redis.del(sessionId);
-        if (callback) {
-            callback();
-        }
-
-    }
+  }
 }
 
 module.exports = RedisSessionStore;
