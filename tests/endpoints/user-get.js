@@ -52,7 +52,7 @@ module.exports = () => {
       // });
 
       test("Check Test's Permission", async () => {
-        var res = await Travelling.User.Current.permissionCheck('get-travelling', null, {
+        var res = await Travelling.User.Current.permissionCheck('get-' + config.serviceName, null, {
           headers: {
             cookie: userContainer.user1Cookie()
           }
