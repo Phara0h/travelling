@@ -1,6 +1,8 @@
 
+
 #### [v1.1.0](https://github.com/Phara0h/travelling/compare/v1.0.0...v1.1.0)
 
+- Fixed some auto doc stuff [`7bac291`](https://github.com/Phara0h/travelling/commit/7bac29170b71b8d005f2733c4ee830da34b0ae69)
 - General cleanup, added posgres config settings, and doc reorg [`d84a3f8`](https://github.com/Phara0h/travelling/commit/d84a3f8131099f294ebb4f4112fd98752635fed0)
 - Update user-get.js [`5e9ec0e`](https://github.com/Phara0h/travelling/commit/5e9ec0eab0701035b997a39609ec9003e70f0e72)
 
