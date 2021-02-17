@@ -105,7 +105,7 @@ module.exports = {
 
       var found = await User.findLimtedBy(qProps.length == 1 ? qProps[0] : qProps, qOps.length == 1 ? qOps[0] : qOps, 1);
 
-      console.log(user, qProps, qOps, found);
+      //console.log(user, qProps, qOps, found);
       if (found && found.length > 0) {
         return {
           type: 'exists-error',
