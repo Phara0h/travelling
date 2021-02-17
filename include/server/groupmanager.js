@@ -20,7 +20,7 @@ class GroupManager {
         a.logger = console;
         config.log.logger = require(config.log.logger)(a);
       } else {
-        console.log(config.log.logger);
+        //console.log(config.log.logger);
         // config.log.logger = require(config.log.logger);
       }
     }
