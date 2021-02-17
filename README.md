@@ -2743,7 +2743,13 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v1.1.1](https://github.com/Phara0h/travelling/compare/v1.1.0...v1.1.1)
+
+- Removed console logs from dev [`d88d0b6`](https://github.com/Phara0h/travelling/commit/d88d0b6daff83706b81ca507c8a95edf4e58c01e)
+
 #### [v1.1.0](https://github.com/Phara0h/travelling/compare/v1.0.0...v1.1.0)
+
+> 17 February 2021
 
 - Fixed some auto doc stuff [`7bac291`](https://github.com/Phara0h/travelling/commit/7bac29170b71b8d005f2733c4ee830da34b0ae69)
 - General cleanup, added posgres config settings, and doc reorg [`d84a3f8`](https://github.com/Phara0h/travelling/commit/d84a3f8131099f294ebb4f4112fd98752635fed0)
