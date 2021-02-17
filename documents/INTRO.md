@@ -1,6 +1,6 @@
 <h1 style="display:flex;">
   <span style="margin-right:10px">
-    <img src="/client/assets/logo-invert.svg" data-canonical-src="/client/assets/logo-invert.svg" width="42" height="42"/>
+    <img src="https://raw.githubusercontent.com/Phara0h/travelling/master/client/assets/logo-invert.svg" data-canonical-src="https://raw.githubusercontent.com/Phara0h/travelling/master/client/assets/logo-invert.svg" width="42" height="42"/>
   </span>
   Travelling
 </h1>
