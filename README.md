@@ -2743,7 +2743,11 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v1.2.0](https://github.com/Phara0h/travelling/compare/v1.1.10...v1.2.0)
+
 #### [v1.1.10](https://github.com/Phara0h/travelling/compare/v1.1.9...v1.1.10)
+
+> 17 February 2021
 
 - Update main.yml [`bce2aff`](https://github.com/Phara0h/travelling/commit/bce2aff08ad3acaab8b532dbf446a7d0becffffd)
 
