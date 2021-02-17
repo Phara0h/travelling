@@ -10,7 +10,7 @@
     "debug": "node --inspect-brk index.js",
     "sdk": "sh sdk/gen-sdk.sh && npm run docs",
     "docs": "jsdoc2md sdk/node/index.js  > sdk/README.md",
-    "version": "auto-changelog -l false --sort-commits date-desc --package --hide-credit --template changelog-template.hbs -p && mdsquash -t documents/INTRO.md -i documents/CONFIG.md,sdk/README.md,CHANGELOG.md,LICENSE && git add -A CHANGELOG.md && git add -A README.md",
+    "version": "auto-changelog -l false --sort-commits date-desc --package --hide-credit --template changelog-template.hbs -p && mdsquash -t documents/INTRO.md -i documents/CONFIG.md,sdk/README.md,CHANGELOG.md,LICENSE -o README.md && git add -A CHANGELOG.md && git add -A README.md",
     "postversion": "git push &&  git push --tags && npm publish"
   },
   "repository": {
@@ -61,7 +61,7 @@
     "jest": "^26.1.0",
     "jest-junit": "^11.0.1",
     "jsdoc-to-markdown": "^6.0.1",
-    "mdsquash": "^1.0.5",
+    "mdsquash": "^1.0.6",
     "prettier": "^2.0.5",
     "prettier-eslint": "^11.0.0",
     "postgen": "^4.6.4"
