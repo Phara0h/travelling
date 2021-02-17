@@ -1,0 +1,15 @@
+{
+  "name": "travelling-sdk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "node/index.js",
+  "files": [
+    "node/index.js",
+    "web/index.mjs",
+    "README.md"
+  ],
+  "author": "Jt Whissel",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {}
+}

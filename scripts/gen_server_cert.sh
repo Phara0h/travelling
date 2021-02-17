@@ -8,9 +8,9 @@ echo $1
 country=US
 state=FL
 locality=USA
-organization=Abeai
+organization=Travelling
 organizationalunit=Engineering
-email=admin@abe.ai
+email=test@travelling.com
 
 #Optional
 password=1234

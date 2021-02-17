@@ -1,6 +1,6 @@
+const config = require('./include/utils/config');
 const fs = require('fs');
 const path = require('path');
-const config = require('./include/utils/config');
 const misc = require('./include/utils/misc');
 const parse = require('./include/utils/parse');
 
@@ -47,10 +47,29 @@ const fastifyCookie = require('fastify-cookie');
 
 const PGConnecter = require('adost').PGConnecter;
 
+var pgc = {};
+
+if (config.pg.url) {
+  pgc.connectionString = config.pg.url;
+}
+if (config.pg.user) {
+  pgc.user = config.pg.user;
+}
+if (config.pg.password) {
+  pgc.password = config.pg.password;
+}
+if (config.pg.database) {
+  pgc.database = config.pg.database;
+}
+if (config.pg.host) {
+  pgc.host = config.pg.host;
+}
+if (config.pg.port) {
+  pgc.port = config.pg.port;
+}
+
 const pg = new PGConnecter({
-  pg: {
-    connectionString: config.pg.url
-  },
+  pg: pgc,
   crypto: require(config.pg.crypto.implementation)
 });
 

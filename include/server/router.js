@@ -259,7 +259,7 @@ class Router {
           for (var j = 0; j < route.length; j++) {
             if (route[j] != surl[j] && route[j] != '*') {
               if (route[j].length > 0) {
-                // checking for . - _ in-between for wildcards
+                // checking for @. - _ in-between for wildcards
                 var subSurl = surl[j].split(/[\@\.\-_]/g).reverse();
                 var subRoute = route[j].split(/[\@\.\-_]/g).reverse();
 
@@ -331,6 +331,8 @@ class Router {
         case ':email':
           prop = user.email || prop;
           break;
+        case ':domain':
+          prop = user.domain || prop;
         case ':grouptype':
           prop = group.type || prop;
           break;

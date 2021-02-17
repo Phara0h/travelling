@@ -1,5 +1,5 @@
 const config = require('../include/utils/config');
-const { Travelling } = require('../sdk')('http://127.0.0.1:6969/' + config.serviceName);
+const { Travelling } = require('../sdk/node')('http://127.0.0.1:6969/' + config.serviceName);
 var userContainer = require('./include/UserContainer.js');
 
 module.exports = () => {
