@@ -655,7 +655,3 @@ ___
 *Enables the requirement of each newly registered user to have a active user with permissions to unlock their account for them.* </br>
 
 > **Default**: `false`
-
-## Changelog
-
-{{doc1}}

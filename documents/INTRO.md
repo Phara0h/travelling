@@ -9,7 +9,6 @@ A blazing fast dynamic route level groups/permissions api gateway.
 
 <!-- TOC START min:1 max:8 link:true asterisk:false update:true -->
   - [REST Docs](#rest-docs)
-  - [API Docs](#api-docs)
   - [Install](#install)
     - [Minimum New Setup](#minimum-new-setup)
   - [Security](#security)
@@ -22,10 +21,6 @@ A blazing fast dynamic route level groups/permissions api gateway.
 ## REST Docs
 
 [REST Docs](https://documenter.getpostman.com/view/208035/TWDUqyFx?version=latest)
-
-## API Docs
-
-[API documentation](./sdk/README.md)
 
 ## Install
 
@@ -78,11 +73,13 @@ It is recommended to follow this security tips to help keep Travelling as secure
 
 ## Configuration
 
-Configuration is done through environment variables. All variables have a default values except for what is stated in [Minimum New Setup](#MinimumNewSetup)
+[Configuration](./documents/CONFIG.md) is done through environment variables. All variables have a default values except for what is stated in [Minimum New Setup](#MinimumNewSetup)
 
 {{doc1}}
 
 ## SDK
+
+[SDK](./sdk/README.md)
 
 {{doc2}}
 
