@@ -3189,7 +3189,7 @@ class UserCurrent {
    *
    * Path: api/v1/user/me/route/allowed
    * @param {any} method  (example: get)
-   * @param {any} route  (example:  /travelling/api/v1/group/request/type/anonymous/user/)
+   * @param {any} route  (example: /travelling/api/v1/group/request/type/anonymous/user/)
    * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
    */
   static async routeCheck(method, route, authorization_bearer, opts) {
@@ -3517,6 +3517,95 @@ class Auth {
     }
     return await fasq.request(options);
   }
+
+  static get Domain() {
+    return AuthDomain;
+  }
+}
+/**
+ *
+ */
+class AuthDomain {
+  constructor() {}
+  static get _postgenClassUrls() {
+    return {
+      login: 'api/v1/auth/login/domain/:domain',
+      register: 'api/v1/auth/register/domain/:domain',
+    };
+  }
+  static getFunctionsPath(name) {
+    return this._postgenClassUrls[name.toLowerCase()];
+  }
+
+  /**
+   * login - Register a user
+   *
+   * Path: api/v1/auth/login/domain/:domain
+   * @param {Object} body
+   * @param {any} domain  (example: test.com)
+   * @example
+   * body
+   * ```json
+   * {
+   * 	"username": "test",
+   * 	"password": "Pas5w0r!d",
+   *     "domain": "default"
+   * }
+   * ```
+   */
+  static async login(body, domain, opts) {
+    var options = {
+      method: 'PUT',
+      simple: false,
+      uri: hostUrl + '/' + `api/v1/auth/login/domain/${domain}`,
+      body,
+      json: true,
+      json: true,
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
+  }
+
+  /**
+  * register - Register a user
+
+`group_request`	is optional.
+  *
+  * Path: api/v1/auth/register/domain/:domain
+  * @param {Object} body
+  * @param {any} domain  (example: test)
+  * @example
+  * body
+  * ```json
+  * {
+ * 	"username":"test",
+ * 	"password":"Pas5w0r!d",
+ * 	"email": "test@test.com"
+ * }
+  * ```
+  */
+  static async register(body, domain, opts) {
+    var options = {
+      method: 'POST',
+      simple: false,
+      uri: hostUrl + '/' + `api/v1/auth/register/domain/${domain}`,
+      body,
+      json: true,
+      json: true,
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
+  }
 }
 /**
  * SDK - importing the SDK for use
@@ -3552,6 +3641,7 @@ function SDK(host, opts) {
     User,
     UserCurrent,
     Auth,
+    AuthDomain,
   };
 }
 module.exports = SDK;

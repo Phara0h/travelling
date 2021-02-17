@@ -35,6 +35,8 @@
 <dt><a href="#Auth">Auth</a></dt>
 <dd><h4 id="auth-endpoints">Auth endpoints</h4>
 </dd>
+<dt><a href="#AuthDomain">AuthDomain</a></dt>
+<dd></dd>
 </dl>
 
 ## Functions
@@ -1798,7 +1800,7 @@ Path: api/v1/user/me/route/allowed
 | Param | Type | Description |
 | --- | --- | --- |
 | method | <code>any</code> | (example: get) |
-| route | <code>any</code> | (example:  /travelling/api/v1/group/request/type/anonymous/user/) |
+| route | <code>any</code> | (example: /travelling/api/v1/group/request/type/anonymous/user/) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="UserCurrent.permissionCheck"></a>
@@ -1978,6 +1980,63 @@ body
 	"password":"Pas5w0r!d",
 	"email": "test@test.com",
     "domain": "default"
+}
+```
+<a name="AuthDomain"></a>
+
+## AuthDomain
+**Kind**: global class  
+
+* [AuthDomain](#AuthDomain)
+    * [.login(body, domain)](#AuthDomain.login)
+    * [.register(body, domain)](#AuthDomain.register)
+
+<a name="AuthDomain.login"></a>
+
+### AuthDomain.login(body, domain)
+login - Register a user
+
+Path: api/v1/auth/login/domain/:domain
+
+**Kind**: static method of [<code>AuthDomain</code>](#AuthDomain)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| domain | <code>any</code> | (example: test.com) |
+
+**Example**  
+body
+```json
+{
+	"username": "test",
+	"password": "Pas5w0r!d",
+    "domain": "default"
+}
+```
+<a name="AuthDomain.register"></a>
+
+### AuthDomain.register(body, domain)
+register - Register a user
+
+`group_request`	is optional.
+
+Path: api/v1/auth/register/domain/:domain
+
+**Kind**: static method of [<code>AuthDomain</code>](#AuthDomain)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| domain | <code>any</code> | (example: test) |
+
+**Example**  
+body
+```json
+{
+	"username":"test",
+	"password":"Pas5w0r!d",
+	"email": "test@test.com"
 }
 ```
 <a name="SDK"></a>
