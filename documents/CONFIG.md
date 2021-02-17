@@ -1,172 +1,100 @@
-<h1 style="display:flex;">
-  <span style="margin-right:10px">
-    <img src="/client/assets/logo-invert.svg" data-canonical-src="/client/assets/logo-invert.svg" width="42" height="42"/>
-  </span>
-  Travelling
-</h1>
+<!-- TOC -->
 
-A blazing fast dynamic route level groups/permissions api gateway.
+- [Basic](#basic)
+  - [TRAVELLING_PORT](#travelling_port)
+  - [TRAVELLING_IP](#travelling_ip)
+  - [TRAVELLING_KEY](#travelling_key)
+  - [TRAVELLING_CERT](#travelling_cert)
+  - [TRAVELLING_HTTPS](#travelling_https)
+- [Cors](#cors)
+  - [TRAVELLING_CORS_ENABLE](#travelling_cors_enable)
+  - [TRAVELLING_CORS_HEADER_ORIGIN](#travelling_cors_header_origin)
+  - [TRAVELLING_CORS_HEADER_METHODS](#travelling_cors_header_methods)
+  - [TRAVELLING_CORS_HEADER_CREDENTIALS](#travelling_cors_header_credentials)
+  - [TRAVELLING_CORS_HEADER_MAX_AGE](#travelling_cors_header_max_age)
+- [Logging](#logging)
+  - [TRAVELLING_LOG_ENABLE](#travelling_log_enable)
+  - [TRAVELLING_LOG_LOGGER](#travelling_log_logger)
+  - [TRAVELLING_LOG_COLORS](#travelling_log_colors)
+  - [TRAVELLING_LOG_LEVEL](#travelling_log_level)
+  - [TRAVELLING_LOG_REQUESTS](#travelling_log_requests)
+  - [TRAVELLING_LOG_UNAUTHORIZED_ACCESS](#travelling_log_unauthorized_access)
+- [Fastify Logger](#fastify-logger)
+  - [TRAVELLING_LOG_FASTIFY_LOGGER](#travelling_log_fastify_logger)
+  - [TRAVELLING_LOG_FASTIFY_LOGGER_REQUEST](#travelling_log_fastify_logger_request)
+  - [TRAVELLING_LOG_FASTIFY_LOGGER_REQ_ID_HEADER](#travelling_log_fastify_logger_req_id_header)
+  - [TRAVELLING_LOG_FASTIFY_LOGGER_REQ_ID_LOG_LABEL](#travelling_log_fastify_logger_req_id_log_label)
+- [Portal](#portal)
+  - [TRAVELLING_PORTAL_ENABLE](#travelling_portal_enable)
+  - [TRAVELLING_PORTAL_PATH](#travelling_portal_path)
+  - [TRAVELLING_PORTAL_HOST](#travelling_portal_host)
+  - [TRAVELLING_PORTAL_FILE_PATH](#travelling_portal_file_path)
+  - [TRAVELLING_PORTAL_LOGO](#travelling_portal_logo)
+  - [TRAVELLING_PORTAL_STYLES](#travelling_portal_styles)
+  - [TRAVELLING_PORTAL_ICON](#travelling_portal_icon)
+- [Proxy](#proxy)
+  - [TRAVELLING_PROXY_TIMEOUT](#travelling_proxy_timeout)
+  - [TRAVELLING_PROXY_SEND_TRAVELLING_HEADERS](#travelling_proxy_send_travelling_headers)
+- [Redis](#redis)
+  - [TRAVELLING_REDIS_ENABLE](#travelling_redis_enable)
+  - [TRAVELLING_REDIS_URL](#travelling_redis_url)
+  - [TRAVELLING_REDIS_EVENTS_URL](#travelling_redis_events_url)
+- [Cookie](#cookie)
+  - [TRAVELLING_COOKIE_SESSION_SECRET](#travelling_cookie_session_secret)
+  - [TRAVELLING_COOKIE_SESSION_EXPIRATION](#travelling_cookie_session_expiration)
+  - [TRAVELLING_COOKIE_TOKEN_SECRET](#travelling_cookie_token_secret)
+  - [TRAVELLING_COOKIE_TOKEN_SALT](#travelling_cookie_token_salt)
+  - [TRAVELLING_COOKIE_TOKEN_EXPIRATION](#travelling_cookie_token_expiration)
+  - [TRAVELLING_COOKIE_DOMAIN](#travelling_cookie_domain)
+  - [TRAVELLING_COOKIE_SECURITY_IP_HIJACK_PROTECTION](#travelling_cookie_security_ip_hijack_protection)
+- [USER](#user)
+  - [TRAVELLING_USER_ISOLATE_BY_DOMAIN](#travelling_user_isolate_by_domain)
+  - [TRAVELLING_USER_USERNAME_MINCHAR](#travelling_user_username_minchar)
+  - [TRAVELLING_USER_USERNAME_ENABLE](#travelling_user_username_enable)
+- [Authentication](#authentication)
+  - [TRAVELLING_PASSWORD_CONSECUTIVE](#travelling_password_consecutive)
+  - [TRAVELLING_PASSWORD_MINCHAR](#travelling_password_minchar)
+  - [TRAVELLING_PASSWORD_MAXCHAR](#travelling_password_maxchar)
+  - [TRAVELLING_PASSWORD_SPECIAL](#travelling_password_special)
+  - [TRAVELLING_PASSWORD_NUMBER](#travelling_password_number)
+  - [TRAVELLING_PASSWORD_LOWERCASE](#travelling_password_lowercase)
+  - [TRAVELLING_PASSWORD_UPPERCASE](#travelling_password_uppercase)
+  - [TRAVELLING_LOGIN_MAX_LOGIN_ATTEMPTS](#travelling_login_max_login_attempts)
+- [OAUTH2](#oauth2)
+  - [TRAVELLING_TOKEN_ACCESS_EXPIRATION](#travelling_token_access_expiration)
+  - [TRAVELLING_TOKEN_CODE_EXPIRATION](#travelling_token_code_expiration)
+  - [TRAVELLING_TOKEN_CODE_AUTHORIZE_FLOW](#travelling_token_code_authorize_flow)
+- [Postgres](#postgres)
+  - [TRAVELLING_DATABASE_URL](#travelling_database_url)
+  - [TRAVELLING_PG_CRYPTO_IMPLEMENTATION](#travelling_pg_crypto_implementation)
+  - [TRAVELLING_PG_CRYPTO_IMPLEMENTATION_SECRET](#travelling_pg_crypto_implementation_secret)
+  - [TRAVELLING_PG_CRYPTO_IMPLEMENTATION_SALT](#travelling_pg_crypto_implementation_salt)
+  - [TRAVELLING_PG_CRYPTO_ENCRYPT_USER_DATA](#travelling_pg_crypto_encrypt_user_data)
+- [Email](#email)
+  - [TRAVELLING_EMAIL_FROM](#travelling_email_from)
+  - [TRAVELLING_EMAIL_RECOVERY_EXPIRATION](#travelling_email_recovery_expiration)
+  - [TRAVELLING_EMAIL_ACTIVATION_EXPIRATION](#travelling_email_activation_expiration)
+  - [TRAVELLING_EMAIL_TEST_ENABLE](#travelling_email_test_enable)
+  - [TRAVELLING_EMAIL_SMTP_ENABLE](#travelling_email_smtp_enable)
+  - [TRAVELLING_EMAIL_SMTP_HOST](#travelling_email_smtp_host)
+  - [TRAVELLING_EMAIL_SMTP_PORT](#travelling_email_smtp_port)
+  - [TRAVELLING_EMAIL_SMTP_SECURE](#travelling_email_smtp_secure)
+  - [TRAVELLING_EMAIL_SMTP_AUTH_USER](#travelling_email_smtp_auth_user)
+  - [TRAVELLING_EMAIL_SMTP_SECURE](#travelling_email_smtp_secure-1)
+  - [TRAVELLING_EMAIL_SMTP_TLS_REJECT_UNAUTHORIZED](#travelling_email_smtp_tls_reject_unauthorized)
+  - [TRAVELLING_EMAIL_AWS_ENABLE](#travelling_email_aws_enable)
+  - [TRAVELLING_EMAIL_AWS_CONFIG](#travelling_email_aws_config)
+  - [Templates](#templates)
+    - [TRAVELLING_EMAIL_RESET_PASSWORD_TEMPLATE_BODY](#travelling_email_reset_password_template_body)
+    - [TRAVELLING_EMAIL_RESET_PASSWORD_TEMPLATE_SUBJECT](#travelling_email_reset_password_template_subject)
+    - [TRAVELLING_EMAIL_ACTIVATION_TEMPLATE_BODY](#travelling_email_activation_template_body)
+    - [TRAVELLING_EMAIL_ACTIVATION_TEMPLATE_SUBJECT](#travelling_email_activation_template_subject)
+- [Registration](#registration)
+  - [TRAVELLING_REGISTRATION_REQUIRE_EMAIL_ACTIVATION](#travelling_registration_require_email_activation)
+  - [TRAVELLING_REGISTRATION_REQUIRE_MANUAL_ACTIVATION](#travelling_registration_require_manual_activation)
+- [Changelog](#changelog)
 
-<!-- TOC START min:1 max:8 link:true asterisk:false update:true -->
-  - [REST Docs](#rest-docs)
-  - [API Docs](#api-docs)
-  - [Install](#install)
-    - [Minimum New Setup](#minimum-new-setup)
-  - [Security](#security)
-  - [Configuration](#configuration)
-    - [Basic](#basic)
-        - [TRAVELLING_PORT](#travelling_port)
-        - [TRAVELLING_IP](#travelling_ip)
-        - [TRAVELLING_KEY](#travelling_key)
-        - [TRAVELLING_CERT](#travelling_cert)
-        - [TRAVELLING_HTTPS](#travelling_https)
-    - [Cors](#cors)
-        - [TRAVELLING_CORS_ENABLE](#travelling_cors_enable)
-        - [TRAVELLING_CORS_HEADER_ORIGIN](#travelling_cors_header_origin)
-        - [TRAVELLING_CORS_HEADER_METHODS](#travelling_cors_header_methods)
-        - [TRAVELLING_CORS_HEADER_CREDENTIALS](#travelling_cors_header_credentials)
-        - [TRAVELLING_CORS_HEADER_MAX_AGE](#travelling_cors_header_max_age)
-    - [Logging](#logging)
-        - [TRAVELLING_LOG_ENABLE](#travelling_log_enable)
-        - [TRAVELLING_LOG_LOGGER](#travelling_log_logger)
-        - [TRAVELLING_LOG_COLORS](#travelling_log_colors)
-        - [TRAVELLING_LOG_LEVEL](#travelling_log_level)
-        - [TRAVELLING_LOG_REQUESTS](#travelling_log_requests)
-        - [TRAVELLING_LOG_UNAUTHORIZED_ACCESS](#travelling_log_unauthorized_access)
-    - [Fastify Logger](#fastify-logger)
-        - [TRAVELLING_LOG_FASTIFY_LOGGER](#travelling_log_fastify_logger)
-        - [TRAVELLING_LOG_FASTIFY_LOGGER_REQUEST](#travelling_log_fastify_logger_request)
-        - [TRAVELLING_LOG_FASTIFY_LOGGER_REQ_ID_HEADER](#travelling_log_fastify_logger_req_id_header)
-        - [TRAVELLING_LOG_FASTIFY_LOGGER_REQ_ID_LOG_LABEL](#travelling_log_fastify_logger_req_id_log_label)
-    - [Portal](#portal)
-        - [TRAVELLING_PORTAL_ENABLE](#travelling_portal_enable)
-        - [TRAVELLING_PORTAL_PATH](#travelling_portal_path)
-        - [TRAVELLING_PORTAL_HOST](#travelling_portal_host)
-        - [TRAVELLING_PORTAL_FILE_PATH](#travelling_portal_file_path)
-        - [TRAVELLING_PORTAL_LOGO](#travelling_portal_logo)
-        - [TRAVELLING_PORTAL_STYLES](#travelling_portal_styles)
-        - [TRAVELLING_PORTAL_ICON](#travelling_portal_icon)
-    - [Proxy](#proxy)
-        - [TRAVELLING_PROXY_TIMEOUT](#travelling_proxy_timeout)
-        - [TRAVELLING_PROXY_SEND_TRAVELLING_HEADERS](#travelling_proxy_send_travelling_headers)
-    - [Redis](#redis)
-        - [TRAVELLING_REDIS_ENABLE](#travelling_redis_enable)
-        - [TRAVELLING_REDIS_URL](#travelling_redis_url)
-        - [TRAVELLING_REDIS_EVENTS_URL](#travelling_redis_events_url)
-    - [Cookie](#cookie)
-        - [TRAVELLING_COOKIE_SESSION_SECRET](#travelling_cookie_session_secret)
-        - [TRAVELLING_COOKIE_SESSION_EXPIRATION](#travelling_cookie_session_expiration)
-        - [TRAVELLING_COOKIE_TOKEN_SECRET](#travelling_cookie_token_secret)
-        - [TRAVELLING_COOKIE_TOKEN_SALT](#travelling_cookie_token_salt)
-        - [TRAVELLING_COOKIE_TOKEN_EXPIRATION](#travelling_cookie_token_expiration)
-        - [TRAVELLING_COOKIE_DOMAIN](#travelling_cookie_domain)
-        - [TRAVELLING_COOKIE_SECURITY_IP_HIJACK_PROTECTION](#travelling_cookie_security_ip_hijack_protection)
-    - [USER](#user)
-        - [TRAVELLING_USER_ISOLATE_BY_DOMAIN](#travelling_user_isolate_by_domain)
-        - [TRAVELLING_USER_USERNAME_MINCHAR](#travelling_user_username_minchar)
-        - [TRAVELLING_USER_USERNAME_ENABLE](#travelling_user_username_enable)
-    - [Authentication](#authentication)
-        - [TRAVELLING_PASSWORD_CONSECUTIVE](#travelling_password_consecutive)
-        - [TRAVELLING_PASSWORD_MINCHAR](#travelling_password_minchar)
-        - [TRAVELLING_PASSWORD_MAXCHAR](#travelling_password_maxchar)
-        - [TRAVELLING_PASSWORD_SPECIAL](#travelling_password_special)
-        - [TRAVELLING_PASSWORD_NUMBER](#travelling_password_number)
-        - [TRAVELLING_PASSWORD_LOWERCASE](#travelling_password_lowercase)
-        - [TRAVELLING_PASSWORD_UPPERCASE](#travelling_password_uppercase)
-        - [TRAVELLING_LOGIN_MAX_LOGIN_ATTEMPTS](#travelling_login_max_login_attempts)
-    - [OAUTH2](#oauth2)
-        - [TRAVELLING_TOKEN_ACCESS_EXPIRATION](#travelling_token_access_expiration)
-        - [TRAVELLING_TOKEN_CODE_EXPIRATION](#travelling_token_code_expiration)
-        - [TRAVELLING_TOKEN_CODE_AUTHORIZE_FLOW](#travelling_token_code_authorize_flow)
-    - [Postgres](#postgres)
-        - [TRAVELLING_DATABASE_URL](#travelling_database_url)
-        - [TRAVELLING_PG_CRYPTO_IMPLEMENTATION](#travelling_pg_crypto_implementation)
-        - [TRAVELLING_PG_CRYPTO_IMPLEMENTATION_SECRET](#travelling_pg_crypto_implementation_secret)
-        - [TRAVELLING_PG_CRYPTO_IMPLEMENTATION_SALT](#travelling_pg_crypto_implementation_salt)
-        - [TRAVELLING_PG_CRYPTO_ENCRYPT_USER_DATA](#travelling_pg_crypto_encrypt_user_data)
-    - [Email](#email)
-        - [TRAVELLING_EMAIL_FROM](#travelling_email_from)
-        - [TRAVELLING_EMAIL_RECOVERY_EXPIRATION](#travelling_email_recovery_expiration)
-        - [TRAVELLING_EMAIL_ACTIVATION_EXPIRATION](#travelling_email_activation_expiration)
-        - [TRAVELLING_EMAIL_TEST_ENABLE](#travelling_email_test_enable)
-        - [TRAVELLING_EMAIL_SMTP_ENABLE](#travelling_email_smtp_enable)
-        - [TRAVELLING_EMAIL_SMTP_HOST](#travelling_email_smtp_host)
-        - [TRAVELLING_EMAIL_SMTP_PORT](#travelling_email_smtp_port)
-        - [TRAVELLING_EMAIL_SMTP_SECURE](#travelling_email_smtp_secure)
-        - [TRAVELLING_EMAIL_SMTP_AUTH_USER](#travelling_email_smtp_auth_user)
-        - [TRAVELLING_EMAIL_SMTP_SECURE](#travelling_email_smtp_secure-1)
-        - [TRAVELLING_EMAIL_SMTP_TLS_REJECT_UNAUTHORIZED](#travelling_email_smtp_tls_reject_unauthorized)
-        - [TRAVELLING_EMAIL_AWS_ENABLE](#travelling_email_aws_enable)
-        - [TRAVELLING_EMAIL_AWS_CONFIG](#travelling_email_aws_config)
-      - [Templates](#templates)
-        - [TRAVELLING_EMAIL_RESET_PASSWORD_TEMPLATE_BODY](#travelling_email_reset_password_template_body)
-        - [TRAVELLING_EMAIL_RESET_PASSWORD_TEMPLATE_SUBJECT](#travelling_email_reset_password_template_subject)
-        - [TRAVELLING_EMAIL_ACTIVATION_TEMPLATE_BODY](#travelling_email_activation_template_body)
-        - [TRAVELLING_EMAIL_ACTIVATION_TEMPLATE_SUBJECT](#travelling_email_activation_template_subject)
-    - [Registration](#registration)
-        - [TRAVELLING_REGISTRATION_REQUIRE_EMAIL_ACTIVATION](#travelling_registration_require_email_activation)
-        - [TRAVELLING_REGISTRATION_REQUIRE_MANUAL_ACTIVATION](#travelling_registration_require_manual_activation)
-<!-- TOC END -->
-
-## REST Docs
-
-[REST Docs](https://documenter.getpostman.com/view/7072151/SVfJUrSZ?version=latest)
-
-## API Docs
-
-[API documentation](../sdk/README.md)
-
-## Install
-
-### Minimum New Setup
-
-1. Download the latest release or run `git clone https://github.com/abeai/travelling.git`
-
-2. Inside the root Travelling folder run: `npm install`
-
-3. Set the `TRAVELLING_DATABASE_URL` environment variable which needs to be pointing to a new PostgreSQL database to start. Do this by creating a `.env` file inside the root Travelling folder. For example:
-
-   ```EditorConfig
-   TRAVELLING_DATABASE_URL=postgres://postgres@localhost/travelling
-   ```
-
-4. Set the salts and secrets for the following:
-
-   ```EditorConfig
-   ## Cookie Session Settings
-   TRAVELLING_COOKIE_SESSION_SECRET=Yzy)8EbJOUJf+~e^%#7-lo1)RJUs.UVPBu4d3qqd0ZDQ!A~ti%Sq<kPy)nfVSn0;TRBeD0_QeMxKzp]Yn{hQe4j#ZtQ{L$0O>+hBJl^-%TKX<S>u|~xz;hFS(DO32tw#
-
-   ## Cookie Token Settings
-   TRAVELLING_COOKIE_TOKEN_SECRET=qVsI_O|Y0VPz>xvW-Uu!&5lejE3M4w-l0KvCI!v4q|9|F0W+v9g-hb!*yX8*3O%Ty@4$~:@1!VX*?Sl&c}KW&a4..gceGHg)KoiVpc9-8bCnrmG&&}iI;7VY+-+&U(?:
-   TRAVELLING_COOKIE_TOKEN_SALT=?)WJ.$!570)5[@bDNip!q.t1J#/B.fJ{cyC--Zd/IJwJ/~L+(&#XOz|FuIoc{k;@8wf#gOrn||Ng1+2bDxOuQ6$_6QK{aWUfc-PZ{L62(0JRKizR~Y*/K8YT]?gLHB+S
-
-   ## Postgres Crypto Settings
-   TRAVELLING_PG_CRYPTO_IMPLEMENTATION_SECRET=:Y@K$;nE8r~D]dR-#%<PyI]/]^v&#lIz7T(OHrI@sAA_Y/+C%bYVfoY5(r#3IN6tC_fn9vpy%CKXh?K0k:<M/[PXs*r2CO~:]!2qBmB,9}RW)8i$$P#uFt_>u,v_M9K}
-   TRAVELLING_PG_CRYPTO_IMPLEMENTATION_SALT=Wdwrmww~NxDAFn2/@~1SfV6&Iq7/PR;]k2Me*gK*(|I!sxcr/V,_0Bbys25dIF!sm,}XG)%U!(9|3gS4Hy1Hjo}D.WsF{!6|+x,t{O6T^S):kuglmBokNNqQeHL^bWk%
-   ```
-
-   These are example secrets and salts ***DO NOT USE THESE VALUES*** generate your own. You can use the included script via `./scripts/generateRandom.sh` to generate a 128 character random string to use for salts and secrets. See [Security](#Security) for more details on keeping Travelling secure.
-
-See [Configuration](#Configuration) for all other configurable options.
-
-## Security
-
-It is recommended to follow this security tips to help keep Travelling as secure as possible.
-
-* Use HTTPS
-* Use a key and cert signed by a known third party ssl vender. (Make sure chrome supports them)
-* Don't use Cors unless you really have to.
-* Request logs are helpful for tracking down malicious requests
-* Run Travelling behind DDOS protection. For example Cloudflare.
-* Rotate cookie session/token secrets and salts often. (Once a month is a good recommendation)
-* Set username passwords and username's to OWSAP current recommendations.
-* Keep OAuth2 Code Tokens short lived for maximum security.
-* Use strong secret's and salts for Postgres encryption. **KEEP THESE SAFE**.
-* Email authentication helps prevent invalid users and makes it harder for bots to generate accounts.
-
-## Configuration
-
-Configuration is done through environment variables. All variables have a default values except for what is stated in [Minimum New Setup](#MinimumNewSetup)
+<!-- /TOC -->
 
 ### Basic
 
@@ -727,3 +655,7 @@ ___
 *Enables the requirement of each newly registered user to have a active user with permissions to unlock their account for them.* </br>
 
 > **Default**: `false`
+
+## Changelog
+
+{{doc1}}

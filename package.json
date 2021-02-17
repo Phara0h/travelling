@@ -4,11 +4,14 @@
   "description": "A dynamic route level groups permissions middleman service",
   "main": "index.js",
   "scripts": {
-    "pretest": "./scripts/pretest.sh",
-    "test": "./startTest.sh",
-    "start": "./scripts/start.sh",
-    "debug": "./scripts/debug.sh",
-    "docs": "./scripts/docs.sh"
+    "pretest": "npm run sdk",
+    "test": "TRAVELLING_ENV=.testENV jest --coverage --verbose --forceExit --detectOpenHandles",
+    "start": "node index.js",
+    "debug": "node --inspect-brk index.js",
+    "sdk": "sh sdk/gen-sdk.sh && npm run docs",
+    "docs": "jsdoc2md sdk/node/index.js  > sdk/README.md",
+    "version": "auto-changelog -l false --sort-commits date-desc --package --hide-credit --template changelog-template.hbs -p && mdsquash -t documents/INTRO.md -i documents/CONFIG.md,sdk/README.md,CHANGELOG.md,LICENSE && git add -A CHANGELOG.md && git add -A README.md",
+    "postversion": "git push &&  git push --tags && npm publish"
   },
   "repository": {
     "type": "git",
@@ -30,8 +33,9 @@
   },
   "homepage": "https://github.com/phara0h/travelling#readme",
   "dependencies": {
-    "adost": "^1.1.2",
+    "adost": "^1.2.1",
     "aws-sdk": "^2.516.0",
+    "dotenv": "^8.2.0",
     "fasquest": "^3.1.1",
     "fast-proxy": "^1.8.0",
     "fastify": "^3.11.0",

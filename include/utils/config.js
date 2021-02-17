@@ -1,3 +1,4 @@
+require('dotenv').config({ path: require('path').resolve(process.cwd(), process.env.TRAVELLING_ENV || '.env') });
 const misc = require('./misc');
 
 const config = {
@@ -34,7 +35,10 @@ const config = {
   },
   portal: {
     enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_PORTAL_ENABLE), true),
-    path: misc.isSetDefault(process.env.TRAVELLING_PORTAL_PATH, '/travelling/portal/'),
+    path: misc.isSetDefault(
+      process.env.TRAVELLING_PORTAL_PATH,
+      `/${misc.isSetDefault(process.env.TRAVELLING_SERVICE_NAME, 'travelling')}/portal/`
+    ),
     host: misc.isSetDefault(process.env.TRAVELLING_PORTAL_HOST, null),
     filePath: misc.isSetDefault(process.env.TRAVELLING_PORTAL_FILE_PATH, __dirname + '/../../client/dist'),
     logo: misc.isSetDefault(process.env.TRAVELLING_PORTAL_LOGO, __dirname + '/../../client/assets/logo.svg'),
@@ -107,6 +111,11 @@ const config = {
   },
   pg: {
     url: misc.isSetDefault(process.env.TRAVELLING_DATABASE_URL, null),
+    user: misc.isSetDefault(process.env.TRAVELLING_DATABASE_USER, null),
+    password: misc.isSetDefault(process.env.TRAVELLING_DATABASE_PASSWORD, null),
+    port: misc.isSetDefault(process.env.TRAVELLING_DATABASE_PORT, null),
+    database: misc.isSetDefault(process.env.TRAVELLING_DATABASE_NAME, null),
+    host: misc.isSetDefault(process.env.TRAVELLING_DATABASE_HOST, null),
     crypto: {
       implementation: misc.isSetDefault(process.env.TRAVELLING_PG_CRYPTO_IMPLEMENTATION, __dirname + '/cryptointerface.js'),
       secret: misc.isSetDefault(process.env.TRAVELLING_PG_CRYPTO_IMPLEMENTATION_SECRET, null),
