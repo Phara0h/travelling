@@ -1,67 +1,12 @@
 
 
-#### [v1.2.0](https://github.com/Phara0h/travelling/compare/v1.1.10...v1.2.0)
+#### [v1.2.1-0](https://github.com/Phara0h/travelling/compare/v1.2.0...v1.2.1-0)
 
-#### [v1.1.10](https://github.com/Phara0h/travelling/compare/v1.1.9...v1.1.10)
+- Updated logo in readme [`2079591`](https://github.com/Phara0h/travelling/commit/20795916dbbe00bd9f656b2834241b19abcf5b86)
 
-> 17 February 2021
-
-- Update main.yml [`bce2aff`](https://github.com/Phara0h/travelling/commit/bce2aff08ad3acaab8b532dbf446a7d0becffffd)
-
-#### [v1.1.9](https://github.com/Phara0h/travelling/compare/v1.1.8...v1.1.9)
+#### [v1.2.0](https://github.com/Phara0h/travelling/compare/v1.1.1...v1.2.0)
 
 > 17 February 2021
-
-- Update main.yml [`98fe5cd`](https://github.com/Phara0h/travelling/commit/98fe5cd097b62392cd4c0ef15234e19bb471d2a2)
-
-#### [v1.1.8](https://github.com/Phara0h/travelling/compare/v1.1.7...v1.1.8)
-
-> 17 February 2021
-
-- Update main.yml [`61f288b`](https://github.com/Phara0h/travelling/commit/61f288b530871c4bc4cca476922c3867a7db936f)
-- Set theme jekyll-theme-midnight [`91db2b3`](https://github.com/Phara0h/travelling/commit/91db2b379b85565b1ae99c3fd94d07537c9a8d8c)
-
-#### [v1.1.7](https://github.com/Phara0h/travelling/compare/v1.1.6...v1.1.7)
-
-> 17 February 2021
-
-- Update main.yml [`c061f42`](https://github.com/Phara0h/travelling/commit/c061f42e8a5615e00be74d4ac3d4fa6a3810f413)
-
-#### [v1.1.6](https://github.com/Phara0h/travelling/compare/v1.1.5...v1.1.6)
-
-> 17 February 2021
-
-- Update main.yml [`cea814c`](https://github.com/Phara0h/travelling/commit/cea814c8d65c6ce241750d29cf2427842ac03a13)
-
-#### [v1.1.5](https://github.com/Phara0h/travelling/compare/v1.1.4...v1.1.5)
-
-> 17 February 2021
-
-- Please be the Github actions fix [`f64a33c`](https://github.com/Phara0h/travelling/commit/f64a33c0e52a151bd520abebdb61d9e03c653de6)
-
-#### [v1.1.4](https://github.com/Phara0h/travelling/compare/v1.1.3...v1.1.4)
-
-> 17 February 2021
-
-- Github actions fix [`9f01e71`](https://github.com/Phara0h/travelling/commit/9f01e71e9380c5c5aef212d2b809f31cba33878c)
-
-#### [v1.1.3](https://github.com/Phara0h/travelling/compare/v1.1.2...v1.1.3)
-
-> 17 February 2021
-
-- Create main.yml [`ec92d7b`](https://github.com/Phara0h/travelling/commit/ec92d7b2e4ed41f5678026800c05f2df6224b4ab)
-
-#### [v1.1.2](https://github.com/Phara0h/travelling/compare/v1.1.1...v1.1.2)
-
-> 17 February 2021
-
-- Update npm-publish.yml [`b15cfbe`](https://github.com/Phara0h/travelling/commit/b15cfbe04a532b20346f2bef18af48596551ff00)
-- Update .gitignore [`ddda22f`](https://github.com/Phara0h/travelling/commit/ddda22fd1dbead54dc17c7eb2d442ce23a08951f)
-- Delete package-lock.json [`2c7afb9`](https://github.com/Phara0h/travelling/commit/2c7afb921f3e2e36e97ce648e9be082ca7dda271)
-- Update npm-publish.yml [`1d5ba20`](https://github.com/Phara0h/travelling/commit/1d5ba202d5d87fe47a08948dd1e2f2bd15a52d8e)
-- Update npm-publish.yml [`30f57ef`](https://github.com/Phara0h/travelling/commit/30f57ef5fec492533ae725080eb6e830da5a0846)
-- Update npm-publish.yml [`8c1692f`](https://github.com/Phara0h/travelling/commit/8c1692f321ddaa4f0e4fc45bbda1cd7c6fde660e)
-- Create npm-publish.yml [`7066bdf`](https://github.com/Phara0h/travelling/commit/7066bdf0f9b939e65a15f2e4301f57fe0de6b02f)
 
 #### [v1.1.1](https://github.com/Phara0h/travelling/compare/v1.1.1-1...v1.1.1)
 
