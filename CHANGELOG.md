@@ -1,6 +1,12 @@
 
 
+#### [v1.2.1](https://github.com/Phara0h/travelling/compare/v1.2.1-0...v1.2.1)
+
+- Fixed bug with auth when usernames disabled [`00fe0bb`](https://github.com/Phara0h/travelling/commit/00fe0bb973d384d7fe8becb18d95e3989e87baef)
+
 #### [v1.2.1-0](https://github.com/Phara0h/travelling/compare/v1.2.0...v1.2.1-0)
+
+> 17 February 2021
 
 - Updated logo in readme [`2079591`](https://github.com/Phara0h/travelling/commit/20795916dbbe00bd9f656b2834241b19abcf5b86)
 
