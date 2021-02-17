@@ -140,7 +140,7 @@ var registerRoute = async (req, res) => {
     return;
   }
 
-  var username = req.body.username.toLowerCase();
+  var username = config.user.username.enabled ? req.body.username.toLowerCase() : '';
   var password = req.body.password;
   var email = req.body.email.toLowerCase();
   var domain = 'default';
