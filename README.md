@@ -775,6 +775,8 @@ ___
 <dt><a href="#Auth">Auth</a></dt>
 <dd><h4 id="auth-endpoints">Auth endpoints</h4>
 </dd>
+<dt><a href="#AuthDomain">AuthDomain</a></dt>
+<dd></dd>
 </dl>
 
 ## Functions
@@ -2538,7 +2540,7 @@ Path: api/v1/user/me/route/allowed
 | Param | Type | Description |
 | --- | --- | --- |
 | method | <code>any</code> | (example: get) |
-| route | <code>any</code> | (example:  /travelling/api/v1/group/request/type/anonymous/user/) |
+| route | <code>any</code> | (example: /travelling/api/v1/group/request/type/anonymous/user/) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="UserCurrent.permissionCheck"></a>
@@ -2720,6 +2722,63 @@ body
     "domain": "default"
 }
 ```
+<a name="AuthDomain"></a>
+
+## AuthDomain
+**Kind**: global class  
+
+* [AuthDomain](#AuthDomain)
+    * [.login(body, domain)](#AuthDomain.login)
+    * [.register(body, domain)](#AuthDomain.register)
+
+<a name="AuthDomain.login"></a>
+
+### AuthDomain.login(body, domain)
+login - Register a user
+
+Path: api/v1/auth/login/domain/:domain
+
+**Kind**: static method of [<code>AuthDomain</code>](#AuthDomain)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| domain | <code>any</code> | (example: test.com) |
+
+**Example**  
+body
+```json
+{
+	"username": "test",
+	"password": "Pas5w0r!d",
+    "domain": "default"
+}
+```
+<a name="AuthDomain.register"></a>
+
+### AuthDomain.register(body, domain)
+register - Register a user
+
+`group_request`	is optional.
+
+Path: api/v1/auth/register/domain/:domain
+
+**Kind**: static method of [<code>AuthDomain</code>](#AuthDomain)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| domain | <code>any</code> | (example: test) |
+
+**Example**  
+body
+```json
+{
+	"username":"test",
+	"password":"Pas5w0r!d",
+	"email": "test@test.com"
+}
+```
 <a name="SDK"></a>
 
 ## SDK(host, opts)
@@ -2743,7 +2802,14 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v1.3.0](https://github.com/Phara0h/travelling/compare/v1.2.1...v1.3.0)
+
+- Added REST email provider as an option, option to change locked message, users will now be unlocked when they reset their password and their locked reason was from password fails and fixed a few bugs [`958be20`](https://github.com/Phara0h/travelling/commit/958be2067dd5d90b57495989fcbe27a843ecf162)
+- Added login by domain in postman / sdk [`04ab374`](https://github.com/Phara0h/travelling/commit/04ab374b629d09248c8280163ce989234ba24530)
+
 #### [v1.2.1](https://github.com/Phara0h/travelling/compare/v1.2.1-0...v1.2.1)
+
+> 17 February 2021
 
 - Fixed bug with auth when usernames disabled [`00fe0bb`](https://github.com/Phara0h/travelling/commit/00fe0bb973d384d7fe8becb18d95e3989e87baef)
 
