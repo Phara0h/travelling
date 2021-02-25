@@ -10,17 +10,11 @@ const gm = require('../server/groupmanager.js');
 class Database {
   constructor() {}
 
-  static async checkAuth(name, email, password, hostname, domain = 'default') {
+  static async checkAuth(name, email, password, domain = 'default') {
     var user = null;
-    var users = null;
+    var users = await this.findUser(email, name, domain);
 
-    if (config.user.isolateByDomain) {
-      users = await User.findLimtedBy([{ username: name }, { email: email }, { domain }], ['OR', 'OR', 'AND'], 1);
-    } else {
-      users = await User.findLimtedBy({ username: name, email: email }, 'OR', 1);
-    }
-
-    //console.log(users);
+    config.log.logger.trace('checkAuth: ', users);
     if (users == null || users.length == 0) {
       throw {
         user: null,
@@ -39,7 +33,7 @@ class Database {
     if (user.email_verify && user.locked) {
       var token = await TokenHandler.getActivationToken(user.id);
 
-      await Email.sendActivation(user, user.email, token.token, hostname);
+      await Email.sendActivation(user, user.email, token.token, domain);
     }
 
     // Locked check
@@ -65,7 +59,8 @@ class Database {
     user.failed_login_attempts += 1;
     if (config.login.maxLoginAttempts && user.failed_login_attempts >= config.login.maxLoginAttempts && !user.locked) {
       user.locked = true;
-      user.locked_reason = 'Failed login attempts exceeded the limit. Contact your admin to get your account unlocked.';
+      user.locked_reason = config.user.locked.message;
+      user.change_password = true;
       await user.save();
       throw {
         user: user,
@@ -146,6 +141,13 @@ class Database {
     user = user[0];
     user.password = password;
     user.reset_password = false;
+
+    if (user.locked && user.locked_reason == config.user.locked.message) {
+      user.locked = false;
+      user.failed_login_attempts = 0;
+      user.locked_reason = '';
+    }
+
     await user.save();
 
     await TokenHandler.deleteAllTempTokens(token[2]);
@@ -170,6 +172,24 @@ class Database {
     await TokenHandler.deleteAllTempTokens(token[2]);
 
     return true;
+  }
+
+  static async findUser(email, username, domain = 'default') {
+    var qProps = [{ email }];
+    var qOps = [config.user.username.enabled ? 'OR' : 'AND'];
+
+    if (config.user.username.enabled && username) {
+      qProps.push({ username });
+      qOps.push('OR');
+    }
+    if (config.user.isolateByDomain && domain) {
+      qProps.push({ domain });
+      qOps.push('AND');
+    }
+
+    var found = await User.findLimtedBy(qProps.length == 1 ? qProps[0] : qProps, qOps.length == 1 ? qOps[0] : qOps, 1);
+
+    return found;
   }
 
   static async initGroups(router) {

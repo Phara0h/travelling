@@ -31,12 +31,13 @@ class TokenStore {
 
   async destroyAllMatching(search) {
     search.replace(/\*/g, '');
+    var keys = Object.keys(this.tokens);
 
-    this.tokens.forEach((key) => {
-      if (key.indexOf(search) > -1) {
-        delete this.tokens[key];
+    for (var i = 0; i < keys.length; i++) {
+      if (keys[i].indexOf(search) > -1) {
+        delete this.tokens[keys[i]];
       }
-    });
+    }
   }
 }
 
