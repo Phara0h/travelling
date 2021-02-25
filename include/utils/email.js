@@ -6,6 +6,35 @@ const Fasquest = require('fasquest');
 
 var transporter = null;
 var templates = null;
+const restTransporter = {
+  name: 'minimal',
+  version: '0.1.0',
+  send: async (mail, callback) => {
+    try {
+      var uri = '';
+
+      if (mail.data.type == 'password') {
+        uri = config.email.rest.passwordRecoveryEndpoint;
+      } else if (mail.data.type == 'activation') {
+        uri = config.email.rest.activationEndpoint;
+      } else if (mail.data.type == 'locked') {
+        uri = config.email.rest.lockedEndpoint;
+      }
+
+      await Fasquest.request({
+        method: 'POST',
+        simple: false,
+        uri,
+        json: true,
+        body: { user: mail.data.user, token: mail.data.token, clientip: mail.data.clientip }
+      });
+      callback(null, true);
+    } catch (e) {
+      config.log.logger.error(`Failed to send email using rest endpoint ${uri}`, mail.data.user);
+      callback(null, false);
+    }
+  }
+};
 
 class Email {
   constructor() {}
@@ -34,7 +63,10 @@ class Email {
       transporter = nodemailer.createTransport({
         SES: new aws.SES({ apiVersion: '2010-12-01' })
       });
+    } else if (config.email.rest.enable) {
+      transporter = nodemailer.createTransport(restTransporter);
     }
+
     templates = {
       resetPasswordBody: Handlebars.compile(
         fs.readFileSync(require('path').resolve(config.email.template.passwordResetBody), 'utf-8')
@@ -54,18 +86,27 @@ class Email {
       config.log.logger.debug(`Password Recovery For: ${email}, ${token}`);
       return;
     }
+    var body;
+    var subject;
 
-    clientip = await Fasquest.request({
-      uri: `http://ip-api.com/json/${clientip}?fields=status,country,regionName,city,isp,query`
-    });
-    var body = templates.resetPasswordBody({ user, hostname, clientip, config, token });
-    var subject = templates.resetPasswordSubject({ user });
+    if (!config.email.rest.enable) {
+      clientip = await Fasquest.request({
+        uri: `http://ip-api.com/json/${clientip}?fields=status,country,regionName,city,isp,query`
+      });
+      body = templates.resetPasswordBody({ user, hostname: user.domain, clientip, config, token });
+      subject = templates.resetPasswordSubject({ user });
+    }
 
     var info = await transporter.sendMail({
       from: config.email.from,
       to: email,
       subject: subject,
-      html: body
+      html: body,
+      type: 'password',
+      user,
+      config,
+      token,
+      clientip
     });
 
     if (config.email.test.enable) {
@@ -84,15 +125,23 @@ class Email {
       config.log.logger.debug(`Activation Email For: ${email}, ${token}`);
       return;
     }
+    var body;
+    var subject;
 
-    var body = templates.activationBody({ user, config, token, hostname });
-    var subject = templates.activationSubject({ user });
+    if (!config.email.rest.enable) {
+      body = templates.activationBody({ user, config, token, hostname: user.domain });
+      subject = templates.activationSubject({ user });
+    }
 
     var info = await transporter.sendMail({
       from: config.email.from,
       to: email,
       subject: subject,
-      html: body
+      html: body,
+      type: 'activation',
+      user,
+      config,
+      token
     });
 
     if (config.email.test.enable) {

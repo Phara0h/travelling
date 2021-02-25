@@ -98,11 +98,16 @@ var loginRoute = async (req, res) => {
       res.code(400).send(isValid);
     } else {
       try {
-        var user = await Database.checkAuth(username, email, req.body.password, req.hostname, domain);
+        var user = await Database.checkAuth(username, email, req.body.password, domain);
 
         await login(user.user, req, res);
       } catch (e) {
-        config.log.logger.debug(e);
+        if (e.err && e.err.msg) {
+          config.log.logger.debug(e.err, e.user ? e.user._ : null);
+          config.log.logger.info(`Failed Auth (${e.err.msg}): `, username, email, domain);
+        } else {
+          config.log.logger.debug(e);
+        }
         res.code(400).send(
           e.err && e.err.type == 'locked'
             ? { type: e.err.type, msg: e.err.msg, email: e.email }
@@ -225,7 +230,7 @@ module.exports = function (app, opts, done) {
       return;
     }
 
-    var isValid = await checkValidUser(req.body, false);
+    var isValid = await checkValidUser({ password: req.body.password }, false);
 
     if (isValid !== true) {
       res.code(400).send(isValid);

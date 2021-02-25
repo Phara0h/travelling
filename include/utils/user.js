@@ -1,7 +1,7 @@
 const config = require('./config');
 const misc = require('./misc');
 const regex = require('./regex');
-const User = require('../database/models/user');
+const Database = require('../database');
 
 module.exports = {
   checkValidUser: async function checkValidUser(user, checkDupe = true) {
@@ -91,19 +91,7 @@ module.exports = {
     }
 
     if (checkDupe) {
-      var qProps = [{ email: user.email }];
-      var qOps = [config.user.username.enabled ? 'OR' : 'AND'];
-
-      if (config.user.username.enabled && user.username) {
-        qProps.push({ username: user.username });
-        qOps.push('OR');
-      }
-      if (config.user.isolateByDomain && user.domain) {
-        qProps.push({ domain: user.domain });
-        qOps.push('AND');
-      }
-
-      var found = await User.findLimtedBy(qProps.length == 1 ? qProps[0] : qProps, qOps.length == 1 ? qOps[0] : qOps, 1);
+      var found = await Database.findUser(user.email, user.username, user.domain);
 
       //console.log(user, qProps, qOps, found);
       if (found && found.length > 0) {

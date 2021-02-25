@@ -86,6 +86,12 @@ const config = {
     username: {
       minchar: misc.isSetDefault(Number(process.env.TRAVELLING_USER_USERNAME_MINCHAR), 4),
       enabled: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_USER_USERNAME_ENABLED), true)
+    },
+    locked: {
+      message: misc.isSetDefault(
+        process.env.TRAVELLING_USER_LOCKED_MESSAGE,
+        'Failed login attempts exceeded the limit. Contact your admin to get your account unlocked.'
+      )
     }
   },
   password: {
@@ -125,6 +131,7 @@ const config = {
   },
   email: {
     from: misc.isSetDefault(process.env.TRAVELLING_EMAIL_FROM, null),
+
     recovery: {
       expiration: misc.isSetDefault(Number(process.env.TRAVELLING_EMAIL_RECOVERY_EXPIRATION), 900) // seconds
     },
@@ -151,6 +158,16 @@ const config = {
     aws: {
       enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_EMAIL_AWS_ENABLE), false),
       config: misc.isSetDefault(process.env.TRAVELLING_EMAIL_AWS_CONFIG, null)
+    },
+    rest: {
+      enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_EMAIL_REST_ENABLE), false),
+      passwordRecoveryEndpoint: misc.isSetDefault(process.env.TRAVELLING_EMAIL_REST_PASSWORD_RECOVERY_ENDPOINT, null),
+      activationEndpoint: misc.isSetDefault(process.env.TRAVELLING_EMAIL_REST_ACTIVATION_ENDPOINT, null),
+      lockedEndpoint: misc.isSetDefault(process.env.TRAVELLING_EMAIL_REST_LOCKED_ENDPOINT, null)
+    },
+    send: {
+      onLocked: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_EMAIL_SEND_ON_LOCKED), true),
+      onNewUser: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_EMAIL_SEND_ON_NEW_USER), false)
     },
     template: {
       passwordResetBody: misc.isSetDefault(
