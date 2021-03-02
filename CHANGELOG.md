@@ -1,6 +1,12 @@
 
 
+#### [v1.3.1](https://github.com/Phara0h/travelling/compare/v1.3.0...v1.3.1)
+
+- typo [`3be0a65`](https://github.com/Phara0h/travelling/commit/3be0a6540aeb8b927b0b26f05cb6cdde2d7e2343)
+
 #### [v1.3.0](https://github.com/Phara0h/travelling/compare/v1.2.1...v1.3.0)
+
+> 25 February 2021
 
 - Added REST email provider as an option, option to change locked message, users will now be unlocked when they reset their password and their locked reason was from password fails and fixed a few bugs [`958be20`](https://github.com/Phara0h/travelling/commit/958be2067dd5d90b57495989fcbe27a843ecf162)
 - Added login by domain in postman / sdk [`04ab374`](https://github.com/Phara0h/travelling/commit/04ab374b629d09248c8280163ce989234ba24530)
