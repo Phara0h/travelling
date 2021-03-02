@@ -141,7 +141,7 @@ class Router {
         req.headers['perm'] = r.name;
       }
 
-      if (req.raw.url.indexOf('/' + config.serviceName + '/') == 0) {
+      if (req.raw.url.indexOf('/' + config.serviceName + '/') == 0 && !r.host) {
         if (config.log.requests) {
           if (authenticated) {
             log.info(
