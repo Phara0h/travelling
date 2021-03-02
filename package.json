@@ -1,6 +1,6 @@
 {
   "name": "travelling",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "A dynamic route level groups permissions middleman service",
   "main": "index.js",
   "scripts": {
