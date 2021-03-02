@@ -2802,7 +2802,13 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v1.3.2](https://github.com/Phara0h/travelling/compare/v1.3.1...v1.3.2)
+
+- Fixed bug of proxying urls that start with the serviceName and have a host [`c6b70b4`](https://github.com/Phara0h/travelling/commit/c6b70b41ed70fe3888a5643d583b9689c555ee68)
+
 #### [v1.3.1](https://github.com/Phara0h/travelling/compare/v1.3.0...v1.3.1)
+
+> 2 March 2021
 
 - typo [`3be0a65`](https://github.com/Phara0h/travelling/commit/3be0a6540aeb8b927b0b26f05cb6cdde2d7e2343)
 
