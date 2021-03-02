@@ -1,6 +1,6 @@
 const config = require('../../utils/config');
 const parse = require('../../utils/parse');
-const qs = require('qs');
+const qs = require('querystring');
 
 const Database = require('../../database');
 const CookieToken = require('../../utils/cookietoken');
