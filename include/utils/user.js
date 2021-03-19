@@ -2,13 +2,14 @@ const config = require('./config');
 const misc = require('./misc');
 const regex = require('./regex');
 const usa = require('./usa');
+const Fasquest = require('fasquest');
 
 module.exports = {
   checkValidUser: async function checkValidUser(user) {
     if (!user) {
       return {
         type: 'body-error',
-        msg: 'No body sent with request)'
+        msg: 'No body sent with request'
       };
     }
 
@@ -19,11 +20,26 @@ module.exports = {
       };
     }
 
-    if (user.email && regex.email.exec(user.email.toLowerCase()) == null) {
-      return {
+    if (user.email) {
+      const emailError = {
         type: 'email-error',
-        msg: 'Must be a real email. (Used only for password recovery)'
+        msg: 'Must be a real email'
       };
+
+      if (config.email.validation.external.enable) {
+        try {
+          var res = await Fasquest.request({
+            method: config.email.validation.external.method,
+            uri: config.email.validation.external.endpoint + (config.email.validation.external.emailInEndpoint ? user.email : ''),
+            body: config.email.validation.external.emailInBody ? user.email : null,
+            resolveWithFullResponse: true
+          });
+        } catch (error) {
+          return emailError;
+        }
+      } else if (regex.email.exec(user.email.toLowerCase()) == null) {
+        return emailError;
+      }
     }
 
     if (
