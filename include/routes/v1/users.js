@@ -5,6 +5,7 @@ const userUtils = require('../../utils/user');
 const config = require('../../utils/config');
 const misc = require('../../utils/misc');
 const gm = require('../../server/groupmanager');
+const Database = require('../../database');
 
 async function deleteUser(req, res, router) {
   var id = _getId(req);
@@ -61,6 +62,9 @@ async function editUser(req, res, router) {
 
   var isValid = await userUtils.checkValidUser(model);
 
+  if (isValid === true) {
+    isValid = await Database.checkDupe(model);
+  }
   if (isValid !== true) {
     res.code(400);
     return isValid;
@@ -311,16 +315,21 @@ function routes(app, opts, done) {
   // app.get('/user/resolve/group/name/:id/:prop', getUserResolveGroup);
 
   app.get('/users', async (req, res) => {
-    if (!misc.isEmpty(req.query) && userUtils.checkValidUser(req.query, false)) {
-      var query = userUtils.setUser({}, req.query);
+    return await User.findAllByFilter(req.query.filter, req.query.sort, req.query.limit, req.query.sortdir);
+  });
 
-      return await User.findAllBy(query);
+  app.get('/users/domain/:domain', async (req, res) => {
+    if (!req.query.filter) {
+      req.query.filter = 'domain=' + req.params.domain;
+    } else {
+      req.query.filter += ',domain=' + req.params.domain;
     }
-    return await User.findAll();
+
+    return await User.findAllByFilter(req.query.filter, req.query.sort, req.query.limit, req.query.sortdir);
   });
 
   app.get('/users/group/request/:group_request', async (req, res) => {
-    if (!misc.isEmpty(req.query) && userUtils.checkValidUser(req.query, false)) {
+    if (!misc.isEmpty(req.query) && userUtils.checkValidUser(req.query)) {
       req.query.group_request = req.params.group_request;
       var query = userUtils.setUser({}, req.query);
 

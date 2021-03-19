@@ -1,10 +1,12 @@
-/*eslint new-cap: "warn"*/
 const BaseModel = require('adost').PGActiveModel;
 const Base = require('adost').Base;
 const PGTypes = require('adost').PGTypes;
 const Group = require('./group');
 const config = require('../../utils/config');
 const gm = require('../../server/groupmanager');
+const userUtil = require('../../utils/user');
+const regex = require('../../utils/regex');
+const misc = require('../../utils/misc');
 
 class User extends Base(BaseModel, 'users', {
   id: PGTypes.PK,
@@ -15,6 +17,22 @@ class User extends Base(BaseModel, 'users', {
   locked: null,
   locked_reason: null,
   group_request: null,
+  firstname: null,
+  lastname: null,
+  middlename: null,
+  gender: null,
+  dob: null,
+  phone: null,
+  state: null,
+  city: null,
+  zip: null,
+  street_physical: null,
+  street_number: null,
+  street_name: null,
+  street_type: null,
+  street_affix: null,
+  has_webauthn: null,
+  has_2fa: null,
   failed_login_attempts: null,
   change_username: null,
   change_password: null,
@@ -42,9 +60,25 @@ class User extends Base(BaseModel, 'users', {
                   email character varying(500),
                   __email character varying(258),
                   group_request character varying(258),
+                  firstname character varying(100),
+                  lastname character varying(100),
+                  middlename character varying(100),
+                  gender character varying(50),
+                  dob date,
+                  phone bigint,
+                  state character varying(2),
+                  city character varying(100),
+                  zip character varying(10),
+                  street_physical boolean,
+                  street_number int,
+                  street_name character varying(100),
+                  street_type character varying(20),
+                  street_affix character varying(50),
                   locked_reason text,
                   locked boolean DEFAULT false,
                   last_login json,
+                  has_webauthn boolean DEFAULT false,
+                  has_2fa boolean DEFAULT false,
                   group_ids UUID[],
                   failed_login_attempts int DEFAULT 0,
                   change_username boolean DEFAULT false,
@@ -52,8 +86,8 @@ class User extends Base(BaseModel, 'users', {
                   reset_password boolean DEFAULT false,
                   email_verify boolean DEFAULT false,
                   avatar bytea,
-                  created_on bigint,
-                  user_data bytea,
+                  created_on timestamp with time zone default current_timestamp ,
+                  user_data text,
                   __user_data character varying(258),
                   eprofile character varying(350),
                   PRIMARY KEY (id)
@@ -145,6 +179,110 @@ class User extends Base(BaseModel, 'users', {
       }
     }
     return false;
+  }
+
+  static async findAllByFilter(filter, sort, limit, sortdir = 'DESC') {
+    var query = `SELECT * FROM ${this.table} `;
+
+    var values;
+
+    if (filter) {
+      if (filter.indexOf(',') > -1) {
+        filter = filter.split(',');
+      } else {
+        filter = [filter];
+      }
+      values = [];
+      query += ' WHERE ';
+
+      var user = {};
+      var opts = [];
+
+      //console.log(filter);
+      for (var i = 0; i < filter.length; i++) {
+        var opt = '=';
+        var key;
+        var value;
+
+        if (filter[i].indexOf('>=') > -1) {
+          var kv = filter[i].split('>=');
+
+          opt = '>=';
+          key = kv[0];
+          value = kv[1];
+        } else if (filter[i].indexOf('<=') > -1) {
+          var kv = filter[i].split('<=');
+
+          opt = '<=';
+          key = kv[0];
+          value = kv[1];
+        } else if (filter[i].indexOf('>') > -1) {
+          var kv = filter[i].split('>');
+
+          opt = '>';
+          key = kv[0];
+          value = kv[1];
+        } else if (filter[i].indexOf('<') > -1) {
+          var kv = filter[i].split('<');
+
+          opt = '<';
+          key = kv[0];
+          value = kv[1];
+        } else if (filter[i].indexOf('=') > -1) {
+          var kv = filter[i].split('=');
+
+          key = kv[0];
+          value = kv[1];
+        }
+        // console.log(key, value);
+
+        if (this._defaultModel[key] !== undefined) {
+          if (this._encryptionFields[key] !== undefined) {
+            value = (await this._queryFieldsHash({ [key]: value }))['__' + key];
+            key = '__' + key;
+          }
+          opts.push(opt);
+          user[key] = misc.stringToNativeType(value);
+        }
+      }
+      var validUser = await userUtil.checkValidUser(user);
+
+      if (validUser !== true) {
+        throw validUser;
+      }
+      user = userUtil.setUser(user, user);
+      var keys = Object.keys(user);
+
+      for (var i = 0; i < keys.length; i++) {
+        query += `"${keys[i]}"${opts[i]}$${i + 1} `;
+
+        values.push(user[keys[i]]);
+        if (keys.length > i + 1) {
+          query += ' AND ';
+        }
+      }
+    }
+
+    if (sort && regex.safeName.exec(sort) != null) {
+      query += ' ORDER BY ' + sort + ' ' + (sortdir == 'ASC' ? 'ASC' : 'DESC');
+    }
+
+    if (limit && !isNaN(Number(limit))) {
+      query += ' LIMIT ' + Number(limit);
+    }
+
+    console.log(query, values);
+
+    const newModels = await this.query(query, values);
+
+    for (var i = 0; i < newModels.length; i++) {
+      if (newModels[i]) {
+        newModels[i] = await this.decrypt(newModels[i], this.getEncryptedProfile(newModels[i]), true);
+        delete newModels[i].password;
+        delete newModels[i].eprofile;
+      }
+    }
+    return newModels;
   }
 
   toJSON() {

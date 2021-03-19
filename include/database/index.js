@@ -90,8 +90,7 @@ class Database {
       group_ids,
       domain,
       change_username: false,
-      change_password: false,
-      created_on: Date.now()
+      change_password: false
     };
 
     if (config.registration.requireManualActivation) {
@@ -190,6 +189,19 @@ class Database {
     var found = await User.findLimtedBy(qProps.length == 1 ? qProps[0] : qProps, qOps.length == 1 ? qOps[0] : qOps, 1);
 
     return found;
+  }
+
+  static async checkDupe(user) {
+    var found = await Database.findUser(user.email, user.username, user.domain);
+
+    //console.log(user, qProps, qOps, found);
+    if (found && found.length > 0) {
+      return {
+        type: 'exists-error',
+        msg: 'Username or email already exists'
+      };
+    }
+    return true;
   }
 
   static async initGroups(router) {

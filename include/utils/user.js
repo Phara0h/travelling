@@ -1,10 +1,10 @@
 const config = require('./config');
 const misc = require('./misc');
 const regex = require('./regex');
-const Database = require('../database');
+const usa = require('./usa');
 
 module.exports = {
-  checkValidUser: async function checkValidUser(user, checkDupe = true) {
+  checkValidUser: async function checkValidUser(user) {
     if (!user) {
       return {
         type: 'body-error',
@@ -54,10 +54,112 @@ module.exports = {
       };
     }
 
+    if (user.gender && (user.gender.length > 50 || regex.safeName.exec(user.gender) == null)) {
+      return {
+        type: 'gender-error',
+        msg: 'Must be a valid gender (less than 50 char and safe chars)'
+      };
+    }
+
+    if (user.firstname && (user.firstname.length > 100 || regex.safeName.exec(user.firstname) == null)) {
+      return {
+        type: 'firstname-error',
+        msg: 'Must be a valid firstname'
+      };
+    }
+    if (user.middlename && (user.middlename.length > 100 || regex.safeName.exec(user.middlename) == null)) {
+      return {
+        type: 'middlename-error',
+        msg: 'Must be a valid middlename'
+      };
+    }
+    if (user.lastname && (user.lastname.length > 100 || regex.safeName.exec(user.lastname) == null)) {
+      return {
+        type: 'lastname-error',
+        msg: 'Must be a valid lastname'
+      };
+    }
+
+    if (user.dob && isNaN(Date.parse(user.dob))) {
+      return {
+        type: 'dob-error',
+        msg: 'Must be a valid date of birth'
+      };
+    }
+
+    if (user.phone && (isNaN(Number(user.phone)) || user.phone.length != 10)) {
+      return {
+        type: 'phone-error',
+        msg: 'Must be a valid phone'
+      };
+    }
+
     if (user.avatar && regex.base64Image.exec(user.avatar) == null) {
       return {
         type: 'avatar-error',
         msg: 'Must be a valid base64 image.'
+      };
+    }
+
+    if (user.state && !usa.states[user.state.toUpperCase()]) {
+      return {
+        type: 'state-request-error',
+        msg: 'Invalid state.'
+      };
+    }
+
+    if (user.city && !usa.cities[user.city.toUpperCase()]) {
+      return {
+        type: 'city-request-error',
+        msg: 'Invalid city.'
+      };
+    }
+
+    if (user.state && user.city && !usa.states[user.state.toUpperCase()][user.city.toUpperCase()]) {
+      return {
+        type: 'city-state-request-error',
+        msg: 'This city is not inside of the specified state.'
+      };
+    }
+
+    if (user.zip && !usa.zips[user.zip]) {
+      return {
+        type: 'zip-request-error',
+        msg: 'Invalid zipcode'
+      };
+    }
+
+    if (user.zip && user.state && usa.zips[user.zip].state != user.state.toUpperCase()) {
+      return {
+        type: 'zip-state-request-error',
+        msg: 'This zipcode is not belong to the specified state.'
+      };
+    }
+
+    if (user.zip && user.city && usa.zips[user.zip].city != user.city.toUpperCase()) {
+      return {
+        type: 'zip-city-request-error',
+        msg: 'This zipcode is not belong to the specified city.'
+      };
+    }
+
+    if (user.street_name && (user.street_name.length > 100 || regex.safeName.exec(user.street_name) == null)) {
+      return {
+        type: 'street-name-error',
+        msg: 'Must be a valid street name.'
+      };
+    }
+
+    if (user.street_type && (user.street_type.length > 20 || regex.safeName.exec(user.street_type) == null)) {
+      return {
+        type: 'street-type-error',
+        msg: 'Must be a valid street type and less than 20 chars.'
+      };
+    }
+    if (user.street_affix && (user.street_affix.length > 50 || regex.safeName.exec(user.street_affix) == null)) {
+      return {
+        type: 'street-affix-error',
+        msg: 'Must be a valid street affix'
       };
     }
 
@@ -90,27 +192,15 @@ module.exports = {
       }
     }
 
-    if (checkDupe) {
-      var found = await Database.findUser(user.email, user.username, user.domain);
-
-      //console.log(user, qProps, qOps, found);
-      if (found && found.length > 0) {
-        return {
-          type: 'exists-error',
-          msg: 'Username or email already exists'
-        };
-      }
-    }
-
     return true;
   },
 
   setUser: function setUser(user, props) {
     if (props.username && config.user.username.enabled) {
-      user.username = props.username.toLowerCase();
+      user.username = misc.toLower(props.username);
     }
     if (props.domain) {
-      user.domain = props.domain.toLowerCase() || 'default';
+      user.domain = misc.toLower(props.domain) || 'default';
     }
 
     if (props.password) {
@@ -118,7 +208,60 @@ module.exports = {
     }
 
     if (props.email) {
-      user.email = props.email.toLowerCase();
+      user.email = misc.toLower(props.email);
+    }
+
+    if (props.firstname !== undefined) {
+      user.firstname = misc.toLower(props.firstname);
+    }
+    if (props.middlename !== undefined) {
+      user.middlename = misc.toLower(props.middlename);
+    }
+    if (props.lastname !== undefined) {
+      user.lastname = misc.toLower(props.lastname);
+    }
+
+    if (props.dob !== undefined) {
+      user.dob = Date.parse(props.dob);
+    }
+
+    if (props.phone !== undefined) {
+      user.phone = Number(props.phone);
+    }
+
+    if (props.state !== undefined) {
+      user.street_name = misc.toLower(props.street_name);
+    }
+
+    if (props.city !== undefined) {
+      user.street_name = misc.toLower(props.street_name);
+    }
+
+    if (props.zip !== undefined) {
+      user.zip = Number(props.zip);
+    }
+
+    if (props.street_name !== undefined) {
+      user.street_name = misc.toLower(props.street_name);
+    }
+
+    if (props.street_type !== undefined) {
+      user.street_type = misc.toLower(props.street_type);
+    }
+    if (props.street_affix !== undefined) {
+      user.street_affix = misc.toLower(props.street_affix);
+    }
+
+    if (props.street_number !== undefined) {
+      user.street_number = Number(props.street_number);
+    }
+
+    if (props.street_physical !== undefined) {
+      user.street_physical = misc.stringToBool(props.street_physical);
+    }
+
+    if (props.gender !== undefined) {
+      user.gender = misc.toLower(props.gender);
     }
 
     if (props.locked_reason !== undefined) {
@@ -127,9 +270,10 @@ module.exports = {
 
     if (props.locked !== undefined) {
       user.locked = misc.stringToBool(props.locked) === true;
-      if (!user.locked) {
-        user.failed_login_attempts = 0;
-      }
+    }
+
+    if (props.created_on !== undefined) {
+      user.created_on = new Date(Date.parse(props.created_on)).toISOString();
     }
 
     if (props.group_ids) {
@@ -137,7 +281,7 @@ module.exports = {
     }
 
     if (props.group_request !== undefined) {
-      user.group_request = props.group_request ? props.group_request.toLowerCase() : null;
+      user.group_request = props.group_request ? misc.toLower(props.group_request) : null;
     }
 
     if (props.change_password !== undefined) {

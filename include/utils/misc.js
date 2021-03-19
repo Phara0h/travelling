@@ -21,8 +21,29 @@ module.exports = {
   },
   isSetDefault: function isSetDefault(v, d) {
     if (typeof v == 'number') {
-      return !Number.isNaN(v) ? v : d;
+      return !isNaN(v) ? v : d;
     }
     return v !== null && v !== undefined ? v : d;
+  },
+  stringToNativeType: function stringToNativeType(s) {
+    if (s == 'true') {
+      return true;
+    }
+    if (s == 'false') {
+      return false;
+    }
+    if (s == 'null') {
+      return null;
+    }
+    if (s == 'undefined') {
+      return undefined;
+    }
+    if (!isNaN(s)) {
+      return Number(s);
+    }
+    return s;
+  },
+  toLower: function toLower(s) {
+    return typeof s == 'string' ? s.toLowerCase() : s;
   }
 };

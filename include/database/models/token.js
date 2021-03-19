@@ -9,7 +9,8 @@ class Token extends Base(BaseModel, 'tokens', {
   name: null,
   type: null,
   urls: null,
-  secret: PGTypes.Hash
+  secret: PGTypes.Hash,
+  secret_encrypt: PGTypes.AutoCrypt
 }) {
   constructor(...args) {
     super(...args);
@@ -21,10 +22,12 @@ class Token extends Base(BaseModel, 'tokens', {
     await pg.query(`CREATE TABLE tokens (
                 id UUID DEFAULT uuid_generate_v4(),
                 user_id UUID,
-                name CHARACTER varying(350),
-                type CHARACTER varying(50),
+                name CHARACTER varying(500),
+                type CHARACTER varying(100),
                 urls CHARACTER varying(2000)[],
                 secret CHARACTER varying(350),
+                secret_encrypt text,
+                __secret_encrypt character varying(258),
                 PRIMARY KEY (id, user_id)
               );`);
   }
