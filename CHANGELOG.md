@@ -1,6 +1,12 @@
 
 
-#### [v2.0.0](https://github.com/Phara0h/travelling/compare/v1.3.3...v2.0.0)
+#### [v2.1.0](https://github.com/Phara0h/travelling/compare/v2.0.0...v2.1.0)
+
+- Added options to handle using external email validation service and updated docs [`b3279da`](https://github.com/Phara0h/travelling/commit/b3279dadab2d009356e36cd9f773d21a0140a0fd)
+
+### [v2.0.0](https://github.com/Phara0h/travelling/compare/v1.3.3...v2.0.0)
+
+> 19 March 2021
 
 - Added a bunch of user related data to schemas, preparing for webauthn support, clean ups and some fixes [`c595104`](https://github.com/Phara0h/travelling/commit/c59510475bb6e792271a0ffae8f8bba7596a6728)
 
