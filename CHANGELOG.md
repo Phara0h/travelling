@@ -1,6 +1,12 @@
 
 
+#### [v2.0.0](https://github.com/Phara0h/travelling/compare/v1.3.3...v2.0.0)
+
+- Added a bunch of user related data to schemas, preparing for webauthn support, clean ups and some fixes [`c595104`](https://github.com/Phara0h/travelling/commit/c59510475bb6e792271a0ffae8f8bba7596a6728)
+
 #### [v1.3.3](https://github.com/Phara0h/travelling/compare/v1.3.2...v1.3.3)
+
+> 2 March 2021
 
 - possible cloudflare headers fix [`3aaeab2`](https://github.com/Phara0h/travelling/commit/3aaeab24ca79d5fd12b852942b4097de8ff37abf)
 
