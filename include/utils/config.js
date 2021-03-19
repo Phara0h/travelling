@@ -130,8 +130,19 @@ const config = {
     }
   },
   email: {
+    validation: {
+      external: {
+        enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_EMAIL_VALIDATION_EXTERNAL_ENABLE), false),
+        endpoint: misc.isSetDefault(process.env.TRAVELLING_EMAIL_VALIDATION_EXTERNAL_ENDPOINT, null),
+        emailInEndpoint: misc.isSetDefault(
+          misc.stringToBool(process.env.TRAVELLING_EMAIL_VALIDATION_EXTERNAL_EMAIL_IN_ENDPOINT),
+          true
+        ),
+        emailInBody: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_EMAIL_VALIDATION_EXTERNAL_EMAIL_IN_BODY), false),
+        method: misc.isSetDefault(process.env.TRAVELLING_EMAIL_VALIDATION_EXTERNAL_METHOD, 'GET')
+      }
+    },
     from: misc.isSetDefault(process.env.TRAVELLING_EMAIL_FROM, null),
-
     recovery: {
       expiration: misc.isSetDefault(Number(process.env.TRAVELLING_EMAIL_RECOVERY_EXPIRATION), 900) // seconds
     },
