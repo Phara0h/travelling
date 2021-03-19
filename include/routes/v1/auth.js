@@ -92,7 +92,7 @@ var loginRoute = async (req, res) => {
       return;
     }
 
-    var isValid = await checkValidUser(req.body, false);
+    var isValid = await checkValidUser(req.body);
 
     if (isValid !== true) {
       res.code(400).send(isValid);
@@ -131,6 +131,10 @@ var registerRoute = async (req, res) => {
   // }
   req.body.domain = req.params.domain || 'default';
   var isValid = await checkValidUser(req.body);
+
+  if (isValid === true) {
+    isValid = await Database.checkDupe(req.body);
+  }
 
   if (!req.body.password || !req.body.email || (!req.body.username && config.user.username.enabled)) {
     res.code(400).send({
@@ -230,7 +234,7 @@ module.exports = function (app, opts, done) {
       return;
     }
 
-    var isValid = await checkValidUser({ password: req.body.password }, false);
+    var isValid = await checkValidUser({ password: req.body.password });
 
     if (isValid !== true) {
       res.code(400).send(isValid);

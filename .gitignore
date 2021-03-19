@@ -8,3 +8,4 @@ agents.json
 coverage
 ./localhost.*
 test.export.json
+workspace.*

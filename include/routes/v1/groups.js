@@ -643,7 +643,7 @@ module.exports = function (app, opts, done) {
       return;
     }
 
-    if (!misc.isEmpty(req.query) && userUtils.checkValidUser(req.query, false)) {
+    if (!misc.isEmpty(req.query) && userUtils.checkValidUser(req.query)) {
       var query = userUtils.setUser({ group_ids: [group.id] }, req.query);
 
       res.code(200).send(await User.findAllBy(query));
@@ -660,7 +660,7 @@ module.exports = function (app, opts, done) {
       return;
     }
 
-    var query = !misc.isEmpty(req.query) && userUtils.checkValidUser(req.query, false) ? req.query : {};
+    var query = !misc.isEmpty(req.query) && userUtils.checkValidUser(req.query) ? req.query : {};
 
     res.code(200).send(await getInhertedUsers(group, [], query));
   });
@@ -671,7 +671,7 @@ module.exports = function (app, opts, done) {
     if (!group) {
       return;
     }
-    if (!misc.isEmpty(req.query) && userUtils.checkValidUser(req.query, false)) {
+    if (!misc.isEmpty(req.query) && userUtils.checkValidUser(req.query)) {
       var query = userUtils.setUser({ group_ids: [group.id] }, req.query);
 
       res.code(200).send(await User.findAllBy(query));
@@ -688,7 +688,7 @@ module.exports = function (app, opts, done) {
       return;
     }
 
-    var query = !misc.isEmpty(req.query) && userUtils.checkValidUser(req.query, false) ? req.query : {};
+    var query = !misc.isEmpty(req.query) && userUtils.checkValidUser(req.query) ? req.query : {};
 
     res.code(200).send(await getInhertedUsers(group, [], query));
   });
