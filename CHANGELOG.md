@@ -1,6 +1,12 @@
 
 
+#### [v2.2.0](https://github.com/Phara0h/travelling/compare/v2.1.0...v2.2.0)
+
+- Update SDK and added Resetpassword with autologin endpoint and forgot password token endpoints. [`9cb2d8e`](https://github.com/Phara0h/travelling/commit/9cb2d8e4cc2e4a2f14ee56dd04cbbd5ba32a39ab)
+
 #### [v2.1.0](https://github.com/Phara0h/travelling/compare/v2.0.0...v2.1.0)
+
+> 19 March 2021
 
 - Added options to handle using external email validation service and updated docs [`b3279da`](https://github.com/Phara0h/travelling/commit/b3279dadab2d009356e36cd9f773d21a0140a0fd)
 
