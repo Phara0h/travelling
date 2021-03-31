@@ -138,7 +138,7 @@ app.register(fastifySession, {
   cookie: {
     secure: config.https,
     httpOnly: true,
-    maxAge: config.cookie.session.expiration * 1000,
+    maxAge: config.cookie.session.expiration,
     domain: config.cookie.domain
   },
   cookieName: 'trav:ssid',
