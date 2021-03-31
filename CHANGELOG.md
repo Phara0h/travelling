@@ -1,6 +1,12 @@
 
 
+#### [v2.3.1](https://github.com/Phara0h/travelling/compare/v2.3.0...v2.3.1)
+
+- Fixed a bug for cookie session expiration length [`ae6dd7c`](https://github.com/Phara0h/travelling/commit/ae6dd7c6e2c935d4976fcda944e0ce02b84d93de)
+
 #### [v2.3.0](https://github.com/Phara0h/travelling/compare/v2.2.0...v2.3.0)
+
+> 31 March 2021
 
 #### [v2.2.0](https://github.com/Phara0h/travelling/compare/v2.1.0...v2.2.0)
 
