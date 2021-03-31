@@ -28,6 +28,8 @@
 <dd></dd>
 <dt><a href="#Users">Users</a></dt>
 <dd></dd>
+<dt><a href="#UsersDomain">UsersDomain</a></dt>
+<dd></dd>
 <dt><a href="#User">User</a></dt>
 <dd></dd>
 <dt><a href="#UserCurrent">UserCurrent</a></dt>
@@ -35,7 +37,11 @@
 <dt><a href="#Auth">Auth</a></dt>
 <dd><h4 id="auth-endpoints">Auth endpoints</h4>
 </dd>
+<dt><a href="#AuthToken">AuthToken</a></dt>
+<dd></dd>
 <dt><a href="#AuthDomain">AuthDomain</a></dt>
+<dd></dd>
+<dt><a href="#AuthDomainToken">AuthDomainToken</a></dt>
 <dd></dd>
 </dl>
 
@@ -1482,6 +1488,42 @@ Path: api/v1/users
 | --- | --- | --- |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
+<a name="UsersDomain"></a>
+
+## UsersDomain
+**Kind**: global class  
+<a name="UsersDomain.get"></a>
+
+### UsersDomain.get(authorization_bearer)
+get - Gets all the users
+
+##### Optional Query Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | *optional* (example:  user7) |
+| locked | *optional* (example:  true) |
+| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+| group_request | *optional* (example:  superadmin) |
+| failed_login_attempts | *optional* (example:  0) |
+| change_username | *optional* (example:  false) |
+| change_password | *optional* (example:  false) |
+| reset_password | *optional* (example:  false) |
+| email_verify | *optional* (example:  false) |
+| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | *optional* (example:  test@test.ai) |
+| created_on | *optional* (example:  1568419646794) |
+| last_login | *optional* (example:  null) |
+
+Path: api/v1/users
+
+**Kind**: static method of [<code>UsersDomain</code>](#UsersDomain)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
 <a name="User"></a>
 
 ## User
@@ -1841,6 +1883,7 @@ Path: api/v1/user/me
     * [.accessToken()](#Auth.accessToken)
     * [.authorize(client_id, response_type, state, redirect_uri, group_request)](#Auth.authorize)
     * [.activate(token)](#Auth.activate)
+    * [.resetPasswordAutoLogin(body, token)](#Auth.resetPasswordAutoLogin)
     * [.resetPassword(body, token)](#Auth.resetPassword)
     * [.forgotPassword(body)](#Auth.forgotPassword)
     * [.logout()](#Auth.logout)
@@ -1885,10 +1928,31 @@ Path: api/v1/auth/activate
 | --- | --- | --- |
 | token | <code>any</code> | (example: activation_token) |
 
+<a name="Auth.resetPasswordAutoLogin"></a>
+
+### Auth.resetPasswordAutoLogin(body, token)
+resetPasswordAutoLogin - Resets the password if the recovery token is valid of the user, then authenticates the user and returns cookies.
+
+Path: api/v1/auth/password/reset/login
+
+**Kind**: static method of [<code>Auth</code>](#Auth)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| token | <code>any</code> | (example: [thegeneratedtoken]) |
+
+**Example**  
+body
+```json
+{
+	"password":"asdf"
+}
+```
 <a name="Auth.resetPassword"></a>
 
 ### Auth.resetPassword(body, token)
-resetPassword - Resets the password if the recovery token is vaild of the user.
+resetPassword - Resets the password if the recovery token is valid of the user.
 
 Path: api/v1/auth/password/reset
 
@@ -1923,8 +1987,7 @@ Path: api/v1/auth/password/forgot
 body
 ```json
 {
-	"email": "joseph@abe.ai",
-    "domain": "default"
+	"email": "test@test.com"
 }
 ```
 <a name="Auth.logout"></a>
@@ -1982,15 +2045,62 @@ body
     "domain": "default"
 }
 ```
+<a name="AuthToken"></a>
+
+## AuthToken
+**Kind**: global class  
+<a name="AuthToken.forgotPassword"></a>
+
+### AuthToken.forgotPassword(body)
+forgotPassword - Generates a recovery token and returns the token to the attached user (if they exist) instead of sending an email.
+*CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**
+
+Path: api/v1/auth/password/forgot
+
+**Kind**: static method of [<code>AuthToken</code>](#AuthToken)  
+
+| Param | Type |
+| --- | --- |
+| body | <code>Object</code> | 
+
+**Example**  
+body
+```json
+{
+	"email": "test@test.com"
+}
+```
 <a name="AuthDomain"></a>
 
 ## AuthDomain
 **Kind**: global class  
 
 * [AuthDomain](#AuthDomain)
+    * [.forgotPassword(body, domain)](#AuthDomain.forgotPassword)
     * [.login(body, domain)](#AuthDomain.login)
     * [.register(body, domain)](#AuthDomain.register)
 
+<a name="AuthDomain.forgotPassword"></a>
+
+### AuthDomain.forgotPassword(body, domain)
+forgotPassword - Generates a recovery token and sends a email to the attached user (if they exist)
+
+Path: api/v1/auth/password/forgot/domain/:domain
+
+**Kind**: static method of [<code>AuthDomain</code>](#AuthDomain)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| domain | <code>any</code> | (example: test.com) |
+
+**Example**  
+body
+```json
+{
+	"email": "test@test.com"
+}
+```
 <a name="AuthDomain.login"></a>
 
 ### AuthDomain.login(body, domain)
@@ -2028,7 +2138,7 @@ Path: api/v1/auth/register/domain/:domain
 | Param | Type | Description |
 | --- | --- | --- |
 | body | <code>Object</code> |  |
-| domain | <code>any</code> | (example: test) |
+| domain | <code>any</code> | (example: test.com) |
 
 **Example**  
 body
@@ -2036,6 +2146,31 @@ body
 {
 	"username":"test",
 	"password":"Pas5w0r!d",
+	"email": "test@test.com"
+}
+```
+<a name="AuthDomainToken"></a>
+
+## AuthDomainToken
+**Kind**: global class  
+<a name="AuthDomainToken.forgotPassword"></a>
+
+### AuthDomainToken.forgotPassword(body)
+forgotPassword - Generates a recovery token and returns the token to the attached user (if they exist) instead of sending an email.
+*CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**
+
+Path: api/v1/auth/password/forgot
+
+**Kind**: static method of [<code>AuthDomainToken</code>](#AuthDomainToken)  
+
+| Param | Type |
+| --- | --- |
+| body | <code>Object</code> | 
+
+**Example**  
+body
+```json
+{
 	"email": "test@test.com"
 }
 ```

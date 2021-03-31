@@ -22,7 +22,7 @@ class CookieToken {
       var dToken = await this.decrypt(tok.toString('ascii'));
       var cred = dToken.split(':');
 
-      console.log(cred, cred[4], ip);
+      //console.log(cred, cred[4], ip);
       if (config.cookie.security.ipHijackProtection && cred[4] != ip) {
         return false;
       }

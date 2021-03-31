@@ -46,12 +46,13 @@ var login = async (user, req, res) => {
       path: '/'
     });
     res.redirect(url[0] === 'GET' ? 301 : 303, url[1]);
-    return;
+    return '';
   }
 
-  res.code(200).send({
+  res.code(200);
+  return {
     msg: 'Access Granted'
-  });
+  };
 };
 
 var loginRoute = async (req, res) => {
@@ -95,12 +96,13 @@ var loginRoute = async (req, res) => {
     var isValid = await checkValidUser(req.body);
 
     if (isValid !== true) {
-      res.code(400).send(isValid);
+      res.code(400);
+      return isValid;
     } else {
       try {
         var user = await Database.checkAuth(username, email, req.body.password, domain);
 
-        await login(user.user, req, res);
+        return await login(user.user, req, res);
       } catch (e) {
         if (e.err && e.err.msg) {
           config.log.logger.debug(e.err, e.user ? e.user._ : null);
@@ -108,14 +110,13 @@ var loginRoute = async (req, res) => {
         } else {
           config.log.logger.debug(e);
         }
-        res.code(400).send(
-          e.err && e.err.type == 'locked'
-            ? { type: e.err.type, msg: e.err.msg, email: e.email }
-            : {
-                type: 'login-error',
-                msg: 'Invalid login'
-              }
-        );
+        res.code(400);
+        return e.err && e.err.type == 'locked'
+          ? { type: e.err.type, msg: e.err.msg, email: e.email }
+          : {
+              type: 'login-error',
+              msg: 'Invalid login'
+            };
       }
     }
   }
@@ -170,24 +171,71 @@ var registerRoute = async (req, res) => {
   res.code(200).send('Account Created');
 };
 
-var forgotPasswordRoute = async (req, res) => {
+var forgotPasswordRoute = async (req, res, sendemail = true) => {
   if (!req.body.email) {
-    res.code(400).send({
+    res.code(400);
+    return {
       type: 'forgot-password-error',
       msg: 'A valid email is required.'
-    });
-    return;
+    };
   }
 
   var isValid = await checkValidUser(req.body, false);
 
   if (isValid !== true) {
-    res.code(400).send(isValid);
-    return;
+    res.code(400);
+    return isValid;
   }
 
-  res.code(200).send();
-  Database.forgotPassword(req.body.email, parse.getIp(req), req.hostname);
+  var tokenProm = Database.forgotPassword(req.body.email, parse.getIp(req), req.params.domain, sendemail);
+
+  if (!sendemail) {
+    return { token: (await tokenProm).token };
+  }
+
+  return '';
+};
+
+var resetPasswordRoute = async (req, res, autologin = false) => {
+  if (!req.body.password) {
+    res.code(400);
+    return {
+      type: 'reset-error',
+      msg: 'A valid password is required.'
+    };
+  }
+
+  var isValid = await checkValidUser({ password: req.body.password });
+
+  if (isValid !== true) {
+    res.code(400);
+    return isValid;
+  }
+
+  var token = await TokenHandler.checkRecoveryToken(req.query.token);
+
+  if (!token) {
+    res.code(400);
+    return {
+      type: 'password-reset-token-error',
+      msg: 'Token is invalid, please click on forgot password again.'
+    };
+  }
+
+  var user = await Database.resetPassword(token, req.body.password);
+
+  if (!user) {
+    res.code(400);
+    return {
+      type: 'password-reset-token-error',
+      msg: 'Token is invalid, please click on forgot password again.'
+    };
+  }
+
+  res.code(200);
+  if (autologin) {
+    return await login(user, req, res);
+  }
 };
 
 module.exports = function (app, opts, done) {
@@ -208,11 +256,26 @@ module.exports = function (app, opts, done) {
 
   app.put('/auth/login', loginRoute);
   app.put('/auth/login/domain/:domain', loginRoute);
+
   app.post('/auth/register', registerRoute);
   app.post('/auth/register/domain/:domain', registerRoute);
 
   app.put('/auth/password/forgot', forgotPasswordRoute);
   app.put('/auth/password/forgot/domain/:domain', forgotPasswordRoute);
+
+  app.put('/auth/password/reset', resetPasswordRoute);
+
+  app.put('/auth/password/reset/login', async (req, res) => {
+    return await resetPasswordRoute(req, res, true);
+  });
+
+  // dangrous to allow for public use.
+  app.put('/auth/token/password/forgot', async (req, res) => {
+    return await forgotPasswordRoute(req, res, false);
+  });
+  app.put('/auth/token/password/forgot/domain/:domain', async (req, res) => {
+    return await forgotPasswordRoute(req, res, false);
+  });
 
   app.get('/auth/logout', (req, res) => {
     req.logout(req, res);
@@ -223,44 +286,6 @@ module.exports = function (app, opts, done) {
     }
 
     res.code(200).send('Logged Out');
-  });
-
-  app.put('/auth/password/reset', async (req, res) => {
-    if (!req.body.password) {
-      res.code(400).send({
-        type: 'reset-error',
-        msg: 'A valid password is required.'
-      });
-      return;
-    }
-
-    var isValid = await checkValidUser({ password: req.body.password });
-
-    if (isValid !== true) {
-      res.code(400).send(isValid);
-      return;
-    }
-    var token = await TokenHandler.checkRecoveryToken(req.query.token);
-
-    if (!token) {
-      res.code(400).send({
-        type: 'password-reset-token-error',
-        msg: 'Token is invalid, please click on forgot password again.'
-      });
-      return;
-    }
-
-    var cPassword = await Database.resetPassword(token, req.body.password);
-
-    if (!cPassword) {
-      res.code(400).send({
-        type: 'password-reset-token-error',
-        msg: 'Token is invalid, please click on forgot password again.'
-      });
-      return;
-    }
-
-    res.code(200).send();
   });
 
   app.get('/auth/activate', async (req, res) => {

@@ -115,8 +115,9 @@ class Database {
     return user;
   }
 
-  static async forgotPassword(email, ip, hostname, domain = 'default') {
-    var user = await User.findLimtedBy({ email: email }, 'AND', 1);
+  static async forgotPassword(email, ip, domain = 'default', sendemail = true) {
+    //console.log(email, domain);
+    var user = await this.findUser(email, null, domain);
 
     if (user && user.length > 0) {
       user = user[0];
@@ -126,7 +127,12 @@ class Database {
       user.reset_password = true;
       await user.save();
 
-      Email.sendPasswordRecovery(user, hostname, ip, user.email, rt.token);
+      if (sendemail) {
+        Email.sendPasswordRecovery(user, domain, ip, user.email, rt.token);
+        return '';
+      }
+
+      return rt;
     }
   }
 
@@ -151,7 +157,7 @@ class Database {
 
     await TokenHandler.deleteAllTempTokens(token[2]);
 
-    return true;
+    return user;
   }
 
   static async activateAccount(token) {
@@ -175,7 +181,7 @@ class Database {
 
   static async findUser(email, username, domain = 'default') {
     var qProps = [{ email }];
-    var qOps = [config.user.username.enabled ? 'OR' : 'AND'];
+    var qOps = [config.user.username.enabled && username ? 'OR' : 'AND'];
 
     if (config.user.username.enabled && username) {
       qProps.push({ username });
@@ -192,7 +198,7 @@ class Database {
   }
 
   static async checkDupe(user) {
-    var found = await Database.findUser(user.email, user.username, user.domain);
+    var found = await this.findUser(user.email, user.username, user.domain);
 
     //console.log(user, qProps, qOps, found);
     if (found && found.length > 0) {
@@ -222,7 +228,31 @@ class Database {
         host: config.portal.host
       });
       anon.addRoute({
-        route: '/' + config.serviceName + '/api/v1/auth/*',
+        route: '/' + config.serviceName + '/api/v1/auth/login/*',
+        host: null
+      });
+      anon.addRoute({
+        route: '/' + config.serviceName + '/api/v1/auth/register/*',
+        host: null
+      });
+      anon.addRoute({
+        route: '/' + config.serviceName + '/api/v1/auth/password/*',
+        host: null
+      });
+      anon.addRoute({
+        route: '/' + config.serviceName + '/api/v1/auth/oauth/*',
+        host: null
+      });
+      anon.addRoute({
+        route: '/' + config.serviceName + '/api/v1/auth/token',
+        host: null
+      });
+      anon.addRoute({
+        route: '/' + config.serviceName + '/api/v1/auth/logout',
+        host: null
+      });
+      anon.addRoute({
+        route: '/' + config.serviceName + '/api/v1/auth/activate',
         host: null
       });
       anon.addRoute({
