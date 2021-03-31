@@ -12,6 +12,49 @@
 					"name": "Domain",
 					"item": [
 						{
+							"name": "Token",
+							"item": [
+								{
+									"name": "Forgot Password",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"email\": \"test@test.com\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{TRAVELLING}}/api/v1/auth/password/forgot",
+											"host": [
+												"{{TRAVELLING}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"auth",
+												"password",
+												"forgot"
+											]
+										},
+										"description": "Generates a recovery token and returns the token to the attached user (if they exist) instead of sending an email. \n**CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**"
+									},
+									"response": []
+								}
+							]
+						},
+						{
 							"name": "Register",
 							"request": {
 								"method": "POST",
@@ -48,7 +91,7 @@
 									"variable": [
 										{
 											"key": "domain",
-											"value": "test"
+											"value": "test.com"
 										}
 									]
 								},
@@ -233,6 +276,95 @@
 									"body": "{\n    \"msg\": \"Access Granted\"\n}"
 								}
 							]
+						},
+						{
+							"name": "Forgot Password",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"email\": \"test@test.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/auth/password/forgot/domain/:domain",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"password",
+										"forgot",
+										"domain",
+										":domain"
+									],
+									"variable": [
+										{
+											"key": "domain",
+											"value": "test.com"
+										}
+									]
+								},
+								"description": "Generates a recovery token and sends a email to the attached user (if they exist) "
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Token",
+					"item": [
+						{
+							"name": "Forgot Password",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"email\": \"test@test.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/auth/password/forgot",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"password",
+										"forgot"
+									]
+								},
+								"description": "Generates a recovery token and returns the token to the attached user (if they exist) instead of sending an email. \n**CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**"
+							},
+							"response": []
 						}
 					]
 				},
@@ -528,7 +660,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"email\": \"joseph@abe.ai\",\n    \"domain\": \"default\"\n}",
+							"raw": "{\n\t\"email\": \"test@test.com\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -592,7 +724,52 @@
 								}
 							]
 						},
-						"description": "Resets the password if the recovery token is vaild of the user."
+						"description": "Resets the password if the recovery token is valid of the user."
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password Auto Login",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"password\":\"asdf\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TRAVELLING}}/api/v1/auth/password/reset/login?token=[thegeneratedtoken]",
+							"host": [
+								"{{TRAVELLING}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"password",
+								"reset",
+								"login"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "[thegeneratedtoken]"
+								}
+							]
+						},
+						"description": "Resets the password if the recovery token is valid of the user, then authenticates the user and returns cookies."
 					},
 					"response": []
 				},
@@ -1859,6 +2036,38 @@
 		{
 			"name": "Users",
 			"item": [
+				{
+					"name": "Domain",
+					"item": [
+						{
+							"name": "Get",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/users",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users"
+									]
+								},
+								"description": "Gets all the users\n\n##### Optional Query Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | *optional* (example:  user7) |\n| locked | *optional* (example:  true) |\n| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |\n| group_request | *optional* (example:  superadmin) |\n| failed_login_attempts | *optional* (example:  0) |\n| change_username | *optional* (example:  false) |\n| change_password | *optional* (example:  false) |\n| reset_password | *optional* (example:  false) |\n| email_verify | *optional* (example:  false) |\n| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | *optional* (example:  test@test.ai) |\n| created_on | *optional* (example:  1568419646794) |\n| last_login | *optional* (example:  null) |"
+							},
+							"response": []
+						}
+					]
+				},
 				{
 					"name": "Get",
 					"request": {

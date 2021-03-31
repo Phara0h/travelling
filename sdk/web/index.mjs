@@ -6625,6 +6625,65 @@ class Users {
     }
     return await fasq.request(options);
   }
+
+  static get Domain() {
+    return UsersDomain;
+  }
+}
+/**
+ *
+ */
+class UsersDomain {
+  constructor() {}
+  static get _postgenClassUrls() {
+    return { get: 'api/v1/users' };
+  }
+  static getFunctionsPath(name) {
+    return this._postgenClassUrls[name.toLowerCase()];
+  }
+
+  /**
+  * get - Gets all the users
+
+##### Optional Query Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | *optional* (example:  user7) |
+| locked | *optional* (example:  true) |
+| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+| group_request | *optional* (example:  superadmin) |
+| failed_login_attempts | *optional* (example:  0) |
+| change_username | *optional* (example:  false) |
+| change_password | *optional* (example:  false) |
+| reset_password | *optional* (example:  false) |
+| email_verify | *optional* (example:  false) |
+| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | *optional* (example:  test@test.ai) |
+| created_on | *optional* (example:  1568419646794) |
+| last_login | *optional* (example:  null) |
+  *
+  * Path: api/v1/users
+  * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+  */
+  static async get(authorization_bearer, opts) {
+    var options = {
+      method: 'GET',
+      simple: false,
+      uri: hostUrl + '/' + `api/v1/users`,
+      authorization: {
+        bearer: authorization_bearer,
+      },
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
+  }
 }
 /**
  *
@@ -7268,6 +7327,7 @@ class Auth {
       accesstoken: 'api/v1/auth/token',
       authorize: 'api/v1/auth/oauth/authorize',
       activate: 'api/v1/auth/activate',
+      resetpasswordautologin: 'api/v1/auth/password/reset/login',
       resetpassword: 'api/v1/auth/password/reset',
       forgotpassword: 'api/v1/auth/password/forgot',
       logout: 'api/v1/auth/logout',
@@ -7361,7 +7421,40 @@ class Auth {
   }
 
   /**
-   * resetPassword - Resets the password if the recovery token is vaild of the user.
+   * resetPasswordAutoLogin - Resets the password if the recovery token is valid of the user, then authenticates the user and returns cookies.
+   *
+   * Path: api/v1/auth/password/reset/login
+   * @param {Object} body
+   * @param {any} token  (example: [thegeneratedtoken])
+   * @example
+   * body
+   * ```json
+   * {
+   * 	"password":"asdf"
+   * }
+   * ```
+   */
+  static async resetPasswordAutoLogin(body, token, opts) {
+    var options = {
+      method: 'PUT',
+      simple: false,
+      uri: hostUrl + '/' + `api/v1/auth/password/reset/login`,
+      qs: { token },
+      body,
+      json: true,
+      json: true,
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
+  }
+
+  /**
+   * resetPassword - Resets the password if the recovery token is valid of the user.
    *
    * Path: api/v1/auth/password/reset
    * @param {Object} body
@@ -7402,8 +7495,7 @@ class Auth {
    * body
    * ```json
    * {
-   * 	"email": "joseph@abe.ai",
-   *     "domain": "default"
+   * 	"email": "test@test.com"
    * }
    * ```
    */
@@ -7514,8 +7606,56 @@ class Auth {
     return await fasq.request(options);
   }
 
+  static get Token() {
+    return AuthToken;
+  }
+
   static get Domain() {
     return AuthDomain;
+  }
+}
+/**
+ *
+ */
+class AuthToken {
+  constructor() {}
+  static get _postgenClassUrls() {
+    return { forgotpassword: 'api/v1/auth/password/forgot' };
+  }
+  static getFunctionsPath(name) {
+    return this._postgenClassUrls[name.toLowerCase()];
+  }
+
+  /**
+   * forgotPassword - Generates a recovery token and returns the token to the attached user (if they exist) instead of sending an email.
+   **CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**
+   *
+   * Path: api/v1/auth/password/forgot
+   * @param {Object} body
+   * @example
+   * body
+   * ```json
+   * {
+   * 	"email": "test@test.com"
+   * }
+   * ```
+   */
+  static async forgotPassword(body, opts) {
+    var options = {
+      method: 'PUT',
+      simple: false,
+      uri: hostUrl + '/' + `api/v1/auth/password/forgot`,
+      body,
+      json: true,
+      json: true,
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
   }
 }
 /**
@@ -7525,12 +7665,45 @@ class AuthDomain {
   constructor() {}
   static get _postgenClassUrls() {
     return {
+      forgotpassword: 'api/v1/auth/password/forgot/domain/:domain',
       login: 'api/v1/auth/login/domain/:domain',
       register: 'api/v1/auth/register/domain/:domain',
     };
   }
   static getFunctionsPath(name) {
     return this._postgenClassUrls[name.toLowerCase()];
+  }
+
+  /**
+   * forgotPassword - Generates a recovery token and sends a email to the attached user (if they exist)
+   *
+   * Path: api/v1/auth/password/forgot/domain/:domain
+   * @param {Object} body
+   * @param {any} domain  (example: test.com)
+   * @example
+   * body
+   * ```json
+   * {
+   * 	"email": "test@test.com"
+   * }
+   * ```
+   */
+  static async forgotPassword(body, domain, opts) {
+    var options = {
+      method: 'PUT',
+      simple: false,
+      uri: hostUrl + '/' + `api/v1/auth/password/forgot/domain/${domain}`,
+      body,
+      json: true,
+      json: true,
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
   }
 
   /**
@@ -7574,7 +7747,7 @@ class AuthDomain {
   *
   * Path: api/v1/auth/register/domain/:domain
   * @param {Object} body
-  * @param {any} domain  (example: test)
+  * @param {any} domain  (example: test.com)
   * @example
   * body
   * ```json
@@ -7590,6 +7763,54 @@ class AuthDomain {
       method: 'POST',
       simple: false,
       uri: hostUrl + '/' + `api/v1/auth/register/domain/${domain}`,
+      body,
+      json: true,
+      json: true,
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
+  }
+
+  static get Token() {
+    return AuthDomainToken;
+  }
+}
+/**
+ *
+ */
+class AuthDomainToken {
+  constructor() {}
+  static get _postgenClassUrls() {
+    return { forgotpassword: 'api/v1/auth/password/forgot' };
+  }
+  static getFunctionsPath(name) {
+    return this._postgenClassUrls[name.toLowerCase()];
+  }
+
+  /**
+   * forgotPassword - Generates a recovery token and returns the token to the attached user (if they exist) instead of sending an email.
+   **CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**
+   *
+   * Path: api/v1/auth/password/forgot
+   * @param {Object} body
+   * @example
+   * body
+   * ```json
+   * {
+   * 	"email": "test@test.com"
+   * }
+   * ```
+   */
+  static async forgotPassword(body, opts) {
+    var options = {
+      method: 'PUT',
+      simple: false,
+      uri: hostUrl + '/' + `api/v1/auth/password/forgot`,
       body,
       json: true,
       json: true,
@@ -7635,10 +7856,13 @@ function SDK(host, opts) {
     GroupRequest,
     GroupRequestUser,
     Users,
+    UsersDomain,
     User,
     UserCurrent,
     Auth,
+    AuthToken,
     AuthDomain,
+    AuthDomainToken,
   };
 }
 export default SDK;
