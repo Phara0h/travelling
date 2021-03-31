@@ -3029,7 +3029,11 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v2.3.0](https://github.com/Phara0h/travelling/compare/v2.2.0...v2.3.0)
+
 #### [v2.2.0](https://github.com/Phara0h/travelling/compare/v2.1.0...v2.2.0)
+
+> 31 March 2021
 
 - Update SDK and added Resetpassword with autologin endpoint and forgot password token endpoints. [`9cb2d8e`](https://github.com/Phara0h/travelling/commit/9cb2d8e4cc2e4a2f14ee56dd04cbbd5ba32a39ab)
 
