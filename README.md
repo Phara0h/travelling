@@ -3029,7 +3029,13 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v2.4.0](https://github.com/Phara0h/travelling/compare/v2.3.1...v2.4.0)
+
+- added more unique req headers coming from travelling. [`a77da6e`](https://github.com/Phara0h/travelling/commit/a77da6e6cf21d86a037e29082c7701a8d966fde0)
+
 #### [v2.3.1](https://github.com/Phara0h/travelling/compare/v2.3.0...v2.3.1)
+
+> 31 March 2021
 
 - Fixed a bug for cookie session expiration length [`ae6dd7c`](https://github.com/Phara0h/travelling/commit/ae6dd7c6e2c935d4976fcda944e0ce02b84d93de)
 
