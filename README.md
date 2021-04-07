@@ -3029,7 +3029,13 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v2.4.1](https://github.com/Phara0h/travelling/compare/v2.4.0...v2.4.1)
+
+- Fixed some bugs, removed /metrics and /health from logs [`7b98a92`](https://github.com/Phara0h/travelling/commit/7b98a92393b932ec0d062aa6a641cd2589f53a21)
+
 #### [v2.4.0](https://github.com/Phara0h/travelling/compare/v2.3.1...v2.4.0)
+
+> 7 April 2021
 
 - added more unique req headers coming from travelling. [`a77da6e`](https://github.com/Phara0h/travelling/commit/a77da6e6cf21d86a037e29082c7701a8d966fde0)
 
