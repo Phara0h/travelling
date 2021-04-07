@@ -27,6 +27,10 @@
     "gateway",
     "api"
   ],
+  "bin": {
+    "travelling": "./index.js",
+    "traveling": "./index.js"
+  },
   "author": "Jt Whissel",
   "license": "MIT",
   "bugs": {
@@ -42,7 +46,7 @@
     "fastify": "^3.11.0",
     "fastify-cookie": "^5.1.0",
     "fastify-favicon": "^3.0.0",
-    "fastify-good-sessions": "^1.4.0",
+    "fastify-good-sessions": "^1.4.2",
     "fastify-plugin": "^3.0.0",
     "fastify-static": "^3.4.0",
     "handlebars": "^4.7.3",
