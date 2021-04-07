@@ -364,7 +364,7 @@ function routes(app, opts, done) {
       return group;
     }
 
-    let user = await getUser(req, res);
+    var user = await getUser(req, res);
 
     if (user && user.msg) {
       res.code(400);
@@ -387,7 +387,7 @@ function routes(app, opts, done) {
       return group;
     }
 
-    const user = await getUser(req, res);
+    var user = await getUser(req, res);
 
     if (user && user.msg) {
       res.code(400);

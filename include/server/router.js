@@ -7,6 +7,7 @@ const log = config.log.logger;
 const regex = require('../utils/regex');
 const parse = require('../utils/parse');
 //const { proxy } = require('fast-proxy')({});
+const ignored_log_routes = ['/' + config.serviceName + '/metrics', '/' + config.serviceName + '/health'];
 
 class Router {
   constructor(server) {
@@ -139,16 +140,27 @@ class Router {
         req.headers['t-id'] = sessionUser.id;
         req.headers['t-email'] = sessionUser.email;
         req.headers['t-perm'] = r.name;
+        req.headers['t-ip'] = parse.getIp(req) || '0.0.0.0';
       }
 
       if (req.raw.url.indexOf('/' + config.serviceName + '/') == 0 && !r.host) {
-        if (config.log.requests) {
+        if (config.log.requests && ignored_log_routes.indexOf(req.raw.url) == -1) {
           if (authenticated) {
             log.info(
-              sessionUser.username + ' (' + routedGroup.name + ') | ' + req.raw.ip + ' | [' + req.raw.method + '] ' + req.raw.url
+              (sessionUser.username || sessionUser.email) +
+                ' (' +
+                routedGroup.name +
+                ') | ' +
+                parse.getIp(req) +
+                ' | [' +
+                req.raw.method +
+                '] ' +
+                req.raw.url
             );
           } else {
-            log.info('Unregistered User' + ' (anonymous)' + ' | ' + req.raw.ip + ' | [' + req.raw.method + '] ' + req.raw.url);
+            log.info(
+              'Unregistered User' + ' (anonymous)' + ' | ' + parse.getIp(req) + ' | [' + req.raw.method + '] ' + req.raw.url
+            );
           }
         }
         return false;
@@ -166,37 +178,36 @@ class Router {
       if (r.remove_from_path) {
         req.raw.url = req.raw.url.replace(this.transformRoute(sessionUser, r, r.remove_from_path, routedGroup), '');
       }
-
-      if (config.log.requests && authenticated) {
-        log.info(
-          sessionUser.username +
-            ' (' +
-            routedGroup.name +
-            ') | ' +
-            parse.getIp(req) +
-            ' | [' +
-            req.raw.method +
-            '] ' +
-            req.raw.url +
-            ' -> ' +
-            target.target +
-            req.raw.url
-        );
-      }
-
-      if (config.log.requests && !authenticated) {
-        log.info(
-          'Unregistered User' +
-            ' (anonymous)' +
-            ' | ' +
-            parse.getIp(req) +
-            ' | [' +
-            req.raw.method +
-            '] ' +
-            req.raw.url +
-            ' -> ' +
-            target.target
-        );
+      if (config.log.requests && ignored_log_routes.indexOf(req.raw.url) == -1) {
+        if (authenticated) {
+          log.info(
+            (sessionUser.username || sessionUser.email) +
+              ' (' +
+              routedGroup.name +
+              ') | ' +
+              parse.getIp(req) +
+              ' | [' +
+              req.raw.method +
+              '] ' +
+              req.raw.url +
+              ' -> ' +
+              target.target +
+              req.raw.url
+          );
+        } else {
+          log.info(
+            'Unregistered User' +
+              ' (anonymous)' +
+              ' | ' +
+              parse.getIp(req) +
+              ' | [' +
+              req.raw.method +
+              '] ' +
+              req.raw.url +
+              ' -> ' +
+              target.target
+          );
+        }
       }
 
       if (r.host && req._wssocket) {
