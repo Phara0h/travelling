@@ -130,15 +130,15 @@ class Router {
       // sets user id cookie every time to protect against tampering.
       if (authenticated && config.proxy.sendTravellingHeaders) {
         if (config.user.username.enabled) {
-          req.headers['un'] = sessionUser.username;
+          req.headers['t-user'] = sessionUser.username;
         }
 
-        req.headers['gn'] = routedGroup.name;
-        req.headers['gt'] = routedGroup.type;
-        req.headers['do'] = sessionUser.domain;
-        req.headers['uid'] = sessionUser.id;
-        req.headers['em'] = sessionUser.email;
-        req.headers['perm'] = r.name;
+        req.headers['t-grpn'] = routedGroup.name;
+        req.headers['t-grpt'] = routedGroup.type;
+        req.headers['t-dom'] = sessionUser.domain;
+        req.headers['t-id'] = sessionUser.id;
+        req.headers['t-email'] = sessionUser.email;
+        req.headers['t-perm'] = r.name;
       }
 
       if (req.raw.url.indexOf('/' + config.serviceName + '/') == 0 && !r.host) {

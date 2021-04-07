@@ -33,6 +33,7 @@ var checkAuthHeader = async (req, res, router) => {
       return false;
     }
 
+    // Maybe optomize this with sessions?
     var user = await TokenHandler.checkAccessToken(splitAuth[1]);
 
     if (!user) {
