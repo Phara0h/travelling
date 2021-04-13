@@ -80,6 +80,16 @@ class GroupManager {
         return this.groups[i];
       }
     }
+    this.log.error('No default group set. Setting default to anonymous');
+
+    for (var i = 0; i < this.groups.length; i++) {
+      if (this.groups[i].name == 'anonymous' && this.groups[i].type == 'group') {
+        this.groups[i].is_default = true;
+        await this.groups[i].save();
+        this.redis.needsGroupUpdate = true;
+        return this.groups[i];
+      }
+    }
   }
 
   async getGroup(id, type) {
