@@ -1,6 +1,12 @@
 
 
+#### [v2.4.2](https://github.com/Phara0h/travelling/compare/v2.4.1...v2.4.2)
+
+- Added fix for when there is no default group it defaults to anonymous [`bd1abda`](https://github.com/Phara0h/travelling/commit/bd1abdae0763bef0a7d9b5d7e9c872498ef6ae27)
+
 #### [v2.4.1](https://github.com/Phara0h/travelling/compare/v2.4.0...v2.4.1)
+
+> 7 April 2021
 
 - Fixed some bugs, removed /metrics and /health from logs [`7b98a92`](https://github.com/Phara0h/travelling/commit/7b98a92393b932ec0d062aa6a641cd2589f53a21)
 
