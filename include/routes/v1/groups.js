@@ -340,7 +340,7 @@ async function editGroup(req, res, router) {
   if (group.is_default) {
     var dgroup = await gm.defaultGroup();
 
-    if (group.id != dgroup.id) {
+    if (group.id != dgroup.id) { 
       dgroup.is_default = false;
       await dgroup.save();
       gm.redis.needsGroupUpdate = true;
