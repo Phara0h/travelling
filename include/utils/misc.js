@@ -1,3 +1,5 @@
+const { resolve } = require('path');
+
 module.exports = {
   isEmpty: function isEmpty(obj) {
     var p;
@@ -45,5 +47,28 @@ module.exports = {
   },
   toLower: function toLower(s) {
     return typeof s == 'string' ? s.toLowerCase() : s;
+  },
+  getVersion: function () {
+    var version = null;
+
+    if (!version) {
+      try {
+        version = require(resolve(__dirname, '../../package.json')).version;
+      } catch (error) {}
+    }
+    if (!version) {
+      try {
+        version = require(process.cwd() + '/package.json').version;
+      } catch (error) {}
+    }
+
+    return version;
+  },
+  getLocalIP: function () {
+    const { networkInterfaces } = require('os');
+
+    return Object.values(networkInterfaces())
+      .flat()
+      .find((i) => i.family == 'IPv4' && !i.internal).address;
   }
 };

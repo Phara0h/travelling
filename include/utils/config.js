@@ -1,4 +1,7 @@
-require('dotenv').config({ path: require('path').resolve(process.cwd(), process.env.TRAVELLING_ENV || '.env') });
+const { resolve, dirname } = require('path');
+
+require('dotenv').config({ path: resolve(process.cwd(), process.env.TRAVELLING_ENV || '.env') });
+
 const misc = require('./misc');
 
 const config = {
@@ -22,16 +25,68 @@ const config = {
   log: {
     enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_LOG_ENABLE), true),
     colors: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_LOG_COLORS), true),
+    jsonoutput: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_LOG_JSONOUTPUT), false),
+    appendFields: {
+      version: {
+        enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_LOG_APPEND_FIELDS_VERSION_ENABLE), true),
+        label: misc.isSetDefault(process.env.TRAVELLING_LOG_APPEND_FIELDS_VERSION_LABEL, misc.getVersion())
+      },
+      host: {
+        enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_LOG_APPEND_FIELDS_HOST_ENABLE), true),
+        label: misc.isSetDefault(process.env.TRAVELLING_LOG_APPEND_FIELDS_HOST_LABEL, misc.getLocalIP())
+      },
+      app: {
+        enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_LOG_APPEND_FIELDS_APP_ENABLE), true),
+        label: misc.isSetDefault(
+          process.env.TRAVELLING_LOG_APPEND_FIELDS_APP_LABEL,
+          misc.isSetDefault(process.env.TRAVELLING_SERVICE_NAME, 'travelling')
+        )
+      },
+      branch: {
+        enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_LOG_APPEND_FIELDS_BRANCH_ENABLE), false),
+        label: misc.isSetDefault(process.env.TRAVELLING_LOG_APPEND_FIELDS_BRANCH_LABEL, 'none')
+      },
+      environment: {
+        enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_LOG_APPEND_FIELDS_ENVIRONMENT_ENABLE), false),
+        label: misc.isSetDefault(process.env.TRAVELLING_LOG_APPEND_FIELDS_ENVIRONMENT_LABEL, 'production')
+      }
+    },
     level: misc.isSetDefault(process.env.TRAVELLING_LOG_LEVEL, 'info'),
     logger: misc.isSetDefault(process.env.TRAVELLING_LOG_LOGGER, 'wog'),
     requests: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_LOG_REQUESTS), true),
     unauthorizedAccess: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_LOG_UNAUTHORIZED_ACCESS), true),
     fastify: {
-      logger: misc.isSetDefault(process.env.TRAVELLING_LOG_FASTIFY_LOGGER, false),
+      logger: misc.isSetDefault(
+        process.env.TRAVELLING_LOG_FASTIFY_LOGGER,
+        misc.isSetDefault(process.env.TRAVELLING_LOG_LOGGER, 'wog')
+      ),
       requestLogging: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_LOG_FASTIFY_LOGGER_REQUEST), true),
-      requestIdHeader: misc.isSetDefault(process.env.TRAVELLING_LOG_FASTIFY_LOGGER_REQ_ID_HEADER, 'travelling-req-id'),
-      requestIdLogLabel: misc.isSetDefault(process.env.TRAVELLING_LOG_FASTIFY_LOGGER_REQ_ID_LOG_LABEL, 'travellingReqID')
+      requestIdHeader: misc.isSetDefault(
+        misc.stringToBool(process.env.TRAVELLING_LOG_FASTIFY_LOGGER_REQ_ID_HEADER) ||
+          process.env.TRAVELLING_LOG_FASTIFY_LOGGER_REQ_ID_HEADER,
+        'travelling-req-id'
+      ),
+      requestIdLogLabel: misc.isSetDefault(
+        misc.stringToBool(process.env.TRAVELLING_LOG_FASTIFY_LOGGER_REQ_ID_LOG_LABEL) ||
+          process.env.TRAVELLING_LOG_FASTIFY_LOGGER_REQ_ID_LOG_LABEL,
+        'travellingReqID'
+      )
     }
+  },
+  tracing: {
+    enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_TRACING_ENABLE), false),
+    instrumentations: misc.isSetDefault(
+      process.env.TRAVELLING_TRACING_INSTRUMENTATIONS,
+      resolve(__dirname, '../../include/server/tracing/instrumentations.js')
+    ),
+    processors: misc.isSetDefault(
+      process.env.TRAVELLING_TRACING_PROCESSORS,
+      resolve(__dirname, '../../include/server/tracing/processors.js')
+    ),
+    propagators: misc.isSetDefault(
+      process.env.TRAVELLING_TRACING_PROPAGATORS,
+      resolve(__dirname, '../../include/server/tracing/propagators.js')
+    )
   },
   portal: {
     enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_PORTAL_ENABLE), true),

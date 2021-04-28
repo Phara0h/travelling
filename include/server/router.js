@@ -48,12 +48,18 @@ class Router {
     });
   }
 
-  async routeUrl(req, res) {
+  async routeUrl(req, res, oldspan) {
     var authenticated = req.isAuthenticated;
     var sessionUser = req.session.data ? req.session.data.user : null;
     var sessionGroupsData = req.session.data ? req.session.data.groupsData : null;
 
-    await gm.updateGroupsIfNeeeded();
+    var span;
+
+    if (oldspan) {
+      span = req.startSpan(`routeUrl [${authenticated ? 'Authenticated' : 'Unauthenticated'}]`, oldspan);
+    }
+
+    await gm.updateGroupsIfNeeeded(span);
 
     var groups = await gm.currentGroup(req, res);
 

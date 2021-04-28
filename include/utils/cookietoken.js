@@ -8,11 +8,20 @@ const User = require('../database/models/user');
 class CookieToken {
   constructor() {}
 
-  static async checkToken(req, res, router) {
+  static async checkToken(req, res, router, oldspan) {
+    var span;
+
+    if (oldspan) {
+      span = req.startSpan('checkToken', oldspan);
+    }
     try {
       var tok = req.cookies['trav:tok'];
 
       if (!tok) {
+        if (span) {
+          span.updateName('checkToken [invalid tok]');
+          span.end();
+        }
         return false;
       }
 
@@ -24,6 +33,10 @@ class CookieToken {
 
       //console.log(cred, cred[4], ip);
       if (config.cookie.security.ipHijackProtection && cred[4] != ip) {
+        if (span) {
+          span.updateName('checkToken [ipHijackProtection]');
+          span.end();
+        }
         return false;
       }
 
@@ -32,16 +45,33 @@ class CookieToken {
         var user = await User.findAllBy({ domain: cred[0], username: cred[1], password: cred[2] });
 
         if (!user || user.length < 1) {
+          if (span) {
+            span.updateName('checkToken [no user]');
+            span.end();
+          }
           return false;
         } else {
+          if (span) {
+            span.updateName('checkToken [valid]');
+            span.end();
+          }
           return user[0];
         }
       } else {
-        this.removeAuthCookie(res);
+        this.removeAuthCookie(res, span);
+        if (span) {
+          span.updateName('checkToken [invalid]');
+          span.end();
+        }
         return false;
       }
     } catch (e) {
-      this.removeAuthCookie(res);
+      this.removeAuthCookie(res, span);
+      if (span) {
+        span.updateName('checkToken [invalid]');
+        span.recordException(e);
+        span.end();
+      }
       config.log.logger.debug(e);
       return false;
     }
@@ -58,7 +88,12 @@ class CookieToken {
     return res;
   }
 
-  static removeAuthCookie(res) {
+  static removeAuthCookie(res, oldspan) {
+    var span;
+
+    if (oldspan) {
+      span = req.startSpan('removeAuthCookie', oldspan);
+    }
     res.setCookie('trav:tok', null, {
       expires: Date.now(),
       secure: config.https,
@@ -66,6 +101,9 @@ class CookieToken {
       domain: config.cookie.domain,
       path: '/'
     });
+    if (span) {
+      span.end();
+    }
     return res;
   }
 

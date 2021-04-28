@@ -6,6 +6,7 @@ const crypto = require(config.pg.crypto.implementation);
 const Email = require('../utils/email');
 const TokenHandler = require('../token');
 const gm = require('../server/groupmanager.js');
+const helpers = require('../server/tracing/helpers')();
 
 class Database {
   constructor() {}
@@ -14,7 +15,7 @@ class Database {
     var user = null;
     var users = await this.findUser(email, name, domain);
 
-    config.log.logger.trace('checkAuth: ', users);
+    //config.log.logger.trace('checkAuth: ', users);
     if (users == null || users.length == 0) {
       throw {
         user: null,
@@ -211,6 +212,11 @@ class Database {
   }
 
   static async initGroups(router) {
+    var span;
+
+    if (config.tracing.enable) {
+      span = helpers.startSpan('initGroups');
+    }
     var grps = await Group.findAll();
 
     if (grps.length == 0) {
@@ -307,10 +313,17 @@ class Database {
       // console.log(admin)
       // gm.groups[admin.name] = this.groupInheritedMerge(admin, grps);
 
-      await gm.updateGroupList();
+      await gm.updateGroupList(span);
+      if (span) {
+        span.end();
+      }
+
       return true;
     }
-    await gm.updateGroupList();
+    await gm.updateGroupList(span);
+    if (span) {
+      span.end();
+    }
     return false;
   }
 }

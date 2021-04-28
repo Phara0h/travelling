@@ -1,31 +1,107 @@
 const config = require('./include/utils/config');
 const fs = require('fs');
 const path = require('path');
-const misc = require('./include/utils/misc');
+
 const parse = require('./include/utils/parse');
+
+var is_testing = false;
+
+if (
+  (process.env.npm_lifecycle_event && process.env.npm_lifecycle_event.indexOf('test') > -1) ||
+  (process.env.NODE_ENV && process.env.NODE_ENV.indexOf('test') > -1) ||
+  process.env.JEST_WORKER_ID
+) {
+  is_testing = true;
+}
 
 if (config.log.logger) {
   if (typeof config.log.logger === 'string') {
     if (config.log.logger == 'wog') {
-      var a = { ...config.log };
+      var appendFields = {};
 
-      a.logger = console;
-      config.log.logger = require(config.log.logger)(a);
+      if (config.log.appendFields.app.enable) {
+        appendFields.app = config.log.appendFields.app.label;
+      }
+      if (config.log.appendFields.version.enable) {
+        appendFields.version = config.log.appendFields.version.label;
+      }
+      if (config.log.appendFields.environment.enable) {
+        appendFields.environment = config.log.appendFields.environment.label;
+      }
+      if (config.log.appendFields.host.enable) {
+        appendFields.host = config.log.appendFields.host.label;
+      }
+      if (config.log.appendFields.branch.enable) {
+        appendFields.branch = config.log.appendFields.branch.label;
+      }
+
+      if (Object.keys(appendFields).length == 0) {
+        appendFields = null;
+      }
+
+      config.log.logger = require('wog')({
+        enable: config.log.enable,
+        colors: config.log.colors,
+        jsonoutput: config.log.jsonoutput,
+        addTimestamp: true,
+        appendFields,
+        serializers: {
+          req: function (req) {
+            var traceId = '';
+
+            if (config.tracing.enable) {
+              if (!req.span || req.span == '') {
+                if (is_testing) {
+                  req.span = trace.tracer.startSpan('root', trace.opentelemetry.context.active());
+                } else {
+                  req.span = trace.opentelemetry.getSpan(trace.opentelemetry.context.active());
+                }
+              }
+
+              traceId = req.span.context().traceId;
+            }
+            var headers = {
+              ...req.headers
+            };
+
+            delete headers.cookie;
+
+            return {
+              method: req.method,
+              url: req.url,
+              headers,
+              remoteAddress: parse.getIp(req),
+              remotePort: req.socket.remotePort,
+              wog_type: 'request',
+              traceId
+            };
+          },
+
+          res: function (reply) {
+            return {
+              wog_type: 'reply',
+              statusCode: reply.statusCode,
+              traceId: config.tracing.enable ? reply.request.span.context().traceId : ''
+            };
+          }
+        }
+      });
     } else {
       config.log.logger = require(config.log.logger);
     }
   }
 }
+var trace = null;
 
-if (typeof config.log.fastify.logger == 'string' && misc.stringToBool(config.log.fastify.logger) === null) {
-  config.log.fastify.logger = require(config.log.fastify.logger);
-} else {
-  config.log.fastify.logger = misc.stringToBool(config.log.fastify.logger);
+if (config.tracing.enable) {
+  trace = require('./include/server/tracing')(config);
+  trace.helpers = require('./include/server/tracing/helpers.js')();
 }
 
 var fastifyOptions = {
   http2: false,
-  logger: config.log.fastify.logger,
+  logger: config.log.logger,
+
   // logger: true
   disableRequestLogging: !config.log.fastify.requestLogging,
   requestIdHeader: config.log.fastify.requestIdHeader,
@@ -88,15 +164,44 @@ const Email = require('./include/utils/email');
 
 const nstats = require('nstats')();
 
-app.setErrorHandler(function (error, request, reply) {
-  config.log.logger.error(error);
-  reply.code(500).send(
-    JSON.stringify({
-      type: 'error',
-      msg: 'Please report this issue to the site admin'
-    })
-  );
-});
+if (config.tracing.enable) {
+  app.setErrorHandler((error, request, reply) => {
+    error.traceId = request.span.context().traceId;
+    config.log.logger.error(error);
+
+    request.span.recordException(error);
+
+    reply.code(500).send(
+      JSON.stringify({
+        type: 'error',
+        msg: 'Please report this issue to the site admin'
+      })
+    );
+  });
+  app.decorateRequest('span', '');
+  app.decorateRequest('startSpan', trace.helpers.startSpan);
+  // if (is_testing) {
+  //   app.addHook('onRequest', (req, res, done) => {
+  //     req.span = trace.tracer.startSpan('root', trace.opentelemetry.context.active());
+  //     done();
+  //   });
+  // } else {
+  //   app.addHook('onRequest', (req, res, done) => {
+  //     req.span = trace.opentelemetry.getSpan(trace.opentelemetry.context.active());
+  //     done();
+  //   });
+  // }
+} else {
+  app.setErrorHandler(function (error, request, reply) {
+    config.log.logger.error(error);
+    reply.code(500).send(
+      JSON.stringify({
+        type: 'error',
+        msg: 'Please report this issue to the site admin'
+      })
+    );
+  });
+}
 
 app.register(require('./include/server/cors.js'), { router });
 
@@ -145,14 +250,14 @@ app.register(fastifySession, {
   saveUninitialized: false
 });
 
-app.decorateRequest('checkLoggedIn', async function (req, res) {
-  return await auth.checkLoggedIn(req, res, router);
+app.decorateRequest('checkLoggedIn', async function (req, res, router, span) {
+  return await auth.checkLoggedIn(req, res, router, span);
 });
 app.decorateRequest('logout', auth.logout);
 app.decorateRequest('isAuthenticated', false);
 
 app.addHook('preParsing', function (req, res, payload, next) {
-  req.checkLoggedIn(req, res, router).then((auth) => {
+  req.checkLoggedIn(req, res, router, req.span).then((auth) => {
     req.isAuthenticated = auth.auth;
 
     if (!auth.route) {
@@ -172,7 +277,7 @@ app.addHook('preParsing', function (req, res, payload, next) {
         }
       }
     } else {
-      router.routeUrl(req, res).then((route) => {
+      router.routeUrl(req, res, req.span).then((route) => {
         if (!route) {
           next();
         }
@@ -220,7 +325,9 @@ if (config.portal.enable) {
 }
 
 app.ready(() => {
-  config.log.logger.debug(app.printRoutes());
+  if (!config.log.jsonoutput) {
+    config.log.logger.debug(app.printRoutes());
+  }
 });
 
 async function init() {
