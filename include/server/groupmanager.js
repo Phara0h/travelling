@@ -1,6 +1,7 @@
 const Group = require('../database/models/group');
 const redis = require('../redis');
 const config = require('../utils/config');
+const helpers = require('../server/tracing/helpers')();
 
 class GroupManager {
   constructor() {
@@ -13,25 +14,30 @@ class GroupManager {
     this.mappedGroups = {};
     this.redis = redis;
 
-    if (typeof config.log.logger === 'string') {
-      if (config.log.logger === 'wog') {
-        var a = { ...config.log };
+    // if (typeof config.log.logger === 'string') {
+    //   if (config.log.logger === 'wog') {
+    //     var a = { ...config.log };
 
-        a.logger = console;
-        config.log.logger = require(config.log.logger)(a);
-      } else {
-        //console.log(config.log.logger);
-        // config.log.logger = require(config.log.logger);
-      }
-    }
+    //     a.logger = console;
+    //     config.log.logger = require(config.log.logger)(a);
+    //   } else {
+    //     //console.log(config.log.logger);
+    //     // config.log.logger = require(config.log.logger);
+    //   }
+    // }
     this.log = config.log.logger;
 
     GroupManager.instance = this;
     return this;
   }
 
-  async updateGroupList() {
-    this.log.debug('Updating Groups');
+  async updateGroupList(oldspan) {
+    var span;
+
+    if (oldspan) {
+      span = helpers.startSpan('updateGroupList', oldspan);
+    }
+    this.log.debug(helpers.text('Updating Groups', span));
     var grps = await Group.findAll();
 
     this.mappedGroups = {};
@@ -45,10 +51,13 @@ class GroupManager {
         this.mergedRoutes[grps[i].type] = {};
       }
 
-      this.mergedRoutes[grps[i].type][grps[i].name] = this.groupInheritedMerge(new Group(grps[i]._), grps);
+      this.mergedRoutes[grps[i].type][grps[i].name] = this.groupInheritedMerge(new Group(grps[i]._), grps, span);
     }
 
     this.redis.needsGroupUpdate = false;
+    if (span) {
+      span.end();
+    }
   }
 
   async currentGroup(req, res) {
@@ -120,13 +129,19 @@ class GroupManager {
     return this.mappedGroups;
   }
 
-  async updateGroupsIfNeeeded() {
+  async updateGroupsIfNeeeded(oldspan) {
     if (this.redis.needsGroupUpdate) {
-      await this.updateGroupList();
+      await this.updateGroupList(oldspan);
     }
   }
 
-  groupInheritedMerge(group, groups) {
+  groupInheritedMerge(group, groups, oldspan) {
+    var span;
+
+    if (oldspan) {
+      span = helpers.startSpan('groupInheritedMerge', oldspan);
+    }
+
     var nallowed = group.allowed ? [...group.allowed] : [];
 
     if (group.inherited && group.inherited.length > 0) {
@@ -141,8 +156,11 @@ class GroupManager {
             break;
           }
         }
-        nallowed.push(...this.groupInheritedMerge(group.inheritedGroups[i], groups));
+        nallowed.push(...this.groupInheritedMerge(group.inheritedGroups[i], groups, span));
       }
+    }
+    if (span) {
+      span.end();
     }
     return nallowed;
   }
