@@ -2053,7 +2053,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{TRAVELLING}}/api/v1/users/domain/:domain?sort=created_on&limit=2&filter=locked=false",
+									"raw": "{{TRAVELLING}}/api/v1/users/domain/:domain",
 									"host": [
 										"{{TRAVELLING}}"
 									],
@@ -2067,21 +2067,29 @@
 									"query": [
 										{
 											"key": "sort",
-											"value": "created_on"
+											"value": "created_on",
+											"disabled": true
 										},
 										{
 											"key": "limit",
-											"value": "2"
+											"value": "200",
+											"disabled": true
 										},
 										{
 											"key": "filter",
-											"value": "locked=false"
+											"value": "locked=false",
+											"disabled": true
+										},
+										{
+											"key": "sortdir",
+											"value": "ASC",
+											"disabled": true
 										}
 									],
 									"variable": [
 										{
 											"key": "domain",
-											"value": "test"
+											"value": "traziventures.com"
 										}
 									]
 								},
@@ -2112,6 +2120,28 @@
 								"api",
 								"v1",
 								"users"
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": "created_on",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "200",
+									"disabled": true
+								},
+								{
+									"key": "filter",
+									"value": "locked=false",
+									"disabled": true
+								},
+								{
+									"key": "sortdir",
+									"value": "ASC",
+									"disabled": true
+								}
 							]
 						},
 						"description": "Gets all the users\n\n##### Optional Query Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | *optional* (example:  user7) |\n| locked | *optional* (example:  true) |\n| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |\n| group_request | *optional* (example:  superadmin) |\n| failed_login_attempts | *optional* (example:  0) |\n| change_username | *optional* (example:  false) |\n| change_password | *optional* (example:  false) |\n| reset_password | *optional* (example:  false) |\n| email_verify | *optional* (example:  false) |\n| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | *optional* (example:  test@test.ai) |\n| created_on | *optional* (example:  1568419646794) |\n| last_login | *optional* (example:  null) |"
