@@ -57,8 +57,9 @@ if (config.log.logger) {
                   req.span = trace.opentelemetry.getSpan(trace.opentelemetry.context.active());
                 }
               }
-
-              traceId = req.span.context().traceId;
+              if (req.span) {
+                traceId = req.span.context().traceId;
+              }
             }
             var headers = {
               ...req.headers
@@ -81,7 +82,7 @@ if (config.log.logger) {
             return {
               wog_type: 'reply',
               statusCode: reply.statusCode,
-              traceId: config.tracing.enable ? reply.request.span.context().traceId : ''
+              traceId: config.tracing.enable && reply.request.span ? reply.request.span.context().traceId : ''
             };
           }
         }
