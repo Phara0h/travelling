@@ -1044,7 +1044,8 @@
 										"key": "Authorization",
 										"value": "Bearer",
 										"description": "The client_credentials generated OAUth2 access token.",
-										"type": "text"
+										"type": "text",
+										"disabled": true
 									}
 								],
 								"url": {
@@ -2052,14 +2053,36 @@
 									}
 								],
 								"url": {
-									"raw": "{{TRAVELLING}}/api/v1/users",
+									"raw": "{{TRAVELLING}}/api/v1/users/domain/:domain?sort=created_on&limit=2&filter=locked=false",
 									"host": [
 										"{{TRAVELLING}}"
 									],
 									"path": [
 										"api",
 										"v1",
-										"users"
+										"users",
+										"domain",
+										":domain"
+									],
+									"query": [
+										{
+											"key": "sort",
+											"value": "created_on"
+										},
+										{
+											"key": "limit",
+											"value": "2"
+										},
+										{
+											"key": "filter",
+											"value": "locked=false"
+										}
+									],
+									"variable": [
+										{
+											"key": "domain",
+											"value": "test"
+										}
 									]
 								},
 								"description": "Gets all the users\n\n##### Optional Query Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | *optional* (example:  user7) |\n| locked | *optional* (example:  true) |\n| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |\n| group_request | *optional* (example:  superadmin) |\n| failed_login_attempts | *optional* (example:  0) |\n| change_username | *optional* (example:  false) |\n| change_password | *optional* (example:  false) |\n| reset_password | *optional* (example:  false) |\n| email_verify | *optional* (example:  false) |\n| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | *optional* (example:  test@test.ai) |\n| created_on | *optional* (example:  1568419646794) |\n| last_login | *optional* (example:  null) |"
@@ -7636,7 +7659,7 @@
 	"variable": [
 		{
 			"key": "TRAVELLING",
-			"value": "http://127.0.0.1:6969/travelling"
+			"value": "http://127.0.0.1:6969/account"
 		}
 	]
 }

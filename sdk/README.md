@@ -1494,7 +1494,7 @@ Path: api/v1/users
 **Kind**: global class  
 <a name="UsersDomain.get"></a>
 
-### UsersDomain.get(authorization_bearer)
+### UsersDomain.get(domain, sort, limit, filter, authorization_bearer)
 get - Gets all the users
 
 ##### Optional Query Params
@@ -1516,12 +1516,16 @@ get - Gets all the users
 | created_on | *optional* (example:  1568419646794) |
 | last_login | *optional* (example:  null) |
 
-Path: api/v1/users
+Path: api/v1/users/domain/:domain
 
 **Kind**: static method of [<code>UsersDomain</code>](#UsersDomain)  
 
 | Param | Type | Description |
 | --- | --- | --- |
+| domain | <code>any</code> | (example: test) |
+| sort | <code>any</code> | (example: created_on) |
+| limit | <code>any</code> | (example: 2) |
+| filter | <code>any</code> | (example: locked=false) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="User"></a>
