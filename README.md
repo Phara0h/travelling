@@ -3033,7 +3033,13 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v2.5.1](https://github.com/Phara0h/travelling/compare/v2.5.0...v2.5.1)
+
+- Update index.js [`12d527f`](https://github.com/Phara0h/travelling/commit/12d527f12609ea9cb90b7c526f0265c3e2fe84f1)
+
 #### [v2.5.0](https://github.com/Phara0h/travelling/compare/v2.4.2...v2.5.0)
+
+> 3 May 2021
 
 - Update Travelling.postman_collection.json [`40e95d2`](https://github.com/Phara0h/travelling/commit/40e95d244ccaa3f66ce57aa0179f750833ea27b6)
 - Started work on add traces throughout code [`dfe93dd`](https://github.com/Phara0h/travelling/commit/dfe93dd291233aa72989998d1053f05a03949295)
