@@ -1,6 +1,13 @@
 
 
+#### [v2.5.0](https://github.com/Phara0h/travelling/compare/v2.4.2...v2.5.0)
+
+- Update Travelling.postman_collection.json [`40e95d2`](https://github.com/Phara0h/travelling/commit/40e95d244ccaa3f66ce57aa0179f750833ea27b6)
+- Started work on add traces throughout code [`dfe93dd`](https://github.com/Phara0h/travelling/commit/dfe93dd291233aa72989998d1053f05a03949295)
+
 #### [v2.4.2](https://github.com/Phara0h/travelling/compare/v2.4.1...v2.4.2)
+
+> 13 April 2021
 
 - Added fix for when there is no default group it defaults to anonymous [`bd1abda`](https://github.com/Phara0h/travelling/commit/bd1abdae0763bef0a7d9b5d7e9c872498ef6ae27)
 
