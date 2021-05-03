@@ -6606,13 +6606,18 @@ class Users {
 | last_login | *optional* (example:  null) |
   *
   * Path: api/v1/users
+  * @param {any} sort  (example: created_on)
+  * @param {any} limit  (example: 200)
+  * @param {any} filter  (example: locked=false)
+  * @param {any} sortdir  (example: ASC)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   */
-  static async get(authorization_bearer, opts) {
+  static async get(sort, limit, filter, sortdir, authorization_bearer, opts) {
     var options = {
       method: 'GET',
       simple: false,
       uri: hostUrl + '/' + `api/v1/users`,
+      qs: { sort, limit, filter, sortdir },
       authorization: {
         bearer: authorization_bearer,
       },
@@ -6665,18 +6670,27 @@ class UsersDomain {
 | last_login | *optional* (example:  null) |
   *
   * Path: api/v1/users/domain/:domain
-  * @param {any} domain  (example: test)
+  * @param {any} domain  (example: dragohmventures.com)
   * @param {any} sort  (example: created_on)
-  * @param {any} limit  (example: 2)
+  * @param {any} limit  (example: 200)
   * @param {any} filter  (example: locked=false)
+  * @param {any} sortdir  (example: ASC)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   */
-  static async get(domain, sort, limit, filter, authorization_bearer, opts) {
+  static async get(
+    domain,
+    sort,
+    limit,
+    filter,
+    sortdir,
+    authorization_bearer,
+    opts
+  ) {
     var options = {
       method: 'GET',
       simple: false,
       uri: hostUrl + '/' + `api/v1/users/domain/${domain}`,
-      qs: { sort, limit, filter },
+      qs: { sort, limit, filter, sortdir },
       authorization: {
         bearer: authorization_bearer,
       },
