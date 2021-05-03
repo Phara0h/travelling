@@ -2640,7 +2640,7 @@ class Users {
 class UsersDomain {
   constructor() {}
   static get _postgenClassUrls() {
-    return { get: 'api/v1/users' };
+    return { get: 'api/v1/users/domain/:domain' };
   }
   static getFunctionsPath(name) {
     return this._postgenClassUrls[name.toLowerCase()];
@@ -2668,14 +2668,19 @@ class UsersDomain {
 | created_on | *optional* (example:  1568419646794) |
 | last_login | *optional* (example:  null) |
   *
-  * Path: api/v1/users
+  * Path: api/v1/users/domain/:domain
+  * @param {any} domain  (example: test)
+  * @param {any} sort  (example: created_on)
+  * @param {any} limit  (example: 2)
+  * @param {any} filter  (example: locked=false)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   */
-  static async get(authorization_bearer, opts) {
+  static async get(domain, sort, limit, filter, authorization_bearer, opts) {
     var options = {
       method: 'GET',
       simple: false,
-      uri: hostUrl + '/' + `api/v1/users`,
+      uri: hostUrl + '/' + `api/v1/users/domain/${domain}`,
+      qs: { sort, limit, filter },
       authorization: {
         bearer: authorization_bearer,
       },
