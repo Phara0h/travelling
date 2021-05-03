@@ -2326,7 +2326,7 @@ Path: api/v1/users
 **Kind**: global class  
 <a name="UsersDomain.get"></a>
 
-### UsersDomain.get(authorization_bearer)
+### UsersDomain.get(domain, sort, limit, filter, authorization_bearer)
 get - Gets all the users
 
 ##### Optional Query Params
@@ -2348,12 +2348,16 @@ get - Gets all the users
 | created_on | *optional* (example:  1568419646794) |
 | last_login | *optional* (example:  null) |
 
-Path: api/v1/users
+Path: api/v1/users/domain/:domain
 
 **Kind**: static method of [<code>UsersDomain</code>](#UsersDomain)  
 
 | Param | Type | Description |
 | --- | --- | --- |
+| domain | <code>any</code> | (example: test) |
+| sort | <code>any</code> | (example: created_on) |
+| limit | <code>any</code> | (example: 2) |
+| filter | <code>any</code> | (example: locked=false) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="User"></a>
@@ -3029,7 +3033,14 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v2.5.0](https://github.com/Phara0h/travelling/compare/v2.4.2...v2.5.0)
+
+- Update Travelling.postman_collection.json [`40e95d2`](https://github.com/Phara0h/travelling/commit/40e95d244ccaa3f66ce57aa0179f750833ea27b6)
+- Started work on add traces throughout code [`dfe93dd`](https://github.com/Phara0h/travelling/commit/dfe93dd291233aa72989998d1053f05a03949295)
+
 #### [v2.4.2](https://github.com/Phara0h/travelling/compare/v2.4.1...v2.4.2)
+
+> 13 April 2021
 
 - Added fix for when there is no default group it defaults to anonymous [`bd1abda`](https://github.com/Phara0h/travelling/commit/bd1abdae0763bef0a7d9b5d7e9c872498ef6ae27)
 
