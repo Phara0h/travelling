@@ -2253,7 +2253,7 @@ body
 
 * [Users](#Users)
     * [.byGroupRequest(group_request, authorization_bearer)](#Users.byGroupRequest)
-    * [.get(authorization_bearer)](#Users.get)
+    * [.get(sort, limit, filter, sortdir, authorization_bearer)](#Users.get)
 
 <a name="Users.byGroupRequest"></a>
 
@@ -2290,7 +2290,7 @@ Path: api/v1/users/group/request/:group_request
 
 <a name="Users.get"></a>
 
-### Users.get(authorization_bearer)
+### Users.get(sort, limit, filter, sortdir, authorization_bearer)
 get - Gets all the users
 
 ##### Optional Query Params
@@ -2318,6 +2318,10 @@ Path: api/v1/users
 
 | Param | Type | Description |
 | --- | --- | --- |
+| sort | <code>any</code> | (example: created_on) |
+| limit | <code>any</code> | (example: 200) |
+| filter | <code>any</code> | (example: locked=false) |
+| sortdir | <code>any</code> | (example: ASC) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="UsersDomain"></a>
@@ -2326,7 +2330,7 @@ Path: api/v1/users
 **Kind**: global class  
 <a name="UsersDomain.get"></a>
 
-### UsersDomain.get(domain, sort, limit, filter, authorization_bearer)
+### UsersDomain.get(domain, sort, limit, filter, sortdir, authorization_bearer)
 get - Gets all the users
 
 ##### Optional Query Params
@@ -2354,10 +2358,11 @@ Path: api/v1/users/domain/:domain
 
 | Param | Type | Description |
 | --- | --- | --- |
-| domain | <code>any</code> | (example: test) |
+| domain | <code>any</code> | (example: dragohmventures.com) |
 | sort | <code>any</code> | (example: created_on) |
-| limit | <code>any</code> | (example: 2) |
+| limit | <code>any</code> | (example: 200) |
 | filter | <code>any</code> | (example: locked=false) |
+| sortdir | <code>any</code> | (example: ASC) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="User"></a>
@@ -3033,7 +3038,15 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v2.5.2](https://github.com/Phara0h/travelling/compare/v2.5.1...v2.5.2)
+
+- Updated to ignore /health and /metrics logs outs [`e530288`](https://github.com/Phara0h/travelling/commit/e5302887065b9c3c4aaa6bc6ac27f8e8a88b7420)
+- Updated SDK [`d52feec`](https://github.com/Phara0h/travelling/commit/d52feec090bd96ccfdd16df1c8f318c7a66bd10f)
+- Update Travelling.postman_collection.json [`1435319`](https://github.com/Phara0h/travelling/commit/1435319c14771389a15ed0d4b5939b9d9b7e7dea)
+
 #### [v2.5.1](https://github.com/Phara0h/travelling/compare/v2.5.0...v2.5.1)
+
+> 3 May 2021
 
 - Update index.js [`12d527f`](https://github.com/Phara0h/travelling/commit/12d527f12609ea9cb90b7c526f0265c3e2fe84f1)
 
