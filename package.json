@@ -60,8 +60,8 @@
     "http-proxy": "^1.17.0",
     "ioredis": "^4.14.1",
     "nodemailer": "^6.3.0",
-    "nstats": "^4.1.2",
-    "wog": "^4.0.3"
+    "nstats": "latest",
+    "wog": "latest"
   },
   "devDependencies": {
     "@abeai/recho": "^1.4.0",

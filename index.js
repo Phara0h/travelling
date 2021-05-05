@@ -14,6 +14,8 @@ if (
   is_testing = true;
 }
 
+const ignored_routes = [`/${config.serviceName}/metrics`, `/${config.serviceName}/health`];
+
 if (config.log.logger) {
   if (typeof config.log.logger === 'string') {
     if (config.log.logger == 'wog') {
@@ -49,6 +51,10 @@ if (config.log.logger) {
           req: function (req) {
             var traceId = '';
 
+            if (ignored_routes.indexOf(req.url) > -1) {
+              return null;
+            }
+
             if (config.tracing.enable) {
               if (!req.span || req.span == '') {
                 if (is_testing) {
@@ -79,6 +85,9 @@ if (config.log.logger) {
           },
 
           res: function (reply) {
+            if (ignored_routes.indexOf(reply.request.url) > -1) {
+              return null;
+            }
             return {
               wog_type: 'reply',
               statusCode: reply.statusCode,
@@ -211,7 +220,7 @@ app.get('/' + config.serviceName + '/metrics', (req, res) => {
 });
 app.get('/' + config.serviceName + '/health', (req, res) => res.code(200).send('All Systems Nominal'));
 app.register(nstats.fastify(), {
-  ignored_routes: ['/' + config.serviceName + '/metrics', '/' + config.serviceName + '/health']
+  ignored_routes
 });
 
 if (config.portal.enable) {
