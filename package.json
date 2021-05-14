@@ -1,5 +1,5 @@
 {
-  "name": "travelling",
+  "name": "@trazi/travelling",
   "version": "2.5.2",
   "description": "A dynamic route level groups permissions middleman service",
   "main": "index.js",
