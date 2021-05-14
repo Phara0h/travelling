@@ -1,5 +1,5 @@
 {
-  "name": "travelling-sdk",
+  "name": "@trazi/travelling-sdk",
   "version": "1.2.1",
   "description": "",
   "main": "node/index.js",
