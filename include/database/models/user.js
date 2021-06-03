@@ -286,6 +286,12 @@ class User extends Base(BaseModel, 'users', {
     return newModels;
   }
 
+  static async getCountByFilter(filter) {
+    // TODO: Create count query
+    const query = `SELECT COUNT(*) FROM ${this.table} `;
+    return await this.query(query, values);
+  }
+
   toJSON() {
     var u = { ...this._ };
 
