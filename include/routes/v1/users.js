@@ -329,6 +329,13 @@ function routes(app, opts, done) {
     return { count: 0 }
   });
 
+
+  app.get('/users/count', async (req, res) => {
+    // TODO: Get users count
+
+    return { count: 0 }
+  });
+
   app.get('/users/domain/:domain', async (req, res) => {
     if (!req.query.filter) {
       req.query.filter = 'domain=' + req.params.domain;
@@ -347,6 +354,18 @@ function routes(app, opts, done) {
     }
 
     return await User.findAllByFilter({ filter: req.query.filter, count: true })
+  });
+  
+  app.get('/users/domain/:domain/count', async (req, res) => {
+    // TODO: Get users count
+
+    if (!req.query.filter) {
+      req.query.filter = 'domain=' + req.params.domain;
+    } else {
+      req.query.filter += ',domain=' + req.params.domain;
+    }
+
+    return await User.getCountByFilter(req.query.filter)
   });
 
   app.get('/users/group/request/:group_request', async (req, res) => {
