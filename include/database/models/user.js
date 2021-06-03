@@ -181,67 +181,68 @@ class User extends Base(BaseModel, 'users', {
     return false;
   }
 
-  static async findAllByFilter(filter, sort, limit, sortdir = 'DESC') {
+  static async findAllByFilter(opts) {
     var query = `SELECT * FROM ${this.table} `;
+    var keys = [];
+    var values = [];
 
-    var values;
+    if (!opts.sortdir) opts.sortdir = 'DESC';
 
-    if (filter) {
-      if (filter.indexOf(',') > -1) {
-        filter = filter.split(',');
+    if (opts.filter) {
+      if (opts.filter.indexOf(',') > -1) {
+        opts.filter = opts.filter.split(',');
       } else {
-        filter = [filter];
+        opts.filter = [opts.filter];
       }
-      values = [];
       query += ' WHERE ';
 
       var user = {};
-      var opts = [];
+      var ops = [];
 
-      //console.log(filter);
-      for (var i = 0; i < filter.length; i++) {
-        var opt = '=';
+      for (var i = 0; i < opts.filter.length; i++) {
+        var op = '=';
         var key;
         var value;
 
-        if (filter[i].indexOf('>=') > -1) {
-          var kv = filter[i].split('>=');
+        if (opts.filter[i].indexOf('>=') > -1) {
+          var kv = opts.filter[i].split('>=');
 
-          opt = '>=';
+          op = '>=';
           key = kv[0];
           value = kv[1];
-        } else if (filter[i].indexOf('<=') > -1) {
-          var kv = filter[i].split('<=');
+        } else if (opts.filter[i].indexOf('<=') > -1) {
+          var kv = opts.filter[i].split('<=');
 
-          opt = '<=';
+          op = '<=';
           key = kv[0];
           value = kv[1];
-        } else if (filter[i].indexOf('>') > -1) {
-          var kv = filter[i].split('>');
+        } else if (opts.filter[i].indexOf('>') > -1) {
+          var kv = opts.filter[i].split('>');
 
-          opt = '>';
+          op = '>';
           key = kv[0];
           value = kv[1];
-        } else if (filter[i].indexOf('<') > -1) {
-          var kv = filter[i].split('<');
+        } else if (opts.filter[i].indexOf('<') > -1) {
+          var kv = opts.filter[i].split('<');
 
-          opt = '<';
+          op = '<';
           key = kv[0];
           value = kv[1];
-        } else if (filter[i].indexOf('=') > -1) {
-          var kv = filter[i].split('=');
+        } else if (opts.filter[i].indexOf('=') > -1) {
+          var kv = opts.filter[i].split('=');
 
           key = kv[0];
           value = kv[1];
         }
-        // console.log(key, value);
 
         if (this._defaultModel[key] !== undefined) {
           if (this._encryptionFields[key] !== undefined) {
             value = (await this._queryFieldsHash({ [key]: value }))['__' + key];
             key = '__' + key;
           }
-          opts.push(opt);
+          ops.push(op);
+          values.push(value)
+          keys.push(key)
           user[key] = misc.stringToNativeType(value);
         }
       }
@@ -251,27 +252,23 @@ class User extends Base(BaseModel, 'users', {
         throw validUser;
       }
       user = userUtil.setUser(user, user);
-      var keys = Object.keys(user);
 
       for (var i = 0; i < keys.length; i++) {
-        query += `"${keys[i]}"${opts[i]}$${i + 1} `;
+        query += `"${keys[i]}"${ops[i]}$${i + 1} `;
 
-        values.push(user[keys[i]]);
         if (keys.length > i + 1) {
           query += ' AND ';
         }
       }
     }
 
-    if (sort && regex.safeName.exec(sort) != null) {
-      query += ' ORDER BY ' + sort + ' ' + (sortdir == 'ASC' ? 'ASC' : 'DESC');
+    if (opts.sort && regex.safeName.exec(opts.sort) != null) {
+      query += ' ORDER BY ' + opts.sort + ' ' + (opts.sortdir == 'ASC' ? 'ASC' : 'DESC');
     }
 
-    if (limit && !isNaN(Number(limit))) {
-      query += ' LIMIT ' + Number(limit);
+    if (opts.limit && !isNaN(Number(opts.limit))) {
+      query += ' LIMIT ' + Number(opts.limit);
     }
-
-    console.log(query, values);
 
     const newModels = await this.query(query, values);
 
