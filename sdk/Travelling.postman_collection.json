@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "e66330cf-84da-4b78-8bf1-eff6e90b8c6b",
+		"_postman_id": "9718a487-a9bf-41ec-b272-fc0438da73d3",
 		"name": "Travelling",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -36,7 +36,7 @@
 											}
 										},
 										"url": {
-											"raw": "{{TRAVELLING}}/api/v1/auth/password/forgot",
+											"raw": "{{TRAVELLING}}/api/v1/auth/token/password/forgot/domain/:domain",
 											"host": [
 												"{{TRAVELLING}}"
 											],
@@ -44,8 +44,17 @@
 												"api",
 												"v1",
 												"auth",
+												"token",
 												"password",
-												"forgot"
+												"forgot",
+												"domain",
+												":domain"
+											],
+											"variable": [
+												{
+													"key": "domain",
+													"value": ""
+												}
 											]
 										},
 										"description": "Generates a recovery token and returns the token to the attached user (if they exist) instead of sending an email. \n**CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**"
@@ -58,17 +67,10 @@
 							"name": "Register",
 							"request": {
 								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"type": "text",
-										"value": "application/json"
-									}
-								],
+								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"username\":\"test\",\n\t\"password\":\"Pas5w0r!d\",\n\t\"email\": \"test@test.com\"\n}",
+									"raw": "{\n\t\"password\":\"Pas5w0r!d\",\n\t\"email\": \"test@test.com\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -291,7 +293,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"email\": \"test@test.com\"\n}",
+									"raw": "{\n\t\"email\": \"kelvin@dragohmventures.com\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -315,7 +317,7 @@
 									"variable": [
 										{
 											"key": "domain",
-											"value": "test.com"
+											"value": "dragohmventures.com"
 										}
 									]
 								},
@@ -2053,7 +2055,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{TRAVELLING}}/api/v1/users/domain/:domain",
+									"raw": "{{TRAVELLING}}/api/v1/users/domain/:domain?sort=created_on&filter=locked=false,created_on>2021-06-03,created_on<2021-06-06",
 									"host": [
 										"{{TRAVELLING}}"
 									],
@@ -2067,18 +2069,16 @@
 									"query": [
 										{
 											"key": "sort",
-											"value": "created_on",
-											"disabled": true
+											"value": "created_on"
 										},
 										{
 											"key": "limit",
-											"value": "200",
+											"value": "2",
 											"disabled": true
 										},
 										{
 											"key": "filter",
-											"value": "locked=false",
-											"disabled": true
+											"value": "locked=false,created_on>2021-06-03,created_on<2021-06-06"
 										},
 										{
 											"key": "sortdir",
@@ -2089,7 +2089,7 @@
 									"variable": [
 										{
 											"key": "domain",
-											"value": "dragohmventures.com"
+											"value": "test.com"
 										}
 									]
 								},
@@ -2120,28 +2120,6 @@
 								"api",
 								"v1",
 								"users"
-							],
-							"query": [
-								{
-									"key": "sort",
-									"value": "created_on",
-									"disabled": true
-								},
-								{
-									"key": "limit",
-									"value": "200",
-									"disabled": true
-								},
-								{
-									"key": "filter",
-									"value": "locked=false",
-									"disabled": true
-								},
-								{
-									"key": "sortdir",
-									"value": "ASC",
-									"disabled": true
-								}
 							]
 						},
 						"description": "Gets all the users\n\n##### Optional Query Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | *optional* (example:  user7) |\n| locked | *optional* (example:  true) |\n| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |\n| group_request | *optional* (example:  superadmin) |\n| failed_login_attempts | *optional* (example:  0) |\n| change_username | *optional* (example:  false) |\n| change_password | *optional* (example:  false) |\n| reset_password | *optional* (example:  false) |\n| email_verify | *optional* (example:  false) |\n| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | *optional* (example:  test@test.ai) |\n| created_on | *optional* (example:  1568419646794) |\n| last_login | *optional* (example:  null) |"
@@ -7689,7 +7667,7 @@
 	"variable": [
 		{
 			"key": "TRAVELLING",
-			"value": "http://127.0.0.1:6969/account"
+			"value": "http://staging.account.dragohmdev.com/account"
 		}
 	]
 }

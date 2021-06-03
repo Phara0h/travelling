@@ -6606,18 +6606,13 @@ class Users {
 | last_login | *optional* (example:  null) |
   *
   * Path: api/v1/users
-  * @param {any} sort  (example: created_on)
-  * @param {any} limit  (example: 200)
-  * @param {any} filter  (example: locked=false)
-  * @param {any} sortdir  (example: ASC)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   */
-  static async get(sort, limit, filter, sortdir, authorization_bearer, opts) {
+  static async get(authorization_bearer, opts) {
     var options = {
       method: 'GET',
       simple: false,
       uri: hostUrl + '/' + `api/v1/users`,
-      qs: { sort, limit, filter, sortdir },
       authorization: {
         bearer: authorization_bearer,
       },
@@ -6670,10 +6665,10 @@ class UsersDomain {
 | last_login | *optional* (example:  null) |
   *
   * Path: api/v1/users/domain/:domain
-  * @param {any} domain  (example: dragohmventures.com)
+  * @param {any} domain  (example: test.com)
   * @param {any} sort  (example: created_on)
-  * @param {any} limit  (example: 200)
-  * @param {any} filter  (example: locked=false)
+  * @param {any} limit  (example: 2)
+  * @param {any} filter  (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)
   * @param {any} sortdir  (example: ASC)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   */
@@ -7698,12 +7693,12 @@ class AuthDomain {
    *
    * Path: api/v1/auth/password/forgot/domain/:domain
    * @param {Object} body
-   * @param {any} domain  (example: test.com)
+   * @param {any} domain  (example: dragohmventures.com)
    * @example
    * body
    * ```json
    * {
-   * 	"email": "test@test.com"
+   * 	"email": "kelvin@dragohmventures.com"
    * }
    * ```
    */
@@ -7771,7 +7766,6 @@ class AuthDomain {
   * body
   * ```json
   * {
- * 	"username":"test",
  * 	"password":"Pas5w0r!d",
  * 	"email": "test@test.com"
  * }
@@ -7783,7 +7777,6 @@ class AuthDomain {
       simple: false,
       uri: hostUrl + '/' + `api/v1/auth/register/domain/${domain}`,
       body,
-      json: true,
       json: true,
     };
     if (defaultOpts) {
@@ -7805,7 +7798,9 @@ class AuthDomain {
 class AuthDomainToken {
   constructor() {}
   static get _postgenClassUrls() {
-    return { forgotpassword: 'api/v1/auth/password/forgot' };
+    return {
+      forgotpassword: 'api/v1/auth/token/password/forgot/domain/:domain',
+    };
   }
   static getFunctionsPath(name) {
     return this._postgenClassUrls[name.toLowerCase()];
@@ -7815,8 +7810,9 @@ class AuthDomainToken {
    * forgotPassword - Generates a recovery token and returns the token to the attached user (if they exist) instead of sending an email.
    **CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**
    *
-   * Path: api/v1/auth/password/forgot
+   * Path: api/v1/auth/token/password/forgot/domain/:domain
    * @param {Object} body
+   * @param {any} domain
    * @example
    * body
    * ```json
@@ -7825,11 +7821,11 @@ class AuthDomainToken {
    * }
    * ```
    */
-  static async forgotPassword(body, opts) {
+  static async forgotPassword(body, domain, opts) {
     var options = {
       method: 'PUT',
       simple: false,
-      uri: hostUrl + '/' + `api/v1/auth/password/forgot`,
+      uri: hostUrl + '/' + `api/v1/auth/token/password/forgot/domain/${domain}`,
       body,
       json: true,
       json: true,

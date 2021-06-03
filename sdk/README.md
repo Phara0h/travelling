@@ -1421,7 +1421,7 @@ body
 
 * [Users](#Users)
     * [.byGroupRequest(group_request, authorization_bearer)](#Users.byGroupRequest)
-    * [.get(sort, limit, filter, sortdir, authorization_bearer)](#Users.get)
+    * [.get(authorization_bearer)](#Users.get)
 
 <a name="Users.byGroupRequest"></a>
 
@@ -1458,7 +1458,7 @@ Path: api/v1/users/group/request/:group_request
 
 <a name="Users.get"></a>
 
-### Users.get(sort, limit, filter, sortdir, authorization_bearer)
+### Users.get(authorization_bearer)
 get - Gets all the users
 
 ##### Optional Query Params
@@ -1486,10 +1486,6 @@ Path: api/v1/users
 
 | Param | Type | Description |
 | --- | --- | --- |
-| sort | <code>any</code> | (example: created_on) |
-| limit | <code>any</code> | (example: 200) |
-| filter | <code>any</code> | (example: locked=false) |
-| sortdir | <code>any</code> | (example: ASC) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="UsersDomain"></a>
@@ -1526,10 +1522,10 @@ Path: api/v1/users/domain/:domain
 
 | Param | Type | Description |
 | --- | --- | --- |
-| domain | <code>any</code> | (example: dragohmventures.com) |
+| domain | <code>any</code> | (example: test.com) |
 | sort | <code>any</code> | (example: created_on) |
-| limit | <code>any</code> | (example: 200) |
-| filter | <code>any</code> | (example: locked=false) |
+| limit | <code>any</code> | (example: 2) |
+| filter | <code>any</code> | (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) |
 | sortdir | <code>any</code> | (example: ASC) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
@@ -2101,13 +2097,13 @@ Path: api/v1/auth/password/forgot/domain/:domain
 | Param | Type | Description |
 | --- | --- | --- |
 | body | <code>Object</code> |  |
-| domain | <code>any</code> | (example: test.com) |
+| domain | <code>any</code> | (example: dragohmventures.com) |
 
 **Example**  
 body
 ```json
 {
-	"email": "test@test.com"
+	"email": "kelvin@dragohmventures.com"
 }
 ```
 <a name="AuthDomain.login"></a>
@@ -2153,7 +2149,6 @@ Path: api/v1/auth/register/domain/:domain
 body
 ```json
 {
-	"username":"test",
 	"password":"Pas5w0r!d",
 	"email": "test@test.com"
 }
@@ -2164,17 +2159,18 @@ body
 **Kind**: global class  
 <a name="AuthDomainToken.forgotPassword"></a>
 
-### AuthDomainToken.forgotPassword(body)
+### AuthDomainToken.forgotPassword(body, domain)
 forgotPassword - Generates a recovery token and returns the token to the attached user (if they exist) instead of sending an email.
 *CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**
 
-Path: api/v1/auth/password/forgot
+Path: api/v1/auth/token/password/forgot/domain/:domain
 
 **Kind**: static method of [<code>AuthDomainToken</code>](#AuthDomainToken)  
 
 | Param | Type |
 | --- | --- |
 | body | <code>Object</code> | 
+| domain | <code>any</code> | 
 
 **Example**  
 body
