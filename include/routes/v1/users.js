@@ -315,7 +315,7 @@ function routes(app, opts, done) {
   // app.get('/user/resolve/group/name/:id/:prop', getUserResolveGroup);
 
   app.get('/users', async (req, res) => {
-    return await User.findAllByFilter(req.query.filter, req.query.sort, req.query.limit, req.query.sortdir);
+    return await User.findAllByFilter({ filter: req.query.filter, sort: req.query.sort, limit: req.query.limit, sortdir: req.query.sortdir });
   });
 
   app.get('/users/domain/:domain', async (req, res) => {
@@ -325,7 +325,10 @@ function routes(app, opts, done) {
       req.query.filter += ',domain=' + req.params.domain;
     }
 
-    return await User.findAllByFilter(req.query.filter, req.query.sort, req.query.limit, req.query.sortdir);
+    console.log('req.query.filter')
+    console.log(req.query.filter)
+
+    return await User.findAllByFilter({ filter: req.query.filter, sort: req.query.sort, limit: req.query.limit, sortdir: req.query.sortdir });
   });
 
   app.get('/users/group/request/:group_request', async (req, res) => {
