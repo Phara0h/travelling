@@ -234,7 +234,6 @@ class User extends Base(BaseModel, 'users', {
           key = kv[0];
           value = kv[1];
         }
-        // console.log(key, value);
 
         if (this._defaultModel[key] !== undefined) {
           if (this._encryptionFields[key] !== undefined) {
@@ -271,8 +270,6 @@ class User extends Base(BaseModel, 'users', {
       query += ' LIMIT ' + Number(limit);
     }
 
-    console.log(query, values);
-
     const newModels = await this.query(query, values);
 
     for (var i = 0; i < newModels.length; i++) {
@@ -283,6 +280,12 @@ class User extends Base(BaseModel, 'users', {
       }
     }
     return newModels;
+  }
+
+  static async getCountByFilter(filter) {
+    // TODO: Create count query
+    const query = `SELECT COUNT(*) FROM ${this.table} `;
+    return await this.query(query, values);
   }
 
   toJSON() {
