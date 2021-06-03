@@ -14,7 +14,7 @@ module.exports = (trace = null) => {
     );
   };
   helpers.text = (msg, span) => {
-    if (!helpers.trace) {
+    if (!helpers.trace || !span) {
       return msg;
     }
 

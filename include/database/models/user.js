@@ -3,7 +3,6 @@ const Base = require('adost').Base;
 const PGTypes = require('adost').PGTypes;
 const Group = require('./group');
 const config = require('../../utils/config');
-const gm = require('../../server/groupmanager');
 const userUtil = require('../../utils/user');
 const regex = require('../../utils/regex');
 const misc = require('../../utils/misc');
@@ -47,6 +46,7 @@ class User extends Base(BaseModel, 'users', {
 }) {
   constructor(...args) {
     super(...args);
+    this.gm = require('../../server/groupmanager');
   }
 
   static async createTable() {
@@ -107,7 +107,7 @@ class User extends Base(BaseModel, 'users', {
     // groups.type = '';
 
     for (var i = 0; i < this.group_ids.length; i++) {
-      const group = (await gm.getGroup(this.group_ids[i])) || (await Group.findById(this.group_ids[i]));
+      const group = (await this.gm.getGroup(this.group_ids[i])) || (await Group.findById(this.group_ids[i]));
 
       groups.push(group);
       groupsNames.push(group.name);
