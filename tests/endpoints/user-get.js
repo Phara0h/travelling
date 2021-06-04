@@ -116,7 +116,7 @@ module.exports = () => {
           }
         });
 
-        expect(res.body).toHaveLength(4);
+        expect(res.body).toHaveLength(5);
       });
 
       test('Get By Id', async () => {
