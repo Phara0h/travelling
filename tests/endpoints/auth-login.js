@@ -55,6 +55,17 @@ module.exports = () => {
       expect(res.body.type).toEqual('locked');
     });
 
+    test('Login with Test Domain User', async () => {
+      var res = await Travelling.Auth.login({
+        password: 'Pas5w0r!d',
+        email: 'test_domain_1@test.com'
+      });
+
+      userContainer.parseUserDomainCookie(res.headers['set-cookie']);
+
+      expect(res.statusCode).toEqual(200);
+    });
+
     if (config.email.test.enable) {
       test('Login with Test4 User Email Activation Enable [Locked]', async () => {
         var res = await Travelling.Auth.login({

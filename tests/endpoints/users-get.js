@@ -10,7 +10,7 @@ module.exports = () => {
       var res = await Travelling.Users.get(userContainer.user1Token);
 
       expect(res.statusCode).toEqual(200);
-      expect(res.body).toHaveLength(4);
+      expect(res.body).toHaveLength(5);
     });
 
     test('Get Users By GroupRequest', async () => {
@@ -19,6 +19,22 @@ module.exports = () => {
       expect(res.statusCode).toEqual(200);
       expect(res.body[0].username).toEqual('test');
     });
+
+    test('Get Users By Default Domain', async () => {
+      var res = await Travelling.Users.Domain.get('default', null, null, null, null, userContainer.userDomainToken);
+
+      expect(res.statusCode).toEqual(200);
+      expect(Number(res.body.length)).toBeGreaterThanOrEqual(1);
+    });
+
+    test('Get Users By Domain', async () => {
+      var res = await Travelling.Users.Domain.get('test.com', null, null, null, null, userContainer.userDomainToken);
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body).toHaveLength(1);
+      expect(res.body[0].domain).toEqual('test.com');
+    });
+
   });
 
   describe('Invalid', () => {
