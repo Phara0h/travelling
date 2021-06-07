@@ -194,7 +194,6 @@ class User extends Base(BaseModel, 'users', {
       } else {
         opts.filter = [opts.filter];
       }
-      query += ' WHERE ';
 
       var user = {};
       var ops = [];
@@ -235,11 +234,26 @@ class User extends Base(BaseModel, 'users', {
           value = kv[1];
         }
 
+        console.log('|' + key.trim() + '|')
+        if (key.trim() === 'created_on') {
+          console.log('date key:')
+          console.log(value)
+
+          if (isNaN(new Date(value.trim()).getTime())) {
+            console.log('INVALID_DATE')
+            // Skip invalid dates
+            continue;
+          } else {
+            console.log('VALID_DATE')
+          }
+        }
+
         if (this._defaultModel[key] !== undefined) {
           if (this._encryptionFields[key] !== undefined) {
             value = (await this._queryFieldsHash({ [key]: value }))['__' + key];
             key = '__' + key;
           }
+
           ops.push(op);
           values.push(value)
           keys.push(key)
@@ -254,6 +268,7 @@ class User extends Base(BaseModel, 'users', {
       user = userUtil.setUser(user, user);
 
       for (var i = 0; i < keys.length; i++) {
+        if (i === 0) query += ' WHERE ';
         query += `"${keys[i]}"${ops[i]}$${i + 1} `;
 
         if (keys.length > i + 1) {
@@ -270,6 +285,8 @@ class User extends Base(BaseModel, 'users', {
       query += ' LIMIT ' + Number(opts.limit);
     }
 
+    console.log(query)
+    console.log(values)
     const newModels = await this.query(query, values);
 
     for (var i = 0; i < newModels.length; i++) {

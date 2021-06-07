@@ -110,7 +110,7 @@ module.exports = () => {
   describe('Non-Current User', () => {
     describe('Valid', () => {
       test('Get All Users', async () => {
-        var res = await Travelling.Users.get(null, {
+        var res = await Travelling.Users.get(null, null, null, null, null, {
           headers: {
             cookie: userContainer.user1Cookie()
           }
