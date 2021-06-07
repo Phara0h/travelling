@@ -2536,6 +2536,7 @@ class Users {
   static get _postgenClassUrls() {
     return {
       bygrouprequest: 'api/v1/users/group/request/:group_request',
+      count: 'api/v1/users/count',
       get: 'api/v1/users',
     };
   }
@@ -2588,6 +2589,49 @@ class Users {
   }
 
   /**
+  * count - Gets all the users
+
+##### Optional Query Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | *optional* (example:  user7) |
+| locked | *optional* (example:  true) |
+| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+| group_request | *optional* (example:  superadmin) |
+| failed_login_attempts | *optional* (example:  0) |
+| change_username | *optional* (example:  false) |
+| change_password | *optional* (example:  false) |
+| reset_password | *optional* (example:  false) |
+| email_verify | *optional* (example:  false) |
+| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | *optional* (example:  test@test.ai) |
+| created_on | *optional* (example:  1568419646794) |
+| last_login | *optional* (example:  null) |
+  *
+  * Path: api/v1/users/count
+  * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+  */
+  static async count(authorization_bearer, opts) {
+    var options = {
+      method: 'GET',
+      simple: false,
+      uri: hostUrl + '/' + `api/v1/users/count`,
+      authorization: {
+        bearer: authorization_bearer,
+      },
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
+  }
+
+  /**
   * get - Gets all the users
 
 ##### Optional Query Params
@@ -2610,13 +2654,18 @@ class Users {
 | last_login | *optional* (example:  null) |
   *
   * Path: api/v1/users
+  * @param {any} sort  (example: created_on)
+  * @param {any} limit  (example: 1)
+  * @param {any} filter  (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)
+  * @param {any} sortdir  (example: ASC)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   */
-  static async get(authorization_bearer, opts) {
+  static async get(sort, limit, filter, sortdir, authorization_bearer, opts) {
     var options = {
       method: 'GET',
       simple: false,
       uri: hostUrl + '/' + `api/v1/users`,
+      qs: { sort, limit, filter, sortdir },
       authorization: {
         bearer: authorization_bearer,
       },
