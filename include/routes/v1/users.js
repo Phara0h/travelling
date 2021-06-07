@@ -315,11 +315,13 @@ function routes(app, opts, done) {
   // app.get('/user/resolve/group/name/:id/:prop', getUserResolveGroup);
 
   app.get('/users', async (req, res) => {
-    const res = await User.findAllByFilter({ filter: req.query.filter, sort: req.query.sort, limit: req.query.limit, sortdir: req.query.sortdir });
+    return await User.findAllByFilter({ filter: req.query.filter, sort: req.query.sort, limit: req.query.limit, sortdir: req.query.sortdir });
   });
 
   app.get('/users/count', async (req, res) => {
-    return await User.findAllByFilter({ filter: req.query.filter, count: true })
+    var countArray = await User.findAllByFilter({ filter: req.query.filter, count: true })
+    if (countArray[0]) return countArray[0];
+    return { count: -1 };
   });
 
 
@@ -350,7 +352,9 @@ function routes(app, opts, done) {
       req.query.filter += ',domain=' + req.params.domain;
     }
 
-    return await User.findAllByFilter({ filter: req.query.filter, count: true })
+    var countArray = await User.findAllByFilter({ filter: req.query.filter, count: true })
+    if (countArray[0]) return countArray[0];
+    return { count: -1 };
   });
   
   app.get('/users/domain/:domain/count', async (req, res) => {

@@ -277,12 +277,9 @@ class User extends Base(BaseModel, 'users', {
     if (opts.limit && !isNaN(Number(opts.limit))) {
       query += ' LIMIT ' + Number(opts.limit);
     }
-console.log(query)
-console.log(values)
 
     const newModels = await this.query(query, values);
     
-console.log(newModels)
     for (var i = 0; i < newModels.length; i++) {
       if (newModels[i]) {
         newModels[i] = await this.decrypt(newModels[i], this.getEncryptedProfile(newModels[i]), true);
