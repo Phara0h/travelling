@@ -320,19 +320,8 @@ function routes(app, opts, done) {
 
   app.get('/users/count', async (req, res) => {
     var countArray = await User.findAllByFilter({ filter: req.query.filter, count: true })
-    if (countArray[0]) return countArray[0];
+    if (countArray[0]) return { count: Number(countArray[0].count) };
     return { count: -1 };
-  });
-
-
-  app.get('/users/count', async (req, res) => {
-    // TODO: Get users count
-
-    return { count: 0 }
-  });
-
-  app.get('/users/count', async (req, res) => {
-    return await User.findAllByFilter({ filter: req.query.filter, count: true })
   });
 
   app.get('/users/domain/:domain', async (req, res) => {
@@ -353,20 +342,8 @@ function routes(app, opts, done) {
     }
 
     var countArray = await User.findAllByFilter({ filter: req.query.filter, count: true })
-    if (countArray[0]) return countArray[0];
+    if (countArray[0]) return { count: Number(countArray[0].count) };
     return { count: -1 };
-  });
-  
-  app.get('/users/domain/:domain/count', async (req, res) => {
-    // TODO: Get users count
-
-    if (!req.query.filter) {
-      req.query.filter = 'domain=' + req.params.domain;
-    } else {
-      req.query.filter += ',domain=' + req.params.domain;
-    }
-
-    return await User.findAllByFilter({ filter: req.query.filter, count: true })
   });
 
   app.get('/users/group/request/:group_request', async (req, res) => {

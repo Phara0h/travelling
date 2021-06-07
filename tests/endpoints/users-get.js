@@ -223,6 +223,40 @@ module.exports = () => {
       expect(res.body[0].domain).toEqual('test.com');
     });
 
+    test('Get Users Count', async () => {
+      var res = await Travelling.Users.count(null, userContainer.user1Token);
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.count).toEqual(5);
+    });
+
+    test('Get Users Count with filter created_on in date range', async () => {
+      const yesterday = new Date().setDate(new Date().getDate() - 1);
+      const tomorrow = new Date().setDate(new Date().getDate() + 1);
+
+      var res = await Travelling.Users.count(`created_on >= ${yesterday}, created_on <= ${tomorrow}`, userContainer.user1Token);
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.count).toEqual(5);
+    });
+
+    test('Get Users Count by Domain', async () => {
+      var res = await Travelling.Users.Domain.count('test.com', null, userContainer.user1Token);
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.count).toEqual(1);
+    });
+
+    test('Get Users Count by Domain filter created_on in date range', async () => {
+      const yesterday = new Date().setDate(new Date().getDate() - 1);
+      const tomorrow = new Date().setDate(new Date().getDate() + 1);
+
+      var res = await Travelling.Users.Domain.count('test.com', `created_on >= ${yesterday}, created_on <= ${tomorrow}`, userContainer.user1Token);
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.count).toEqual(1);
+    });
+
   });
 
   describe('Invalid', () => {
