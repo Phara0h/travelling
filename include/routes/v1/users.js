@@ -329,11 +329,8 @@ function routes(app, opts, done) {
     return { count: 0 }
   });
 
-
   app.get('/users/count', async (req, res) => {
-    // TODO: Get users count
-
-    return { count: 0 }
+    return await User.findAllByFilter({ filter: req.query.filter, count: true })
   });
 
   app.get('/users/domain/:domain', async (req, res) => {
@@ -365,7 +362,7 @@ function routes(app, opts, done) {
       req.query.filter += ',domain=' + req.params.domain;
     }
 
-    return await User.getCountByFilter(req.query.filter)
+    return await User.findAllByFilter({ filter: req.query.filter, count: true })
   });
 
   app.get('/users/group/request/:group_request', async (req, res) => {
