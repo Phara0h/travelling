@@ -315,21 +315,11 @@ function routes(app, opts, done) {
   // app.get('/user/resolve/group/name/:id/:prop', getUserResolveGroup);
 
   app.get('/users', async (req, res) => {
-    return await User.findAllByFilter({ filter: req.query.filter, sort: req.query.sort, limit: req.query.limit, sortdir: req.query.sortdir });
+    const res = await User.findAllByFilter({ filter: req.query.filter, sort: req.query.sort, limit: req.query.limit, sortdir: req.query.sortdir });
   });
 
-
   app.get('/users/count', async (req, res) => {
-    // TODO: Get users count
-
-    return { count: 0 }
-  });
-
-
-  app.get('/users/count', async (req, res) => {
-    // TODO: Get users count
-
-    return { count: 0 }
+    return await User.findAllByFilter({ filter: req.query.filter, count: true })
   });
 
   app.get('/users/domain/:domain', async (req, res) => {
@@ -343,27 +333,13 @@ function routes(app, opts, done) {
   });
   
   app.get('/users/domain/:domain/count', async (req, res) => {
-    // TODO: Get users count
-
     if (!req.query.filter) {
       req.query.filter = 'domain=' + req.params.domain;
     } else {
       req.query.filter += ',domain=' + req.params.domain;
     }
 
-    return await User.getCountByFilter(req.query.filter)
-  });
-  
-  app.get('/users/domain/:domain/count', async (req, res) => {
-    // TODO: Get users count
-
-    if (!req.query.filter) {
-      req.query.filter = 'domain=' + req.params.domain;
-    } else {
-      req.query.filter += ',domain=' + req.params.domain;
-    }
-
-    return await User.getCountByFilter(req.query.filter)
+    return await User.findAllByFilter({ filter: req.query.filter, count: true })
   });
 
   app.get('/users/group/request/:group_request', async (req, res) => {

@@ -42,7 +42,8 @@ class User extends Base(BaseModel, 'users', {
   created_on: null,
   last_login: null,
   user_data: config.pg.crypto.encryptUserData ? PGTypes.AutoCrypt : null,
-  eprofile: PGTypes.EncryptProfile
+  eprofile: PGTypes.EncryptProfile,
+  count: null
 }) {
   constructor(...args) {
     super(...args);
@@ -182,9 +183,12 @@ class User extends Base(BaseModel, 'users', {
   }
 
   static async findAllByFilter(opts) {
-    var query = `SELECT * FROM ${this.table} `;
+    var query = '';
     var keys = [];
     var values = [];
+
+    if (opts.count) query = `SELECT COUNT(id) FROM ${this.table} `;
+    else query = `SELECT * FROM ${this.table} `;
 
     if (!opts.sortdir) opts.sortdir = 'DESC';
 
@@ -273,9 +277,12 @@ class User extends Base(BaseModel, 'users', {
     if (opts.limit && !isNaN(Number(opts.limit))) {
       query += ' LIMIT ' + Number(opts.limit);
     }
+console.log(query)
+console.log(values)
 
     const newModels = await this.query(query, values);
-
+    
+console.log(newModels)
     for (var i = 0; i < newModels.length; i++) {
       if (newModels[i]) {
         newModels[i] = await this.decrypt(newModels[i], this.getEncryptedProfile(newModels[i]), true);
@@ -284,12 +291,6 @@ class User extends Base(BaseModel, 'users', {
       }
     }
     return newModels;
-  }
-
-  static async getCountByFilter(filter) {
-    // TODO: Create count query
-    const query = `SELECT COUNT(*) FROM ${this.table} `;
-    return await this.query(query, values);
   }
 
   toJSON() {
