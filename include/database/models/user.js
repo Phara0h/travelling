@@ -234,19 +234,8 @@ class User extends Base(BaseModel, 'users', {
           value = kv[1];
         }
 
-        console.log('|' + key.trim() + '|')
-        if (key.trim() === 'created_on') {
-          console.log('date key:')
-          console.log(value)
-
-          if (isNaN(new Date(value.trim()).getTime())) {
-            console.log('INVALID_DATE')
-            // Skip invalid dates
-            continue;
-          } else {
-            console.log('VALID_DATE')
-          }
-        }
+        // Skip invalid dates
+        if (key.trim() === 'created_on' && isNaN(new Date(value.trim()).getTime())) continue;
 
         if (this._defaultModel[key] !== undefined) {
           if (this._encryptionFields[key] !== undefined) {
@@ -285,8 +274,6 @@ class User extends Base(BaseModel, 'users', {
       query += ' LIMIT ' + Number(opts.limit);
     }
 
-    console.log(query)
-    console.log(values)
     const newModels = await this.query(query, values);
 
     for (var i = 0; i < newModels.length; i++) {
