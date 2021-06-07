@@ -8,8 +8,10 @@ var userContainer = require('../include/UserContainer.js');
 module.exports = () => {
   var token1;
   var token2;
+  var tokenDomain;
   var accessToken1;
   var accessToken2;
+  var accessTokenDomain;
 
   describe('Valid', () => {
     test('Register OAuth2 Credentials Token as Test User With No Name', async () => {
@@ -41,6 +43,21 @@ module.exports = () => {
       });
     });
 
+    test('Register New OAuth2 Credentials Token as Test Domain User With Name', async () => {
+      var res = await Travelling.User.Current.registerToken({ urls: ['http://localhost:6969'] }, null, {
+        headers: {
+          cookie: userContainer.userDomainCookie()
+        }
+      });
+
+      tokenDomain = res.body;
+
+      expect(res.body).toMatchObject({
+        client_id:  expect.any(String),
+        client_secret: expect.any(String)
+      });
+    });
+
     test('Get New OAuth2 Access Token as Test User With No Name', async () => {
       var res = await Travelling.Auth.accessToken('client_credentials', token1.client_id, token1.client_secret, null);
 
@@ -66,6 +83,19 @@ module.exports = () => {
       });
     });
 
+    test('Get New OAuth2 Access Token as Test Domain User With No Name', async () => {
+      var res = await Travelling.Auth.accessToken('client_credentials', tokenDomain.client_id, tokenDomain.client_secret, null);
+
+      accessTokenDomain = res.body.access_token;
+      userContainer.userDomainToken = res.body.access_token;
+
+      expect(res.body).toMatchObject({
+        expires_in: config.token.access.expiration * 60, // seconds
+        access_token: expect.any(String),
+        token_type: 'bearer'
+      });
+    });
+
     test('Get User With Token as Test User With No Name', async () => {
       var res = await Travelling.User.Current.get(accessToken1);
 
@@ -76,6 +106,12 @@ module.exports = () => {
       var res = await Travelling.User.Current.get(accessToken2);
 
       expect(res.body.username).toEqual('test2');
+    });
+
+    test('Get User With Token as Test Domain User With No Name', async () => {
+      var res = await Travelling.User.Current.get(accessTokenDomain);
+
+      expect(res.body.email).toEqual('test_domain_1@test.com');
     });
   });
 

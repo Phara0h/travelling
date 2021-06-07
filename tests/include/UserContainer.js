@@ -4,6 +4,7 @@ class UserContainer {
   constructor() {
     this.user1 = {};
     this.user2 = {};
+    this.userDomain = {};
   }
 
   parseUser1Cookie(carray) {
@@ -14,12 +15,20 @@ class UserContainer {
     this.user2 = this.parseCookie(carray, this.user2);
   }
 
+  parseUserDomainCookie(carray) {
+    this.userDomain = this.parseCookie(carray, this.userDomain);
+  }
+
   user1Cookie() {
     return this.getCookie(this.user1);
   }
 
   user2Cookie() {
     return this.getCookie(this.user2);
+  }
+
+  userDomainCookie() {
+    return this.getCookie(this.userDomain);
   }
 
   parseCookie(carray, user) {
