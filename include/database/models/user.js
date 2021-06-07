@@ -42,8 +42,7 @@ class User extends Base(BaseModel, 'users', {
   created_on: null,
   last_login: null,
   user_data: config.pg.crypto.encryptUserData ? PGTypes.AutoCrypt : null,
-  eprofile: PGTypes.EncryptProfile,
-  count: null
+  eprofile: PGTypes.EncryptProfile
 }) {
   constructor(...args) {
     super(...args);
@@ -238,9 +237,6 @@ class User extends Base(BaseModel, 'users', {
           value = kv[1];
         }
 
-        // Skip invalid dates
-        if (key.trim() === 'created_on' && isNaN(new Date(value.trim()).getTime())) continue;
-
         if (this._defaultModel[key] !== undefined) {
           if (this._encryptionFields[key] !== undefined) {
             value = (await this._queryFieldsHash({ [key]: value }))['__' + key];
@@ -276,6 +272,11 @@ class User extends Base(BaseModel, 'users', {
 
     if (opts.limit && !isNaN(Number(opts.limit))) {
       query += ' LIMIT ' + Number(opts.limit);
+    }
+
+    if (opts.count) {
+      const countRes = await this.query(query, values, false);
+      return { count: Number(countRes.rows[0].count) };
     }
 
     const newModels = await this.query(query, values);
