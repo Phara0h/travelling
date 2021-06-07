@@ -325,9 +325,6 @@ function routes(app, opts, done) {
       req.query.filter += ',domain=' + req.params.domain;
     }
 
-    console.log('req.query.filter')
-    console.log(req.query.filter)
-
     return await User.findAllByFilter({ filter: req.query.filter, sort: req.query.sort, limit: req.query.limit, sortdir: req.query.sortdir });
   });
 
