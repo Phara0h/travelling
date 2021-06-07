@@ -41,7 +41,7 @@ module.exports = () => {
       expect(res.statusCode).toEqual(200);
     });
 
-    test('Create Test User [test4] Email Activaation', async () => {
+    test('Create Test User [test4] Email Activation', async () => {
       config.registration.requireEmailActivation = true;
       var res = await Travelling.Auth.register({
         username: 'test4',
@@ -53,6 +53,17 @@ module.exports = () => {
 
       expect(res.statusCode).toEqual(200);
     });
+
+    test('Create Test User [test_domain_1]', async () => {
+      var res = await Travelling.Auth.Domain.register({
+        username: 'test_domain_1',
+        password: 'Pas5w0r!d',
+        email: 'test_domain_1@test.com'
+      }, 'test.com');
+
+      expect(res.statusCode).toEqual(200);
+    });
+
   });
 
   describe('Invalid', () => {

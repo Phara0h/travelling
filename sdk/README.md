@@ -1421,6 +1421,7 @@ body
 
 * [Users](#Users)
     * [.byGroupRequest(group_request, authorization_bearer)](#Users.byGroupRequest)
+    * [.count(authorization_bearer)](#Users.count)
     * [.get(sort, limit, filter, sortdir, authorization_bearer)](#Users.get)
 
 <a name="Users.byGroupRequest"></a>
@@ -1456,6 +1457,38 @@ Path: api/v1/users/group/request/:group_request
 | group_request | <code>any</code> | name of the group  (example: superadmin) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
+<a name="Users.count"></a>
+
+### Users.count(authorization_bearer)
+count - Gets all the users
+
+##### Optional Query Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | *optional* (example:  user7) |
+| locked | *optional* (example:  true) |
+| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+| group_request | *optional* (example:  superadmin) |
+| failed_login_attempts | *optional* (example:  0) |
+| change_username | *optional* (example:  false) |
+| change_password | *optional* (example:  false) |
+| reset_password | *optional* (example:  false) |
+| email_verify | *optional* (example:  false) |
+| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | *optional* (example:  test@test.ai) |
+| created_on | *optional* (example:  1568419646794) |
+| last_login | *optional* (example:  null) |
+
+Path: api/v1/users/count
+
+**Kind**: static method of [<code>Users</code>](#Users)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
 <a name="Users.get"></a>
 
 ### Users.get(sort, limit, filter, sortdir, authorization_bearer)
@@ -1487,8 +1520,8 @@ Path: api/v1/users
 | Param | Type | Description |
 | --- | --- | --- |
 | sort | <code>any</code> | (example: created_on) |
-| limit | <code>any</code> | (example: 200) |
-| filter | <code>any</code> | (example: locked=false) |
+| limit | <code>any</code> | (example: 1) |
+| filter | <code>any</code> | (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) |
 | sortdir | <code>any</code> | (example: ASC) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
@@ -1526,10 +1559,10 @@ Path: api/v1/users/domain/:domain
 
 | Param | Type | Description |
 | --- | --- | --- |
-| domain | <code>any</code> | (example: traziventures.com) |
+| domain | <code>any</code> | (example: test.com) |
 | sort | <code>any</code> | (example: created_on) |
-| limit | <code>any</code> | (example: 200) |
-| filter | <code>any</code> | (example: locked=false) |
+| limit | <code>any</code> | (example: 2) |
+| filter | <code>any</code> | (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) |
 | sortdir | <code>any</code> | (example: ASC) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
@@ -2101,13 +2134,13 @@ Path: api/v1/auth/password/forgot/domain/:domain
 | Param | Type | Description |
 | --- | --- | --- |
 | body | <code>Object</code> |  |
-| domain | <code>any</code> | (example: test.com) |
+| domain | <code>any</code> | (example: traziventures.com) |
 
 **Example**  
 body
 ```json
 {
-	"email": "test@test.com"
+	"email": "kelvin@traziventures.com"
 }
 ```
 <a name="AuthDomain.login"></a>
@@ -2153,7 +2186,6 @@ Path: api/v1/auth/register/domain/:domain
 body
 ```json
 {
-	"username":"test",
 	"password":"Pas5w0r!d",
 	"email": "test@test.com"
 }
@@ -2164,17 +2196,18 @@ body
 **Kind**: global class  
 <a name="AuthDomainToken.forgotPassword"></a>
 
-### AuthDomainToken.forgotPassword(body)
+### AuthDomainToken.forgotPassword(body, domain)
 forgotPassword - Generates a recovery token and returns the token to the attached user (if they exist) instead of sending an email.
 *CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**
 
-Path: api/v1/auth/password/forgot
+Path: api/v1/auth/token/password/forgot/domain/:domain
 
 **Kind**: static method of [<code>AuthDomainToken</code>](#AuthDomainToken)  
 
 | Param | Type |
 | --- | --- |
 | body | <code>Object</code> | 
+| domain | <code>any</code> | 
 
 **Example**  
 body
