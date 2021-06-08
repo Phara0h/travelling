@@ -186,10 +186,15 @@ class User extends Base(BaseModel, 'users', {
     var keys = [];
     var values = [];
 
-    if (opts.count) query = `SELECT COUNT(id) FROM ${this.table} `;
-    else query = `SELECT * FROM ${this.table} `;
+    if (opts.count) {
+      query = `SELECT COUNT(id) FROM ${this.table} `;
+    } else {
+      query = `SELECT * FROM ${this.table} `;
+    }
 
-    if (!opts.sortdir) opts.sortdir = 'DESC';
+    if (!opts.sortdir) {
+      opts.sortdir = 'DESC';
+    }
 
     if (opts.filter) {
       if (opts.filter.indexOf(',') > -1) {
@@ -257,7 +262,9 @@ class User extends Base(BaseModel, 'users', {
       user = userUtil.setUser(user, user);
 
       for (var i = 0; i < keys.length; i++) {
-        if (i === 0) query += ' WHERE ';
+        if (i === 0) {
+          query += ' WHERE ';
+        }
         query += `"${keys[i]}"${ops[i]}$${i + 1} `;
 
         if (keys.length > i + 1) {
