@@ -318,7 +318,7 @@ function routes(app, opts, done) {
     if (req.query.filter && req.query.filter.indexOf(' ') > -1) req.query.filter = req.query.filter.replace(/\s/g, '');
     
     try {
-      return await User.findAllByFilter({ filter: req.query.filter, sort: req.query.sort, limit: req.query.limit, sortdir: req.query.sortdir });
+      return await User.findAllByFilter({ sort: req.query.sort, limit: req.query.limit, skip: req.query.skip, filter: req.query.filter, sortdir: req.query.sortdir });
     } catch {
       res.code(400).send({
         type: 'user-filter-error',
@@ -348,7 +348,7 @@ function routes(app, opts, done) {
     }
 
     try {
-      return await User.findAllByFilter({ filter: req.query.filter, sort: req.query.sort, limit: req.query.limit, sortdir: req.query.sortdir });
+      return await User.findAllByFilter({ sort: req.query.sort, limit: req.query.limit, skip: req.query.skip, filter: req.query.filter, sortdir: req.query.sortdir });
     } catch {
       res.code(400).send({
         type: 'user-filter-error',

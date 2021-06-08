@@ -274,6 +274,10 @@ class User extends Base(BaseModel, 'users', {
       query += ' LIMIT ' + Number(opts.limit);
     }
 
+    if (opts.skip && !isNaN(Number(opts.skip))) {
+      query += ' OFFSET ' + Number(opts.skip);
+    }
+
     if (opts.count) {
       const countRes = await this.query(query, values, false);
       return { count: Number(countRes.rows[0].count) };
