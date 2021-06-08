@@ -6607,7 +6607,7 @@ class Users {
 | last_login | *optional* (example:  null) |
   *
   * Path: api/v1/users/count
-  * @param {any} filter  (example: created_on>2022-06-06,created_on<2022-06-08)
+  * @param {any} filter  (example: created_on>2021-06-06,created_on<2021-06-08)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   */
   static async count(filter, authorization_bearer, opts) {
@@ -6653,17 +6653,26 @@ class Users {
   *
   * Path: api/v1/users
   * @param {any} sort  (example: created_on)
-  * @param {any} limit  (example: 1)
+  * @param {any} limit  (example: 2)
+  * @param {any} skip  (example: 10)
   * @param {any} filter  (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)
   * @param {any} sortdir  (example: ASC)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   */
-  static async get(sort, limit, filter, sortdir, authorization_bearer, opts) {
+  static async get(
+    sort,
+    limit,
+    skip,
+    filter,
+    sortdir,
+    authorization_bearer,
+    opts
+  ) {
     var options = {
       method: 'GET',
       simple: false,
       uri: hostUrl + '/' + `api/v1/users`,
-      qs: { sort, limit, filter, sortdir },
+      qs: { sort, limit, skip, filter, sortdir },
       authorization: {
         bearer: authorization_bearer,
       },
@@ -6768,6 +6777,7 @@ class UsersDomain {
   * @param {any} domain  (example: test.com)
   * @param {any} sort  (example: created_on)
   * @param {any} limit  (example: 2)
+  * @param {any} skip  (example: 10)
   * @param {any} filter  (example: created_on>2021-06-01,created_on<2021-06-08)
   * @param {any} sortdir  (example: ASC)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
@@ -6776,6 +6786,7 @@ class UsersDomain {
     domain,
     sort,
     limit,
+    skip,
     filter,
     sortdir,
     authorization_bearer,
@@ -6785,7 +6796,7 @@ class UsersDomain {
       method: 'GET',
       simple: false,
       uri: hostUrl + '/' + `api/v1/users/domain/${domain}`,
-      qs: { sort, limit, filter, sortdir },
+      qs: { sort, limit, skip, filter, sortdir },
       authorization: {
         bearer: authorization_bearer,
       },
