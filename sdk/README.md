@@ -1422,7 +1422,7 @@ body
 * [Users](#Users)
     * [.byGroupRequest(group_request, authorization_bearer)](#Users.byGroupRequest)
     * [.count(filter, authorization_bearer)](#Users.count)
-    * [.get(sort, limit, filter, sortdir, authorization_bearer)](#Users.get)
+    * [.get(sort, limit, skip, filter, sortdir, authorization_bearer)](#Users.get)
 
 <a name="Users.byGroupRequest"></a>
 
@@ -1487,12 +1487,12 @@ Path: api/v1/users/count
 
 | Param | Type | Description |
 | --- | --- | --- |
-| filter | <code>any</code> | (example: created_on>2022-06-06,created_on<2022-06-08) |
+| filter | <code>any</code> | (example: created_on>2021-06-06,created_on<2021-06-08) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="Users.get"></a>
 
-### Users.get(sort, limit, filter, sortdir, authorization_bearer)
+### Users.get(sort, limit, skip, filter, sortdir, authorization_bearer)
 get - Gets all the users
 
 ##### Optional Query Params
@@ -1521,7 +1521,8 @@ Path: api/v1/users
 | Param | Type | Description |
 | --- | --- | --- |
 | sort | <code>any</code> | (example: created_on) |
-| limit | <code>any</code> | (example: 1) |
+| limit | <code>any</code> | (example: 2) |
+| skip | <code>any</code> | (example: 10) |
 | filter | <code>any</code> | (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) |
 | sortdir | <code>any</code> | (example: ASC) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
@@ -1533,7 +1534,7 @@ Path: api/v1/users
 
 * [UsersDomain](#UsersDomain)
     * [.count(domain, filter, authorization_bearer)](#UsersDomain.count)
-    * [.get(domain, sort, limit, filter, sortdir, authorization_bearer)](#UsersDomain.get)
+    * [.get(domain, sort, limit, skip, filter, sortdir, authorization_bearer)](#UsersDomain.get)
 
 <a name="UsersDomain.count"></a>
 
@@ -1571,7 +1572,7 @@ Path: api/v1/users/domain/:domain/count
 
 <a name="UsersDomain.get"></a>
 
-### UsersDomain.get(domain, sort, limit, filter, sortdir, authorization_bearer)
+### UsersDomain.get(domain, sort, limit, skip, filter, sortdir, authorization_bearer)
 get - Gets all the users
 
 ##### Optional Query Params
@@ -1602,6 +1603,7 @@ Path: api/v1/users/domain/:domain
 | domain | <code>any</code> | (example: test.com) |
 | sort | <code>any</code> | (example: created_on) |
 | limit | <code>any</code> | (example: 2) |
+| skip | <code>any</code> | (example: 10) |
 | filter | <code>any</code> | (example: created_on>2021-06-01,created_on<2021-06-08) |
 | sortdir | <code>any</code> | (example: ASC) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
