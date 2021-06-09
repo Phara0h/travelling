@@ -32,6 +32,8 @@
 <dd></dd>
 <dt><a href="#User">User</a></dt>
 <dd></dd>
+<dt><a href="#UserDomain">UserDomain</a></dt>
+<dd></dd>
 <dt><a href="#UserCurrent">UserCurrent</a></dt>
 <dd></dd>
 <dt><a href="#Auth">Auth</a></dt>
@@ -1421,7 +1423,7 @@ body
 
 * [Users](#Users)
     * [.byGroupRequest(group_request, authorization_bearer)](#Users.byGroupRequest)
-    * [.count(filter, authorization_bearer)](#Users.count)
+    * [.count(limit, skip, filter, authorization_bearer)](#Users.count)
     * [.get(sort, limit, skip, filter, sortdir, authorization_bearer)](#Users.get)
 
 <a name="Users.byGroupRequest"></a>
@@ -1459,7 +1461,7 @@ Path: api/v1/users/group/request/:group_request
 
 <a name="Users.count"></a>
 
-### Users.count(filter, authorization_bearer)
+### Users.count(limit, skip, filter, authorization_bearer)
 count - Gets all the users
 
 ##### Optional Query Params
@@ -1487,7 +1489,9 @@ Path: api/v1/users/count
 
 | Param | Type | Description |
 | --- | --- | --- |
-| filter | <code>any</code> | (example: created_on>2021-06-06,created_on<2021-06-08) |
+| limit | <code>any</code> | Number of maximum results. (example: 2) (example: 2) |
+| skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |
+| filter | <code>any</code> | Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-06,created_on<2021-06-08) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="Users.get"></a>
@@ -1495,7 +1499,7 @@ Path: api/v1/users/count
 ### Users.get(sort, limit, skip, filter, sortdir, authorization_bearer)
 get - Gets all the users
 
-##### Optional Query Params
+##### Filter Params
 
 | Param | Description |
 | --- | --- |
@@ -1520,11 +1524,11 @@ Path: api/v1/users
 
 | Param | Type | Description |
 | --- | --- | --- |
-| sort | <code>any</code> | (example: created_on) |
-| limit | <code>any</code> | (example: 2) |
-| skip | <code>any</code> | (example: 10) |
-| filter | <code>any</code> | (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) |
-| sortdir | <code>any</code> | (example: ASC) |
+| sort | <code>any</code> | Sort by any user object key (examples: id, domain, locked, etc.) (example: created_on) |
+| limit | <code>any</code> | Number of maximum results. (example: 2) (example: 2) |
+| skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |
+| filter | <code>any</code> | Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) |
+| sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: ASC) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="UsersDomain"></a>
@@ -1533,12 +1537,12 @@ Path: api/v1/users
 **Kind**: global class  
 
 * [UsersDomain](#UsersDomain)
-    * [.count(domain, filter, authorization_bearer)](#UsersDomain.count)
+    * [.count(domain, limit, skip, filter, authorization_bearer)](#UsersDomain.count)
     * [.get(domain, sort, limit, skip, filter, sortdir, authorization_bearer)](#UsersDomain.get)
 
 <a name="UsersDomain.count"></a>
 
-### UsersDomain.count(domain, filter, authorization_bearer)
+### UsersDomain.count(domain, limit, skip, filter, authorization_bearer)
 count - Gets all the users
 
 ##### Optional Query Params
@@ -1567,7 +1571,9 @@ Path: api/v1/users/domain/:domain/count
 | Param | Type | Description |
 | --- | --- | --- |
 | domain | <code>any</code> | (example: test.com) |
-| filter | <code>any</code> | (example: created_on>2022-06-01,created_on<2022-06-08) |
+| limit | <code>any</code> | Number of maximum results. (example: 2) (example: 2) |
+| skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |
+| filter | <code>any</code> | Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2022-06-01,created_on<2022-06-08) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="UsersDomain.get"></a>
@@ -1575,7 +1581,7 @@ Path: api/v1/users/domain/:domain/count
 ### UsersDomain.get(domain, sort, limit, skip, filter, sortdir, authorization_bearer)
 get - Gets all the users
 
-##### Optional Query Params
+##### Filter Params
 
 | Param | Description |
 | --- | --- |
@@ -1601,11 +1607,11 @@ Path: api/v1/users/domain/:domain
 | Param | Type | Description |
 | --- | --- | --- |
 | domain | <code>any</code> | (example: test.com) |
-| sort | <code>any</code> | (example: created_on) |
-| limit | <code>any</code> | (example: 2) |
-| skip | <code>any</code> | (example: 10) |
-| filter | <code>any</code> | (example: created_on>2021-06-01,created_on<2021-06-08) |
-| sortdir | <code>any</code> | (example: ASC) |
+| sort | <code>any</code> | Sort by any user object key (examples: id, domain, locked, etc.) (example: created_on) |
+| limit | <code>any</code> | Number of maximum results. (example: 2) (example: 2) |
+| skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |
+| filter | <code>any</code> | Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-01,created_on<2021-06-08) |
+| sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: ASC) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="User"></a>
@@ -1755,6 +1761,164 @@ Path: api/v1/user/id/:id
 
 | Param | Type | Description |
 | --- | --- | --- |
+| id | <code>any</code> | (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="UserDomain"></a>
+
+## UserDomain
+**Kind**: global class  
+
+* [UserDomain](#UserDomain)
+    * [.delete(domain, id, authorization_bearer)](#UserDomain.delete)
+    * [.removeGroupInheritance(domain, id, inheritgroupid, inheritgrouptype, authorization_bearer)](#UserDomain.removeGroupInheritance)
+    * [.addGroupInheritance(domain, id, inheritgroupid, inheritgrouptype, authorization_bearer)](#UserDomain.addGroupInheritance)
+    * [.editPropertyValue(domain, id, property, value, authorization_bearer)](#UserDomain.editPropertyValue)
+    * [.editProperty(body, domain, id, property, authorization_bearer)](#UserDomain.editProperty)
+    * [.edit(body, domain, id, authorization_bearer)](#UserDomain.edit)
+    * [.getProperty(domain, id, property, authorization_bearer)](#UserDomain.getProperty)
+    * [.get(domain, id, authorization_bearer)](#UserDomain.get)
+
+<a name="UserDomain.delete"></a>
+
+### UserDomain.delete(domain, id, authorization_bearer)
+delete - Delete a user by it's Id.
+
+Path: api/v1/user/domain/:domain/id/:id
+
+**Kind**: static method of [<code>UserDomain</code>](#UserDomain)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| domain | <code>any</code> |  |
+| id | <code>any</code> | Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="UserDomain.removeGroupInheritance"></a>
+
+### UserDomain.removeGroupInheritance(domain, id, inheritgroupid, inheritgrouptype, authorization_bearer)
+removeGroupInheritance - Remove a user from a group.
+
+Path: api/v1/user/domain/:domain/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype
+
+**Kind**: static method of [<code>UserDomain</code>](#UserDomain)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| domain | <code>any</code> |  |
+| id | <code>any</code> | id or name of the user (example: user5) |
+| inheritgroupid | <code>any</code> | id or name of the  group to inherit (example: group2) |
+| inheritgrouptype | <code>any</code> | type of the  group to inherit (example: group) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="UserDomain.addGroupInheritance"></a>
+
+### UserDomain.addGroupInheritance(domain, id, inheritgroupid, inheritgrouptype, authorization_bearer)
+addGroupInheritance - Add a user to a group.
+
+Path: api/v1/user/domain/:domain/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype
+
+**Kind**: static method of [<code>UserDomain</code>](#UserDomain)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| domain | <code>any</code> |  |
+| id | <code>any</code> | id or name of the user (example: user5) |
+| inheritgroupid | <code>any</code> | id or name of the  group to inherit (example: group2) |
+| inheritgrouptype | <code>any</code> | type of the  group to inherit (example: group) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="UserDomain.editPropertyValue"></a>
+
+### UserDomain.editPropertyValue(domain, id, property, value, authorization_bearer)
+editPropertyValue - Edit a current user's property data as a path param.
+
+Path: api/v1/user/domain/:domain/id/:id/property/:property/:value
+
+**Kind**: static method of [<code>UserDomain</code>](#UserDomain)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| domain | <code>any</code> |  |
+| id | <code>any</code> | Id or Username |
+| property | <code>any</code> | (example: group_id) |
+| value | <code>any</code> | (example: 595d3f9a-5383-4da9-a465-b975d8a5e28e) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="UserDomain.editProperty"></a>
+
+### UserDomain.editProperty(body, domain, id, property, authorization_bearer)
+editProperty - Edit a user's property by id.
+
+Path: api/v1/user/domain/:domain/id/:id/property/:property
+
+**Kind**: static method of [<code>UserDomain</code>](#UserDomain)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| domain | <code>any</code> |  |
+| id | <code>any</code> | Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA) |
+| property | <code>any</code> |  |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+**Example**  
+body
+```text
+user6
+```
+<a name="UserDomain.edit"></a>
+
+### UserDomain.edit(body, domain, id, authorization_bearer)
+edit - Edit a user's by id.
+
+Path: api/v1/user/domain/:domain/id/:id
+
+**Kind**: static method of [<code>UserDomain</code>](#UserDomain)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| domain | <code>any</code> |  |
+| id | <code>any</code> | Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+**Example**  
+body
+```json
+{
+	"username" : "user6",
+	"password" : "Awickednewawesomepasword4242!@"
+}
+```
+<a name="UserDomain.getProperty"></a>
+
+### UserDomain.getProperty(domain, id, property, authorization_bearer)
+getProperty - Get a user's property by it's id.
+
+Path: api/v1/user/domain/:domain/id/:id/property/:property
+
+**Kind**: static method of [<code>UserDomain</code>](#UserDomain)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| domain | <code>any</code> |  |
+| id | <code>any</code> | Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA) |
+| property | <code>any</code> |  |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="UserDomain.get"></a>
+
+### UserDomain.get(domain, id, authorization_bearer)
+get - Get a user by it's id.
+
+Path: api/v1/user/domain/:domain/id/:id
+
+**Kind**: static method of [<code>UserDomain</code>](#UserDomain)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| domain | <code>any</code> |  |
 | id | <code>any</code> | (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
