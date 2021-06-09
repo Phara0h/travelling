@@ -1651,6 +1651,423 @@
 					]
 				},
 				{
+					"name": "Domain",
+					"item": [
+						{
+							"name": "Get",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/user/domain/:domain/id/:id",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"domain",
+										":domain",
+										"id",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "domain",
+											"value": ""
+										},
+										{
+											"key": "id",
+											"value": "39A2BC37-61AE-434C-B245-A731A27CF8DA"
+										}
+									]
+								},
+								"description": "Get a user by it's id."
+							},
+							"response": []
+						},
+						{
+							"name": "Get Property",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/user/domain/:domain/id/:id/property/:property",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"domain",
+										":domain",
+										"id",
+										":id",
+										"property",
+										":property"
+									],
+									"variable": [
+										{
+											"key": "domain",
+											"value": ""
+										},
+										{
+											"key": "id",
+											"value": "39A2BC37-61AE-434C-B245-A731A27CF8DA",
+											"description": "Id or Username "
+										},
+										{
+											"key": "property",
+											"value": ""
+										}
+									]
+								},
+								"description": "Get a user's property by it's id."
+							},
+							"response": []
+						},
+						{
+							"name": "Edit",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"username\" : \"user6\",\n\t\"password\" : \"Awickednewawesomepasword4242!@\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/user/domain/:domain/id/:id",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"domain",
+										":domain",
+										"id",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "domain",
+											"value": ""
+										},
+										{
+											"key": "id",
+											"value": "39A2BC37-61AE-434C-B245-A731A27CF8DA",
+											"description": "Id or Username "
+										}
+									]
+								},
+								"description": "Edit a user's by id."
+							},
+							"response": []
+						},
+						{
+							"name": "Edit Property",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "user6",
+									"options": {
+										"raw": {
+											"language": "text"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/user/domain/:domain/id/:id/property/:property",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"domain",
+										":domain",
+										"id",
+										":id",
+										"property",
+										":property"
+									],
+									"variable": [
+										{
+											"key": "domain",
+											"value": ""
+										},
+										{
+											"key": "id",
+											"value": "39A2BC37-61AE-434C-B245-A731A27CF8DA",
+											"description": "Id or Username "
+										},
+										{
+											"key": "property",
+											"value": ""
+										}
+									]
+								},
+								"description": "Edit a user's property by id."
+							},
+							"response": []
+						},
+						{
+							"name": "Edit Property Value",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/user/domain/:domain/id/:id/property/:property/:value",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"domain",
+										":domain",
+										"id",
+										":id",
+										"property",
+										":property",
+										":value"
+									],
+									"variable": [
+										{
+											"key": "domain",
+											"value": ""
+										},
+										{
+											"key": "id",
+											"value": "",
+											"description": "Id or Username "
+										},
+										{
+											"key": "property",
+											"value": "group_id"
+										},
+										{
+											"key": "value",
+											"value": "595d3f9a-5383-4da9-a465-b975d8a5e28e"
+										}
+									]
+								},
+								"description": "Edit a current user's property data as a path param."
+							},
+							"response": []
+						},
+						{
+							"name": "Add Group Inheritance",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"description": "The client_credentials generated OAUth2 access token.",
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer"
+									}
+								],
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/user/domain/:domain/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"domain",
+										":domain",
+										"id",
+										":id",
+										"inheritance",
+										"group",
+										":inheritgroupid",
+										"type",
+										":inheritgrouptype"
+									],
+									"variable": [
+										{
+											"key": "domain",
+											"value": ""
+										},
+										{
+											"key": "id",
+											"value": "user5",
+											"description": "id or name of the user"
+										},
+										{
+											"key": "inheritgroupid",
+											"value": "group2",
+											"description": "id or name of the  group to inherit"
+										},
+										{
+											"key": "inheritgrouptype",
+											"value": "group",
+											"description": "type of the  group to inherit"
+										}
+									]
+								},
+								"description": "Add a user to a group."
+							},
+							"response": []
+						},
+						{
+							"name": "Remove Group Inheritance",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "The client_credentials generated OAUth2 access token.",
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer"
+									}
+								],
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/user/domain/:domain/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"domain",
+										":domain",
+										"id",
+										":id",
+										"inheritance",
+										"group",
+										":inheritgroupid",
+										"type",
+										":inheritgrouptype"
+									],
+									"variable": [
+										{
+											"key": "domain",
+											"value": ""
+										},
+										{
+											"key": "id",
+											"value": "user5",
+											"description": "id or name of the user"
+										},
+										{
+											"key": "inheritgroupid",
+											"value": "group2",
+											"description": "id or name of the  group to inherit"
+										},
+										{
+											"key": "inheritgrouptype",
+											"value": "group",
+											"description": "type of the  group to inherit"
+										}
+									]
+								},
+								"description": "Remove a user from a group."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/user/domain/:domain/id/:id",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"domain",
+										":domain",
+										"id",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "domain",
+											"value": ""
+										},
+										{
+											"key": "id",
+											"value": "39A2BC37-61AE-434C-B245-A731A27CF8DA",
+											"description": "Id or Username "
+										}
+									]
+								},
+								"description": "Delete a user by it's Id."
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "Get",
 					"request": {
 						"method": "GET",
@@ -2070,26 +2487,31 @@
 										{
 											"key": "sort",
 											"value": "created_on",
+											"description": "Sort by any user object key (examples: id, domain, locked, etc.)",
 											"disabled": true
 										},
 										{
 											"key": "limit",
 											"value": "2",
+											"description": "Number of maximum results. (example: 2)",
 											"disabled": true
 										},
 										{
 											"key": "skip",
 											"value": "10",
+											"description": "Number of db rows skipped. (example: 10)",
 											"disabled": true
 										},
 										{
 											"key": "filter",
 											"value": "created_on>2021-06-01,created_on<2021-06-08",
+											"description": "Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)",
 											"disabled": true
 										},
 										{
 											"key": "sortdir",
 											"value": "ASC",
+											"description": "Sort direction (example ascending order: ASC)",
 											"disabled": true
 										}
 									],
@@ -2100,7 +2522,7 @@
 										}
 									]
 								},
-								"description": "Gets all the users\n\n##### Optional Query Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | *optional* (example:  user7) |\n| locked | *optional* (example:  true) |\n| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |\n| group_request | *optional* (example:  superadmin) |\n| failed_login_attempts | *optional* (example:  0) |\n| change_username | *optional* (example:  false) |\n| change_password | *optional* (example:  false) |\n| reset_password | *optional* (example:  false) |\n| email_verify | *optional* (example:  false) |\n| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | *optional* (example:  test@test.ai) |\n| created_on | *optional* (example:  1568419646794) |\n| last_login | *optional* (example:  null) |"
+								"description": "Gets all the users\n\n##### Filter Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | *optional* (example:  user7) |\n| locked | *optional* (example:  true) |\n| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |\n| group_request | *optional* (example:  superadmin) |\n| failed_login_attempts | *optional* (example:  0) |\n| change_username | *optional* (example:  false) |\n| change_password | *optional* (example:  false) |\n| reset_password | *optional* (example:  false) |\n| email_verify | *optional* (example:  false) |\n| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | *optional* (example:  test@test.ai) |\n| created_on | *optional* (example:  1568419646794) |\n| last_login | *optional* (example:  null) |"
 							},
 							"response": []
 						},
@@ -2131,8 +2553,21 @@
 									],
 									"query": [
 										{
+											"key": "limit",
+											"value": "2",
+											"description": "Number of maximum results. (example: 2)",
+											"disabled": true
+										},
+										{
+											"key": "skip",
+											"value": "10",
+											"description": "Number of db rows skipped. (example: 10)",
+											"disabled": true
+										},
+										{
 											"key": "filter",
 											"value": "created_on>2022-06-01,created_on<2022-06-08",
+											"description": "Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)",
 											"disabled": true
 										}
 									],
@@ -2175,31 +2610,36 @@
 								{
 									"key": "sort",
 									"value": "created_on",
+									"description": "Sort by any user object key (examples: id, domain, locked, etc.)",
 									"disabled": true
 								},
 								{
 									"key": "limit",
 									"value": "2",
+									"description": "Number of maximum results. (example: 2)",
 									"disabled": true
 								},
 								{
 									"key": "skip",
 									"value": "10",
+									"description": "Number of db rows skipped. (example: 10)",
 									"disabled": true
 								},
 								{
 									"key": "filter",
 									"value": "locked=false,created_on>2021-06-03,created_on<2021-06-06",
+									"description": "Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)",
 									"disabled": true
 								},
 								{
 									"key": "sortdir",
 									"value": "ASC",
+									"description": "Sort direction (example ascending order: ASC)",
 									"disabled": true
 								}
 							]
 						},
-						"description": "Gets all the users\n\n##### Optional Query Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | *optional* (example:  user7) |\n| locked | *optional* (example:  true) |\n| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |\n| group_request | *optional* (example:  superadmin) |\n| failed_login_attempts | *optional* (example:  0) |\n| change_username | *optional* (example:  false) |\n| change_password | *optional* (example:  false) |\n| reset_password | *optional* (example:  false) |\n| email_verify | *optional* (example:  false) |\n| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | *optional* (example:  test@test.ai) |\n| created_on | *optional* (example:  1568419646794) |\n| last_login | *optional* (example:  null) |"
+						"description": "Gets all the users\n\n##### Filter Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | *optional* (example:  user7) |\n| locked | *optional* (example:  true) |\n| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |\n| group_request | *optional* (example:  superadmin) |\n| failed_login_attempts | *optional* (example:  0) |\n| change_username | *optional* (example:  false) |\n| change_password | *optional* (example:  false) |\n| reset_password | *optional* (example:  false) |\n| email_verify | *optional* (example:  false) |\n| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | *optional* (example:  test@test.ai) |\n| created_on | *optional* (example:  1568419646794) |\n| last_login | *optional* (example:  null) |"
 					},
 					"response": []
 				},
@@ -2228,8 +2668,21 @@
 							],
 							"query": [
 								{
+									"key": "limit",
+									"value": "2",
+									"description": "Number of maximum results. (example: 2)",
+									"disabled": true
+								},
+								{
+									"key": "skip",
+									"value": "10",
+									"description": "Number of db rows skipped. (example: 10)",
+									"disabled": true
+								},
+								{
 									"key": "filter",
 									"value": "created_on>2021-06-06,created_on<2021-06-08",
+									"description": "Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)",
 									"disabled": true
 								}
 							]
