@@ -1421,7 +1421,7 @@ body
 
 * [Users](#Users)
     * [.byGroupRequest(group_request, authorization_bearer)](#Users.byGroupRequest)
-    * [.count(authorization_bearer)](#Users.count)
+    * [.count(filter, authorization_bearer)](#Users.count)
     * [.get(sort, limit, filter, sortdir, authorization_bearer)](#Users.get)
 
 <a name="Users.byGroupRequest"></a>
@@ -1459,7 +1459,7 @@ Path: api/v1/users/group/request/:group_request
 
 <a name="Users.count"></a>
 
-### Users.count(authorization_bearer)
+### Users.count(filter, authorization_bearer)
 count - Gets all the users
 
 ##### Optional Query Params
@@ -1487,6 +1487,7 @@ Path: api/v1/users/count
 
 | Param | Type | Description |
 | --- | --- | --- |
+| filter | <code>any</code> | (example: created_on>2022-06-06,created_on<2022-06-08) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="Users.get"></a>
@@ -1529,6 +1530,45 @@ Path: api/v1/users
 
 ## UsersDomain
 **Kind**: global class  
+
+* [UsersDomain](#UsersDomain)
+    * [.count(domain, filter, authorization_bearer)](#UsersDomain.count)
+    * [.get(domain, sort, limit, filter, sortdir, authorization_bearer)](#UsersDomain.get)
+
+<a name="UsersDomain.count"></a>
+
+### UsersDomain.count(domain, filter, authorization_bearer)
+count - Gets all the users
+
+##### Optional Query Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | *optional* (example:  user7) |
+| locked | *optional* (example:  true) |
+| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+| group_request | *optional* (example:  superadmin) |
+| failed_login_attempts | *optional* (example:  0) |
+| change_username | *optional* (example:  false) |
+| change_password | *optional* (example:  false) |
+| reset_password | *optional* (example:  false) |
+| email_verify | *optional* (example:  false) |
+| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | *optional* (example:  test@test.ai) |
+| created_on | *optional* (example:  1568419646794) |
+| last_login | *optional* (example:  null) |
+
+Path: api/v1/users/domain/:domain/count
+
+**Kind**: static method of [<code>UsersDomain</code>](#UsersDomain)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| domain | <code>any</code> | (example: test.com) |
+| filter | <code>any</code> | (example: created_on>2022-06-01,created_on<2022-06-08) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
 <a name="UsersDomain.get"></a>
 
 ### UsersDomain.get(domain, sort, limit, filter, sortdir, authorization_bearer)
@@ -1562,7 +1602,7 @@ Path: api/v1/users/domain/:domain
 | domain | <code>any</code> | (example: test.com) |
 | sort | <code>any</code> | (example: created_on) |
 | limit | <code>any</code> | (example: 2) |
-| filter | <code>any</code> | (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) |
+| filter | <code>any</code> | (example: created_on>2021-06-01,created_on<2021-06-08) |
 | sortdir | <code>any</code> | (example: ASC) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
