@@ -2611,13 +2611,15 @@ class Users {
 | last_login | *optional* (example:  null) |
   *
   * Path: api/v1/users/count
+  * @param {any} filter  (example: created_on>2022-06-06,created_on<2022-06-08)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   */
-  static async count(authorization_bearer, opts) {
+  static async count(filter, authorization_bearer, opts) {
     var options = {
       method: 'GET',
       simple: false,
       uri: hostUrl + '/' + `api/v1/users/count`,
+      qs: { filter },
       authorization: {
         bearer: authorization_bearer,
       },
@@ -2689,10 +2691,59 @@ class Users {
 class UsersDomain {
   constructor() {}
   static get _postgenClassUrls() {
-    return { get: 'api/v1/users/domain/:domain' };
+    return {
+      count: 'api/v1/users/domain/:domain/count',
+      get: 'api/v1/users/domain/:domain',
+    };
   }
   static getFunctionsPath(name) {
     return this._postgenClassUrls[name.toLowerCase()];
+  }
+
+  /**
+  * count - Gets all the users
+
+##### Optional Query Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | *optional* (example:  user7) |
+| locked | *optional* (example:  true) |
+| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+| group_request | *optional* (example:  superadmin) |
+| failed_login_attempts | *optional* (example:  0) |
+| change_username | *optional* (example:  false) |
+| change_password | *optional* (example:  false) |
+| reset_password | *optional* (example:  false) |
+| email_verify | *optional* (example:  false) |
+| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | *optional* (example:  test@test.ai) |
+| created_on | *optional* (example:  1568419646794) |
+| last_login | *optional* (example:  null) |
+  *
+  * Path: api/v1/users/domain/:domain/count
+  * @param {any} domain  (example: test.com)
+  * @param {any} filter  (example: created_on>2022-06-01,created_on<2022-06-08)
+  * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+  */
+  static async count(domain, filter, authorization_bearer, opts) {
+    var options = {
+      method: 'GET',
+      simple: false,
+      uri: hostUrl + '/' + `api/v1/users/domain/${domain}/count`,
+      qs: { filter },
+      authorization: {
+        bearer: authorization_bearer,
+      },
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
   }
 
   /**
@@ -2721,7 +2772,7 @@ class UsersDomain {
   * @param {any} domain  (example: test.com)
   * @param {any} sort  (example: created_on)
   * @param {any} limit  (example: 2)
-  * @param {any} filter  (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)
+  * @param {any} filter  (example: created_on>2021-06-01,created_on<2021-06-08)
   * @param {any} sortdir  (example: ASC)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   */

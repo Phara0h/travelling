@@ -182,11 +182,19 @@ class User extends Base(BaseModel, 'users', {
   }
 
   static async findAllByFilter(opts) {
-    var query = `SELECT * FROM ${this.table} `;
+    var query = '';
     var keys = [];
     var values = [];
 
-    if (!opts.sortdir) opts.sortdir = 'DESC';
+    if (opts.count) {
+      query = `SELECT COUNT(id) FROM ${this.table} `;
+    } else {
+      query = `SELECT * FROM ${this.table} `;
+    }
+
+    if (!opts.sortdir) {
+      opts.sortdir = 'DESC';
+    }
 
     if (opts.filter) {
       if (opts.filter.indexOf(',') > -1) {
@@ -234,9 +242,6 @@ class User extends Base(BaseModel, 'users', {
           value = kv[1];
         }
 
-        // Skip invalid dates
-        if (key.trim() === 'created_on' && isNaN(new Date(value.trim()).getTime())) continue;
-
         if (this._defaultModel[key] !== undefined) {
           if (this._encryptionFields[key] !== undefined) {
             value = (await this._queryFieldsHash({ [key]: value }))['__' + key];
@@ -257,7 +262,9 @@ class User extends Base(BaseModel, 'users', {
       user = userUtil.setUser(user, user);
 
       for (var i = 0; i < keys.length; i++) {
-        if (i === 0) query += ' WHERE ';
+        if (i === 0) {
+          query += ' WHERE ';
+        }
         query += `"${keys[i]}"${ops[i]}$${i + 1} `;
 
         if (keys.length > i + 1) {
@@ -274,8 +281,13 @@ class User extends Base(BaseModel, 'users', {
       query += ' LIMIT ' + Number(opts.limit);
     }
 
-    const newModels = await this.query(query, values);
+    if (opts.count) {
+      const countRes = await this.query(query, values, false);
+      return { count: Number(countRes.rows[0].count) };
+    }
 
+    const newModels = await this.query(query, values);
+    
     for (var i = 0; i < newModels.length; i++) {
       if (newModels[i]) {
         newModels[i] = await this.decrypt(newModels[i], this.getEncryptedProfile(newModels[i]), true);

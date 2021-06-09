@@ -315,17 +315,71 @@ function routes(app, opts, done) {
   // app.get('/user/resolve/group/name/:id/:prop', getUserResolveGroup);
 
   app.get('/users', async (req, res) => {
-    return await User.findAllByFilter({ filter: req.query.filter, sort: req.query.sort, limit: req.query.limit, sortdir: req.query.sortdir });
+    if (req.query.filter && req.query.filter.indexOf(' ') > -1) {
+      req.query.filter = req.query.filter.replace(/\s/g, '');
+    }
+    
+    try {
+      return await User.findAllByFilter({ filter: req.query.filter, sort: req.query.sort, limit: req.query.limit, sortdir: req.query.sortdir });
+    } catch {
+      res.code(400).send({
+        type: 'user-filter-error',
+        msg: 'Invalid filter.'});
+    }
+  });
+
+  app.get('/users/count', async (req, res) => {
+    if (req.query.filter && req.query.filter.indexOf(' ') > -1) {
+      req.query.filter = req.query.filter.replace(/\s/g, '');
+    }
+
+    try {
+      return await User.findAllByFilter({ filter: req.query.filter, count: true })
+    } catch (e) {
+      res.code(400).send({
+        type: 'user-filter-error',
+        msg: 'Invalid filter.'});
+    }
   });
 
   app.get('/users/domain/:domain', async (req, res) => {
+    if (req.query.filter && req.query.filter.indexOf(' ') > -1) {
+      req.query.filter = req.query.filter.replace(/\s/g, '');
+    }
+
     if (!req.query.filter) {
       req.query.filter = 'domain=' + req.params.domain;
     } else {
       req.query.filter += ',domain=' + req.params.domain;
     }
 
-    return await User.findAllByFilter({ filter: req.query.filter, sort: req.query.sort, limit: req.query.limit, sortdir: req.query.sortdir });
+    try {
+      return await User.findAllByFilter({ filter: req.query.filter, sort: req.query.sort, limit: req.query.limit, sortdir: req.query.sortdir });
+    } catch {
+      res.code(400).send({
+        type: 'user-filter-error',
+        msg: 'Invalid filter.'});
+    }
+  });
+  
+  app.get('/users/domain/:domain/count', async (req, res) => {
+    if (req.query.filter && req.query.filter.indexOf(' ') > -1) {
+      req.query.filter = req.query.filter.replace(/\s/g, '');
+    }
+
+    if (!req.query.filter) {
+      req.query.filter = 'domain=' + req.params.domain;
+    } else {
+      req.query.filter += ',domain=' + req.params.domain;
+    }
+
+    try {
+      return await User.findAllByFilter({ filter: req.query.filter, count: true })
+    } catch {
+      res.code(400).send({
+        type: 'user-filter-error',
+        msg: 'Invalid filter.'});
+    }
   });
 
   app.get('/users/group/request/:group_request', async (req, res) => {
