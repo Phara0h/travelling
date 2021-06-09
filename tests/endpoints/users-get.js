@@ -278,10 +278,31 @@ module.exports = () => {
     });
 
     test('Get Users Count', async () => {
-      var res = await Travelling.Users.count(null, userContainer.user1Token);
+      var res = await Travelling.Users.count(null, null, null, userContainer.user1Token);
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.count).toEqual(5);
+    });
+
+    test('Get Users Count with limit', async () => {
+      var res = await Travelling.Users.count(2, null, null, userContainer.user1Token);
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.count).toEqual(2);
+    });
+
+    test('Get Users Count with skip', async () => {
+      var res = await Travelling.Users.count(null, 3, null, userContainer.user1Token);
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.count).toEqual(2);
+    });
+
+    test('Get Users Count with limit and skip', async () => {
+      var res = await Travelling.Users.count(2, 4, null, userContainer.user1Token);
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.count).toEqual(1);
     });
 
     test('Get Users Count with filter created_on in date range', async () => {
@@ -290,17 +311,31 @@ module.exports = () => {
       yesterday.setDate(yesterday.getDate() - 1);
       tomorrow.setDate(tomorrow.getDate() + 1);
 
-      var res = await Travelling.Users.count(`created_on >= ${yesterday.toISOString()}, created_on <= ${tomorrow.toISOString()}`, userContainer.user1Token);
+      var res = await Travelling.Users.count(null, null, `created_on >= ${yesterday.toISOString()}, created_on <= ${tomorrow.toISOString()}`, userContainer.user1Token);
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.count).toEqual(5);
     });
 
     test('Get Users Count by Domain', async () => {
-      var res = await Travelling.Users.Domain.count('test.com', null, userContainer.user1Token);
+      var res = await Travelling.Users.Domain.count('test.com', null, null, null, userContainer.user1Token);
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.count).toEqual(1);
+    });
+
+    test('Get Users Count by Domain with limit', async () => {
+      var res = await Travelling.Users.Domain.count('test.com', 0, null, null, userContainer.user1Token);
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.count).toEqual(0);
+    });
+
+    test('Get Users Count by Domain with skip', async () => {
+      var res = await Travelling.Users.Domain.count('test.com', null, 1, null, userContainer.user1Token);
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.count).toEqual(0);
     });
 
     test('Get Users Count by Domain filter created_on in date range', async () => {
@@ -309,7 +344,7 @@ module.exports = () => {
       yesterday.setDate(yesterday.getDate() - 1);
       tomorrow.setDate(tomorrow.getDate() + 1);
 
-      var res = await Travelling.Users.Domain.count('test.com', `created_on >= ${yesterday.toISOString()}, created_on <= ${tomorrow.toISOString()}`, userContainer.user1Token);
+      var res = await Travelling.Users.Domain.count('test.com', null, null, `created_on >= ${yesterday.toISOString()}, created_on <= ${tomorrow.toISOString()}`, userContainer.user1Token);
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.count).toEqual(1);
