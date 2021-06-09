@@ -6731,7 +6731,7 @@ class UsersDomain {
   *
   * Path: api/v1/users/domain/:domain/count
   * @param {any} domain  (example: test.com)
-  * @param {any} limit Number of maximum results. (example: 2) (example: 2)
+  * @param {any} limit Number of maximum results. (example: 2) (example: 5)
   * @param {any} skip Number of db rows skipped. (example: 10) (example: 10)
   * @param {any} filter Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2022-06-01,created_on<2022-06-08)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
@@ -6780,7 +6780,7 @@ class UsersDomain {
   * Path: api/v1/users/domain/:domain
   * @param {any} domain  (example: test.com)
   * @param {any} sort Sort by any user object key (examples: id, domain, locked, etc.) (example: created_on)
-  * @param {any} limit Number of maximum results. (example: 2) (example: 2)
+  * @param {any} limit Number of maximum results. (example: 2) (example: 1)
   * @param {any} skip Number of db rows skipped. (example: 10) (example: 10)
   * @param {any} filter Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-01,created_on<2021-06-08)
   * @param {any} sortdir Sort direction (example ascending order: ASC) (example: ASC)

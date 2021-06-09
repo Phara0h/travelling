@@ -196,6 +196,16 @@ class User extends Base(BaseModel, 'users', {
       opts.sortdir = 'DESC';
     }
 
+    if (opts.limit && isNaN(opts.limit)) {
+      throw new Error('Invalid filter') 
+    }
+    opts.limit = Number.parseInt(opts.limit);
+
+    if (opts.skip && isNaN(opts.skip)) {
+      throw new Error('Invalid filter')
+    }
+    opts.skip = Number.parseInt(opts.skip);
+
     if (opts.filter) {
       if (opts.filter.indexOf(',') > -1) {
         opts.filter = opts.filter.split(',');
@@ -277,17 +287,29 @@ class User extends Base(BaseModel, 'users', {
       query += ' ORDER BY ' + opts.sort + ' ' + (opts.sortdir == 'ASC' ? 'ASC' : 'DESC');
     }
 
-    if (opts.limit && !isNaN(Number(opts.limit))) {
-      query += ' LIMIT ' + Number(opts.limit);
+    if (opts.limit && !opts.count) {
+      query += ' LIMIT ' +  opts.limit;
     }
 
-    if (opts.skip && !isNaN(Number(opts.skip))) {
-      query += ' OFFSET ' + Number(opts.skip);
+    if (opts.skip && !opts.count) {
+      query += ' OFFSET ' +  opts.skip;
     }
 
     if (opts.count) {
       const countRes = await this.query(query, values, false);
-      return { count: Number(countRes.rows[0].count) };
+      var count = Number.parseInt(countRes.rows[0].count);
+
+      if (opts.skip) {
+        count -= opts.skip;
+        if (count < 0) { count = 0; }
+      }
+      if (opts.limit) {
+        if (count >= opts.limit) {
+          return { count: opts.limit };
+        }
+      }
+      
+      return { count }
     }
 
     const newModels = await this.query(query, values);

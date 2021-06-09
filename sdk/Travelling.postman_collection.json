@@ -2492,7 +2492,7 @@
 										},
 										{
 											"key": "limit",
-											"value": "2",
+											"value": "1",
 											"description": "Number of maximum results. (example: 2)",
 											"disabled": true
 										},
@@ -2554,7 +2554,7 @@
 									"query": [
 										{
 											"key": "limit",
-											"value": "2",
+											"value": "5",
 											"description": "Number of maximum results. (example: 2)",
 											"disabled": true
 										},
