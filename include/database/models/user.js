@@ -298,12 +298,12 @@ class User extends Base(BaseModel, 'users', {
     if (opts.count) {
       const countRes = await this.query(query, values, false);
       var count = Number.parseInt(countRes.rows[0].count);
-
+   
       if (opts.skip) {
         count -= opts.skip;
         if (count < 0) { count = 0; }
       }
-      if (opts.limit) {
+      if (opts.limit !== null) {
         if (count >= opts.limit) {
           return { count: opts.limit };
         }
