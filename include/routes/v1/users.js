@@ -334,7 +334,7 @@ function routes(app, opts, done) {
     }
 
     try {
-      return await User.findAllByFilter({ filter: req.query.filter, count: true })
+      return await User.findAllByFilter({ limit: req.query.limit, skip: req.query.skip, filter: req.query.filter, count: true })
     } catch (e) {
       res.code(400).send({
         type: 'user-filter-error',
@@ -374,7 +374,7 @@ function routes(app, opts, done) {
     }
 
     try {
-      return await User.findAllByFilter({ filter: req.query.filter, count: true })
+      return await User.findAllByFilter({ limit: req.query.limit, skip: req.query.skip, filter: req.query.filter, count: true })
     } catch {
       res.code(400).send({
         type: 'user-filter-error',

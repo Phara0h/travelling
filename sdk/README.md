@@ -1571,7 +1571,7 @@ Path: api/v1/users/domain/:domain/count
 | Param | Type | Description |
 | --- | --- | --- |
 | domain | <code>any</code> | (example: test.com) |
-| limit | <code>any</code> | Number of maximum results. (example: 2) (example: 2) |
+| limit | <code>any</code> | Number of maximum results. (example: 2) (example: 5) |
 | skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |
 | filter | <code>any</code> | Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2022-06-01,created_on<2022-06-08) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
@@ -1608,7 +1608,7 @@ Path: api/v1/users/domain/:domain
 | --- | --- | --- |
 | domain | <code>any</code> | (example: test.com) |
 | sort | <code>any</code> | Sort by any user object key (examples: id, domain, locked, etc.) (example: created_on) |
-| limit | <code>any</code> | Number of maximum results. (example: 2) (example: 2) |
+| limit | <code>any</code> | Number of maximum results. (example: 2) (example: 1) |
 | skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |
 | filter | <code>any</code> | Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-01,created_on<2021-06-08) |
 | sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: ASC) |
