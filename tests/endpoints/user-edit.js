@@ -99,8 +99,120 @@ module.exports = () => {
         expect(res.body).toMatchObject({ email: 'gr@fd.foo', user_data: { test: 1, foo: 'bar' } });
       });
     });
+  });
 
-    
-    describe('Invalid', () => {});
+  describe('Non-Current User By Domain', () => {
+    describe('Valid', () => {
+      // TODO: Move to user-get.js
+      // test('Get User Domain 2', async () => {
+      //   var res = await Travelling.User.Domain.get(
+      //     'test.com',
+      //     'test_domain_2@test.com',
+      //     userContainer.userDomain2Token
+      //   );
+
+      //   expect(res.statusCode).toEqual(200);
+      //   expect(res.body.domain).toEqual('test.com');
+      //   expect(res.body.email).toEqual('test_domain_2@test.com');
+      // });
+
+      test('Edit User Domain 2 Email Property', async () => {
+        var res = await Travelling.User.Domain.editProperty(
+          'test_domain_2_changed@test.com',
+          'test.com',
+          'test_domain_2@test.com',
+          'email',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.body).toEqual('test_domain_2_changed@test.com');
+        expect(res.statusCode).toEqual(200);
+      });
+
+      test('Edit User Domain 2 Email Property Value', async () => {
+        var res = await Travelling.User.Domain.editPropertyValue(
+          'test.com',
+          'test_domain_2_changed@test.com',
+          'email',
+          'test_domain_2@test.com',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.body).toEqual('test_domain_2@test.com');
+        expect(res.statusCode).toEqual(200);
+      });
+
+      test('Edit User Domain 2 UserData', async () => {
+        var res = await Travelling.User.Domain.edit(
+          { user_data: { test: 1, foo: 'bar' } },
+          'test.com',
+          'test_domain_2@test.com',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toMatchObject({ user_data: { test: 1, foo: 'bar' } });
+      });
+
+      test('Delete User Domain 3 UserData', async () => {
+        var res = await Travelling.User.Domain.delete(
+          'test.com',
+          'test_domain_3@test.com',
+          userContainer.userDomain3Token
+        );
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body.domain).toEqual('test.com');
+      });
+
+    });
+
+    describe('Invalid', () => {
+      test('Edit User Domain 2 Email Property Invalid Domain', async () => {
+        var res = await Travelling.User.Domain.editProperty(
+          'test_domain_2_changed@test.com',
+          'this-aint-no-real-domain.elite',
+          'test_domain_2@test.com',
+          'email',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.statusCode).toEqual(400);
+      });
+
+      test('Edit User Domain 2 Email Property Value Invalid Property', async () => {
+        var res = await Travelling.User.Domain.editPropertyValue(
+          'test.com',
+          'test_domain_2_changed@test.com',
+          'fakeaffff',
+          'test_domain_2@test.com',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.statusCode).toEqual(400);
+      });
+
+      // TODO: Move to user-get.js
+      // test('Get User Domain 2 non-existent domain', async () => {
+      //   var res = await Travelling.User.Domain.get(
+      //     'this-aint-no-real-domain.elite',
+      //     'test_domain_2@test.com',
+      //     userContainer.userDomain2Token
+      //   );
+
+      //   expect(res.statusCode).toEqual(400);
+      // });
+
+      // test('Get User Domain 2 invalid id', async () => {
+      //   var res = await Travelling.User.Domain.get(
+      //     'test.com',
+      //     'real-incorrect-id@trump.wrong',
+      //     userContainer.userDomain2Token
+      //   );
+
+      //   expect(res.statusCode).toEqual(400);
+      // });
+
+    }); 
   });
 };

@@ -66,6 +66,29 @@ module.exports = () => {
       expect(res.statusCode).toEqual(200);
     });
 
+    test('Login with Test Domain User 2', async () => {
+      var res = await Travelling.Auth.login({
+        password: 'Pas5w0r!d',
+        email: 'test_domain_2@test.com'
+      });
+
+      userContainer.parseUserDomain2Cookie(res.headers['set-cookie']);
+
+      expect(res.statusCode).toEqual(200);
+    });
+
+    test('Login with Test Domain User 3', async () => {
+      var res = await Travelling.Auth.login({
+        password: 'Pas5w0r!d',
+        email: 'test_domain_3@test.com'
+      });
+
+      userContainer.parseUserDomain3Cookie(res.headers['set-cookie']);
+
+      expect(res.statusCode).toEqual(200);
+    });
+
+
     if (config.email.test.enable) {
       test('Login with Test4 User Email Activation Enable [Locked]', async () => {
         var res = await Travelling.Auth.login({
