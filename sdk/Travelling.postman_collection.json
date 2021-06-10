@@ -186,7 +186,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"username\": \"test\",\n\t\"password\": \"Pas5w0r!d\",\n    \"domain\": \"default\"\n}",
+									"raw": "{\n\t\"email\": \"test@test.com\",\n\t\"password\": \"Pas5w0r!d\",\n    \"domain\": \"test.com\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1682,11 +1682,11 @@
 									"variable": [
 										{
 											"key": "domain",
-											"value": ""
+											"value": "test.com"
 										},
 										{
 											"key": "id",
-											"value": "39A2BC37-61AE-434C-B245-A731A27CF8DA"
+											"value": "75d2ed5e-bc5b-4129-a1ec-657cf27e6294"
 										}
 									]
 								},
@@ -1725,16 +1725,16 @@
 									"variable": [
 										{
 											"key": "domain",
-											"value": ""
+											"value": "test.com"
 										},
 										{
 											"key": "id",
-											"value": "39A2BC37-61AE-434C-B245-A731A27CF8DA",
+											"value": "75d2ed5e-bc5b-4129-a1ec-657cf27e6294",
 											"description": "Id or Username "
 										},
 										{
 											"key": "property",
-											"value": ""
+											"value": "locked"
 										}
 									]
 								},
@@ -1786,11 +1786,11 @@
 									"variable": [
 										{
 											"key": "domain",
-											"value": ""
+											"value": "test.com"
 										},
 										{
 											"key": "id",
-											"value": "39A2BC37-61AE-434C-B245-A731A27CF8DA",
+											"value": "75d2ed5e-bc5b-4129-a1ec-657cf27e6294",
 											"description": "Id or Username "
 										}
 									]
@@ -1813,7 +1813,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "user6",
+									"raw": "false",
 									"options": {
 										"raw": {
 											"language": "text"
@@ -1839,16 +1839,16 @@
 									"variable": [
 										{
 											"key": "domain",
-											"value": ""
+											"value": "test.com"
 										},
 										{
 											"key": "id",
-											"value": "39A2BC37-61AE-434C-B245-A731A27CF8DA",
+											"value": "75d2ed5e-bc5b-4129-a1ec-657cf27e6294",
 											"description": "Id or Username "
 										},
 										{
 											"key": "property",
-											"value": ""
+											"value": "locked"
 										}
 									]
 								},
@@ -1888,11 +1888,11 @@
 									"variable": [
 										{
 											"key": "domain",
-											"value": ""
+											"value": "test.com"
 										},
 										{
 											"key": "id",
-											"value": "",
+											"value": "75d2ed5e-bc5b-4129-a1ec-657cf27e6294",
 											"description": "Id or Username "
 										},
 										{
@@ -1943,7 +1943,7 @@
 									"variable": [
 										{
 											"key": "domain",
-											"value": ""
+											"value": "test.com"
 										},
 										{
 											"key": "id",
@@ -2000,7 +2000,7 @@
 									"variable": [
 										{
 											"key": "domain",
-											"value": ""
+											"value": "trest.com"
 										},
 										{
 											"key": "id",
@@ -2052,11 +2052,11 @@
 									"variable": [
 										{
 											"key": "domain",
-											"value": ""
+											"value": "test.com"
 										},
 										{
 											"key": "id",
-											"value": "39A2BC37-61AE-434C-B245-A731A27CF8DA",
+											"value": "75d2ed5e-bc5b-4129-a1ec-657cf27e6294",
 											"description": "Id or Username "
 										}
 									]

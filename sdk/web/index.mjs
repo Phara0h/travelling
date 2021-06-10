@@ -7124,8 +7124,8 @@ class UserDomain {
    * delete - Delete a user by it's Id.
    *
    * Path: api/v1/user/domain/:domain/id/:id
-   * @param {any} domain
-   * @param {any} id Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA)
+   * @param {any} domain  (example: test.com)
+   * @param {any} id Id or Username  (example: 75d2ed5e-bc5b-4129-a1ec-657cf27e6294)
    * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
    */
   static async delete(domain, id, authorization_bearer, opts) {
@@ -7150,7 +7150,7 @@ class UserDomain {
    * removeGroupInheritance - Remove a user from a group.
    *
    * Path: api/v1/user/domain/:domain/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype
-   * @param {any} domain
+   * @param {any} domain  (example: trest.com)
    * @param {any} id id or name of the user (example: user5)
    * @param {any} inheritgroupid id or name of the  group to inherit (example: group2)
    * @param {any} inheritgrouptype type of the  group to inherit (example: group)
@@ -7188,7 +7188,7 @@ class UserDomain {
    * addGroupInheritance - Add a user to a group.
    *
    * Path: api/v1/user/domain/:domain/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype
-   * @param {any} domain
+   * @param {any} domain  (example: test.com)
    * @param {any} id id or name of the user (example: user5)
    * @param {any} inheritgroupid id or name of the  group to inherit (example: group2)
    * @param {any} inheritgrouptype type of the  group to inherit (example: group)
@@ -7226,8 +7226,8 @@ class UserDomain {
    * editPropertyValue - Edit a current user's property data as a path param.
    *
    * Path: api/v1/user/domain/:domain/id/:id/property/:property/:value
-   * @param {any} domain
-   * @param {any} id Id or Username
+   * @param {any} domain  (example: test.com)
+   * @param {any} id Id or Username  (example: 75d2ed5e-bc5b-4129-a1ec-657cf27e6294)
    * @param {any} property  (example: group_id)
    * @param {any} value  (example: 595d3f9a-5383-4da9-a465-b975d8a5e28e)
    * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
@@ -7265,14 +7265,14 @@ class UserDomain {
    *
    * Path: api/v1/user/domain/:domain/id/:id/property/:property
    * @param {Object} body
-   * @param {any} domain
-   * @param {any} id Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA)
-   * @param {any} property
+   * @param {any} domain  (example: test.com)
+   * @param {any} id Id or Username  (example: 75d2ed5e-bc5b-4129-a1ec-657cf27e6294)
+   * @param {any} property  (example: locked)
    * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
    * @example
    * body
    * ```text
-   * user6
+   * false
    * ```
    */
   static async editProperty(
@@ -7309,8 +7309,8 @@ class UserDomain {
    *
    * Path: api/v1/user/domain/:domain/id/:id
    * @param {Object} body
-   * @param {any} domain
-   * @param {any} id Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA)
+   * @param {any} domain  (example: test.com)
+   * @param {any} id Id or Username  (example: 75d2ed5e-bc5b-4129-a1ec-657cf27e6294)
    * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
    * @example
    * body
@@ -7346,9 +7346,9 @@ class UserDomain {
    * getProperty - Get a user's property by it's id.
    *
    * Path: api/v1/user/domain/:domain/id/:id/property/:property
-   * @param {any} domain
-   * @param {any} id Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA)
-   * @param {any} property
+   * @param {any} domain  (example: test.com)
+   * @param {any} id Id or Username  (example: 75d2ed5e-bc5b-4129-a1ec-657cf27e6294)
+   * @param {any} property  (example: locked)
    * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
    */
   static async getProperty(domain, id, property, authorization_bearer, opts) {
@@ -7376,8 +7376,8 @@ class UserDomain {
    * get - Get a user by it's id.
    *
    * Path: api/v1/user/domain/:domain/id/:id
-   * @param {any} domain
-   * @param {any} id  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA)
+   * @param {any} domain  (example: test.com)
+   * @param {any} id  (example: 75d2ed5e-bc5b-4129-a1ec-657cf27e6294)
    * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
    */
   static async get(domain, id, authorization_bearer, opts) {
@@ -8151,9 +8151,9 @@ class AuthDomain {
    * body
    * ```json
    * {
-   * 	"username": "test",
+   * 	"email": "test@test.com",
    * 	"password": "Pas5w0r!d",
-   *     "domain": "default"
+   *     "domain": "test.com"
    * }
    * ```
    */

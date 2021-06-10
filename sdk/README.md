@@ -1790,8 +1790,8 @@ Path: api/v1/user/domain/:domain/id/:id
 
 | Param | Type | Description |
 | --- | --- | --- |
-| domain | <code>any</code> |  |
-| id | <code>any</code> | Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA) |
+| domain | <code>any</code> | (example: test.com) |
+| id | <code>any</code> | Id or Username  (example: 75d2ed5e-bc5b-4129-a1ec-657cf27e6294) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="UserDomain.removeGroupInheritance"></a>
@@ -1805,7 +1805,7 @@ Path: api/v1/user/domain/:domain/id/:id/inheritance/group/:inheritgroupid/type/:
 
 | Param | Type | Description |
 | --- | --- | --- |
-| domain | <code>any</code> |  |
+| domain | <code>any</code> | (example: trest.com) |
 | id | <code>any</code> | id or name of the user (example: user5) |
 | inheritgroupid | <code>any</code> | id or name of the  group to inherit (example: group2) |
 | inheritgrouptype | <code>any</code> | type of the  group to inherit (example: group) |
@@ -1822,7 +1822,7 @@ Path: api/v1/user/domain/:domain/id/:id/inheritance/group/:inheritgroupid/type/:
 
 | Param | Type | Description |
 | --- | --- | --- |
-| domain | <code>any</code> |  |
+| domain | <code>any</code> | (example: test.com) |
 | id | <code>any</code> | id or name of the user (example: user5) |
 | inheritgroupid | <code>any</code> | id or name of the  group to inherit (example: group2) |
 | inheritgrouptype | <code>any</code> | type of the  group to inherit (example: group) |
@@ -1839,8 +1839,8 @@ Path: api/v1/user/domain/:domain/id/:id/property/:property/:value
 
 | Param | Type | Description |
 | --- | --- | --- |
-| domain | <code>any</code> |  |
-| id | <code>any</code> | Id or Username |
+| domain | <code>any</code> | (example: test.com) |
+| id | <code>any</code> | Id or Username  (example: 75d2ed5e-bc5b-4129-a1ec-657cf27e6294) |
 | property | <code>any</code> | (example: group_id) |
 | value | <code>any</code> | (example: 595d3f9a-5383-4da9-a465-b975d8a5e28e) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
@@ -1857,15 +1857,15 @@ Path: api/v1/user/domain/:domain/id/:id/property/:property
 | Param | Type | Description |
 | --- | --- | --- |
 | body | <code>Object</code> |  |
-| domain | <code>any</code> |  |
-| id | <code>any</code> | Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA) |
-| property | <code>any</code> |  |
+| domain | <code>any</code> | (example: test.com) |
+| id | <code>any</code> | Id or Username  (example: 75d2ed5e-bc5b-4129-a1ec-657cf27e6294) |
+| property | <code>any</code> | (example: locked) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
 body
 ```text
-user6
+false
 ```
 <a name="UserDomain.edit"></a>
 
@@ -1879,8 +1879,8 @@ Path: api/v1/user/domain/:domain/id/:id
 | Param | Type | Description |
 | --- | --- | --- |
 | body | <code>Object</code> |  |
-| domain | <code>any</code> |  |
-| id | <code>any</code> | Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA) |
+| domain | <code>any</code> | (example: test.com) |
+| id | <code>any</code> | Id or Username  (example: 75d2ed5e-bc5b-4129-a1ec-657cf27e6294) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
@@ -1902,9 +1902,9 @@ Path: api/v1/user/domain/:domain/id/:id/property/:property
 
 | Param | Type | Description |
 | --- | --- | --- |
-| domain | <code>any</code> |  |
-| id | <code>any</code> | Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA) |
-| property | <code>any</code> |  |
+| domain | <code>any</code> | (example: test.com) |
+| id | <code>any</code> | Id or Username  (example: 75d2ed5e-bc5b-4129-a1ec-657cf27e6294) |
+| property | <code>any</code> | (example: locked) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="UserDomain.get"></a>
@@ -1918,8 +1918,8 @@ Path: api/v1/user/domain/:domain/id/:id
 
 | Param | Type | Description |
 | --- | --- | --- |
-| domain | <code>any</code> |  |
-| id | <code>any</code> | (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA) |
+| domain | <code>any</code> | (example: test.com) |
+| id | <code>any</code> | (example: 75d2ed5e-bc5b-4129-a1ec-657cf27e6294) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="UserCurrent"></a>
@@ -2367,9 +2367,9 @@ Path: api/v1/auth/login/domain/:domain
 body
 ```json
 {
-	"username": "test",
+	"email": "test@test.com",
 	"password": "Pas5w0r!d",
-    "domain": "default"
+    "domain": "test.com"
 }
 ```
 <a name="AuthDomain.register"></a>
