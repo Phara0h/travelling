@@ -2611,15 +2611,17 @@ class Users {
 | last_login | *optional* (example:  null) |
   *
   * Path: api/v1/users/count
-  * @param {any} filter  (example: created_on>2022-06-06,created_on<2022-06-08)
+  * @param {any} limit Number of maximum results. (example: 2) (example: 2)
+  * @param {any} skip Number of db rows skipped. (example: 10) (example: 10)
+  * @param {any} filter Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-06,created_on<2021-06-08)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   */
-  static async count(filter, authorization_bearer, opts) {
+  static async count(limit, skip, filter, authorization_bearer, opts) {
     var options = {
       method: 'GET',
       simple: false,
       uri: hostUrl + '/' + `api/v1/users/count`,
-      qs: { filter },
+      qs: { limit, skip, filter },
       authorization: {
         bearer: authorization_bearer,
       },
@@ -2636,7 +2638,7 @@ class Users {
   /**
   * get - Gets all the users
 
-##### Optional Query Params
+##### Filter Params
 
 | Param | Description |
 | --- | --- |
@@ -2656,18 +2658,27 @@ class Users {
 | last_login | *optional* (example:  null) |
   *
   * Path: api/v1/users
-  * @param {any} sort  (example: created_on)
-  * @param {any} limit  (example: 1)
-  * @param {any} filter  (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)
-  * @param {any} sortdir  (example: ASC)
+  * @param {any} sort Sort by any user object key (examples: id, domain, locked, etc.) (example: created_on)
+  * @param {any} limit Number of maximum results. (example: 2) (example: 2)
+  * @param {any} skip Number of db rows skipped. (example: 10) (example: 10)
+  * @param {any} filter Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)
+  * @param {any} sortdir Sort direction (example ascending order: ASC) (example: ASC)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   */
-  static async get(sort, limit, filter, sortdir, authorization_bearer, opts) {
+  static async get(
+    sort,
+    limit,
+    skip,
+    filter,
+    sortdir,
+    authorization_bearer,
+    opts
+  ) {
     var options = {
       method: 'GET',
       simple: false,
       uri: hostUrl + '/' + `api/v1/users`,
-      qs: { sort, limit, filter, sortdir },
+      qs: { sort, limit, skip, filter, sortdir },
       authorization: {
         bearer: authorization_bearer,
       },
@@ -2724,15 +2735,17 @@ class UsersDomain {
   *
   * Path: api/v1/users/domain/:domain/count
   * @param {any} domain  (example: test.com)
-  * @param {any} filter  (example: created_on>2022-06-01,created_on<2022-06-08)
+  * @param {any} limit Number of maximum results. (example: 2) (example: 5)
+  * @param {any} skip Number of db rows skipped. (example: 10) (example: 10)
+  * @param {any} filter Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2022-06-01,created_on<2022-06-08)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   */
-  static async count(domain, filter, authorization_bearer, opts) {
+  static async count(domain, limit, skip, filter, authorization_bearer, opts) {
     var options = {
       method: 'GET',
       simple: false,
       uri: hostUrl + '/' + `api/v1/users/domain/${domain}/count`,
-      qs: { filter },
+      qs: { limit, skip, filter },
       authorization: {
         bearer: authorization_bearer,
       },
@@ -2749,7 +2762,7 @@ class UsersDomain {
   /**
   * get - Gets all the users
 
-##### Optional Query Params
+##### Filter Params
 
 | Param | Description |
 | --- | --- |
@@ -2770,16 +2783,18 @@ class UsersDomain {
   *
   * Path: api/v1/users/domain/:domain
   * @param {any} domain  (example: test.com)
-  * @param {any} sort  (example: created_on)
-  * @param {any} limit  (example: 2)
-  * @param {any} filter  (example: created_on>2021-06-01,created_on<2021-06-08)
-  * @param {any} sortdir  (example: ASC)
+  * @param {any} sort Sort by any user object key (examples: id, domain, locked, etc.) (example: created_on)
+  * @param {any} limit Number of maximum results. (example: 2) (example: 1)
+  * @param {any} skip Number of db rows skipped. (example: 10) (example: 10)
+  * @param {any} filter Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-01,created_on<2021-06-08)
+  * @param {any} sortdir Sort direction (example ascending order: ASC) (example: ASC)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   */
   static async get(
     domain,
     sort,
     limit,
+    skip,
     filter,
     sortdir,
     authorization_bearer,
@@ -2789,7 +2804,7 @@ class UsersDomain {
       method: 'GET',
       simple: false,
       uri: hostUrl + '/' + `api/v1/users/domain/${domain}`,
-      qs: { sort, limit, filter, sortdir },
+      qs: { sort, limit, skip, filter, sortdir },
       authorization: {
         bearer: authorization_bearer,
       },
@@ -3077,8 +3092,314 @@ class User {
     return await fasq.request(options);
   }
 
+  static get Domain() {
+    return UserDomain;
+  }
+
   static get Current() {
     return UserCurrent;
+  }
+}
+/**
+ *
+ */
+class UserDomain {
+  constructor() {}
+  static get _postgenClassUrls() {
+    return {
+      delete: 'api/v1/user/domain/:domain/id/:id',
+      removegroupinheritance:
+        'api/v1/user/domain/:domain/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype',
+      addgroupinheritance:
+        'api/v1/user/domain/:domain/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype',
+      editpropertyvalue:
+        'api/v1/user/domain/:domain/id/:id/property/:property/:value',
+      editproperty: 'api/v1/user/domain/:domain/id/:id/property/:property',
+      edit: 'api/v1/user/domain/:domain/id/:id',
+      getproperty: 'api/v1/user/domain/:domain/id/:id/property/:property',
+      get: 'api/v1/user/domain/:domain/id/:id',
+    };
+  }
+  static getFunctionsPath(name) {
+    return this._postgenClassUrls[name.toLowerCase()];
+  }
+
+  /**
+   * delete - Delete a user by it's Id.
+   *
+   * Path: api/v1/user/domain/:domain/id/:id
+   * @param {any} domain
+   * @param {any} id Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA)
+   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+   */
+  static async delete(domain, id, authorization_bearer, opts) {
+    var options = {
+      method: 'DELETE',
+      simple: false,
+      uri: hostUrl + '/' + `api/v1/user/domain/${domain}/id/${id}`,
+      authorization: {
+        bearer: authorization_bearer,
+      },
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
+  }
+
+  /**
+   * removeGroupInheritance - Remove a user from a group.
+   *
+   * Path: api/v1/user/domain/:domain/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype
+   * @param {any} domain
+   * @param {any} id id or name of the user (example: user5)
+   * @param {any} inheritgroupid id or name of the  group to inherit (example: group2)
+   * @param {any} inheritgrouptype type of the  group to inherit (example: group)
+   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+   */
+  static async removeGroupInheritance(
+    domain,
+    id,
+    inheritgroupid,
+    inheritgrouptype,
+    authorization_bearer,
+    opts
+  ) {
+    var options = {
+      method: 'DELETE',
+      simple: false,
+      uri:
+        hostUrl +
+        '/' +
+        `api/v1/user/domain/${domain}/id/${id}/inheritance/group/${inheritgroupid}/type/${inheritgrouptype}`,
+      authorization: {
+        bearer: authorization_bearer,
+      },
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
+  }
+
+  /**
+   * addGroupInheritance - Add a user to a group.
+   *
+   * Path: api/v1/user/domain/:domain/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype
+   * @param {any} domain
+   * @param {any} id id or name of the user (example: user5)
+   * @param {any} inheritgroupid id or name of the  group to inherit (example: group2)
+   * @param {any} inheritgrouptype type of the  group to inherit (example: group)
+   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+   */
+  static async addGroupInheritance(
+    domain,
+    id,
+    inheritgroupid,
+    inheritgrouptype,
+    authorization_bearer,
+    opts
+  ) {
+    var options = {
+      method: 'PUT',
+      simple: false,
+      uri:
+        hostUrl +
+        '/' +
+        `api/v1/user/domain/${domain}/id/${id}/inheritance/group/${inheritgroupid}/type/${inheritgrouptype}`,
+      authorization: {
+        bearer: authorization_bearer,
+      },
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
+  }
+
+  /**
+   * editPropertyValue - Edit a current user's property data as a path param.
+   *
+   * Path: api/v1/user/domain/:domain/id/:id/property/:property/:value
+   * @param {any} domain
+   * @param {any} id Id or Username
+   * @param {any} property  (example: group_id)
+   * @param {any} value  (example: 595d3f9a-5383-4da9-a465-b975d8a5e28e)
+   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+   */
+  static async editPropertyValue(
+    domain,
+    id,
+    property,
+    value,
+    authorization_bearer,
+    opts
+  ) {
+    var options = {
+      method: 'PUT',
+      simple: false,
+      uri:
+        hostUrl +
+        '/' +
+        `api/v1/user/domain/${domain}/id/${id}/property/${property}/${value}`,
+      authorization: {
+        bearer: authorization_bearer,
+      },
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
+  }
+
+  /**
+   * editProperty - Edit a user's property by id.
+   *
+   * Path: api/v1/user/domain/:domain/id/:id/property/:property
+   * @param {Object} body
+   * @param {any} domain
+   * @param {any} id Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA)
+   * @param {any} property
+   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+   * @example
+   * body
+   * ```text
+   * user6
+   * ```
+   */
+  static async editProperty(
+    body,
+    domain,
+    id,
+    property,
+    authorization_bearer,
+    opts
+  ) {
+    var options = {
+      method: 'PUT',
+      simple: false,
+      uri:
+        hostUrl +
+        '/' +
+        `api/v1/user/domain/${domain}/id/${id}/property/${property}`,
+      body,
+      authorization: {
+        bearer: authorization_bearer,
+      },
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
+  }
+
+  /**
+   * edit - Edit a user's by id.
+   *
+   * Path: api/v1/user/domain/:domain/id/:id
+   * @param {Object} body
+   * @param {any} domain
+   * @param {any} id Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA)
+   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+   * @example
+   * body
+   * ```json
+   * {
+   * 	"username" : "user6",
+   * 	"password" : "Awickednewawesomepasword4242!@"
+   * }
+   * ```
+   */
+  static async edit(body, domain, id, authorization_bearer, opts) {
+    var options = {
+      method: 'PUT',
+      simple: false,
+      uri: hostUrl + '/' + `api/v1/user/domain/${domain}/id/${id}`,
+      body,
+      json: true,
+      json: true,
+      authorization: {
+        bearer: authorization_bearer,
+      },
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
+  }
+
+  /**
+   * getProperty - Get a user's property by it's id.
+   *
+   * Path: api/v1/user/domain/:domain/id/:id/property/:property
+   * @param {any} domain
+   * @param {any} id Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA)
+   * @param {any} property
+   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+   */
+  static async getProperty(domain, id, property, authorization_bearer, opts) {
+    var options = {
+      method: 'GET',
+      simple: false,
+      uri:
+        hostUrl +
+        '/' +
+        `api/v1/user/domain/${domain}/id/${id}/property/${property}`,
+      authorization: {
+        bearer: authorization_bearer,
+      },
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
+  }
+
+  /**
+   * get - Get a user by it's id.
+   *
+   * Path: api/v1/user/domain/:domain/id/:id
+   * @param {any} domain
+   * @param {any} id  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA)
+   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+   */
+  static async get(domain, id, authorization_bearer, opts) {
+    var options = {
+      method: 'GET',
+      simple: false,
+      uri: hostUrl + '/' + `api/v1/user/domain/${domain}/id/${id}`,
+      authorization: {
+        bearer: authorization_bearer,
+      },
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
   }
 }
 /**
@@ -3976,6 +4297,7 @@ function SDK(host, opts) {
     Users,
     UsersDomain,
     User,
+    UserDomain,
     UserCurrent,
     Auth,
     AuthToken,
