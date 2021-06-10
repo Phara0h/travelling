@@ -7,8 +7,10 @@ const misc = require('../../utils/misc');
 const gm = require('../../server/groupmanager');
 const Database = require('../../database');
 
-async function deleteUser(req, res, router) {
+async function deleteUser(req, res, needsDomain, router) {
   var id = _getId(req);
+  var domain = req.params.domain;
+  var user;
 
   if (!id) {
     res.code(400);
@@ -18,7 +20,11 @@ async function deleteUser(req, res, router) {
     };
   }
 
-  var user = await User.deleteAllBy(id, 'AND');
+  if (needsDomain) {
+    user = await User.deleteAllBy({ domain, ...id }, 'AND', 1);
+  } else {
+    user = await User.deleteAllBy(id, 'AND');
+  }
 
   if (user && user.length > 0) {
     await user[0].resolveGroup(router);
@@ -40,8 +46,10 @@ async function deleteUser(req, res, router) {
   };
 }
 
-async function editUser(req, res, router) {
+async function editUser(req, res, needsDomain, router) {
   var id = _getId(req);
+  var domain = req.params.domain;
+  var user;
 
   if (!id) {
     res.code(400);
@@ -80,7 +88,11 @@ async function editUser(req, res, router) {
     };
   }
 
-  var user = await User.updateLimitedBy(id, updatedProps, 'AND', 1);
+  if (needsDomain) {
+    user = await User.updateLimitedBy({ domain, ...id }, updatedProps, 'AND', 1);
+  } else {
+    user = await User.updateLimitedBy(id, updatedProps, 'AND', 1);
+  }
 
   if (user && user.length > 0) {
     if (req.params.prop && user[0][req.params.prop] === undefined) {
@@ -112,8 +124,10 @@ async function editUser(req, res, router) {
   };
 }
 
-async function getUser(req, res) {
+async function getUser(req, res, needsDomain) {
   var id = _getId(req);
+  var domain = req.params.domain;
+  var user;
 
   if (!id) {
     res.code(400);
@@ -123,7 +137,11 @@ async function getUser(req, res) {
     };
   }
 
-  var user = await User.findLimtedBy(id, 'AND', 1);
+  if (needsDomain) {
+    user = await User.findLimtedBy({ domain, ...id }, 'AND', 1);
+  } else {
+    user = await User.findLimtedBy(id, 'AND', 1);
+  }
 
   if (user && user.length > 0) {
     if (req.params.prop && user[0][req.params.prop] === undefined) {
@@ -246,10 +264,10 @@ function routes(app, opts, done) {
   // };
 
   app.get('/user/id/:id', async (req, res) => {
-    return await getUser(req, res, router);
+    return await getUser(req, res, needsDomain = false, router);
   });
   app.get('/user/id/:id/property/:prop', async (req, res) => {
-    return await getUser(req, res, router);
+    return await getUser(req, res, needsDomain = false, router);
   });
 
   app.put('/user/id/:id/inheritance/group/:groupid/type/:grouptype', async (req, res) => {
@@ -261,7 +279,7 @@ function routes(app, opts, done) {
       return group;
     }
 
-    var user = await getUser(req, res);
+    var user = await getUser(req, res, needsDomain = false);
 
     if (user && user.msg) {
       res.code(400);
@@ -282,7 +300,7 @@ function routes(app, opts, done) {
       return group;
     }
 
-    var user = await getUser(req, res);
+    var user = await getUser(req, res, needsDomain = false);
 
     if (user && user.msg) {
       res.code(400);
@@ -296,18 +314,149 @@ function routes(app, opts, done) {
   });
 
   app.put('/user/id/:id', async (req, res) => {
-    return await editUser(req, res, router);
+    return await editUser(req, res, needsDomain = false, router);
   });
   app.put('/user/id/:id/property/:prop', async (req, res) => {
-    return await editUser(req, res, router);
+    return await editUser(req, res, needsDomain = false, router);
   });
   app.put('/user/id/:id/property/:prop/:propdata', async (req, res) => {
-    return await editUser(req, res, router);
+    return await editUser(req, res, needsDomain = false, router);
   });
 
   app.delete('/user/id/:id', async (req, res) => {
-    return await deleteUser(req, res, router);
+    return await deleteUser(req, res, needsDomain = false, router);
   });
+
+  // Domain operations
+  app.get('/user/domain/:domain/id/:id', async (req, res) => {
+    if (!req.params.domain) {
+      res.code(400);
+      return {
+        type: 'user-find-by-error',
+        msg: 'No domain was provided.'
+      };
+    }
+
+    return await getUser(req, res, needsDomain = true, router);
+  });
+  app.get('/user/domain/:domain/id/:id/property/:prop', async (req, res) => {
+    if (!req.params.domain) {
+      res.code(400);
+      return {
+        type: 'user-find-by-error',
+        msg: 'No domain was provided.'
+      };
+    }
+
+    return await getUser(req, res, needsDomain = true, router);
+  });
+
+  app.put('/user/domain/:domain/id/:id/inheritance/group/:groupid/type/:grouptype', async (req, res) => {
+    const group = await getGroup(req, res);
+
+    if (!req.params.domain) {
+      res.code(400);
+      return {
+        type: 'user-find-by-error',
+        msg: 'No domain was provided.'
+      };
+    }
+
+    if (group && group.msg) {
+      res.code(400);
+      return group;
+    }
+
+    var user = await getUser(req, res, needsDomain = true);
+
+    if (user && user.msg) {
+      res.code(400);
+      return user;
+    }
+
+    user = await addRemoveGroupInheritance(user, group, true, req);
+    res.code(user && user.msg ? 400 : 200);
+
+    return user;
+  });
+
+  app.delete('/user/domain/:domain/id/:id/inheritance/group/:groupid/type/:grouptype', async (req, res) => {
+    const group = await getGroup(req, res);
+
+    if (!req.params.domain) {
+      res.code(400);
+      return {
+        type: 'user-find-by-error',
+        msg: 'No domain was provided.'
+      };
+    }
+
+    if (group && group.msg) {
+      res.code(400);
+      return group;
+    }
+
+    var user = await getUser(req, res, needsDomain = true);
+
+    if (user && user.msg) {
+      res.code(400);
+      return user;
+    }
+
+    user = await addRemoveGroupInheritance(user, group, false, req);
+    res.code(user && user.msg ? 400 : 200);
+
+    return user;
+  });
+
+  app.put('/user/domain/:domain/id/:id', async (req, res) => {
+    if (!req.params.domain) {
+      res.code(400);
+      return {
+        type: 'user-find-by-error',
+        msg: 'No domain was provided.'
+      };
+    }
+
+    return await editUser(req, res, needsDomain = true, router);
+  });
+
+  app.put('/user/domain/:domain/id/:id/property/:prop', async (req, res) => {
+    if (!req.params.domain) {
+      res.code(400);
+      return {
+        type: 'user-find-by-error',
+        msg: 'No domain was provided.'
+      };
+    }
+
+    return await editUser(req, res, needsDomain = true, router);
+  });
+
+  app.put('/user/domain/:domain/id/:id/property/:prop/:propdata', async (req, res) => {
+    if (!req.params.domain) {
+      res.code(400);
+      return {
+        type: 'user-find-by-error',
+        msg: 'No domain was provided.'
+      };
+    }
+
+    return await editUser(req, res, needsDomain = true, router);
+  });
+
+  app.delete('/user/domain/:domain/id/:id', async (req, res) => {
+    if (!req.params.domain) {
+      res.code(400);
+      return {
+        type: 'user-find-by-error',
+        msg: 'No domain was provided.'
+      };
+    }
+
+    return await deleteUser(req, res, needsDomain = true, router);
+  });
+
 
   // app.get('/user/resolve/group/username/:username', getUserResolveGroup);
   // app.get('/user/resolve/group/username/:username/:prop', getUserResolveGroup);
