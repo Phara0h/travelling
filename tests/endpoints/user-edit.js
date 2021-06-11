@@ -103,31 +103,6 @@ module.exports = () => {
 
   describe('Non-Current User By Domain', () => {
     describe('Valid', () => {
-      // TODO: Move to user-get.js
-      // test('Get User Domain 2', async () => {
-      //   var res = await Travelling.User.Domain.get(
-      //     'test.com',
-      //     'test_domain_2@test.com',
-      //     userContainer.userDomain2Token
-      //   );
-
-      //   expect(res.statusCode).toEqual(200);
-      //   expect(res.body.domain).toEqual('test.com');
-      //   expect(res.body.email).toEqual('test_domain_2@test.com');
-      // });
-      //
-      // test('Get User Domain 2', async () => {
-      //   var res = await Travelling.User.Domain.getProperty(
-      //     'test.com',
-      //     'test_domain_2@test.com',
-      //     userContainer.userDomain2Token
-      //   );
-
-      //   expect(res.statusCode).toEqual(200);
-      //   expect(res.body.domain).toEqual('test.com');
-      //   expect(res.body.email).toEqual('test_domain_2@test.com');
-      // });
-
       test('Edit Property [email] User Domain 2', async () => {
         var res = await Travelling.User.Domain.editProperty(
           'test_domain_2_changed@test.com',
@@ -297,31 +272,6 @@ module.exports = () => {
         expect(res.body).toHaveProperty('type', 'user-delete-error');
         expect(res.body).toHaveProperty('msg', 'No user by that username or id was found.');
       });
-
-      // TODO: Move to user-get.js
-      // test('Get User Domain 2 non-existent domain', async () => {
-      //   var res = await Travelling.User.Domain.get(
-      //     'this-aint-no-real-domain.elite',
-      //     'test_domain_2@test.com',
-      //     userContainer.userDomain2Token
-      //   );
-
-      //   expect(res.statusCode).toEqual(400);
-      // expect(res.body).toHaveProperty('type', 'Error-Sex-Ethnicity-Hair');
-      // expect(res.body).toHaveProperty('msg', 'Must input valid sex and ethnicity and hair.');
-      // });
-
-      // test('Get User Domain 2 invalid id', async () => {
-      //   var res = await Travelling.User.Domain.get(
-      //     'test.com',
-      //     'real-incorrect-id@45.wrong',
-      //     userContainer.userDomain2Token
-      //   );
-
-      //   expect(res.statusCode).toEqual(400);
-      // expect(res.body).toHaveProperty('type', 'Error-Sex-Ethnicity-Hair');
-      // expect(res.body).toHaveProperty('msg', 'Must input valid sex and ethnicity and hair.');
-      // });
 
     }); 
   });
