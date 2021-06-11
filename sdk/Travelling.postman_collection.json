@@ -1682,11 +1682,13 @@
 									"variable": [
 										{
 											"key": "domain",
-											"value": "test.com"
+											"value": "test.com",
+											"description": "Domain (example: test.com)"
 										},
 										{
 											"key": "id",
-											"value": "75d2ed5e-bc5b-4129-a1ec-657cf27e6294"
+											"value": "d1bf9986-9938-4d47-b8aa-79184b37cc16",
+											"description": "id, username or email."
 										}
 									]
 								},
@@ -1725,16 +1727,18 @@
 									"variable": [
 										{
 											"key": "domain",
-											"value": "test.com"
+											"value": "test.com",
+											"description": "Domain (example: test.com)"
 										},
 										{
 											"key": "id",
 											"value": "75d2ed5e-bc5b-4129-a1ec-657cf27e6294",
-											"description": "Id or Username "
+											"description": "id, username or email."
 										},
 										{
 											"key": "property",
-											"value": "locked"
+											"value": "locked",
+											"description": "Property to get (example: locked)"
 										}
 									]
 								},
@@ -1786,12 +1790,13 @@
 									"variable": [
 										{
 											"key": "domain",
-											"value": "test.com"
+											"value": "test.com",
+											"description": "Domain (example: test.com)"
 										},
 										{
 											"key": "id",
 											"value": "75d2ed5e-bc5b-4129-a1ec-657cf27e6294",
-											"description": "Id or Username "
+											"description": "id, username or email."
 										}
 									]
 								},
@@ -1839,16 +1844,18 @@
 									"variable": [
 										{
 											"key": "domain",
-											"value": "test.com"
+											"value": "test.com",
+											"description": "Domain (example: test.com)"
 										},
 										{
 											"key": "id",
 											"value": "75d2ed5e-bc5b-4129-a1ec-657cf27e6294",
-											"description": "Id or Username "
+											"description": "id, username or email."
 										},
 										{
 											"key": "property",
-											"value": "locked"
+											"value": "locked",
+											"description": "Property to modify (example: locked)"
 										}
 									]
 								},
@@ -1888,20 +1895,23 @@
 									"variable": [
 										{
 											"key": "domain",
-											"value": "test.com"
+											"value": "test.com",
+											"description": "Domain (example: test.com)"
 										},
 										{
 											"key": "id",
 											"value": "75d2ed5e-bc5b-4129-a1ec-657cf27e6294",
-											"description": "Id or Username "
+											"description": "id, username or email."
 										},
 										{
 											"key": "property",
-											"value": "group_id"
+											"value": "locked",
+											"description": "Property to modify (example: locked)"
 										},
 										{
 											"key": "value",
-											"value": "595d3f9a-5383-4da9-a465-b975d8a5e28e"
+											"value": "true",
+											"description": "Value to change property to."
 										}
 									]
 								},
@@ -1943,22 +1953,23 @@
 									"variable": [
 										{
 											"key": "domain",
-											"value": "test.com"
+											"value": "test.com",
+											"description": "Domain (example: test.com)"
 										},
 										{
 											"key": "id",
 											"value": "user5",
-											"description": "id or name of the user"
+											"description": "id, username or email."
 										},
 										{
 											"key": "inheritgroupid",
 											"value": "group2",
-											"description": "id or name of the  group to inherit"
+											"description": "id or name of the group to inherit"
 										},
 										{
 											"key": "inheritgrouptype",
 											"value": "group",
-											"description": "type of the  group to inherit"
+											"description": "type of the group to inherit"
 										}
 									]
 								},
@@ -2000,22 +2011,23 @@
 									"variable": [
 										{
 											"key": "domain",
-											"value": "trest.com"
+											"value": "test.com",
+											"description": "Domain (example: test.com)"
 										},
 										{
 											"key": "id",
-											"value": "user5",
-											"description": "id or name of the user"
+											"value": "d1bf9986-9938-4d47-b8aa-79184b37cc16",
+											"description": "id, username or email."
 										},
 										{
 											"key": "inheritgroupid",
-											"value": "group2",
-											"description": "id or name of the  group to inherit"
+											"value": "group1",
+											"description": "id or name of the group to inherit"
 										},
 										{
 											"key": "inheritgrouptype",
-											"value": "group",
-											"description": "type of the  group to inherit"
+											"value": "testgroup",
+											"description": "type of the group to inherit"
 										}
 									]
 								},
@@ -2052,12 +2064,13 @@
 									"variable": [
 										{
 											"key": "domain",
-											"value": "test.com"
+											"value": "test.com",
+											"description": "Domain (example: test.com)"
 										},
 										{
 											"key": "id",
 											"value": "75d2ed5e-bc5b-4129-a1ec-657cf27e6294",
-											"description": "Id or Username "
+											"description": "id, username or email."
 										}
 									]
 								},
@@ -6497,7 +6510,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"group1\",\n    \"type\": \"accounts\",\n    \"allowed\": [\n        {\n            \"route\": \"/test\",\n            \"host\": \"http://127.0.0.1:1237/\",\n            \"remove_from_path\": \"test\",\n            \"method\": \"*\",\n            \"name\": \"all-test\"\n        }\n    ],\n    \"is_default\": false\n}",
+							"raw": "{\n    \"name\": \"group1\",\n    \"type\": \"testgroup\",\n    \"allowed\": [\n        {\n            \"route\": \"/test\",\n            \"host\": \"http://127.0.0.1:1237/\",\n            \"remove_from_path\": \"test\",\n            \"method\": \"*\",\n            \"name\": \"all-test\"\n        }\n    ],\n    \"is_default\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
