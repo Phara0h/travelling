@@ -115,8 +115,20 @@ module.exports = () => {
       //   expect(res.body.domain).toEqual('test.com');
       //   expect(res.body.email).toEqual('test_domain_2@test.com');
       // });
+      //
+      // test('Get User Domain 2', async () => {
+      //   var res = await Travelling.User.Domain.getProperty(
+      //     'test.com',
+      //     'test_domain_2@test.com',
+      //     userContainer.userDomain2Token
+      //   );
 
-      test('Edit User Domain 2 Email Property', async () => {
+      //   expect(res.statusCode).toEqual(200);
+      //   expect(res.body.domain).toEqual('test.com');
+      //   expect(res.body.email).toEqual('test_domain_2@test.com');
+      // });
+
+      test('Edit Property [email] User Domain 2', async () => {
         var res = await Travelling.User.Domain.editProperty(
           'test_domain_2_changed@test.com',
           'test.com',
@@ -129,7 +141,7 @@ module.exports = () => {
         expect(res.statusCode).toEqual(200);
       });
 
-      test('Edit User Domain 2 Email Property Value', async () => {
+      test('Edit Property Value [email] User Domain 2', async () => {
         var res = await Travelling.User.Domain.editPropertyValue(
           'test.com',
           'test_domain_2_changed@test.com',
@@ -142,7 +154,7 @@ module.exports = () => {
         expect(res.statusCode).toEqual(200);
       });
 
-      test('Edit User Domain 2 UserData', async () => {
+      test('Edit [UserData] User Domain 2', async () => {
         var res = await Travelling.User.Domain.edit(
           { user_data: { test: 1, foo: 'bar' } },
           'test.com',
@@ -154,7 +166,43 @@ module.exports = () => {
         expect(res.body).toMatchObject({ user_data: { test: 1, foo: 'bar' } });
       });
 
-      test('Delete User Domain 3 UserData', async () => {
+      test('Add Group Inheritance [group1][testgroup] User Domain 2', async () => {
+        var res = await Travelling.User.Domain.addGroupInheritance(
+          'test.com',
+          'test_domain_2@test.com',
+          'group1',
+          'testgroup',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body.domain).toEqual('test.com')
+      });
+
+      test('Remove Group Inheritance [group1][testgroup] User Domain 3', async () => {
+        // Add group inheritence
+        var res = await Travelling.User.Domain.addGroupInheritance(
+          'test.com',
+          'test_domain_3@test.com',
+          'group1',
+          'testgroup',
+          userContainer.userDomain3Token
+        );
+        
+        // Remove group inheritence
+        var res = await Travelling.User.Domain.removeGroupInheritance(
+          'test.com',
+          'test_domain_3@test.com',
+          'group1',
+          'testgroup',
+          userContainer.userDomain3Token
+        );
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body.domain).toEqual('test.com')
+      });
+
+      test('Delete User Domain 3', async () => {
         var res = await Travelling.User.Domain.delete(
           'test.com',
           'test_domain_3@test.com',
@@ -167,8 +215,9 @@ module.exports = () => {
 
     });
 
+
     describe('Invalid', () => {
-      test('Edit User Domain 2 Email Property Invalid Domain', async () => {
+      test('Edit Property [email] User Domain 2 Invalid Domain', async () => {
         var res = await Travelling.User.Domain.editProperty(
           'test_domain_2_changed@test.com',
           'this-aint-no-real-domain.elite',
@@ -178,9 +227,11 @@ module.exports = () => {
         );
 
         expect(res.statusCode).toEqual(400);
+        expect(res.body).toHaveProperty('type', 'user-edit-error');
+        expect(res.body).toHaveProperty('msg', 'No user by that username or id was found.');
       });
 
-      test('Edit User Domain 2 Email Property Value Invalid Property', async () => {
+      test('Edit Property Value User Domain 2 Invalid Property', async () => {
         var res = await Travelling.User.Domain.editPropertyValue(
           'test.com',
           'test_domain_2_changed@test.com',
@@ -190,6 +241,61 @@ module.exports = () => {
         );
 
         expect(res.statusCode).toEqual(400);
+        expect(res.body).toHaveProperty('type', 'user-prop-error');
+        expect(res.body).toHaveProperty('msg', 'Not a property of user');
+      });
+
+      test('Edit User Domain 2 Invalid Data', async () => {
+        var res = await Travelling.User.Domain.edit(
+          { garbo: { from: 3.14159, space: 'bar' } },
+          'test.com',
+          'test_domain_2@test.com',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.statusCode).toEqual(400);
+        expect(res.body).toHaveProperty('type', 'user-prop-error');
+        expect(res.body).toHaveProperty('msg', 'Not a property of user');
+      });
+
+      test('Add [Pre-Existing] Group Inheritance User Domain 2', async () => {
+        var res = await Travelling.User.Domain.addGroupInheritance(
+          'test.com',
+          'test_domain_2@test.com',
+          'group1',
+          'testgroup',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.statusCode).toEqual(400);
+        expect(res.body).toHaveProperty('type', 'user-add-group-error');
+        expect(res.body).toHaveProperty('msg', 'User could not add group.');
+      });
+
+      test('Add Group Inheritance User Domain 2 Non-existent group type', async () => {
+        var res = await Travelling.User.Domain.addGroupInheritance(
+          'test.com',
+          'test_domain_2@test.com',
+          'group1',
+          'it-really-doesnt-exist',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.statusCode).toEqual(400);
+        expect(res.body).toHaveProperty('type', 'user-edit-group-error');
+        expect(res.body).toHaveProperty('msg', 'No group with that type by that name or id was found.');
+      });
+
+      test('Delete Already Deleted User Domain 3', async () => {
+        var res = await Travelling.User.Domain.delete(
+          'test.com',
+          'test_domain_3@test.com',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.statusCode).toEqual(400);
+        expect(res.body).toHaveProperty('type', 'user-delete-error');
+        expect(res.body).toHaveProperty('msg', 'No user by that username or id was found.');
       });
 
       // TODO: Move to user-get.js
@@ -201,16 +307,20 @@ module.exports = () => {
       //   );
 
       //   expect(res.statusCode).toEqual(400);
+      // expect(res.body).toHaveProperty('type', 'Error-Sex-Ethnicity-Hair');
+      // expect(res.body).toHaveProperty('msg', 'Must input valid sex and ethnicity and hair.');
       // });
 
       // test('Get User Domain 2 invalid id', async () => {
       //   var res = await Travelling.User.Domain.get(
       //     'test.com',
-      //     'real-incorrect-id@trump.wrong',
+      //     'real-incorrect-id@45.wrong',
       //     userContainer.userDomain2Token
       //   );
 
       //   expect(res.statusCode).toEqual(400);
+      // expect(res.body).toHaveProperty('type', 'Error-Sex-Ethnicity-Hair');
+      // expect(res.body).toHaveProperty('msg', 'Must input valid sex and ethnicity and hair.');
       // });
 
     }); 
