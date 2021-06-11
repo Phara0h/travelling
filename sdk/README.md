@@ -2249,7 +2249,15 @@ Path: api/v1/auth/logout
 <a name="Auth.login"></a>
 
 ### Auth.login(body)
-login - Register a user
+login - Login a user
+
+##### Body Properties
+
+| Prop | Description |
+| --- | --- |
+| email/username | *required* String (example:  test@test.com) |
+| password | *required* String (example:  fakePassword123) |
+| remember | *optional* Boolean if you would like to be logged in automatically (example:  true) |
 
 Path: api/v1/auth/login
 
@@ -2263,9 +2271,9 @@ Path: api/v1/auth/login
 body
 ```json
 {
-	"username": "test",
+	"id": "test4@test.com",
 	"password": "Pas5w0r!d",
-    "domain": "default"
+    "remember": true
 }
 ```
 <a name="Auth.register"></a>
@@ -2340,7 +2348,7 @@ Path: api/v1/auth/password/forgot/domain/:domain
 | Param | Type | Description |
 | --- | --- | --- |
 | body | <code>Object</code> |  |
-| domain | <code>any</code> | (example: traziventures.com) |
+| domain | <code>any</code> | Domain name (example: test.com) (example: traziventures.com) |
 
 **Example**  
 body
@@ -2352,7 +2360,16 @@ body
 <a name="AuthDomain.login"></a>
 
 ### AuthDomain.login(body, domain)
-login - Register a user
+login - Login a user
+
+##### Body Properties
+
+| Prop | Description |
+| --- | --- |
+| email/username | *required* String (example:  test@test.com) |
+| password | *required* String (example:  fakePassword123) |
+| domain | *required* String (example:  test.com) |
+| remember | *optional* Boolean if you would like to be logged in automatically (example:  true) |
 
 Path: api/v1/auth/login/domain/:domain
 
@@ -2361,15 +2378,16 @@ Path: api/v1/auth/login/domain/:domain
 | Param | Type | Description |
 | --- | --- | --- |
 | body | <code>Object</code> |  |
-| domain | <code>any</code> | (example: test.com) |
+| domain | <code>any</code> | Domain name (example: test.com) (example: test.com) |
 
 **Example**  
 body
 ```json
 {
-	"email": "test@test.com",
+	"email": "test4@test.com",
 	"password": "Pas5w0r!d",
-    "domain": "test.com"
+    "domain": "test.com",
+    "remember": true
 }
 ```
 <a name="AuthDomain.register"></a>
@@ -2386,7 +2404,7 @@ Path: api/v1/auth/register/domain/:domain
 | Param | Type | Description |
 | --- | --- | --- |
 | body | <code>Object</code> |  |
-| domain | <code>any</code> | (example: test.com) |
+| domain | <code>any</code> | Domain name (example: test.com) (example: test.com) |
 
 **Example**  
 body
