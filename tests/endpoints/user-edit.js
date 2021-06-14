@@ -203,7 +203,6 @@ module.exports = () => {
 
         expect(res.statusCode).toEqual(400);
         expect(res.body).toHaveProperty('type', 'user-edit-error');
-        expect(res.body).toHaveProperty('msg', 'No user by that username or id was found.');
       });
 
       test('Edit Property Value User Domain 2 Invalid Property', async () => {
@@ -217,7 +216,6 @@ module.exports = () => {
 
         expect(res.statusCode).toEqual(400);
         expect(res.body).toHaveProperty('type', 'user-prop-error');
-        expect(res.body).toHaveProperty('msg', 'Not a property of user');
       });
 
       test('Edit User Domain 2 Invalid Data', async () => {
@@ -230,7 +228,6 @@ module.exports = () => {
 
         expect(res.statusCode).toEqual(400);
         expect(res.body).toHaveProperty('type', 'user-prop-error');
-        expect(res.body).toHaveProperty('msg', 'Not a property of user');
       });
 
       test('Add [Pre-Existing] Group Inheritance User Domain 2', async () => {
@@ -244,7 +241,6 @@ module.exports = () => {
 
         expect(res.statusCode).toEqual(400);
         expect(res.body).toHaveProperty('type', 'user-add-group-error');
-        expect(res.body).toHaveProperty('msg', 'User could not add group.');
       });
 
       test('Add Group Inheritance User Domain 2 Non-existent group type', async () => {
@@ -258,7 +254,6 @@ module.exports = () => {
 
         expect(res.statusCode).toEqual(400);
         expect(res.body).toHaveProperty('type', 'user-edit-group-error');
-        expect(res.body).toHaveProperty('msg', 'No group with that type by that name or id was found.');
       });
 
       test('Delete Already Deleted User Domain 3', async () => {
@@ -270,7 +265,6 @@ module.exports = () => {
 
         expect(res.statusCode).toEqual(400);
         expect(res.body).toHaveProperty('type', 'user-delete-error');
-        expect(res.body).toHaveProperty('msg', 'No user by that username or id was found.');
       });
 
     }); 
