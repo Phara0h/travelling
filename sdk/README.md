@@ -2271,8 +2271,9 @@ Path: api/v1/auth/login
 body
 ```json
 {
-	"id": "test4@test.com",
+	"id": "test@test.com",
 	"password": "Pas5w0r!d",
+    "domain": "default",
     "remember": true
 }
 ```
@@ -2384,7 +2385,7 @@ Path: api/v1/auth/login/domain/:domain
 body
 ```json
 {
-	"email": "test4@test.com",
+	"email": "test@test.com",
 	"password": "Pas5w0r!d",
     "domain": "test.com",
     "remember": true

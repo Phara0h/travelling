@@ -187,7 +187,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"email\": \"test4@test.com\",\n\t\"password\": \"Pas5w0r!d\",\n    \"domain\": \"test.com\",\n    \"remember\": true\n}",
+									"raw": "{\n\t\"email\": \"test@test.com\",\n\t\"password\": \"Pas5w0r!d\",\n    \"domain\": \"test.com\",\n    \"remember\": true\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -495,7 +495,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"id\": \"test4@test.com\",\n\t\"password\": \"Pas5w0r!d\",\n    \"remember\": true\n}",
+							"raw": "{\n\t\"id\": \"test@test.com\",\n\t\"password\": \"Pas5w0r!d\",\n    \"domain\": \"default\",\n    \"remember\": true\n}",
 							"options": {
 								"raw": {
 									"language": "json"
