@@ -20,7 +20,7 @@ async function deleteUser(opts) {
     };
   }
 
-  if (needsDomain && !domain) {
+  if (opts.needsDomain && !domain) {
     opts.res.code(400);
     return {
       type: 'user-missing-param-error',
@@ -66,7 +66,7 @@ async function editUser(opts) {
     };
   }
 
-  if (needsDomain && !domain) {
+  if (opts.needsDomain && !domain) {
     opts.res.code(400);
     return {
       type: 'user-missing-param-error',
@@ -156,7 +156,7 @@ async function getUser(opts) {
     };
   }
 
-  if (needsDomain && !domain) {
+  if (opts.needsDomain && !domain) {
     opts.res.code(400);
     return {
       type: 'user-missing-param-error',
