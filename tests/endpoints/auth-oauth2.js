@@ -11,13 +11,11 @@ module.exports = () => {
   var tokenDomain;
   var tokenDomain2;
   var tokenDomain3;
-  var tokenDomain4;
   var accessToken1;
   var accessToken2;
   var accessTokenDomain;
   var accessTokenDomain2;
   var accessTokenDomain3;
-  var accessTokenDomain4;
 
   describe('Valid', () => {
     test('Register OAuth2 Credentials Token as Test User With No Name', async () => {
@@ -92,17 +90,6 @@ module.exports = () => {
         client_id:  expect.any(String),
         client_secret: expect.any(String)
       });
-    });
-
-    test('Register New OAuth2 Credentials Token as Test Domain User 4 With No Name', async () => {
-      var res = await Travelling.User.Current.registerToken({ urls: ['http://localhost:6969'] }, null, {
-        headers: {
-          cookie: userContainer.userDomain4Cookie()
-        }
-      });
-
-      expect(res.statusCode).toEqual(401);
-      expect(res.body).toEqual("Access Denied");
     });
 
     test('Get New OAuth2 Access Token as Test User With No Name', async () => {
@@ -197,12 +184,6 @@ module.exports = () => {
       var res = await Travelling.User.Current.get(accessTokenDomain3);
 
       expect(res.body.email).toEqual('test_domain_3@test.com');
-    });
-
-    test('Get User With Token as Test Domain User 4 With No Name', async () => {
-      var res = await Travelling.User.Current.get(accessTokenDomain4);
-
-      expect(res.statusCode).toEqual(401);
     });
   });
 
