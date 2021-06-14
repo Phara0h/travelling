@@ -109,16 +109,6 @@ module.exports = () => {
 
   describe('Non-Current User', () => {
     describe('Valid', () => {
-      test('Get All Users', async () => {
-        var res = await Travelling.Users.get(null, null, null, null, null, null, {
-          headers: {
-            cookie: userContainer.user1Cookie()
-          }
-        });
-
-        expect(res.body).toHaveLength(5);
-      });
-
       test('Get By Id', async () => {
         var res = await Travelling.User.get(userContainer.user1.id, null, {
           headers: {
@@ -223,4 +213,70 @@ module.exports = () => {
       });
     });
   });
+
+
+  describe('Non-Current User With Domain', () => {
+    describe('Valid', () => {
+      test('Get User Domain 2', async () => {
+        var res = await Travelling.User.Domain.get(
+          'test.com',
+          'test_domain_2@test.com',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body.domain).toEqual('test.com');
+        expect(res.body.email).toEqual('test_domain_2@test.com');
+      });
+      
+      test('Get Property User Domain 2', async () => {
+        var res = await Travelling.User.Domain.getProperty(
+          'test.com',
+          'test_domain_2@test.com',
+          'domain',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toEqual('test.com');
+      });
+    });
+
+    describe('Invalid', () => {
+      test('Get User Domain 2 non-existent domain', async () => {
+        var res = await Travelling.User.Domain.get(
+          'this-aint-no-real-domain.elite',
+          'test_domain_2@test.com',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.statusCode).toEqual(400);
+        expect(res.body).toHaveProperty('type', 'user-find-by-error');
+      });
+
+      test('Get User Domain 2 invalid id', async () => {
+        var res = await Travelling.User.Domain.get(
+          'test.com',
+          'real-incorrect-id@45.wrong',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.statusCode).toEqual(400);
+        expect(res.body).toHaveProperty('type', 'user-find-by-error');
+      });
+
+      test('Get User Domain 2 invalid property', async () => {
+        var res = await Travelling.User.Domain.getProperty(
+          'test.com',
+          'test_domain_2@test.com',
+          'asdfasdfasdf',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.statusCode).toEqual(400);
+        expect(res.body).toHaveProperty('type', 'user-prop-error');
+      });
+    });
+  });
+    
 };

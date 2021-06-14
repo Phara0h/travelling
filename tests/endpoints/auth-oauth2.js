@@ -9,9 +9,13 @@ module.exports = () => {
   var token1;
   var token2;
   var tokenDomain;
+  var tokenDomain2;
+  var tokenDomain3;
   var accessToken1;
   var accessToken2;
   var accessTokenDomain;
+  var accessTokenDomain2;
+  var accessTokenDomain3;
 
   describe('Valid', () => {
     test('Register OAuth2 Credentials Token as Test User With No Name', async () => {
@@ -43,7 +47,7 @@ module.exports = () => {
       });
     });
 
-    test('Register New OAuth2 Credentials Token as Test Domain User With Name', async () => {
+    test('Register New OAuth2 Credentials Token as Test Domain User With No Name', async () => {
       var res = await Travelling.User.Current.registerToken({ urls: ['http://localhost:6969'] }, null, {
         headers: {
           cookie: userContainer.userDomainCookie()
@@ -51,6 +55,36 @@ module.exports = () => {
       });
 
       tokenDomain = res.body;
+
+      expect(res.body).toMatchObject({
+        client_id:  expect.any(String),
+        client_secret: expect.any(String)
+      });
+    });
+
+    test('Register New OAuth2 Credentials Token as Test Domain User 2 With No Name', async () => {
+      var res = await Travelling.User.Current.registerToken({ urls: ['http://localhost:6969'] }, null, {
+        headers: {
+          cookie: userContainer.userDomain2Cookie()
+        }
+      });
+
+      tokenDomain2 = res.body;
+
+      expect(res.body).toMatchObject({
+        client_id:  expect.any(String),
+        client_secret: expect.any(String)
+      });
+    });
+
+    test('Register New OAuth2 Credentials Token as Test Domain User 3 With No Name', async () => {
+      var res = await Travelling.User.Current.registerToken({ urls: ['http://localhost:6969'] }, null, {
+        headers: {
+          cookie: userContainer.userDomain3Cookie()
+        }
+      });
+
+      tokenDomain3 = res.body;
 
       expect(res.body).toMatchObject({
         client_id:  expect.any(String),
@@ -96,6 +130,32 @@ module.exports = () => {
       });
     });
 
+    test('Get New OAuth2 Access Token as Test Domain User 2 With No Name', async () => {
+      var res = await Travelling.Auth.accessToken('client_credentials', tokenDomain2.client_id, tokenDomain2.client_secret, null);
+
+      accessTokenDomain2 = res.body.access_token;
+      userContainer.userDomain2Token = res.body.access_token;
+
+      expect(res.body).toMatchObject({
+        expires_in: config.token.access.expiration * 60, // seconds
+        access_token: expect.any(String),
+        token_type: 'bearer'
+      });
+    });
+
+    test('Get New OAuth2 Access Token as Test Domain User 3 With No Name', async () => {
+      var res = await Travelling.Auth.accessToken('client_credentials', tokenDomain3.client_id, tokenDomain3.client_secret, null);
+
+      accessTokenDomain3 = res.body.access_token;
+      userContainer.userDomain3Token = res.body.access_token;
+
+      expect(res.body).toMatchObject({
+        expires_in: config.token.access.expiration * 60, // seconds
+        access_token: expect.any(String),
+        token_type: 'bearer'
+      });
+    });
+
     test('Get User With Token as Test User With No Name', async () => {
       var res = await Travelling.User.Current.get(accessToken1);
 
@@ -112,6 +172,18 @@ module.exports = () => {
       var res = await Travelling.User.Current.get(accessTokenDomain);
 
       expect(res.body.email).toEqual('test_domain_1@test.com');
+    });
+
+    test('Get User With Token as Test Domain User 2 With No Name', async () => {
+      var res = await Travelling.User.Current.get(accessTokenDomain2);
+
+      expect(res.body.email).toEqual('test_domain_2@test.com');
+    });
+
+    test('Get User With Token as Test Domain User 3 With No Name', async () => {
+      var res = await Travelling.User.Current.get(accessTokenDomain3);
+
+      expect(res.body.email).toEqual('test_domain_3@test.com');
     });
   });
 
