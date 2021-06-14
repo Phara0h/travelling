@@ -99,7 +99,174 @@ module.exports = () => {
         expect(res.body).toMatchObject({ email: 'gr@fd.foo', user_data: { test: 1, foo: 'bar' } });
       });
     });
+  });
 
-    describe('Invalid', () => {});
+  describe('Non-Current User By Domain', () => {
+    describe('Valid', () => {
+      test('Edit Property [email] User Domain 2', async () => {
+        var res = await Travelling.User.Domain.editProperty(
+          'test_domain_2_changed@test.com',
+          'test.com',
+          'test_domain_2@test.com',
+          'email',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.body).toEqual('test_domain_2_changed@test.com');
+        expect(res.statusCode).toEqual(200);
+      });
+
+      test('Edit Property Value [email] User Domain 2', async () => {
+        var res = await Travelling.User.Domain.editPropertyValue(
+          'test.com',
+          'test_domain_2_changed@test.com',
+          'email',
+          'test_domain_2@test.com',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.body).toEqual('test_domain_2@test.com');
+        expect(res.statusCode).toEqual(200);
+      });
+
+      test('Edit [UserData] User Domain 2', async () => {
+        var res = await Travelling.User.Domain.edit(
+          { user_data: { test: 1, foo: 'bar' } },
+          'test.com',
+          'test_domain_2@test.com',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toMatchObject({ user_data: { test: 1, foo: 'bar' } });
+      });
+
+      test('Add Group Inheritance [group1][testgroup] User Domain 2', async () => {
+        var res = await Travelling.User.Domain.addGroupInheritance(
+          'test.com',
+          'test_domain_2@test.com',
+          'group1',
+          'testgroup',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body.domain).toEqual('test.com')
+      });
+
+      test('Remove Group Inheritance [group1][testgroup] User Domain 3', async () => {
+        // Add group inheritence
+        var res = await Travelling.User.Domain.addGroupInheritance(
+          'test.com',
+          'test_domain_3@test.com',
+          'group1',
+          'testgroup',
+          userContainer.userDomain3Token
+        );
+        
+        // Remove group inheritence
+        var res = await Travelling.User.Domain.removeGroupInheritance(
+          'test.com',
+          'test_domain_3@test.com',
+          'group1',
+          'testgroup',
+          userContainer.userDomain3Token
+        );
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body.domain).toEqual('test.com')
+      });
+
+      test('Delete User Domain 3', async () => {
+        var res = await Travelling.User.Domain.delete(
+          'test.com',
+          'test_domain_3@test.com',
+          userContainer.userDomain3Token
+        );
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body.domain).toEqual('test.com');
+      });
+
+    });
+
+
+    describe('Invalid', () => {
+      test('Edit Property [email] User Domain 2 Invalid Domain', async () => {
+        var res = await Travelling.User.Domain.editProperty(
+          'test_domain_2_changed@test.com',
+          'this-aint-no-real-domain.elite',
+          'test_domain_2@test.com',
+          'email',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.statusCode).toEqual(400);
+        expect(res.body).toHaveProperty('type', 'user-edit-error');
+      });
+
+      test('Edit Property Value User Domain 2 Invalid Property', async () => {
+        var res = await Travelling.User.Domain.editPropertyValue(
+          'test.com',
+          'test_domain_2_changed@test.com',
+          'fakeaffff',
+          'test_domain_2@test.com',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.statusCode).toEqual(400);
+        expect(res.body).toHaveProperty('type', 'user-prop-error');
+      });
+
+      test('Edit User Domain 2 Invalid Data', async () => {
+        var res = await Travelling.User.Domain.edit(
+          { garbo: { from: 3.14159, space: 'bar' } },
+          'test.com',
+          'test_domain_2@test.com',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.statusCode).toEqual(400);
+        expect(res.body).toHaveProperty('type', 'user-prop-error');
+      });
+
+      test('Add [Pre-Existing] Group Inheritance User Domain 2', async () => {
+        var res = await Travelling.User.Domain.addGroupInheritance(
+          'test.com',
+          'test_domain_2@test.com',
+          'group1',
+          'testgroup',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.statusCode).toEqual(400);
+        expect(res.body).toHaveProperty('type', 'user-add-group-error');
+      });
+
+      test('Add Group Inheritance User Domain 2 Non-existent group type', async () => {
+        var res = await Travelling.User.Domain.addGroupInheritance(
+          'test.com',
+          'test_domain_2@test.com',
+          'group1',
+          'it-really-doesnt-exist',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.statusCode).toEqual(400);
+        expect(res.body).toHaveProperty('type', 'user-edit-group-error');
+      });
+
+      test('Delete Already Deleted User Domain 3', async () => {
+        var res = await Travelling.User.Domain.delete(
+          'test.com',
+          'test_domain_3@test.com',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.statusCode).toEqual(400);
+        expect(res.body).toHaveProperty('type', 'user-delete-error');
+      });
+
+    }); 
   });
 };

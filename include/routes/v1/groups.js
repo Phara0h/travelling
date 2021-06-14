@@ -152,7 +152,7 @@ async function getUserByGroup(req, res, router) {
 
   // delete prop so we get back full user
   delete req.params.prop;
-  var user = await userRoutes.getUser(req, res, router);
+  var user = await userRoutes.getUser({ req, res, needsDomain: false, router });
 
   // set prop back for other functions to use
   req.params.prop = prop;
@@ -209,7 +209,7 @@ async function editUserByGroup(req, res, router) {
     return user;
   }
 
-  var editedUser = await userRoutes.editUser(req, res, router);
+  var editedUser = await userRoutes.editUser({ req, res, needsDomain: false, router });
 
   if (editedUser.msg) {
     res.code(400);
@@ -250,7 +250,7 @@ async function deleteUserByGroup(req, res, router) {
     res.code(400);
     return false;
   }
-  var deletedUser = userRoutes.deleteUser(req, res, router);
+  var deletedUser = userRoutes.deleteUser({ req, res, needsDomain: true, router });
 
   if (deletedUser && deletedUser.msg) {
     res.code(400);
