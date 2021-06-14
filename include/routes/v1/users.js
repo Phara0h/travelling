@@ -7,52 +7,52 @@ const misc = require('../../utils/misc');
 const gm = require('../../server/groupmanager');
 const Database = require('../../database');
 
-async function deleteUser(req, res, needsDomain, router) {
-  var id = _getId(req);
-  var domain = req.params.domain;
-  var user;
+async function deleteUser(opts) {
+  var id = _getId(opts.req);
+  var domain = opts.req.params.domain;
 
   if (!id) {
-    res.code(400);
+    opts.res.code(400);
     return {
       type: 'user-find-by-error',
       msg: 'No user by that username or id was found.'
     };
   }
 
-  if (needsDomain) {
+  var user;
+
+  if (opts.needsDomain) {
     user = await User.deleteAllBy({ domain, ...id }, 'AND', 1);
   } else {
     user = await User.deleteAllBy(id, 'AND');
   }
 
   if (user && user.length > 0) {
-    await user[0].resolveGroup(router);
+    await user[0].resolveGroup(opts.router);
 
-    var session = await req.sessionStore.get(user[0].id);
+    var session = await opts.req.sessionStore.get(user[0].id);
 
     if (session) {
-      await req.sessionStore.destroy(session.sessionId);
+      await opts.req.sessionStore.destroy(session.sessionId);
     }
 
-    res.code(200);
+    opts.res.code(200);
     return user[0];
   }
 
-  res.code(400);
+  opts.res.code(400);
   return {
     type: 'user-delete-error',
     msg: 'No user by that username or id was found.'
   };
 }
 
-async function editUser(req, res, needsDomain, router) {
-  var id = _getId(req);
-  var domain = req.params.domain;
-  var user;
+async function editUser(opts) {
+  var id = _getId(opts.req);
+  var domain = opts.req.params.domain;
 
   if (!id) {
-    res.code(400);
+    opts.res.code(400);
     return {
       type: 'user-find-by-error',
       msg: 'No user by that username or id was found.'
@@ -60,12 +60,12 @@ async function editUser(req, res, needsDomain, router) {
   }
 
   // filter group_id
-  req.body = filterUser(req);
+  opts.req.body = filterUser(opts.req);
 
-  var model = req.body;
+  var model = opts.req.body;
 
-  if (req.params.prop) {
-    model = req.params.propdata ? { [req.params.prop]: req.params.propdata } : { [req.params.prop]: req.body };
+  if (opts.req.params.prop) {
+    model = opts.req.params.propdata ? { [opts.req.params.prop]: opts.req.params.propdata } : { [opts.req.params.prop]: opts.req.body };
   }
 
   var isValid = await userUtils.checkValidUser(model);
@@ -74,78 +74,81 @@ async function editUser(req, res, needsDomain, router) {
     isValid = await Database.checkDupe(model);
   }
   if (isValid !== true) {
-    res.code(400);
+    opts.res.code(400);
     return isValid;
   }
 
   var updatedProps = userUtils.setUser({}, model);
 
   if (misc.isEmpty(updatedProps)) {
-    res.code(400);
+    opts.res.code(400);
     return {
       type: 'user-prop-error',
       msg: 'Not a property of user'
     };
   }
 
-  if (needsDomain) {
+  var user;
+
+  if (opts.needsDomain) {
     user = await User.updateLimitedBy({ domain, ...id }, updatedProps, 'AND', 1);
   } else {
     user = await User.updateLimitedBy(id, updatedProps, 'AND', 1);
   }
 
   if (user && user.length > 0) {
-    if (req.params.prop && user[0][req.params.prop] === undefined) {
-      res.code(400);
+    if (opts.req.params.prop && user[0][opts.req.params.prop] === undefined) {
+      opts.res.code(400);
       return {
         type: 'user-prop-error',
         msg: 'Not a property of user'
       };
     }
 
-    const groupsData = await user[0].resolveGroup(router);
+    const groupsData = await user[0].resolveGroup(opts.router);
 
-    res.code(200);
+    opts.res.code(200);
     // Update any current logged in users
-    var session = await req.sessionStore.get(user[0].id);
+    var session = await opts.req.sessionStore.get(user[0].id);
 
     if (session) {
       session.data = { user: user[0], groupsData };
-      await req.sessionStore.set(session.sessionId, session);
+      await opts.req.sessionStore.set(session.sessionId, session);
     }
 
-    return req.params.prop ? user[0][req.params.prop] : user[0];
+    return opts.req.params.prop ? user[0][opts.req.params.prop] : user[0];
   }
 
-  res.code(400);
+  opts.res.code(400);
   return {
     type: 'user-edit-error',
     msg: 'No user by that username or id was found.'
   };
 }
 
-async function getUser(req, res, needsDomain) {
-  var id = _getId(req);
-  var domain = req.params.domain;
-  var user;
+async function getUser(opts) {
+  var id = _getId(opts.req);
+  var domain = opts.req.params.domain;
 
   if (!id) {
-    res.code(400);
+    opts.res.code(400);
     return {
       type: 'user-find-by-error',
       msg: 'No user by that username or id was found.'
     };
   }
 
-  if (needsDomain) {
+  var user;
+
+  if (opts.needsDomain) {
     user = await User.findLimtedBy({ domain, ...id }, 'AND', 1);
   } else {
     user = await User.findLimtedBy(id, 'AND', 1);
   }
 
   if (user && user.length > 0) {
-    if (req.params.prop && user[0][req.params.prop] === undefined) {
-      res.code(400);
+    if (opts.req.params.prop && user[0][opts.req.params.prop] === undefined) {
+      opts.res.code(400);
       return {
         type: 'user-prop-error',
         msg: 'Not a property of user'
@@ -154,11 +157,11 @@ async function getUser(req, res, needsDomain) {
 
     await user[0].resolveGroup();
 
-    res.code(200);
-    return req.params.prop ? user[0][req.params.prop] : user[0];
+    opts.res.code(200);
+    return opts.req.params.prop ? user[0][opts.req.params.prop] : user[0];
   }
 
-  res.code(400);
+  opts.res.code(400);
   return {
     type: 'user-find-by-error',
     msg: 'No user by that username or id was found.'
@@ -194,7 +197,6 @@ async function getGroup(req, res) {
 
 async function addRemoveGroupInheritance(user, group, add = true, req) {
   if (user) {
-    // console.log(group);
     user = add ? await user.addGroup(group) : await user.removeGroup(group);
 
     if (!user) {
@@ -206,8 +208,6 @@ async function addRemoveGroupInheritance(user, group, add = true, req) {
     await updateSessionUser(user, req);
     return user;
   }
-
-  // console.log(user);
 
   return {
     type: 'user-edit-error',
@@ -264,11 +264,11 @@ function routes(app, opts, done) {
   // };
 
   app.get('/user/id/:id', async (req, res) => {
-    return await getUser(req, res, (needsDomain = false), router);
+    return await getUser({ req, res, needsDomain: false, router });
   });
 
   app.get('/user/id/:id/property/:prop', async (req, res) => {
-    return await getUser(req, res, (needsDomain = false), router);
+    return await getUser({ req, res, needsDomain: false, router });
   });
 
   app.put('/user/id/:id/inheritance/group/:groupid/type/:grouptype', async (req, res) => {
@@ -279,7 +279,7 @@ function routes(app, opts, done) {
       return group;
     }
 
-    var user = await getUser(req, res, (needsDomain = false));
+    var user = await getUser({ req, res, needsDomain: false });
 
     if (user && user.msg) {
       res.code(400);
@@ -300,7 +300,7 @@ function routes(app, opts, done) {
       return group;
     }
 
-    var user = await getUser(req, res, (needsDomain = false));
+    var user = await getUser({ req, res, needsDomain: false });
 
     if (user && user.msg) {
       res.code(400);
@@ -314,32 +314,32 @@ function routes(app, opts, done) {
   });
 
   app.put('/user/id/:id', async (req, res) => {
-    return await editUser(req, res, (needsDomain = false), router);
+    return await editUser({ req, res, needsDomain: false, router });
   });
 
   app.put('/user/id/:id/property/:prop', async (req, res) => {
-    return await editUser(req, res, (needsDomain = false), router);
+    return await editUser({ req, res, needsDomain: false, router });
   });
 
   app.put('/user/id/:id/property/:prop/:propdata', async (req, res) => {
-    return await editUser(req, res, (needsDomain = false), router);
+    return await editUser({ req, res, needsDomain: false, router });
   });
 
   app.delete('/user/id/:id', async (req, res) => {
-    return await deleteUser(req, res, (needsDomain = false), router);
+    return await deleteUser({ req, res, needsDomain: false, router });
   });
 
   // Domain operations
   app.get('/user/domain/:domain/id/:id', async (req, res) => {
-    if (!req.params.domain) {
-      res.code(400);
-      return {
-        type: 'user-find-by-error',
-        msg: 'No domain was provided.'
-      };
-    }
+    // if (!req.params.domain) {
+    //   res.code(400);
+    //   return {
+    //     type: 'user-find-by-error',
+    //     msg: 'No domain was provided.'
+    //   };
+    // }
 
-    return await getUser(req, res, (needsDomain = true), router);
+    return await getUser({ req, res, needsDomain: true, router });
   });
   app.get('/user/domain/:domain/id/:id/property/:prop', async (req, res) => {
     if (!req.params.domain) {
@@ -350,7 +350,7 @@ function routes(app, opts, done) {
       };
     }
 
-    return await getUser(req, res, (needsDomain = true), router);
+    return await getUser({ req, res, needsDomain: true, router });
   });
 
   app.put('/user/domain/:domain/id/:id/inheritance/group/:groupid/type/:grouptype', async (req, res) => {
@@ -369,7 +369,7 @@ function routes(app, opts, done) {
       return group;
     }
 
-    var user = await getUser(req, res, (needsDomain = true));
+    var user = await getUser({ req, res, needsDomain: true });
 
     if (user && user.msg) {
       res.code(400);
@@ -398,7 +398,7 @@ function routes(app, opts, done) {
       return group;
     }
 
-    var user = await getUser(req, res, (needsDomain = true));
+    var user = await getUser({ req, res, needsDomain: true });
 
     if (user && user.msg) {
       res.code(400);
@@ -420,7 +420,7 @@ function routes(app, opts, done) {
       };
     }
 
-    return await editUser(req, res, (needsDomain = true), router);
+    return await editUser({ req, res, needsDomain: true, router });
   });
 
   app.put('/user/domain/:domain/id/:id/property/:prop', async (req, res) => {
@@ -432,7 +432,7 @@ function routes(app, opts, done) {
       };
     }
 
-    return await editUser(req, res, (needsDomain = true), router);
+    return await editUser({ req, res, needsDomain: true, router });
   });
 
   app.put('/user/domain/:domain/id/:id/property/:prop/:propdata', async (req, res) => {
@@ -444,7 +444,7 @@ function routes(app, opts, done) {
       };
     }
 
-    return await editUser(req, res, (needsDomain = true), router);
+    return await editUser({ req, res, needsDomain: true, router });
   });
 
   app.delete('/user/domain/:domain/id/:id', async (req, res) => {
@@ -456,7 +456,7 @@ function routes(app, opts, done) {
       };
     }
 
-    return await deleteUser(req, res, (needsDomain = true), router);
+    return await deleteUser({ req, res, needsDomain: true, router });
   });
 
   // app.get('/user/resolve/group/username/:username', getUserResolveGroup);
@@ -594,7 +594,7 @@ function routes(app, opts, done) {
       return group;
     }
 
-    var user = await getUser(req, res, (needsDomain = false));
+    var user = await getUser({ req, res, needsDomain: false });
 
     if (user && user.msg) {
       res.code(400);
@@ -617,7 +617,7 @@ function routes(app, opts, done) {
       return group;
     }
 
-    var user = await getUser(req, res, (needsDomain = false));
+    var user = await getUser({ req, res, needsDomain: false });
 
     if (user && user.msg) {
       res.code(400);
@@ -632,17 +632,17 @@ function routes(app, opts, done) {
 
   app.put('/user/me', async (req, res) => {
     req.params.id = req.session.data.user.id;
-    return await editUser(req, res, (needsDomain = false), router);
+    return await editUser({ req, res, needsDomain: false, router });
   });
 
   app.put('/user/me/property/:prop', async (req, res) => {
     req.params.id = req.session.data.user.id;
-    return await editUser(req, res, (needsDomain = false), router);
+    return await editUser({ req, res, needsDomain: false, router });
   });
 
   app.put('/user/me/property/:prop/:propdata', async (req, res) => {
     req.params.id = req.session.data.user.id;
-    return await editUser(req, res, (needsDomain = false), router);
+    return await editUser({ req, res, needsDomain: false, router });
   });
 
   app.get('/user/me/route/allowed', async (req, res) => {
