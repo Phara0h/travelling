@@ -252,7 +252,6 @@ module.exports = () => {
 
         expect(res.statusCode).toEqual(400);
         expect(res.body).toHaveProperty('type', 'user-find-by-error');
-        expect(res.body).toHaveProperty('msg', 'No user by that username or id was found.');
       });
 
       test('Get User Domain 2 invalid id', async () => {
@@ -264,7 +263,6 @@ module.exports = () => {
 
         expect(res.statusCode).toEqual(400);
         expect(res.body).toHaveProperty('type', 'user-find-by-error');
-        expect(res.body).toHaveProperty('msg', 'No user by that username or id was found.');
       });
 
       test('Get User Domain 2 invalid property', async () => {
@@ -277,7 +275,6 @@ module.exports = () => {
 
         expect(res.statusCode).toEqual(400);
         expect(res.body).toHaveProperty('type', 'user-prop-error');
-        expect(res.body).toHaveProperty('msg', 'Not a property of user');
       });
     });
   });

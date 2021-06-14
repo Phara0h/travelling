@@ -10,6 +10,7 @@ const Database = require('../../database');
 async function deleteUser(opts) {
   var id = _getId(opts.req);
   var domain = opts.req.params.domain;
+  var user;
 
   if (!id) {
     opts.res.code(400);
@@ -19,7 +20,13 @@ async function deleteUser(opts) {
     };
   }
 
-  var user;
+  if (needsDomain && !domain) {
+    opts.res.code(400);
+    return {
+      type: 'user-missing-param-error',
+      msg: 'No domain was provided.'
+    };
+  }
 
   if (opts.needsDomain) {
     user = await User.deleteAllBy({ domain, ...id }, 'AND', 1);
@@ -43,7 +50,7 @@ async function deleteUser(opts) {
   opts.res.code(400);
   return {
     type: 'user-delete-error',
-    msg: 'No user by that username or id was found.'
+    msg: `No user by that id, username, email ${opts.needsDomain ? 'with that domain ' : ''}was found.`
   };
 }
 
@@ -59,13 +66,23 @@ async function editUser(opts) {
     };
   }
 
+  if (needsDomain && !domain) {
+    opts.res.code(400);
+    return {
+      type: 'user-missing-param-error',
+      msg: 'No domain was provided.'
+    };
+  }
+
   // filter group_id
   opts.req.body = filterUser(opts.req);
 
   var model = opts.req.body;
 
   if (opts.req.params.prop) {
-    model = opts.req.params.propdata ? { [opts.req.params.prop]: opts.req.params.propdata } : { [opts.req.params.prop]: opts.req.body };
+    model = opts.req.params.propdata
+      ? { [opts.req.params.prop]: opts.req.params.propdata }
+      : { [opts.req.params.prop]: opts.req.body };
   }
 
   var isValid = await userUtils.checkValidUser(model);
@@ -122,13 +139,14 @@ async function editUser(opts) {
   opts.res.code(400);
   return {
     type: 'user-edit-error',
-    msg: 'No user by that username or id was found.'
+    msg: `No user by that id, username, email ${opts.needsDomain ? 'with that domain ' : ''}was found.`
   };
 }
 
 async function getUser(opts) {
   var id = _getId(opts.req);
   var domain = opts.req.params.domain;
+  var user;
 
   if (!id) {
     opts.res.code(400);
@@ -138,7 +156,13 @@ async function getUser(opts) {
     };
   }
 
-  var user;
+  if (needsDomain && !domain) {
+    opts.res.code(400);
+    return {
+      type: 'user-missing-param-error',
+      msg: 'No domain was provided.'
+    };
+  }
 
   if (opts.needsDomain) {
     user = await User.findLimtedBy({ domain, ...id }, 'AND', 1);
@@ -164,7 +188,7 @@ async function getUser(opts) {
   opts.res.code(400);
   return {
     type: 'user-find-by-error',
-    msg: 'No user by that username or id was found.'
+    msg: `No user by that id, username, email ${opts.needsDomain ? 'with that domain ' : ''}was found.`
   };
 }
 async function updateSessionUser(user, req) {
@@ -331,38 +355,15 @@ function routes(app, opts, done) {
 
   // Domain operations
   app.get('/user/domain/:domain/id/:id', async (req, res) => {
-    // if (!req.params.domain) {
-    //   res.code(400);
-    //   return {
-    //     type: 'user-find-by-error',
-    //     msg: 'No domain was provided.'
-    //   };
-    // }
-
     return await getUser({ req, res, needsDomain: true, router });
   });
-  app.get('/user/domain/:domain/id/:id/property/:prop', async (req, res) => {
-    if (!req.params.domain) {
-      res.code(400);
-      return {
-        type: 'user-find-by-error',
-        msg: 'No domain was provided.'
-      };
-    }
 
+  app.get('/user/domain/:domain/id/:id/property/:prop', async (req, res) => {
     return await getUser({ req, res, needsDomain: true, router });
   });
 
   app.put('/user/domain/:domain/id/:id/inheritance/group/:groupid/type/:grouptype', async (req, res) => {
     const group = await getGroup(req, res);
-
-    if (!req.params.domain) {
-      res.code(400);
-      return {
-        type: 'user-find-by-error',
-        msg: 'No domain was provided.'
-      };
-    }
 
     if (group && group.msg) {
       res.code(400);
@@ -385,14 +386,6 @@ function routes(app, opts, done) {
   app.delete('/user/domain/:domain/id/:id/inheritance/group/:groupid/type/:grouptype', async (req, res) => {
     const group = await getGroup(req, res);
 
-    if (!req.params.domain) {
-      res.code(400);
-      return {
-        type: 'user-find-by-error',
-        msg: 'No domain was provided.'
-      };
-    }
-
     if (group && group.msg) {
       res.code(400);
       return group;
@@ -412,50 +405,18 @@ function routes(app, opts, done) {
   });
 
   app.put('/user/domain/:domain/id/:id', async (req, res) => {
-    if (!req.params.domain) {
-      res.code(400);
-      return {
-        type: 'user-find-by-error',
-        msg: 'No domain was provided.'
-      };
-    }
-
     return await editUser({ req, res, needsDomain: true, router });
   });
 
   app.put('/user/domain/:domain/id/:id/property/:prop', async (req, res) => {
-    if (!req.params.domain) {
-      res.code(400);
-      return {
-        type: 'user-find-by-error',
-        msg: 'No domain was provided.'
-      };
-    }
-
     return await editUser({ req, res, needsDomain: true, router });
   });
 
   app.put('/user/domain/:domain/id/:id/property/:prop/:propdata', async (req, res) => {
-    if (!req.params.domain) {
-      res.code(400);
-      return {
-        type: 'user-find-by-error',
-        msg: 'No domain was provided.'
-      };
-    }
-
     return await editUser({ req, res, needsDomain: true, router });
   });
 
   app.delete('/user/domain/:domain/id/:id', async (req, res) => {
-    if (!req.params.domain) {
-      res.code(400);
-      return {
-        type: 'user-find-by-error',
-        msg: 'No domain was provided.'
-      };
-    }
-
     return await deleteUser({ req, res, needsDomain: true, router });
   });
 
