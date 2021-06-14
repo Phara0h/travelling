@@ -88,17 +88,6 @@ module.exports = () => {
       expect(res.statusCode).toEqual(200);
     });
 
-    test('Login with Test Domain User 4 [will not be remembered]', async () => {
-      var res = await Travelling.Auth.login({
-        password: 'Pas5w0r!d',
-        email: 'test_domain_4@test.com',
-        remember: false
-      });
-
-      userContainer.parseUserDomain4Cookie(res.headers['set-cookie']);
-
-      expect(res.statusCode).toEqual(200);
-    });
 
 
     if (config.email.test.enable) {

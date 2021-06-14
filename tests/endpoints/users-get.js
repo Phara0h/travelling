@@ -395,11 +395,5 @@ module.exports = () => {
       expect(res.body).toHaveLength(0);
     });
 
-    test('Get Users By Domain with  Test Domain User 4 [non-remembered login]', async () => {
-      var res = await Travelling.Users.Domain.get('test.com', null, null, null, null, null, userContainer.userDomain4Token);
-
-      expect(res.statusCode).toEqual(401);
-    });
-
   });
 };
