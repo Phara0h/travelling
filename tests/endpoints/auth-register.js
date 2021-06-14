@@ -74,11 +74,21 @@ module.exports = () => {
       expect(res.statusCode).toEqual(200);
     });
 
-    test('Create Test User [test_domain_3]', async () => {
+    test('Create Test User [test_domain_3] Gets deleted in user-edit', async () => {
       var res = await Travelling.Auth.Domain.register({
         username: 'test_domain_3',
         password: 'Pas5w0r!d',
         email: 'test_domain_3@test.com'
+      }, 'test.com');
+
+      expect(res.statusCode).toEqual(200);
+    });
+
+    test('Create Test User [test_domain_4] login remember [false]', async () => {
+      var res = await Travelling.Auth.Domain.register({
+        username: 'test_domain_4',
+        password: 'Pas5w0r!d',
+        email: 'test_domain_4@test.com'
       }, 'test.com');
 
       expect(res.statusCode).toEqual(200);
