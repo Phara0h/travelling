@@ -3993,8 +3993,9 @@ class Auth {
   * body
   * ```json
   * {
- * 	"id": "test4@test.com",
+ * 	"id": "test@test.com",
  * 	"password": "Pas5w0r!d",
+ *     "domain": "default",
  *     "remember": true
  * }
   * ```
@@ -4172,7 +4173,7 @@ class AuthDomain {
   * body
   * ```json
   * {
- * 	"email": "test4@test.com",
+ * 	"email": "test@test.com",
  * 	"password": "Pas5w0r!d",
  *     "domain": "test.com",
  *     "remember": true
