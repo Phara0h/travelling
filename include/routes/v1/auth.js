@@ -25,7 +25,7 @@ var login = async (user, req, res) => {
 
   req.createSession(user.id, { user, groupsData });
 
-  if (!('remember' in req.body) || req.body.remember === true || req.body.remember == null) {
+  if (req.body.remember !== false ) {
     await CookieToken.newTokenInCookie(user.domain, user.username, user.password, user.last_login.ip, res);
   }
 
