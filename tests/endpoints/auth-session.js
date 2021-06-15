@@ -91,6 +91,9 @@ module.exports = () => {
 
       await p;
 
+      expect(userContainer.userDomain4.tok).toBeUndefined();
+      expect(userContainer.userDomain4.ssid).toBeDefined();
+
       // Current User again
       var userRes2 = await Travelling.User.Current.get(null,  {
         headers: {
