@@ -7973,20 +7973,29 @@ class Auth {
   }
 
   /**
-   * login - Register a user
-   *
-   * Path: api/v1/auth/login
-   * @param {Object} body
-   * @example
-   * body
-   * ```json
-   * {
-   * 	"username": "test",
-   * 	"password": "Pas5w0r!d",
-   *     "domain": "default"
-   * }
-   * ```
-   */
+  * login - Login a user
+
+##### Body Properties
+
+| Prop | Description |
+| --- | --- |
+| email/username | *required* String (example:  test@test.com) |
+| password | *required* String (example:  fakePassword123) |
+| remember | *optional* Boolean if you would like to be logged in automatically (example:  true) |
+  *
+  * Path: api/v1/auth/login
+  * @param {Object} body
+  * @example
+  * body
+  * ```json
+  * {
+ * 	"id": "test@test.com",
+ * 	"password": "Pas5w0r!d",
+ *     "domain": "default",
+ *     "remember": true
+ * }
+  * ```
+  */
   static async login(body, opts) {
     var options = {
       method: 'PUT',
@@ -8114,7 +8123,7 @@ class AuthDomain {
    *
    * Path: api/v1/auth/password/forgot/domain/:domain
    * @param {Object} body
-   * @param {any} domain  (example: dragohmventures.com)
+   * @param {any} domain Domain name (example: test.com) (example: dragohmventures.com)
    * @example
    * body
    * ```json
@@ -8142,21 +8151,31 @@ class AuthDomain {
   }
 
   /**
-   * login - Register a user
-   *
-   * Path: api/v1/auth/login/domain/:domain
-   * @param {Object} body
-   * @param {any} domain  (example: test.com)
-   * @example
-   * body
-   * ```json
-   * {
-   * 	"email": "test@test.com",
-   * 	"password": "Pas5w0r!d",
-   *     "domain": "test.com"
-   * }
-   * ```
-   */
+  * login - Login a user
+
+##### Body Properties
+
+| Prop | Description |
+| --- | --- |
+| email/username | *required* String (example:  test@test.com) |
+| password | *required* String (example:  fakePassword123) |
+| domain | *required* String (example:  test.com) |
+| remember | *optional* Boolean if you would like to be logged in automatically (example:  true) |
+  *
+  * Path: api/v1/auth/login/domain/:domain
+  * @param {Object} body
+  * @param {any} domain Domain name (example: test.com) (example: test.com)
+  * @example
+  * body
+  * ```json
+  * {
+ * 	"email": "test@test.com",
+ * 	"password": "Pas5w0r!d",
+ *     "domain": "test.com",
+ *     "remember": true
+ * }
+  * ```
+  */
   static async login(body, domain, opts) {
     var options = {
       method: 'PUT',
@@ -8182,7 +8201,7 @@ class AuthDomain {
   *
   * Path: api/v1/auth/register/domain/:domain
   * @param {Object} body
-  * @param {any} domain  (example: test.com)
+  * @param {any} domain Domain name (example: test.com) (example: test.com)
   * @example
   * body
   * ```json

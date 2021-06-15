@@ -93,7 +93,8 @@
 									"variable": [
 										{
 											"key": "domain",
-											"value": "test.com"
+											"value": "test.com",
+											"description": "Domain name (example: test.com)"
 										}
 									]
 								},
@@ -186,7 +187,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"email\": \"test@test.com\",\n\t\"password\": \"Pas5w0r!d\",\n    \"domain\": \"test.com\"\n}",
+									"raw": "{\n\t\"email\": \"test@test.com\",\n\t\"password\": \"Pas5w0r!d\",\n    \"domain\": \"test.com\",\n    \"remember\": true\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -209,11 +210,12 @@
 									"variable": [
 										{
 											"key": "domain",
-											"value": "test.com"
+											"value": "test.com",
+											"description": "Domain name (example: test.com)"
 										}
 									]
 								},
-								"description": "Register a user"
+								"description": "Login a user\n\n##### Body Properties\n\n| Prop | Description |\n| --- | --- |\n| email/username | *required* String (example:  test@test.com) |\n| password | *required* String (example:  fakePassword123) |\n| domain | *required* String (example:  test.com) |\n| remember | *optional* Boolean if you would like to be logged in automatically (example:  true) |"
 							},
 							"response": [
 								{
@@ -317,7 +319,8 @@
 									"variable": [
 										{
 											"key": "domain",
-											"value": "dragohmventures.com"
+											"value": "dragohmventures.com",
+											"description": "Domain name (example: test.com)"
 										}
 									]
 								},
@@ -492,7 +495,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"username\": \"test\",\n\t\"password\": \"Pas5w0r!d\",\n    \"domain\": \"default\"\n}",
+							"raw": "{\n\t\"id\": \"test@test.com\",\n\t\"password\": \"Pas5w0r!d\",\n    \"domain\": \"default\",\n    \"remember\": true\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -511,7 +514,7 @@
 								"login"
 							]
 						},
-						"description": "Register a user"
+						"description": "Login a user\n\n##### Body Properties\n\n| Prop | Description |\n| --- | --- |\n| email/username | *required* String (example:  test@test.com) |\n| password | *required* String (example:  fakePassword123) |\n| remember | *optional* Boolean if you would like to be logged in automatically (example:  true) |"
 					},
 					"response": [
 						{
