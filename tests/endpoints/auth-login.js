@@ -77,7 +77,7 @@ module.exports = () => {
       expect(res.statusCode).toEqual(200);
     });
 
-    test('Login with Test Domain User 3', async () => {
+    test('Login with Test Domain User 3 [Gets deleted in user-edit]', async () => {
       var res = await Travelling.Auth.login({
         password: 'Pas5w0r!d',
         email: 'test_domain_3@test.com'
@@ -87,6 +87,7 @@ module.exports = () => {
 
       expect(res.statusCode).toEqual(200);
     });
+
 
 
     if (config.email.test.enable) {

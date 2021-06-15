@@ -24,7 +24,10 @@ var login = async (user, req, res) => {
   const groupsData = await user.resolveGroup();
 
   req.createSession(user.id, { user, groupsData });
-  await CookieToken.newTokenInCookie(user.domain, user.username, user.password, user.last_login.ip, res);
+
+  if (req.body.remember !== false ) {
+    await CookieToken.newTokenInCookie(user.domain, user.username, user.password, user.last_login.ip, res);
+  }
 
   config.log.logger.info(
     `User Logged in:  ${user.username || ''}(${user.email})[${user.domain}]` +
