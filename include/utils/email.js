@@ -43,7 +43,8 @@ class Email {
     if (config.email.test.enable) {
       var ta = await nodemailer.createTestAccount();
 
-      config.log.logger.debug('Test Email Account:', ta);
+      config.log.logger.debug('Test Email Account:');
+      console.log(ta);
 
       transporter = nodemailer.createTransport({
         host: 'smtp.ethereal.email',
@@ -74,9 +75,15 @@ class Email {
       resetPasswordSubject: Handlebars.compile(
         fs.readFileSync(require('path').resolve(config.email.template.passwordResetSubject), 'utf-8')
       ),
-      activationBody: Handlebars.compile(fs.readFileSync(require('path').resolve(config.email.template.activationBody), 'utf-8')),
+      activationBody: Handlebars.compile(
+        fs.readFileSync(require('path').resolve(config.email.template.activationBody), 'utf-8')),
       activationSubject: Handlebars.compile(
         fs.readFileSync(require('path').resolve(config.email.template.activationSubject), 'utf-8')
+      ),
+      welcomeBody: Handlebars.compile(
+        fs.readFileSync(require('path').resolve(config.email.template.welcomeBody), 'utf-8')),
+      welcomeSubject: Handlebars.compile(
+        fs.readFileSync(require('path').resolve(config.email.template.welcomeSubject), 'utf-8')
       )
     };
   }
@@ -146,12 +153,40 @@ class Email {
 
     if (config.email.test.enable) {
       var testInfo = { info, url: await nodemailer.getTestMessageUrl(info) };
-
       config.log.logger.debug(testInfo);
       var tc = require('../../tests/include/TestContainer');
 
       tc.activationEmail = testInfo;
       return testInfo;
+    }
+  }
+
+  static async sendWelcome(user) {
+    if (!transporter) {
+      config.log.logger.debug(`No Transporter to send welcome Email For: ${user.email}`);
+      return;
+    }
+
+    var body;
+    var subject;
+
+    if (!config.email.rest.enable) {
+      body = templates.welcomeBody({ user });
+      subject = templates.welcomeSubject({ user });
+    }
+
+    var info = await transporter.sendMail({
+      from: config.email.from,
+      to: user.email,
+      subject: subject,
+      html: body,
+      type: 'welcome',
+      user
+    });
+
+    if (config.email.test.enable) {
+      var testInfo = { info, url: await nodemailer.getTestMessageUrl(info) };
+      config.log.logger.debug(testInfo);
     }
   }
 }

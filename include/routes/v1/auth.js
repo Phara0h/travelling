@@ -5,6 +5,7 @@ const qs = require('querystring');
 const Database = require('../../database');
 const CookieToken = require('../../utils/cookietoken');
 const TokenHandler = require('../../token');
+const Email = require('../../utils/email');
 
 const { checkValidUser } = require('../../utils/user');
 const gm = require('../../server/groupmanager');
@@ -59,7 +60,6 @@ var login = async (user, req, res) => {
 };
 
 var loginRoute = async (req, res) => {
-  // console.log(req)
   if (req.isAuthenticated) {
     res.code(200).send({
       type: 'login-session-error',
@@ -171,6 +171,12 @@ var registerRoute = async (req, res) => {
   var user = await Database.createAccount(username, password, email, [dGroup.id], groupRequest, req.hostname, domain);
 
   config.log.logger.info(`New User Created: ${user.username || ''}(${user.email})[${domain}] | ${parse.getIp(req)}`);
+
+  if (config.registration.sendWelcomeEmail === true) {
+    await Email.sendWelcome(user);
+    config.log.logger.info(`Sent welcome email to: ${user.email}.`)
+  }
+
   res.code(200).send('Account Created');
 };
 
@@ -460,8 +466,6 @@ module.exports = function (app, opts, done) {
       };
     }
 
-    // console.log(client_id, client_secret, code[0], code[1]);
-
     if (!client_id || !client_secret) {
       res.code(401);
       return {
@@ -480,8 +484,6 @@ module.exports = function (app, opts, done) {
       };
     }
 
-    // console.log('checkdCode', checkedCode);
-
     var codeUserId = checkedCode.id.split('_'); // tokenid, userid
 
     var checkedToken = await TokenHandler.checkOAuthToken(client_id, client_secret);
@@ -493,9 +495,6 @@ module.exports = function (app, opts, done) {
         msg: 'client_id and/or client_secret are invalid'
       };
     }
-
-    // console.log('checkedToken', checkedToken);
-    // console.log('ID  CHECK: ', checkedToken.user_id, codeUserId[1], codeUserId[0], checkedToken.user_id != codeUserId[1], checkedToken.name != codeUserId[0] && checkedToken.id != codeUserId[0]);
 
     if (checkedToken.name != codeUserId[0] && checkedToken.id != codeUserId[0]) {
       res.code(401);
