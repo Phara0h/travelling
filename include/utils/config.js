@@ -251,6 +251,14 @@ const config = {
       activationSubject: misc.isSetDefault(
         process.env.TRAVELLING_EMAIL_ACTIVATION_TEMPLATE_SUBJECT,
         __dirname + '/../../templates/email-activation-subject.html'
+      ),
+      welcomeBody: misc.isSetDefault(
+        process.env.TRAVELLING_EMAIL_WELCOME_TEMPLATE_BODY,
+        __dirname + '/../../templates/email-welcome-body.html'
+      ),
+      welcomeSubject: misc.isSetDefault(
+        process.env.TRAVELLING_EMAIL_WELCOME_TEMPLATE_SUBJECT,
+        __dirname + '/../../templates/email-welcome-subject.html'
       )
     }
   },
@@ -261,6 +269,10 @@ const config = {
     ),
     requireManualActivation: misc.isSetDefault(
       misc.stringToBool(process.env.TRAVELLING_REGISTRATION_REQUIRE_MANUAL_ACTIVATION),
+      false
+    ),
+    sendWelcomeEmail: misc.isSetDefault(
+      misc.stringToBool(process.env.TRAVELLING_EMAIL_SEND_WELCOME_ON_REGISTER), 
       false
     )
   }
