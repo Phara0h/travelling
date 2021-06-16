@@ -163,6 +163,7 @@ It is recommended to follow this security tips to help keep Travelling as secure
     - [TRAVELLING_EMAIL_VALIDATION_EXTERNAL_EMAIL_IN_BODY](#travelling_email_validation_external_email_in_body)
     - [TRAVELLING_EMAIL_VALIDATION_EXTERNAL_METHOD](#travelling_email_validation_external_method)
     - [TRAVELLING_EMAIL_FROM](#travelling_email_from)
+    - [TRAVELLING_EMAIL_SEND_WELCOME_ON_REGISTER](#travelling_email_send_welcome_on_register)
     - [TRAVELLING_EMAIL_RECOVERY_EXPIRATION](#travelling_email_recovery_expiration)
     - [TRAVELLING_EMAIL_ACTIVATION_EXPIRATION](#travelling_email_activation_expiration)
     - [TRAVELLING_EMAIL_TEST_ENABLE](#travelling_email_test_enable)
@@ -691,6 +692,12 @@ _Supplied endpoint's HTTP Method to use_ </br>
 _The email that will be used as the `from` address. Recommended to set it to a no-reply email address_ </br>
 
 > **Default**: `null`
+
+##### TRAVELLING_EMAIL_SEND_WELCOME_ON_REGISTER
+
+_Sends the user a welcome email on signup_ </br>
+
+> **Default**: `false`
 
 ##### TRAVELLING_EMAIL_RECOVERY_EXPIRATION
 
