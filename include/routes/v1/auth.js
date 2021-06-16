@@ -133,12 +133,6 @@ var registerRoute = async (req, res) => {
   //     });
   //     return;
   // }
-  req.body.domain = req.params.domain || 'default';
-  var isValid = await checkValidUser(req.body);
-
-  if (isValid === true) {
-    isValid = await Database.checkDupe(req.body);
-  }
 
   if (!req.body.password || !req.body.email || (!req.body.username && config.user.username.enabled)) {
     res.code(400).send({
@@ -146,6 +140,12 @@ var registerRoute = async (req, res) => {
       msg: 'A valid username, password and email are required.'
     });
     return;
+  }
+
+  var isValid = await checkValidUser(req.body);
+
+  if (isValid === true) {
+    isValid = await Database.checkDupe(req.body);
   }
 
   if (isValid !== true) {
@@ -159,12 +159,12 @@ var registerRoute = async (req, res) => {
   var domain = 'default';
   var groupRequest;
 
-  if (req.body.group_request) {
-    groupRequest = req.body.group_request.toLowerCase();
-  }
-
   if (req.params.domain) {
     domain = req.params.domain.toLowerCase();
+  }
+
+  if (req.body.group_request) {
+    groupRequest = req.body.group_request.toLowerCase();
   }
 
   var dGroup = await gm.defaultGroup();
@@ -172,9 +172,9 @@ var registerRoute = async (req, res) => {
 
   config.log.logger.info(`New User Created: ${user.username || ''}(${user.email})[${domain}] | ${parse.getIp(req)}`);
 
-  if (config.registration.sendWelcomeEmail === true) {
+  if (config.registration.sendWelcomeEmail === true && user.email) {
     await Email.sendWelcome(user);
-    config.log.logger.info(`Sent welcome email to: ${user.email}.`)
+    config.log.logger.info(`Sent welcome email to: ${email}.`)
   }
 
   res.code(200).send('Account Created');

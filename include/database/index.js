@@ -201,7 +201,6 @@ class Database {
   static async checkDupe(user) {
     var found = await this.findUser(user.email, user.username, user.domain);
 
-    //console.log(user, qProps, qOps, found);
     if (found && found.length > 0) {
       return {
         type: 'exists-error',
