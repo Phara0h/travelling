@@ -172,12 +172,15 @@ var registerRoute = async (req, res) => {
 
   config.log.logger.info(`New User Created: ${username || ''}(${email})[${domain}] | ${parse.getIp(req)}`);
 
+  var sentWelcomeEmail = false;
+  
   if (config.registration.sendWelcomeEmail === true && email) {
     await Email.sendWelcome(user);
-    config.log.logger.info(`Sent welcome email to: ${email}.`)
+    config.log.logger.info(`Sent welcome email to: ${email}.`);
+    sentWelcomeEmail = true;
   }
 
-  res.code(200).send('Account Created');
+  res.code(200).send(`Account Created${sentWelcomeEmail ? ', Sent Welcome Email' : ''}`);
 };
 
 var forgotPasswordRoute = async (req, res, sendemail = true) => {

@@ -43,8 +43,7 @@ class Email {
     if (config.email.test.enable) {
       var ta = await nodemailer.createTestAccount();
 
-      config.log.logger.debug('Test Email Account:');
-      console.log(ta);
+      config.log.logger.debug({ testEmailAccount: ta });
 
       transporter = nodemailer.createTransport({
         host: 'smtp.ethereal.email',
