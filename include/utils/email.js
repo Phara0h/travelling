@@ -163,7 +163,7 @@ class Email {
   static async sendWelcome(user) {
     if (!transporter) {
       config.log.logger.debug(`No Transporter to send welcome Email For: ${user.email}`);
-      return;
+      return false;
     }
 
     var body;
