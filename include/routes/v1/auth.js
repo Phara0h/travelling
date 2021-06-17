@@ -170,9 +170,9 @@ var registerRoute = async (req, res) => {
   var dGroup = await gm.defaultGroup();
   var user = await Database.createAccount(username, password, email, [dGroup.id], groupRequest, req.hostname, domain);
 
-  config.log.logger.info(`New User Created: ${user.username || ''}(${user.email})[${domain}] | ${parse.getIp(req)}`);
+  config.log.logger.info(`New User Created: ${username || ''}(${email})[${domain}] | ${parse.getIp(req)}`);
 
-  if (config.registration.sendWelcomeEmail === true && user.email) {
+  if (config.registration.sendWelcomeEmail === true && email) {
     await Email.sendWelcome(user);
     config.log.logger.info(`Sent welcome email to: ${email}.`)
   }
