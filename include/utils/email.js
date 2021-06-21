@@ -183,8 +183,6 @@ class Email {
       html: body,
       type: 'welcome',
       user
-    }, (a, success)=> {      
-      config.log.logger.debug(`Sent welcome email: ${success}`);
     });
 
     if (config.email.test.enable) {
