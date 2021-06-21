@@ -62,9 +62,10 @@ module.exports = () => {
       }, 'test.com');
 
       expect(res.statusCode).toEqual(200);
+      expect(res.body).toEqual('Account Created')
     });
 
-    test('Create Test User [test_domain_2] and Assert Welcome Email Sent (Optional)', async () => {
+    test('Create Test User [test_domain_2]', async () => {
       var res = await Travelling.Auth.Domain.register({
         username: 'test_domain_2',
         password: 'Pas5w0r!d',
@@ -72,12 +73,7 @@ module.exports = () => {
       }, 'test.com');
 
       expect(res.statusCode).toEqual(200);
-
-      if (config.registration.sendWelcomeEmail === true && config.email.test.enable === true) {
-        expect(res.body).toEqual('Account Created, Sent Welcome Email')
-      } else {
-        expect(res.body).toEqual('Account Created')
-      }
+      expect(res.body).toEqual('Account Created')
     });
 
     test('Create Test User [test_domain_3] Gets deleted in user-edit', async () => {

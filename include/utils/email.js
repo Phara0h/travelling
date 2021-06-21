@@ -19,6 +19,8 @@ const restTransporter = {
         uri = config.email.rest.activationEndpoint;
       } else if (mail.data.type == 'locked') {
         uri = config.email.rest.lockedEndpoint;
+      } else if (mail.data.type == 'welcome') {
+        uri = config.email.rest.welcomeEndpoint;
       }
 
       await Fasquest.request({
@@ -181,6 +183,8 @@ class Email {
       html: body,
       type: 'welcome',
       user
+    }, (a, success)=> {      
+      config.log.logger.debug(`Sent welcome email: ${success}`);
     });
 
     if (config.email.test.enable) {
