@@ -163,7 +163,7 @@ It is recommended to follow this security tips to help keep Travelling as secure
     - [TRAVELLING_EMAIL_VALIDATION_EXTERNAL_EMAIL_IN_BODY](#travelling_email_validation_external_email_in_body)
     - [TRAVELLING_EMAIL_VALIDATION_EXTERNAL_METHOD](#travelling_email_validation_external_method)
     - [TRAVELLING_EMAIL_FROM](#travelling_email_from)
-    - [TRAVELLING_EMAIL_SEND_WELCOME_ON_REGISTER](#travelling_email_send_welcome_on_register)
+    - [TRAVELLING_EMAIL_SEND_ON_NEW_USER](#travelling_email_send_on_new_user)
     - [TRAVELLING_EMAIL_RECOVERY_EXPIRATION](#travelling_email_recovery_expiration)
     - [TRAVELLING_EMAIL_ACTIVATION_EXPIRATION](#travelling_email_activation_expiration)
     - [TRAVELLING_EMAIL_TEST_ENABLE](#travelling_email_test_enable)
@@ -174,6 +174,11 @@ It is recommended to follow this security tips to help keep Travelling as secure
     - [TRAVELLING_EMAIL_SMTP_AUTH_USER](#travelling_email_smtp_auth_user)
     - [TRAVELLING_EMAIL_SMTP_SECURE](#travelling_email_smtp_secure-1)
     - [TRAVELLING_EMAIL_SMTP_TLS_REJECT_UNAUTHORIZED](#travelling_email_smtp_tls_reject_unauthorized)
+    - [TRAVELLING_EMAIL_REST_ENABLE](#travelling_email_rest_enable)
+    - [TRAVELLING_EMAIL_REST_PASSWORD_RECOVERY_ENDPOINT](#travelling_email_rest_password_recovery_endpoint)
+    - [TRAVELLING_EMAIL_REST_ACTIVATION_ENDPOINT](#travelling_email_rest_activation_endpoint)
+    - [TRAVELLING_EMAIL_REST_LOCKED_ENDPOINT](#travelling_email_rest_locked_endpoint)
+    - [TRAVELLING_EMAIL_REST_WELCOME_ENDPOINT](#travelling_email_rest_welcome_endpoint)
     - [TRAVELLING_EMAIL_AWS_ENABLE](#travelling_email_aws_enable)
     - [TRAVELLING_EMAIL_AWS_CONFIG](#travelling_email_aws_config)
   - [Templates](#templates)
@@ -693,7 +698,7 @@ _The email that will be used as the `from` address. Recommended to set it to a n
 
 > **Default**: `null`
 
-##### TRAVELLING_EMAIL_SEND_WELCOME_ON_REGISTER
+##### TRAVELLING_EMAIL_SEND_ON_NEW_USER
 
 _Sends the user a welcome email on signup_ </br>
 
@@ -713,13 +718,13 @@ _The number of seconds for the email activation link to last for._ </br>
 
 ##### TRAVELLING_EMAIL_TEST_ENABLE
 
-_Enables the use of a test email service that will display the login credentials inside the log at start. This is used by our integration test. However, it is helpful to enable this if custom [Templates](#Templates) are written. Only one type of email support should be used `Test`, `SMTP` or `AWS`._ </br>
+_Enables the use of a test email service that will display the login credentials inside the log at start. This is used by our integration test. However, it is helpful to enable this if custom [Templates](#Templates) are written. Only one type of email support should be used `Test`, `SMTP`, `REST`, or `AWS`._ </br>
 
 > **Default**: `false`
 
 ##### TRAVELLING_EMAIL_SMTP_ENABLE
 
-_Enables the use of a SMTP email service. Only one type of email support should be used `Test`, `SMTP` or `AWS`._ </br>
+_Enables the use of a SMTP email service. Only one type of email support should be used `Test`, `SMTP`, `REST` or `AWS`._ </br>
 
 > **Default**: `false`
 
@@ -759,9 +764,39 @@ _Enables rejection of TLS certs that are self served or invalid. Recommended to 
 
 > **Default**: `true`
 
+##### TRAVELLING_EMAIL_REST_ENABLE
+
+_Enables the use of a REST email service. Only one type of email support should be used `Test`, `SMTP`, `REST` or `AWS`._ </br>
+
+> **Default**: `false`
+
+##### TRAVELLING_EMAIL_REST_PASSWORD_RECOVERY_ENDPOINT
+
+_Endpoint for sending a password recovery email._ </br>
+
+> **Default**: `null`
+
+##### TRAVELLING_EMAIL_REST_ACTIVATION_ENDPOINT
+
+_Endpoint for sending an activation email._ </br>
+
+> **Default**: `null`
+
+##### TRAVELLING_EMAIL_REST_LOCKED_ENDPOINT
+
+_Endpoint for sending a locked account email._ </br>
+
+> **Default**: `null`
+
+##### TRAVELLING_EMAIL_REST_WELCOME_ENDPOINT
+
+_Endpoint for sending a welcome email on signup._ </br>
+
+> **Default**: `null`
+
 ##### TRAVELLING_EMAIL_AWS_ENABLE
 
-_Enables the use of the AWS SES email service. Only one type of email support should be used `Test`, `SMTP` or `AWS`._ </br>
+_Enables the use of the AWS SES email service. Only one type of email support should be used `Test`, `SMTP`, `REST`, or `AWS`._ </br>
 
 > **Default**: `false`
 

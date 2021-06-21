@@ -133,6 +133,12 @@ var registerRoute = async (req, res) => {
   //     });
   //     return;
   // }
+  req.body.domain = req.params.domain || 'default';
+  var isValid = await checkValidUser(req.body);
+
+  if (isValid === true) {
+    isValid = await Database.checkDupe(req.body);
+  }
 
   if (!req.body.password || !req.body.email || (!req.body.username && config.user.username.enabled)) {
     res.code(400).send({
@@ -140,12 +146,6 @@ var registerRoute = async (req, res) => {
       msg: 'A valid username, password and email are required.'
     });
     return;
-  }
-
-  var isValid = await checkValidUser(req.body);
-
-  if (isValid === true) {
-    isValid = await Database.checkDupe(req.body);
   }
 
   if (isValid !== true) {
@@ -172,18 +172,11 @@ var registerRoute = async (req, res) => {
 
   config.log.logger.info(`New User Created: ${username || ''}(${email})[${domain}] | ${parse.getIp(req)}`);
 
-  var sentWelcomeEmail = false;
-
-  if (config.registration.sendWelcomeEmail === true && email) {
-    var failed = await Email.sendWelcome(user);
-
-    if (failed !== false) {
-      config.log.logger.info(`Sent welcome email to: ${email}.`);
-      sentWelcomeEmail = true;
-    }
+  if (config.email.send.onNewUser === true && email) {
+    await Email.sendWelcome(user);
   }
 
-  res.code(200).send(`Account Created${sentWelcomeEmail ? ', Sent Welcome Email' : ''}`);
+  res.code(200).send('Account Created.');
 };
 
 var forgotPasswordRoute = async (req, res, sendemail = true) => {

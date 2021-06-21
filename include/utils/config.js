@@ -229,7 +229,8 @@ const config = {
       enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_EMAIL_REST_ENABLE), false),
       passwordRecoveryEndpoint: misc.isSetDefault(process.env.TRAVELLING_EMAIL_REST_PASSWORD_RECOVERY_ENDPOINT, null),
       activationEndpoint: misc.isSetDefault(process.env.TRAVELLING_EMAIL_REST_ACTIVATION_ENDPOINT, null),
-      lockedEndpoint: misc.isSetDefault(process.env.TRAVELLING_EMAIL_REST_LOCKED_ENDPOINT, null)
+      lockedEndpoint: misc.isSetDefault(process.env.TRAVELLING_EMAIL_REST_LOCKED_ENDPOINT, null),
+      welcomeEndpoint: misc.isSetDefault(process.env.TRAVELLING_EMAIL_REST_WELCOME_ENDPOINT, null)
     },
     send: {
       onLocked: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_EMAIL_SEND_ON_LOCKED), true),
@@ -269,10 +270,6 @@ const config = {
     ),
     requireManualActivation: misc.isSetDefault(
       misc.stringToBool(process.env.TRAVELLING_REGISTRATION_REQUIRE_MANUAL_ACTIVATION),
-      false
-    ),
-    sendWelcomeEmail: misc.isSetDefault(
-      misc.stringToBool(process.env.TRAVELLING_EMAIL_SEND_WELCOME_ON_REGISTER), 
       false
     )
   }
