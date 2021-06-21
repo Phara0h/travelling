@@ -176,7 +176,7 @@ var registerRoute = async (req, res) => {
     await Email.sendWelcome(user);
   }
 
-  res.code(200).send('Account Created.');
+  res.code(200).send('Account Created');
 };
 
 var forgotPasswordRoute = async (req, res, sendemail = true) => {
