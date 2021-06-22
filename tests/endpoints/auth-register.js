@@ -62,6 +62,7 @@ module.exports = () => {
       }, 'test.com');
 
       expect(res.statusCode).toEqual(200);
+      expect(res.body).toEqual('Account Created')
     });
 
     test('Create Test User [test_domain_2]', async () => {
@@ -72,6 +73,7 @@ module.exports = () => {
       }, 'test.com');
 
       expect(res.statusCode).toEqual(200);
+      expect(res.body).toEqual('Account Created')
     });
 
     test('Create Test User [test_domain_3] Gets deleted in user-edit', async () => {
