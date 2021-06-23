@@ -1,6 +1,7 @@
 const qs = require('querystring');
 const auth = require('./functions/auth');
 
+
 module.exports = function (app, opts, done) {
   // if (config.cors.enable) {
   //   app.use((req,res,next) => {
