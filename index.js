@@ -173,7 +173,7 @@ const Database = require('./include/database');
 const Group = require('./include/database/models/group');
 const User = require('./include/database/models/user');
 const Token = require('./include/database/models/token');
-const Changelog = require('./include/database/models/changelog');
+const Audit = require('./include/database/models/audit');
 
 const redis = require('./include/redis');
 
@@ -371,7 +371,7 @@ async function init() {
     await Token.createTable();
   } catch (_) {}
   try {
-    await Changelog.createTable();
+    await Audit.createTable();
   } catch (_) {}
 
   await Database.initGroups(router);
