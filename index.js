@@ -300,6 +300,7 @@ app.addHook('preParsing', function (req, res, payload, next) {
 app.register(require('./include/routes/v1/auth'), { prefix: '/' + config.serviceName + '/api/v1', router });
 app.register(require('./include/routes/v1/groups'), { prefix: '/' + config.serviceName + '/api/v1', router });
 app.register(require('./include/routes/v1/users'), { prefix: '/' + config.serviceName + '/api/v1', router });
+app.register(require('./include/routes/v1/auth'), { prefix: '/' + config.serviceName + '/api/v1', router });
 app.get('/' + config.serviceName + '/api/v1/config/:prop', (req, res) => {
   res.code(200).send(config[req.params.prop]);
 });
