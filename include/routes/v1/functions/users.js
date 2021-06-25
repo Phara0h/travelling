@@ -1,10 +1,12 @@
 const regex = require('../../../utils/regex');
-const User = require('../../../database/models/user');
 const userUtils = require('../../../utils/user');
 const config = require('../../../utils/config');
 const misc = require('../../../utils/misc');
 const gm = require('../../../server/groupmanager');
+const audit = require('../../../utils/audit');
+
 const Database = require('../../../database');
+const User = require('../../../database/models/user');
 
 async function deleteUser(opts) {
     var id = _getId(opts.req);
@@ -77,6 +79,7 @@ async function deleteUser(opts) {
     opts.req.body = filterUser(opts.req);
   
     var model = opts.req.body;
+    var oldModel = await getUser(opts);
   
     if (opts.req.params.prop) {
       model = opts.req.params.propdata
@@ -111,7 +114,7 @@ async function deleteUser(opts) {
     } else {
       user = await User.updateLimitedBy(id, updatedProps, 'AND', 1);
     }
-  
+
     if (user && user.length > 0) {
       if (opts.req.params.prop && user[0][opts.req.params.prop] === undefined) {
         opts.res.code(400);
@@ -131,6 +134,23 @@ async function deleteUser(opts) {
         session.data = { user: user[0], groupsData };
         await opts.req.sessionStore.set(session.sessionId, session);
       }
+
+      // Add changes to audit
+      audit.createAudit({ 
+        action: 'Edit', 
+        byUser: {
+          id: opts.req.session.data.user.id,
+          email: opts.req.session.data.user.email,
+          username: opts.req.session.data.user.username,
+        }, 
+        ofUser: {
+          id: user[0].id,
+          email: user[0].email,
+          username: user[0].username
+        },
+        oldObj: oldModel._,
+        newObj: model 
+      });
   
       return opts.req.params.prop ? user[0][opts.req.params.prop] : user[0];
     }
@@ -258,7 +278,7 @@ async function deleteUser(opts) {
   
     return req.body;
   }
-  
+
   function _getId(req) {
     if (!req.params.id) {
       return null;
