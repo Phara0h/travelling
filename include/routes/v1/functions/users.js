@@ -80,13 +80,15 @@ async function deleteUser(opts) {
   
     var model = opts.req.body;
     var oldModel = await getUser(opts);
-  
+
     if (opts.req.params.prop) {
       model = opts.req.params.propdata
         ? { [opts.req.params.prop]: opts.req.params.propdata }
         : { [opts.req.params.prop]: opts.req.body };
+
+      oldModel = { [opts.req.params.prop]: oldModel }
     }
-  
+    
     var isValid = await userUtils.checkValidUser(model);
   
     if (isValid === true) {
@@ -148,7 +150,7 @@ async function deleteUser(opts) {
           email: user[0].email,
           username: user[0].username
         },
-        oldObj: oldModel._,
+        oldObj: oldModel,
         newObj: model 
       });
   
