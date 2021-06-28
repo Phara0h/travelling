@@ -3,15 +3,29 @@ const config = require('./config');
 
 function createAudit(opts) {
     switch (opts.action) {
+        case 'Create':
+            createAction(opts);
+            break;
         case 'Edit':
             editAction(opts);
             break;
         case 'Delete':
             deleteAction(opts);
             break;
+        case 'AddGroupInheritance':
+            addRemoveGroupInheritance(opts);
+            break;
+        case 'RemoveGroupInheritance':
+            addRemoveGroupInheritance(opts);
+            break;
         default:
             config.log.logger.debug(`Unknown audit action: ${opts.action}`);
     }
+}
+
+async function createAction(opts) {
+    const newAudit = createAuditObject(opts, prop = 'user', oldPropValue = opts.oldObj, newPropValue = opts.newObj);
+    await Audit.create(newAudit);
 }
 
 async function editAction(opts) {
@@ -29,6 +43,11 @@ async function editAction(opts) {
 
 async function deleteAction(opts) {
     const newAudit = createAuditObject(opts);
+    await Audit.create(newAudit);
+}
+
+async function addRemoveGroupInheritance(opts) {
+    const newAudit = createAuditObject(opts, prop = 'inheritgroupid', oldPropValue = opts.oldObj, newPropValue = opts.newObj);
     await Audit.create(newAudit);
 }
 
