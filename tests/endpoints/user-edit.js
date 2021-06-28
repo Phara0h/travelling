@@ -1,4 +1,5 @@
 const config = require('../../include/utils/config');
+const Audit = require('../../include/database/models/audit');
 const { Travelling } = require('../../sdk/node')('http://127.0.0.1:6969/' + config.serviceName, {
   resolveWithFullResponse: true
 });
@@ -49,11 +50,23 @@ module.exports = () => {
 
   describe('Non-Current User', () => {
     describe('Valid', () => {
-      test('Edit Test User 2 Email Property ', async () => {
+      test('Edit Test User 2 Email Property (Including Audit test)', async () => {
         var res = await Travelling.User.editProperty('asdf@asdf.memes', 'test2', 'email', userContainer.user1Token);
-
+       
         expect(res.body).toEqual('asdf@asdf.memes');
         expect(res.statusCode).toEqual(200);
+
+        // Check audit for this change
+        const audit = await Audit.findLimtedBy({ of_user_username: 'test2' }, 'AND', 1);
+
+        expect(audit[0].action).toEqual('Edit');
+        expect(audit[0].by_user_email).toEqual('testasdf2@fd.foo');
+        expect(audit[0].by_user_username).toEqual('test');
+        expect(audit[0].of_user_username).toEqual('test2');
+        expect(audit[0].of_user_email).toEqual('asdf@asdf.memes');
+        expect(audit[0].prop).toEqual('email');
+        expect(audit[0].old_val).toEqual('test2@test.com');
+        expect(audit[0].new_val).toEqual('asdf@asdf.memes');
       });
 
       test('Edit Test User 2 Email Property Value ', async () => {
