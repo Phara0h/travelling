@@ -43,6 +43,21 @@ async function deleteUser(opts) {
       if (session) {
         await opts.req.sessionStore.destroy(session.sessionId);
       }
+
+      // Add to audit
+      audit.createAudit({ 
+        action: 'Delete', 
+        byUser: {
+          id: opts.req.session.data.user.id,
+          email: opts.req.session.data.user.email,
+          username: opts.req.session.data.user.username,
+        }, 
+        ofUser: {
+          id: user[0].id,
+          email: user[0].email,
+          username: user[0].username
+        }
+      });
   
       opts.res.code(200);
       return user[0];
