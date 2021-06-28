@@ -52,18 +52,20 @@ async function addRemoveGroupInheritance(opts) {
 }
 
 function createAuditObject(opts, prop, oldPropValue, newPropValue) {
-    return {
-        action: opts.action,
-        by_user_id: opts.byUser.id,
-        by_user_email: opts.byUser.email,
-        by_user_username: opts.byUser.username,
-        of_user_id: opts.ofUser.id,
-        of_user_email: opts.ofUser.email,
-        of_user_username: opts.ofUser.username,
-        prop: prop,
-        old_val: oldPropValue,
-        new_val: newPropValue
-    }
+    var audit = {};
+
+    if (opts.action) { audit.action = opts.action }
+    if (opts.byUser.id) { audit.by_user_id = opts.byUser.id }
+    if (opts.byUser.email) { audit.by_user_email = opts.byUser.email }
+    if (opts.byUser.username) { audit.by_user_username = opts.byUser.username }
+    if (opts.ofUser.id) { audit.of_user_id = opts.ofUser.id }
+    if (opts.ofUser.email) { audit.of_user_email = opts.ofUser.email }
+    if (opts.ofUser.username) { audit.of_user_username = opts.ofUser.username }
+    if (prop) { audit.prop = prop.toString() }
+    if (oldPropValue) { audit.old_val = oldPropValue.toString() }
+    if (newPropValue) { audit.new_val = newPropValue.toString() }
+
+    return audit;
 }
 
 module.exports = {
