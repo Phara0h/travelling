@@ -1,5 +1,6 @@
 const config = require('../../../utils/config');
 const parse = require('../../../utils/parse');
+const audit = require('../../../utils/audit');
 const gm = require('../../../server/groupmanager');
 const { checkValidUser } = require('../../../utils/user');
 
@@ -129,7 +130,31 @@ var registerRoute = async (req, res) => {
     await Email.sendWelcome(user);
   }
 
-  res.code(200).send('Account Created');
+    if (config.email.send.onNewUser === true && email) {
+        await Email.sendWelcome(user);
+    }
+
+    // If registered by another user
+    if (user.id !== req.session.data.user.id) {
+        // Add new user to audit
+        audit.createAudit({ 
+        action: 'Create', 
+        byUser: {
+            id: req.session.data.user.id,
+            email: req.session.data.user.email,
+            username: req.session.data.user.username,
+        }, 
+        ofUser: {
+            id: user.id,
+            email: user.email,
+            username: user.username
+        },
+        oldObj: '',
+        newObj: user.id 
+        });
+    }
+
+    res.code(200).send('Account Created');
 };
 
 /** validates user and returns response with token. */

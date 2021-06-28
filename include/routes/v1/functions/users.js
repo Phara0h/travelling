@@ -266,6 +266,24 @@ async function deleteUser(opts) {
         };
       }
       await updateSessionUser(user, req);
+
+      // Add changes to audit
+      audit.createAudit({ 
+        action: add ? 'AddGroupInheritance' : 'RemoveGroupInheritance', 
+        byUser: {
+          id: req.session.data.user.id,
+          email: req.session.data.user.email,
+          username: req.session.data.user.username,
+        }, 
+        ofUser: {
+          id: user.id,
+          email: user.email,
+          username: user.username
+        },
+        oldObj: add ? '' : group.id,
+        newObj: add ? group.id : '',
+      });
+
       return user;
     }
   
