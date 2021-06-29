@@ -44,20 +44,15 @@ async function deleteUser(opts) {
       await opts.req.sessionStore.destroy(session.sessionId);
     }
 
-    if (config.audit.delete.enable) {
-      audit.createAudit({ 
-        action: 'Delete', 
-        byUser: {
-          id: opts.req.session.data.user.id,
-          email: opts.req.session.data.user.email,
-          username: opts.req.session.data.user.username,
-        }, 
-        ofUser: {
-          id: user[0].id,
-          email: user[0].email,
-          username: user[0].username
-        }
-      });
+    if (config.audit.delete.enable === true) {
+      var auditObj = {
+          action: 'DELETE', 
+          subaction: 'USER',
+          byUserId: user.id,
+          ofUserId: user.id
+      }
+      if (opts.req.session.data) { auditObj.byUserId = opts.req.session.data.user.id }
+        audit.createSingleAudit(auditObj);
     }
 
     opts.res.code(200);
@@ -153,22 +148,16 @@ async function editUser(opts) {
       await opts.req.sessionStore.set(session.sessionId, session);
     }
 
-    if (config.audit.edit.enable) {
-      audit.createAudit({ 
-        action: 'Edit', 
-        byUser: {
-          id: opts.req.session.data.user.id,
-          email: opts.req.session.data.user.email,
-          username: opts.req.session.data.user.username,
-        }, 
-        ofUser: {
-          id: user[0].id,
-          email: user[0].email,
-          username: user[0].username
-        },
-        oldObj: oldModel,
-        newObj: model 
-      });
+    if (config.audit.edit.enable === true) {
+      var auditObj = {
+          action: 'EDIT', 
+          subaction: 'USER_PROPERTY',
+          ofUserId: user.id,
+          oldObj: oldModel,
+          newObj: model
+      }
+      if (opts.req.session.data) { auditObj.byUserId = opts.req.session.data.user.id }
+      audit.splitAndCreateAudits(auditObj);
     }
 
     return opts.req.params.prop ? user[0][opts.req.params.prop] : user[0];
@@ -270,22 +259,20 @@ async function addRemoveGroupInheritance(user, group, add = true, req) {
     }
     await updateSessionUser(user, req);
 
-    if (config.audit.edit.enable) {
-        audit.createAudit({ 
-        action: add ? 'AddGroupInheritance' : 'RemoveGroupInheritance', 
-        byUser: {
-          id: req.session.data.user.id,
-          email: req.session.data.user.email,
-          username: req.session.data.user.username,
-        }, 
-        ofUser: {
-          id: user.id,
-          email: user.email,
-          username: user.username
-        },
-        oldObj: add ? '' : group.id,
-        newObj: add ? group.id : '',
-      });
+    if (config.audit.edit.enable === true) {
+      var auditObj = {
+          action: 'EDIT', 
+          subaction: add ? 'USER_ADD_GROUP_INHERITANCE' : 'USER_REMOVE_GROUP_INHERITANCE',
+          ofUserId: user.id
+      }
+      if (req.session.data) { auditObj.byUserId = req.session.data.user.id }
+      if (add === true) {
+        auditObj.newObj = { groupId: group.id}
+      } else if (add === false) {
+        auditObj.oldObj = { groupId: group.id}
+      }
+
+      audit.createSingleAudit(auditObj);
     }
 
     return user;
