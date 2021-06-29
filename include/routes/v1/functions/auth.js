@@ -134,8 +134,7 @@ var registerRoute = async (req, res) => {
         await Email.sendWelcome(user);
     }
 
-    // Audit if registered by another user
-    if (user && req.session.data && user.id !== req.session.data.user.id) {
+    if (config.audit.delete.enable) {
         audit.createAudit({ 
         action: 'Create', 
         byUser: {
