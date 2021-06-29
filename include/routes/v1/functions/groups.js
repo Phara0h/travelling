@@ -4,6 +4,8 @@ const User = require('../../../database/models/user');
 const misc = require('../../../utils/misc');
 const regex = require('../../../utils/regex');
 const userUtils = require('../../../utils/user.js');
+const config = require('../../../utils/config');
+const audit = require('../../../utils/audit');
 const gm = require('../../../server/groupmanager');
 const userRoutes = require('./users');
 
@@ -309,6 +311,17 @@ async function addGroup(req, res, router) {
 
   var ngroup = await Group.create(group.changedProps);
 
+  if (config.audit.create.enable === true) {
+    var auditObj = {
+        action: 'CREATE', 
+        subaction: 'GROUP',
+        oldObj: { groupID: ''},
+        newObj: { groupID: ngroup.id }
+    }
+    if (req.session.data) { auditObj.byUserId = req.session.data.user.id }
+    audit.splitAndCreateAudits(auditObj);
+  }
+
   gm.redis.needsGroupUpdate = true;
   res.code(200).send(ngroup);
 }
@@ -377,6 +390,18 @@ async function addRouteGroup(req, res, router) {
   }
 
   await fgroup.save();
+
+  if (config.audit.edit.enable === true) {
+    var auditObj = {
+        action: 'EDIT', 
+        subaction: 'GROUP_ADD_ROUTE',
+        oldObj: { groupID: ''},
+        newObj: { groupID: fgroup.id }
+    }
+    if (req.session.data) { auditObj.byUserId = req.session.data.user.id }
+    audit.splitAndCreateAudits(auditObj);
+  }
+
   gm.redis.needsGroupUpdate = true;
   res.code(200).send(fgroup);
 }
@@ -405,6 +430,18 @@ async function deleteRouteGroup(req, res, router) {
   }
 
   await fgroup.save();
+
+  if (config.audit.edit.enable === true) {
+    var auditObj = {
+        action: 'EDIT', 
+        subaction: 'GROUP_REMOVE_ROUTE',
+        oldObj: { groupID: ''},
+        newObj: { groupID: fgroup.id }
+    }
+    if (req.session.data) { auditObj.byUserId = req.session.data.user.id }
+    audit.splitAndCreateAudits(auditObj);
+  }
+
   gm.redis.needsGroupUpdate = true;
   res.code(200).send(fgroup);
 }
@@ -419,12 +456,25 @@ async function deleteGroup(req, res, router) {
   }
 
   var fgroup = await getGroup(req, res, router);
+  const fGroupId = fgroup.id;
 
   if (!fgroup) {
     return;
   }
 
   await fgroup.delete();
+
+  if (config.audit.delete.enable === true) {
+    var auditObj = {
+        action: 'DELETE', 
+        subaction: 'GROUP',
+        oldObj: { groupID: ''},
+        newObj: { groupID: fGroupId }
+    }
+    if (req.session.data) { auditObj.byUserId = req.session.data.user.id }
+    audit.splitAndCreateAudits(auditObj);
+  }
+
   gm.redis.needsGroupUpdate = true;
   res.code(200).send();
 }
@@ -501,19 +551,159 @@ async function removeInheritance(req, res, router) {
 }
 
 
-  module.exports = { 
-    setGroup,
-    getGroup,
-    getUserByGroup,
-    getGroupsByType,
-    editUserByGroup,
-    addRemoveGroupInheritanceByGroup,
-    deleteUserByGroup,
-    addGroup,
-    editGroup,
-    addRouteGroup,
-    deleteRouteGroup,
-    getInhertedUsers,
-    addInheritedToGroup,
-    removeInheritance    
+var importGroups = async (req, res) => {
+  // Possibly should put a check or lock to stop all group editing until import is done.
+  var grouptypes = Object.keys(req.body);
+  var groups = [];
+  var inheritance = {};
+  var savedGroups = {};
+
+  for (var k = 0; k < grouptypes.length; k++) {
+    var keys = Object.keys(req.body[grouptypes[k]]);
+
+    for (var i = 0; i < keys.length; i++) {
+      var group = req.body[grouptypes[k]][keys[i]];
+
+      group.name = keys[i];
+      group.type = grouptypes[k];
+
+      var keyGroupName = group.type + '|' + group.name;
+
+      try {
+        if (group.inherited && group.inherited.length > 0) {
+          inheritance[keyGroupName] = [];
+          for (var j = 0; j < group.inherited.length; j++) {
+            inheritance[keyGroupName].push(group.inherited[j]);
+          }
+        }
+        var fgroup = await gm.getGroup(group.name, group.type);
+
+        if (fgroup) {
+          fgroup._.inherited = null;
+          fgroup = fgroup._;
+        } else {
+          fgroup = {};
+        }
+
+        fgroup.is_default = group.is_default;
+        groups.push(await setGroup({ body: group }, new Group(fgroup), router=null, req.body));
+      } catch (e) {
+        res.code(400).send(e);
+        return;
+      }
+    }
+
+    for (var i = 0; i < groups.length; i++) {
+      if (groups[i].is_default) {
+        var dgroup = await gm.defaultGroup();
+
+        if (groups[i].name != dgroup.name && groups[i].type != dgroup.type) {
+          dgroup.is_default = false;
+          await dgroup.save();
+        }
+      }
+      if (groups[i].id) {
+        await groups[i].save();
+      } else {
+        await groups[i].create();
+      }
+
+      savedGroups[groups[i].type + '|' + groups[i].name] = groups[i];
+    }
+  }
+
+  var inheritanceKeys = Object.keys(inheritance);
+
+  var failedInheritance = [];
+
+  for (var i = 0; i < inheritanceKeys.length; i++) {
+    savedGroups[inheritanceKeys[i]].inherited = [];
+    for (var j = 0; j < inheritance[inheritanceKeys[i]].length; j++) {
+      if (savedGroups[inheritance[inheritanceKeys[i]][j]]) {
+        savedGroups[inheritanceKeys[i]].inherited.push(savedGroups[inheritance[inheritanceKeys[i]][j]].id);
+      } else {
+        failedInheritance.push({ group: inheritanceKeys[i], inheritance: inheritance[inheritanceKeys[i]][j] });
+      }
+    }
+    await savedGroups[inheritanceKeys[i]].save();
+  }
+  gm.redis.needsGroupUpdate = true;
+
+  if (failedInheritance.length > 0) {
+    res.code(240).send({
+      type: 'group-export-failed-inheritances',
+      msg: 'All groups imported but these inheritances were not done since the group names do not exist.',
+      failedInheritance
+    });
+    return;
+  }
+
+  if (config.audit.edit.enable === true) {
+    var auditObj = {
+        action: 'EDIT', 
+        subaction: 'IMPORT_GROUPS'
+    }
+    if (req.session.data) { 
+      auditObj.byUserId = req.session.data.user.id 
+    }
+    audit.createSingleAudit(auditObj);
+  }
+
+  res.code(200).send();
+}
+
+var exportGroups = async (req, res) => {
+  var groups = await gm.getGroups();
+  var mappedGroups = await gm.getMappedGroups();
+  var exported = {};
+
+  for (var i = 0; i < groups.length; i++) {
+    var group = new Group({ ...groups[i]._ });
+
+    if (group.inheritedGroups) {
+      group.inheritedGroups = undefined;
+    }
+    if (group.inherited && group.inherited.length > 0) {
+      for (var j = 0; j < group.inherited.length; j++) {
+        group.inherited[j] = mappedGroups[group.inherited[j]].type + '|' + mappedGroups[group.inherited[j]].name;
+      }
+    }
+    group.id = undefined;
+    if (!exported[group.type]) {
+      exported[group.type] = {};
+    }
+    exported[group.type][group.name] = {};
+    if (group.allowed && group.allowed.length > 0) {
+      exported[group.type][group.name].allowed = group.allowed;
+    }
+    if (group.inherited && group.inherited.length > 0) {
+      exported[group.type][group.name].inherited = group.inherited;
+    }
+    if (group.is_default) {
+      exported[group.type][group.name].is_default = group.is_default;
+    }
+  }
+
+  res.code(200).send(exported);
+}
+
+
+module.exports = { 
+  setGroup,
+  getGroup,
+  getUserByGroup,
+  getGroupsByType,
+  editUserByGroup,
+  addRemoveGroupInheritanceByGroup,
+  deleteUserByGroup,
+  deleteGroup,
+  addGroup,
+  editGroup,
+  addRouteGroup,
+  deleteRouteGroup,
+  getInhertedUsers,
+  addInheritedToGroup,
+  removeInheritance,
+  importGroups,
+  exportGroups
 };
