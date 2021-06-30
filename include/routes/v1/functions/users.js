@@ -7,7 +7,6 @@ const audit = require('../../../utils/audit');
 
 const Database = require('../../../database');
 const User = require('../../../database/models/user');
-const Audit = require('../../../database/models/audit');
 
 async function deleteUser(opts) {
   var id = _getId(opts.req);
@@ -49,7 +48,7 @@ async function deleteUser(opts) {
       var auditObj = {
           action: 'DELETE', 
           subaction: 'USER',
-          ofUserId: user.id
+          ofUserId: user[0].id
       }
       if (opts.req.session.data) { auditObj.byUserId = opts.req.session.data.user.id }
         audit.createSingleAudit(auditObj);
@@ -152,7 +151,7 @@ async function editUser(opts) {
       var auditObj = {
           action: 'EDIT', 
           subaction: 'USER_PROPERTY',
-          ofUserId: user.id,
+          ofUserId: user[0].id,
           oldObj: oldModel,
           newObj: model
       }
@@ -171,12 +170,6 @@ async function editUser(opts) {
 }
   
 async function getUser(opts) {
-
-
-  return Audit.findLimtedBy({ id: opts.req.params.id })
-
-
-  /////
   var id = _getId(opts.req);
   var domain = opts.req.params.domain;
   var user;

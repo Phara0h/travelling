@@ -1,5 +1,6 @@
 const config = require('../../include/utils/config');
-
+const Audit = require('../../include/database/models/audit');
+const User = require('../../include/database/models/user');
 const { Travelling } = require('../../sdk/node')('http://127.0.0.1:6969/' + config.serviceName, {
   resolveWithFullResponse: true
 });
@@ -19,7 +20,7 @@ module.exports = () => {
       expect(res.statusCode).toEqual(200);
     });
 
-    test('Create Test User [test2]', async () => {
+    test('Create Test User [test2] and verify audit', async () => {
       var res = await Travelling.Auth.register({
         username: 'test2',
         password: 'Pas5w0r!d2',
@@ -27,6 +28,14 @@ module.exports = () => {
       });
 
       expect(res.statusCode).toEqual(200);
+
+      const u = await User.findAllBy({ email: 'test2@test.com' });
+      const audit = await Audit.findAllBy({ of_user_id: u[0].id, action: "CREATE", subaction: "USER" });
+
+      expect(audit[0]).toHaveProperty('id');
+      expect(audit[0].created_on).not.toBeNull();
+      expect(audit[0].action).toEqual('CREATE');
+      expect(audit[0].subaction).toEqual('USER');
     });
 
     test('Create Test User [test3] Manual Activation Request Group Type Test', async () => {
