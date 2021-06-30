@@ -223,8 +223,12 @@ module.exports = function (app, opts, done) {
   });
 
   // import/export Groups
-  app.put('/groups/import', groupRoutes.importGroups);
-  app.get('/groups/export', groupRoutes.exportGroups);
+  app.put('/groups/import', async (req, res) => { 
+    return await groupRoutes.importGroups(req, res, router);
+  });
+  app.get('/groups/export', async (req, res) => {
+    return await groupRoutes.exportGroups(req, res);
+  });
 
   // Users by group type and group id
   app.get('/group/id/:groupid/type/:grouptype/user/:id', async (req, res) => {
