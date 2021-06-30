@@ -1,4 +1,6 @@
 const config = require('../../include/utils/config');
+const Audit = require('../../include/database/models/audit');
+const Group = require('../../include/database/models/group');
 const { Travelling } = require('../../sdk/node')('http://127.0.0.1:6969/' + config.serviceName, {
   resolveWithFullResponse: true
 });
@@ -28,11 +30,19 @@ module.exports = () => {
                                         group1
           */
 
-      test('Create a Group With Name group1', async () => {
+      test('Create a Group With Name group1 and verify audit', async () => {
         var res = await Travelling.Group.create({ name: 'group1', type: 'testgroup' }, userContainer.user1Token);
 
         group1 = res.body;
         expect(res.body).toMatchObject({ name: 'group1', id: expect.any(String), is_default: false });
+      
+        const audit = await Audit.findAllBy({ action: "CREATE", subaction: "GROUP" });
+
+        expect(audit[0]).toHaveProperty('id');
+        expect(audit[0].created_on).not.toBeNull();
+        expect(audit[0].by_user_id).not.toBeNull();
+        expect(audit[0].new_val).not.toBeNull();
+        expect(audit[0].prop).toEqual('groupID');
       });
 
       test('Create a Group With Name group2 and Inherited From group1', async () => {
@@ -149,6 +159,15 @@ module.exports = () => {
           is_default: false,
           inherited: [group3.id, superadmin]
         });
+
+              
+        const audit = await Audit.findAllBy({ action: "EDIT", subaction: "GROUP_ADD_INHERITANCE" });
+
+        expect(audit[0]).toHaveProperty('id');
+        expect(audit[0].created_on).not.toBeNull();
+        expect(audit[0].by_user_id).not.toBeNull();
+        expect(audit[0].new_val).not.toBeNull();
+        expect(audit[0].prop).toEqual('inheritedGroup');
       });
 
       test('Group 1 to Inherit Superadmin', async () => {
