@@ -356,11 +356,24 @@ async function editGroup(req, res, router) {
     if (group.id != dgroup.id) { 
       dgroup.is_default = false;
       await dgroup.save();
+
+      if (config.audit.edit.enable === true) {
+        var auditObj = {
+            action: 'EDIT', 
+            subaction: 'DEFAULT_GROUP',
+            oldObj: { defaultGroupID: dgroup.id },
+            newObj: { defaultGroupID: group.id }
+        }
+        if (req.session.data) { auditObj.byUserId = req.session.data.user.id }
+        audit.splitAndCreateAudits(auditObj);
+      }
+
       gm.redis.needsGroupUpdate = true;
     }
   }
 
   await group.save();
+
   gm.redis.needsGroupUpdate = true;
 
   res.code(200).send(await gm.getGroup(group.id));
@@ -514,6 +527,17 @@ async function addInheritedToGroup(req, res, router) {
     inherited: [...group.inherited, inhertedGroup.id]
   };
   await editGroup(req, res, router);
+
+  if (config.audit.edit.enable === true) {
+    var auditObj = {
+        action: 'EDIT', 
+        subaction: 'GROUP_ADD_INHERITANCE',
+        oldObj: { inheritedGroup: '' },
+        newObj: { inheritedGroup: inhertedGroup.id }
+    }
+    if (req.session.data) { auditObj.byUserId = req.session.data.user.id }
+    audit.splitAndCreateAudits(auditObj);
+  }
 }
 
 async function removeInheritance(req, res, router) {
@@ -548,10 +572,21 @@ async function removeInheritance(req, res, router) {
     inherited: group.inherited
   };
   await editGroup(req, res, router);
+
+  if (config.audit.edit.enable === true) {
+    var auditObj = {
+        action: 'EDIT', 
+        subaction: 'GROUP_REMOVE_INHERITANCE',
+        oldObj: { inheritedGroup: inhertedGroup.id },
+        newObj: { inheritedGroup: '' }
+    }
+    if (req.session.data) { auditObj.byUserId = req.session.data.user.id }
+    audit.splitAndCreateAudits(auditObj);
+  }
 }
 
 
-var importGroups = async (req, res) => {
+async function importGroups(req, res, router) {
   // Possibly should put a check or lock to stop all group editing until import is done.
   var grouptypes = Object.keys(req.body);
   var groups = [];
@@ -586,7 +621,7 @@ var importGroups = async (req, res) => {
         }
 
         fgroup.is_default = group.is_default;
-        groups.push(await setGroup({ body: group }, new Group(fgroup), router=null, req.body));
+        groups.push(await setGroup({ body: group }, new Group(fgroup), router, req.body));
       } catch (e) {
         res.code(400).send(e);
         return;
@@ -652,7 +687,7 @@ var importGroups = async (req, res) => {
   res.code(200).send();
 }
 
-var exportGroups = async (req, res) => {
+async function exportGroups(req, res) {
   var groups = await gm.getGroups();
   var mappedGroups = await gm.getMappedGroups();
   var exported = {};

@@ -24,7 +24,11 @@ async function splitAndCreateAudits(opts) {
 
         if (newPropValue !== oldPropValue) {
             const newAudit = createAuditObject(opts, prop, oldPropValue, newPropValue);
-            await Audit.create(newAudit);
+            
+            // Ignore models and changedProps
+            if (newAudit.prop !== 'models' && newAudit.prop !== 'changedProps') {
+                await Audit.create(newAudit);
+            }
         }
     }
 }
@@ -37,10 +41,31 @@ function createAuditObject(opts, prop, oldPropValue, newPropValue) {
     if (opts.byUserId) { audit.by_user_id = opts.byUserId }
     if (opts.ofUserId) { audit.of_user_id = opts.ofUserId }
     if (prop) { audit.prop = prop.toString() }
-    if (oldPropValue) { audit.old_val = oldPropValue.toString() }
-    if (newPropValue) { audit.new_val = newPropValue.toString() }
+    if (oldPropValue) { 
+        if (isJson(oldPropValue)) {
+            audit.old_val = JSON.stringify(oldPropValue);
+        } else {
+            audit.old_val = oldPropValue.toString() 
+        }
+    }
+    if (newPropValue) { 
+        if (isJson(newPropValue)) {
+            audit.new_val = JSON.stringify(newPropValue);
+        } else {
+            audit.new_val = newPropValue.toString() 
+        }
+    }
 
     return audit;
+}
+
+function isJson(str) {
+    try {
+        JSON.stringify(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
 }
 
 module.exports = {
