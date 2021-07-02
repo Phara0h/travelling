@@ -12,7 +12,7 @@ module.exports = () => {
         test('Get Audit by Test User (No Query Params)', async () => {
             testUser1 = await User.findAllBy({ username: 'test' });
 
-            var res = await Travelling.Audit.User.byuserId(
+            const res = await Travelling.Audit.User.byuserId(
                 testUser1[0].id,
                 null,
                 null,
@@ -31,7 +31,7 @@ module.exports = () => {
         });
 
         test('Get Audit by Test User with Sort', async () => {
-            var res = await Travelling.Audit.User.byuserId(
+            const res = await Travelling.Audit.User.byuserId(
                 testUser1[0].id,
                 null,
                 null,
@@ -50,7 +50,7 @@ module.exports = () => {
         });
 
         test('Get Audit by Test User with Sortdir', async () => {
-            var res = await Travelling.Audit.User.byuserId(
+            const res = await Travelling.Audit.User.byuserId(
                 testUser1[0].id,
                 null,
                 null,
@@ -69,7 +69,7 @@ module.exports = () => {
         });
 
         test('Get Audit by Test User with limit', async () => {
-            var res = await Travelling.Audit.User.byuserId(
+            const res = await Travelling.Audit.User.byuserId(
                 testUser1[0].id,
                 null,
                 1,
@@ -89,7 +89,7 @@ module.exports = () => {
         });
 
         test('Get Audit by Test User with skip', async () => {
-            var res = await Travelling.Audit.User.byuserId(
+            const res = await Travelling.Audit.User.byuserId(
                 testUser1[0].id,
                 null,
                 null,
@@ -104,7 +104,7 @@ module.exports = () => {
         });
 
         test('Get Audit by Test User with filter (action=EDIT)', async () => {
-            var res = await Travelling.Audit.User.byuserId(
+            const res = await Travelling.Audit.User.byuserId(
                 testUser1[0].id,
                 'action=EDIT',
                 null,
@@ -128,7 +128,7 @@ module.exports = () => {
             yesterday.setDate(yesterday.getDate() - 1);
             tomorrow.setDate(tomorrow.getDate() + 1);
    
-            var res = await Travelling.Audit.User.byuserId(
+            const res = await Travelling.Audit.User.byuserId(
                 testUser1[0].id,
                 `created_on >= ${yesterday.toISOString()}, created_on <= ${tomorrow.toISOString()}`,
                 null,
@@ -152,7 +152,7 @@ module.exports = () => {
             yesterday.setDate(yesterday.getDate() - 1);
             tomorrow.setDate(tomorrow.getDate() + 1);
             
-            var res = await Travelling.Audit.User.byuserId(
+            const res = await Travelling.Audit.User.byuserId(
                 testUser1[0].id,
                 `created_on > ${tomorrow.toISOString()}, created_on < ${yesterday.toISOString()}`,
                 null,
@@ -174,7 +174,7 @@ module.exports = () => {
         test('Get Audit of Test User (No Query Params)', async () => {
             testUser1 = await User.findAllBy({ username: 'test' });
 
-            var res = await Travelling.Audit.User.ofuserId(
+            const res = await Travelling.Audit.User.ofuserId(
                 testUser1[0].id,
                 null,
                 null,
@@ -193,7 +193,7 @@ module.exports = () => {
         });
 
         test('Get Audit of Test User with Sort', async () => {
-            var res = await Travelling.Audit.User.ofuserId(
+            const res = await Travelling.Audit.User.ofuserId(
                 testUser1[0].id,
                 null,
                 null,
@@ -212,7 +212,7 @@ module.exports = () => {
         });
 
         test('Get Audit of Test User with Sortdir', async () => {
-            var res = await Travelling.Audit.User.ofuserId(
+            const res = await Travelling.Audit.User.ofuserId(
                 testUser1[0].id,
                 null,
                 null,
@@ -231,7 +231,7 @@ module.exports = () => {
         });
 
         test('Get Audit of Test User with limit', async () => {
-            var res = await Travelling.Audit.User.ofuserId(
+            const res = await Travelling.Audit.User.ofuserId(
                 testUser1[0].id,
                 null,
                 1,
@@ -251,7 +251,7 @@ module.exports = () => {
         });
 
         test('Get Audit of Test User with skip', async () => {
-            var res = await Travelling.Audit.User.ofuserId(
+            const res = await Travelling.Audit.User.ofuserId(
                 testUser1[0].id,
                 null,
                 null,
@@ -266,7 +266,7 @@ module.exports = () => {
         });
 
         test('Get Audit of Test User with filter (action=EDIT)', async () => {
-            var res = await Travelling.Audit.User.ofuserId(
+            const res = await Travelling.Audit.User.ofuserId(
                 testUser1[0].id,
                 'action=EDIT',
                 null,
@@ -290,7 +290,7 @@ module.exports = () => {
             yesterday.setDate(yesterday.getDate() - 1);
             tomorrow.setDate(tomorrow.getDate() + 1);
   
-            var res = await Travelling.Audit.User.ofuserId(
+            const res = await Travelling.Audit.User.ofuserId(
                 testUser1[0].id,
                 `created_on >= ${yesterday.toISOString()}, created_on <= ${tomorrow.toISOString()}`,
                 null,
@@ -314,7 +314,7 @@ module.exports = () => {
             yesterday.setDate(yesterday.getDate() - 1);
             tomorrow.setDate(tomorrow.getDate() + 1);
             
-            var res = await Travelling.Audit.User.ofuserId(
+            const res = await Travelling.Audit.User.ofuserId(
                 testUser1[0].id,
                 `created_on > ${tomorrow.toISOString()}, created_on < ${yesterday.toISOString()}`,
                 null,
@@ -329,4 +329,81 @@ module.exports = () => {
         });
     });
 
+
+    describe('Invalid', async () => {
+        test('Get Audit ByUser with non-existent user id', async () => {
+            const res = await Travelling.Audit.User.byuserId(
+                'fakeAF',
+                null,
+                null,
+                null,
+                null,
+                null,
+                userContainer.user1Token
+            );
+
+            expect(res.statusCode).toEqual(200);
+            expect(res.body.length).toEqual(0);
+        });
+
+        test('Get Audit OfUser with non-existent user id', async () => {
+            const res = await Travelling.Audit.User.ofuserId(
+                'UnrealAF',
+                null,
+                null,
+                null,
+                null,
+                null,
+                userContainer.user1Token
+            );
+
+            expect(res.statusCode).toEqual(200);
+            expect(res.body.length).toEqual(0);
+        });
+
+        test('Get Audit ByUser with missing user id', async () => {
+            const res = await Travelling.Audit.User.byuserId(
+                '',
+                null,
+                null,
+                null,
+                null,
+                null,
+                userContainer.user1Token
+            );
+
+            expect(res.statusCode).toEqual(400);
+            expect(res.body.type).toEqual('missing-param-error');
+        });
+
+        test('Get Audit OfUser with missing user id', async () => {
+            const res = await Travelling.Audit.User.ofuserId(
+                '',
+                null,
+                null,
+                null,
+                null,
+                null,
+                userContainer.user1Token
+            );
+
+            expect(res.statusCode).toEqual(400);
+            expect(res.body.type).toEqual('missing-param-error');
+        });
+
+        test('Get Audit ByUser with invalid skip param', async () => {
+            const res = await Travelling.Audit.User.byuserId(
+                null,
+                null,
+                null,
+                'NaN008',
+                null,
+                null,
+                userContainer.user1Token
+            );
+
+            expect(res.statusCode).toEqual(400);
+            expect(res.body.type).toEqual('audit-filter-error');
+        });
+    });
 };
