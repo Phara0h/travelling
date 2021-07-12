@@ -3,8 +3,8 @@ const Audit = require('../database/models/audit');
 /** 
  * Create audit that has just one change (e.g. CREATE user) 
  */
-async function createSingleAudit(opts) {
-    const newAudit = createAuditObject(opts);
+async function createSingleAudit(opts, prop) {
+    const newAudit = createAuditObject(opts, prop, opts.oldObj, opts.newObj);
     await Audit.create(newAudit);
 }
 

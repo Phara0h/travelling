@@ -48,10 +48,12 @@ async function deleteUser(opts) {
       var auditObj = {
           action: 'DELETE', 
           subaction: 'USER',
-          ofUserId: user[0].id
+          ofUserId: user[0].id,
+          oldObj: user[0],
+          newObj: {}
       }
       if (opts.req.session.data) { auditObj.byUserId = opts.req.session.data.user.id }
-        audit.createSingleAudit(auditObj);
+        audit.createSingleAudit(auditObj, 'DELETE');
     }
 
     opts.res.code(200);
