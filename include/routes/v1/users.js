@@ -396,7 +396,6 @@ module.exports = function (app, opts, done) {
         var auditObj = {
           action: 'CREATE',
           subaction: 'USER_OAUTH_TOKEN',
-          oldObj: {},
           newObj: token
         };
         if (req.session.data) {
@@ -436,7 +435,6 @@ module.exports = function (app, opts, done) {
           action: 'DELETE',
           subaction: 'USER_OAUTH_TOKEN',
           oldObj: token,
-          newObj: {}
         };
         if (req.session.data) {
           auditObj.byUserId = req.session.data.user.id;
