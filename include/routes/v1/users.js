@@ -393,11 +393,12 @@ module.exports = function (app, opts, done) {
         req.body.urls
       );
 
-
       if (config.audit.create.enable === true) {
         var auditObj = {
             action: 'CREATE', 
-            subaction: 'USER_TOKEN'
+            subaction: 'USER_OAUTH_TOKEN',
+            oldObj: {},
+            newObj: token
         }
         if (req.session.data) { 
           auditObj.byUserId = req.session.data.user.id 
@@ -434,7 +435,9 @@ module.exports = function (app, opts, done) {
       if (config.audit.delete.enable === true) {
         var auditObj = {
             action: 'DELETE', 
-            subaction: 'USER_TOKEN'
+            subaction: 'USER_OAUTH_TOKEN',
+            oldObj: token,
+            newObj: {}
         }
         if (req.session.data) { 
           auditObj.byUserId = req.session.data.user.id 

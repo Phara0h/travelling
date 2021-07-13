@@ -315,11 +315,11 @@ async function addGroup(req, res, router) {
     var auditObj = {
         action: 'CREATE', 
         subaction: 'GROUP',
-        oldObj: { groupID: ''},
-        newObj: { groupID: ngroup.id }
+        oldObj: {},
+        newObj: ngroup
     }
     if (req.session.data) { auditObj.byUserId = req.session.data.user.id }
-    audit.splitAndCreateAudits(auditObj);
+    await audit.createSingleAudit(auditObj);
   }
 
   gm.redis.needsGroupUpdate = true;
@@ -361,11 +361,11 @@ async function editGroup(req, res, router) {
         var auditObj = {
             action: 'EDIT', 
             subaction: 'DEFAULT_GROUP',
-            oldObj: { defaultGroupID: dgroup.id },
-            newObj: { defaultGroupID: group.id }
+            oldObj: dgroup,
+            newObj: group
         }
         if (req.session.data) { auditObj.byUserId = req.session.data.user.id }
-        audit.splitAndCreateAudits(auditObj);
+        await audit.splitAndCreateAudits(auditObj);
       }
 
       gm.redis.needsGroupUpdate = true;
@@ -408,11 +408,11 @@ async function addRouteGroup(req, res, router) {
     var auditObj = {
         action: 'EDIT', 
         subaction: 'GROUP_ADD_ROUTE',
-        oldObj: { groupID: ''},
-        newObj: { groupID: fgroup.id }
+        oldObj: {},
+        newObj: req.body
     }
     if (req.session.data) { auditObj.byUserId = req.session.data.user.id }
-    audit.splitAndCreateAudits(auditObj);
+    await audit.createSingleAudit(auditObj);
   }
 
   gm.redis.needsGroupUpdate = true;
@@ -448,11 +448,11 @@ async function deleteRouteGroup(req, res, router) {
     var auditObj = {
         action: 'EDIT', 
         subaction: 'GROUP_REMOVE_ROUTE',
-        oldObj: { groupID: ''},
-        newObj: { groupID: fgroup.id }
+        oldObj: req.body,
+        newObj: {}
     }
     if (req.session.data) { auditObj.byUserId = req.session.data.user.id }
-    audit.splitAndCreateAudits(auditObj);
+    await audit.createSingleAudit(auditObj);
   }
 
   gm.redis.needsGroupUpdate = true;
@@ -481,11 +481,11 @@ async function deleteGroup(req, res, router) {
     var auditObj = {
         action: 'DELETE', 
         subaction: 'GROUP',
-        oldObj: { groupID: ''},
-        newObj: { groupID: fGroupId }
+        oldObj: fGroupId,
+        newObj: {}
     }
     if (req.session.data) { auditObj.byUserId = req.session.data.user.id }
-    audit.splitAndCreateAudits(auditObj);
+    await audit.createSingleAudit(auditObj);
   }
 
   gm.redis.needsGroupUpdate = true;
@@ -532,11 +532,11 @@ async function addInheritedToGroup(req, res, router) {
     var auditObj = {
         action: 'EDIT', 
         subaction: 'GROUP_ADD_INHERITANCE',
-        oldObj: { inheritedGroup: '' },
-        newObj: { inheritedGroup: inhertedGroup.id }
+        oldObj: {},
+        newObj: inhertedGroup
     }
     if (req.session.data) { auditObj.byUserId = req.session.data.user.id }
-    audit.splitAndCreateAudits(auditObj);
+    await audit.createSingleAudit(auditObj);
   }
 }
 
@@ -577,11 +577,11 @@ async function removeInheritance(req, res, router) {
     var auditObj = {
         action: 'EDIT', 
         subaction: 'GROUP_REMOVE_INHERITANCE',
-        oldObj: { inheritedGroup: inhertedGroup.id },
-        newObj: { inheritedGroup: '' }
+        oldObj: inhertedGroup,
+        newObj: {}
     }
     if (req.session.data) { auditObj.byUserId = req.session.data.user.id }
-    audit.splitAndCreateAudits(auditObj);
+    await audit.createSingleAudit(auditObj);
   }
 }
 
@@ -676,12 +676,14 @@ async function importGroups(req, res, router) {
   if (config.audit.edit.enable === true) {
     var auditObj = {
         action: 'EDIT', 
-        subaction: 'IMPORT_GROUPS'
+        subaction: 'IMPORT_GROUPS',
+        oldObj: {},
+        newObj: req.body
     }
     if (req.session.data) { 
       auditObj.byUserId = req.session.data.user.id 
     }
-    audit.createSingleAudit(auditObj);
+    await audit.createSingleAudit(auditObj);
   }
 
   res.code(200).send();
