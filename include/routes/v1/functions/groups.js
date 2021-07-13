@@ -364,25 +364,38 @@ async function editGroup(req, res, router) {
       await dgroup.save();
 
       gm.redis.needsGroupUpdate = true;
+
+      if (config.audit.edit.enable === true) {
+        var auditObj = {
+          action: 'EDIT',
+          subaction: 'DEFAULT_GROUP',
+          oldObj: fgroup,
+          newObj: dgroup
+        };
+        if (req.session.data) {
+          auditObj.byUserId = req.session.data.user.id;
+        }
+        await audit.splitAndCreateAudits(auditObj);
+      }
+    }
+  } else {
+    if (config.audit.edit.enable === true) {
+      var auditObj = {
+        action: 'EDIT',
+        subaction: 'GROUP',
+        oldObj: fgroup,
+        newObj: group
+      };
+      if (req.session.data) {
+        auditObj.byUserId = req.session.data.user.id;
+      }
+      await audit.splitAndCreateAudits(auditObj);
     }
   }
 
   await group.save();
 
   gm.redis.needsGroupUpdate = true;
-
-  if (config.audit.edit.enable === true) {
-    var auditObj = {
-      action: 'EDIT',
-      subaction: 'DEFAULT_GROUP',
-      oldObj: fgroup,
-      newObj: group
-    };
-    if (req.session.data) {
-      auditObj.byUserId = req.session.data.user.id;
-    }
-    await audit.splitAndCreateAudits(auditObj);
-  }
 
   res.code(200).send(await gm.getGroup(group.id));
 }
@@ -457,7 +470,7 @@ async function deleteRouteGroup(req, res, router) {
     var auditObj = {
       action: 'EDIT',
       subaction: 'GROUP_REMOVE_ROUTE',
-      oldObj: req.body,
+      oldObj: req.body
     };
     if (req.session.data) {
       auditObj.byUserId = req.session.data.user.id;
@@ -491,7 +504,7 @@ async function deleteGroup(req, res, router) {
     var auditObj = {
       action: 'DELETE',
       subaction: 'GROUP',
-      oldObj: fgroup,
+      oldObj: fgroup
     };
     if (req.session.data) {
       auditObj.byUserId = req.session.data.user.id;
@@ -595,7 +608,7 @@ async function removeInheritance(req, res, router) {
     var auditObj = {
       action: 'EDIT',
       subaction: 'GROUP_REMOVE_INHERITANCE',
-      oldObj: inhertedGroup,
+      oldObj: inhertedGroup
     };
     if (req.session.data) {
       auditObj.byUserId = req.session.data.user.id;
