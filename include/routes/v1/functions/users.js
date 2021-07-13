@@ -7,7 +7,6 @@ const audit = require('../../../utils/audit');
 
 const Database = require('../../../database');
 const User = require('../../../database/models/user');
-const Audit = require('../../../database/models/audit');
 
 async function deleteUser(opts) {
   var id = _getId(opts.req);
@@ -50,8 +49,7 @@ async function deleteUser(opts) {
         action: 'DELETE',
         subaction: 'USER',
         ofUserId: user[0].id,
-        oldObj: user[0],
-        newObj: {}
+        oldObj: user[0]
       };
       if (opts.req.session.data) {
         auditObj.byUserId = opts.req.session.data.user.id;
@@ -177,11 +175,6 @@ async function editUser(opts) {
 }
 
 async function getUser(opts) {
-  // const audit = await Audit.findLimtedBy({ id: opts.req.params.id });
-  // console.log(audit)
-  // return audit
-
-  /////
   var id = _getId(opts.req);
   var domain = opts.req.params.domain;
   var user;
@@ -274,12 +267,15 @@ async function addRemoveGroupInheritance(user, group, add = true, req) {
       var auditObj = {
         action: 'EDIT',
         subaction: add ? 'USER_ADD_GROUP_INHERITANCE' : 'USER_REMOVE_GROUP_INHERITANCE',
-        ofUserId: user.id,
-        oldObj: add ? {} : group,
-        newObj: add ? group : {}
+        ofUserId: user.id
       };
       if (req.session.data) {
         auditObj.byUserId = req.session.data.user.id;
+      }
+      if (add === true) {
+        auditObj.newObj = group;
+      } else if (add === false) {
+        auditObj.oldObj = group;
       }
 
       await audit.createSingleAudit(auditObj);

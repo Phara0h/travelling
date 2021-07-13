@@ -135,7 +135,6 @@ var registerRoute = async (req, res) => {
       action: 'CREATE',
       subaction: 'USER',
       ofUserId: user.id,
-      oldObj: {},
       newObj: user
     };
     if (req.session.data) {
