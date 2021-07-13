@@ -47,14 +47,16 @@ async function deleteUser(opts) {
 
     if (config.audit.delete.enable === true) {
       var auditObj = {
-          action: 'DELETE', 
-          subaction: 'USER',
-          ofUserId: user[0].id,
-          oldObj: user[0],
-          newObj: {}
+        action: 'DELETE',
+        subaction: 'USER',
+        ofUserId: user[0].id,
+        oldObj: user[0],
+        newObj: {}
+      };
+      if (opts.req.session.data) {
+        auditObj.byUserId = opts.req.session.data.user.id;
       }
-      if (opts.req.session.data) { auditObj.byUserId = opts.req.session.data.user.id }
-        await audit.createSingleAudit(auditObj, 'DELETE');
+      await audit.createSingleAudit(auditObj, 'DELETE');
     }
 
     opts.res.code(200);
@@ -67,7 +69,7 @@ async function deleteUser(opts) {
     msg: `No user by that id, username, email ${opts.needsDomain ? 'with that domain ' : ''}was found.`
   };
 }
-  
+
 async function editUser(opts) {
   var id = _getId(opts.req);
   var domain = opts.req.params.domain;
@@ -99,9 +101,9 @@ async function editUser(opts) {
       ? { [opts.req.params.prop]: opts.req.params.propdata }
       : { [opts.req.params.prop]: opts.req.body };
 
-    oldModel = { [opts.req.params.prop]: oldModel }
+    oldModel = { [opts.req.params.prop]: oldModel };
   }
-  
+
   var isValid = await userUtils.checkValidUser(model);
 
   if (isValid === true) {
@@ -152,13 +154,15 @@ async function editUser(opts) {
 
     if (config.audit.edit.enable === true) {
       var auditObj = {
-          action: 'EDIT', 
-          subaction: 'USER_PROPERTY',
-          ofUserId: user[0].id,
-          oldObj: oldModel,
-          newObj: model
+        action: 'EDIT',
+        subaction: 'USER_PROPERTY',
+        ofUserId: user[0].id,
+        oldObj: oldModel,
+        newObj: model
+      };
+      if (opts.req.session.data) {
+        auditObj.byUserId = opts.req.session.data.user.id;
       }
-      if (opts.req.session.data) { auditObj.byUserId = opts.req.session.data.user.id }
       await audit.splitAndCreateAudits(auditObj);
     }
 
@@ -171,7 +175,7 @@ async function editUser(opts) {
     msg: `No user by that id, username, email ${opts.needsDomain ? 'with that domain ' : ''}was found.`
   };
 }
-  
+
 async function getUser(opts) {
   // const audit = await Audit.findLimtedBy({ id: opts.req.params.id });
   // console.log(audit)
@@ -268,13 +272,15 @@ async function addRemoveGroupInheritance(user, group, add = true, req) {
 
     if (config.audit.edit.enable === true) {
       var auditObj = {
-          action: 'EDIT', 
-          subaction: add ? 'USER_ADD_GROUP_INHERITANCE' : 'USER_REMOVE_GROUP_INHERITANCE',
-          ofUserId: user.id,
-          oldObj: add ? {} : group,
-          newObj: add ? group : {}
+        action: 'EDIT',
+        subaction: add ? 'USER_ADD_GROUP_INHERITANCE' : 'USER_REMOVE_GROUP_INHERITANCE',
+        ofUserId: user.id,
+        oldObj: add ? {} : group,
+        newObj: add ? group : {}
+      };
+      if (req.session.data) {
+        auditObj.byUserId = req.session.data.user.id;
       }
-      if (req.session.data) { auditObj.byUserId = req.session.data.user.id }
 
       await audit.createSingleAudit(auditObj);
     }
@@ -330,11 +336,10 @@ function _getId(req) {
   return { id: req.params.id };
 }
 
-  
-module.exports = { 
-    getUser,
-    deleteUser,
-    editUser,
-    getGroup,
-    addRemoveGroupInheritance
+module.exports = {
+  getUser,
+  deleteUser,
+  editUser,
+  getGroup,
+  addRemoveGroupInheritance
 };

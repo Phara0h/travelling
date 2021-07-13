@@ -62,7 +62,7 @@ var loginRoute = async (req, res) => {
       } catch (e) {
         if (e.err && e.err.msg) {
           config.log.logger.debug(e.err, e.user ? e.user._ : null);
-          config.log.logger.info(`Failed Auth (${e.err.msg}): ${username}, ${email}, ${domain}`);
+          config.log.logger.info(`Failed Auth (${e.err.msg}): `, username, email, domain);
         } else {
           config.log.logger.debug(e);
         }
@@ -130,23 +130,21 @@ var registerRoute = async (req, res) => {
     await Email.sendWelcome(user);
   }
 
-    if (config.email.send.onNewUser === true && email) {
-        await Email.sendWelcome(user);
+  if (config.audit.create.enable === true) {
+    var auditObj = {
+      action: 'CREATE',
+      subaction: 'USER',
+      ofUserId: user.id,
+      oldObj: {},
+      newObj: user
+    };
+    if (req.session.data) {
+      auditObj.byUserId = req.session.data.user.id;
     }
+    await audit.createSingleAudit(auditObj);
+  }
 
-    if (config.audit.create.enable === true) {
-        var auditObj = {
-            action: 'CREATE', 
-            subaction: 'USER',
-            ofUserId: user.id,
-            oldObj: {},
-            newObj: user
-        }
-        if (req.session.data) { auditObj.byUserId = req.session.data.user.id }
-        await audit.createSingleAudit(auditObj);
-    }
-
-    res.code(200).send('Account Created');
+  res.code(200).send('Account Created');
 };
 
 /** validates user and returns response with token. */
@@ -212,23 +210,23 @@ async function resetPasswordRoute(req, res, autologin = false) {
     };
   }
 
-    if (config.audit.edit.enable === true) {
-        var auditObj = {
-            action: 'EDIT',
-            subaction: 'USER_RESET_PASSWORD',
-        }
-        if (req.session.data) { 
-            auditObj.byUserId = req.session.data.user.id;
-            auditObj.ofUserId = req.session.data.user.id;
-        }
-        await audit.createSingleAudit(auditObj);
+  if (config.audit.edit.enable === true) {
+    var auditObj = {
+      action: 'EDIT',
+      subaction: 'USER_RESET_PASSWORD'
+    };
+    if (req.session.data) {
+      auditObj.byUserId = req.session.data.user.id;
+      auditObj.ofUserId = req.session.data.user.id;
     }
+    await audit.createSingleAudit(auditObj);
+  }
 
-    res.code(200);
-    if (autologin) {
-        return await login(user, req, res);
-    }
-};
+  res.code(200);
+  if (autologin) {
+    return await login(user, req, res);
+  }
+}
 
 var logoutRoute = async (req, res) => {
   req.logout(req, res);
@@ -313,7 +311,9 @@ var postOAuthAuthorizeRoute = async (req, res) => {
     var code = Buffer.from(`${token.client_id}:${token.client_secret}`, 'ascii').toString('base64');
 
     res.headers['Cache-Control'] = 'no-cache';
-    res.redirect(encodeURI(req.query.redirect_uri + `?code=${code}&state=${req.query.state}&client_id=${req.query.client_id}`));
+    res.redirect(
+      encodeURI(req.query.redirect_uri + `?code=${code}&state=${req.query.state}&client_id=${req.query.client_id}`)
+    );
     return;
   } catch (e) {
     config.log.logger.debug(e);
