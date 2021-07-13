@@ -40,6 +40,8 @@ class Audit extends Base(BaseModel, 'audits', {
                     );`);
   }
 
+
+  // TODO: Extend Active model instead of this and the same function in User model
   static async findAllByIdWithFilter(opts) {
     var query = `SELECT * FROM ${this.table} `;
     var keys = [];
