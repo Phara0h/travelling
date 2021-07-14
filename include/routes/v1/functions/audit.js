@@ -2,7 +2,7 @@ const Audit = require('../../../database/models/audit');
 
 async function getAuditsByUserID(opts) {
     const id = opts.req.params.id;
-
+    
     if (!id) {
         opts.res.code(400);
         return {
@@ -17,10 +17,7 @@ async function getAuditsByUserID(opts) {
     }
 
     try {
-        return await Audit.findAllByIdWithFilter({
-            id: id,
-            byUser: opts.byUser,
-            ofUser: opts.ofUser,
+        return await Audit.findAllByFilter({
             filter: opts.req.query.filter,
             limit: opts.req.query.limit,
             skip: opts.req.query.skip,
