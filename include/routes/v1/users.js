@@ -402,7 +402,7 @@ module.exports = function (app, opts, done) {
           auditObj.byUserId = req.session.data.user.id;
           auditObj.ofUserId = req.session.data.user.id;
         }
-        audit.createSingleAudit(auditObj);
+        await audit.createSingleAudit(auditObj);
       }
 
       res.code(200).send({ client_id: token.name || token.id, client_secret: token.secret });
@@ -440,7 +440,7 @@ module.exports = function (app, opts, done) {
           auditObj.byUserId = req.session.data.user.id;
           auditObj.ofUserId = req.session.data.user.id;
         }
-        audit.createSingleAudit(auditObj);
+        await audit.createSingleAudit(auditObj);
       }
 
       res.code(200).send();
