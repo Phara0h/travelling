@@ -35,14 +35,15 @@ module.exports = () => {
 
         group1 = res.body;
         expect(res.body).toMatchObject({ name: 'group1', id: expect.any(String), is_default: false });
-      
+      });
+
+      test('Create a Group With Name group1 and verify audit', async () => {
         const audit = await Audit.findAllBy({ action: "CREATE", subaction: "GROUP" });
 
         expect(audit[0]).toHaveProperty('id');
         expect(audit[0].created_on).not.toBeNull();
         expect(audit[0].by_user_id).not.toBeNull();
         expect(audit[0].new_val).not.toBeNull();
-        expect(audit[0].prop).toEqual('groupID');
       });
 
       test('Create a Group With Name group2 and Inherited From group1', async () => {
@@ -159,15 +160,15 @@ module.exports = () => {
           is_default: false,
           inherited: [group3.id, superadmin]
         });
+      });
 
-              
-        const audit = await Audit.findAllBy({ action: "EDIT", subaction: "GROUP_ADD_INHERITANCE" });
+      test('Audit Add Group Inheritance', async () => {
+        const audit = await Audit.findAllBy({ action: "EDIT", subaction: "USER_ADD_GROUP_INHERITANCE" });
 
         expect(audit[0]).toHaveProperty('id');
         expect(audit[0].created_on).not.toBeNull();
         expect(audit[0].by_user_id).not.toBeNull();
         expect(audit[0].new_val).not.toBeNull();
-        expect(audit[0].prop).toEqual('inheritedGroup');
       });
 
       test('Group 1 to Inherit Superadmin', async () => {
