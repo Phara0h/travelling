@@ -1,9 +1,8 @@
-const BaseModel = require('adost').PGActiveModel;
+const BaseModel = require('./basemodel.js');
 const Base = require('adost').Base;
 const PGTypes = require('adost').PGTypes;
 const Group = require('./group');
 const config = require('../../utils/config');
-const { findAllByFilterQuery } = require('../../utils/query');
 
 class User extends Base(BaseModel, 'users', {
   id: PGTypes.PK,
@@ -177,10 +176,6 @@ class User extends Base(BaseModel, 'users', {
       }
     }
     return false;
-  }
-
-  static async findAllByFilter(opts) {
-    return await findAllByFilterQuery(this, opts);
   }
 
   toJSON() {

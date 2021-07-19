@@ -1,5 +1,5 @@
 /*eslint new-cap: "warn"*/
-const BaseModel = require('adost').PGActiveModel;
+const BaseModel = require('./basemodel.js');
 const Base = require('adost').Base;
 const PGTypes = require('adost').PGTypes;
 

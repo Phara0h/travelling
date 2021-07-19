@@ -1,7 +1,6 @@
-const BaseModel = require('adost').PGActiveModel;
+const BaseModel = require('./basemodel.js');
 const Base = require('adost').Base;
 const PGTypes = require('adost').PGTypes;
-const { findAllByFilterQuery } = require('../../utils/query');
 
 class Audit extends Base(BaseModel, 'audits', {
   id: PGTypes.PK,
@@ -37,10 +36,6 @@ class Audit extends Base(BaseModel, 'audits', {
                     eprofile character varying(350),
                     PRIMARY KEY (id)
                     );`);
-  }
-
-  static async findAllByFilter(opts) {
-    return await findAllByFilterQuery(this, opts);
   }
 }
 
