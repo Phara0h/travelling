@@ -1,16 +1,18 @@
-const regex = require('./regex');
-const misc = require('./misc');
+/*eslint new-cap: "warn"*/
+const BaseModel = require('adost').PGActiveModel;
+const regex = require('../../utils/regex');
+const misc = require('../../utils/misc');
 const userUtil = require('./user');
 
-async function findAllByFilterQuery(self, opts) {
+PGActiveModel.findAllByFilter = async function (opts) {
   var query = '';
   var keys = [];
   var values = [];
 
   if (opts.count) {
-    query = `SELECT COUNT(id) FROM ${self.table} `;
+    query = `SELECT COUNT(id) FROM ${this.table} `;
   } else {
-    query = `SELECT * FROM ${self.table} `;
+    query = `SELECT * FROM ${this.table} `;
   }
 
   if (!opts.sortdir) {
@@ -73,9 +75,9 @@ async function findAllByFilterQuery(self, opts) {
         value = kv[1];
       }
 
-      if (self._defaultModel[key] !== undefined) {
-        if (self._encryptionFields[key] !== undefined) {
-          value = (await self._queryFieldsHash({ [key]: value }))['__' + key];
+      if (this._defaultModel[key] !== undefined) {
+        if (this._encryptionFields[key] !== undefined) {
+          value = (await this._queryFieldsHash({ [key]: value }))['__' + key];
           key = '__' + key;
         }
 
@@ -86,13 +88,13 @@ async function findAllByFilterQuery(self, opts) {
       }
     }
 
-    if (self.table === 'users') {
-      var validUser = await userUtil.checkValidUser(obj);
+    if (this.table === 'users') {
+      var validUser = await this.checkValidUser(obj);
 
       if (validUser !== true) {
         throw validUser;
       }
-      obj = userUtil.setUser(obj, obj);
+      obj = this.setUser(obj, obj);
     }
 
     for (var i = 0; i < keys.length; i++) {
@@ -120,7 +122,7 @@ async function findAllByFilterQuery(self, opts) {
   }
 
   if (opts.count) {
-    const countRes = await self.query(query, values, false);
+    const countRes = await this.query(query, values, false);
     var count = Number.parseInt(countRes.rows[0].count);
 
     if (opts.skip) {
@@ -138,19 +140,18 @@ async function findAllByFilterQuery(self, opts) {
     return { count };
   }
 
-  const newModels = await self.query(query, values);
+  const newModels = await this.query(query, values);
+
   console.log(query);
   console.log(values);
   for (var i = 0; i < newModels.length; i++) {
     if (newModels[i]) {
-      newModels[i] = await self.decrypt(newModels[i], self.getEncryptedProfile(newModels[i]), true);
+      newModels[i] = await this.decrypt(newModels[i], this.getEncryptedProfile(newModels[i]), true);
       delete newModels[i].password;
       delete newModels[i].eprofile;
     }
   }
   return newModels;
-}
-
-module.exports = {
-  findAllByFilterQuery
 };
+
+module.exports = PGActiveModel;
