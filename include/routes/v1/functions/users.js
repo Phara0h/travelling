@@ -92,14 +92,20 @@ async function editUser(opts) {
   opts.req.body = filterUser(opts.req);
 
   var model = opts.req.body;
-  var oldModel = await getUser(opts);
+  var oldModel;
+
+  if (config.audit.edit.enable === true) {
+    oldModel = await getUser(opts);
+  }
 
   if (opts.req.params.prop) {
     model = opts.req.params.propdata
       ? { [opts.req.params.prop]: opts.req.params.propdata }
       : { [opts.req.params.prop]: opts.req.body };
 
-    oldModel = { [opts.req.params.prop]: oldModel };
+    if (config.audit.edit.enable === true) {
+      oldModel = { [opts.req.params.prop]: oldModel };
+    }
   }
 
   var isValid = await userUtils.checkValidUser(model);
@@ -155,7 +161,7 @@ async function editUser(opts) {
         action: 'EDIT',
         subaction: 'USER_PROPERTY',
         ofUserId: user[0].id,
-        oldObj: oldModel,
+        oldObj: oldModel._,
         newObj: model
       };
       if (opts.req.session.data) {
@@ -253,6 +259,14 @@ async function getGroup(req, res) {
 
 async function addRemoveGroupInheritance(user, group, add = true, req) {
   if (user) {
+    var previousGroups;
+
+    if (config.audit.edit.enable === true) {
+      if (user.groups) {
+        previousGroups = user.groups;
+      }
+    }
+
     user = add ? await user.addGroup(group) : await user.removeGroup(group);
 
     if (!user) {
@@ -264,18 +278,21 @@ async function addRemoveGroupInheritance(user, group, add = true, req) {
     await updateSessionUser(user, req);
 
     if (config.audit.edit.enable === true) {
+      var newGroups;
+      
+      if (user.groups) {
+        newGroups = user.groups;
+      }
+
       var auditObj = {
         action: 'EDIT',
         subaction: add ? 'USER_ADD_GROUP_INHERITANCE' : 'USER_REMOVE_GROUP_INHERITANCE',
-        ofUserId: user.id
+        ofUserId: user.id,
+        oldObj: previousGroups,
+        newObj: newGroups
       };
       if (req.session.data) {
         auditObj.byUserId = req.session.data.user.id;
-      }
-      if (add === true) {
-        auditObj.newObj = group;
-      } else if (add === false) {
-        auditObj.oldObj = group;
       }
 
       await audit.createSingleAudit(auditObj);
