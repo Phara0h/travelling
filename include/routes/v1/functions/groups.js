@@ -361,22 +361,23 @@ async function editGroup(req, res, router) {
 
     if (group.id != dgroup.id) {
       dgroup.is_default = false;
-      await dgroup.save();
-
-      gm.redis.needsGroupUpdate = true;
 
       if (config.audit.edit.enable === true) {
         var auditObj = {
           action: 'EDIT',
           subaction: 'DEFAULT_GROUP',
-          oldObj: fgroup,
-          newObj: dgroup
+          oldObj: fgroup._,
+          newObj: dgroup._
         };
         if (req.session.data) {
           auditObj.byUserId = req.session.data.user.id;
         }
         await audit.splitAndCreateAudits(auditObj);
       }
+
+      await dgroup.save();
+
+      gm.redis.needsGroupUpdate = true;
     }
   } else {
     if (config.audit.edit.enable === true) {
@@ -415,6 +416,12 @@ async function addRouteGroup(req, res, router) {
     return;
   }
 
+  var previousGroup;
+
+  if (config.audit.edit.enable === true) {
+    previousGroup = fgroup;
+  }
+
   if (!fgroup.addRoute(req.body)) {
     res.code(400).send({
       type: 'error',
@@ -429,6 +436,7 @@ async function addRouteGroup(req, res, router) {
     var auditObj = {
       action: 'EDIT',
       subaction: 'GROUP_ADD_ROUTE',
+      oldObj: previousGroup,
       newObj: req.body
     };
     if (req.session.data) {
@@ -623,6 +631,11 @@ async function importGroups(req, res, router) {
   var groups = [];
   var inheritance = {};
   var savedGroups = {};
+  var previousGroups;
+
+  if (config.audit.edit.enable === true) {
+    previousGroups = await exportGroups();
+  }
 
   for (var k = 0; k < grouptypes.length; k++) {
     var keys = Object.keys(req.body[grouptypes[k]]);
@@ -708,6 +721,7 @@ async function importGroups(req, res, router) {
     var auditObj = {
       action: 'EDIT',
       subaction: 'IMPORT_GROUPS',
+      oldObj: previousGroups,
       newObj: req.body
     };
     if (req.session.data) {

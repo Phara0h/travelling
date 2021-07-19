@@ -1,6 +1,5 @@
 const config = require('../../include/utils/config');
 const Audit = require('../../include/database/models/audit');
-const Group = require('../../include/database/models/group');
 const { Travelling } = require('../../sdk/node')('http://127.0.0.1:6969/' + config.serviceName, {
   resolveWithFullResponse: true
 });
@@ -37,13 +36,15 @@ module.exports = () => {
         expect(res.body).toMatchObject({ name: 'group1', id: expect.any(String), is_default: false });
       });
 
-      test('Create a Group With Name group1 and verify audit', async () => {
-        const audit = await Audit.findAllBy({ action: "CREATE", subaction: "GROUP" });
+      test('Create Group Audit', async () => {
+        if (config.audit.create.enable === true) {
+          const audit = await Audit.findAllBy({ action: "CREATE", subaction: "GROUP" });
 
-        expect(audit[0]).toHaveProperty('id');
-        expect(audit[0].created_on).not.toBeNull();
-        expect(audit[0].by_user_id).not.toBeNull();
-        expect(audit[0].new_val).not.toBeNull();
+          expect(audit[0]).toHaveProperty('id');
+          expect(audit[0].created_on).not.toBeNull();
+          expect(audit[0].by_user_id).not.toBeNull();
+          expect(audit[0].new_val).not.toBeNull();
+        }
       });
 
       test('Create a Group With Name group2 and Inherited From group1', async () => {
@@ -163,12 +164,14 @@ module.exports = () => {
       });
 
       test('Audit Add Group Inheritance', async () => {
-        const audit = await Audit.findAllBy({ action: "EDIT", subaction: "USER_ADD_GROUP_INHERITANCE" });
+        if (config.audit.edit.enable === true) {
+          const audit = await Audit.findAllBy({ action: "EDIT", subaction: "GROUP" });
 
-        expect(audit[0]).toHaveProperty('id');
-        expect(audit[0].created_on).not.toBeNull();
-        expect(audit[0].by_user_id).not.toBeNull();
-        expect(audit[0].new_val).not.toBeNull();
+          expect(audit[0]).toHaveProperty('id');
+          expect(audit[0].created_on).not.toBeNull();
+          expect(audit[0].by_user_id).not.toBeNull();
+          expect(audit[0].new_val).not.toBeNull();
+        }
       });
 
       test('Group 1 to Inherit Superadmin', async () => {

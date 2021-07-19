@@ -5,6 +5,7 @@ const gm = require('../../../server/groupmanager');
 const { checkValidUser } = require('../../../utils/user');
 
 const Database = require('../../../database');
+const User = require('.././../../database/models/user');
 const CookieToken = require('../../../utils/cookietoken');
 const TokenHandler = require('../../../token');
 const Email = require('../../../utils/email');
@@ -199,6 +200,16 @@ async function resetPasswordRoute(req, res, autologin = false) {
     };
   }
 
+  var oldPassword;
+
+  if (config.audit.edit.enable === true) {
+    var oldUser = await User.findLimtedBy({ id: token[2] }, 'AND', 1);
+
+    if (oldUser[0] || oldUser.length > 0) {
+      oldPassword = oldUser.password;
+    }
+  }
+
   var user = await Database.resetPassword(token, req.body.password);
 
   if (!user) {
@@ -212,7 +223,9 @@ async function resetPasswordRoute(req, res, autologin = false) {
   if (config.audit.edit.enable === true) {
     var auditObj = {
       action: 'EDIT',
-      subaction: 'USER_RESET_PASSWORD'
+      subaction: 'USER_RESET_PASSWORD',
+      oldObj: { password: oldPassword },
+      newObj: { password: user.password }
     };
     if (req.session.data) {
       auditObj.byUserId = req.session.data.user.id;

@@ -6,10 +6,12 @@ const { Travelling } = require('../../sdk/node')('http://127.0.0.1:6969/' + conf
 var userContainer = require('../include/UserContainer.js');
 
 module.exports = () => {
-    describe('Valid ByUser', () => {
+    if (config.audit.create.enable === true && config.audit.edit.enable === true && config.audit.delete.enable === true) {
+
+        describe('Valid ByUser', () => {
         var testUser1;
 
-        test('Get Audit by Test User (No Query Params)', async () => {
+            test('Get Audit by Test User (No Query Params)', async () => {
             testUser1 = await User.findAllBy({ username: 'test' });
 
             const res = await Travelling.Audit.User.byuserId(
@@ -28,6 +30,7 @@ module.exports = () => {
             expect(res.body[0].action).not.toBeNull();
             expect(res.body[0].subaction).not.toBeNull();
             expect(res.body[0].by_user_id).toEqual(testUser1[0].id);
+            
         });
 
         test('Get Audit by Test User with Sort', async () => {
@@ -406,4 +409,5 @@ module.exports = () => {
             expect(res.body.type).toEqual('audit-filter-error');
         });
     });
+}
 };

@@ -52,30 +52,21 @@ function createAuditObject(opts, prop, oldPropValue, newPropValue) {
     audit.prop = prop.toString();
   }
   if (oldPropValue) {
-    if (isJson(oldPropValue)) {
+    try {
       audit.old_val = JSON.stringify(oldPropValue);
-    } else {
+    } catch {
       audit.old_val = oldPropValue.toString();
     }
   }
   if (newPropValue) {
-    if (isJson(newPropValue)) {
+    try {
       audit.new_val = JSON.stringify(newPropValue);
-    } else {
+    } catch {
       audit.new_val = newPropValue.toString();
     }
   }
 
   return audit;
-}
-
-function isJson(str) {
-  try {
-    JSON.stringify(str);
-  } catch (e) {
-    return false;
-  }
-  return true;
 }
 
 module.exports = {
