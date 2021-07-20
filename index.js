@@ -16,6 +16,17 @@ if (
 
 const ignored_routes = [`/${config.serviceName}/metrics`, `/${config.serviceName}/health`];
 
+const isRouteIgnored = function (url) {
+  for (let i = 0; i < ignored_routes.length; i++) {
+    const r = ignored_routes[i];
+
+    if (url.indexOf(r) > -1) {
+      return true;
+    }
+  }
+  return false;
+};
+
 if (config.log.logger) {
   if (typeof config.log.logger === 'string') {
     if (config.log.logger == 'wog') {
@@ -51,21 +62,19 @@ if (config.log.logger) {
           req: function (req) {
             var traceId = '';
 
-            if (ignored_routes.indexOf(req.url) > -1) {
+            if (isRouteIgnored(req.url)) {
               return null;
             }
 
-            if (config.tracing.enable) {
-              if (!req.span || req.span == '') {
-                if (is_testing) {
-                  req.span = trace.tracer.startSpan('root', trace.opentelemetry.context.active());
-                } else {
-                  req.span = trace.opentelemetry.getSpan(trace.opentelemetry.context.active());
-                }
+            if (!req.span || req.span == '') {
+              if (is_testing) {
+                req.span = trace.tracer.startSpan('root', undefined, trace.opentelemetry.context.active());
+              } else {
+                req.span = trace.opentelemetry.trace.getSpan(trace.opentelemetry.context.active());
               }
-              if (req.span) {
-                traceId = req.span.context().traceId;
-              }
+            }
+            if (req.span) {
+              traceId = req.span.spanContext().traceId;
             }
             var headers = {
               ...req.headers
@@ -85,13 +94,14 @@ if (config.log.logger) {
           },
 
           res: function (reply) {
-            if (ignored_routes.indexOf(reply.request.url) > -1) {
+            if (isRouteIgnored(reply.request.url)) {
               return null;
             }
+
             return {
               wog_type: 'reply',
               statusCode: reply.statusCode,
-              traceId: config.tracing.enable && reply.request.span ? reply.request.span.context().traceId : ''
+              traceId: config.tracing.enable && reply.request.span ? reply.request.span.spanContext().traceId : ''
             };
           }
         }
@@ -177,10 +187,13 @@ const nstats = require('nstats')();
 
 if (config.tracing.enable) {
   app.setErrorHandler((error, request, reply) => {
-    error.traceId = request.span.context().traceId;
-    config.log.logger.error(error);
-
-    request.span.recordException(error);
+    if (request.span) {
+      error.traceId = request.span.spanContext().traceId;
+    }
+    wog.error(error);
+    if (request.span) {
+      request.span.recordException(error);
+    }
 
     reply.code(500).send(
       JSON.stringify({
@@ -189,6 +202,7 @@ if (config.tracing.enable) {
       })
     );
   });
+
   app.decorateRequest('span', '');
   app.decorateRequest('startSpan', trace.helpers.startSpan);
   // if (is_testing) {
