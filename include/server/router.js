@@ -105,8 +105,14 @@ class Router {
 
         if (config.log.unauthorizedAccess) {
           log.warn(
-            'Unauthorized',
-            'Unregistered User' + ' (anonymous)' + ' | ' + parse.getIp(req) + ' | [' + req.raw.method + '] ' + req.raw.url
+            'Unauthorized Unregistered User' +
+              ' (anonymous)' +
+              ' | ' +
+              parse.getIp(req) +
+              ' | [' +
+              req.raw.method +
+              '] ' +
+              req.raw.url
           );
         }
         return false;
@@ -120,8 +126,8 @@ class Router {
             sessionGroupsData = await sessionUser.resolveGroup();
           }
           log.warn(
-            'Unauthorized',
-            sessionUser.username +
+            'Unauthorized ' +
+              sessionUser.username +
               ' (' +
               sessionGroupsData.names +
               ') | ' +
