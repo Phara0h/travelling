@@ -3296,7 +3296,13 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v2.6.5](https://github.com/Trazi-Ventures/travelling/compare/v2.6.4...v2.6.5)
+
+- Update router.js [`3f6d413`](https://github.com/Trazi-Ventures/travelling/commit/3f6d41382c3fab3899a39ab62d65704f188cdd8e)
+
 #### [v2.6.4](https://github.com/Trazi-Ventures/travelling/compare/v2.6.3...v2.6.4)
+
+> 20 July 2021
 
 - Update index.js [`fb0ac1a`](https://github.com/Trazi-Ventures/travelling/commit/fb0ac1a3ad986b1dbf3d85fed943dbd98457153c)
 
