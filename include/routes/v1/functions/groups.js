@@ -437,7 +437,7 @@ async function addRouteGroup(req, res, router) {
       action: 'EDIT',
       subaction: 'GROUP_ADD_ROUTE',
       oldObj: previousGroup,
-      newObj: req.body
+      newObj: fgroup
     };
     if (req.session.data) {
       auditObj.byUserId = req.session.data.user.id;
@@ -500,7 +500,6 @@ async function deleteGroup(req, res, router) {
   }
 
   var fgroup = await getGroup(req, res, router);
-  const fGroupId = fgroup.id;
 
   if (!fgroup) {
     return;
@@ -567,6 +566,7 @@ async function addInheritedToGroup(req, res, router) {
     var auditObj = {
       action: 'EDIT',
       subaction: 'GROUP_ADD_INHERITANCE',
+      oldObj: group.inherited,
       newObj: inhertedGroup
     };
     if (req.session.data) {

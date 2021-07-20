@@ -205,7 +205,7 @@ async function resetPasswordRoute(req, res, autologin = false) {
   if (config.audit.edit.enable === true) {
     var oldUser = await User.findLimtedBy({ id: token[2] }, 'AND', 1);
 
-    if (oldUser[0] || oldUser.length > 0) {
+    if (oldUser.length > 0 && oldUser[0]) {
       oldPassword = oldUser.password;
     }
   }
