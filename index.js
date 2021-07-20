@@ -190,7 +190,7 @@ if (config.tracing.enable) {
     if (request.span) {
       error.traceId = request.span.spanContext().traceId;
     }
-    wog.error(error);
+    config.log.logger.error(error);
     if (request.span) {
       request.span.recordException(error);
     }
