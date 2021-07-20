@@ -17,7 +17,7 @@ module.exports = (tracez = null) => {
 
     return {
       message: msg,
-      traceId: span ? span.context().traceId : 'unknown',
+      traceId: span ? span.spanContext().traceId : 'unknown',
       wog_type: 'string_message'
     };
   };
