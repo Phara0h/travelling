@@ -1,6 +1,12 @@
 
 
+#### [v2.6.3](https://github.com/Dragohm/travelling/compare/v2.6.2...v2.6.3)
+
+- Fix for opentelemtry [`fd4a07e`](https://github.com/Dragohm/travelling/commit/fd4a07e580b8d8346d8a858fb22a4d82e8ff3bad)
+
 #### [v2.6.2](https://github.com/Dragohm/travelling/compare/v2.6.1...v2.6.2)
+
+> 20 July 2021
 
 - Update helpers.js [`acd28f5`](https://github.com/Dragohm/travelling/commit/acd28f5dbf37cf50101a50f0170588e5b48ebaf6)
 
