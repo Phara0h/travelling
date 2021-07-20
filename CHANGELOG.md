@@ -1,6 +1,12 @@
 
 
+#### [v2.6.4](https://github.com/Trazi-Ventures/travelling/compare/v2.6.3...v2.6.4)
+
+- Update index.js [`fb0ac1a`](https://github.com/Trazi-Ventures/travelling/commit/fb0ac1a3ad986b1dbf3d85fed943dbd98457153c)
+
 #### [v2.6.3](https://github.com/Trazi-Ventures/travelling/compare/v2.6.2...v2.6.3)
+
+> 20 July 2021
 
 - Fix for opentelemtry [`fd4a07e`](https://github.com/Trazi-Ventures/travelling/commit/fd4a07e580b8d8346d8a858fb22a4d82e8ff3bad)
 
