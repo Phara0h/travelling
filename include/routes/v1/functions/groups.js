@@ -765,7 +765,11 @@ async function exportGroups(req, res) {
     }
   }
 
-  res.code(200).send(exported);
+  if (res) {
+    res.code(200).send(exported);
+  } else {
+    return exported;
+  }
 }
 
 module.exports = {
