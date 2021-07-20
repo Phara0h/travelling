@@ -183,6 +183,8 @@ const router = new Router(app.server);
 const auth = require('./include/utils/auth');
 const Email = require('./include/utils/email');
 
+const Stats = require('./include/utils/stats');
+const stats = new Stats(redis.sessionStore);
 const nstats = require('nstats')();
 
 if (config.tracing.enable) {
@@ -231,7 +233,7 @@ if (config.tracing.enable) {
 app.register(require('./include/server/cors.js'), { router });
 
 app.get('/' + config.serviceName + '/metrics', (req, res) => {
-  res.code(200).send(nstats.toPrometheus());
+  res.code(200).send(nstats.toPrometheus()+stats.toPrometheus());
 });
 app.get('/' + config.serviceName + '/health', (req, res) => res.code(200).send('All Systems Nominal'));
 app.register(nstats.fastify(), {
