@@ -3296,7 +3296,13 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v2.6.1](https://github.com/Trazi-Ventures/travelling/compare/v2.6.0...v2.6.1)
+
+- Fix for opentelemtry [`e41a671`](https://github.com/Trazi-Ventures/travelling/commit/e41a671674b8603823abf14fbfd236e98e440bcd)
+
 #### [v2.6.0](https://github.com/Trazi-Ventures/travelling/compare/v2.5.2...v2.6.0)
+
+> 20 July 2021
 
 - Audits table model and added to db init. [`#9`](https://github.com/Trazi-Ventures/travelling/pull/9)
 - Feature #21 clean up route functions [`#8`](https://github.com/Trazi-Ventures/travelling/pull/8)
