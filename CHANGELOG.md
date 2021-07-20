@@ -1,6 +1,12 @@
 
 
+#### [v2.6.5](https://github.com/Dragohm/travelling/compare/v2.6.4...v2.6.5)
+
+- Update router.js [`3f6d413`](https://github.com/Dragohm/travelling/commit/3f6d41382c3fab3899a39ab62d65704f188cdd8e)
+
 #### [v2.6.4](https://github.com/Dragohm/travelling/compare/v2.6.3...v2.6.4)
+
+> 20 July 2021
 
 - Update index.js [`fb0ac1a`](https://github.com/Dragohm/travelling/commit/fb0ac1a3ad986b1dbf3d85fed943dbd98457153c)
 
