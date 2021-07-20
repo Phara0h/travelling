@@ -511,7 +511,7 @@ async function deleteGroup(req, res, router) {
     var auditObj = {
       action: 'DELETE',
       subaction: 'GROUP',
-      oldObj: fgroup
+      oldObj: fgroup._
     };
     if (req.session.data) {
       auditObj.byUserId = req.session.data.user.id;
