@@ -161,7 +161,7 @@ async function editUser(opts) {
         action: 'EDIT',
         subaction: 'USER_PROPERTY',
         ofUserId: user[0].id,
-        oldObj: oldModel._,
+        oldObj: oldModel,
         newObj: model
       };
       if (opts.req.session.data) {
