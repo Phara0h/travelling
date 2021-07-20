@@ -33,6 +33,27 @@ async function getAuditsByUserID(opts) {
   }
 }
 
+async function getAuditsByType(type, res) {
+  if (!type) {
+    res.code(400);
+    return {
+      type: 'missing-param-error',
+      msg: 'Please provide required parameter(s).'
+    };
+  }
+  
+  try {
+    return await Audit.findAllBy(type);
+  } catch (e) {
+    res.code(400);
+    return {
+      type: 'audit-get-error',
+      msg: 'Unable to retrieve audits.'
+    };
+  }
+}
+
 module.exports = {
-  getAuditsByUserID
+  getAuditsByUserID,
+  getAuditsByType
 };

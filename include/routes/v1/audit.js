@@ -21,5 +21,17 @@ module.exports = function (app, opts, done) {
     return await auditRoutes.getAuditsByUserID({ req, res, ofUser: true });
   });
 
+  app.get('/audit/action/:action', async (req, res) => {
+    return await auditRoutes.getAuditsByType({ action: req.params.action }, res);
+  });
+
+  app.get('/audit/subaction/:subaction', async (req, res) => {
+    return await auditRoutes.getAuditsByType({ subaction: req.params.subaction }, res);
+  });
+
+  app.get('/audit/action/:action/subaction/:subaction', async (req, res) => {
+    return await auditRoutes.getAuditsByType({ action: req.params.action, subaction: req.params.subaction }, res);
+  });
+
   done();
 };
