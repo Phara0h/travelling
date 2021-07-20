@@ -1,20 +1,17 @@
+const { context, trace } = require('@opentelemetry/api');
 var helpers;
 
-module.exports = (trace = null) => {
+module.exports = (tracez = null) => {
   if (helpers) {
     return helpers;
   }
   helpers = {};
-  helpers.trace = trace;
+  helpers.trace = tracez;
   helpers.startSpan = (name, oldspan) => {
-    return helpers.trace.tracer.startSpan(
-      name,
-      undefined,
-      oldspan ? helpers.trace.opentelemetry.setSpan(helpers.trace.opentelemetry.context.active(), oldspan) : undefined
-    );
+    return helpers.trace.tracer.startSpan(name, undefined, oldspan ? trace.setSpan(context.active(), oldspan) : undefined);
   };
   helpers.text = (msg, span) => {
-    if (!helpers.trace || !span) {
+    if (!helpers.trace) {
       return msg;
     }
 

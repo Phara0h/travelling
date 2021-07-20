@@ -37,11 +37,15 @@ module.exports = function (config) {
         propagators
       })
     });
+    opentelemetry.propagation.setGlobalPropagator(propagators[0]);
   } catch (error) {
     config.log.logger.warn('Error registering propagators for tracing', error);
   }
 
-  var trace = { tracer: opentelemetry.trace.getTracer('travelling'), opentelemetry };
+  var trace = {
+    tracer: opentelemetry.trace.getTracer('travelling', config.log.appendFields.version.label),
+    opentelemetry
+  };
 
   require('./helpers.js')(trace);
   return trace;

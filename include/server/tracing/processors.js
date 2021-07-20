@@ -3,6 +3,7 @@ const { SimpleSpanProcessor, ConsoleSpanExporter } = require('@opentelemetry/tra
 module.exports = function (config) {
   var tags = [];
 
+  tags.push({ key: 'service.name', value: app });
   if (config.log.appendFields.app.enable) {
     tags.push({ key: 'app', value: config.log.appendFields.app.label });
   }
@@ -22,7 +23,6 @@ module.exports = function (config) {
   return [
     new SimpleSpanProcessor(
       new ConsoleSpanExporter({
-        serviceName: app,
         tags
       })
     )
