@@ -359,6 +359,53 @@ app.ready(() => {
   }
 });
 
+process
+  .on('unhandledRejection', (reason, p) => {
+    var span = null;
+
+    if (config.tracing.enable && trace) {
+      span = trace.opentelemetry.trace.getSpan(trace.opentelemetry.context.active());
+      if (span) {
+        reason.traceId = span.spanContext().traceId;
+        span.recordException(reason);
+      }
+    }
+    config.log.logger.fatal(trace.helpers.text('unhandledRejection', span));
+    config.log.logger.fatal(reason);
+  })
+  .on('uncaughtException', (err) => {
+    var span = null;
+
+    if (config.tracing.enable && trace) {
+      span = trace.opentelemetry.trace.getSpan(trace.opentelemetry.context.active());
+      if (span) {
+        err.traceId = span.spanContext().traceId;
+        span.recordException(err);
+      }
+    }
+    config.log.logger.fatal(trace.helpers.text('uncaughtException', span));
+    config.log.logger.fatal(err);
+  })
+  .on('warning', (warning) => {
+    var span = null;
+
+    if (config.tracing.enable && trace) {
+      if (span) {
+        span = trace.opentelemetry.trace.getSpan(trace.opentelemetry.context.active());
+        warning.traceId = span.spanContext().traceId;
+      }
+    }
+    config.log.logger.warn(warning); // Print the stack trace
+  })
+  .on('beforeExit', (code) => {
+    var span = null;
+
+    if (config.tracing.enable && trace) {
+      span = trace.opentelemetry.trace.getSpan(trace.opentelemetry.context.active());
+    }
+    config.log.logger.info(trace.helpers.text('Process beforeExit event with code: ' + code, span));
+  });
+
 async function init() {
   try {
     await pg.query('CREATE EXTENSION "uuid-ossp";');
