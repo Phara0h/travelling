@@ -30,7 +30,7 @@ module.exports = () => {
       expect(res.statusCode).toEqual(200);
     });
 
-    test('Create User Audit', async () => {
+    test('Checking Audit of (Create Test User [test2])', async () => {
       if (config.audit.create.enable === true) {
         const u = await User.findAllBy({ email: 'test2@test.com' });
         const audit = await Audit.findAllBy({ of_user_id: u[0].id, action: "CREATE", subaction: "USER" });

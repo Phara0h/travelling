@@ -128,6 +128,7 @@ async function editUser(opts) {
     };
   }
 
+  const changedProps = Object.assign({}, updatedProps);
   var user;
 
   if (opts.needsDomain) {
@@ -162,7 +163,7 @@ async function editUser(opts) {
         subaction: 'USER_PROPERTY',
         ofUserId: user[0].id,
         oldObj: oldModel,
-        newObj: model
+        newObj: changedProps
       };
       if (opts.req.session.data) {
         auditObj.byUserId = opts.req.session.data.user.id;

@@ -58,7 +58,7 @@ module.exports = () => {
         expect(res.statusCode).toEqual(200);
       });
 
-      test('Edit User Property Audit', async () => {
+      test('Checking Audit of (Edit Test User Email Property [test2])', async () => {
         if (config.audit.edit.enable === true) {
           const u = await User.findAllBy({ username: 'test2' });
           const audit = await Audit.findAllBy({ of_user_id: u[0].id, action: 'EDIT', subaction: 'USER_PROPERTY' });
@@ -206,7 +206,7 @@ module.exports = () => {
         expect(res.body.domain).toEqual('test.com');
       });
 
-      test('Delete User Audit', async () => {
+      test('Checking Audit of (Delete Test User [test_domain_3@test.com])', async () => {
         if (config.audit.delete.enable === true) {
           const audit = await Audit.findAllBy({ of_user_id: userDomain3[0].id, action: 'DELETE', subaction: 'USER' });
 

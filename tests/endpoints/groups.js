@@ -29,14 +29,14 @@ module.exports = () => {
                                         group1
           */
 
-      test('Create a Group With Name group1 and verify audit', async () => {
+      test('Create a Group With Name group1', async () => {
         var res = await Travelling.Group.create({ name: 'group1', type: 'testgroup' }, userContainer.user1Token);
 
         group1 = res.body;
         expect(res.body).toMatchObject({ name: 'group1', id: expect.any(String), is_default: false });
       });
 
-      test('Create Group Audit', async () => {
+      test('Checking Audit of (Create Group [group1])', async () => {
         if (config.audit.create.enable === true) {
           const audit = await Audit.findAllBy({ action: "CREATE", subaction: "GROUP" });
 
@@ -163,7 +163,7 @@ module.exports = () => {
         });
       });
 
-      test('Audit Add Group Inheritance', async () => {
+      test('Checking Audit of (Add Group Inheritance [group4] inherit [Superadmin])', async () => {
         if (config.audit.edit.enable === true) {
           const audit = await Audit.findAllBy({ action: "EDIT", subaction: "GROUP" });
 
