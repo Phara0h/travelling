@@ -12,6 +12,8 @@ module.exports = function (app, opts, done) {
       };
     }
 
+    // TODO: Validate action
+
     if (!req.query.filter) {
       req.query.filter = `by_user_id=${id}`;
     } else {

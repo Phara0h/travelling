@@ -69,7 +69,68 @@ function createAuditObject(opts, prop, oldPropValue, newPropValue) {
   return audit;
 }
 
+function validateAuditAction(action) {
+  const actions = [
+    'CREATE',
+    'EDIT',
+    'DELETE'
+  ];
+
+  let match = false;
+
+  for (let i = 0; i < actions.length; i++) {
+    if (action === actions[i]) {
+      match = true;
+    }
+  }
+
+  if (!match) {
+    return {
+      type: 'audit-action-error',
+      msg: 'Must be a valid audit action'
+    };
+  } else {
+    return true;
+  }
+}
+
+function validateAuditSubaction(subaction) {
+  const subactions = [
+    'USER',
+    'GROUP',
+    'TOKEN',
+    'USER_OAUTH2_TOKEN',
+    'USER_RESET_PASSWORD',
+    'USER_PROPERTY',
+    'DEFAULT_GROUP',
+    'GROUP_ADD_ROUTE',
+    'GROUP_REMOVE_ROUTE',
+    'USER_ADD_GROUP_INHERITANCE',
+    'USER_REMOVE_GROUP_INHERITANCE',
+    'IMPORT_GROUPS'
+  ];
+
+  let match = false;
+
+  for (let i = 0; i < subactions.length; i++) {
+    if (subaction === subactions[i]) {
+      match = true;
+    }
+  }
+
+  if (!match) {
+    return {
+      type: 'audit-subaction-error',
+      msg: 'Must be a valid audit subaction'
+    };
+  } else {
+    return true;
+  }
+}
+
 module.exports = {
   createSingleAudit,
-  splitAndCreateAudits
+  splitAndCreateAudits,
+  validateAuditAction,
+  validateAuditSubaction
 };
