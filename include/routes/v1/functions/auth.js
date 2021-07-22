@@ -63,7 +63,7 @@ var loginRoute = async (req, res) => {
       } catch (e) {
         if (e.err && e.err.msg) {
           config.log.logger.debug(e.err, e.user ? e.user._ : null);
-          config.log.logger.info(`Failed Auth (${e.err.msg}): `, username, email, domain);
+          config.log.logger.info(`Failed Auth (${e.err.msg}): ${username}, ${email}, ${domain}`);
         } else {
           config.log.logger.debug(e);
         }
