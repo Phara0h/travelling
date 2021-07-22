@@ -65,16 +65,17 @@ if (config.log.logger) {
             if (isRouteIgnored(req.url)) {
               return null;
             }
-
-            if (!req.span || req.span == '') {
-              if (is_testing) {
-                req.span = trace.tracer.startSpan('root', undefined, trace.opentelemetry.context.active());
-              } else {
-                req.span = trace.opentelemetry.trace.getSpan(trace.opentelemetry.context.active());
+            if (config.tracing.enable) {
+              if (!req.span || req.span == '') {
+                if (is_testing) {
+                  req.span = trace.tracer.startSpan('root', undefined, trace.opentelemetry.context.active());
+                } else {
+                  req.span = trace.opentelemetry.trace.getSpan(trace.opentelemetry.context.active());
+                }
               }
-            }
-            if (req.span) {
-              traceId = req.span.spanContext().traceId;
+              if (req.span) {
+                traceId = req.span.spanContext().traceId;
+              }
             }
             var headers = {
               ...req.headers
@@ -233,7 +234,7 @@ if (config.tracing.enable) {
 app.register(require('./include/server/cors.js'), { router });
 
 app.get('/' + config.serviceName + '/metrics', (req, res) => {
-  res.code(200).send(nstats.toPrometheus()+stats.toPrometheus());
+  res.code(200).send(nstats.toPrometheus() + stats.toPrometheus());
 });
 app.get('/' + config.serviceName + '/health', (req, res) => res.code(200).send('All Systems Nominal'));
 app.register(nstats.fastify(), {
