@@ -1,4 +1,5 @@
 const auditRoutes = require('./functions/audit');
+const { validateAuditAction, validateAuditSubaction } = require('../../utils/audit');
 
 module.exports = function (app, opts, done) {
   app.get('/audit/user/byuser/:id', async (req, res) => {
@@ -11,8 +12,6 @@ module.exports = function (app, opts, done) {
         msg: 'Please provide required parameter(s).'
       };
     }
-
-    // TODO: Validate action
 
     if (!req.query.filter) {
       req.query.filter = `by_user_id=${id}`;
@@ -54,6 +53,13 @@ module.exports = function (app, opts, done) {
       };
     }
 
+    const error = validateAuditAction(action);
+
+    if (error.msg) {
+      res.code(400);
+      return error;
+    }
+    
     if (!req.query.filter) {
       req.query.filter = `action=${action}`;
     } else {
@@ -74,6 +80,13 @@ module.exports = function (app, opts, done) {
       };
     }
 
+    const error = validateAuditSubaction(subaction);
+
+    if (error.msg) {
+      res.code(400);
+      return error;
+    }
+
     if (!req.query.filter) {
       req.query.filter = `subaction=${subaction}`;
     } else {
@@ -92,6 +105,17 @@ module.exports = function (app, opts, done) {
       return {
         type: 'missing-param-error',
         msg: 'Please provide an action/subaction.'
+      };
+    }
+
+    const validAction = validateAuditAction(action);
+    const validSubction = validateAuditSubaction(subaction);
+
+    if (validAction.msg || validSubction.msg) {
+      res.code(400);
+      return {
+        type: 'missing-param-error',
+        msg: 'Please provide a valid action/subaction.'
       };
     }
 
