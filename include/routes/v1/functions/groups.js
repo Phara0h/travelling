@@ -519,7 +519,7 @@ async function deleteGroup(req, res, router) {
   var previousGroup;
 
   if (config.audit.delete.enable === true) {
-    previousGroup = fgroup;
+    previousGroup = Object.assign({}, fgroup._);
   }
 
   await fgroup.delete();

@@ -29,6 +29,12 @@ async function deleteUser(opts) {
     };
   }
 
+  var previousUser;
+
+  if (config.audit.delete.enable === true) {
+    previousUser = await getUser(opts);
+  }
+
   if (opts.needsDomain) {
     user = await User.deleteAllBy({ domain, ...id }, 'AND', 1);
   } else {
@@ -49,7 +55,7 @@ async function deleteUser(opts) {
         action: 'DELETE',
         subaction: 'USER',
         ofUserId: user[0].id,
-        oldObj: user[0]
+        oldObj: previousUser
       };
       if (opts.req.session.data) {
         auditObj.byUserId = opts.req.session.data.user.id;
@@ -260,11 +266,11 @@ async function getGroup(req, res) {
 
 async function addRemoveGroupInheritance(user, group, add = true, req) {
   if (user) {
-    var previousGroups;
+    var previousGroup;
 
     if (config.audit.edit.enable === true) {
-      if (user.groups) {
-        previousGroups = user.groups;
+      if (user.groups && !add) {
+        previousGroup = user.groups;
       }
     }
 
@@ -279,24 +285,24 @@ async function addRemoveGroupInheritance(user, group, add = true, req) {
     await updateSessionUser(user, req);
 
     if (config.audit.edit.enable === true) {
-      var newGroups;
-      
-      if (user.groups) {
-        newGroups = user.groups;
+      var newGroup;
+
+      if (add) {
+        newGroup = group;
       }
 
       var auditObj = {
         action: 'EDIT',
         subaction: add ? 'USER_ADD_GROUP_INHERITANCE' : 'USER_REMOVE_GROUP_INHERITANCE',
         ofUserId: user.id,
-        oldObj: previousGroups,
-        newObj: newGroups
+        oldObj: previousGroup,
+        newObj: newGroup
       };
       if (req.session.data) {
         auditObj.byUserId = req.session.data.user.id;
       }
 
-      await audit.createSingleAudit(auditObj);
+      await audit.createSingleAudit(auditObj, 'groups');
     }
 
     return user;

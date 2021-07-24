@@ -19,8 +19,20 @@ async function splitAndCreateAudits(opts) {
 
   for (i = 0; i < keysLength; i++) {
     const prop = keys[i];
-    const oldPropValue = opts.oldObj[prop];
-    const newPropValue = opts.newObj[prop];
+    var oldPropValue = opts.oldObj[prop];
+    var newPropValue = opts.newObj[prop];
+
+    try {
+      oldPropValue = JSON.stringify(oldPropValue);
+    } catch {
+      oldPropValue = oldPropValue.toString();
+    }
+
+    try {
+      newPropValue = JSON.stringify(newPropValue);
+    } catch {
+      newPropValue = newPropValue.toString();
+    }
 
     if (newPropValue !== oldPropValue) {
       const newAudit = createAuditObject(opts, prop, oldPropValue, newPropValue);
