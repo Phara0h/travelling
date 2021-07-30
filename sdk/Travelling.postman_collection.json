@@ -187,7 +187,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"email\": \"test@test.com\",\n\t\"password\": \"Pas5w0r!d\",\n    \"domain\": \"test.com\",\n    \"remember\": true\n}",
+									"raw": "{\n\t\"email\": \"test@test.com\",\n\t\"password\": \"Pas5w0r!d\",\n    \"domain\": \"test.com\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -495,7 +495,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"id\": \"test@test.com\",\n\t\"password\": \"Pas5w0r!d\",\n    \"domain\": \"default\",\n    \"remember\": true\n}",
+							"raw": "{\n\t\"email\": \"test@test.com\",\n\t\"password\": \"Pas5w0r!d\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2341,17 +2341,17 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "user5",
+									"value": "99a64193-b5a8-448d-8933-05d27f366094",
 									"description": "id or name of the user"
 								},
 								{
 									"key": "inheritgroupid",
-									"value": "group2",
+									"value": "group1",
 									"description": "id or name of the  group to inherit"
 								},
 								{
 									"key": "inheritgrouptype",
-									"value": "group",
+									"value": "testgroup",
 									"description": "type of the  group to inherit"
 								}
 							]
@@ -2392,17 +2392,17 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "user5",
+									"value": "99a64193-b5a8-448d-8933-05d27f366094",
 									"description": "id or name of the user"
 								},
 								{
 									"key": "inheritgroupid",
-									"value": "group2",
+									"value": "group",
 									"description": "id or name of the  group to inherit"
 								},
 								{
 									"key": "inheritgrouptype",
-									"value": "group",
+									"value": "testgroup",
 									"description": "type of the  group to inherit"
 								}
 							]
@@ -6884,7 +6884,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "",
+									"value": "group1",
 									"description": "id or name "
 								}
 							]
@@ -8169,6 +8169,154 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"consecutive\": false,\n    \"minchar\": 3,\n    \"maxchar\": 100,\n    \"special\": 0,\n    \"number\": 0,\n    \"lowercase\": 1,\n    \"uppercase\": 0\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Audit",
+			"item": [
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "OfUser ID",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/audit/user/ofuser/:id",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"audit",
+										"user",
+										"ofuser",
+										":id"
+									],
+									"query": [
+										{
+											"key": "filter",
+											"value": "created_on>2021-06-03,created_on<2021-06-06",
+											"description": "Filter parameters (example: action=CREATE,subaction=USER,created_on>2021-06-03,created_on<2021-06-06)",
+											"disabled": true
+										},
+										{
+											"key": "limit",
+											"value": "2",
+											"description": "Number of maximum results. (example: 2)",
+											"disabled": true
+										},
+										{
+											"key": "skip",
+											"value": "10",
+											"description": "Number of db rows skipped. (example: 10)",
+											"disabled": true
+										},
+										{
+											"key": "sort",
+											"value": "action",
+											"description": "Sort by any user object key (examples: created_on, action, etc.)",
+											"disabled": true
+										},
+										{
+											"key": "sortdir",
+											"value": "DESC",
+											"description": "Sort direction (example ascending order: ASC)",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "5eec54a7-5e8a-48eb-8796-2917dc408cab",
+											"description": "Id of user that committed the action."
+										}
+									]
+								},
+								"description": "Gets audits by of_user id.\n\n##### Filter Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |\n| created_on | *optional* (example:  created_on>=2021-06-09) |\n| action | *optional* (example:  action=CREATE) |\n| subaction | *optional* (example:  subaction=USER) |\n| prop | *optional* (example:  prop=email) |\n| old_val | *optional* (example:  old_val=swagger@email.69) |\n| new_val | *optional* (example:  new_val=leet@teel.com) |"
+							},
+							"response": []
+						},
+						{
+							"name": "ByUser ID",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/audit/user/byuser/:id",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"audit",
+										"user",
+										"byuser",
+										":id"
+									],
+									"query": [
+										{
+											"key": "filter",
+											"value": "action=CREATE,created_on>2021-06-03,created_on<2021-07-06",
+											"description": "Filter parameters (example: action=CREATE,subaction=USER,created_on>2021-06-03,created_on<2021-06-06)",
+											"disabled": true
+										},
+										{
+											"key": "limit",
+											"value": "2",
+											"description": "Number of maximum results. (example: 2)",
+											"disabled": true
+										},
+										{
+											"key": "skip",
+											"value": "10",
+											"description": "Number of db rows skipped. (example: 10)",
+											"disabled": true
+										},
+										{
+											"key": "sort",
+											"value": "created_on",
+											"description": "Sort by any user object key (examples: created_on, action, etc.)",
+											"disabled": true
+										},
+										{
+											"key": "sortdir",
+											"value": "ASC",
+											"description": "Sort direction (example ascending order: ASC)",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "5eec54a7-5e8a-48eb-8796-2917dc408cab",
+											"description": "Id of user that committed the action."
+										}
+									]
+								},
+								"description": "Gets audits by by_user id.\n\n##### Filter Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |\n| created_on | *optional* (example:  created_on>=2021-06-09) |\n| action | *optional* (example:  action=CREATE) |\n| subaction | *optional* (example:  subaction=USER) |\n| prop | *optional* (example:  prop=email) |\n| old_val | *optional* (example:  old_val=swagger@email.69) |\n| new_val | *optional* (example:  new_val=leet@teel.com) |"
+							},
+							"response": []
 						}
 					]
 				}

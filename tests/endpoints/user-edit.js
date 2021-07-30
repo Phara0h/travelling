@@ -1,4 +1,6 @@
 const config = require('../../include/utils/config');
+const Audit = require('../../include/database/models/audit');
+const User = require('../../include/database/models/user');
 const { Travelling } = require('../../sdk/node')('http://127.0.0.1:6969/' + config.serviceName, {
   resolveWithFullResponse: true
 });
@@ -49,11 +51,24 @@ module.exports = () => {
 
   describe('Non-Current User', () => {
     describe('Valid', () => {
-      test('Edit Test User 2 Email Property ', async () => {
+      test('Edit Test User 2 Email Property', async () => {
         var res = await Travelling.User.editProperty('asdf@asdf.memes', 'test2', 'email', userContainer.user1Token);
 
         expect(res.body).toEqual('asdf@asdf.memes');
         expect(res.statusCode).toEqual(200);
+      });
+
+      test('Checking Audit of (Edit Test User Email Property [test2])', async () => {
+        if (config.audit.edit.enable === true) {
+          const u = await User.findAllBy({ username: 'test2' });
+          const audit = await Audit.findAllBy({ of_user_id: u[0].id, action: 'EDIT', subaction: 'USER_PROPERTY' });
+
+          expect(audit[0]).toHaveProperty('id');
+          expect(audit[0].created_on).not.toBeNull();
+          expect(audit[0].prop).toEqual('email');
+          expect(audit[0].old_val).toMatch('test2@test.com');
+          expect(audit[0].new_val).toMatch('asdf@asdf.memes');
+        }
       });
 
       test('Edit Test User 2 Email Property Value ', async () => {
@@ -151,7 +166,7 @@ module.exports = () => {
         );
 
         expect(res.statusCode).toEqual(200);
-        expect(res.body.domain).toEqual('test.com')
+        expect(res.body.domain).toEqual('test.com');
       });
 
       test('Remove Group Inheritance [group1][testgroup] User Domain 3', async () => {
@@ -163,7 +178,7 @@ module.exports = () => {
           'testgroup',
           userContainer.userDomain3Token
         );
-        
+
         // Remove group inheritence
         var res = await Travelling.User.Domain.removeGroupInheritance(
           'test.com',
@@ -174,10 +189,13 @@ module.exports = () => {
         );
 
         expect(res.statusCode).toEqual(200);
-        expect(res.body.domain).toEqual('test.com')
+        expect(res.body.domain).toEqual('test.com');
       });
 
+      var userDomain3;
       test('Delete User Domain 3', async () => {
+        userDomain3 = await User.findAllBy({ email: 'test_domain_3@test.com' });
+
         var res = await Travelling.User.Domain.delete(
           'test.com',
           'test_domain_3@test.com',
@@ -188,8 +206,16 @@ module.exports = () => {
         expect(res.body.domain).toEqual('test.com');
       });
 
-    });
+      test('Checking Audit of (Delete Test User [test_domain_3@test.com])', async () => {
+        if (config.audit.delete.enable === true) {
+          const audit = await Audit.findAllBy({ of_user_id: userDomain3[0].id, action: 'DELETE', subaction: 'USER' });
 
+          expect(audit[0]).toHaveProperty('id');
+          expect(audit[0].created_on).not.toBeNull();
+          expect(audit[0].old_val).not.toBeNull();
+        }
+      });
+    });
 
     describe('Invalid', () => {
       test('Edit Property [email] User Domain 2 Invalid Domain', async () => {
@@ -266,7 +292,6 @@ module.exports = () => {
         expect(res.statusCode).toEqual(400);
         expect(res.body).toHaveProperty('type', 'user-delete-error');
       });
-
-    }); 
+    });
   });
 };

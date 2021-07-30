@@ -1,4 +1,4 @@
-const BaseModel = require('adost').PGActiveModel;
+const BaseModel = require('./basemodel.js');
 const Base = require('adost').Base;
 const PGTypes = require('adost').PGTypes;
 
@@ -6,12 +6,9 @@ class Audit extends Base(BaseModel, 'audits', {
   id: PGTypes.PK,
   created_on: null,
   action: null,
+  subaction: null,
   by_user_id: null,
-  by_user_email: PGTypes.AutoCrypt,
-  by_user_username: null,
-  to_user_id: null,
-  to_user_email: PGTypes.AutoCrypt,
-  to_user_username: null,
+  of_user_id: null,
   prop: null,
   old_val: PGTypes.AutoCrypt,
   new_val: PGTypes.AutoCrypt,
@@ -28,14 +25,9 @@ class Audit extends Base(BaseModel, 'audits', {
                     id UUID DEFAULT uuid_generate_v4(),
                     created_on timestamp with time zone default current_timestamp,
                     action character varying(25),
-                    by_user_id character varying(32),
-                    by_user_email character varying(500),
-                    __by_user_email character varying(258),
-                    by_user_username character varying(100),
-                    of_user_id character varying(32),
-                    of_user_email character varying(500),
-                    __of_user_email character varying(258),
-                    of_user_username character varying(100),
+                    subaction character varying(64),
+                    by_user_id character varying(64),
+                    of_user_id character varying(64),
                     prop character varying(200),
                     old_val text,
                     __old_val character varying(258),

@@ -1,7 +1,6 @@
 const qs = require('querystring');
 const auth = require('./functions/auth');
 
-
 module.exports = function (app, opts, done) {
   // if (config.cors.enable) {
   //   app.use((req,res,next) => {
@@ -12,10 +11,10 @@ module.exports = function (app, opts, done) {
 
   app.addContentTypeParser(
     'application/x-www-form-urlencoded',
-      { 
-        parseAs: 'buffer', 
-        bodyLimit: opts.bodyLimit 
-      },
+    {
+      parseAs: 'buffer',
+      bodyLimit: opts.bodyLimit
+    },
     function (req, body, done) {
       done(null, qs.parse(body.toString()));
     }
