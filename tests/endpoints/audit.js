@@ -171,7 +171,7 @@ module.exports = () => {
     });
 
 
-    describe('Valid OfUser', async () => {
+    describe('Valid OfUser', () => {
         var testUser1;
 
         test('Get Audit of Test User (No Query Params)', async () => {
@@ -333,7 +333,7 @@ module.exports = () => {
     });
 
 
-    describe('Invalid', async () => {
+    describe('Invalid', () => {
         test('Get Audit ByUser with non-existent user id', async () => {
             const res = await Travelling.Audit.User.byuserId(
                 'fakeAF',
