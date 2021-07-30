@@ -134,7 +134,12 @@ async function editUser(opts) {
     };
   }
 
-  const changedProps = Object.assign({}, updatedProps);
+  let changedProps;
+
+  if (config.audit.edit.enable === true) {
+    changedProps = Object.assign({}, updatedProps);
+  }
+
   var user;
 
   if (opts.needsDomain) {
