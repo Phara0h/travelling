@@ -104,10 +104,6 @@ It is recommended to follow this security tips to help keep Travelling as secure
     - [TRAVELLING_LOG_FASTIFY_LOGGER_REQUEST](#travelling_log_fastify_logger_request)
     - [TRAVELLING_LOG_FASTIFY_LOGGER_REQ_ID_HEADER](#travelling_log_fastify_logger_req_id_header)
     - [TRAVELLING_LOG_FASTIFY_LOGGER_REQ_ID_LOG_LABEL](#travelling_log_fastify_logger_req_id_log_label)
-- [Auditing](#auditing)
-    - [TRAVELLING_AUDIT_CREATE_ENABLE](#travelling_audit_create_enable)
-    - [TRAVELLING_AUDIT_EDIT_ENABLE](#travelling_audit_edit_enable)
-    - [TRAVELLING_AUDIT_DELETE_ENABLE](#travelling_audit_delete_enable)
 - [Portal](#portal)
     - [TRAVELLING_PORTAL_ENABLE](#travelling_portal_enable)
     - [TRAVELLING_PORTAL_PATH](#travelling_portal_path)
@@ -349,28 +345,6 @@ _The name of the header that gets set by pino's correlation id system._ </br>
 _The name of the property that gets set by pino's correlation id system._ </br>
 
 > **Default**: `travellingReqID` </br>
-
----
-
-### Auditing
-
-##### TRAVELLING_AUDIT_CREATE_ENABLE
-
-_Enables the creation of audit logs on create events such as user registration, group creation, etc._ </br>
-
-> **Default**: `false`
-
-##### TRAVELLING_AUDIT_EDIT_ENABLE
-
-_Enables the creation of audit logs on edit events such as user property edit, adding or removing group inheritance, etc._ </br>
-
-> **Default**: `false`
-
-##### TRAVELLING_AUDIT_DELETE_ENABLE
-
-_Enables the creation of audit logs on delete events such as user deletion, group deletion, etc._ </br>
-
-> **Default**: `false`
 
 ---
 
@@ -861,6 +835,10 @@ _Enables the requirement of each newly registered user to have a active user wit
 <dl>
 <dt><a href="#Travelling">Travelling</a></dt>
 <dd></dd>
+<dt><a href="#Audit">Audit</a></dt>
+<dd></dd>
+<dt><a href="#AuditUser">AuditUser</a></dt>
+<dd></dd>
 <dt><a href="#Config">Config</a></dt>
 <dd></dd>
 <dt><a href="#Groups">Groups</a></dt>
@@ -946,6 +924,81 @@ Path: metrics
 
 | Param | Type | Description |
 | --- | --- | --- |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="Audit"></a>
+
+## Audit
+**Kind**: global class  
+<a name="AuditUser"></a>
+
+## AuditUser
+**Kind**: global class  
+
+* [AuditUser](#AuditUser)
+    * [.byuserId(id, filter, limit, skip, sort, sortdir, authorization_bearer)](#AuditUser.byuserId)
+    * [.ofuserId(id, filter, limit, skip, sort, sortdir, authorization_bearer)](#AuditUser.ofuserId)
+
+<a name="AuditUser.byuserId"></a>
+
+### AuditUser.byuserId(id, filter, limit, skip, sort, sortdir, authorization_bearer)
+byuserId - Gets audits by by_user id.
+
+##### Filter Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | *optional* (example:  created_on>=2021-06-09) |
+| action | *optional* (example:  action=CREATE) |
+| subaction | *optional* (example:  subaction=USER) |
+| prop | *optional* (example:  prop=email) |
+| old_val | *optional* (example:  old_val=swagger@email.69) |
+| new_val | *optional* (example:  new_val=leet@teel.com) |
+
+Path: api/v1/audit/user/byuser/:id
+
+**Kind**: static method of [<code>AuditUser</code>](#AuditUser)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>any</code> | Id of user that committed the action. (example: 5eec54a7-5e8a-48eb-8796-2917dc408cab) |
+| filter | <code>any</code> | Filter parameters (example: action=CREATE,subaction=USER,created_on>2021-06-03,created_on<2021-06-06) (example: action=CREATE,created_on>2021-06-03,created_on<2021-07-06) |
+| limit | <code>any</code> | Number of maximum results. (example: 2) (example: 2) |
+| skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |
+| sort | <code>any</code> | Sort by any user object key (examples: created_on, action, etc.) (example: created_on) |
+| sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: ASC) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="AuditUser.ofuserId"></a>
+
+### AuditUser.ofuserId(id, filter, limit, skip, sort, sortdir, authorization_bearer)
+ofuserId - Gets audits by of_user id.
+
+##### Filter Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | *optional* (example:  created_on>=2021-06-09) |
+| action | *optional* (example:  action=CREATE) |
+| subaction | *optional* (example:  subaction=USER) |
+| prop | *optional* (example:  prop=email) |
+| old_val | *optional* (example:  old_val=swagger@email.69) |
+| new_val | *optional* (example:  new_val=leet@teel.com) |
+
+Path: api/v1/audit/user/ofuser/:id
+
+**Kind**: static method of [<code>AuditUser</code>](#AuditUser)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>any</code> | Id of user that committed the action. (example: 5eec54a7-5e8a-48eb-8796-2917dc408cab) |
+| filter | <code>any</code> | Filter parameters (example: action=CREATE,subaction=USER,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-03,created_on<2021-06-06) |
+| limit | <code>any</code> | Number of maximum results. (example: 2) (example: 2) |
+| skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |
+| sort | <code>any</code> | Sort by any user object key (examples: created_on, action, etc.) (example: action) |
+| sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: DESC) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="Config"></a>
@@ -1342,7 +1395,7 @@ Path: api/v1/group/id/:id
 
 | Param | Type | Description |
 | --- | --- | --- |
-| id | <code>any</code> | id or name |
+| id | <code>any</code> | id or name  (example: group1) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="Group.edit"></a>
@@ -2512,9 +2565,9 @@ Path: api/v1/user/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptyp
 
 | Param | Type | Description |
 | --- | --- | --- |
-| id | <code>any</code> | id or name of the user (example: user5) |
-| inheritgroupid | <code>any</code> | id or name of the  group to inherit (example: group2) |
-| inheritgrouptype | <code>any</code> | type of the  group to inherit (example: group) |
+| id | <code>any</code> | id or name of the user (example: 99a64193-b5a8-448d-8933-05d27f366094) |
+| inheritgroupid | <code>any</code> | id or name of the  group to inherit (example: group) |
+| inheritgrouptype | <code>any</code> | type of the  group to inherit (example: testgroup) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="User.addGroupInheritance"></a>
@@ -2528,9 +2581,9 @@ Path: api/v1/user/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptyp
 
 | Param | Type | Description |
 | --- | --- | --- |
-| id | <code>any</code> | id or name of the user (example: user5) |
-| inheritgroupid | <code>any</code> | id or name of the  group to inherit (example: group2) |
-| inheritgrouptype | <code>any</code> | type of the  group to inherit (example: group) |
+| id | <code>any</code> | id or name of the user (example: 99a64193-b5a8-448d-8933-05d27f366094) |
+| inheritgroupid | <code>any</code> | id or name of the  group to inherit (example: group1) |
+| inheritgrouptype | <code>any</code> | type of the  group to inherit (example: testgroup) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="User.editPropertyValue"></a>
@@ -3129,10 +3182,8 @@ Path: api/v1/auth/login
 body
 ```json
 {
-	"id": "test@test.com",
-	"password": "Pas5w0r!d",
-    "domain": "default",
-    "remember": true
+	"email": "test@test.com",
+	"password": "Pas5w0r!d"
 }
 ```
 <a name="Auth.register"></a>
@@ -3245,8 +3296,7 @@ body
 {
 	"email": "test@test.com",
 	"password": "Pas5w0r!d",
-    "domain": "test.com",
-    "remember": true
+    "domain": "test.com"
 }
 ```
 <a name="AuthDomain.register"></a>
@@ -3322,7 +3372,62 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v2.7.0](https://github.com/Dragohm/travelling/compare/v2.6.5...v2.7.0)
+
+- Feature #22 retrieve user change history [`#11`](https://github.com/Dragohm/travelling/pull/11)
+- Updated tests [`c281e92`](https://github.com/Dragohm/travelling/commit/c281e927bce2d81c36c5f2f14f291087776f8603)
+- added config if statement [`2bc7088`](https://github.com/Dragohm/travelling/commit/2bc70885739a0ed4a6cfa21f3bb7558b47ae84ec)
+- Update audit.js [`37e63d5`](https://github.com/Dragohm/travelling/commit/37e63d5134b83dd278d36a09401af3a74409c662)
+- Minor audit changes [`6b3b850`](https://github.com/Dragohm/travelling/commit/6b3b8506e6ec3fe15e73db6494138ea45fb9026a)
+- Added audit query validation [`0d8dae1`](https://github.com/Dragohm/travelling/commit/0d8dae1ce9b4976b21804960ec24db200af405b3)
+- Audit validation functions. [`d18b9db`](https://github.com/Dragohm/travelling/commit/d18b9db81ce1339cc63428bfc591cf640a5f2812)
+- Added filters to action and [`55a3cc3`](https://github.com/Dragohm/travelling/commit/55a3cc3f459f1721aa75417c51a2c2002a064387)
+- Minor tweaks. [`6a706c4`](https://github.com/Dragohm/travelling/commit/6a706c41cea32ef4ba0866e3a68b4d1e8e9ccc1a)
+- Update index.js [`0f772b4`](https://github.com/Dragohm/travelling/commit/0f772b407aba1658c4f44e1dba2fda4bbb94a473)
+- Fixed trace bug [`082ae14`](https://github.com/Dragohm/travelling/commit/082ae1415e8f9794693634de5827d24aa0987833)
+- Fixed group delete audit bug [`d7be225`](https://github.com/Dragohm/travelling/commit/d7be22542ebed7f492752c4032e2647189a9637a)
+- Added audit action type endpoints. [`94d052d`](https://github.com/Dragohm/travelling/commit/94d052d7445b4992e75a85d5880d3f6879664d39)
+- Added start to capture user count from sessions [`3e764f0`](https://github.com/Dragohm/travelling/commit/3e764f09762c416df25a6b5d26c23fd0a88e443e)
+- Update auth.js [`99ee0b8`](https://github.com/Dragohm/travelling/commit/99ee0b83dbbf69ec7472867c0e22899ca7b72761)
+- fixed export bug [`d84b094`](https://github.com/Dragohm/travelling/commit/d84b0942897e1fee13f2efd0098f5aedd0a20c97)
+- removed unused class [`aa42d1a`](https://github.com/Dragohm/travelling/commit/aa42d1a8e2f866aa9ab7d61b1869f6cfd6b16c5f)
+- Audit changes. [`cc3d73d`](https://github.com/Dragohm/travelling/commit/cc3d73dd890eee0f11e5bfe3f76a2cc263d7d6a9)
+- Test updates. [`ed48458`](https://github.com/Dragohm/travelling/commit/ed48458f63d61aceac0b2e10d0be4c56c250a794)
+- Clean up on model function inheritance [`fa34f22`](https://github.com/Dragohm/travelling/commit/fa34f22ed44cef8542529d2a48011f0cd032196b)
+- Typo fix. [`349600b`](https://github.com/Dragohm/travelling/commit/349600bef9c83ba02beb56e316ac36fa6b7d09dd)
+- Lint fixes. [`a5aef2f`](https://github.com/Dragohm/travelling/commit/a5aef2fc1e4f5ebc6511dd46430ca325bb540938)
+- Moved query logic to util file. [`f427d43`](https://github.com/Dragohm/travelling/commit/f427d43f939599e3a058babede51d713f522c177)
+- Created audit retrieval end points. [`71f2078`](https://github.com/Dragohm/travelling/commit/71f2078ae8a6b510093a3fe94c8e5d0a58895aba)
+- Added audit when default group set. [`152c02b`](https://github.com/Dragohm/travelling/commit/152c02b6c6ccb0cb8043c21746fa9ae691f9887d)
+- Updated token audit data. [`52244cc`](https://github.com/Dragohm/travelling/commit/52244cc98c1e6d4672130bb9f684a48d968377f6)
+- Removed empty objects from audits [`9434a1d`](https://github.com/Dragohm/travelling/commit/9434a1d871100c472e927274b4916c41fddeb1cf)
+- Lint fixes. [`8e5297f`](https://github.com/Dragohm/travelling/commit/8e5297f603c5a58ce24438fe41958776a33dc43a)
+- Updated audit info saved [`e02cde8`](https://github.com/Dragohm/travelling/commit/e02cde80cefab92cc21874c3c3d4cebca09b08fa)
+- Updated single audit logic to save objects. [`bb33066`](https://github.com/Dragohm/travelling/commit/bb3306640c67029b9736f2d29d1db330e5e7cb34)
+- Typo fix. [`4258544`](https://github.com/Dragohm/travelling/commit/4258544b5533edbe1d300ffb7caf1015c258a448)
+- Added invalid audit tests. [`487469e`](https://github.com/Dragohm/travelling/commit/487469e8e06f98910bfe3727e97c82258f811b42)
+- Added test for audit retrieval. [`46c8bb4`](https://github.com/Dragohm/travelling/commit/46c8bb48a264b5f78e9c308167b0449c88548ceb)
+- Updated SDK. [`292a88a`](https://github.com/Dragohm/travelling/commit/292a88aa83a231cbba94a548d5f8163ac0892686)
+- Created audit user by_id and of_id endpoints. [`e35fe02`](https://github.com/Dragohm/travelling/commit/e35fe02d2711cd8fbcbbff8cb19d3046f0782f0a)
+- Added and updated tests for audits. [`d37d002`](https://github.com/Dragohm/travelling/commit/d37d00284be75c18db8056ea417b4f446fd05089)
+- Updated and added rest of audits. [`985ae3e`](https://github.com/Dragohm/travelling/commit/985ae3e6dcae8ba031ab71cfbc0a8904c62f73e5)
+- Updated audit creation logic. [`d8ff6fc`](https://github.com/Dragohm/travelling/commit/d8ff6fccfe447da8bfaffad4d9f92f1d41381c0e)
+- Add support for audit environment variables. [`540067c`](https://github.com/Dragohm/travelling/commit/540067cff87b86fcf4776292b2f72f103444cf01)
+- Updated audit schema. [`095b106`](https://github.com/Dragohm/travelling/commit/095b106c7cba386a0f9997464022ced475ef67bb)
+- Added user edit with domain audit test. [`5e38ff9`](https://github.com/Dragohm/travelling/commit/5e38ff94653d0712e0b5e088c1316490b1024347)
+- Added audit test. [`161c60a`](https://github.com/Dragohm/travelling/commit/161c60a8bdbd339ba07e5076d55ea73263704bae)
+- Update audit util. [`8dcf997`](https://github.com/Dragohm/travelling/commit/8dcf99792a26e557928d71fc3a94087b95270d68)
+- Fixed bug with user create audits. [`f3e2f2c`](https://github.com/Dragohm/travelling/commit/f3e2f2ccac6f45dc2565c9fcfc9c843da55471c5)
+- Added user create and group inheritance audits. [`a1e2572`](https://github.com/Dragohm/travelling/commit/a1e257246d2dbd060d58219515290b3f08306729)
+- DB inserts for audits. Added Delete audits. [`33c8a69`](https://github.com/Dragohm/travelling/commit/33c8a695792ba7cf4550ec32bb332fc634107606)
+- Added audit support for editing single props. [`47a5279`](https://github.com/Dragohm/travelling/commit/47a5279dc4e3a2368268c65f304acf153686f8d8)
+- Created audit util sorting and 'Edit' audit. [`2e57869`](https://github.com/Dragohm/travelling/commit/2e5786908e793601ac422c9d9f3052a9d611f6b1)
+- Created structure for creating audits. [`0df59c7`](https://github.com/Dragohm/travelling/commit/0df59c786a8d8f8e3d6e9cfd3683c298eef74315)
+- Updated file name from changelog to audit. [`5cc40d3`](https://github.com/Dragohm/travelling/commit/5cc40d393fb47823610e6c23750e66e7c3b770d3)
+
 #### [v2.6.5](https://github.com/Dragohm/travelling/compare/v2.6.4...v2.6.5)
+
+> 20 July 2021
 
 - Update router.js [`3f6d413`](https://github.com/Dragohm/travelling/commit/3f6d41382c3fab3899a39ab62d65704f188cdd8e)
 
