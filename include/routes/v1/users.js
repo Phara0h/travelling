@@ -3,10 +3,10 @@ const TokenHandler = require('../../token');
 
 const userUtils = require('../../utils/user');
 const config = require('../../utils/config');
+const audit = require('../../utils/audit');
 const misc = require('../../utils/misc');
 const gm = require('../../server/groupmanager');
 const userRoutes = require('./functions/users');
-
 
 module.exports = function (app, opts, done) {
   const router = opts.router;
@@ -391,6 +391,20 @@ module.exports = function (app, opts, done) {
         req.body.name || null,
         req.body.urls
       );
+
+      if (config.audit.create.enable === true) {
+        var auditObj = {
+          action: 'CREATE',
+          subaction: 'USER_OAUTH2_TOKEN',
+          newObj: token
+        };
+        if (req.session.data) {
+          auditObj.byUserId = req.session.data.user.id;
+          auditObj.ofUserId = req.session.data.user.id;
+        }
+        await audit.createSingleAudit(auditObj);
+      }
+
       res.code(200).send({ client_id: token.name || token.id, client_secret: token.secret });
       return;
     } catch (e) {
@@ -415,6 +429,20 @@ module.exports = function (app, opts, done) {
         });
         return;
       }
+
+      if (config.audit.delete.enable === true) {
+        var auditObj = {
+          action: 'DELETE',
+          subaction: 'USER_OAUTH2_TOKEN',
+          oldObj: token
+        };
+        if (req.session.data) {
+          auditObj.byUserId = req.session.data.user.id;
+          auditObj.ofUserId = req.session.data.user.id;
+        }
+        await audit.createSingleAudit(auditObj);
+      }
+
       res.code(200).send();
       return;
     } catch (e) {
@@ -428,4 +456,4 @@ module.exports = function (app, opts, done) {
   });
 
   done();
-}
+};

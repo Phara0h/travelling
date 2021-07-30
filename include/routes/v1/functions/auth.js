@@ -1,9 +1,11 @@
 const config = require('../../../utils/config');
 const parse = require('../../../utils/parse');
+const audit = require('../../../utils/audit');
 const gm = require('../../../server/groupmanager');
 const { checkValidUser } = require('../../../utils/user');
 
 const Database = require('../../../database');
+const User = require('.././../../database/models/user');
 const CookieToken = require('../../../utils/cookietoken');
 const TokenHandler = require('../../../token');
 const Email = require('../../../utils/email');
@@ -129,6 +131,19 @@ var registerRoute = async (req, res) => {
     await Email.sendWelcome(user);
   }
 
+  if (config.audit.create.enable === true) {
+    var auditObj = {
+      action: 'CREATE',
+      subaction: 'USER',
+      ofUserId: user.id,
+      newObj: user
+    };
+    if (req.session.data) {
+      auditObj.byUserId = req.session.data.user.id;
+    }
+    await audit.createSingleAudit(auditObj);
+  }
+
   res.code(200).send('Account Created');
 };
 
@@ -185,6 +200,16 @@ async function resetPasswordRoute(req, res, autologin = false) {
     };
   }
 
+  var oldPassword;
+
+  if (config.audit.edit.enable === true) {
+    var oldUser = await User.findLimtedBy({ id: token[2] }, 'AND', 1);
+
+    if (oldUser.length > 0 && oldUser[0]) {
+      oldPassword = oldUser.password;
+    }
+  }
+
   var user = await Database.resetPassword(token, req.body.password);
 
   if (!user) {
@@ -193,6 +218,20 @@ async function resetPasswordRoute(req, res, autologin = false) {
       type: 'password-reset-token-error',
       msg: 'Token is invalid, please click on forgot password again.'
     };
+  }
+
+  if (config.audit.edit.enable === true) {
+    var auditObj = {
+      action: 'EDIT',
+      subaction: 'USER_RESET_PASSWORD',
+      oldObj: { password: oldPassword },
+      newObj: { password: user.password }
+    };
+    if (req.session.data) {
+      auditObj.byUserId = req.session.data.user.id;
+      auditObj.ofUserId = req.session.data.user.id;
+    }
+    await audit.createSingleAudit(auditObj);
   }
 
   res.code(200);
@@ -284,7 +323,9 @@ var postOAuthAuthorizeRoute = async (req, res) => {
     var code = Buffer.from(`${token.client_id}:${token.client_secret}`, 'ascii').toString('base64');
 
     res.headers['Cache-Control'] = 'no-cache';
-    res.redirect(encodeURI(req.query.redirect_uri + `?code=${code}&state=${req.query.state}&client_id=${req.query.client_id}`));
+    res.redirect(
+      encodeURI(req.query.redirect_uri + `?code=${code}&state=${req.query.state}&client_id=${req.query.client_id}`)
+    );
     return;
   } catch (e) {
     config.log.logger.debug(e);

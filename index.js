@@ -65,16 +65,17 @@ if (config.log.logger) {
             if (isRouteIgnored(req.url)) {
               return null;
             }
-
-            if (!req.span || req.span == '') {
-              if (is_testing) {
-                req.span = trace.tracer.startSpan('root', undefined, trace.opentelemetry.context.active());
-              } else {
-                req.span = trace.opentelemetry.trace.getSpan(trace.opentelemetry.context.active());
+            if (config.tracing.enable) {
+              if (!req.span || req.span == '') {
+                if (is_testing) {
+                  req.span = trace.tracer.startSpan('root', undefined, trace.opentelemetry.context.active());
+                } else {
+                  req.span = trace.opentelemetry.trace.getSpan(trace.opentelemetry.context.active());
+                }
               }
-            }
-            if (req.span) {
-              traceId = req.span.spanContext().traceId;
+              if (req.span) {
+                traceId = req.span.spanContext().traceId;
+              }
             }
             var headers = {
               ...req.headers
@@ -173,7 +174,7 @@ const Database = require('./include/database');
 const Group = require('./include/database/models/group');
 const User = require('./include/database/models/user');
 const Token = require('./include/database/models/token');
-const Changelog = require('./include/database/models/changelog');
+const Audit = require('./include/database/models/audit');
 
 const redis = require('./include/redis');
 
@@ -233,7 +234,7 @@ if (config.tracing.enable) {
 app.register(require('./include/server/cors.js'), { router });
 
 app.get('/' + config.serviceName + '/metrics', (req, res) => {
-  res.code(200).send(nstats.toPrometheus()+stats.toPrometheus());
+  res.code(200).send(nstats.toPrometheus() + stats.toPrometheus());
 });
 app.get('/' + config.serviceName + '/health', (req, res) => res.code(200).send('All Systems Nominal'));
 app.register(nstats.fastify(), {
@@ -316,6 +317,7 @@ app.addHook('preParsing', function (req, res, payload, next) {
 app.register(require('./include/routes/v1/auth'), { prefix: '/' + config.serviceName + '/api/v1', router });
 app.register(require('./include/routes/v1/groups'), { prefix: '/' + config.serviceName + '/api/v1', router });
 app.register(require('./include/routes/v1/users'), { prefix: '/' + config.serviceName + '/api/v1', router });
+app.register(require('./include/routes/v1/audit'), { prefix: '/' + config.serviceName + '/api/v1', router });
 app.get('/' + config.serviceName + '/api/v1/config/:prop', (req, res) => {
   res.code(200).send(config[req.params.prop]);
 });
@@ -357,6 +359,53 @@ app.ready(() => {
   }
 });
 
+process
+  .on('unhandledRejection', (reason, p) => {
+    var span = null;
+
+    if (config.tracing.enable && trace) {
+      span = trace.opentelemetry.trace.getSpan(trace.opentelemetry.context.active());
+      if (span) {
+        reason.traceId = span.spanContext().traceId;
+        span.recordException(reason);
+      }
+    }
+    config.log.logger.fatal(trace.helpers.text('unhandledRejection', span));
+    config.log.logger.fatal(reason);
+  })
+  .on('uncaughtException', (err) => {
+    var span = null;
+
+    if (config.tracing.enable && trace) {
+      span = trace.opentelemetry.trace.getSpan(trace.opentelemetry.context.active());
+      if (span) {
+        err.traceId = span.spanContext().traceId;
+        span.recordException(err);
+      }
+    }
+    config.log.logger.fatal(trace.helpers.text('uncaughtException', span));
+    config.log.logger.fatal(err);
+  })
+  .on('warning', (warning) => {
+    var span = null;
+
+    if (config.tracing.enable && trace) {
+      if (span) {
+        span = trace.opentelemetry.trace.getSpan(trace.opentelemetry.context.active());
+        warning.traceId = span.spanContext().traceId;
+      }
+    }
+    config.log.logger.warn(warning); // Print the stack trace
+  })
+  .on('beforeExit', (code) => {
+    var span = null;
+
+    if (config.tracing.enable && trace) {
+      span = trace.opentelemetry.trace.getSpan(trace.opentelemetry.context.active());
+    }
+    config.log.logger.info(trace.helpers.text('Process beforeExit event with code: ' + code, span));
+  });
+
 async function init() {
   try {
     await pg.query('CREATE EXTENSION "uuid-ossp";');
@@ -371,7 +420,7 @@ async function init() {
     await Token.createTable();
   } catch (_) {}
   try {
-    await Changelog.createTable();
+    await Audit.createTable();
   } catch (_) {}
 
   await Database.initGroups(router);

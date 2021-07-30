@@ -4293,6 +4293,10 @@ class Travelling {
     return await fasq.request(options);
   }
 
+  static get Audit() {
+    return Audit;
+  }
+
   static get Config() {
     return Config;
   }
@@ -4315,6 +4319,141 @@ class Travelling {
 
   static get Auth() {
     return Auth;
+  }
+}
+/**
+ *
+ */
+class Audit {
+  constructor() {}
+  static get _postgenClassUrls() {
+    return {};
+  }
+  static getFunctionsPath(name) {
+    return this._postgenClassUrls[name.toLowerCase()];
+  }
+
+  static get User() {
+    return AuditUser;
+  }
+}
+/**
+ *
+ */
+class AuditUser {
+  constructor() {}
+  static get _postgenClassUrls() {
+    return {
+      byuserid: 'api/v1/audit/user/byuser/:id',
+      ofuserid: 'api/v1/audit/user/ofuser/:id',
+    };
+  }
+  static getFunctionsPath(name) {
+    return this._postgenClassUrls[name.toLowerCase()];
+  }
+
+  /**
+  * byuserId - Gets audits by by_user id.
+
+##### Filter Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | *optional* (example:  created_on>=2021-06-09) |
+| action | *optional* (example:  action=CREATE) |
+| subaction | *optional* (example:  subaction=USER) |
+| prop | *optional* (example:  prop=email) |
+| old_val | *optional* (example:  old_val=swagger@email.69) |
+| new_val | *optional* (example:  new_val=leet@teel.com) |
+  *
+  * Path: api/v1/audit/user/byuser/:id
+  * @param {any} id Id of user that committed the action. (example: 5eec54a7-5e8a-48eb-8796-2917dc408cab)
+  * @param {any} filter Filter parameters (example: action=CREATE,subaction=USER,created_on>2021-06-03,created_on<2021-06-06) (example: action=CREATE,created_on>2021-06-03,created_on<2021-07-06)
+  * @param {any} limit Number of maximum results. (example: 2) (example: 2)
+  * @param {any} skip Number of db rows skipped. (example: 10) (example: 10)
+  * @param {any} sort Sort by any user object key (examples: created_on, action, etc.) (example: created_on)
+  * @param {any} sortdir Sort direction (example ascending order: ASC) (example: ASC)
+  * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+  */
+  static async byuserId(
+    id,
+    filter,
+    limit,
+    skip,
+    sort,
+    sortdir,
+    authorization_bearer,
+    opts
+  ) {
+    var options = {
+      method: 'GET',
+      simple: false,
+      uri: hostUrl + '/' + `api/v1/audit/user/byuser/${id}`,
+      qs: { filter, limit, skip, sort, sortdir },
+      authorization: {
+        bearer: authorization_bearer,
+      },
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
+  }
+
+  /**
+  * ofuserId - Gets audits by of_user id.
+
+##### Filter Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | *optional* (example:  created_on>=2021-06-09) |
+| action | *optional* (example:  action=CREATE) |
+| subaction | *optional* (example:  subaction=USER) |
+| prop | *optional* (example:  prop=email) |
+| old_val | *optional* (example:  old_val=swagger@email.69) |
+| new_val | *optional* (example:  new_val=leet@teel.com) |
+  *
+  * Path: api/v1/audit/user/ofuser/:id
+  * @param {any} id Id of user that committed the action. (example: 5eec54a7-5e8a-48eb-8796-2917dc408cab)
+  * @param {any} filter Filter parameters (example: action=CREATE,subaction=USER,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-03,created_on<2021-06-06)
+  * @param {any} limit Number of maximum results. (example: 2) (example: 2)
+  * @param {any} skip Number of db rows skipped. (example: 10) (example: 10)
+  * @param {any} sort Sort by any user object key (examples: created_on, action, etc.) (example: action)
+  * @param {any} sortdir Sort direction (example ascending order: ASC) (example: DESC)
+  * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+  */
+  static async ofuserId(
+    id,
+    filter,
+    limit,
+    skip,
+    sort,
+    sortdir,
+    authorization_bearer,
+    opts
+  ) {
+    var options = {
+      method: 'GET',
+      simple: false,
+      uri: hostUrl + '/' + `api/v1/audit/user/ofuser/${id}`,
+      qs: { filter, limit, skip, sort, sortdir },
+      authorization: {
+        bearer: authorization_bearer,
+      },
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
   }
 }
 /**
@@ -4893,7 +5032,7 @@ class Group {
    * delete - delete group by its id or name
    *
    * Path: api/v1/group/id/:id
-   * @param {any} id id or name
+   * @param {any} id id or name  (example: group1)
    * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
    */
   static async delete(id, authorization_bearer, opts) {
@@ -6866,9 +7005,9 @@ class User {
    * removeGroupInheritance - Remove a user from a group.
    *
    * Path: api/v1/user/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype
-   * @param {any} id id or name of the user (example: user5)
-   * @param {any} inheritgroupid id or name of the  group to inherit (example: group2)
-   * @param {any} inheritgrouptype type of the  group to inherit (example: group)
+   * @param {any} id id or name of the user (example: 99a64193-b5a8-448d-8933-05d27f366094)
+   * @param {any} inheritgroupid id or name of the  group to inherit (example: group)
+   * @param {any} inheritgrouptype type of the  group to inherit (example: testgroup)
    * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
    */
   static async removeGroupInheritance(
@@ -6902,9 +7041,9 @@ class User {
    * addGroupInheritance - Add a user to a group.
    *
    * Path: api/v1/user/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype
-   * @param {any} id id or name of the user (example: user5)
-   * @param {any} inheritgroupid id or name of the  group to inherit (example: group2)
-   * @param {any} inheritgrouptype type of the  group to inherit (example: group)
+   * @param {any} id id or name of the user (example: 99a64193-b5a8-448d-8933-05d27f366094)
+   * @param {any} inheritgroupid id or name of the  group to inherit (example: group1)
+   * @param {any} inheritgrouptype type of the  group to inherit (example: testgroup)
    * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
    */
   static async addGroupInheritance(
@@ -7989,10 +8128,8 @@ class Auth {
   * body
   * ```json
   * {
- * 	"id": "test@test.com",
- * 	"password": "Pas5w0r!d",
- *     "domain": "default",
- *     "remember": true
+ * 	"email": "test@test.com",
+ * 	"password": "Pas5w0r!d"
  * }
   * ```
   */
@@ -8171,8 +8308,7 @@ class AuthDomain {
   * {
  * 	"email": "test@test.com",
  * 	"password": "Pas5w0r!d",
- *     "domain": "test.com",
- *     "remember": true
+ *     "domain": "test.com"
  * }
   * ```
   */
@@ -8299,6 +8435,8 @@ function SDK(host, opts) {
   }
   return {
     Travelling,
+    Audit,
+    AuditUser,
     Config,
     Groups,
     GroupsType,

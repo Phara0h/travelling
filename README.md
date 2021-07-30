@@ -104,6 +104,10 @@ It is recommended to follow this security tips to help keep Travelling as secure
     - [TRAVELLING_LOG_FASTIFY_LOGGER_REQUEST](#travelling_log_fastify_logger_request)
     - [TRAVELLING_LOG_FASTIFY_LOGGER_REQ_ID_HEADER](#travelling_log_fastify_logger_req_id_header)
     - [TRAVELLING_LOG_FASTIFY_LOGGER_REQ_ID_LOG_LABEL](#travelling_log_fastify_logger_req_id_log_label)
+- [Auditing](#auditing)
+    - [TRAVELLING_AUDIT_CREATE_ENABLE](#travelling_audit_create_enable)
+    - [TRAVELLING_AUDIT_EDIT_ENABLE](#travelling_audit_edit_enable)
+    - [TRAVELLING_AUDIT_DELETE_ENABLE](#travelling_audit_delete_enable)
 - [Portal](#portal)
     - [TRAVELLING_PORTAL_ENABLE](#travelling_portal_enable)
     - [TRAVELLING_PORTAL_PATH](#travelling_portal_path)
@@ -345,6 +349,28 @@ _The name of the header that gets set by pino's correlation id system._ </br>
 _The name of the property that gets set by pino's correlation id system._ </br>
 
 > **Default**: `travellingReqID` </br>
+
+---
+
+### Auditing
+
+##### TRAVELLING_AUDIT_CREATE_ENABLE
+
+_Enables the creation of audit logs on create events such as user registration, group creation, etc._ </br>
+
+> **Default**: `false`
+
+##### TRAVELLING_AUDIT_EDIT_ENABLE
+
+_Enables the creation of audit logs on edit events such as user property edit, adding or removing group inheritance, etc._ </br>
+
+> **Default**: `false`
+
+##### TRAVELLING_AUDIT_DELETE_ENABLE
+
+_Enables the creation of audit logs on delete events such as user deletion, group deletion, etc._ </br>
+
+> **Default**: `false`
 
 ---
 

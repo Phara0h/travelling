@@ -73,6 +73,17 @@ const config = {
       )
     }
   },
+  audit: {
+    create: {
+      enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_AUDIT_CREATE_ENABLE), false)
+    },
+    edit: {
+      enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_AUDIT_EDIT_ENABLE), false)
+    }, 
+    delete: {
+      enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_AUDIT_DELETE_ENABLE), false)
+    }
+  },
   tracing: {
     enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_TRACING_ENABLE), false),
     instrumentations: misc.isSetDefault(

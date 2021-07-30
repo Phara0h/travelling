@@ -3,6 +3,10 @@
 <dl>
 <dt><a href="#Travelling">Travelling</a></dt>
 <dd></dd>
+<dt><a href="#Audit">Audit</a></dt>
+<dd></dd>
+<dt><a href="#AuditUser">AuditUser</a></dt>
+<dd></dd>
 <dt><a href="#Config">Config</a></dt>
 <dd></dd>
 <dt><a href="#Groups">Groups</a></dt>
@@ -88,6 +92,81 @@ Path: metrics
 
 | Param | Type | Description |
 | --- | --- | --- |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="Audit"></a>
+
+## Audit
+**Kind**: global class  
+<a name="AuditUser"></a>
+
+## AuditUser
+**Kind**: global class  
+
+* [AuditUser](#AuditUser)
+    * [.byuserId(id, filter, limit, skip, sort, sortdir, authorization_bearer)](#AuditUser.byuserId)
+    * [.ofuserId(id, filter, limit, skip, sort, sortdir, authorization_bearer)](#AuditUser.ofuserId)
+
+<a name="AuditUser.byuserId"></a>
+
+### AuditUser.byuserId(id, filter, limit, skip, sort, sortdir, authorization_bearer)
+byuserId - Gets audits by by_user id.
+
+##### Filter Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | *optional* (example:  created_on>=2021-06-09) |
+| action | *optional* (example:  action=CREATE) |
+| subaction | *optional* (example:  subaction=USER) |
+| prop | *optional* (example:  prop=email) |
+| old_val | *optional* (example:  old_val=swagger@email.69) |
+| new_val | *optional* (example:  new_val=leet@teel.com) |
+
+Path: api/v1/audit/user/byuser/:id
+
+**Kind**: static method of [<code>AuditUser</code>](#AuditUser)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>any</code> | Id of user that committed the action. (example: 5eec54a7-5e8a-48eb-8796-2917dc408cab) |
+| filter | <code>any</code> | Filter parameters (example: action=CREATE,subaction=USER,created_on>2021-06-03,created_on<2021-06-06) (example: action=CREATE,created_on>2021-06-03,created_on<2021-07-06) |
+| limit | <code>any</code> | Number of maximum results. (example: 2) (example: 2) |
+| skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |
+| sort | <code>any</code> | Sort by any user object key (examples: created_on, action, etc.) (example: created_on) |
+| sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: ASC) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="AuditUser.ofuserId"></a>
+
+### AuditUser.ofuserId(id, filter, limit, skip, sort, sortdir, authorization_bearer)
+ofuserId - Gets audits by of_user id.
+
+##### Filter Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | *optional* (example:  created_on>=2021-06-09) |
+| action | *optional* (example:  action=CREATE) |
+| subaction | *optional* (example:  subaction=USER) |
+| prop | *optional* (example:  prop=email) |
+| old_val | *optional* (example:  old_val=swagger@email.69) |
+| new_val | *optional* (example:  new_val=leet@teel.com) |
+
+Path: api/v1/audit/user/ofuser/:id
+
+**Kind**: static method of [<code>AuditUser</code>](#AuditUser)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>any</code> | Id of user that committed the action. (example: 5eec54a7-5e8a-48eb-8796-2917dc408cab) |
+| filter | <code>any</code> | Filter parameters (example: action=CREATE,subaction=USER,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-03,created_on<2021-06-06) |
+| limit | <code>any</code> | Number of maximum results. (example: 2) (example: 2) |
+| skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |
+| sort | <code>any</code> | Sort by any user object key (examples: created_on, action, etc.) (example: action) |
+| sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: DESC) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="Config"></a>
@@ -484,7 +563,7 @@ Path: api/v1/group/id/:id
 
 | Param | Type | Description |
 | --- | --- | --- |
-| id | <code>any</code> | id or name |
+| id | <code>any</code> | id or name  (example: group1) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="Group.edit"></a>
@@ -1654,9 +1733,9 @@ Path: api/v1/user/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptyp
 
 | Param | Type | Description |
 | --- | --- | --- |
-| id | <code>any</code> | id or name of the user (example: user5) |
-| inheritgroupid | <code>any</code> | id or name of the  group to inherit (example: group2) |
-| inheritgrouptype | <code>any</code> | type of the  group to inherit (example: group) |
+| id | <code>any</code> | id or name of the user (example: 99a64193-b5a8-448d-8933-05d27f366094) |
+| inheritgroupid | <code>any</code> | id or name of the  group to inherit (example: group) |
+| inheritgrouptype | <code>any</code> | type of the  group to inherit (example: testgroup) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="User.addGroupInheritance"></a>
@@ -1670,9 +1749,9 @@ Path: api/v1/user/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptyp
 
 | Param | Type | Description |
 | --- | --- | --- |
-| id | <code>any</code> | id or name of the user (example: user5) |
-| inheritgroupid | <code>any</code> | id or name of the  group to inherit (example: group2) |
-| inheritgrouptype | <code>any</code> | type of the  group to inherit (example: group) |
+| id | <code>any</code> | id or name of the user (example: 99a64193-b5a8-448d-8933-05d27f366094) |
+| inheritgroupid | <code>any</code> | id or name of the  group to inherit (example: group1) |
+| inheritgrouptype | <code>any</code> | type of the  group to inherit (example: testgroup) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="User.editPropertyValue"></a>
@@ -2271,10 +2350,8 @@ Path: api/v1/auth/login
 body
 ```json
 {
-	"id": "test@test.com",
-	"password": "Pas5w0r!d",
-    "domain": "default",
-    "remember": true
+	"email": "test@test.com",
+	"password": "Pas5w0r!d"
 }
 ```
 <a name="Auth.register"></a>
@@ -2387,8 +2464,7 @@ body
 {
 	"email": "test@test.com",
 	"password": "Pas5w0r!d",
-    "domain": "test.com",
-    "remember": true
+    "domain": "test.com"
 }
 ```
 <a name="AuthDomain.register"></a>
