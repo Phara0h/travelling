@@ -79,7 +79,7 @@ const config = {
     },
     edit: {
       enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_AUDIT_EDIT_ENABLE), false)
-    }, 
+    },
     delete: {
       enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_AUDIT_DELETE_ENABLE), false)
     }
@@ -121,6 +121,9 @@ const config = {
   proxy: {
     timeout: misc.isSetDefault(Number(process.env.TRAVELLING_PROXY_TIMEOUT), 0),
     sendTravellingHeaders: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_PROXY_SEND_TRAVELLING_HEADERS), false)
+  },
+  stats: {
+    captureGroupRoutes: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_STATS_CAPTURE_GROUP_ROUTES), true)
   },
   redis: {
     enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_REDIS_ENABLE), false),

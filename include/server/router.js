@@ -10,7 +10,7 @@ const parse = require('../utils/parse');
 const ignored_log_routes = ['/' + config.serviceName + '/metrics', '/' + config.serviceName + '/health'];
 
 class Router {
-  constructor(server) {
+  constructor(server, nstats) {
     this.proxy = httpProxy.createProxyServer({
       ws: true,
       secure: false,
@@ -46,9 +46,17 @@ class Router {
       res.statusCode = 504;
       res.end();
     });
+    this.nstats = nstats;
   }
 
   async routeUrl(req, res, oldspan) {
+    var sTime;
+    var possibleRoute;
+
+    if (config.stats.captureGroupRoutes) {
+      sTime = process.hrtime.bigint();
+    }
+
     var authenticated = req.isAuthenticated;
     var sessionUser = req.session.data ? req.session.data.user : null;
     var sessionGroupsData = req.session.data ? req.session.data.groupsData : null;
@@ -75,9 +83,24 @@ class Router {
 
       for (var i = 0; i < groups.length; i++) {
         routedGroup = groups[i].group;
+
         r = this.isRouteAllowed(req.raw.method, req.raw.url, groups[i].routes, sessionUser, routedGroup);
         if (r) {
+          possibleRoute = r.route;
           break;
+        }
+      }
+      if (config.stats.captureGroupRoutes && !possibleRoute && ignored_log_routes.indexOf(req.raw.url) == -1) {
+        var troute = req.raw.url.split('/');
+
+        troute.shift();
+        var last = gm.allPossibleRoutes;
+
+        for (var i = 0; i < troute.length; i++) {
+          if (last[troute[i]] || last['*']) {
+            possibleRoute = last[troute[i]].name;
+            last = last[troute[i]];
+          }
         }
       }
 
@@ -138,6 +161,11 @@ class Router {
               req.raw.url
           );
         }
+
+        if (config.stats.captureGroupRoutes && req.raw.url.indexOf('/' + config.serviceName + '/') == -1) {
+          this.nstats.addWeb({ routerPath: possibleRoute, method: req.raw.method, socket: req.raw.socket }, res, sTime);
+        }
+
         return false;
       }
       // sets user id cookie every time to protect against tampering.
@@ -176,6 +204,10 @@ class Router {
           }
         }
         return false;
+      }
+
+      if (config.stats.captureGroupRoutes) {
+        this.nstats.addWeb({ routerPath: possibleRoute, method: req.raw.method, socket: req.raw.socket }, res, sTime);
       }
 
       var target = {

@@ -177,16 +177,15 @@ const Token = require('./include/database/models/token');
 const Audit = require('./include/database/models/audit');
 
 const redis = require('./include/redis');
-
-const Router = require('./include/server/router');
-const router = new Router(app.server);
-
-const auth = require('./include/utils/auth');
-const Email = require('./include/utils/email');
-
 const Stats = require('./include/utils/stats');
 const stats = new Stats(redis.sessionStore);
 const nstats = require('nstats')();
+
+const Router = require('./include/server/router');
+const router = new Router(app.server, nstats);
+
+const auth = require('./include/utils/auth');
+const Email = require('./include/utils/email');
 
 if (config.tracing.enable) {
   app.setErrorHandler((error, request, reply) => {
@@ -238,7 +237,8 @@ app.get('/' + config.serviceName + '/metrics', (req, res) => {
 });
 app.get('/' + config.serviceName + '/health', (req, res) => res.code(200).send('All Systems Nominal'));
 app.register(nstats.fastify(), {
-  ignored_routes
+  ignored_routes,
+  ignore_non_router_paths: true
 });
 
 if (config.portal.enable) {
