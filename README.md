@@ -3372,7 +3372,13 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v2.7.1](https://github.com/Dragohm/travelling/compare/v2.7.0...v2.7.1)
+
+- added prom stats for routes that are inside of groups. [`18f9adf`](https://github.com/Dragohm/travelling/commit/18f9adfcb9c45e850ec942cb24cca4ca02f53c88)
+
 #### [v2.7.0](https://github.com/Dragohm/travelling/compare/v2.6.5...v2.7.0)
+
+> 30 July 2021
 
 - Feature #22 retrieve user change history [`#11`](https://github.com/Dragohm/travelling/pull/11)
 - Updated tests [`c281e92`](https://github.com/Dragohm/travelling/commit/c281e927bce2d81c36c5f2f14f291087776f8603)
