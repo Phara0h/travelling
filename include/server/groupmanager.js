@@ -10,6 +10,7 @@ class GroupManager {
     }
 
     this.mergedRoutes = [];
+    this.allPossibleRoutes = {};
     this.groups = [];
     this.mappedGroups = {};
     this.redis = redis;
@@ -42,6 +43,8 @@ class GroupManager {
 
     this.mappedGroups = {};
     this.groups = [];
+    this.allPossibleRoutes = {};
+    var allPossibleRoutesTemp = {};
 
     for (var i = 0; i < grps.length; i++) {
       this.groups.push(grps[i]);
@@ -52,6 +55,27 @@ class GroupManager {
       }
 
       this.mergedRoutes[grps[i].type][grps[i].name] = this.groupInheritedMerge(new Group(grps[i]._), grps, span);
+
+      for (var j = 0; j < this.mergedRoutes[grps[i].type][grps[i].name].length; j++) {
+        allPossibleRoutesTemp[this.mergedRoutes[grps[i].type][grps[i].name][j].route] = true;
+      }
+    }
+    allPossibleRoutesTemp = Object.keys(allPossibleRoutesTemp);
+    for (let i = 0; i < allPossibleRoutesTemp.length; i++) {
+      var t = allPossibleRoutesTemp[i].split('/');
+
+      t.shift();
+      var last = this.allPossibleRoutes;
+
+      for (let j = 0; j < t.length; j++) {
+        if (t[j] != '') {
+          if (!last[t[j]]) {
+            last[t[j]] = {};
+          }
+          last[t[j]].name = allPossibleRoutesTemp[i];
+          last = last[t[j]];
+        }
+      }
     }
 
     this.redis.needsGroupUpdate = false;
