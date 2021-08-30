@@ -3372,7 +3372,11 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v2.7.2](https://github.com/Dragohm/travelling/compare/v2.7.1...v2.7.2)
+
 #### [v2.7.1](https://github.com/Dragohm/travelling/compare/v2.7.0...v2.7.1)
+
+> 9 August 2021
 
 - added prom stats for routes that are inside of groups. [`18f9adf`](https://github.com/Dragohm/travelling/commit/18f9adfcb9c45e850ec942cb24cca4ca02f53c88)
 
