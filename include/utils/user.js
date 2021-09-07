@@ -4,7 +4,7 @@ const regex = require('./regex');
 const usa = require('./usa');
 const Fasquest = require('fasquest');
 
-module.exports = {
+const utilsUser = {
   checkValidUser: async function checkValidUser(user) {
     if (!user) {
       return {
@@ -211,6 +211,28 @@ module.exports = {
     return true;
   },
 
+  getPersonalInfo: function getPersonalInfo(user) {
+    return utilsUser.setUser(
+      {},
+      {
+        firstname: user.firstname,
+        middlename: user.middlename,
+        lastname: user.lastname,
+        dob: user.dob,
+        phone: user.phone,
+        state: user.state,
+        city: user.city,
+        zip: user.zip,
+        street_name: user.street_name,
+        street_type: user.street_type,
+        street_affix: user.street_affix,
+        street_number: user.street_number,
+        street_physical: user.street_physical,
+        gender: user.gender
+      }
+    );
+  },
+
   setUser: function setUser(user, props) {
     if (props.username && config.user.username.enabled) {
       user.username = misc.toLower(props.username);
@@ -332,3 +354,5 @@ module.exports = {
     return user;
   }
 };
+
+module.exports = utilsUser;
