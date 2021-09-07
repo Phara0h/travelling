@@ -82,17 +82,24 @@ class Database {
     };
   }
 
-  static async createAccount(username, password, email, group_ids, group_request = null, hostname, domain = 'default') {
-    var userProp = {
-      username,
-      password,
-      email,
-      group_request,
-      group_ids,
-      domain,
-      change_username: false,
-      change_password: false
-    };
+  static async createAccount(
+    username,
+    password,
+    email,
+    group_ids,
+    group_request = null,
+    hostname,
+    domain = 'default',
+    userProp = {}
+  ) {
+    userProp.username = username;
+    userProp.password = password;
+    userProp.email = email;
+    userProp.group_ids = group_ids;
+    userProp.group_request = group_request;
+    userProp.domain = domain;
+    userProp.change_username = false;
+    userProp.change_password = false;
 
     if (config.registration.requireManualActivation) {
       userProp.locked = true;

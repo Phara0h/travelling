@@ -2,7 +2,7 @@ const config = require('../../../utils/config');
 const parse = require('../../../utils/parse');
 const audit = require('../../../utils/audit');
 const gm = require('../../../server/groupmanager');
-const { checkValidUser } = require('../../../utils/user');
+const { checkValidUser, getPersonalInfo } = require('../../../utils/user');
 
 const Database = require('../../../database');
 const User = require('.././../../database/models/user');
@@ -113,6 +113,10 @@ var registerRoute = async (req, res) => {
   var email = req.body.email.toLowerCase();
   var domain = 'default';
   var groupRequest;
+  var personalInfo = {
+  }
+
+
 
   if (req.params.domain) {
     domain = req.params.domain.toLowerCase();
@@ -123,7 +127,7 @@ var registerRoute = async (req, res) => {
   }
 
   var dGroup = await gm.defaultGroup();
-  var user = await Database.createAccount(username, password, email, [dGroup.id], groupRequest, req.hostname, domain);
+  var user = await Database.createAccount(username, password, email, [dGroup.id], groupRequest, req.hostname, domain, getPersonalInfo(req.body));
 
   config.log.logger.info(`New User Created: ${username || ''}(${email})[${domain}] | ${parse.getIp(req)}`);
 
