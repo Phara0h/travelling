@@ -149,16 +149,16 @@ class Router {
             sessionGroupsData = await sessionUser.resolveGroup();
           }
           log.warn(
-            'Unauthorized ' +
-              sessionUser.username +
-              ' (' +
-              sessionGroupsData.names +
-              ') | ' +
-              parse.getIp(req) +
-              ' | [' +
-              req.raw.method +
-              '] ' +
-              req.raw.url
+            'Unauthorized ' + sessionUser.username ||
+              sessionUser.email +
+                ' (' +
+                sessionGroupsData.names +
+                ') | ' +
+                parse.getIp(req) +
+                ' | [' +
+                req.raw.method +
+                '] ' +
+                req.raw.url
           );
         }
 

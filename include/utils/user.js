@@ -260,7 +260,7 @@ const utilsUser = {
     }
 
     if (props.dob !== undefined) {
-      user.dob = Date.parse(props.dob);
+      user.dob = new Date(Date.parse(props.dob)).toISOString();
     }
 
     if (props.phone !== undefined) {
@@ -352,6 +352,26 @@ const utilsUser = {
     }
 
     return user;
+  },
+
+  getId: function getId(req) {
+    if (!req.params.id) {
+      return null;
+    }
+    // if prob an email addresss
+    if (req.params.id.indexOf('@') > -1) {
+      return { email: req.params.id };
+    }
+
+    if (!regex.uuidCheck(req.params.id)) {
+      if (regex.username.exec(req.params.id)) {
+        return { username: req.params.id };
+      } else {
+        return null;
+      }
+    }
+
+    return { id: req.params.id };
   }
 };
 

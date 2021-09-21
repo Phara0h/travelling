@@ -321,17 +321,20 @@ module.exports = function (app, opts, done) {
 
   app.put('/user/me', async (req, res) => {
     req.params.id = req.session.data.user.id;
-    return await userRoutes.editUser({ req, res, needsDomain: false, router });
+    req.params.domain = req.session.data.user.domain;
+    return await userRoutes.editUser({ req, res, needsDomain: true, router });
   });
 
   app.put('/user/me/property/:prop', async (req, res) => {
     req.params.id = req.session.data.user.id;
-    return await userRoutes.editUser({ req, res, needsDomain: false, router });
+    req.params.domain = req.session.data.user.domain;
+    return await userRoutes.editUser({ req, res, needsDomain: true, router });
   });
 
   app.put('/user/me/property/:prop/:propdata', async (req, res) => {
     req.params.id = req.session.data.user.id;
-    return await userRoutes.editUser({ req, res, needsDomain: false, router });
+    req.params.domain = req.session.data.user.domain;
+    return await userRoutes.editUser({ req, res, needsDomain: true, router });
   });
 
   app.get('/user/me/route/allowed', async (req, res) => {

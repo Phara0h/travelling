@@ -9,7 +9,7 @@ const Database = require('../../../database');
 const User = require('../../../database/models/user');
 
 async function deleteUser(opts) {
-  var id = _getId(opts.req);
+  var id = userUtils.getId(opts.req);
   var domain = opts.req.params.domain;
   var user;
 
@@ -57,6 +57,7 @@ async function deleteUser(opts) {
         ofUserId: user[0].id,
         oldObj: previousUser
       };
+
       if (opts.req.session.data) {
         auditObj.byUserId = opts.req.session.data.user.id;
       }
@@ -75,7 +76,7 @@ async function deleteUser(opts) {
 }
 
 async function editUser(opts) {
-  var id = _getId(opts.req);
+  var id = userUtils.getId(opts.req);
   var domain = opts.req.params.domain;
 
   if (!id) {
@@ -176,6 +177,7 @@ async function editUser(opts) {
         oldObj: oldModel,
         newObj: changedProps
       };
+
       if (opts.req.session.data) {
         auditObj.byUserId = opts.req.session.data.user.id;
       }
@@ -193,7 +195,7 @@ async function editUser(opts) {
 }
 
 async function getUser(opts) {
-  var id = _getId(opts.req);
+  var id = userUtils.getId(opts.req);
   var domain = opts.req.params.domain;
   var user;
 
@@ -303,6 +305,7 @@ async function addRemoveGroupInheritance(user, group, add = true, req) {
         oldObj: previousGroup,
         newObj: newGroup
       };
+
       if (req.session.data) {
         auditObj.byUserId = req.session.data.user.id;
       }
@@ -339,26 +342,6 @@ function filterUser(req) {
   }
 
   return req.body;
-}
-
-function _getId(req) {
-  if (!req.params.id) {
-    return null;
-  }
-  // if prob an email addresss
-  if (req.params.id.indexOf('@') > -1) {
-    return { email: req.params.id };
-  }
-
-  if (!regex.uuidCheck(req.params.id)) {
-    if (regex.username.exec(req.params.id)) {
-      return { username: req.params.id };
-    } else {
-      return null;
-    }
-  }
-
-  return { id: req.params.id };
 }
 
 module.exports = {
