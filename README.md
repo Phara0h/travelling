@@ -3372,7 +3372,13 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v2.8.1](https://github.com/Dragohm/travelling/compare/v2.8.0...v2.8.1)
+
+- Fixed security bug regarding refreshed tokens while user has no username and dob bug [`0d34961`](https://github.com/Dragohm/travelling/commit/0d34961b855653dd2f1da5e2a77358b1f322665a)
+
 #### [v2.8.0](https://github.com/Dragohm/travelling/compare/v2.7.2...v2.8.0)
+
+> 7 September 2021
 
 - Added the ability to set user's personal information on reg. [`8018bec`](https://github.com/Dragohm/travelling/commit/8018becea67ac4d975deca9e5b50c4f593bb0b4a)
 
