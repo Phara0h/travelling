@@ -42,7 +42,8 @@ class CookieToken {
 
       if (Date.now() - Number(cred[3]) < config.cookie.token.expiration * 86400000) {
         // 90 days in millls
-        var user = await User.findAllBy({ domain: cred[0], username: cred[1], password: cred[2] });
+
+        var user = await User.findAllBy({ domain: cred[0], id: cred[1], password: cred[2] });
 
         if (!user || user.length < 1) {
           if (span) {
@@ -51,6 +52,11 @@ class CookieToken {
           }
           return false;
         } else {
+          if (user.length > 1) {
+            config.log.logger.warn(
+              helpers.text(`Multiple users returned back for ${cred[1]} when there should only be one!`, span)
+            );
+          }
           if (span) {
             span.updateName('checkToken [valid]');
             span.end();
@@ -108,14 +114,14 @@ class CookieToken {
   }
 
   // password are the hashed password only!
-  static async getToken(domain, username, password, ip, date) {
-    return await this.encrypt(`${domain}:${username}:${password}:${date}:${config.cookie.security.ipHijackProtection ? ip : ''}`);
+  static async getToken(domain, id, password, ip, date) {
+    return await this.encrypt(`${domain}:${id}:${password}:${date}:${config.cookie.security.ipHijackProtection ? ip : ''}`);
   }
 
   // password are the hashed password only!
-  static async newTokenInCookie(domain, username, password, ip, res) {
+  static async newTokenInCookie(domain, id, password, ip, res) {
     var date = Date.now();
-    var tok = await this.getToken(domain, username, password, ip, date);
+    var tok = await this.getToken(domain, id, password, ip, date);
 
     this.setAuthCookie(tok, res, new Date(date));
   }

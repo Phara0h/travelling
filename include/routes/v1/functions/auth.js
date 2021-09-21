@@ -113,10 +113,7 @@ var registerRoute = async (req, res) => {
   var email = req.body.email.toLowerCase();
   var domain = 'default';
   var groupRequest;
-  var personalInfo = {
-  }
-
-
+  var personalInfo = {};
 
   if (req.params.domain) {
     domain = req.params.domain.toLowerCase();
@@ -127,7 +124,16 @@ var registerRoute = async (req, res) => {
   }
 
   var dGroup = await gm.defaultGroup();
-  var user = await Database.createAccount(username, password, email, [dGroup.id], groupRequest, req.hostname, domain, getPersonalInfo(req.body));
+  var user = await Database.createAccount(
+    username,
+    password,
+    email,
+    [dGroup.id],
+    groupRequest,
+    req.hostname,
+    domain,
+    getPersonalInfo(req.body)
+  );
 
   config.log.logger.info(`New User Created: ${username || ''}(${email})[${domain}] | ${parse.getIp(req)}`);
 
@@ -142,6 +148,7 @@ var registerRoute = async (req, res) => {
       ofUserId: user.id,
       newObj: user
     };
+
     if (req.session.data) {
       auditObj.byUserId = req.session.data.user.id;
     }
@@ -231,6 +238,7 @@ async function resetPasswordRoute(req, res, autologin = false) {
       oldObj: { password: oldPassword },
       newObj: { password: user.password }
     };
+
     if (req.session.data) {
       auditObj.byUserId = req.session.data.user.id;
       auditObj.ofUserId = req.session.data.user.id;
@@ -327,9 +335,7 @@ var postOAuthAuthorizeRoute = async (req, res) => {
     var code = Buffer.from(`${token.client_id}:${token.client_secret}`, 'ascii').toString('base64');
 
     res.headers['Cache-Control'] = 'no-cache';
-    res.redirect(
-      encodeURI(req.query.redirect_uri + `?code=${code}&state=${req.query.state}&client_id=${req.query.client_id}`)
-    );
+    res.redirect(encodeURI(req.query.redirect_uri + `?code=${code}&state=${req.query.state}&client_id=${req.query.client_id}`));
     return;
   } catch (e) {
     config.log.logger.debug(e);
@@ -376,7 +382,7 @@ var login = async (user, req, res) => {
   req.createSession(user.id, { user, groupsData });
 
   if (req.body.remember !== false) {
-    await CookieToken.newTokenInCookie(user.domain, user.username, user.password, user.last_login.ip, res);
+    await CookieToken.newTokenInCookie(user.domain, user.id, user.password, user.last_login.ip, res);
   }
 
   config.log.logger.info(

@@ -130,16 +130,20 @@ var checkCookie = async (req, res, router, oldspan) => {
         }
         return { auth: false, route: true };
       }
+
       const groupsData = await user.resolveGroup(span);
 
       req.createSession(user.id, { user, groupsData });
 
       config.log.logger.info(
         helpers.text(
-          'User Token Session Refreshed: ' + user.username + ' (' + groupsData.names + ')' + ' | ' + parse.getIp(req),
+          `User Token Session Refreshed: ${user.username ? user.username : user.email} (${groupsData.names}) | ${parse.getIp(
+            req
+          )}`,
           span
         )
       );
+
       if (span) {
         span.updateName('checkCookie [valid]');
         span.end();
