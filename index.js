@@ -369,8 +369,9 @@ process
         reason.traceId = span.spanContext().traceId;
         span.recordException(reason);
       }
+
+      config.log.logger.fatal(trace.helpers.text('unhandledRejection', span));
     }
-    config.log.logger.fatal(trace.helpers.text('unhandledRejection', span));
     config.log.logger.fatal(reason);
   })
   .on('uncaughtException', (err) => {
@@ -382,8 +383,9 @@ process
         err.traceId = span.spanContext().traceId;
         span.recordException(err);
       }
+
+      config.log.logger.fatal(trace.helpers.text('uncaughtException', span));
     }
-    config.log.logger.fatal(trace.helpers.text('uncaughtException', span));
     config.log.logger.fatal(err);
   })
   .on('warning', (warning) => {
