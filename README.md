@@ -3372,7 +3372,13 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v2.8.2](https://github.com/Trazi-Ventures/travelling/compare/v2.8.1...v2.8.2)
+
+- Misc fixes and option to disable denied redirects to portal [`a47085b`](https://github.com/Trazi-Ventures/travelling/commit/a47085bc4da87294d7258747789ed6324bed4975)
+
 #### [v2.8.1](https://github.com/Trazi-Ventures/travelling/compare/v2.8.0...v2.8.1)
+
+> 21 September 2021
 
 - Fixed security bug regarding refreshed tokens while user has no username and dob bug [`0d34961`](https://github.com/Trazi-Ventures/travelling/commit/0d34961b855653dd2f1da5e2a77358b1f322665a)
 
