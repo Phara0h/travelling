@@ -20,7 +20,8 @@ const config = {
   },
   https: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_HTTPS), true),
   misc: {
-    cloudflareIP: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_MISC_CLOUDFLAREIP), false)
+    cloudflareIP: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_MISC_CLOUDFLAREIP), false),
+    deniedRedirect: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_MISC_DENIED_REDIRECT), true)
   },
   log: {
     enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_LOG_ENABLE), true),

@@ -97,9 +97,12 @@ class Router {
         var last = gm.allPossibleRoutes;
 
         for (var i = 0; i < troute.length; i++) {
-          if (last[troute[i]] || last['*']) {
+          if (last[troute[i]]) {
             possibleRoute = last[troute[i]].name;
             last = last[troute[i]];
+          } else if (last['*']) {
+            possibleRoute = last['*'].name;
+            last = last['*'];
           }
         }
       }
@@ -116,7 +119,8 @@ class Router {
         if (
           req.raw.url != config.portal.path &&
           req.raw.url.indexOf('/' + config.serviceName + '/api/') != 0 &&
-          req.raw.url.indexOf('/' + config.serviceName + '/assets/') != 0
+          req.raw.url.indexOf('/' + config.serviceName + '/assets/') != 0 &&
+          config.misc.deniedRedirect
         ) {
           // console.log(req.raw.url, req.raw.url, config.portal.path)
           this.setBackurl(res, req);
