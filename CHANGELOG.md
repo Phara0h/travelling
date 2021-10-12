@@ -1,6 +1,12 @@
 
 
+#### [v2.8.3](https://github.com/Dragohm/travelling/compare/v2.8.2...v2.8.3)
+
+- sdk update [`8ef19a6`](https://github.com/Dragohm/travelling/commit/8ef19a6a474e9d991b495d59083b57140ce0be09)
+
 #### [v2.8.2](https://github.com/Dragohm/travelling/compare/v2.8.1...v2.8.2)
+
+> 29 September 2021
 
 - Misc fixes and option to disable denied redirects to portal [`a47085b`](https://github.com/Dragohm/travelling/commit/a47085bc4da87294d7258747789ed6324bed4975)
 
