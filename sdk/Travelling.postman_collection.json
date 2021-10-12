@@ -187,7 +187,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"email\": \"test@test.com\",\n\t\"password\": \"Pas5w0r!d\",\n    \"domain\": \"test.com\"\n}",
+									"raw": "{\n\t\"email\": \"test@test.com\",\n\t\"password\": \"Pas5w0r!d\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -210,7 +210,7 @@
 									"variable": [
 										{
 											"key": "domain",
-											"value": "test.com",
+											"value": "traziventures.com",
 											"description": "Domain name (example: test.com)"
 										}
 									]
@@ -1312,7 +1312,7 @@
 									"variable": [
 										{
 											"key": "id",
-											"value": "",
+											"value": "74b3c2f2-3f94-4b5d-b3e2-4b3bd2c5d6fe",
 											"description": "id or name of the token"
 										}
 									]
@@ -1572,7 +1572,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"name\": \"conversate\"\n}",
+									"raw": "{\n    \"urls\": [\n        \"http://checkpeople.com\"\n    ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -7771,7 +7771,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"group\": {\n        \"anonymous\": {\n            \"type\": \"group\",\n            \"allowed\": [\n                {\n                    \"route\": \"/travelling/portal/*\",\n                    \"host\": null,\n                    \"name\": \"*-travelling-portal-*\"\n                },\n                {\n                    \"route\": \"/travelling/api/v1/auth/*\",\n                    \"host\": null,\n                    \"name\": \"*-travelling-api-v1-auth-*\"\n                },\n                {\n                    \"route\": \"/travelling/api/v1/user/me/route/allowed\",\n                    \"host\": null,\n                    \"method\": \"GET\",\n                    \"name\": \"get-travelling-api-v1-user-me-route-allowed\"\n                },\n                {\n                    \"route\": \"/travelling/api/v1/user/me/permission/allowed/*\",\n                    \"host\": null,\n                    \"method\": \"GET\",\n                    \"name\": \"get-travelling-api-v1-user-me-permission-allowed-*\"\n                },\n                {\n                    \"route\": \"/travelling/assets/*\",\n                    \"host\": null,\n                    \"removeFromPath\": \"/travelling/assets/\",\n                    \"method\": \"GET\",\n                    \"name\": \"get-travelling-assets-*\"\n                },\n                {\n                    \"route\": \"/travelling/api/v1/config/password\",\n                    \"host\": null,\n                    \"method\": \"GET\",\n                    \"name\": \"get-travelling-api-v1-config-password\"\n                },\n                {\n                    \"route\": \"/favicon.ico\",\n                    \"host\": null,\n                    \"method\": \"GET\",\n                    \"name\": \"get-favicon.ico\"\n                }\n            ],\n            \"inherited\": null,\n            \"is_default\": false\n        },\n        \"group3\": {\n            \"type\": \"group\",\n            \"allowed\": null,\n            \"inherited\": [\n                \"testgroup|group1\",\n                \"group|group2\"\n            ],\n            \"is_default\": false\n        },\n        \"superadmin\": {\n            \"type\": \"group\",\n            \"allowed\": [\n                {\n                    \"host\": null,\n                    \"route\": \"/travelling/*\",\n                    \"name\": \"*-travelling-*\"\n                },\n                {\n                    \"name\": \"test-one-*-three\"\n                }\n            ],\n            \"inherited\": [\n                \"group|anonymous\"\n            ],\n            \"is_default\": false\n        },\n        \"group4\": {\n            \"type\": \"group\",\n            \"allowed\": null,\n            \"inherited\": [],\n            \"is_default\": false\n        },\n        \"group2\": {\n            \"type\": \"group\",\n            \"allowed\": [\n                {\n                    \"route\": \"/test/get\",\n                    \"host\": \"https://127.0.0.1:4268/:username/:group\",\n                    \"removeFromPath\": \"/test/get\",\n                    \"method\": \"GET\",\n                    \"name\": \"get-test-get\"\n                },\n                {\n                    \"route\": \"/test/post\",\n                    \"host\": \"http://127.0.0.1:4267/?id=:id&permission=:permission\",\n                    \"removeFromPath\": \"/test/post\",\n                    \"method\": \"POST\",\n                    \"name\": \"post-test-post\"\n                }\n            ],\n            \"inherited\": [\n                \"testgroup|group1\"\n            ],\n            \"is_default\": false\n        },\n        \"group5\": {\n            \"type\": \"group\",\n            \"allowed\": [\n                {\n                    \"route\": \"/test/delete/:grouptype\",\n                    \"host\": \"https://127.0.0.1:4268\",\n                    \"removeFromPath\": \"/test/delete\",\n                    \"method\": \"DELETE\",\n                    \"name\": \"delete-test-delete-:grouptype\"\n                }\n            ],\n            \"inherited\": [\n                \"group|group4\",\n                \"group|superadmin\"\n            ],\n            \"is_default\": true\n        },\n        \"group1\": {\n            \"type\": \"group\",\n            \"allowed\": null,\n            \"inherited\": null,\n            \"is_default\": false\n        }\n    },\n    \"testgroup\": {\n        \"group1\": {\n            \"type\": \"testgroup\",\n            \"allowed\": null,\n            \"inherited\": [\n                \"group|group4\"\n            ],\n            \"is_default\": false\n        },\n        \"superadmin\": {\n            \"type\": \"testgroup\",\n            \"allowed\": null,\n            \"inherited\": null,\n            \"is_default\": false\n        }\n    }\n}",
+							"raw": "{\n    \"global\": {\n        \"user\": {\n            \"allowed\": [\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/account/api/v1/auth/logout\",\n                    \"name\": \"get-account-api-v1-auth-logout\"\n                },\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/account/api/v1/user/me/*\",\n                    \"name\": \"get-account-api-v1-user-me-*\"\n                },\n                {\n                    \"method\": \"PUT\",\n                    \"route\": \"/account/api/v1/user/me/property/password/*\",\n                    \"name\": \"put-account-api-v1-user-me-property-password-*\"\n                },\n                {\n                    \"method\": \"PUT\",\n                    \"route\": \"/account/api/v1/user/me/property/avatar/*\",\n                    \"name\": \"put-account-api-v1-user-me-property-avatar-*\"\n                },\n                {\n                    \"method\": \"PUT\",\n                    \"route\": \"/account/api/v1/user/me/property/email/*\",\n                    \"name\": \"put-account-api-v1-user-me-property-email-*\"\n                }\n            ],\n            \"inherited\": [\n                \"group|anonymous\"\n            ],\n            \"is_default\": true\n        },\n        \"developer\": {\n            \"allowed\": [\n                {\n                    \"method\": \"POST\",\n                    \"route\": \"/account/api/v1/user/me/token\",\n                    \"name\": \"post-account-api-v1-user-me-token\"\n                },\n                {\n                    \"method\": \"DELETE\",\n                    \"route\": \"/account/api/v1/user/me/token/*\",\n                    \"name\": \"delete-account-api-v1-user-me-token-*\"\n                }\n            ],\n            \"inherited\": [\n                \"global|user\"\n            ]\n        },\n        \"service\": {\n            \"allowed\": [\n                {\n                    \"method\": \"POST\",\n                    \"route\": \"/account/api/v1/user/me/token\",\n                    \"name\": \"post-account-api-v1-user-me-token\"\n                },\n                {\n                    \"method\": \"DELETE\",\n                    \"route\": \"/account/api/v1/user/me/token/*\",\n                    \"name\": \"delete-account-api-v1-user-me-token-*\"\n                }\n            ],\n            \"inherited\": [\n                \"global|user\",\n                \"global|superadmin\"\n            ]\n        },\n        \"crm-public\": {\n            \"allowed\": [\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/crm\",\n                    \"host\": \"http://localhost:1337\",\n                    \"name\": \"get-crm\"\n                },\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/crm/auth/*\",\n                    \"host\": \"http://localhost:1337\",\n                    \"name\": \"get-crm-auth-*\"\n                }\n            ]\n        },\n        \"leads-public\": {\n            \"allowed\": [\n                {\n                    \"method\": \"POST\",\n                    \"route\": \"/api/leads/v1/new/lead\",\n                    \"remove_from_path\": \"/api\",\n                    \"host\": \"http://leads.trazidev.com\",\n                    \"name\": \"post-api-leads-v1-new-lead\"\n                }\n            ]\n        },\n        \"import-report-public\": {\n            \"allowed\": [\n                {\n                    \"method\": \"POST\",\n                    \"route\": \"/api/import-report/v1/tlo/people/cid/*\",\n                    \"remove_from_path\": \"/api\",\n                    \"host\": \"http://import-report.trazidev.com\",\n                    \"name\": \"post-api-import-report-v1-tlo-people-cid-*\"\n                }\n            ]\n        },\n        \"subscribed\": {},\n        \"admin\": {\n            \"inherited\": [\n                \"global|user\",\n                \"global|csrall\"\n            ]\n        },\n        \"superadmin\": {\n            \"allowed\": [\n                {\n                    \"route\": \"/account/*\",\n                    \"name\": \"*-account-*\"\n                },\n                {\n                    \"name\": \"account-*\"\n                }\n            ],\n            \"inherited\": [\n                \"global|admin\"\n            ]\n        },\n        \"csrall\": {\n            \"allowed\": [\n                {\n                    \"method\": \"*\",\n                    \"route\": \"/api/opt-out/v1/*\",\n                    \"remove_from_path\": \"/api\",\n                    \"host\": \"http://opt-out.trazidev.com\",\n                    \"name\": \"*-api-opt-out-v1-*\"\n                },\n                {\n                    \"method\": \"*\",\n                    \"route\": \"/api/search/v1/*\",\n                    \"remove_from_path\": \"/api\",\n                    \"host\": \"http://search.trazidev.com\",\n                    \"name\": \"*-api-search-v1-*\"\n                },\n                {\n                    \"method\": \"*\",\n                    \"route\": \"/api/email/v1/*\",\n                    \"remove_from_path\": \"/api\",\n                    \"host\": \"http://email.trazidev.com\",\n                    \"name\": \"*-api-email-v1-*\"\n                }\n            ],\n            \"inherited\": [\n                \"global|user\",\n                \"global|crm-private\"\n            ]\n        },\n        \"auth\": {\n            \"allowed\": [\n                {\n                    \"method\": \"POST\",\n                    \"route\": \"/account/api/v1/auth/register/domain/unmask.com\",\n                    \"name\": \"post-account-api-v1-auth-register-domain-unmask.com\"\n                },\n                {\n                    \"method\": \"PUT\",\n                    \"route\": \"/account/api/v1/auth/login/domain/unmask.com\",\n                    \"name\": \"put-account-api-v1-auth-login-domain-unmask.com\"\n                },\n                {\n                    \"method\": \"PUT\",\n                    \"route\": \"/account/api/v1/auth/password/forgot/domain/unmask.com\",\n                    \"name\": \"put-account-api-v1-auth-password-forgot-domain-unmask.com\"\n                },\n                {\n                    \"method\": \"POST\",\n                    \"route\": \"/account/api/v1/auth/register/domain/checkpeople.com\",\n                    \"name\": \"post-account-api-v1-auth-register-domain-checkpeople.com\"\n                },\n                {\n                    \"method\": \"PUT\",\n                    \"route\": \"/account/api/v1/auth/login/domain/checkpeople.com\",\n                    \"name\": \"put-account-api-v1-auth-login-domain-checkpeople.com\"\n                },\n                {\n                    \"method\": \"PUT\",\n                    \"route\": \"/account/api/v1/auth/password/forgot/domain/checkpeople.com\",\n                    \"name\": \"put-account-api-v1-auth-password-forgot-domain-checkpeople.com\"\n                },\n                {\n                    \"method\": \"POST\",\n                    \"route\": \"/account/api/v1/auth/register/domain/traziventures.com\",\n                    \"name\": \"post-account-api-v1-auth-register-domain-traziventures.com\"\n                },\n                {\n                    \"method\": \"PUT\",\n                    \"route\": \"/account/api/v1/auth/login/domain/traziventures.com\",\n                    \"name\": \"put-account-api-v1-auth-login-domain-traziventures.com\"\n                },\n                {\n                    \"method\": \"PUT\",\n                    \"route\": \"/account/api/v1/auth/password/forgot/domain/traziventures.com\",\n                    \"name\": \"put-account-api-v1-auth-password-forgot-domain-traziventures.com\"\n                },\n                {\n                    \"method\": \"PUT\",\n                    \"route\": \"/account/api/v1/auth/password/reset/login\",\n                    \"name\": \"put-account-api-v1-auth-password-reset-login\"\n                }\n            ]\n        },\n        \"crm-private\": {\n            \"allowed\": [\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/crm/admin/*\",\n                    \"host\": \"http://staging.crm.trazidev.com\",\n                    \"name\": \"get-crm-admin-*\"\n                }\n            ]\n        },\n        \"csr\": {\n            \"allowed\": [\n                {\n                    \"method\": \"*\",\n                    \"route\": \"/api/opt-out/v1/cids\",\n                    \"remove_from_path\": \"/api\",\n                    \"host\": \"http://opt-out.trazidev.com\",\n                    \"name\": \"*-api-opt-out-v1-cids\"\n                },\n                {\n                    \"method\": \"*\",\n                    \"route\": \"/api/opt-out/v1/id/*\",\n                    \"remove_from_path\": \"/api\",\n                    \"host\": \"http://opt-out.trazidev.com\",\n                    \"name\": \"*-api-opt-out-v1-id-*\"\n                },\n                {\n                    \"method\": \"*\",\n                    \"route\": \"/api/opt-out/v1/domain/:grouptype.com\",\n                    \"remove_from_path\": \"/api\",\n                    \"host\": \"http://opt-out.trazidev.com\",\n                    \"name\": \"*-api-opt-out-v1-domain-:grouptype.com\"\n                },\n                {\n                    \"method\": \"*\",\n                    \"route\": \"/api/opt-out/v1/domain/:grouptype.com/*\",\n                    \"remove_from_path\": \"/api\",\n                    \"host\": \"http://opt-out.trazidev.com\",\n                    \"name\": \"*-api-opt-out-v1-domain-:grouptype.com-*\"\n                },\n                {\n                    \"method\": \"*\",\n                    \"route\": \"/api/search/v1/*\",\n                    \"remove_from_path\": \"/api\",\n                    \"host\": \"http://search.trazidev.com\",\n                    \"name\": \"*-api-search-v1-*\"\n                },\n                {\n                    \"method\": \"*\",\n                    \"route\": \"/api/email/v1/*\",\n                    \"remove_from_path\": \"/api\",\n                    \"host\": \"http://email.trazidev.com\",\n                    \"name\": \"*-api-email-v1-*\"\n                }\n            ],\n            \"inherited\": [\n                \"global|user\",\n                \"global|crm-private\"\n            ]\n        }\n    },\n    \"group\": {\n        \"superadmin\": {\n            \"allowed\": [\n                {\n                    \"host\": null,\n                    \"route\": \"/account/*\",\n                    \"name\": \"*-account-*\"\n                }\n            ],\n            \"inherited\": [\n                \"group|anonymous\"\n            ]\n        },\n        \"anonymous\": {\n            \"allowed\": [\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/account/dashboard/*\",\n                    \"remove_from_path\": \"/account/dashboard\",\n                    \"host\": \"https://unmask.com\",\n                    \"name\": \"get-account-dashboard-*\"\n                },\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/account/portal/*\",\n                    \"name\": \"get-account-portal-*\"\n                },\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/account/assets/*\",\n                    \"name\": \"get-account-assets-*\"\n                },\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/favicon.ico\",\n                    \"name\": \"get-favicon.ico\"\n                },\n                {\n                    \"method\": \"PUT\",\n                    \"route\": \"/account/api/v1/auth/password/forgot\",\n                    \"name\": \"put-account-api-v1-auth-password-forgot\"\n                },\n                {\n                    \"method\": \"PUT\",\n                    \"route\": \"/account/api/v1/auth/password/reset\",\n                    \"name\": \"put-account-api-v1-auth-password-reset\"\n                },\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/account/api/v1/auth/activate\",\n                    \"name\": \"get-account-api-v1-auth-activate\"\n                },\n                {\n                    \"method\": \"POST\",\n                    \"route\": \"/account/api/v1/auth/token\",\n                    \"name\": \"post-account-api-v1-auth-token\"\n                },\n                {\n                    \"method\": \"POST\",\n                    \"route\": \"/account/api/v1//auth/oauth/authorize\",\n                    \"name\": \"post-account-api-v1--auth-oauth-authorize\"\n                },\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/account/api/v1//auth/oauth/authorize\",\n                    \"name\": \"get-account-api-v1--auth-oauth-authorize\"\n                },\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/account/api/v1/user/me/permission/allowed/*\",\n                    \"name\": \"get-account-api-v1-user-me-permission-allowed-*\"\n                },\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/account/api/v1/user/me/route/allowed\",\n                    \"name\": \"get-account-api-v1-user-me-route-allowed\"\n                },\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/account/api/v1/config/password\",\n                    \"name\": \"get-account-api-v1-config-password\"\n                },\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/account/api/v1/config/portal/webclient\",\n                    \"name\": \"get-account-api-v1-config-portal-webclient\"\n                },\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/account/metrics\",\n                    \"name\": \"get-account-metrics\"\n                },\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/account/health\",\n                    \"name\": \"get-account-health\"\n                }\n            ],\n            \"inherited\": [\n                \"global|auth\",\n                \"global|leads-public\",\n                \"global|import-report-public\",\n                \"global|opt-out-public\",\n                \"global|crm-public\"\n            ]\n        }\n    },\n    \"unmask\": {\n        \"csr\": {\n            \"inherited\": [\n                \"global|csr\"\n            ]\n        }\n    },\n    \"checkpeople\": {\n        \"csr\": {\n            \"inherited\": [\n                \"global|csr\"\n            ]\n        }\n    },\n    \"information\": {\n        \"csr\": {\n            \"inherited\": [\n                \"global|csr\"\n            ]\n        }\n    },\n    \"products\": {\n        \"full_reports\": {},\n        \"pdf_generation\": {},\n        \"report_monitoring\": {}\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -8240,7 +8240,7 @@
 									"variable": [
 										{
 											"key": "id",
-											"value": "5eec54a7-5e8a-48eb-8796-2917dc408cab",
+											"value": "7c93b6f6-a145-41b6-b892-a52bd3ad3e11",
 											"description": "Id of user that committed the action."
 										}
 									]
@@ -8309,7 +8309,7 @@
 									"variable": [
 										{
 											"key": "id",
-											"value": "5eec54a7-5e8a-48eb-8796-2917dc408cab",
+											"value": "778c3e68-4d9f-486d-a6eb-0d1cfd93520d",
 											"description": "Id of user that committed the action."
 										}
 									]
@@ -8319,6 +8319,217 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "By Action",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{TRAVELLING}}/api/v1/audit/action/:action",
+							"host": [
+								"{{TRAVELLING}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"audit",
+								"action",
+								":action"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "2",
+									"description": "Number of maximum results. (example: 2)",
+									"disabled": true
+								},
+								{
+									"key": "skip",
+									"value": "1",
+									"description": "Number of db rows skipped. (example: 10)",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "created_on",
+									"description": "Sort by any user object key (examples: created_on, action, etc.)",
+									"disabled": true
+								},
+								{
+									"key": "sortdir",
+									"value": "ASC",
+									"description": "Sort direction (example ascending order: ASC)",
+									"disabled": true
+								},
+								{
+									"key": "filter",
+									"value": "created_on>2021-06-03,created_on<2021-06-06",
+									"description": "Filter parameters (example: action=created_on>2021-06-03,created_on<2021-06-06)",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "action",
+									"value": "CREATE",
+									"description": "Audit action type."
+								}
+							]
+						},
+						"description": "Gets audits by action type.\n\n##### Filter Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |\n| created_on | *optional* (example:  created_on>=2021-06-09) |\n| prop | *optional* (example: prop=email) |\n| old_val | *optional* (example:  old_val=swagger@email.69) |\n| new_val | *optional* (example:  new_val=leet@teel.com) |"
+					},
+					"response": []
+				},
+				{
+					"name": "By Subaction",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{TRAVELLING}}/api/v1/audit/subaction/:subaction",
+							"host": [
+								"{{TRAVELLING}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"audit",
+								"subaction",
+								":subaction"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "2",
+									"description": "Number of maximum results. (example: 2)",
+									"disabled": true
+								},
+								{
+									"key": "skip",
+									"value": "1",
+									"description": "Number of db rows skipped. (example: 10)",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "created_on",
+									"description": "Sort by any user object key (examples: created_on, action, etc.)",
+									"disabled": true
+								},
+								{
+									"key": "sortdir",
+									"value": "ASC",
+									"description": "Sort direction (example ascending order: ASC)",
+									"disabled": true
+								},
+								{
+									"key": "filter",
+									"value": "created_on>2021-06-03,created_on<2021-06-06",
+									"description": "Filter parameters (example: action=created_on>2021-06-03,created_on<2021-06-06)",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "subaction",
+									"value": "USER",
+									"description": "Audit subaction type."
+								}
+							]
+						},
+						"description": "Gets audits by subaction type.\n\n##### Filter Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |\n| created_on | *optional* (example:  created_on>=2021-06-09) |\n| prop | *optional* (example: prop=email) |\n| old_val | *optional* (example:  old_val=swagger@email.69) |\n| new_val | *optional* (example:  new_val=leet@teel.com) |"
+					},
+					"response": []
+				},
+				{
+					"name": "By Action and Subaction",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{TRAVELLING}}/api/v1/audit/action/:action/subaction/:subaction",
+							"host": [
+								"{{TRAVELLING}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"audit",
+								"action",
+								":action",
+								"subaction",
+								":subaction"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "2",
+									"description": "Number of maximum results. (example: 2)",
+									"disabled": true
+								},
+								{
+									"key": "skip",
+									"value": "1",
+									"description": "Number of db rows skipped. (example: 10)",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "created_on",
+									"description": "Sort by any user object key (examples: created_on, action, etc.)",
+									"disabled": true
+								},
+								{
+									"key": "sortdir",
+									"value": "ASC",
+									"description": "Sort direction (example ascending order: ASC)",
+									"disabled": true
+								},
+								{
+									"key": "filter",
+									"value": "created_on>2021-06-03,created_on<2021-06-06",
+									"description": "Filter parameters (example: action=created_on>2021-06-03,created_on<2021-06-06)",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "action",
+									"value": "CREATE",
+									"description": "Audti action type."
+								},
+								{
+									"key": "subaction",
+									"value": "GROUP",
+									"description": "Audit subaction type."
+								}
+							]
+						},
+						"description": "Gets audits by action and subaction type.\n\n##### Filter Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |\n| created_on | *optional* (example:  created_on>=2021-06-09) |\n| prop | *optional* (example: prop=email) |\n| old_val | *optional* (example:  old_val=swagger@email.69) |\n| new_val | *optional* (example:  new_val=leet@teel.com) |"
+					},
+					"response": []
 				}
 			]
 		},
