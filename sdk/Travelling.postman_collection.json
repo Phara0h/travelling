@@ -20,9 +20,9 @@
 										"method": "PUT",
 										"header": [
 											{
-												"key": "Content-Type",
-												"name": "Content-Type",
-												"value": "application/json",
+												"key": "Authorization",
+												"value": "Bearer",
+												"description": "The client_credentials generated OAUth2 access token.",
 												"type": "text"
 											}
 										],
@@ -67,7 +67,14 @@
 							"name": "Register",
 							"request": {
 								"method": "POST",
-								"header": [],
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
 								"body": {
 									"mode": "raw",
 									"raw": "{\n\t\"password\":\"Pas5w0r!d\",\n\t\"email\": \"test@test.com\"\n}",
@@ -179,9 +186,9 @@
 								"method": "PUT",
 								"header": [
 									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"value": "application/json",
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
 										"type": "text"
 									}
 								],
@@ -287,9 +294,9 @@
 								"method": "PUT",
 								"header": [
 									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"value": "application/json",
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
 										"type": "text"
 									}
 								],
@@ -379,9 +386,9 @@
 						"method": "POST",
 						"header": [
 							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
 								"type": "text"
 							}
 						],
@@ -487,9 +494,9 @@
 						"method": "PUT",
 						"header": [
 							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
 								"type": "text"
 							}
 						],
@@ -584,7 +591,14 @@
 					"name": "Logout",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{TRAVELLING}}/api/v1/auth/logout",
 							"host": [
@@ -657,9 +671,9 @@
 						"method": "PUT",
 						"header": [
 							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
 								"type": "text"
 							}
 						],
@@ -695,9 +709,9 @@
 						"method": "PUT",
 						"header": [
 							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
 								"type": "text"
 							}
 						],
@@ -739,9 +753,9 @@
 						"method": "PUT",
 						"header": [
 							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
 								"type": "text"
 							}
 						],
@@ -782,7 +796,14 @@
 					"name": "Activate",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{TRAVELLING}}/api/v1/auth/activate?token=activation_token",
 							"host": [
@@ -1040,17 +1061,10 @@
 								"method": "GET",
 								"header": [
 									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									},
-									{
 										"key": "Authorization",
 										"value": "Bearer",
 										"description": "The client_credentials generated OAUth2 access token.",
-										"type": "text",
-										"disabled": true
+										"type": "text"
 									}
 								],
 								"url": {
