@@ -3728,7 +3728,13 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v2.8.4](https://github.com/Trazi-Ventures/travelling/compare/v2.8.3...v2.8.4)
+
+- Update Travelling.postman_collection.json [`911bd7a`](https://github.com/Trazi-Ventures/travelling/commit/911bd7ab1c551d097840a1e71cbf5e628f6033ad)
+
 #### [v2.8.3](https://github.com/Trazi-Ventures/travelling/compare/v2.8.2...v2.8.3)
+
+> 12 October 2021
 
 - sdk update [`8ef19a6`](https://github.com/Trazi-Ventures/travelling/commit/8ef19a6a474e9d991b495d59083b57140ce0be09)
 
