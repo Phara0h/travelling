@@ -4300,7 +4300,6 @@ class UserCurrent {
       method: 'GET',
       simple: false,
       uri: hostUrl + '/' + `api/v1/user/me`,
-      json: true,
       authorization: {
         bearer: authorization_bearer,
       },
@@ -4401,13 +4400,17 @@ class Auth {
    *
    * Path: api/v1/auth/activate
    * @param {any} token  (example: activation_token)
+   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
    */
-  static async activate(token, opts) {
+  static async activate(token, authorization_bearer, opts) {
     var options = {
       method: 'GET',
       simple: false,
       uri: hostUrl + '/' + `api/v1/auth/activate`,
       qs: { token },
+      authorization: {
+        bearer: authorization_bearer,
+      },
     };
     if (defaultOpts) {
       options = Object.assign(options, defaultOpts);
@@ -4424,6 +4427,7 @@ class Auth {
    * Path: api/v1/auth/password/reset/login
    * @param {Object} body
    * @param {any} token  (example: [thegeneratedtoken])
+   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
    * @example
    * body
    * ```json
@@ -4432,7 +4436,7 @@ class Auth {
    * }
    * ```
    */
-  static async resetPasswordAutoLogin(body, token, opts) {
+  static async resetPasswordAutoLogin(body, token, authorization_bearer, opts) {
     var options = {
       method: 'PUT',
       simple: false,
@@ -4440,7 +4444,9 @@ class Auth {
       qs: { token },
       body,
       json: true,
-      json: true,
+      authorization: {
+        bearer: authorization_bearer,
+      },
     };
     if (defaultOpts) {
       options = Object.assign(options, defaultOpts);
@@ -4457,6 +4463,7 @@ class Auth {
    * Path: api/v1/auth/password/reset
    * @param {Object} body
    * @param {any} token  (example: [thegeneratedtoken])
+   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
    * @example
    * body
    * ```json
@@ -4465,7 +4472,7 @@ class Auth {
    * }
    * ```
    */
-  static async resetPassword(body, token, opts) {
+  static async resetPassword(body, token, authorization_bearer, opts) {
     var options = {
       method: 'PUT',
       simple: false,
@@ -4473,7 +4480,9 @@ class Auth {
       qs: { token },
       body,
       json: true,
-      json: true,
+      authorization: {
+        bearer: authorization_bearer,
+      },
     };
     if (defaultOpts) {
       options = Object.assign(options, defaultOpts);
@@ -4489,6 +4498,7 @@ class Auth {
    *
    * Path: api/v1/auth/password/forgot
    * @param {Object} body
+   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
    * @example
    * body
    * ```json
@@ -4497,14 +4507,16 @@ class Auth {
    * }
    * ```
    */
-  static async forgotPassword(body, opts) {
+  static async forgotPassword(body, authorization_bearer, opts) {
     var options = {
       method: 'PUT',
       simple: false,
       uri: hostUrl + '/' + `api/v1/auth/password/forgot`,
       body,
       json: true,
-      json: true,
+      authorization: {
+        bearer: authorization_bearer,
+      },
     };
     if (defaultOpts) {
       options = Object.assign(options, defaultOpts);
@@ -4519,12 +4531,16 @@ class Auth {
    * logout -
    *
    * Path: api/v1/auth/logout
+   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
    */
-  static async logout(opts) {
+  static async logout(authorization_bearer, opts) {
     var options = {
       method: 'GET',
       simple: false,
       uri: hostUrl + '/' + `api/v1/auth/logout`,
+      authorization: {
+        bearer: authorization_bearer,
+      },
     };
     if (defaultOpts) {
       options = Object.assign(options, defaultOpts);
@@ -4548,6 +4564,7 @@ class Auth {
   *
   * Path: api/v1/auth/login
   * @param {Object} body
+  * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   * @example
   * body
   * ```json
@@ -4557,14 +4574,16 @@ class Auth {
  * }
   * ```
   */
-  static async login(body, opts) {
+  static async login(body, authorization_bearer, opts) {
     var options = {
       method: 'PUT',
       simple: false,
       uri: hostUrl + '/' + `api/v1/auth/login`,
       body,
       json: true,
-      json: true,
+      authorization: {
+        bearer: authorization_bearer,
+      },
     };
     if (defaultOpts) {
       options = Object.assign(options, defaultOpts);
@@ -4582,6 +4601,7 @@ class Auth {
   *
   * Path: api/v1/auth/register
   * @param {Object} body
+  * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   * @example
   * body
   * ```json
@@ -4593,14 +4613,16 @@ class Auth {
  * }
   * ```
   */
-  static async register(body, opts) {
+  static async register(body, authorization_bearer, opts) {
     var options = {
       method: 'POST',
       simple: false,
       uri: hostUrl + '/' + `api/v1/auth/register`,
       body,
       json: true,
-      json: true,
+      authorization: {
+        bearer: authorization_bearer,
+      },
     };
     if (defaultOpts) {
       options = Object.assign(options, defaultOpts);
@@ -4685,6 +4707,7 @@ class AuthDomain {
    * Path: api/v1/auth/password/forgot/domain/:domain
    * @param {Object} body
    * @param {any} domain Domain name (example: test.com) (example: dragohmventures.com)
+   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
    * @example
    * body
    * ```json
@@ -4693,14 +4716,16 @@ class AuthDomain {
    * }
    * ```
    */
-  static async forgotPassword(body, domain, opts) {
+  static async forgotPassword(body, domain, authorization_bearer, opts) {
     var options = {
       method: 'PUT',
       simple: false,
       uri: hostUrl + '/' + `api/v1/auth/password/forgot/domain/${domain}`,
       body,
       json: true,
-      json: true,
+      authorization: {
+        bearer: authorization_bearer,
+      },
     };
     if (defaultOpts) {
       options = Object.assign(options, defaultOpts);
@@ -4726,6 +4751,7 @@ class AuthDomain {
   * Path: api/v1/auth/login/domain/:domain
   * @param {Object} body
   * @param {any} domain Domain name (example: test.com) (example: dragohmventures.com)
+  * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   * @example
   * body
   * ```json
@@ -4735,14 +4761,16 @@ class AuthDomain {
  * }
   * ```
   */
-  static async login(body, domain, opts) {
+  static async login(body, domain, authorization_bearer, opts) {
     var options = {
       method: 'PUT',
       simple: false,
       uri: hostUrl + '/' + `api/v1/auth/login/domain/${domain}`,
       body,
       json: true,
-      json: true,
+      authorization: {
+        bearer: authorization_bearer,
+      },
     };
     if (defaultOpts) {
       options = Object.assign(options, defaultOpts);
@@ -4761,6 +4789,7 @@ class AuthDomain {
   * Path: api/v1/auth/register/domain/:domain
   * @param {Object} body
   * @param {any} domain Domain name (example: test.com) (example: test.com)
+  * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   * @example
   * body
   * ```json
@@ -4770,13 +4799,16 @@ class AuthDomain {
  * }
   * ```
   */
-  static async register(body, domain, opts) {
+  static async register(body, domain, authorization_bearer, opts) {
     var options = {
       method: 'POST',
       simple: false,
       uri: hostUrl + '/' + `api/v1/auth/register/domain/${domain}`,
       body,
       json: true,
+      authorization: {
+        bearer: authorization_bearer,
+      },
     };
     if (defaultOpts) {
       options = Object.assign(options, defaultOpts);
@@ -4812,6 +4844,7 @@ class AuthDomainToken {
    * Path: api/v1/auth/token/password/forgot/domain/:domain
    * @param {Object} body
    * @param {any} domain
+   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
    * @example
    * body
    * ```json
@@ -4820,14 +4853,16 @@ class AuthDomainToken {
    * }
    * ```
    */
-  static async forgotPassword(body, domain, opts) {
+  static async forgotPassword(body, domain, authorization_bearer, opts) {
     var options = {
       method: 'PUT',
       simple: false,
       uri: hostUrl + '/' + `api/v1/auth/token/password/forgot/domain/${domain}`,
       body,
       json: true,
-      json: true,
+      authorization: {
+        bearer: authorization_bearer,
+      },
     };
     if (defaultOpts) {
       options = Object.assign(options, defaultOpts);
