@@ -331,10 +331,167 @@ class Travelling {
 class Audit {
   constructor() {}
   static get _postgenClassUrls() {
-    return {};
+    return {
+      byactionandsubaction: 'api/v1/audit/action/:action/subaction/:subaction',
+      bysubaction: 'api/v1/audit/subaction/:subaction',
+      byaction: 'api/v1/audit/action/:action',
+    };
   }
   static getFunctionsPath(name) {
     return this._postgenClassUrls[name.toLowerCase()];
+  }
+
+  /**
+  * byActionAndSubaction - Gets audits by action and subaction type.
+
+##### Filter Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | *optional* (example:  created_on>=2021-06-09) |
+| prop | *optional* (example: prop=email) |
+| old_val | *optional* (example:  old_val=swagger@email.69) |
+| new_val | *optional* (example:  new_val=leet@teel.com) |
+  *
+  * Path: api/v1/audit/action/:action/subaction/:subaction
+  * @param {any} action Audti action type. (example: CREATE)
+  * @param {any} subaction Audit subaction type. (example: GROUP)
+  * @param {any} limit Number of maximum results. (example: 2) (example: 2)
+  * @param {any} skip Number of db rows skipped. (example: 10) (example: 1)
+  * @param {any} sort Sort by any user object key (examples: created_on, action, etc.) (example: created_on)
+  * @param {any} sortdir Sort direction (example ascending order: ASC) (example: ASC)
+  * @param {any} filter Filter parameters (example: action=created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-03,created_on<2021-06-06)
+  * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+  */
+  static async byActionAndSubaction(
+    action,
+    subaction,
+    limit,
+    skip,
+    sort,
+    sortdir,
+    filter,
+    authorization_bearer,
+    opts
+  ) {
+    var options = {
+      method: 'GET',
+      simple: false,
+      uri:
+        hostUrl + '/' + `api/v1/audit/action/${action}/subaction/${subaction}`,
+      qs: { limit, skip, sort, sortdir, filter },
+      authorization: {
+        bearer: authorization_bearer,
+      },
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
+  }
+
+  /**
+  * bySubaction - Gets audits by subaction type.
+
+##### Filter Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | *optional* (example:  created_on>=2021-06-09) |
+| prop | *optional* (example: prop=email) |
+| old_val | *optional* (example:  old_val=swagger@email.69) |
+| new_val | *optional* (example:  new_val=leet@teel.com) |
+  *
+  * Path: api/v1/audit/subaction/:subaction
+  * @param {any} subaction Audit subaction type. (example: USER)
+  * @param {any} limit Number of maximum results. (example: 2) (example: 2)
+  * @param {any} skip Number of db rows skipped. (example: 10) (example: 1)
+  * @param {any} sort Sort by any user object key (examples: created_on, action, etc.) (example: created_on)
+  * @param {any} sortdir Sort direction (example ascending order: ASC) (example: ASC)
+  * @param {any} filter Filter parameters (example: action=created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-03,created_on<2021-06-06)
+  * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+  */
+  static async bySubaction(
+    subaction,
+    limit,
+    skip,
+    sort,
+    sortdir,
+    filter,
+    authorization_bearer,
+    opts
+  ) {
+    var options = {
+      method: 'GET',
+      simple: false,
+      uri: hostUrl + '/' + `api/v1/audit/subaction/${subaction}`,
+      qs: { limit, skip, sort, sortdir, filter },
+      authorization: {
+        bearer: authorization_bearer,
+      },
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
+  }
+
+  /**
+  * byAction - Gets audits by action type.
+
+##### Filter Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | *optional* (example:  created_on>=2021-06-09) |
+| prop | *optional* (example: prop=email) |
+| old_val | *optional* (example:  old_val=swagger@email.69) |
+| new_val | *optional* (example:  new_val=leet@teel.com) |
+  *
+  * Path: api/v1/audit/action/:action
+  * @param {any} action Audit action type. (example: CREATE)
+  * @param {any} limit Number of maximum results. (example: 2) (example: 2)
+  * @param {any} skip Number of db rows skipped. (example: 10) (example: 1)
+  * @param {any} sort Sort by any user object key (examples: created_on, action, etc.) (example: created_on)
+  * @param {any} sortdir Sort direction (example ascending order: ASC) (example: ASC)
+  * @param {any} filter Filter parameters (example: action=created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-03,created_on<2021-06-06)
+  * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+  */
+  static async byAction(
+    action,
+    limit,
+    skip,
+    sort,
+    sortdir,
+    filter,
+    authorization_bearer,
+    opts
+  ) {
+    var options = {
+      method: 'GET',
+      simple: false,
+      uri: hostUrl + '/' + `api/v1/audit/action/${action}`,
+      qs: { limit, skip, sort, sortdir, filter },
+      authorization: {
+        bearer: authorization_bearer,
+      },
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
   }
 
   static get User() {
@@ -372,7 +529,7 @@ class AuditUser {
 | new_val | *optional* (example:  new_val=leet@teel.com) |
   *
   * Path: api/v1/audit/user/byuser/:id
-  * @param {any} id Id of user that committed the action. (example: 5eec54a7-5e8a-48eb-8796-2917dc408cab)
+  * @param {any} id Id of user that committed the action. (example: 778c3e68-4d9f-486d-a6eb-0d1cfd93520d)
   * @param {any} filter Filter parameters (example: action=CREATE,subaction=USER,created_on>2021-06-03,created_on<2021-06-06) (example: action=CREATE,created_on>2021-06-03,created_on<2021-07-06)
   * @param {any} limit Number of maximum results. (example: 2) (example: 2)
   * @param {any} skip Number of db rows skipped. (example: 10) (example: 10)
@@ -424,7 +581,7 @@ class AuditUser {
 | new_val | *optional* (example:  new_val=leet@teel.com) |
   *
   * Path: api/v1/audit/user/ofuser/:id
-  * @param {any} id Id of user that committed the action. (example: 5eec54a7-5e8a-48eb-8796-2917dc408cab)
+  * @param {any} id Id of user that committed the action. (example: 7c93b6f6-a145-41b6-b892-a52bd3ad3e11)
   * @param {any} filter Filter parameters (example: action=CREATE,subaction=USER,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-03,created_on<2021-06-06)
   * @param {any} limit Number of maximum results. (example: 2) (example: 2)
   * @param {any} skip Number of db rows skipped. (example: 10) (example: 10)
@@ -547,149 +704,410 @@ class Groups {
    * body
    * ```json
    * {
-   *     "group": {
-   *         "anonymous": {
-   *             "type": "group",
+   *     "global": {
+   *         "user": {
    *             "allowed": [
    *                 {
-   *                     "route": "/travelling/portal/*",
-   *                     "host": null,
-   *                     "name": "*-travelling-portal-*"
-   *                 },
-   *                 {
-   *                     "route": "/travelling/api/v1/auth/*",
-   *                     "host": null,
-   *                     "name": "*-travelling-api-v1-auth-*"
-   *                 },
-   *                 {
-   *                     "route": "/travelling/api/v1/user/me/route/allowed",
-   *                     "host": null,
    *                     "method": "GET",
-   *                     "name": "get-travelling-api-v1-user-me-route-allowed"
+   *                     "route": "/account/api/v1/auth/logout",
+   *                     "name": "get-account-api-v1-auth-logout"
    *                 },
    *                 {
-   *                     "route": "/travelling/api/v1/user/me/permission/allowed/*",
-   *                     "host": null,
    *                     "method": "GET",
-   *                     "name": "get-travelling-api-v1-user-me-permission-allowed-*"
+   *                     "route": "/account/api/v1/user/me/*",
+   *                     "name": "get-account-api-v1-user-me-*"
    *                 },
    *                 {
-   *                     "route": "/travelling/assets/*",
-   *                     "host": null,
-   *                     "removeFromPath": "/travelling/assets/",
-   *                     "method": "GET",
-   *                     "name": "get-travelling-assets-*"
+   *                     "method": "PUT",
+   *                     "route": "/account/api/v1/user/me/property/password/*",
+   *                     "name": "put-account-api-v1-user-me-property-password-*"
    *                 },
    *                 {
-   *                     "route": "/travelling/api/v1/config/password",
-   *                     "host": null,
-   *                     "method": "GET",
-   *                     "name": "get-travelling-api-v1-config-password"
+   *                     "method": "PUT",
+   *                     "route": "/account/api/v1/user/me/property/avatar/*",
+   *                     "name": "put-account-api-v1-user-me-property-avatar-*"
    *                 },
    *                 {
-   *                     "route": "/favicon.ico",
-   *                     "host": null,
-   *                     "method": "GET",
-   *                     "name": "get-favicon.ico"
-   *                 }
-   *             ],
-   *             "inherited": null,
-   *             "is_default": false
-   *         },
-   *         "group3": {
-   *             "type": "group",
-   *             "allowed": null,
-   *             "inherited": [
-   *                 "testgroup|group1",
-   *                 "group|group2"
-   *             ],
-   *             "is_default": false
-   *         },
-   *         "superadmin": {
-   *             "type": "group",
-   *             "allowed": [
-   *                 {
-   *                     "host": null,
-   *                     "route": "/travelling/*",
-   *                     "name": "*-travelling-*"
-   *                 },
-   *                 {
-   *                     "name": "test-one-*-three"
+   *                     "method": "PUT",
+   *                     "route": "/account/api/v1/user/me/property/email/*",
+   *                     "name": "put-account-api-v1-user-me-property-email-*"
    *                 }
    *             ],
    *             "inherited": [
    *                 "group|anonymous"
    *             ],
-   *             "is_default": false
-   *         },
-   *         "group4": {
-   *             "type": "group",
-   *             "allowed": null,
-   *             "inherited": [],
-   *             "is_default": false
-   *         },
-   *         "group2": {
-   *             "type": "group",
-   *             "allowed": [
-   *                 {
-   *                     "route": "/test/get",
-   *                     "host": "https://127.0.0.1:4268/:username/:group",
-   *                     "removeFromPath": "/test/get",
-   *                     "method": "GET",
-   *                     "name": "get-test-get"
-   *                 },
-   *                 {
-   *                     "route": "/test/post",
-   *                     "host": "http://127.0.0.1:4267/?id=:id&permission=:permission",
-   *                     "removeFromPath": "/test/post",
-   *                     "method": "POST",
-   *                     "name": "post-test-post"
-   *                 }
-   *             ],
-   *             "inherited": [
-   *                 "testgroup|group1"
-   *             ],
-   *             "is_default": false
-   *         },
-   *         "group5": {
-   *             "type": "group",
-   *             "allowed": [
-   *                 {
-   *                     "route": "/test/delete/:grouptype",
-   *                     "host": "https://127.0.0.1:4268",
-   *                     "removeFromPath": "/test/delete",
-   *                     "method": "DELETE",
-   *                     "name": "delete-test-delete-:grouptype"
-   *                 }
-   *             ],
-   *             "inherited": [
-   *                 "group|group4",
-   *                 "group|superadmin"
-   *             ],
    *             "is_default": true
    *         },
-   *         "group1": {
-   *             "type": "group",
-   *             "allowed": null,
-   *             "inherited": null,
-   *             "is_default": false
-   *         }
-   *     },
-   *     "testgroup": {
-   *         "group1": {
-   *             "type": "testgroup",
-   *             "allowed": null,
-   *             "inherited": [
-   *                 "group|group4"
+   *         "developer": {
+   *             "allowed": [
+   *                 {
+   *                     "method": "POST",
+   *                     "route": "/account/api/v1/user/me/token",
+   *                     "name": "post-account-api-v1-user-me-token"
+   *                 },
+   *                 {
+   *                     "method": "DELETE",
+   *                     "route": "/account/api/v1/user/me/token/*",
+   *                     "name": "delete-account-api-v1-user-me-token-*"
+   *                 }
    *             ],
-   *             "is_default": false
+   *             "inherited": [
+   *                 "global|user"
+   *             ]
+   *         },
+   *         "service": {
+   *             "allowed": [
+   *                 {
+   *                     "method": "POST",
+   *                     "route": "/account/api/v1/user/me/token",
+   *                     "name": "post-account-api-v1-user-me-token"
+   *                 },
+   *                 {
+   *                     "method": "DELETE",
+   *                     "route": "/account/api/v1/user/me/token/*",
+   *                     "name": "delete-account-api-v1-user-me-token-*"
+   *                 }
+   *             ],
+   *             "inherited": [
+   *                 "global|user",
+   *                 "global|superadmin"
+   *             ]
+   *         },
+   *         "crm-public": {
+   *             "allowed": [
+   *                 {
+   *                     "method": "GET",
+   *                     "route": "/crm",
+   *                     "host": "http://localhost:1337",
+   *                     "name": "get-crm"
+   *                 },
+   *                 {
+   *                     "method": "GET",
+   *                     "route": "/crm/auth/*",
+   *                     "host": "http://localhost:1337",
+   *                     "name": "get-crm-auth-*"
+   *                 }
+   *             ]
+   *         },
+   *         "leads-public": {
+   *             "allowed": [
+   *                 {
+   *                     "method": "POST",
+   *                     "route": "/api/leads/v1/new/lead",
+   *                     "remove_from_path": "/api",
+   *                     "host": "http://leads.dragohmdev.com",
+   *                     "name": "post-api-leads-v1-new-lead"
+   *                 }
+   *             ]
+   *         },
+   *         "import-report-public": {
+   *             "allowed": [
+   *                 {
+   *                     "method": "POST",
+   *                     "route": "/api/import-report/v1/tlo/people/cid/*",
+   *                     "remove_from_path": "/api",
+   *                     "host": "http://import-report.dragohmdev.com",
+   *                     "name": "post-api-import-report-v1-tlo-people-cid-*"
+   *                 }
+   *             ]
+   *         },
+   *         "subscribed": {},
+   *         "admin": {
+   *             "inherited": [
+   *                 "global|user",
+   *                 "global|csrall"
+   *             ]
    *         },
    *         "superadmin": {
-   *             "type": "testgroup",
-   *             "allowed": null,
-   *             "inherited": null,
-   *             "is_default": false
+   *             "allowed": [
+   *                 {
+   *                     "route": "/account/*",
+   *                     "name": "*-account-*"
+   *                 },
+   *                 {
+   *                     "name": "account-*"
+   *                 }
+   *             ],
+   *             "inherited": [
+   *                 "global|admin"
+   *             ]
+   *         },
+   *         "csrall": {
+   *             "allowed": [
+   *                 {
+   *                     "method": "*",
+   *                     "route": "/api/opt-out/v1/*",
+   *                     "remove_from_path": "/api",
+   *                     "host": "http://opt-out.dragohmdev.com",
+   *                     "name": "*-api-opt-out-v1-*"
+   *                 },
+   *                 {
+   *                     "method": "*",
+   *                     "route": "/api/search/v1/*",
+   *                     "remove_from_path": "/api",
+   *                     "host": "http://search.dragohmdev.com",
+   *                     "name": "*-api-search-v1-*"
+   *                 },
+   *                 {
+   *                     "method": "*",
+   *                     "route": "/api/email/v1/*",
+   *                     "remove_from_path": "/api",
+   *                     "host": "http://email.dragohmdev.com",
+   *                     "name": "*-api-email-v1-*"
+   *                 }
+   *             ],
+   *             "inherited": [
+   *                 "global|user",
+   *                 "global|crm-private"
+   *             ]
+   *         },
+   *         "auth": {
+   *             "allowed": [
+   *                 {
+   *                     "method": "POST",
+   *                     "route": "/account/api/v1/auth/register/domain/unmask.com",
+   *                     "name": "post-account-api-v1-auth-register-domain-unmask.com"
+   *                 },
+   *                 {
+   *                     "method": "PUT",
+   *                     "route": "/account/api/v1/auth/login/domain/unmask.com",
+   *                     "name": "put-account-api-v1-auth-login-domain-unmask.com"
+   *                 },
+   *                 {
+   *                     "method": "PUT",
+   *                     "route": "/account/api/v1/auth/password/forgot/domain/unmask.com",
+   *                     "name": "put-account-api-v1-auth-password-forgot-domain-unmask.com"
+   *                 },
+   *                 {
+   *                     "method": "POST",
+   *                     "route": "/account/api/v1/auth/register/domain/checkpeople.com",
+   *                     "name": "post-account-api-v1-auth-register-domain-checkpeople.com"
+   *                 },
+   *                 {
+   *                     "method": "PUT",
+   *                     "route": "/account/api/v1/auth/login/domain/checkpeople.com",
+   *                     "name": "put-account-api-v1-auth-login-domain-checkpeople.com"
+   *                 },
+   *                 {
+   *                     "method": "PUT",
+   *                     "route": "/account/api/v1/auth/password/forgot/domain/checkpeople.com",
+   *                     "name": "put-account-api-v1-auth-password-forgot-domain-checkpeople.com"
+   *                 },
+   *                 {
+   *                     "method": "POST",
+   *                     "route": "/account/api/v1/auth/register/domain/dragohmventures.com",
+   *                     "name": "post-account-api-v1-auth-register-domain-dragohmventures.com"
+   *                 },
+   *                 {
+   *                     "method": "PUT",
+   *                     "route": "/account/api/v1/auth/login/domain/dragohmventures.com",
+   *                     "name": "put-account-api-v1-auth-login-domain-dragohmventures.com"
+   *                 },
+   *                 {
+   *                     "method": "PUT",
+   *                     "route": "/account/api/v1/auth/password/forgot/domain/dragohmventures.com",
+   *                     "name": "put-account-api-v1-auth-password-forgot-domain-dragohmventures.com"
+   *                 },
+   *                 {
+   *                     "method": "PUT",
+   *                     "route": "/account/api/v1/auth/password/reset/login",
+   *                     "name": "put-account-api-v1-auth-password-reset-login"
+   *                 }
+   *             ]
+   *         },
+   *         "crm-private": {
+   *             "allowed": [
+   *                 {
+   *                     "method": "GET",
+   *                     "route": "/crm/admin/*",
+   *                     "host": "http://staging.crm.dragohmdev.com",
+   *                     "name": "get-crm-admin-*"
+   *                 }
+   *             ]
+   *         },
+   *         "csr": {
+   *             "allowed": [
+   *                 {
+   *                     "method": "*",
+   *                     "route": "/api/opt-out/v1/cids",
+   *                     "remove_from_path": "/api",
+   *                     "host": "http://opt-out.dragohmdev.com",
+   *                     "name": "*-api-opt-out-v1-cids"
+   *                 },
+   *                 {
+   *                     "method": "*",
+   *                     "route": "/api/opt-out/v1/id/*",
+   *                     "remove_from_path": "/api",
+   *                     "host": "http://opt-out.dragohmdev.com",
+   *                     "name": "*-api-opt-out-v1-id-*"
+   *                 },
+   *                 {
+   *                     "method": "*",
+   *                     "route": "/api/opt-out/v1/domain/:grouptype.com",
+   *                     "remove_from_path": "/api",
+   *                     "host": "http://opt-out.dragohmdev.com",
+   *                     "name": "*-api-opt-out-v1-domain-:grouptype.com"
+   *                 },
+   *                 {
+   *                     "method": "*",
+   *                     "route": "/api/opt-out/v1/domain/:grouptype.com/*",
+   *                     "remove_from_path": "/api",
+   *                     "host": "http://opt-out.dragohmdev.com",
+   *                     "name": "*-api-opt-out-v1-domain-:grouptype.com-*"
+   *                 },
+   *                 {
+   *                     "method": "*",
+   *                     "route": "/api/search/v1/*",
+   *                     "remove_from_path": "/api",
+   *                     "host": "http://search.dragohmdev.com",
+   *                     "name": "*-api-search-v1-*"
+   *                 },
+   *                 {
+   *                     "method": "*",
+   *                     "route": "/api/email/v1/*",
+   *                     "remove_from_path": "/api",
+   *                     "host": "http://email.dragohmdev.com",
+   *                     "name": "*-api-email-v1-*"
+   *                 }
+   *             ],
+   *             "inherited": [
+   *                 "global|user",
+   *                 "global|crm-private"
+   *             ]
    *         }
+   *     },
+   *     "group": {
+   *         "superadmin": {
+   *             "allowed": [
+   *                 {
+   *                     "host": null,
+   *                     "route": "/account/*",
+   *                     "name": "*-account-*"
+   *                 }
+   *             ],
+   *             "inherited": [
+   *                 "group|anonymous"
+   *             ]
+   *         },
+   *         "anonymous": {
+   *             "allowed": [
+   *                 {
+   *                     "method": "GET",
+   *                     "route": "/account/dashboard/*",
+   *                     "remove_from_path": "/account/dashboard",
+   *                     "host": "https://unmask.com",
+   *                     "name": "get-account-dashboard-*"
+   *                 },
+   *                 {
+   *                     "method": "GET",
+   *                     "route": "/account/portal/*",
+   *                     "name": "get-account-portal-*"
+   *                 },
+   *                 {
+   *                     "method": "GET",
+   *                     "route": "/account/assets/*",
+   *                     "name": "get-account-assets-*"
+   *                 },
+   *                 {
+   *                     "method": "GET",
+   *                     "route": "/favicon.ico",
+   *                     "name": "get-favicon.ico"
+   *                 },
+   *                 {
+   *                     "method": "PUT",
+   *                     "route": "/account/api/v1/auth/password/forgot",
+   *                     "name": "put-account-api-v1-auth-password-forgot"
+   *                 },
+   *                 {
+   *                     "method": "PUT",
+   *                     "route": "/account/api/v1/auth/password/reset",
+   *                     "name": "put-account-api-v1-auth-password-reset"
+   *                 },
+   *                 {
+   *                     "method": "GET",
+   *                     "route": "/account/api/v1/auth/activate",
+   *                     "name": "get-account-api-v1-auth-activate"
+   *                 },
+   *                 {
+   *                     "method": "POST",
+   *                     "route": "/account/api/v1/auth/token",
+   *                     "name": "post-account-api-v1-auth-token"
+   *                 },
+   *                 {
+   *                     "method": "POST",
+   *                     "route": "/account/api/v1//auth/oauth/authorize",
+   *                     "name": "post-account-api-v1--auth-oauth-authorize"
+   *                 },
+   *                 {
+   *                     "method": "GET",
+   *                     "route": "/account/api/v1//auth/oauth/authorize",
+   *                     "name": "get-account-api-v1--auth-oauth-authorize"
+   *                 },
+   *                 {
+   *                     "method": "GET",
+   *                     "route": "/account/api/v1/user/me/permission/allowed/*",
+   *                     "name": "get-account-api-v1-user-me-permission-allowed-*"
+   *                 },
+   *                 {
+   *                     "method": "GET",
+   *                     "route": "/account/api/v1/user/me/route/allowed",
+   *                     "name": "get-account-api-v1-user-me-route-allowed"
+   *                 },
+   *                 {
+   *                     "method": "GET",
+   *                     "route": "/account/api/v1/config/password",
+   *                     "name": "get-account-api-v1-config-password"
+   *                 },
+   *                 {
+   *                     "method": "GET",
+   *                     "route": "/account/api/v1/config/portal/webclient",
+   *                     "name": "get-account-api-v1-config-portal-webclient"
+   *                 },
+   *                 {
+   *                     "method": "GET",
+   *                     "route": "/account/metrics",
+   *                     "name": "get-account-metrics"
+   *                 },
+   *                 {
+   *                     "method": "GET",
+   *                     "route": "/account/health",
+   *                     "name": "get-account-health"
+   *                 }
+   *             ],
+   *             "inherited": [
+   *                 "global|auth",
+   *                 "global|leads-public",
+   *                 "global|import-report-public",
+   *                 "global|opt-out-public",
+   *                 "global|crm-public"
+   *             ]
+   *         }
+   *     },
+   *     "unmask": {
+   *         "csr": {
+   *             "inherited": [
+   *                 "global|csr"
+   *             ]
+   *         }
+   *     },
+   *     "checkpeople": {
+   *         "csr": {
+   *             "inherited": [
+   *                 "global|csr"
+   *             ]
+   *         }
+   *     },
+   *     "information": {
+   *         "csr": {
+   *             "inherited": [
+   *                 "global|csr"
+   *             ]
+   *         }
+   *     },
+   *     "products": {
+   *         "full_reports": {},
+   *         "pdf_generation": {},
+   *         "report_monitoring": {}
    *     }
    * }
    * ```
@@ -3577,7 +3995,9 @@ class UserCurrent {
    * body
    * ```json
    * {
-   * 	"name": "conversate"
+   *     "urls": [
+   *         "http://checkpeople.com"
+   *     ]
    * }
    * ```
    */
@@ -3735,7 +4155,7 @@ class UserCurrent {
    * deleteToken - Deletes a client_credentials based access token auth.
    *
    * Path: api/v1/user/me/token/:id
-   * @param {any} id id or name of the token
+   * @param {any} id id or name of the token (example: 74b3c2f2-3f94-4b5d-b3e2-4b3bd2c5d6fe)
    * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
    */
   static async deleteToken(id, authorization_bearer, opts) {
@@ -4305,14 +4725,13 @@ class AuthDomain {
   *
   * Path: api/v1/auth/login/domain/:domain
   * @param {Object} body
-  * @param {any} domain Domain name (example: test.com) (example: test.com)
+  * @param {any} domain Domain name (example: test.com) (example: dragohmventures.com)
   * @example
   * body
   * ```json
   * {
  * 	"email": "test@test.com",
- * 	"password": "Pas5w0r!d",
- *     "domain": "test.com"
+ * 	"password": "Pas5w0r!d"
  * }
   * ```
   */
