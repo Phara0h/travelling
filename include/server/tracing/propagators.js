@@ -1,5 +1,5 @@
-const { HttpTraceContextPropagator } = require('@opentelemetry/core');
+const { W3CTraceContextPropagator } = require('@opentelemetry/core');
 
 module.exports = function (config) {
-  return [new HttpTraceContextPropagator()];
+  return [new W3CTraceContextPropagator()];
 };

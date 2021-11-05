@@ -250,6 +250,7 @@ async function resetPasswordRoute(req, res, autologin = false) {
   if (autologin) {
     return await login(user, req, res);
   }
+  return '';
 }
 
 var logoutRoute = async (req, res) => {
@@ -376,7 +377,7 @@ var login = async (user, req, res) => {
   };
 
   user.failed_login_attempts = 0;
-  await user.save();
+  await user.updated();
   const groupsData = await user.resolveGroup();
 
   req.createSession(user.id, { user, groupsData });

@@ -38,6 +38,7 @@ class User extends Base(BaseModel, 'users', {
   email: PGTypes.AutoCrypt,
   created_on: null,
   last_login: null,
+  updated_on: null,
   user_data: config.pg.crypto.encryptUserData ? PGTypes.AutoCrypt : null,
   eprofile: PGTypes.EncryptProfile
 }) {
@@ -86,6 +87,7 @@ class User extends Base(BaseModel, 'users', {
                   created_on timestamp with time zone default current_timestamp ,
                   user_data text,
                   __user_data character varying(258),
+                  updated_on timestamp with time zone default current_timestamp,
                   eprofile character varying(350),
                   PRIMARY KEY (id)
                 );`);
@@ -137,7 +139,7 @@ class User extends Base(BaseModel, 'users', {
     this.group_ids.push(group.id);
     this.group_ids = [...this.group_ids];
 
-    return await this.save();
+    return await this.updated();
   }
 
   async removeGroup(group) {
@@ -153,6 +155,11 @@ class User extends Base(BaseModel, 'users', {
     this.group_ids.splice(found, 1);
     this.group_ids = [...this.group_ids];
 
+    return await this.updated();
+  }
+
+  async updated() {
+    this.updated_on = new Date();
     return await this.save();
   }
 
