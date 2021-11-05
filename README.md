@@ -3743,7 +3743,13 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v2.9.1](https://github.com/Dragohm/travelling/compare/v2.9.0...v2.9.1)
+
+- Update index.js [`aa91814`](https://github.com/Dragohm/travelling/commit/aa91814ef263ee79bc3657b79c35d34185edc193)
+
 #### [v2.9.0](https://github.com/Dragohm/travelling/compare/v2.8.4...v2.9.0)
+
+> 5 November 2021
 
 - Added "updated" prop to users, sped up user prop requests and fixed some bugs [`e7f51b1`](https://github.com/Dragohm/travelling/commit/e7f51b16c479811ca8ec24c82901a5a68e67ff12)
 - Update package.json [`fe550d3`](https://github.com/Dragohm/travelling/commit/fe550d3021fd6c86448648368a55abdeb9866c5d)
