@@ -263,7 +263,7 @@ module.exports = function (app, opts, done) {
   });
 
   app.get('/user/me/property/:prop', (req, res) => {
-    if (req.session.data.user[req.params.prop] !== undefined) {
+    if (userUtils.checkUserProps(req.params.prop)) {
       res.code(200).send(req.session.data.user[req.params.prop]);
     } else {
       res.code(400).send({

@@ -1,9 +1,8 @@
-const { SimpleSpanProcessor, ConsoleSpanExporter } = require('@opentelemetry/tracing');
+const { SimpleSpanProcessor, ConsoleSpanExporter } = require('@opentelemetry/sdk-trace-base');
 
 module.exports = function (config) {
   var tags = [];
 
-  tags.push({ key: 'service.name', value: app });
   if (config.log.appendFields.app.enable) {
     tags.push({ key: 'app', value: config.log.appendFields.app.label });
   }

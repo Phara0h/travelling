@@ -36,6 +36,7 @@ module.exports = () => {
           password: 'Pas5w0r!d2',
           email: 'test2@test.com'
         },
+        null,
         {
           headers: {
             cookie: userContainer.user2Cookie()
@@ -43,6 +44,7 @@ module.exports = () => {
         }
       );
 
+      console.log(res);
       expect(res.body.type).toEqual('login-session-error');
     });
 
@@ -87,8 +89,6 @@ module.exports = () => {
 
       expect(res.statusCode).toEqual(200);
     });
-
-
 
     if (config.email.test.enable) {
       test('Login with Test4 User Email Activation Enable [Locked]', async () => {

@@ -13,6 +13,7 @@ module.exports = () => {
           password: 'Pas5w0r!d2',
           email: 'test2@test.com'
         },
+        null,
         {
           headers: {
             cookie: userContainer.user2Cookie()
@@ -40,6 +41,7 @@ module.exports = () => {
           password: 'Pas5w0r!d2',
           email: 'test2@test.com'
         },
+        null,
         {
           headers: {
             cookie: userContainer.user2Cookie()
@@ -63,6 +65,7 @@ module.exports = () => {
           email: 'test_domain_4@test.com',
           remember: false
         },
+        null,
         {
           headers: {
             cookie: userContainer.userDomain4Cookie()
@@ -71,16 +74,16 @@ module.exports = () => {
       );
 
       userContainer.parseUserDomain4Cookie(res.headers['set-cookie']);
-      expect(res.statusCode).toBe(200);      
+      expect(res.statusCode).toBe(200);
 
       // Current User
-      var userRes1 = await Travelling.User.Current.get(null,  {
+      var userRes1 = await Travelling.User.Current.get(null, {
         headers: {
           cookie: userContainer.userDomain4Cookie()
         }
       });
-      expect(userRes1.statusCode).toEqual(200);
 
+      expect(userRes1.statusCode).toEqual(200);
 
       // Wait for session to expire
       var p = new Promise((resolve, reject) => {
@@ -95,11 +98,12 @@ module.exports = () => {
       expect(userContainer.userDomain4.ssid).toBeDefined();
 
       // Current User again
-      var userRes2 = await Travelling.User.Current.get(null,  {
+      var userRes2 = await Travelling.User.Current.get(null, {
         headers: {
           cookie: userContainer.userDomain4Cookie()
         }
       });
+
       expect(userRes2.statusCode).toEqual(401);
     });
 

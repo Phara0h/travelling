@@ -51,8 +51,7 @@ class Database {
     // Password check
     if (user.password == (await crypto.hash(password, null, user.getEncryptedProfile(user)))) {
       user.failed_login_attempts = 0;
-      await user.save();
-
+      await user.updated();
       return { user, err: null };
     }
 
@@ -62,7 +61,7 @@ class Database {
       user.locked = true;
       user.locked_reason = config.user.locked.message;
       user.change_password = true;
-      await user.save();
+      await user.updated();
       throw {
         user: user,
         err: {
@@ -72,7 +71,7 @@ class Database {
       };
     }
 
-    await user.save();
+    await user.updated();
     throw {
       user: user,
       err: {
@@ -114,7 +113,7 @@ class Database {
       var token = await TokenHandler.getActivationToken(user.id);
 
       user.email_verify = true;
-      await user.save();
+      await user.updated();
 
       await Email.sendActivation(user, user.email, token.token, hostname);
     }
@@ -133,7 +132,7 @@ class Database {
       var rt = await TokenHandler.getRecoveryToken(user.id);
 
       user.reset_password = true;
-      await user.save();
+      await user.updated();
 
       if (sendemail) {
         Email.sendPasswordRecovery(user, domain, ip, user.email, rt.token);
@@ -161,7 +160,7 @@ class Database {
       user.locked_reason = '';
     }
 
-    await user.save();
+    await user.updated();
 
     await TokenHandler.deleteAllTempTokens(token[2]);
 
@@ -180,7 +179,7 @@ class Database {
     user.email_verify = false;
     user.locked = false;
     user.locked_reason = null;
-    await user.save();
+    await user.updated();
 
     await TokenHandler.deleteAllTempTokens(token[2]);
 

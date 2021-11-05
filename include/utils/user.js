@@ -3,7 +3,8 @@ const misc = require('./misc');
 const regex = require('./regex');
 const usa = require('./usa');
 const Fasquest = require('fasquest');
-
+const User = require('../database/models/user');
+const userSchema = new User()._defaultModel;
 const utilsUser = {
   checkValidUser: async function checkValidUser(user) {
     if (!user) {
@@ -232,7 +233,9 @@ const utilsUser = {
       }
     );
   },
-
+  checkUserProps: function checkUserProps(prop) {
+    return userSchema[prop] !== undefined;
+  },
   setUser: function setUser(user, props) {
     if (props.username && config.user.username.enabled) {
       user.username = misc.toLower(props.username);

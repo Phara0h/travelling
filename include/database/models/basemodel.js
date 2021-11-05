@@ -2,6 +2,7 @@
 const BaseModel = require('adost').PGActiveModel;
 const regex = require('../../utils/regex');
 
+
 BaseModel.findAllByFilter = async function (opts) {
   var query = '';
   var keys = [];

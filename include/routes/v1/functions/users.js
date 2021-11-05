@@ -161,6 +161,7 @@ async function editUser(opts) {
     const groupsData = await user[0].resolveGroup(opts.router);
 
     opts.res.code(200);
+
     // Update any current logged in users
     var session = await opts.req.sessionStore.get(user[0].id);
 
@@ -168,6 +169,7 @@ async function editUser(opts) {
       session.data = { user: user[0], groupsData };
       await opts.req.sessionStore.set(session.sessionId, session);
     }
+    await user[0].updated();
 
     if (config.audit.edit.enable === true) {
       var auditObj = {
@@ -215,25 +217,34 @@ async function getUser(opts) {
     };
   }
 
+  if (opts.req.params.prop && !userUtils.checkUserProps(opts.req.params.prop)) {
+    opts.res.code(400);
+    return {
+      type: 'user-prop-error',
+      msg: 'Not a property of user'
+    };
+  }
+
   if (opts.needsDomain) {
-    user = await User.findLimtedBy({ domain, ...id }, 'AND', 1);
+    user = await User.findLimtedBy({ domain, ...id }, 'AND', 1, opts.req.params.prop || '*');
   } else {
-    user = await User.findLimtedBy(id, 'AND', 1);
+    user = await User.findLimtedBy(id, 'AND', 1, opts.req.params.prop || '*');
   }
 
   if (user && user.length > 0) {
-    if (opts.req.params.prop && user[0][opts.req.params.prop] === undefined) {
-      opts.res.code(400);
-      return {
-        type: 'user-prop-error',
-        msg: 'Not a property of user'
-      };
+    if (opts.req.params.prop) {
+      if (opts.req.params.prop === 'groups') {
+        await user[0].resolveGroup();
+      }
+
+      opts.res.code(200);
+      return user[0][opts.req.params.prop];
     }
 
     await user[0].resolveGroup();
 
     opts.res.code(200);
-    return opts.req.params.prop ? user[0][opts.req.params.prop] : user[0];
+    return user[0];
   }
 
   opts.res.code(400);
@@ -290,7 +301,7 @@ async function addRemoveGroupInheritance(user, group, add = true, req) {
       };
     }
     await updateSessionUser(user, req);
-
+    await user.updated();
     if (config.audit.edit.enable === true) {
       var newGroup;
 
