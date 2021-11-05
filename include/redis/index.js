@@ -8,7 +8,7 @@ const TokenStore = require('./memory/tokenstore');
 const RedisTokenStore = require('./tokenstore');
 
 const IORedis = require('ioredis');
-const uuidv4 = require('uuid');
+const { v4: uuidv4 } = require('uuid');
 
 class Redis {
   constructor() {
