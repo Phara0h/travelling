@@ -52,7 +52,7 @@
     "fastify": "^3.11.0",
     "fastify-cookie": "^5.1.0",
     "fastify-favicon": "^3.0.0",
-    "fastify-good-sessions": "^1.4.3",
+    "fastify-good-sessions": "^1.4.4",
     "fastify-jaeger": "^1.0.1",
     "fastify-plugin": "^3.0.0",
     "fastify-static": "^3.4.0",
