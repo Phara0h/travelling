@@ -1,6 +1,12 @@
 
 
+#### [v2.9.2](https://github.com/Trazi-Ventures/travelling/compare/v2.9.1...v2.9.2)
+
+- Update package.json [`315f8dc`](https://github.com/Trazi-Ventures/travelling/commit/315f8dc153c8e365607b23b529e53f4eba643cb2)
+
 #### [v2.9.1](https://github.com/Trazi-Ventures/travelling/compare/v2.9.0...v2.9.1)
+
+> 5 November 2021
 
 - Update index.js [`aa91814`](https://github.com/Trazi-Ventures/travelling/commit/aa91814ef263ee79bc3657b79c35d34185edc193)
 
