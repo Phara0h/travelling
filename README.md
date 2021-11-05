@@ -3398,13 +3398,13 @@ Path: api/v1/user/me
 * [Auth](#Auth)
     * [.accessToken()](#Auth.accessToken)
     * [.authorize(client_id, response_type, state, redirect_uri, group_request)](#Auth.authorize)
-    * [.activate(token)](#Auth.activate)
-    * [.resetPasswordAutoLogin(body, token)](#Auth.resetPasswordAutoLogin)
-    * [.resetPassword(body, token)](#Auth.resetPassword)
-    * [.forgotPassword(body)](#Auth.forgotPassword)
-    * [.logout()](#Auth.logout)
-    * [.login(body)](#Auth.login)
-    * [.register(body)](#Auth.register)
+    * [.activate(token, authorization_bearer)](#Auth.activate)
+    * [.resetPasswordAutoLogin(body, token, authorization_bearer)](#Auth.resetPasswordAutoLogin)
+    * [.resetPassword(body, token, authorization_bearer)](#Auth.resetPassword)
+    * [.forgotPassword(body, authorization_bearer)](#Auth.forgotPassword)
+    * [.logout(authorization_bearer)](#Auth.logout)
+    * [.login(body, authorization_bearer)](#Auth.login)
+    * [.register(body, authorization_bearer)](#Auth.register)
 
 <a name="Auth.accessToken"></a>
 
@@ -3433,7 +3433,7 @@ Path: api/v1/auth/oauth/authorize
 
 <a name="Auth.activate"></a>
 
-### Auth.activate(token)
+### Auth.activate(token, authorization_bearer)
 activate - Activates and unlocks user
 
 Path: api/v1/auth/activate
@@ -3443,10 +3443,11 @@ Path: api/v1/auth/activate
 | Param | Type | Description |
 | --- | --- | --- |
 | token | <code>any</code> | (example: activation_token) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="Auth.resetPasswordAutoLogin"></a>
 
-### Auth.resetPasswordAutoLogin(body, token)
+### Auth.resetPasswordAutoLogin(body, token, authorization_bearer)
 resetPasswordAutoLogin - Resets the password if the recovery token is valid of the user, then authenticates the user and returns cookies.
 
 Path: api/v1/auth/password/reset/login
@@ -3457,6 +3458,7 @@ Path: api/v1/auth/password/reset/login
 | --- | --- | --- |
 | body | <code>Object</code> |  |
 | token | <code>any</code> | (example: [thegeneratedtoken]) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
 body
@@ -3467,7 +3469,7 @@ body
 ```
 <a name="Auth.resetPassword"></a>
 
-### Auth.resetPassword(body, token)
+### Auth.resetPassword(body, token, authorization_bearer)
 resetPassword - Resets the password if the recovery token is valid of the user.
 
 Path: api/v1/auth/password/reset
@@ -3478,6 +3480,7 @@ Path: api/v1/auth/password/reset
 | --- | --- | --- |
 | body | <code>Object</code> |  |
 | token | <code>any</code> | (example: [thegeneratedtoken]) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
 body
@@ -3488,16 +3491,17 @@ body
 ```
 <a name="Auth.forgotPassword"></a>
 
-### Auth.forgotPassword(body)
+### Auth.forgotPassword(body, authorization_bearer)
 forgotPassword - Generates a recovery token and sends a email to the attached user (if they exist)
 
 Path: api/v1/auth/password/forgot
 
 **Kind**: static method of [<code>Auth</code>](#Auth)  
 
-| Param | Type |
-| --- | --- |
-| body | <code>Object</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
 body
@@ -3508,15 +3512,20 @@ body
 ```
 <a name="Auth.logout"></a>
 
-### Auth.logout()
+### Auth.logout(authorization_bearer)
 logout -
 
 Path: api/v1/auth/logout
 
 **Kind**: static method of [<code>Auth</code>](#Auth)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
 <a name="Auth.login"></a>
 
-### Auth.login(body)
+### Auth.login(body, authorization_bearer)
 login - Login a user
 
 ##### Body Properties
@@ -3531,9 +3540,10 @@ Path: api/v1/auth/login
 
 **Kind**: static method of [<code>Auth</code>](#Auth)  
 
-| Param | Type |
-| --- | --- |
-| body | <code>Object</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
 body
@@ -3545,7 +3555,7 @@ body
 ```
 <a name="Auth.register"></a>
 
-### Auth.register(body)
+### Auth.register(body, authorization_bearer)
 register - Register a user
 
 `group_request`	is optional.
@@ -3554,9 +3564,10 @@ Path: api/v1/auth/register
 
 **Kind**: static method of [<code>Auth</code>](#Auth)  
 
-| Param | Type |
-| --- | --- |
-| body | <code>Object</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
 body
@@ -3599,13 +3610,13 @@ body
 **Kind**: global class  
 
 * [AuthDomain](#AuthDomain)
-    * [.forgotPassword(body, domain)](#AuthDomain.forgotPassword)
-    * [.login(body, domain)](#AuthDomain.login)
-    * [.register(body, domain)](#AuthDomain.register)
+    * [.forgotPassword(body, domain, authorization_bearer)](#AuthDomain.forgotPassword)
+    * [.login(body, domain, authorization_bearer)](#AuthDomain.login)
+    * [.register(body, domain, authorization_bearer)](#AuthDomain.register)
 
 <a name="AuthDomain.forgotPassword"></a>
 
-### AuthDomain.forgotPassword(body, domain)
+### AuthDomain.forgotPassword(body, domain, authorization_bearer)
 forgotPassword - Generates a recovery token and sends a email to the attached user (if they exist)
 
 Path: api/v1/auth/password/forgot/domain/:domain
@@ -3616,6 +3627,7 @@ Path: api/v1/auth/password/forgot/domain/:domain
 | --- | --- | --- |
 | body | <code>Object</code> |  |
 | domain | <code>any</code> | Domain name (example: test.com) (example: traziventures.com) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
 body
@@ -3626,7 +3638,7 @@ body
 ```
 <a name="AuthDomain.login"></a>
 
-### AuthDomain.login(body, domain)
+### AuthDomain.login(body, domain, authorization_bearer)
 login - Login a user
 
 ##### Body Properties
@@ -3646,6 +3658,7 @@ Path: api/v1/auth/login/domain/:domain
 | --- | --- | --- |
 | body | <code>Object</code> |  |
 | domain | <code>any</code> | Domain name (example: test.com) (example: traziventures.com) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
 body
@@ -3657,7 +3670,7 @@ body
 ```
 <a name="AuthDomain.register"></a>
 
-### AuthDomain.register(body, domain)
+### AuthDomain.register(body, domain, authorization_bearer)
 register - Register a user
 
 `group_request`	is optional.
@@ -3670,6 +3683,7 @@ Path: api/v1/auth/register/domain/:domain
 | --- | --- | --- |
 | body | <code>Object</code> |  |
 | domain | <code>any</code> | Domain name (example: test.com) (example: test.com) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
 body
@@ -3685,7 +3699,7 @@ body
 **Kind**: global class  
 <a name="AuthDomainToken.forgotPassword"></a>
 
-### AuthDomainToken.forgotPassword(body, domain)
+### AuthDomainToken.forgotPassword(body, domain, authorization_bearer)
 forgotPassword - Generates a recovery token and returns the token to the attached user (if they exist) instead of sending an email.
 *CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**
 
@@ -3693,10 +3707,11 @@ Path: api/v1/auth/token/password/forgot/domain/:domain
 
 **Kind**: static method of [<code>AuthDomainToken</code>](#AuthDomainToken)  
 
-| Param | Type |
-| --- | --- |
-| body | <code>Object</code> | 
-| domain | <code>any</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| domain | <code>any</code> |  |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
 body
@@ -3728,7 +3743,15 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v2.9.0](https://github.com/Trazi-Ventures/travelling/compare/v2.8.4...v2.9.0)
+
+- Added "updated" prop to users, sped up user prop requests and fixed some bugs [`e7f51b1`](https://github.com/Trazi-Ventures/travelling/commit/e7f51b16c479811ca8ec24c82901a5a68e67ff12)
+- Update package.json [`fe550d3`](https://github.com/Trazi-Ventures/travelling/commit/fe550d3021fd6c86448648368a55abdeb9866c5d)
+- updated sdk [`9a35a4e`](https://github.com/Trazi-Ventures/travelling/commit/9a35a4e2edff1a334e994253cb43446344c1ef96)
+
 #### [v2.8.4](https://github.com/Trazi-Ventures/travelling/compare/v2.8.3...v2.8.4)
+
+> 12 October 2021
 
 - Update Travelling.postman_collection.json [`911bd7a`](https://github.com/Trazi-Ventures/travelling/commit/911bd7ab1c551d097840a1e71cbf5e628f6033ad)
 

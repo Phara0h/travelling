@@ -1,6 +1,14 @@
 
 
+#### [v2.9.0](https://github.com/Trazi-Ventures/travelling/compare/v2.8.4...v2.9.0)
+
+- Added "updated" prop to users, sped up user prop requests and fixed some bugs [`e7f51b1`](https://github.com/Trazi-Ventures/travelling/commit/e7f51b16c479811ca8ec24c82901a5a68e67ff12)
+- Update package.json [`fe550d3`](https://github.com/Trazi-Ventures/travelling/commit/fe550d3021fd6c86448648368a55abdeb9866c5d)
+- updated sdk [`9a35a4e`](https://github.com/Trazi-Ventures/travelling/commit/9a35a4e2edff1a334e994253cb43446344c1ef96)
+
 #### [v2.8.4](https://github.com/Trazi-Ventures/travelling/compare/v2.8.3...v2.8.4)
+
+> 12 October 2021
 
 - Update Travelling.postman_collection.json [`911bd7a`](https://github.com/Trazi-Ventures/travelling/commit/911bd7ab1c551d097840a1e71cbf5e628f6033ad)
 
