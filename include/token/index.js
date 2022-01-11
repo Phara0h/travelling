@@ -284,6 +284,14 @@ class TokenHandler {
     return await this.checkTempToken(token, config.email.activation.expiration * 1000, 'activation');
   }
 
+  static async checkOTPToken(token) {
+    return await this.checkTempToken(token, config.otp.expiration * 1000, 'otp');
+  }
+
+  static async getOTPToken(userId) {
+    return await this.getTempToken('otp', userId, config.otp.expiration * 1000);
+  }
+
   static async getRecoveryToken(userId) {
     return await this.getTempToken('recovery', userId, config.email.recovery.expiration * 1000);
   }

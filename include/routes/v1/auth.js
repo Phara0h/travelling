@@ -22,6 +22,7 @@ module.exports = function (app, opts, done) {
 
   app.put('/auth/login', auth.loginRoute);
   app.put('/auth/login/domain/:domain', auth.loginRoute);
+  app.get('/auth/login/otp', auth.otpLoginRoute);
 
   app.post('/auth/register', auth.registerRoute);
   app.post('/auth/register/domain/:domain', auth.registerRoute);
@@ -40,6 +41,12 @@ module.exports = function (app, opts, done) {
   });
   app.put('/auth/token/password/forgot/domain/:domain', async (req, res) => {
     return await auth.forgotPasswordRoute(req, res, false);
+  });
+  app.get('/auth/token/otp/id/:id', async (req, res) => {
+    return await auth.otpGetRoute(req, res);
+  });
+  app.get('/auth/token/otp/domain/:domain/id/:id', async (req, res) => {
+    return await auth.otpGetRoute(req, res, true);
   });
 
   app.get('/auth/logout', auth.logoutRoute);

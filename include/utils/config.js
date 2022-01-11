@@ -23,6 +23,7 @@ const config = {
     cloudflareIP: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_MISC_CLOUDFLAREIP), false),
     deniedRedirect: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_MISC_DENIED_REDIRECT), true)
   },
+
   log: {
     enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_LOG_ENABLE), true),
     colors: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_LOG_COLORS), true),
@@ -184,6 +185,9 @@ const config = {
       expiration: misc.isSetDefault(Number(process.env.TRAVELLING_TOKEN_CODE_EXPIRATION), 5), // minutes
       authorizeFlow: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_TOKEN_CODE_AUTHORIZE_FLOW), true)
     }
+  },
+  otp: {
+    expiration: misc.isSetDefault(Number(process.env.TRAVELLING_OTP_EXPIRATION), 5 * 60) // seconds
   },
   pg: {
     url: misc.isSetDefault(process.env.TRAVELLING_DATABASE_URL, null),

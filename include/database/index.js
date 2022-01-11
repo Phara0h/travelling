@@ -4,6 +4,7 @@ const User = require('./models/user');
 const config = require('../utils/config');
 const crypto = require(config.pg.crypto.implementation);
 const Email = require('../utils/email');
+const userUtils = require('../utils/user');
 const TokenHandler = require('../token');
 const gm = require('../server/groupmanager.js');
 const helpers = require('../server/tracing/helpers')();
@@ -141,6 +142,51 @@ class Database {
 
       return rt;
     }
+  }
+
+  static async getOTP(opts) {
+    var id = userUtils.getId(opts.req);
+    var domain = opts.req.params.domain;
+
+    if (opts.needsDomain && !domain) {
+      opts.res.code(400);
+      return {
+        type: 'otp-missing-param-error',
+        msg: 'No domain was provided.'
+      };
+    }
+
+    domain = domain || 'default';
+
+    if (config.user.isolateByDomain && domain) {
+      id.domain = domain;
+    }
+
+    var user = await User.findLimtedBy(id, 'AND', 1);
+
+    if (user && user.length > 0) {
+      user = user[0];
+
+      return { token: (await TokenHandler.getOTPToken(user.id)).token };
+    }
+    return {
+      type: 'otp-no-user-error',
+      msg: 'No user found with that id'
+    };
+  }
+
+  static async consumeOTP(token) {
+    var user = await User.findLimtedBy({ id: token[2] }, 'AND', 1);
+
+    if (!user || user.length < 1) {
+      return false;
+    }
+
+    user = user[0];
+
+    await TokenHandler.deleteAllTempTokens(token[2]);
+
+    return user;
   }
 
   static async resetPassword(token, password) {

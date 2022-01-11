@@ -184,6 +184,42 @@ async function forgotPasswordRoute(req, res, sendemail = true) {
   return '';
 }
 
+/** validates user and returns response with token. */
+async function otpGetRoute(req, res, needsDomain = false) {
+  var isValid = await checkValidUser({ id: req.params.id }, false);
+
+  if (isValid !== true) {
+    res.code(400);
+    return isValid;
+  }
+  return await Database.getOTP({ req, res, needsDomain });
+}
+
+/** Validates new password and recovery token. Updates password. */
+async function otpLoginRoute(req, res) {
+  var token = await TokenHandler.checkOTPToken(req.query.token);
+
+  if (!token) {
+    res.code(400);
+    return {
+      type: 'otp-token-error',
+      msg: 'OTP is invalid or expired.'
+    };
+  }
+
+  var user = await Database.consumeOTP(token);
+
+  if (!user) {
+    res.code(400);
+    return {
+      type: 'otp-token-error-no-user',
+      msg: 'OTP is invalid or expired.'
+    };
+  }
+  res.code(200);
+  return await login(user, req, res);
+}
+
 /** Validates new password and recovery token. Updates password. */
 async function resetPasswordRoute(req, res, autologin = false) {
   if (!req.body.password) {
@@ -382,7 +418,7 @@ var login = async (user, req, res) => {
 
   req.createSession(user.id, { user, groupsData });
 
-  if (req.body.remember !== false) {
+  if (req.body && req.body.remember !== false) {
     await CookieToken.newTokenInCookie(user.domain, user.id, user.password, user.last_login.ip, res);
   }
 
@@ -535,6 +571,8 @@ var authorizationCodeToken = async (req, res) => {
 module.exports = {
   loginRoute,
   registerRoute,
+  otpGetRoute,
+  otpLoginRoute,
   forgotPasswordRoute,
   resetPasswordRoute,
   logoutRoute,
