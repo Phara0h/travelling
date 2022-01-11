@@ -60,6 +60,108 @@
 										"description": "Generates a recovery token and returns the token to the attached user (if they exist) instead of sending an email. \n**CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**"
 									},
 									"response": []
+								},
+								{
+									"name": "OTP",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{TRAVELLING}}/api/v1/auth/token/otp/domain/:domain/id/:id",
+											"host": [
+												"{{TRAVELLING}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"auth",
+												"token",
+												"otp",
+												"domain",
+												":domain",
+												"id",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "domain",
+													"value": "traziventures.com"
+												},
+												{
+													"key": "id",
+													"value": "test@test.com"
+												}
+											]
+										},
+										"description": "Generates a one time use password and returns the token to the attached user (if they exist) instead of sending an email.  \n**CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**"
+									},
+									"response": [
+										{
+											"name": "OTP",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{TRAVELLING}}/api/v1/auth/token/otp/domain/:domain/id/:id",
+													"host": [
+														"{{TRAVELLING}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"auth",
+														"token",
+														"otp",
+														"domain",
+														":domain",
+														"id",
+														":id"
+													],
+													"variable": [
+														{
+															"key": "domain",
+															"value": "traziventures.com"
+														},
+														{
+															"key": "id",
+															"value": "test@test.com"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "content-type",
+													"value": "application/json; charset=utf-8"
+												},
+												{
+													"key": "set-cookie",
+													"value": "trav:ssid=7cdb5f41-ff4a-45c8-b701-c4ed3a5441e2%3AP1qzV8tYSCL4%2F6resKVPdg%3D%3D.couvYbEmzLJw7XikB1WWTFjTvpanFL39C6x6%2F%2B2Vqm4; Max-Age=4; Path=/; Expires=Tue, 11 Jan 2022 19:25:08 GMT; HttpOnly"
+												},
+												{
+													"key": "content-length",
+													"value": "165"
+												},
+												{
+													"key": "Date",
+													"value": "Tue, 11 Jan 2022 19:25:08 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=5"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"token\": \"zzLcLL2gtG5LiflWu7dwhhrzelsM9XXbmG5OD1xxPwdDDGgCaDr_McB7gRlGLzJJl1cRMe9GgzpHpMhahzG8e0yVwGQROP5cl6b3TVkt-2rftCy3DjscJsE3rt59l4Pr|v1mhC9aKdCOKyFiV3ZQcNQ==\"\n}"
+										}
+									]
 								}
 							]
 						},
@@ -100,7 +202,7 @@
 									"variable": [
 										{
 											"key": "domain",
-											"value": "test.com",
+											"value": "traziventures.com",
 											"description": "Domain name (example: test.com)"
 										}
 									]
@@ -362,7 +464,7 @@
 									}
 								},
 								"url": {
-									"raw": "{{TRAVELLING}}/api/v1/auth/password/forgot",
+									"raw": "{{TRAVELLING}}/api/v1/auth/token/password/forgot",
 									"host": [
 										"{{TRAVELLING}}"
 									],
@@ -370,6 +472,7 @@
 										"api",
 										"v1",
 										"auth",
+										"token",
 										"password",
 										"forgot"
 									]
@@ -377,6 +480,99 @@
 								"description": "Generates a recovery token and returns the token to the attached user (if they exist) instead of sending an email. \n**CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**"
 							},
 							"response": []
+						},
+						{
+							"name": "OTP",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/auth/token/otp/id/:id",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"token",
+										"otp",
+										"id",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "test@test.com"
+										}
+									]
+								},
+								"description": "Generates a one time use password and returns the token to the attached user (if they exist) instead of sending an email.  \n**CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**"
+							},
+							"response": [
+								{
+									"name": "OTP",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{TRAVELLING}}/api/v1/auth/token/otp/id/:id",
+											"host": [
+												"{{TRAVELLING}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"auth",
+												"token",
+												"otp",
+												"id",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "test@test.com"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "content-type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "set-cookie",
+											"value": "trav:ssid=7cdb5f41-ff4a-45c8-b701-c4ed3a5441e2%3AFdDmkZKbysf%2FBV7%2Flj8Q4w%3D%3D.%2B9uzqbadc%2FC1VXiTeJBOtxj2YQs2pC%2F5DvtMIZdxmWU; Max-Age=4; Path=/; Expires=Tue, 11 Jan 2022 19:25:43 GMT; HttpOnly"
+										},
+										{
+											"key": "content-length",
+											"value": "165"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 11 Jan 2022 19:25:43 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"token\": \"yHoGLBYyxS8L6mwcPMtratD7muGkRCRSSuJ_RshbMDOh_jXNsdlHzCOwMa74JzGq2mQuBmWZhSc92qW-q3L0QFuRbbWtZTx5Wk5mkm9PtTb_ONrbthPyOl9ZBICyQTOH|PBO27SAzoAiYrrY8URPL5A==\"\n}"
+								}
+							]
 						}
 					]
 				},
@@ -538,10 +734,10 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"username\":\"test\",\n\t\"password\":\"swagmoney69xd420\",\n\t\"email\": \"test@test.com\"\n}"
+									"raw": "{\n    \"username\":fakeusername\n\t\"password\":\"fakepassword\",\n\t\"email\": \"test@test.com\"\n}"
 								},
 								"url": {
-									"raw": "{{TRAVELLING}}/api/v1/auth/login",
+									"raw": "{{TRAVELLING}}/api/v1/auth/login/domain/:domain",
 									"host": [
 										"{{TRAVELLING}}"
 									],
@@ -549,7 +745,128 @@
 										"api",
 										"v1",
 										"auth",
-										"login"
+										"login",
+										"domain",
+										":domain"
+									],
+									"variable": [
+										{
+											"key": "domain",
+											"value": null
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "set-cookie",
+									"value": "trav:tok=db34b933bf4b7b7afeebd1e258a0c8c0fa80bb0132cf74186d8f32033dbce7ebb4779527aa9d05ed3e9eba54b41510167f4d3b63a067591a49dc1fadf97b06ce46f0499b241f0a9855429b750880bc7c00c0130fc012427b73326b7beff6f15b%2Fde3086b22638e56370f2397334a788ed; Path=/; Expires=Thu, 19 Sep 2019 20:11:42 GMT; HttpOnly; Secure"
+								},
+								{
+									"key": "set-cookie",
+									"value": "trav:ssid=0bQDu3Vb-5PZR8o9uuqsMkecjGi6Nguv.RPBOsJtYuAWeno7%2F7JJ5VUHnj8Z2MEfhXIYYhK0GmAk; Path=/; HttpOnly; Secure"
+								},
+								{
+									"key": "content-length",
+									"value": "24"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 20 Aug 2019 20:11:42 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"msg\": \"Access Granted\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Login OTP",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {},
+						"strictSSL": false,
+						"followOriginalHttpMethod": true,
+						"followAuthorizationHeader": true,
+						"removeRefererHeaderOnRedirect": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{TRAVELLING}}/api/v1/auth/login/otp?token=JQHGH9QuIIhpGuFBG920TdnWkSECFp-ONP0NadfPCclsX708wYaXKHFb5nUj1fmZFHcN1KpKqzkOkjfZGYdfsIt0KnWV69mmt5Uqpw3HiMYD1mBfr4SQap2cg8vH78bb|6Rzt6ubKWXJKY6Pg4GAePg==",
+							"host": [
+								"{{TRAVELLING}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login",
+								"otp"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "JQHGH9QuIIhpGuFBG920TdnWkSECFp-ONP0NadfPCclsX708wYaXKHFb5nUj1fmZFHcN1KpKqzkOkjfZGYdfsIt0KnWV69mmt5Uqpw3HiMYD1mBfr4SQap2cg8vH78bb|6Rzt6ubKWXJKY6Pg4GAePg=="
+								}
+							]
+						},
+						"description": "Login a user\n\n##### Body Properties\n\n| Prop | Description |\n| --- | --- |\n| email/username | *required* String (example:  test@test.com) |\n| password | *required* String (example:  fakePassword123) |\n| remember | *optional* Boolean if you would like to be logged in automatically (example:  true) |"
+					},
+					"response": [
+						{
+							"name": "Login",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\":fakeusername\n\t\"password\":\"fakepassword\",\n\t\"email\": \"test@test.com\"\n}"
+								},
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/auth/login/domain/:domain",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"login",
+										"domain",
+										":domain"
+									],
+									"variable": [
+										{
+											"key": "domain",
+											"value": null
+										}
 									]
 								}
 							},
@@ -1404,10 +1721,10 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"test\": 123\n}",
+									"raw": "newpasss",
 									"options": {
 										"raw": {
-											"language": "json"
+											"language": "text"
 										}
 									}
 								},
@@ -1427,7 +1744,7 @@
 									"variable": [
 										{
 											"key": "property",
-											"value": "user_data"
+											"value": "password"
 										}
 									]
 								},
@@ -1586,7 +1903,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"urls\": [\n        \"http://checkpeople.com\"\n    ]\n}",
+									"raw": "{\n    \"urls\": [\n        \"http://127.0.0.1\",\n        \"http://checkpeople.com\"\n    ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -8616,12 +8933,6 @@
 					""
 				]
 			}
-		}
-	],
-	"variable": [
-		{
-			"key": "TRAVELLING",
-			"value": "http://staging.account.trazidev.com/account"
 		}
 	]
 }
