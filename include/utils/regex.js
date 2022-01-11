@@ -13,9 +13,9 @@ const regex = {
       config.password.lowercase +
       ',})(?=(.*[A-Z]){' +
       config.password.uppercase +
-      ',})(?=(.*[@#$%!]){' +
+      ',})(?=(.*[@#$%!\\^\\&\\*\\?\\_\\-\\.]){' +
       config.password.special +
-      ',})(?:[\\da-zA-Z@#$%!\\^\\&\\*\\(\\)]){' +
+      ',})(?:[\\da-zA-Z@#$%!\\^\\&\\*\\?\\_\\-\\.]){' +
       config.password.minchar +
       ',' +
       config.password.maxchar +
