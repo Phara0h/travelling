@@ -1,6 +1,13 @@
 
 
+#### [v2.10.0](https://github.com/Dragohm/travelling/compare/v2.9.2...v2.10.0)
+
+- Update Travelling.postman_collection.json [`15c500a`](https://github.com/Dragohm/travelling/commit/15c500a7907a3f9de7909e60cc77d7c8af46be18)
+- Added OTP routes and functionality and updated special chars password [`d718ae2`](https://github.com/Dragohm/travelling/commit/d718ae209d6282e5e94032c7ed36d739291e7cdb)
+
 #### [v2.9.2](https://github.com/Dragohm/travelling/compare/v2.9.1...v2.9.2)
+
+> 5 November 2021
 
 - Update package.json [`315f8dc`](https://github.com/Dragohm/travelling/commit/315f8dc153c8e365607b23b529e53f4eba643cb2)
 
