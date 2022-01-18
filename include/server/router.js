@@ -6,6 +6,7 @@ const gm = require('./groupmanager');
 const log = config.log.logger;
 const regex = require('../utils/regex');
 const parse = require('../utils/parse');
+const helpers = require('./tracing/helpers')();
 //const { proxy } = require('fast-proxy')({});
 const ignored_log_routes = ['/' + config.serviceName + '/metrics', '/' + config.serviceName + '/health'];
 
@@ -132,14 +133,17 @@ class Router {
 
         if (config.log.unauthorizedAccess) {
           log.warn(
-            'Unauthorized Unregistered User' +
-              ' (anonymous)' +
-              ' | ' +
-              parse.getIp(req) +
-              ' | [' +
-              req.raw.method +
-              '] ' +
-              req.raw.url
+            helpers.text(
+              'Unauthorized Unregistered User' +
+                ' (anonymous)' +
+                ' | ' +
+                parse.getIp(req) +
+                ' | [' +
+                req.raw.method +
+                '] ' +
+                req.raw.url,
+              span
+            )
           );
         }
         return false;
@@ -153,16 +157,21 @@ class Router {
             sessionGroupsData = await sessionUser.resolveGroup();
           }
           log.warn(
-            'Unauthorized ' + sessionUser.username ||
-              sessionUser.email +
-                ' (' +
-                sessionGroupsData.names +
-                ') | ' +
-                parse.getIp(req) +
-                ' | [' +
-                req.raw.method +
-                '] ' +
-                req.raw.url
+            helpers.text(
+              'Unauthorized ' + sessionUser.username ||
+                sessionUser.email +
+                  ' (' +
+                  sessionGroupsData.names +
+                  ',' +
+                  sessionUser.domain +
+                  ') | ' +
+                  parse.getIp(req) +
+                  ' | [' +
+                  req.raw.method +
+                  '] ' +
+                  req.raw.url,
+              span
+            )
           );
         }
 
@@ -191,19 +200,27 @@ class Router {
         if (config.log.requests && ignored_log_routes.indexOf(req.raw.url) == -1) {
           if (authenticated) {
             log.info(
-              (sessionUser.username || sessionUser.email) +
-                ' (' +
-                routedGroup.name +
-                ') | ' +
-                parse.getIp(req) +
-                ' | [' +
-                req.raw.method +
-                '] ' +
-                req.raw.url
+              helpers.text(
+                (sessionUser.username || sessionUser.email) +
+                  ' (' +
+                  routedGroup.name +
+                  ',' +
+                  sessionUser.domain +
+                  ') | ' +
+                  parse.getIp(req) +
+                  ' | [' +
+                  req.raw.method +
+                  '] ' +
+                  req.raw.url,
+                span
+              )
             );
           } else {
             log.info(
-              'Unregistered User' + ' (anonymous)' + ' | ' + parse.getIp(req) + ' | [' + req.raw.method + '] ' + req.raw.url
+              helpers.text(
+                'Unregistered User' + ' (anonymous)' + ' | ' + parse.getIp(req) + ' | [' + req.raw.method + '] ' + req.raw.url,
+                span
+              )
             );
           }
         }
@@ -229,31 +246,39 @@ class Router {
       if (config.log.requests && ignored_log_routes.indexOf(req.raw.url) == -1) {
         if (authenticated) {
           log.info(
-            (sessionUser.username || sessionUser.email) +
-              ' (' +
-              routedGroup.name +
-              ') | ' +
-              parse.getIp(req) +
-              ' | [' +
-              req.raw.method +
-              '] ' +
-              req.raw.url +
-              ' -> ' +
-              target.target +
-              req.raw.url
+            helpers.text(
+              (sessionUser.username || sessionUser.email) +
+                ' (' +
+                routedGroup.name +
+                ',' +
+                sessionUser.domain +
+                ') | ' +
+                parse.getIp(req) +
+                ' | [' +
+                req.raw.method +
+                '] ' +
+                req.raw.url +
+                ' -> ' +
+                target.target +
+                req.raw.url,
+              span
+            )
           );
         } else {
           log.info(
-            'Unregistered User' +
-              ' (anonymous)' +
-              ' | ' +
-              parse.getIp(req) +
-              ' | [' +
-              req.raw.method +
-              '] ' +
-              req.raw.url +
-              ' -> ' +
-              target.target
+            helpers.text(
+              'Unregistered User' +
+                ' (anonymous)' +
+                ' | ' +
+                parse.getIp(req) +
+                ' | [' +
+                req.raw.method +
+                '] ' +
+                req.raw.url +
+                ' -> ' +
+                target.target,
+              span
+            )
           );
         }
       }
@@ -290,7 +315,7 @@ class Router {
     // res.redirect(config.portal.path);
 
     // Should never get here;
-    log.wtf('router you what?');
+    log.wtf(helpers.text('router you what?', span));
     return false;
   }
 
@@ -385,7 +410,7 @@ class Router {
           prop = user.id || prop;
           break;
         case ':username':
-          prop = user.username || prop;
+          prop = user.username || user.email || prop;
           break;
         case ':email':
           prop = user.email || prop;

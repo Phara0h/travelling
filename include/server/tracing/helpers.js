@@ -9,11 +9,11 @@ module.exports = (tracez = null) => {
   helpers = {};
   helpers.trace = tracez;
   helpers.startSpan = (name, oldspan) => {
-    return helpers.trace.tracer.startSpan(
-      name,
-      undefined,
-      oldspan ? trace.setSpan(context.active(), oldspan) : undefined
-    );
+    if (helpers.trace) {
+      return helpers.trace.tracer.startSpan(name, undefined, oldspan ? trace.setSpan(context.active(), oldspan) : undefined);
+    } else {
+      return { end: () => {} };
+    }
   };
 
   helpers.text = (msg, span) => {
@@ -23,8 +23,8 @@ module.exports = (tracez = null) => {
 
     return {
       message: msg,
-      traceId: span ? span.spanContext().traceId : "unknown",
-      wog_type: "string_message",
+      traceId: span ? span.spanContext().traceId : 'unknown',
+      wog_type: 'string_message'
     };
   };
 

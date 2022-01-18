@@ -2393,6 +2393,7 @@ body
 ```json
 {
     "urls": [
+        "http://127.0.0.1",
         "http://checkpeople.com"
     ]
 }
@@ -2454,15 +2455,13 @@ Path: api/v1/user/me/property/:property
 | Param | Type | Description |
 | --- | --- | --- |
 | body | <code>Object</code> |  |
-| property | <code>any</code> | (example: user_data) |
+| property | <code>any</code> | (example: password) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
 body
-```json
-{
-	"test": 123
-}
+```text
+newpasss
 ```
 <a name="UserCurrent.deleteToken"></a>
 
@@ -2571,8 +2570,9 @@ Path: api/v1/user/me
     * [.resetPassword(body, token, authorization_bearer)](#Auth.resetPassword)
     * [.forgotPassword(body, authorization_bearer)](#Auth.forgotPassword)
     * [.logout(authorization_bearer)](#Auth.logout)
+    * [.loginOtp(token, authorization_bearer)](#Auth.loginOtp)
     * [.login(body, authorization_bearer)](#Auth.login)
-    * [.register(body, authorization_bearer)](#Auth.register)
+    * [.register(body, randomPassword, authorization_bearer)](#Auth.register)
 
 <a name="Auth.accessToken"></a>
 
@@ -2691,6 +2691,28 @@ Path: api/v1/auth/logout
 | --- | --- | --- |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
+<a name="Auth.loginOtp"></a>
+
+### Auth.loginOtp(token, authorization_bearer)
+loginOtp - Login a user
+
+##### Body Properties
+
+| Prop | Description |
+| --- | --- |
+| email/username | *required* String (example:  test@test.com) |
+| password | *required* String (example:  fakePassword123) |
+| remember | *optional* Boolean if you would like to be logged in automatically (example:  true) |
+
+Path: api/v1/auth/login/otp
+
+**Kind**: static method of [<code>Auth</code>](#Auth)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| token | <code>any</code> | (example: JQHGH9QuIIhpGuFBG920TdnWkSECFp-ONP0NadfPCclsX708wYaXKHFb5nUj1fmZFHcN1KpKqzkOkjfZGYdfsIt0KnWV69mmt5Uqpw3HiMYD1mBfr4SQap2cg8vH78bb|6Rzt6ubKWXJKY6Pg4GAePg==) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
 <a name="Auth.login"></a>
 
 ### Auth.login(body, authorization_bearer)
@@ -2723,7 +2745,7 @@ body
 ```
 <a name="Auth.register"></a>
 
-### Auth.register(body, authorization_bearer)
+### Auth.register(body, randomPassword, authorization_bearer)
 register - Register a user
 
 `group_request`	is optional.
@@ -2735,6 +2757,7 @@ Path: api/v1/auth/register
 | Param | Type | Description |
 | --- | --- | --- |
 | body | <code>Object</code> |  |
+| randomPassword | <code>any</code> | Generates a random password on the backend securely if set to `true` (example: true) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
@@ -2742,22 +2765,42 @@ body
 ```json
 {
 	"username":"test",
-	"password":"Pas5w0r!d",
-	"email": "test@test.com",
-    "domain": "default"
+	"email": "test34@test.com",
+    "domain": "default",
+    "password": "Pas5w0r!d"
+
 }
 ```
 <a name="AuthToken"></a>
 
 ## AuthToken
 **Kind**: global class  
+
+* [AuthToken](#AuthToken)
+    * [.otp(id)](#AuthToken.otp)
+    * [.forgotPassword(body)](#AuthToken.forgotPassword)
+
+<a name="AuthToken.otp"></a>
+
+### AuthToken.otp(id)
+otp - Generates a one time use password and returns the token to the attached user (if they exist) instead of sending an email.
+*CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**
+
+Path: api/v1/auth/token/otp/id/:id
+
+**Kind**: static method of [<code>AuthToken</code>](#AuthToken)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>any</code> | (example: test@test.com) |
+
 <a name="AuthToken.forgotPassword"></a>
 
 ### AuthToken.forgotPassword(body)
 forgotPassword - Generates a recovery token and returns the token to the attached user (if they exist) instead of sending an email.
 *CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**
 
-Path: api/v1/auth/password/forgot
+Path: api/v1/auth/token/password/forgot
 
 **Kind**: static method of [<code>AuthToken</code>](#AuthToken)  
 
@@ -2780,7 +2823,7 @@ body
 * [AuthDomain](#AuthDomain)
     * [.forgotPassword(body, domain, authorization_bearer)](#AuthDomain.forgotPassword)
     * [.login(body, domain, authorization_bearer)](#AuthDomain.login)
-    * [.register(body, domain, authorization_bearer)](#AuthDomain.register)
+    * [.register(body, domain, randomPassword, authorization_bearer)](#AuthDomain.register)
 
 <a name="AuthDomain.forgotPassword"></a>
 
@@ -2832,13 +2875,13 @@ Path: api/v1/auth/login/domain/:domain
 body
 ```json
 {
-	"email": "test@test.com",
+	"email": "tesft@test.com",
 	"password": "Pas5w0r!d"
 }
 ```
 <a name="AuthDomain.register"></a>
 
-### AuthDomain.register(body, domain, authorization_bearer)
+### AuthDomain.register(body, domain, randomPassword, authorization_bearer)
 register - Register a user
 
 `group_request`	is optional.
@@ -2850,21 +2893,42 @@ Path: api/v1/auth/register/domain/:domain
 | Param | Type | Description |
 | --- | --- | --- |
 | body | <code>Object</code> |  |
-| domain | <code>any</code> | Domain name (example: test.com) (example: test.com) |
+| domain | <code>any</code> | Domain name (example: test.com) (example: dragohmventures.com) |
+| randomPassword | <code>any</code> | Generates a random password on the backend securely if set to `true` (example: true) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
 body
 ```json
 {
-	"password":"Pas5w0r!d",
-	"email": "test@test.com"
+	"email": "tesft@test.com",
+	"password": "Pas5w0r!d"
 }
 ```
 <a name="AuthDomainToken"></a>
 
 ## AuthDomainToken
 **Kind**: global class  
+
+* [AuthDomainToken](#AuthDomainToken)
+    * [.otp(domain, id)](#AuthDomainToken.otp)
+    * [.forgotPassword(body, domain, authorization_bearer)](#AuthDomainToken.forgotPassword)
+
+<a name="AuthDomainToken.otp"></a>
+
+### AuthDomainToken.otp(domain, id)
+otp - Generates a one time use password and returns the token to the attached user (if they exist) instead of sending an email.
+*CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**
+
+Path: api/v1/auth/token/otp/domain/:domain/id/:id
+
+**Kind**: static method of [<code>AuthDomainToken</code>](#AuthDomainToken)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| domain | <code>any</code> | (example: dragohmventures.com) |
+| id | <code>any</code> | (example: test@test.com) |
+
 <a name="AuthDomainToken.forgotPassword"></a>
 
 ### AuthDomainToken.forgotPassword(body, domain, authorization_bearer)

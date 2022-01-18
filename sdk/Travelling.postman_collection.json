@@ -179,7 +179,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"password\":\"Pas5w0r!d\",\n\t\"email\": \"test@test.com\"\n}",
+									"raw": "{\n\t\"email\": \"tesft@test.com\",\n\t\"password\": \"Pas5w0r!d\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -198,6 +198,14 @@
 										"register",
 										"domain",
 										":domain"
+									],
+									"query": [
+										{
+											"key": "randomPassword",
+											"value": "true",
+											"description": "Generates a random password on the backend securely if set to `true`",
+											"disabled": true
+										}
 									],
 									"variable": [
 										{
@@ -296,7 +304,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"email\": \"test@test.com\",\n\t\"password\": \"Pas5w0r!d\"\n}",
+									"raw": "{\n\t\"email\": \"tesft@test.com\",\n\t\"password\": \"Pas5w0r!d\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -590,7 +598,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"username\":\"test\",\n\t\"password\":\"Pas5w0r!d\",\n\t\"email\": \"test@test.com\",\n    \"domain\": \"default\"\n}",
+							"raw": "{\n\t\"username\":\"test\",\n\t\"email\": \"test34@test.com\",\n    \"domain\": \"default\",\n    \"password\": \"Pas5w0r!d\"\n\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -607,6 +615,14 @@
 								"v1",
 								"auth",
 								"register"
+							],
+							"query": [
+								{
+									"key": "randomPassword",
+									"value": "true",
+									"description": "Generates a random password on the backend securely if set to `true`",
+									"disabled": true
+								}
 							]
 						},
 						"description": "Register a user\n\n`group_request`\tis optional."

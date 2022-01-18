@@ -204,7 +204,115 @@ var checkLoggedIn = async (req, res, router, oldspan) => {
   return { auth: false, route: true };
 };
 
+/**
+ * Generate a random character with 1 Uppercase, 1 lowercase,
+ * 1 special character, and no consecutive characters.
+ * @param {Object} passwordLength Length of password
+ * @returns
+ */
+function generateRandomPassword(passwordLength = 20, retryCount = 0, oldspan) {
+  const span = helpers.startSpan('utils.auth.generateRandomPassword()', oldspan);
+
+  config.log.logger.debug(helpers.text(`utils.auth.generateRandomPassword(${passwordLength})`, span));
+
+  try {
+    const lowercase = [
+      'a',
+      'b',
+      'c',
+      'd',
+      'e',
+      'f',
+      'g',
+      'h',
+      'i',
+      'j',
+      'k',
+      'l',
+      'm',
+      'n',
+      'o',
+      'p',
+      'q',
+      'r',
+      's',
+      't',
+      'u',
+      'v',
+      'x',
+      'y',
+      'z'
+    ];
+    const uppercase = [
+      'A',
+      'B',
+      'C',
+      'D',
+      'E',
+      'F',
+      'G',
+      'H',
+      'I',
+      'J',
+      'K',
+      'L',
+      'M',
+      'N',
+      'O',
+      'P',
+      'Q',
+      'R',
+      'S',
+      'T',
+      'U',
+      'V',
+      'X',
+      'Y',
+      'Z'
+    ];
+    const numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const specialCharacters = ['@', '#', '$', '%', '^', '&', '*', '!', '?', '-', '_', '.'];
+    var types = [lowercase, uppercase, numbers, specialCharacters];
+    var result = '';
+
+    // Generate uppercase, number, and special characters
+    for (var i = 0; i < config.password.uppercase; i++) {
+      result += uppercase.splice(Math.floor(Math.random() * uppercase.length), 1);
+    }
+    for (var i = 0; i < config.password.lowercase; i++) {
+      result += lowercase.splice(Math.floor(Math.random() * lowercase.length), 1);
+    }
+    for (var i = 0; i < config.password.number; i++) {
+      result += numbers.splice(Math.floor(Math.random() * numbers.length), 1);
+    }
+    for (var i = 0; i < config.password.special; i++) {
+      result += specialCharacters.splice(Math.floor(Math.random() * specialCharacters.length), 1);
+    }
+    var max = config.password.maxchar === '' ? config.password.randomGenerationLength : config.password.maxchar;
+    // Fill in rest with random chars until length is full
+
+    while (max > result.length) {
+      var type = types[Math.floor(Math.random() * types.length)];
+
+      result += type.splice(Math.floor(Math.random() * type.length), 1);
+    }
+
+    span.end();
+    return result;
+  } catch (e) {
+    if (retryCount < 3) {
+      config.log.logger.debug('Retrying password generation.');
+
+      this.generateRandomPassword(passwordLength, retryCount + 1, span);
+    } else {
+      config.log.logger.error(e);
+      throw new Error('Failed to generate password.');
+    }
+  }
+}
+
 module.exports = {
+  generateRandomPassword,
   checkLoggedIn,
   logout
 };

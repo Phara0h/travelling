@@ -189,13 +189,15 @@ const Email = require('./include/utils/email');
 
 if (config.tracing.enable) {
   app.setErrorHandler((error, request, reply) => {
-    if (request.span) {
-      error.traceId = request.span.spanContext().traceId;
-    }
-    config.log.logger.error(error);
-    if (request.span) {
-      request.span.recordException(error);
-    }
+    try {
+      if (request.span) {
+        error.traceId = request.span.spanContext().traceId;
+      }
+      config.log.logger.error(error);
+      if (request.span) {
+        request.span.recordException(error);
+      }
+    } catch (error) {}
 
     reply.code(500).send(
       JSON.stringify({
@@ -220,7 +222,9 @@ if (config.tracing.enable) {
   // }
 } else {
   app.setErrorHandler(function (error, request, reply) {
-    config.log.logger.error(error);
+    try {
+      config.log.logger.error(error);
+    } catch (error) {}
     reply.code(500).send(
       JSON.stringify({
         type: 'error',
@@ -284,34 +288,39 @@ app.decorateRequest('checkLoggedIn', async function (req, res, router, span) {
 app.decorateRequest('logout', auth.logout);
 app.decorateRequest('isAuthenticated', false);
 
-app.addHook('preParsing', function (req, res, payload, next) {
-  req.checkLoggedIn(req, res, router, req.span).then((auth) => {
-    req.isAuthenticated = auth.auth;
+app.addHook('preParsing', async function (req, res, payload) {
+  var auth = await req.checkLoggedIn(req, res, router, req.span);
 
-    if (!auth.route) {
-      res.code(401);
-      if (auth.invalidToken) {
-        res.send({
-          error: 'invalid_client',
-          error_description: 'Invalid Access Token'
-        });
-      } else {
-        res.send();
-        if (config.log.requests) {
-          config.log.logger.warn(
-            'Unauthorized',
-            'Unregistered User' + ' (anonymous)' + ' | ' + parse.getIp(req) + ' | [' + req.raw.method + '] ' + req.raw.url
-          );
-        }
-      }
-    } else {
-      router.routeUrl(req, res, req.span).then((route) => {
-        if (!route) {
-          next();
-        }
+  req.isAuthenticated = auth.auth;
+
+  if (!auth.route) {
+    res.code(401);
+    if (auth.invalidToken) {
+      res.send({
+        error: 'invalid_client',
+        error_description: 'Invalid Access Token'
       });
+      return payload;
+    } else {
+      if (config.log.requests) {
+        config.log.logger.warn(
+          'Unauthorized',
+          'Unregistered User' + ' (anonymous)' + ' | ' + parse.getIp(req) + ' | [' + req.raw.method + '] ' + req.raw.url
+        );
+      }
+      res.send();
+      return payload;
     }
-  });
+  } else {
+    var route = await router.routeUrl(req, res, req.span);
+
+    console.log(route);
+    if (!route) {
+      return payload;
+    } else {
+      return res;
+    }
+  }
 });
 
 app.register(require('./include/routes/v1/auth'), { prefix: '/' + config.serviceName + '/api/v1', router });
