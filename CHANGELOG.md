@@ -1,6 +1,12 @@
 
 
+#### [v2.11.0](https://github.com/Dragohm/travelling/compare/v2.10.0...v2.11.0)
+
+- Added optional generating random passwords for new user [`0af759f`](https://github.com/Dragohm/travelling/commit/0af759f2409b29f41fd779584325e31eef159c3d)
+
 #### [v2.10.0](https://github.com/Dragohm/travelling/compare/v2.9.2...v2.10.0)
+
+> 11 January 2022
 
 - Update Travelling.postman_collection.json [`15c500a`](https://github.com/Dragohm/travelling/commit/15c500a7907a3f9de7909e60cc77d7c8af46be18)
 - Added OTP routes and functionality and updated special chars password [`d718ae2`](https://github.com/Dragohm/travelling/commit/d718ae209d6282e5e94032c7ed36d739291e7cdb)
