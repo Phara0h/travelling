@@ -166,6 +166,7 @@ const config = {
     }
   },
   password: {
+    randomGenerationLength: misc.isSetDefault(Number(process.env.TRAVELLING_PASSWORD_RANDOM_GENERATION_LENGTH), 30),
     consecutive: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_PASSWORD_CONSECUTIVE), false),
     minchar: misc.isSetDefault(Number(process.env.TRAVELLING_PASSWORD_MINCHAR), 8),
     maxchar: misc.isSetDefault(Number(process.env.TRAVELLING_PASSWORD_MAXCHAR), ''),

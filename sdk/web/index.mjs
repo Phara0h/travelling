@@ -7992,6 +7992,7 @@ class UserCurrent {
    * ```json
    * {
    *     "urls": [
+   *         "http://127.0.0.1",
    *         "http://checkpeople.com"
    *     ]
    * }
@@ -8117,14 +8118,12 @@ class UserCurrent {
    *
    * Path: api/v1/user/me/property/:property
    * @param {Object} body
-   * @param {any} property  (example: user_data)
+   * @param {any} property  (example: password)
    * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
    * @example
    * body
-   * ```json
-   * {
-   * 	"test": 123
-   * }
+   * ```text
+   * newpasss
    * ```
    */
   static async editProperty(body, property, authorization_bearer, opts) {
@@ -8133,7 +8132,6 @@ class UserCurrent {
       simple: false,
       uri: hostUrl + '/' + `api/v1/user/me/property/${property}`,
       body,
-      json: true,
       authorization: {
         bearer: authorization_bearer,
       },
@@ -8324,6 +8322,7 @@ class Auth {
       resetpassword: 'api/v1/auth/password/reset',
       forgotpassword: 'api/v1/auth/password/forgot',
       logout: 'api/v1/auth/logout',
+      loginotp: 'api/v1/auth/login/otp',
       login: 'api/v1/auth/login',
       register: 'api/v1/auth/register',
     };
@@ -8548,6 +8547,40 @@ class Auth {
   }
 
   /**
+  * loginOtp - Login a user
+
+##### Body Properties
+
+| Prop | Description |
+| --- | --- |
+| email/username | *required* String (example:  test@test.com) |
+| password | *required* String (example:  fakePassword123) |
+| remember | *optional* Boolean if you would like to be logged in automatically (example:  true) |
+  *
+  * Path: api/v1/auth/login/otp
+  * @param {any} token  (example: JQHGH9QuIIhpGuFBG920TdnWkSECFp-ONP0NadfPCclsX708wYaXKHFb5nUj1fmZFHcN1KpKqzkOkjfZGYdfsIt0KnWV69mmt5Uqpw3HiMYD1mBfr4SQap2cg8vH78bb|6Rzt6ubKWXJKY6Pg4GAePg==)
+  * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+  */
+  static async loginOtp(token, authorization_bearer, opts) {
+    var options = {
+      method: 'GET',
+      simple: false,
+      uri: hostUrl + '/' + `api/v1/auth/login/otp`,
+      qs: { token },
+      authorization: {
+        bearer: authorization_bearer,
+      },
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
+  }
+
+  /**
   * login - Login a user
 
 ##### Body Properties
@@ -8597,23 +8630,26 @@ class Auth {
   *
   * Path: api/v1/auth/register
   * @param {Object} body
+  * @param {any} randomPassword Generates a random password on the backend securely if set to `true` (example: true)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   * @example
   * body
   * ```json
   * {
  * 	"username":"test",
- * 	"password":"Pas5w0r!d",
- * 	"email": "test@test.com",
- *     "domain": "default"
+ * 	"email": "test34@test.com",
+ *     "domain": "default",
+ *     "password": "Pas5w0r!d"
+ * 
  * }
   * ```
   */
-  static async register(body, authorization_bearer, opts) {
+  static async register(body, randomPassword, authorization_bearer, opts) {
     var options = {
       method: 'POST',
       simple: false,
       uri: hostUrl + '/' + `api/v1/auth/register`,
+      qs: { randomPassword },
       body,
       json: true,
       authorization: {
@@ -8643,17 +8679,42 @@ class Auth {
 class AuthToken {
   constructor() {}
   static get _postgenClassUrls() {
-    return { forgotpassword: 'api/v1/auth/password/forgot' };
+    return {
+      otp: 'api/v1/auth/token/otp/id/:id',
+      forgotpassword: 'api/v1/auth/token/password/forgot',
+    };
   }
   static getFunctionsPath(name) {
     return this._postgenClassUrls[name.toLowerCase()];
   }
 
   /**
+   * otp - Generates a one time use password and returns the token to the attached user (if they exist) instead of sending an email.
+   **CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**
+   *
+   * Path: api/v1/auth/token/otp/id/:id
+   * @param {any} id  (example: test@test.com)
+   */
+  static async otp(id, opts) {
+    var options = {
+      method: 'GET',
+      simple: false,
+      uri: hostUrl + '/' + `api/v1/auth/token/otp/id/${id}`,
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
+  }
+
+  /**
    * forgotPassword - Generates a recovery token and returns the token to the attached user (if they exist) instead of sending an email.
    **CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**
    *
-   * Path: api/v1/auth/password/forgot
+   * Path: api/v1/auth/token/password/forgot
    * @param {Object} body
    * @example
    * body
@@ -8667,7 +8728,7 @@ class AuthToken {
     var options = {
       method: 'PUT',
       simple: false,
-      uri: hostUrl + '/' + `api/v1/auth/password/forgot`,
+      uri: hostUrl + '/' + `api/v1/auth/token/password/forgot`,
       body,
       json: true,
       json: true,
@@ -8752,7 +8813,7 @@ class AuthDomain {
   * body
   * ```json
   * {
- * 	"email": "test@test.com",
+ * 	"email": "tesft@test.com",
  * 	"password": "Pas5w0r!d"
  * }
   * ```
@@ -8784,22 +8845,30 @@ class AuthDomain {
   *
   * Path: api/v1/auth/register/domain/:domain
   * @param {Object} body
-  * @param {any} domain Domain name (example: test.com) (example: test.com)
+  * @param {any} domain Domain name (example: test.com) (example: traziventures.com)
+  * @param {any} randomPassword Generates a random password on the backend securely if set to `true` (example: true)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   * @example
   * body
   * ```json
   * {
- * 	"password":"Pas5w0r!d",
- * 	"email": "test@test.com"
+ * 	"email": "tesft@test.com",
+ * 	"password": "Pas5w0r!d"
  * }
   * ```
   */
-  static async register(body, domain, authorization_bearer, opts) {
+  static async register(
+    body,
+    domain,
+    randomPassword,
+    authorization_bearer,
+    opts
+  ) {
     var options = {
       method: 'POST',
       simple: false,
       uri: hostUrl + '/' + `api/v1/auth/register/domain/${domain}`,
+      qs: { randomPassword },
       body,
       json: true,
       authorization: {
@@ -8826,11 +8895,35 @@ class AuthDomainToken {
   constructor() {}
   static get _postgenClassUrls() {
     return {
+      otp: 'api/v1/auth/token/otp/domain/:domain/id/:id',
       forgotpassword: 'api/v1/auth/token/password/forgot/domain/:domain',
     };
   }
   static getFunctionsPath(name) {
     return this._postgenClassUrls[name.toLowerCase()];
+  }
+
+  /**
+   * otp - Generates a one time use password and returns the token to the attached user (if they exist) instead of sending an email.
+   **CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**
+   *
+   * Path: api/v1/auth/token/otp/domain/:domain/id/:id
+   * @param {any} domain  (example: traziventures.com)
+   * @param {any} id  (example: test@test.com)
+   */
+  static async otp(domain, id, opts) {
+    var options = {
+      method: 'GET',
+      simple: false,
+      uri: hostUrl + '/' + `api/v1/auth/token/otp/domain/${domain}/id/${id}`,
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
   }
 
   /**

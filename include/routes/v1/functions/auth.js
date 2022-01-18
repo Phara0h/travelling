@@ -3,7 +3,7 @@ const parse = require('../../../utils/parse');
 const audit = require('../../../utils/audit');
 const gm = require('../../../server/groupmanager');
 const { checkValidUser, getPersonalInfo } = require('../../../utils/user');
-
+const { generateRandomPassword } = require('../../../utils/auth');
 const Database = require('../../../database');
 const User = require('.././../../database/models/user');
 const CookieToken = require('../../../utils/cookietoken');
@@ -89,23 +89,30 @@ var registerRoute = async (req, res) => {
   //     return;
   // }
   req.body.domain = req.params.domain || 'default';
+  if (req.query.randomPassword === 'true') {
+    req.body.password = generateRandomPassword(config.password.maxchar, 3, req.span);
+  }
   var isValid = await checkValidUser(req.body);
 
   if (isValid === true) {
     isValid = await Database.checkDupe(req.body);
   }
 
-  if (!req.body.password || !req.body.email || (!req.body.username && config.user.username.enabled)) {
-    res.code(400).send({
+  if (
+    (!req.body.password && req.query.randomPassword !== 'true') ||
+    !req.body.email ||
+    (!req.body.username && config.user.username.enabled)
+  ) {
+    res.code(400);
+    return {
       type: 'register-error',
       msg: 'A valid username, password and email are required.'
-    });
-    return;
+    };
   }
 
   if (isValid !== true) {
-    res.code(400).send(isValid);
-    return;
+    res.code(400);
+    return isValid;
   }
 
   var username = config.user.username.enabled ? req.body.username.toLowerCase() : '';
@@ -155,7 +162,8 @@ var registerRoute = async (req, res) => {
     await audit.createSingleAudit(auditObj);
   }
 
-  res.code(200).send('Account Created');
+  res.code(200);
+  return 'Account Created';
 };
 
 /** validates user and returns response with token. */
