@@ -1,6 +1,10 @@
 
 
+#### [v2.11.1](https://github.com/Trazi-Ventures/travelling/compare/v2.11.0...v2.11.1)
+
 #### [v2.11.0](https://github.com/Trazi-Ventures/travelling/compare/v2.10.0...v2.11.0)
+
+> 18 January 2022
 
 - Added optional generating random passwords for new user [`0af759f`](https://github.com/Trazi-Ventures/travelling/commit/0af759f2409b29f41fd779584325e31eef159c3d)
 
