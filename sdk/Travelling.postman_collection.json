@@ -65,7 +65,14 @@
 									"name": "OTP",
 									"request": {
 										"method": "GET",
-										"header": [],
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer",
+												"description": "The client_credentials generated OAUth2 access token.",
+												"type": "text"
+											}
+										],
 										"url": {
 											"raw": "{{TRAVELLING}}/api/v1/auth/token/otp/domain/:domain/id/:id",
 											"host": [
@@ -496,7 +503,14 @@
 							},
 							"request": {
 								"method": "GET",
-								"header": [],
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
 								"url": {
 									"raw": "{{TRAVELLING}}/api/v1/auth/token/otp/id/:id",
 									"host": [

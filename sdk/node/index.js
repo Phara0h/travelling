@@ -4698,12 +4698,16 @@ class AuthToken {
    *
    * Path: api/v1/auth/token/otp/id/:id
    * @param {any} id  (example: test@test.com)
+   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
    */
-  static async otp(id, opts) {
+  static async otp(id, authorization_bearer, opts) {
     var options = {
       method: 'GET',
       simple: false,
       uri: hostUrl + '/' + `api/v1/auth/token/otp/id/${id}`,
+      authorization: {
+        bearer: authorization_bearer,
+      },
     };
     if (defaultOpts) {
       options = Object.assign(options, defaultOpts);
@@ -4914,12 +4918,16 @@ class AuthDomainToken {
    * Path: api/v1/auth/token/otp/domain/:domain/id/:id
    * @param {any} domain  (example: traziventures.com)
    * @param {any} id  (example: test@test.com)
+   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
    */
-  static async otp(domain, id, opts) {
+  static async otp(domain, id, authorization_bearer, opts) {
     var options = {
       method: 'GET',
       simple: false,
       uri: hostUrl + '/' + `api/v1/auth/token/otp/domain/${domain}/id/${id}`,
+      authorization: {
+        bearer: authorization_bearer,
+      },
     };
     if (defaultOpts) {
       options = Object.assign(options, defaultOpts);
