@@ -1,6 +1,12 @@
 
 
+#### [v2.11.2](https://github.com/Trazi-Ventures/travelling/compare/v2.11.1...v2.11.2)
+
+- sdk [`e45af3d`](https://github.com/Trazi-Ventures/travelling/commit/e45af3dde10dfcfd203f62b4da0c348d7b1d0f81)
+
 #### [v2.11.1](https://github.com/Trazi-Ventures/travelling/compare/v2.11.0...v2.11.1)
+
+> 25 January 2022
 
 #### [v2.11.0](https://github.com/Trazi-Ventures/travelling/compare/v2.10.0...v2.11.0)
 

@@ -3609,12 +3609,12 @@ body
 **Kind**: global class  
 
 * [AuthToken](#AuthToken)
-    * [.otp(id)](#AuthToken.otp)
+    * [.otp(id, authorization_bearer)](#AuthToken.otp)
     * [.forgotPassword(body)](#AuthToken.forgotPassword)
 
 <a name="AuthToken.otp"></a>
 
-### AuthToken.otp(id)
+### AuthToken.otp(id, authorization_bearer)
 otp - Generates a one time use password and returns the token to the attached user (if they exist) instead of sending an email.
 *CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**
 
@@ -3625,6 +3625,7 @@ Path: api/v1/auth/token/otp/id/:id
 | Param | Type | Description |
 | --- | --- | --- |
 | id | <code>any</code> | (example: test@test.com) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="AuthToken.forgotPassword"></a>
 
@@ -3743,12 +3744,12 @@ body
 **Kind**: global class  
 
 * [AuthDomainToken](#AuthDomainToken)
-    * [.otp(domain, id)](#AuthDomainToken.otp)
+    * [.otp(domain, id, authorization_bearer)](#AuthDomainToken.otp)
     * [.forgotPassword(body, domain, authorization_bearer)](#AuthDomainToken.forgotPassword)
 
 <a name="AuthDomainToken.otp"></a>
 
-### AuthDomainToken.otp(domain, id)
+### AuthDomainToken.otp(domain, id, authorization_bearer)
 otp - Generates a one time use password and returns the token to the attached user (if they exist) instead of sending an email.
 *CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**
 
@@ -3760,6 +3761,7 @@ Path: api/v1/auth/token/otp/domain/:domain/id/:id
 | --- | --- | --- |
 | domain | <code>any</code> | (example: traziventures.com) |
 | id | <code>any</code> | (example: test@test.com) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="AuthDomainToken.forgotPassword"></a>
 
@@ -3807,7 +3809,13 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v2.11.2](https://github.com/Trazi-Ventures/travelling/compare/v2.11.1...v2.11.2)
+
+- sdk [`e45af3d`](https://github.com/Trazi-Ventures/travelling/commit/e45af3dde10dfcfd203f62b4da0c348d7b1d0f81)
+
 #### [v2.11.1](https://github.com/Trazi-Ventures/travelling/compare/v2.11.0...v2.11.1)
+
+> 25 January 2022
 
 #### [v2.11.0](https://github.com/Trazi-Ventures/travelling/compare/v2.10.0...v2.11.0)
 
