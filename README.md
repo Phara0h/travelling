@@ -3809,7 +3809,13 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v2.11.3](https://github.com/Dragohm/travelling/compare/v2.11.2...v2.11.3)
+
+- Update auth.js [`88953eb`](https://github.com/Dragohm/travelling/commit/88953ebf7da7fe7173ae83b7ab01457043e8731c)
+
 #### [v2.11.2](https://github.com/Dragohm/travelling/compare/v2.11.1...v2.11.2)
+
+> 25 January 2022
 
 - sdk [`e45af3d`](https://github.com/Dragohm/travelling/commit/e45af3dde10dfcfd203f62b4da0c348d7b1d0f81)
 
