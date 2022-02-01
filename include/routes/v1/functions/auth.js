@@ -189,7 +189,9 @@ async function forgotPasswordRoute(req, res, sendemail = true) {
     return { token: (await tokenProm).token };
   }
 
-  return '';
+  return {
+    msg: 'Access Granted'
+  };
 }
 
 /** validates user and returns response with token. */
