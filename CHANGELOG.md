@@ -1,6 +1,12 @@
 
 
+#### [v2.11.4](https://github.com/Dragohm/travelling/compare/v2.11.3...v2.11.4)
+
+- Added extra layer of security on t header hijacking. [`8db842c`](https://github.com/Dragohm/travelling/commit/8db842c339a6d7c88174a8579930ce9905ba545d)
+
 #### [v2.11.3](https://github.com/Dragohm/travelling/compare/v2.11.2...v2.11.3)
+
+> 1 February 2022
 
 - Update auth.js [`88953eb`](https://github.com/Dragohm/travelling/commit/88953ebf7da7fe7173ae83b7ab01457043e8731c)
 
