@@ -182,18 +182,36 @@ class Router {
         return false;
       }
       // sets user id cookie every time to protect against tampering.
-      if (authenticated && config.proxy.sendTravellingHeaders) {
-        if (config.user.username.enabled) {
+      if (config.proxy.sendTravellingHeaders) {
+        if (config.user.username.enabled && authenticated) {
           req.headers['t-user'] = sessionUser.username;
+        }
+
+        if (authenticated) {
+          req.headers['t-dom'] = sessionUser.domain;
+          req.headers['t-id'] = sessionUser.id;
+          req.headers['t-email'] = sessionUser.email;
+        } else {
+          // possibly add an option to skip anti header tampering for speed increase.
+          delete req.headers['t-dom'];
+          delete req.headers['t-id'];
+          delete req.headers['t-email'];
         }
 
         req.headers['t-grpn'] = routedGroup.name;
         req.headers['t-grpt'] = routedGroup.type;
-        req.headers['t-dom'] = sessionUser.domain;
-        req.headers['t-id'] = sessionUser.id;
-        req.headers['t-email'] = sessionUser.email;
         req.headers['t-perm'] = r.name;
         req.headers['t-ip'] = parse.getIp(req) || '0.0.0.0';
+      } else {
+        // possibly add an option to skip anti header tampering for speed increase.
+        delete req.headers['t-user'];
+        delete req.headers['t-dom'];
+        delete req.headers['t-id'];
+        delete req.headers['t-email'];
+        delete req.headers['t-grpn'];
+        delete req.headers['t-grpt'];
+        delete req.headers['t-perm'];
+        delete req.headers['t-ip'];
       }
 
       if (req.raw.url.indexOf('/' + config.serviceName + '/') == 0 && !r.host) {

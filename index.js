@@ -314,7 +314,6 @@ app.addHook('preParsing', async function (req, res, payload) {
   } else {
     var route = await router.routeUrl(req, res, req.span);
 
-    console.log(route);
     if (!route) {
       return payload;
     } else {
