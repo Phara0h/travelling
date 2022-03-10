@@ -3809,7 +3809,13 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v2.11.7](https://github.com/Dragohm/travelling/compare/v2.11.6...v2.11.7)
+
+- fixed domains inside urls [`8fa304a`](https://github.com/Dragohm/travelling/commit/8fa304af4b3c49f3eeff592e209daf4573463503)
+
 #### [v2.11.6](https://github.com/Dragohm/travelling/compare/v2.11.5...v2.11.6)
+
+> 10 March 2022
 
 - Update auth.js [`e9ad8cd`](https://github.com/Dragohm/travelling/commit/e9ad8cdb281601fc2b4be468b5ab6e82c319ebb9)
 
