@@ -164,6 +164,7 @@ module.exports = function (app, opts, done) {
         limit: req.query.limit,
         skip: req.query.skip,
         filter: req.query.filter,
+        ids: req.query.ids,
         sortdir: req.query.sortdir
       });
     } catch {

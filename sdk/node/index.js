@@ -3229,13 +3229,14 @@ class Users {
     filter,
     sortdir,
     authorization_bearer,
+    ids,
     opts
   ) {
     var options = {
       method: 'GET',
       simple: false,
       uri: hostUrl + '/' + `api/v1/users`,
-      qs: { sort, limit, skip, filter, sortdir },
+      qs: { sort, limit, skip, filter, sortdir, ids },
       authorization: {
         bearer: authorization_bearer,
       },
@@ -5018,4 +5019,3 @@ function SDK(host, opts) {
   };
 }
 module.exports = SDK;
-
