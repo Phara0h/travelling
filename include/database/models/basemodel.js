@@ -7,6 +7,7 @@ BaseModel.findAllByFilter = async function (opts) {
   var query = '';
   var keys = [];
   var values = [];
+  var ops = [];
 
   if (opts.count) {
     query = `SELECT COUNT(id) FROM ${this.table} `;
@@ -34,8 +35,6 @@ BaseModel.findAllByFilter = async function (opts) {
     } else {
       opts.filter = [opts.filter];
     }
-
-    var ops = [];
 
     for (var i = 0; i < opts.filter.length; i++) {
       var op = '=';
@@ -84,12 +83,20 @@ BaseModel.findAllByFilter = async function (opts) {
         keys.push(key);
       }
     }
+  }
 
+  if (opts.ids && !keys.includes('id')) {
+    ops.push('=ANY');
+    values.push(opts.ids.split(','));
+    keys.push('id');
+  }
+
+  if (keys.length) {
     for (var i = 0; i < keys.length; i++) {
       if (i === 0) {
-        query += ' WHERE ';
+        query += 'WHERE ';
       }
-      query += `"${keys[i]}"${ops[i]}$${i + 1} `;
+      query += `"${keys[i]}"${ops[i]}${ops[i] === '=ANY' ? `($${i + 1})` : `$${i + 1}`}`;
 
       if (keys.length > i + 1) {
         query += ' AND ';
