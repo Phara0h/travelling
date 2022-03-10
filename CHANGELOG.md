@@ -1,6 +1,12 @@
 
 
+#### [v2.11.5](https://github.com/Trazi-Ventures/travelling/compare/v2.11.4...v2.11.5)
+
+- Update auth.js [`62e2e9c`](https://github.com/Trazi-Ventures/travelling/commit/62e2e9ccc0958c24745db62a0d87c2e28c633645)
+
 #### [v2.11.4](https://github.com/Trazi-Ventures/travelling/compare/v2.11.3...v2.11.4)
+
+> 8 March 2022
 
 - Added extra layer of security on t header hijacking. [`8db842c`](https://github.com/Trazi-Ventures/travelling/commit/8db842c339a6d7c88174a8579930ce9905ba545d)
 
