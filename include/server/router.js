@@ -346,7 +346,6 @@ class Router {
     for (var i = 0; i < routes.length; i++) {
       if (!routes[i].method || !method || method == routes[i].method || routes[i].method == '*') {
         var route = this.transformRoute(user, routes[i], routes[i].route, currentGroup);
-
         if (!route) {
           continue;
         }
@@ -422,7 +421,6 @@ class Router {
     }
     return path.replace(regex.transformRoute, (a, b, c) => {
       var prop = '';
-
       switch (a) {
         case ':id':
           prop = user.id || prop;
@@ -435,6 +433,7 @@ class Router {
           break;
         case ':domain':
           prop = user.domain || prop;
+          break;
         case ':grouptype':
           prop = group.type || prop;
           break;
