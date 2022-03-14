@@ -860,7 +860,7 @@
 								}
 							]
 						},
-						"description": "Login a user\n\n##### Body Properties\n\n| Prop | Description |\n| --- | --- |\n| email/username | *required* String (example:  test@test.com) |\n| password | *required* String (example:  fakePassword123) |\n| remember | *optional* Boolean if you would like to be logged in automatically (example:  true) |"
+						"description": "Login via an OTP"
 					},
 					"response": [
 						{
@@ -2012,6 +2012,26 @@
 								}
 							]
 						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
 					]
 				},
 				{
@@ -2849,7 +2869,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{TRAVELLING}}/api/v1/users/domain/:domain",
+									"raw": "{{TRAVELLING}}/api/v1/users/domain/:domain?ids=d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f",
 									"host": [
 										"{{TRAVELLING}}"
 									],
@@ -2890,6 +2910,11 @@
 											"value": "ASC",
 											"description": "Sort direction (example ascending order: ASC)",
 											"disabled": true
+										},
+										{
+											"key": "ids",
+											"value": "d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f",
+											"description": "Comma seperated id values used in inclusion query"
 										}
 									],
 									"variable": [
@@ -2916,7 +2941,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{TRAVELLING}}/api/v1/users/domain/:domain/count",
+									"raw": "{{TRAVELLING}}/api/v1/users/domain/:domain/count?ids=d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f",
 									"host": [
 										"{{TRAVELLING}}"
 									],
@@ -2946,6 +2971,11 @@
 											"value": "created_on>2022-06-01,created_on<2022-06-08",
 											"description": "Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)",
 											"disabled": true
+										},
+										{
+											"key": "ids",
+											"value": "d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f",
+											"description": "Comma seperated id values used in inclusion query"
 										}
 									],
 									"variable": [
@@ -2974,7 +3004,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{TRAVELLING}}/api/v1/users",
+							"raw": "{{TRAVELLING}}/api/v1/users?ids=d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f",
 							"host": [
 								"{{TRAVELLING}}"
 							],
@@ -3013,6 +3043,11 @@
 									"value": "ASC",
 									"description": "Sort direction (example ascending order: ASC)",
 									"disabled": true
+								},
+								{
+									"key": "ids",
+									"value": "d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f",
+									"description": "Comma seperated id values used in inclusion query"
 								}
 							]
 						},
@@ -3060,6 +3095,12 @@
 									"key": "filter",
 									"value": "created_on>2021-06-06,created_on<2021-06-08",
 									"description": "Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)",
+									"disabled": true
+								},
+								{
+									"key": "ids",
+									"value": "d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f",
+									"description": "Comma seperated id values used in inclusion query",
 									"disabled": true
 								}
 							]
@@ -8963,6 +9004,13 @@
 					""
 				]
 			}
+		}
+	],
+	"variable": [
+		{
+			"key": "TRAVELLING",
+			"value": "http://staging.travelling.trazidev.com",
+			"type": "string"
 		}
 	]
 }
