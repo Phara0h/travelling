@@ -85,7 +85,7 @@ BaseModel.findAllByFilter = async function (opts) {
     }
   }
 
-  if (opts.ids && !keys.includes('id')) {
+  if (opts.ids && keys.indexOf('id') < 0) {
     ops.push('=ANY');
     values.push(opts.ids.split(','));
     keys.push('id');
@@ -94,7 +94,7 @@ BaseModel.findAllByFilter = async function (opts) {
   if (keys.length) {
     for (var i = 0; i < keys.length; i++) {
       if (i === 0) {
-        query += 'WHERE ';
+        query += ' WHERE ';
       }
       query += `"${keys[i]}"${ops[i]}${ops[i] === '=ANY' ? `($${i + 1})` : `$${i + 1}`}`;
 
