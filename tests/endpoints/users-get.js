@@ -216,7 +216,7 @@ module.exports = () => {
       oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
       twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
 
-      var res = await Travelling.Users.Domain.get('test.com', null, null, null, `created_on>=${twoWeeksAgo.toISOString()},created_on<=${oneWeekAgo.toISOString()}`, null, userContainer.userDomainToken);
+      var res = await Travelling.Users.Domain.get('test.com', null, null, null, `created_on>=${twoWeeksAgo.toISOString()},created_on<=${oneWeekAgo.toISOString()}`, null, null, userContainer.userDomainToken);
 
       expect(res.statusCode).toEqual(200);
       expect(res.body).toHaveLength(0);
@@ -285,28 +285,28 @@ module.exports = () => {
     });
 
     test('Get Users Count', async () => {
-      var res = await Travelling.Users.count(null, null, null, userContainer.user1Token);
+      var res = await Travelling.Users.count(null, null, null, null, userContainer.user1Token);
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.count).toEqual(7);
     });
 
     test('Get Users Count with limit', async () => {
-      var res = await Travelling.Users.count(2, null, null, userContainer.user1Token);
+      var res = await Travelling.Users.count(2, null, null, null, userContainer.user1Token);
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.count).toEqual(2);
     });
 
     test('Get Users Count with skip', async () => {
-      var res = await Travelling.Users.count(null, 3, null, userContainer.user1Token);
+      var res = await Travelling.Users.count(null, 3, null, null, userContainer.user1Token);
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.count).toEqual(4);
     });
 
     test('Get Users Count with limit and skip', async () => {
-      var res = await Travelling.Users.count(2, 6, null, userContainer.user1Token);
+      var res = await Travelling.Users.count(2, 6, null, null, userContainer.user1Token);
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.count).toEqual(1);
@@ -318,28 +318,28 @@ module.exports = () => {
       yesterday.setDate(yesterday.getDate() - 1);
       tomorrow.setDate(tomorrow.getDate() + 1);
 
-      var res = await Travelling.Users.count(null, null, `created_on >= ${yesterday.toISOString()}, created_on <= ${tomorrow.toISOString()}`, userContainer.user1Token);
+      var res = await Travelling.Users.count(null, null, `created_on >= ${yesterday.toISOString()}, created_on <= ${tomorrow.toISOString()}`, null, userContainer.user1Token);
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.count).toEqual(7);
     });
 
     test('Get Users Count by Domain', async () => {
-      var res = await Travelling.Users.Domain.count('test.com', null, null, null, userContainer.user1Token);
+      var res = await Travelling.Users.Domain.count('test.com', null, null, null, null, userContainer.user1Token);
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.count).toEqual(3);
     });
 
     test('Get Users Count by Domain with limit', async () => {
-      var res = await Travelling.Users.Domain.count('test.com', 1, null, null, userContainer.user1Token);
+      var res = await Travelling.Users.Domain.count('test.com', 1, null, null, null, userContainer.user1Token);
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.count).toEqual(1);
     });
 
     test('Get Users Count by Domain with skip', async () => {
-      var res = await Travelling.Users.Domain.count('test.com', null, 1, null, userContainer.user1Token);
+      var res = await Travelling.Users.Domain.count('test.com', null, 1, null, null, userContainer.user1Token);
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.count).toEqual(2);
@@ -351,7 +351,7 @@ module.exports = () => {
       yesterday.setDate(yesterday.getDate() - 1);
       tomorrow.setDate(tomorrow.getDate() + 1);
 
-      var res = await Travelling.Users.Domain.count('test.com', null, `created_on >= ${yesterday.toISOString()}, created_on <= ${tomorrow.toISOString()}`, null, userContainer.user1Token);
+      var res = await Travelling.Users.Domain.count('test.com', null, `created_on >= ${yesterday.toISOString()}, created_on <= ${tomorrow.toISOString()}`, null, null, userContainer.user1Token);
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.count).toEqual(3);
@@ -381,13 +381,13 @@ module.exports = () => {
     });
 
     test('Get Users with filter created_on with invalid date', async () => {
-      var res = await Travelling.Users.get(null, null, null, 'created_on < figment-of-ones-imagination', null, userContainer.user1Token);
+      var res = await Travelling.Users.get(null, null, null, 'created_on < figment-of-ones-imagination', null, null, userContainer.user1Token);
 
       expect(res.statusCode).toEqual(400);
     });
 
     test('Get Users By Domain with filter created_on with invalid date', async () => {
-      var res = await Travelling.Users.Domain.get('test.com', null, null, null, 'created_on < veryinvalid', null, userContainer.userDomainToken);
+      var res = await Travelling.Users.Domain.get('test.com', null, null, null, 'created_on < veryinvalid', null, null, userContainer.userDomainToken);
 
       expect(res.statusCode).toEqual(400);
     });
@@ -396,7 +396,7 @@ module.exports = () => {
       var yesterday = new Date()
       yesterday.setDate(yesterday.getDate() - 1);
 
-      var res = await Travelling.Users.Domain.get('swagger.69', null, null, null, `created_on >= ${yesterday.toISOString()}`, null, userContainer.userDomainToken);
+      var res = await Travelling.Users.Domain.get('swagger.69', null, null, null, `created_on >= ${yesterday.toISOString()}`, null, null, userContainer.userDomainToken);
 
       expect(res.statusCode).toEqual(200);
       expect(res.body).toHaveLength(0);
