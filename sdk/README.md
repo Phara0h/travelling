@@ -1857,8 +1857,8 @@ body
 
 * [Users](#Users)
     * [.byGroupRequest(group_request, authorization_bearer)](#Users.byGroupRequest)
-    * [.count(limit, skip, filter, authorization_bearer)](#Users.count)
-    * [.get(sort, limit, skip, filter, sortdir, authorization_bearer)](#Users.get)
+    * [.count(limit, skip, filter, ids, authorization_bearer)](#Users.count)
+    * [.get(sort, limit, skip, filter, sortdir, ids, authorization_bearer)](#Users.get)
 
 <a name="Users.byGroupRequest"></a>
 
@@ -1895,7 +1895,7 @@ Path: api/v1/users/group/request/:group_request
 
 <a name="Users.count"></a>
 
-### Users.count(limit, skip, filter, authorization_bearer)
+### Users.count(limit, skip, filter, ids, authorization_bearer)
 count - Gets all the users
 
 ##### Optional Query Params
@@ -1926,11 +1926,12 @@ Path: api/v1/users/count
 | limit | <code>any</code> | Number of maximum results. (example: 2) (example: 2) |
 | skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |
 | filter | <code>any</code> | Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-06,created_on<2021-06-08) |
+| ids | <code>any</code> | Comma seperated id values used in inclusion query (example: d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="Users.get"></a>
 
-### Users.get(sort, limit, skip, filter, sortdir, authorization_bearer)
+### Users.get(sort, limit, skip, filter, sortdir, ids, authorization_bearer)
 get - Gets all the users
 
 ##### Filter Params
@@ -1963,6 +1964,7 @@ Path: api/v1/users
 | skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |
 | filter | <code>any</code> | Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) |
 | sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: ASC) |
+| ids | <code>any</code> | Comma seperated id values used in inclusion query (example: d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="UsersDomain"></a>
@@ -1971,12 +1973,12 @@ Path: api/v1/users
 **Kind**: global class  
 
 * [UsersDomain](#UsersDomain)
-    * [.count(domain, limit, skip, filter, authorization_bearer)](#UsersDomain.count)
-    * [.get(domain, sort, limit, skip, filter, sortdir, authorization_bearer)](#UsersDomain.get)
+    * [.count(domain, limit, skip, filter, ids, authorization_bearer)](#UsersDomain.count)
+    * [.get(domain, sort, limit, skip, filter, sortdir, ids, authorization_bearer)](#UsersDomain.get)
 
 <a name="UsersDomain.count"></a>
 
-### UsersDomain.count(domain, limit, skip, filter, authorization_bearer)
+### UsersDomain.count(domain, limit, skip, filter, ids, authorization_bearer)
 count - Gets all the users
 
 ##### Optional Query Params
@@ -2008,11 +2010,12 @@ Path: api/v1/users/domain/:domain/count
 | limit | <code>any</code> | Number of maximum results. (example: 2) (example: 5) |
 | skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |
 | filter | <code>any</code> | Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2022-06-01,created_on<2022-06-08) |
+| ids | <code>any</code> | Comma seperated id values used in inclusion query (example: d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="UsersDomain.get"></a>
 
-### UsersDomain.get(domain, sort, limit, skip, filter, sortdir, authorization_bearer)
+### UsersDomain.get(domain, sort, limit, skip, filter, sortdir, ids, authorization_bearer)
 get - Gets all the users
 
 ##### Filter Params
@@ -2046,6 +2049,7 @@ Path: api/v1/users/domain/:domain
 | skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |
 | filter | <code>any</code> | Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-01,created_on<2021-06-08) |
 | sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: ASC) |
+| ids | <code>any</code> | Comma seperated id values used in inclusion query (example: d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="User"></a>
@@ -2694,15 +2698,7 @@ Path: api/v1/auth/logout
 <a name="Auth.loginOtp"></a>
 
 ### Auth.loginOtp(token, authorization_bearer)
-loginOtp - Login a user
-
-##### Body Properties
-
-| Prop | Description |
-| --- | --- |
-| email/username | *required* String (example:  test@test.com) |
-| password | *required* String (example:  fakePassword123) |
-| remember | *optional* Boolean if you would like to be logged in automatically (example:  true) |
+loginOtp - Login via an OTP
 
 Path: api/v1/auth/login/otp
 
