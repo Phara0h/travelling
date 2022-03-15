@@ -3805,7 +3805,7 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
-#### [v2.12.0](https://github.com/Dragohm/travelling/compare/v2.12.0...v2.12.0)
+#### [v2.13.0](https://github.com/Dragohm/travelling/compare/v2.12.0...v2.13.0)
 
 - Feature - Users - get list by ids [`#12`](https://github.com/Dragohm/travelling/pull/12)
 - fixed domains inside urls [`8fa304a`](https://github.com/Dragohm/travelling/commit/8fa304af4b3c49f3eeff592e209daf4573463503)
