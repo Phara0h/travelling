@@ -164,7 +164,8 @@ module.exports = function (app, opts, done) {
         limit: req.query.limit,
         skip: req.query.skip,
         filter: req.query.filter,
-        sortdir: req.query.sortdir
+        sortdir: req.query.sortdir,
+        ids: req.query.ids
       });
     } catch {
       res.code(400).send({
@@ -184,6 +185,7 @@ module.exports = function (app, opts, done) {
         limit: req.query.limit,
         skip: req.query.skip,
         filter: req.query.filter,
+        ids: req.query.ids,
         count: true
       });
     } catch (e) {
@@ -211,7 +213,8 @@ module.exports = function (app, opts, done) {
         limit: req.query.limit,
         skip: req.query.skip,
         filter: req.query.filter,
-        sortdir: req.query.sortdir
+        sortdir: req.query.sortdir,
+        ids: req.query.ids
       });
     } catch {
       res.code(400).send({
@@ -237,6 +240,7 @@ module.exports = function (app, opts, done) {
         limit: req.query.limit,
         skip: req.query.skip,
         filter: req.query.filter,
+        ids: req.query.ids,
         count: true
       });
     } catch {

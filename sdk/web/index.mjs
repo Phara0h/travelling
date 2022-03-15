@@ -7167,14 +7167,15 @@ class Users {
   * @param {any} limit Number of maximum results. (example: 2) (example: 2)
   * @param {any} skip Number of db rows skipped. (example: 10) (example: 10)
   * @param {any} filter Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-06,created_on<2021-06-08)
+  * @param {any} ids Comma seperated id values used in inclusion query (example: d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   */
-  static async count(limit, skip, filter, authorization_bearer, opts) {
+  static async count(limit, skip, filter, ids, authorization_bearer, opts) {
     var options = {
       method: 'GET',
       simple: false,
       uri: hostUrl + '/' + `api/v1/users/count`,
-      qs: { limit, skip, filter },
+      qs: { limit, skip, filter, ids },
       authorization: {
         bearer: authorization_bearer,
       },
@@ -7216,6 +7217,7 @@ class Users {
   * @param {any} skip Number of db rows skipped. (example: 10) (example: 10)
   * @param {any} filter Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)
   * @param {any} sortdir Sort direction (example ascending order: ASC) (example: ASC)
+  * @param {any} ids Comma seperated id values used in inclusion query (example: d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   */
   static async get(
@@ -7224,6 +7226,7 @@ class Users {
     skip,
     filter,
     sortdir,
+    ids,
     authorization_bearer,
     opts
   ) {
@@ -7231,7 +7234,7 @@ class Users {
       method: 'GET',
       simple: false,
       uri: hostUrl + '/' + `api/v1/users`,
-      qs: { sort, limit, skip, filter, sortdir },
+      qs: { sort, limit, skip, filter, sortdir, ids },
       authorization: {
         bearer: authorization_bearer,
       },
@@ -7291,14 +7294,23 @@ class UsersDomain {
   * @param {any} limit Number of maximum results. (example: 2) (example: 5)
   * @param {any} skip Number of db rows skipped. (example: 10) (example: 10)
   * @param {any} filter Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2022-06-01,created_on<2022-06-08)
+  * @param {any} ids Comma seperated id values used in inclusion query (example: d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   */
-  static async count(domain, limit, skip, filter, authorization_bearer, opts) {
+  static async count(
+    domain,
+    limit,
+    skip,
+    filter,
+    ids,
+    authorization_bearer,
+    opts
+  ) {
     var options = {
       method: 'GET',
       simple: false,
       uri: hostUrl + '/' + `api/v1/users/domain/${domain}/count`,
-      qs: { limit, skip, filter },
+      qs: { limit, skip, filter, ids },
       authorization: {
         bearer: authorization_bearer,
       },
@@ -7341,6 +7353,7 @@ class UsersDomain {
   * @param {any} skip Number of db rows skipped. (example: 10) (example: 10)
   * @param {any} filter Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-01,created_on<2021-06-08)
   * @param {any} sortdir Sort direction (example ascending order: ASC) (example: ASC)
+  * @param {any} ids Comma seperated id values used in inclusion query (example: d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   */
   static async get(
@@ -7350,6 +7363,7 @@ class UsersDomain {
     skip,
     filter,
     sortdir,
+    ids,
     authorization_bearer,
     opts
   ) {
@@ -7357,7 +7371,7 @@ class UsersDomain {
       method: 'GET',
       simple: false,
       uri: hostUrl + '/' + `api/v1/users/domain/${domain}`,
-      qs: { sort, limit, skip, filter, sortdir },
+      qs: { sort, limit, skip, filter, sortdir, ids },
       authorization: {
         bearer: authorization_bearer,
       },
@@ -8547,20 +8561,12 @@ class Auth {
   }
 
   /**
-  * loginOtp - Login a user
-
-##### Body Properties
-
-| Prop | Description |
-| --- | --- |
-| email/username | *required* String (example:  test@test.com) |
-| password | *required* String (example:  fakePassword123) |
-| remember | *optional* Boolean if you would like to be logged in automatically (example:  true) |
-  *
-  * Path: api/v1/auth/login/otp
-  * @param {any} token  (example: JQHGH9QuIIhpGuFBG920TdnWkSECFp-ONP0NadfPCclsX708wYaXKHFb5nUj1fmZFHcN1KpKqzkOkjfZGYdfsIt0KnWV69mmt5Uqpw3HiMYD1mBfr4SQap2cg8vH78bb|6Rzt6ubKWXJKY6Pg4GAePg==)
-  * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
-  */
+   * loginOtp - Login via an OTP
+   *
+   * Path: api/v1/auth/login/otp
+   * @param {any} token  (example: JQHGH9QuIIhpGuFBG920TdnWkSECFp-ONP0NadfPCclsX708wYaXKHFb5nUj1fmZFHcN1KpKqzkOkjfZGYdfsIt0KnWV69mmt5Uqpw3HiMYD1mBfr4SQap2cg8vH78bb|6Rzt6ubKWXJKY6Pg4GAePg==)
+   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+   */
   static async loginOtp(token, authorization_bearer, opts) {
     var options = {
       method: 'GET',
