@@ -2689,8 +2689,8 @@ body
 
 * [Users](#Users)
     * [.byGroupRequest(group_request, authorization_bearer)](#Users.byGroupRequest)
-    * [.count(limit, skip, filter, authorization_bearer)](#Users.count)
-    * [.get(sort, limit, skip, filter, sortdir, authorization_bearer)](#Users.get)
+    * [.count(limit, skip, filter, ids, authorization_bearer)](#Users.count)
+    * [.get(sort, limit, skip, filter, sortdir, ids, authorization_bearer)](#Users.get)
 
 <a name="Users.byGroupRequest"></a>
 
@@ -2727,7 +2727,7 @@ Path: api/v1/users/group/request/:group_request
 
 <a name="Users.count"></a>
 
-### Users.count(limit, skip, filter, authorization_bearer)
+### Users.count(limit, skip, filter, ids, authorization_bearer)
 count - Gets all the users
 
 ##### Optional Query Params
@@ -2758,11 +2758,12 @@ Path: api/v1/users/count
 | limit | <code>any</code> | Number of maximum results. (example: 2) (example: 2) |
 | skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |
 | filter | <code>any</code> | Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-06,created_on<2021-06-08) |
+| ids | <code>any</code> | Comma seperated id values used in inclusion query (example: d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="Users.get"></a>
 
-### Users.get(sort, limit, skip, filter, sortdir, authorization_bearer)
+### Users.get(sort, limit, skip, filter, sortdir, ids, authorization_bearer)
 get - Gets all the users
 
 ##### Filter Params
@@ -2795,6 +2796,7 @@ Path: api/v1/users
 | skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |
 | filter | <code>any</code> | Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) |
 | sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: ASC) |
+| ids | <code>any</code> | Comma seperated id values used in inclusion query (example: d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="UsersDomain"></a>
@@ -2803,12 +2805,12 @@ Path: api/v1/users
 **Kind**: global class  
 
 * [UsersDomain](#UsersDomain)
-    * [.count(domain, limit, skip, filter, authorization_bearer)](#UsersDomain.count)
-    * [.get(domain, sort, limit, skip, filter, sortdir, authorization_bearer)](#UsersDomain.get)
+    * [.count(domain, limit, skip, filter, ids, authorization_bearer)](#UsersDomain.count)
+    * [.get(domain, sort, limit, skip, filter, sortdir, ids, authorization_bearer)](#UsersDomain.get)
 
 <a name="UsersDomain.count"></a>
 
-### UsersDomain.count(domain, limit, skip, filter, authorization_bearer)
+### UsersDomain.count(domain, limit, skip, filter, ids, authorization_bearer)
 count - Gets all the users
 
 ##### Optional Query Params
@@ -2840,11 +2842,12 @@ Path: api/v1/users/domain/:domain/count
 | limit | <code>any</code> | Number of maximum results. (example: 2) (example: 5) |
 | skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |
 | filter | <code>any</code> | Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2022-06-01,created_on<2022-06-08) |
+| ids | <code>any</code> | Comma seperated id values used in inclusion query (example: d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="UsersDomain.get"></a>
 
-### UsersDomain.get(domain, sort, limit, skip, filter, sortdir, authorization_bearer)
+### UsersDomain.get(domain, sort, limit, skip, filter, sortdir, ids, authorization_bearer)
 get - Gets all the users
 
 ##### Filter Params
@@ -2878,6 +2881,7 @@ Path: api/v1/users/domain/:domain
 | skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |
 | filter | <code>any</code> | Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-01,created_on<2021-06-08) |
 | sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: ASC) |
+| ids | <code>any</code> | Comma seperated id values used in inclusion query (example: d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="User"></a>
@@ -3526,15 +3530,7 @@ Path: api/v1/auth/logout
 <a name="Auth.loginOtp"></a>
 
 ### Auth.loginOtp(token, authorization_bearer)
-loginOtp - Login a user
-
-##### Body Properties
-
-| Prop | Description |
-| --- | --- |
-| email/username | *required* String (example:  test@test.com) |
-| password | *required* String (example:  fakePassword123) |
-| remember | *optional* Boolean if you would like to be logged in automatically (example:  true) |
+loginOtp - Login via an OTP
 
 Path: api/v1/auth/login/otp
 
@@ -3809,7 +3805,25 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v2.12.0](https://github.com/Dragohm/travelling/compare/v2.12.0...v2.12.0)
+
+- Feature - Users - get list by ids [`#12`](https://github.com/Dragohm/travelling/pull/12)
+- fixed domains inside urls [`8fa304a`](https://github.com/Dragohm/travelling/commit/8fa304af4b3c49f3eeff592e209daf4573463503)
+
+#### [v2.12.0](https://github.com/Dragohm/travelling/compare/v2.11.7...v2.12.0)
+
+> 15 March 2022
+
+- update tests [`bbf5438`](https://github.com/Dragohm/travelling/commit/bbf54381252d4108493e0ab9a5e860a59784d9f6)
+- update postman + tests [`de1879f`](https://github.com/Dragohm/travelling/commit/de1879fc5553a8cf91b9b6b5cc4fea3abbc7b60a)
+- fix testENV [`91e9b34`](https://github.com/Dragohm/travelling/commit/91e9b3457825b14780217a54c607c15aa3b73be9)
+- adding tests [`9e38c35`](https://github.com/Dragohm/travelling/commit/9e38c3585d4bdc100d563fec27ede1cd4234386b)
+- address PR feedback [`be26654`](https://github.com/Dragohm/travelling/commit/be26654c4d36e02358095a099145b44056a005f9)
+- update users list query to work with list of ids [`c03919d`](https://github.com/Dragohm/travelling/commit/c03919d0aa5c12744c39f7703d24970fc029f305)
+
 #### [v2.11.7](https://github.com/Dragohm/travelling/compare/v2.11.6...v2.11.7)
+
+> 10 March 2022
 
 - fixed domains inside urls [`8fa304a`](https://github.com/Dragohm/travelling/commit/8fa304af4b3c49f3eeff592e209daf4573463503)
 
