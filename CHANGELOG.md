@@ -1,6 +1,6 @@
 
 
-#### [v2.12.0](https://github.com/Trazi-Ventures/travelling/compare/v2.12.0...v2.12.0)
+#### [v2.13.0](https://github.com/Trazi-Ventures/travelling/compare/v2.12.0...v2.13.0)
 
 - Feature - Users - get list by ids [`#12`](https://github.com/Trazi-Ventures/travelling/pull/12)
 - fixed domains inside urls [`8fa304a`](https://github.com/Trazi-Ventures/travelling/commit/8fa304af4b3c49f3eeff592e209daf4573463503)
