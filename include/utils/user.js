@@ -31,7 +31,9 @@ const utilsUser = {
         try {
           var res = await Fasquest.request({
             method: config.email.validation.external.method,
-            uri: config.email.validation.external.endpoint + (config.email.validation.external.emailInEndpoint ? user.email : ''),
+            uri:
+              config.email.validation.external.endpoint +
+              (config.email.validation.external.emailInEndpoint ? user.email : ''),
             body: config.email.validation.external.emailInBody ? user.email : null,
             resolveWithFullResponse: true
           });
@@ -255,15 +257,21 @@ const utilsUser = {
     if (props.firstname !== undefined) {
       user.firstname = misc.toLower(props.firstname);
     }
+
     if (props.middlename !== undefined) {
       user.middlename = misc.toLower(props.middlename);
     }
+
     if (props.lastname !== undefined) {
       user.lastname = misc.toLower(props.lastname);
     }
 
     if (props.dob !== undefined) {
-      user.dob = new Date(Date.parse(props.dob)).toISOString();
+      if (!props.dob) {
+        user.dob = null;
+      } else {
+        user.dob = new Date(Date.parse(props.dob)).toISOString();
+      }
     }
 
     if (props.phone !== undefined) {
@@ -289,6 +297,7 @@ const utilsUser = {
     if (props.street_type !== undefined) {
       user.street_type = misc.toLower(props.street_type);
     }
+
     if (props.street_affix !== undefined) {
       user.street_affix = misc.toLower(props.street_affix);
     }
