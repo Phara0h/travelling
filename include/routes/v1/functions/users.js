@@ -241,6 +241,24 @@ async function getUser(opts) {
       return user[0][opts.req.params.prop];
     }
 
+    // Record view audit
+    if (config.audit.view.enable === true) {
+      var auditObj = {
+        action: 'VIEW',
+        subaction: 'USER',
+        ofUserId: user[0].id
+      };
+
+      if (opts.req.session.data) {
+        auditObj.byUserId = opts.req.session.data.user.id;
+      }
+
+      // Dont add view audit when viewing self
+      if (user[0].id !== auditObj.byUserId) {
+        await audit.createSingleAudit(auditObj);
+      }
+    }
+
     await user[0].resolveGroup();
 
     opts.res.code(200);
