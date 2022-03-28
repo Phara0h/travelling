@@ -242,7 +242,7 @@ async function getUser(opts) {
     }
 
     // Record view audit
-    if (config.audit.view.enable === true) {
+    if (config.audit.view.enable === true && user[0].id !== auditObj.byUserId) {
       var auditObj = {
         action: 'VIEW',
         subaction: 'USER',
@@ -253,10 +253,7 @@ async function getUser(opts) {
         auditObj.byUserId = opts.req.session.data.user.id;
       }
 
-      // Dont add view audit when viewing self
-      if (user[0].id !== auditObj.byUserId) {
-        await audit.createSingleAudit(auditObj);
-      }
+      await audit.createSingleAudit(auditObj);
     }
 
     await user[0].resolveGroup();

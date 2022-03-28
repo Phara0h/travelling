@@ -100,13 +100,13 @@ Path: metrics
 **Kind**: global class  
 
 * [Audit](#Audit)
-    * [.byActionAndSubaction(action, subaction, limit, skip, sort, sortdir, filter, authorization_bearer)](#Audit.byActionAndSubaction)
-    * [.bySubaction(subaction, limit, skip, sort, sortdir, filter, authorization_bearer)](#Audit.bySubaction)
-    * [.byAction(action, limit, skip, sort, sortdir, filter, authorization_bearer)](#Audit.byAction)
+    * [.byActionAndSubaction(action, subaction, limit, skip, sort, sortdir, filter, resolve, authorization_bearer)](#Audit.byActionAndSubaction)
+    * [.bySubaction(subaction, limit, skip, sort, sortdir, filter, resolve, authorization_bearer)](#Audit.bySubaction)
+    * [.byAction(action, limit, skip, sort, sortdir, filter, resolve, authorization_bearer)](#Audit.byAction)
 
 <a name="Audit.byActionAndSubaction"></a>
 
-### Audit.byActionAndSubaction(action, subaction, limit, skip, sort, sortdir, filter, authorization_bearer)
+### Audit.byActionAndSubaction(action, subaction, limit, skip, sort, sortdir, filter, resolve, authorization_bearer)
 byActionAndSubaction - Gets audits by action and subaction type.
 
 ##### Filter Params
@@ -132,11 +132,12 @@ Path: api/v1/audit/action/:action/subaction/:subaction
 | sort | <code>any</code> | Sort by any user object key (examples: created_on, action, etc.) (example: created_on) |
 | sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: ASC) |
 | filter | <code>any</code> | Filter parameters (example: action=created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-03,created_on<2021-06-06) |
+| resolve | <code>any</code> | Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields (example: true) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="Audit.bySubaction"></a>
 
-### Audit.bySubaction(subaction, limit, skip, sort, sortdir, filter, authorization_bearer)
+### Audit.bySubaction(subaction, limit, skip, sort, sortdir, filter, resolve, authorization_bearer)
 bySubaction - Gets audits by subaction type.
 
 ##### Filter Params
@@ -161,11 +162,12 @@ Path: api/v1/audit/subaction/:subaction
 | sort | <code>any</code> | Sort by any user object key (examples: created_on, action, etc.) (example: created_on) |
 | sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: ASC) |
 | filter | <code>any</code> | Filter parameters (example: action=created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-03,created_on<2021-06-06) |
+| resolve | <code>any</code> | Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields (example: true) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="Audit.byAction"></a>
 
-### Audit.byAction(action, limit, skip, sort, sortdir, filter, authorization_bearer)
+### Audit.byAction(action, limit, skip, sort, sortdir, filter, resolve, authorization_bearer)
 byAction - Gets audits by action type.
 
 ##### Filter Params
@@ -190,6 +192,7 @@ Path: api/v1/audit/action/:action
 | sort | <code>any</code> | Sort by any user object key (examples: created_on, action, etc.) (example: created_on) |
 | sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: ASC) |
 | filter | <code>any</code> | Filter parameters (example: action=created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-03,created_on<2021-06-06) |
+| resolve | <code>any</code> | Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields (example: true) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="AuditUser"></a>
@@ -198,12 +201,12 @@ Path: api/v1/audit/action/:action
 **Kind**: global class  
 
 * [AuditUser](#AuditUser)
-    * [.byuserId(id, filter, limit, skip, sort, sortdir, authorization_bearer)](#AuditUser.byuserId)
-    * [.ofuserId(id, filter, limit, skip, sort, sortdir, authorization_bearer)](#AuditUser.ofuserId)
+    * [.byuserId(id, filter, limit, skip, sort, sortdir, resolve, authorization_bearer)](#AuditUser.byuserId)
+    * [.ofuserId(id, filter, limit, skip, sort, sortdir, resolve, authorization_bearer)](#AuditUser.ofuserId)
 
 <a name="AuditUser.byuserId"></a>
 
-### AuditUser.byuserId(id, filter, limit, skip, sort, sortdir, authorization_bearer)
+### AuditUser.byuserId(id, filter, limit, skip, sort, sortdir, resolve, authorization_bearer)
 byuserId - Gets audits by by_user id.
 
 ##### Filter Params
@@ -224,17 +227,18 @@ Path: api/v1/audit/user/byuser/:id
 
 | Param | Type | Description |
 | --- | --- | --- |
-| id | <code>any</code> | Id of user that committed the action. (example: 778c3e68-4d9f-486d-a6eb-0d1cfd93520d) |
-| filter | <code>any</code> | Filter parameters (example: action=CREATE,subaction=USER,created_on>2021-06-03,created_on<2021-06-06) (example: action=CREATE,created_on>2021-06-03,created_on<2021-07-06) |
+| id | <code>any</code> | Id of user that committed the action. (example: 44aa2ae6-22e9-43ef-a6d3-3d7d39e78064) |
+| filter | <code>any</code> | Filter parameters (example: action=CREATE,subaction=USER,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-03,created_on<2021-06-06) |
 | limit | <code>any</code> | Number of maximum results. (example: 2) (example: 2) |
-| skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |
+| skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 1) |
 | sort | <code>any</code> | Sort by any user object key (examples: created_on, action, etc.) (example: created_on) |
 | sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: ASC) |
+| resolve | <code>any</code> | Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields (example: true) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="AuditUser.ofuserId"></a>
 
-### AuditUser.ofuserId(id, filter, limit, skip, sort, sortdir, authorization_bearer)
+### AuditUser.ofuserId(id, filter, limit, skip, sort, sortdir, resolve, authorization_bearer)
 ofuserId - Gets audits by of_user id.
 
 ##### Filter Params
@@ -261,6 +265,7 @@ Path: api/v1/audit/user/ofuser/:id
 | skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |
 | sort | <code>any</code> | Sort by any user object key (examples: created_on, action, etc.) (example: action) |
 | sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: DESC) |
+| resolve | <code>any</code> | Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields (example: true) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="Config"></a>
@@ -2006,7 +2011,7 @@ Path: api/v1/users/domain/:domain/count
 
 | Param | Type | Description |
 | --- | --- | --- |
-| domain | <code>any</code> | (example: test.com) |
+| domain | <code>any</code> | (example: dragohmventures.com) |
 | limit | <code>any</code> | Number of maximum results. (example: 2) (example: 5) |
 | skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |
 | filter | <code>any</code> | Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2022-06-01,created_on<2022-06-08) |
@@ -2043,7 +2048,7 @@ Path: api/v1/users/domain/:domain
 
 | Param | Type | Description |
 | --- | --- | --- |
-| domain | <code>any</code> | (example: test.com) |
+| domain | <code>any</code> | (example: dragohmventures.com) |
 | sort | <code>any</code> | Sort by any user object key (examples: id, domain, locked, etc.) (example: created_on) |
 | limit | <code>any</code> | Number of maximum results. (example: 2) (example: 1) |
 | skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |

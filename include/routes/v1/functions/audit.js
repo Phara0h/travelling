@@ -1,9 +1,13 @@
 const Audit = require('../../../database/models/audit');
 
 async function getAudits(opts) {
-  // Audit base query joins users to retireve first and last names
-  const query =
-    'select audits.id, audits.created_on, audits.action, audits.subaction, audits.by_user_id, audits.of_user_id, audits.prop, audits.old_val, audits.new_val, users.firstName as by_user_firstname, users.lastname as by_user_lastname from audits join users on audits.by_user_id = users.id ';
+  let query;
+
+  if (opts.resolve) {
+    // Audit base query joins users to retrieve first and last names
+    query =
+      'select audits.id, audits.created_on, audits.action, audits.subaction, audits.by_user_id, audits.of_user_id, audits.prop, audits.old_val, audits.new_val, users.firstName as by_user_firstname, users.lastname as by_user_lastname from audits join users on audits.by_user_id = users.id ';
+  }
 
   // Strip filter white space
   if (opts.req.query.filter && opts.req.query.filter.indexOf(' ') > -1) {
