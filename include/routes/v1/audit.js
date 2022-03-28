@@ -20,6 +20,8 @@ module.exports = function (app, opts, done) {
       req.query.filter += `,by_user_id=${id}`;
     }
 
+    opts.resolve = req.query.resolve ? true : false;
+
     return await auditRoutes.getAudits({ req, res });
   });
 
@@ -39,6 +41,8 @@ module.exports = function (app, opts, done) {
     } else {
       req.query.filter += `,of_user_id=${id}`;
     }
+
+    opts.resolve = req.query.resolve ? true : false;
 
     return await auditRoutes.getAudits({ req, res });
   });
@@ -67,6 +71,8 @@ module.exports = function (app, opts, done) {
       req.query.filter += `,action=${action}`;
     }
 
+    opts.resolve = req.query.resolve ? true : false;
+
     return await auditRoutes.getAudits({ req, res });
   });
 
@@ -93,6 +99,8 @@ module.exports = function (app, opts, done) {
     } else {
       req.query.filter += `,subaction=${subaction}`;
     }
+
+    opts.resolve = req.query.resolve ? true : false;
 
     return await auditRoutes.getAudits({ req, res });
   });
@@ -125,6 +133,8 @@ module.exports = function (app, opts, done) {
     } else {
       req.query.filter += `,action=${action},subaction=${subaction}`;
     }
+
+    opts.resolve = req.query.resolve ? true : false;
 
     return await auditRoutes.getAudits({ req, res });
   });

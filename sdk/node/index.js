@@ -362,6 +362,7 @@ class Audit {
   * @param {any} sort Sort by any user object key (examples: created_on, action, etc.) (example: created_on)
   * @param {any} sortdir Sort direction (example ascending order: ASC) (example: ASC)
   * @param {any} filter Filter parameters (example: action=created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-03,created_on<2021-06-06)
+  * @param {any} resolve Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields (example: true)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   */
   static async byActionAndSubaction(
@@ -372,6 +373,7 @@ class Audit {
     sort,
     sortdir,
     filter,
+    resolve,
     authorization_bearer,
     opts
   ) {
@@ -380,7 +382,7 @@ class Audit {
       simple: false,
       uri:
         hostUrl + '/' + `api/v1/audit/action/${action}/subaction/${subaction}`,
-      qs: { limit, skip, sort, sortdir, filter },
+      qs: { limit, skip, sort, sortdir, filter, resolve },
       authorization: {
         bearer: authorization_bearer,
       },
@@ -414,6 +416,7 @@ class Audit {
   * @param {any} sort Sort by any user object key (examples: created_on, action, etc.) (example: created_on)
   * @param {any} sortdir Sort direction (example ascending order: ASC) (example: ASC)
   * @param {any} filter Filter parameters (example: action=created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-03,created_on<2021-06-06)
+  * @param {any} resolve Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields (example: true)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   */
   static async bySubaction(
@@ -423,6 +426,7 @@ class Audit {
     sort,
     sortdir,
     filter,
+    resolve,
     authorization_bearer,
     opts
   ) {
@@ -430,7 +434,7 @@ class Audit {
       method: 'GET',
       simple: false,
       uri: hostUrl + '/' + `api/v1/audit/subaction/${subaction}`,
-      qs: { limit, skip, sort, sortdir, filter },
+      qs: { limit, skip, sort, sortdir, filter, resolve },
       authorization: {
         bearer: authorization_bearer,
       },
@@ -464,6 +468,7 @@ class Audit {
   * @param {any} sort Sort by any user object key (examples: created_on, action, etc.) (example: created_on)
   * @param {any} sortdir Sort direction (example ascending order: ASC) (example: ASC)
   * @param {any} filter Filter parameters (example: action=created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-03,created_on<2021-06-06)
+  * @param {any} resolve Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields (example: true)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   */
   static async byAction(
@@ -473,6 +478,7 @@ class Audit {
     sort,
     sortdir,
     filter,
+    resolve,
     authorization_bearer,
     opts
   ) {
@@ -480,7 +486,7 @@ class Audit {
       method: 'GET',
       simple: false,
       uri: hostUrl + '/' + `api/v1/audit/action/${action}`,
-      qs: { limit, skip, sort, sortdir, filter },
+      qs: { limit, skip, sort, sortdir, filter, resolve },
       authorization: {
         bearer: authorization_bearer,
       },
@@ -529,12 +535,13 @@ class AuditUser {
 | new_val | *optional* (example:  new_val=leet@teel.com) |
   *
   * Path: api/v1/audit/user/byuser/:id
-  * @param {any} id Id of user that committed the action. (example: 778c3e68-4d9f-486d-a6eb-0d1cfd93520d)
-  * @param {any} filter Filter parameters (example: action=CREATE,subaction=USER,created_on>2021-06-03,created_on<2021-06-06) (example: action=CREATE,created_on>2021-06-03,created_on<2021-07-06)
+  * @param {any} id Id of user that committed the action. (example: 44aa2ae6-22e9-43ef-a6d3-3d7d39e78064)
+  * @param {any} filter Filter parameters (example: action=CREATE,subaction=USER,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-03,created_on<2021-06-06)
   * @param {any} limit Number of maximum results. (example: 2) (example: 2)
-  * @param {any} skip Number of db rows skipped. (example: 10) (example: 10)
+  * @param {any} skip Number of db rows skipped. (example: 10) (example: 1)
   * @param {any} sort Sort by any user object key (examples: created_on, action, etc.) (example: created_on)
   * @param {any} sortdir Sort direction (example ascending order: ASC) (example: ASC)
+  * @param {any} resolve Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields (example: true)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   */
   static async byuserId(
@@ -544,6 +551,7 @@ class AuditUser {
     skip,
     sort,
     sortdir,
+    resolve,
     authorization_bearer,
     opts
   ) {
@@ -551,7 +559,7 @@ class AuditUser {
       method: 'GET',
       simple: false,
       uri: hostUrl + '/' + `api/v1/audit/user/byuser/${id}`,
-      qs: { filter, limit, skip, sort, sortdir },
+      qs: { filter, limit, skip, sort, sortdir, resolve },
       authorization: {
         bearer: authorization_bearer,
       },
@@ -587,6 +595,7 @@ class AuditUser {
   * @param {any} skip Number of db rows skipped. (example: 10) (example: 10)
   * @param {any} sort Sort by any user object key (examples: created_on, action, etc.) (example: action)
   * @param {any} sortdir Sort direction (example ascending order: ASC) (example: DESC)
+  * @param {any} resolve Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields (example: true)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   */
   static async ofuserId(
@@ -596,6 +605,7 @@ class AuditUser {
     skip,
     sort,
     sortdir,
+    resolve,
     authorization_bearer,
     opts
   ) {
@@ -603,7 +613,7 @@ class AuditUser {
       method: 'GET',
       simple: false,
       uri: hostUrl + '/' + `api/v1/audit/user/ofuser/${id}`,
-      qs: { filter, limit, skip, sort, sortdir },
+      qs: { filter, limit, skip, sort, sortdir, resolve },
       authorization: {
         bearer: authorization_bearer,
       },
@@ -3294,7 +3304,7 @@ class UsersDomain {
 | last_login | *optional* (example:  null) |
   *
   * Path: api/v1/users/domain/:domain/count
-  * @param {any} domain  (example: test.com)
+  * @param {any} domain  (example: traziventures.com)
   * @param {any} limit Number of maximum results. (example: 2) (example: 5)
   * @param {any} skip Number of db rows skipped. (example: 10) (example: 10)
   * @param {any} filter Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2022-06-01,created_on<2022-06-08)
@@ -3351,7 +3361,7 @@ class UsersDomain {
 | last_login | *optional* (example:  null) |
   *
   * Path: api/v1/users/domain/:domain
-  * @param {any} domain  (example: test.com)
+  * @param {any} domain  (example: traziventures.com)
   * @param {any} sort Sort by any user object key (examples: id, domain, locked, etc.) (example: created_on)
   * @param {any} limit Number of maximum results. (example: 2) (example: 1)
   * @param {any} skip Number of db rows skipped. (example: 10) (example: 10)

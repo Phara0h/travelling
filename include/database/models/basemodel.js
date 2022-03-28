@@ -89,6 +89,7 @@ BaseModel.findAllByFilter = async function ({ query, filter, sort, sortdir = 'DE
       if (i === 0) {
         query += ' WHERE ';
       }
+      
       query += `${this.table}.${keys[i]}${ops[i]}${ops[i] === '=ANY' ? `($${i + 1})` : `$${i + 1}`}`;
 
       if (keys.length > i + 1) {
