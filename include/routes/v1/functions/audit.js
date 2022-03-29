@@ -1,7 +1,7 @@
 const Audit = require('../../../database/models/audit');
 
 async function getAudits(opts) {
-  let query;
+  var query = null;
 
   if (opts.resolve) {
     // Audit base query joins users to retrieve first and last names
