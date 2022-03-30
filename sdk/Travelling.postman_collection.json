@@ -2869,7 +2869,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{TRAVELLING}}/api/v1/users/domain/:domain?ids=d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f",
+									"raw": "{{TRAVELLING}}/api/v1/users/domain/:domain",
 									"host": [
 										"{{TRAVELLING}}"
 									],
@@ -2914,13 +2914,14 @@
 										{
 											"key": "ids",
 											"value": "d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f",
-											"description": "Comma seperated id values used in inclusion query"
+											"description": "Comma seperated id values used in inclusion query",
+											"disabled": true
 										}
 									],
 									"variable": [
 										{
 											"key": "domain",
-											"value": "test.com"
+											"value": "traziventures.com"
 										}
 									]
 								},
@@ -2941,7 +2942,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{TRAVELLING}}/api/v1/users/domain/:domain/count?ids=d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f",
+									"raw": "{{TRAVELLING}}/api/v1/users/domain/:domain/count",
 									"host": [
 										"{{TRAVELLING}}"
 									],
@@ -2975,13 +2976,14 @@
 										{
 											"key": "ids",
 											"value": "d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f",
-											"description": "Comma seperated id values used in inclusion query"
+											"description": "Comma seperated id values used in inclusion query",
+											"disabled": true
 										}
 									],
 									"variable": [
 										{
 											"key": "domain",
-											"value": "test.com"
+											"value": "traziventures.com"
 										}
 									]
 								},
@@ -8637,6 +8639,12 @@
 											"value": "DESC",
 											"description": "Sort direction (example ascending order: ASC)",
 											"disabled": true
+										},
+										{
+											"key": "resolve",
+											"value": "true",
+											"description": "Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields",
+											"disabled": true
 										}
 									],
 									"variable": [
@@ -8679,7 +8687,7 @@
 									"query": [
 										{
 											"key": "filter",
-											"value": "action=CREATE,created_on>2021-06-03,created_on<2021-07-06",
+											"value": "created_on>2021-06-03,created_on<2021-06-06",
 											"description": "Filter parameters (example: action=CREATE,subaction=USER,created_on>2021-06-03,created_on<2021-06-06)",
 											"disabled": true
 										},
@@ -8691,7 +8699,7 @@
 										},
 										{
 											"key": "skip",
-											"value": "10",
+											"value": "1",
 											"description": "Number of db rows skipped. (example: 10)",
 											"disabled": true
 										},
@@ -8706,12 +8714,18 @@
 											"value": "ASC",
 											"description": "Sort direction (example ascending order: ASC)",
 											"disabled": true
+										},
+										{
+											"key": "resolve",
+											"value": "true",
+											"description": "Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields",
+											"disabled": true
 										}
 									],
 									"variable": [
 										{
 											"key": "id",
-											"value": "778c3e68-4d9f-486d-a6eb-0d1cfd93520d",
+											"value": "44aa2ae6-22e9-43ef-a6d3-3d7d39e78064",
 											"description": "Id of user that committed the action."
 										}
 									]
@@ -8775,6 +8789,12 @@
 									"key": "filter",
 									"value": "created_on>2021-06-03,created_on<2021-06-06",
 									"description": "Filter parameters (example: action=created_on>2021-06-03,created_on<2021-06-06)",
+									"disabled": true
+								},
+								{
+									"key": "resolve",
+									"value": "true",
+									"description": "Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields",
 									"disabled": true
 								}
 							],
@@ -8843,6 +8863,12 @@
 									"key": "filter",
 									"value": "created_on>2021-06-03,created_on<2021-06-06",
 									"description": "Filter parameters (example: action=created_on>2021-06-03,created_on<2021-06-06)",
+									"disabled": true
+								},
+								{
+									"key": "resolve",
+									"value": "true",
+									"description": "Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields",
 									"disabled": true
 								}
 							],
@@ -8913,6 +8939,12 @@
 									"key": "filter",
 									"value": "created_on>2021-06-03,created_on<2021-06-06",
 									"description": "Filter parameters (example: action=created_on>2021-06-03,created_on<2021-06-06)",
+									"disabled": true
+								},
+								{
+									"key": "resolve",
+									"value": "true",
+									"description": "Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields",
 									"disabled": true
 								}
 							],

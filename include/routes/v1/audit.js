@@ -1,15 +1,16 @@
 const auditRoutes = require('./functions/audit');
 const { validateAuditAction, validateAuditSubaction } = require('../../utils/audit');
+const regex = require('../../utils/regex');
 
 module.exports = function (app, opts, done) {
   app.get('/audit/user/byuser/:id', async (req, res) => {
     const id = req.params.id;
 
-    if (!id) {
+    if (!id || !regex.uuidCheck(id)) {
       res.code(400);
       return {
-        type: 'missing-param-error',
-        msg: 'Please provide required parameter(s).'
+        type: 'validation-error',
+        msg: 'Please provide a valid uuid.'
       };
     }
 
@@ -25,14 +26,14 @@ module.exports = function (app, opts, done) {
   app.get('/audit/user/ofuser/:id', async (req, res) => {
     const id = req.params.id;
 
-    if (!id) {
+    if (!id || !regex.uuidCheck(id)) {
       res.code(400);
       return {
-        type: 'missing-param-error',
-        msg: 'Please provide a valid id.'
+        type: 'validation-error',
+        msg: 'Please provide a valid uuid.'
       };
     }
-    
+
     if (!req.query.filter) {
       req.query.filter = `of_user_id=${id}`;
     } else {
@@ -59,7 +60,7 @@ module.exports = function (app, opts, done) {
       res.code(400);
       return error;
     }
-    
+
     if (!req.query.filter) {
       req.query.filter = `action=${action}`;
     } else {
