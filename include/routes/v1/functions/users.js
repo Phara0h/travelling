@@ -242,7 +242,7 @@ async function getUser(opts) {
     }
 
     // Record view audit (if not viewing self)
-    if (config.audit.view.enable === true && user[0].id !== opts.req.session.data.user.id) {
+    if (config.audit.view.enable === true && opts.req.session.data && user[0].id !== opts.req.session.data.user.id) {
       var auditObj = {
         action: 'VIEW',
         subaction: 'USER',
