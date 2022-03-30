@@ -1,6 +1,21 @@
 
 
+#### [v2.14.0](https://github.com/Trazi-Ventures/travelling/compare/v2.13.0...v2.14.0)
+
+- Add user view audits [`#15`](https://github.com/Trazi-Ventures/travelling/pull/15)
+- Fix #36 Crash user edit dob [`#14`](https://github.com/Trazi-Ventures/travelling/pull/14)
+- Merge pull request #14 from Trazi-Ventures/fix-#36-crash-user-edit-dob [`#36`](https://github.com/Trazi-Ventures/travelling/issues/36)
+- Add session check [`e2f75c1`](https://github.com/Trazi-Ventures/travelling/commit/e2f75c1b70e26aadc110ba6ae10b10575e82edfd)
+- bug fix [`fc063c1`](https://github.com/Trazi-Ventures/travelling/commit/fc063c12ced6423bab4ed07692a18feaa885f7be)
+- test fixes [`67520ef`](https://github.com/Trazi-Ventures/travelling/commit/67520ef7b1ebbff80f626a8846a3df914c391ac0)
+- update var [`2320adc`](https://github.com/Trazi-Ventures/travelling/commit/2320adc14a941084753c88c24f01e7202a6ba838)
+- Add audit resolve. Update SDK [`2b19d71`](https://github.com/Trazi-Ventures/travelling/commit/2b19d718620871f783aad145e2a619c1b42a8fa6)
+- Update user validation [`12e44ee`](https://github.com/Trazi-Ventures/travelling/commit/12e44ee0d4d6458acf89d354084f09fb2cd38e7b)
+- Update package.json [`8c81584`](https://github.com/Trazi-Ventures/travelling/commit/8c81584e53ccc3683740901cb3afc2ba8046ad06)
+
 #### [v2.13.0](https://github.com/Trazi-Ventures/travelling/compare/v2.12.0...v2.13.0)
+
+> 15 March 2022
 
 - Feature - Users - get list by ids [`#12`](https://github.com/Trazi-Ventures/travelling/pull/12)
 - fixed domains inside urls [`8fa304a`](https://github.com/Trazi-Ventures/travelling/commit/8fa304af4b3c49f3eeff592e209daf4573463503)
