@@ -3810,7 +3810,13 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v2.14.1](https://github.com/Dragohm/travelling/compare/v2.14.0...v2.14.1)
+
+- Fix json and buffer data audit values [`#16`](https://github.com/Dragohm/travelling/pull/16)
+
 #### [v2.14.0](https://github.com/Dragohm/travelling/compare/v2.13.0...v2.14.0)
+
+> 30 March 2022
 
 - Add user view audits [`#15`](https://github.com/Dragohm/travelling/pull/15)
 - Fix #36 Crash user edit dob [`#14`](https://github.com/Dragohm/travelling/pull/14)
