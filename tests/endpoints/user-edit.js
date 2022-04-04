@@ -58,19 +58,6 @@ module.exports = () => {
         expect(res.statusCode).toEqual(200);
       });
 
-      test('Checking Audit of (Edit Test User Email Property [test2])', async () => {
-        if (config.audit.edit.enable === true) {
-          const u = await User.findAllBy({ username: 'test2' });
-          const audit = await Audit.findAllBy({ of_user_id: u[0].id, action: 'EDIT', subaction: 'USER_PROPERTY' });
-
-          expect(audit[0]).toHaveProperty('id');
-          expect(audit[0].created_on).not.toBeNull();
-          expect(audit[0].prop).toEqual('email');
-          expect(audit[0].old_val).toMatch('test2@test.com');
-          expect(audit[0].new_val).toMatch('asdf@asdf.memes');
-        }
-      });
-
       test('Edit Test User 2 Email Property Value ', async () => {
         var res = await Travelling.User.editPropertyValue('test2', 'email', 'test2@test.com', userContainer.user1Token);
 
@@ -87,6 +74,17 @@ module.exports = () => {
 
         expect(res.statusCode).toEqual(200);
         expect(res.body).toMatchObject({ email: 'asdfa@fd.foo', user_data: { test: 1, foo: 'bar' } });
+      });
+
+      test('Edit Test User Update Existing UserData', async () => {
+        var res = await Travelling.User.edit(
+          { user_data: { notes: 'notey totey' } },
+          'test2',
+          userContainer.user1Token
+        );
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toMatchObject({ user_data: { notes: 'notey totey' } });
       });
 
       test('Edit Test User 1 Email Property By GroupRequest', async () => {

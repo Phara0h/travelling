@@ -1,5 +1,6 @@
 const config = require('../../include/utils/config');
 const User = require('../../include/database/models/user');
+const Audit = require('../../include/database/models/audit');
 const { Travelling } = require('../../sdk/node')('http://127.0.0.1:6969/' + config.serviceName, {
   resolveWithFullResponse: true
 });
@@ -420,6 +421,41 @@ module.exports = () => {
 
         expect(res.statusCode).toEqual(200);
         expect(res.body.length).toEqual(0);
+      });
+
+      test('Checking Audit of (Edit Test User Email Property [test2])', async () => {
+        const u = await User.findAllBy({ username: 'test2' });
+        const audit = await Audit.findAllBy({ of_user_id: u[0].id, action: 'EDIT', subaction: 'USER_PROPERTY' });
+
+        expect(audit[0]).toHaveProperty('id');
+        expect(audit[0].created_on).not.toBeNull();
+        expect(audit[0].prop).toEqual('email');
+        expect(audit[0].old_val).toMatch('test2@test.com');
+        expect(audit[0].new_val).toMatch('asdf@asdf.memes');
+
+        expect(audit[1]).toHaveProperty('id');
+        expect(audit[1].created_on).not.toBeNull();
+        expect(audit[1].prop).toEqual('email');
+        expect(audit[1].old_val).toMatch('asdf@asdf.memes');
+        expect(audit[1].new_val).toMatch('test2@test.com');
+
+        expect(audit[2]).toHaveProperty('id');
+        expect(audit[2].created_on).not.toBeNull();
+        expect(audit[2].prop).toEqual('email');
+        expect(audit[2].old_val).toMatch('test2@test.com');
+        expect(audit[2].new_val).toMatch('asdfa@fd.foo');
+
+        expect(audit[3]).toHaveProperty('id');
+        expect(audit[3].created_on).not.toBeNull();
+        expect(audit[3].prop).toEqual('user_data');
+        expect(audit[3].old_val).toBeNull();
+        expect(audit[3].new_val).toMatch('{"test":1,"foo":"bar"}');
+
+        expect(audit[4]).toHaveProperty('id');
+        expect(audit[4].created_on).not.toBeNull();
+        expect(audit[4].prop).toEqual('user_data');
+        expect(audit[4].old_val).toMatch('{"test":1,"foo":"bar"}');
+        expect(audit[4].new_val).toMatch('{"notes":"notey totey"}');
       });
     });
 
