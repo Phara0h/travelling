@@ -8645,12 +8645,18 @@
 											"value": "true",
 											"description": "Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields",
 											"disabled": true
+										},
+										{
+											"key": "selfexclusion",
+											"value": "true",
+											"description": "Excludes audits with the same by_user_id.",
+											"disabled": true
 										}
 									],
 									"variable": [
 										{
 											"key": "id",
-											"value": "7c93b6f6-a145-41b6-b892-a52bd3ad3e11",
+											"value": "44aa2ae6-22e9-43ef-a6d3-3d7d39e78064",
 											"description": "Id of user that committed the action."
 										}
 									]
@@ -8719,6 +8725,12 @@
 											"key": "resolve",
 											"value": "true",
 											"description": "Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields",
+											"disabled": true
+										},
+										{
+											"key": "selfexclusion",
+											"value": "true",
+											"description": "Excludes audits with the same of_user_id.",
 											"disabled": true
 										}
 									],
@@ -9036,13 +9048,6 @@
 					""
 				]
 			}
-		}
-	],
-	"variable": [
-		{
-			"key": "TRAVELLING",
-			"value": "http://staging.travelling.dragohmdev.com",
-			"type": "string"
 		}
 	]
 }

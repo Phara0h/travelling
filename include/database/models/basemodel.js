@@ -2,7 +2,17 @@
 const BaseModel = require('adost').PGActiveModel;
 const regex = require('../../utils/regex');
 
-BaseModel.findAllByFilter = async function ({ query, filter, sort, sortdir = 'DESC', limit, skip, count, ids }) {
+BaseModel.findAllByFilter = async function ({
+  query,
+  filter,
+  additionalFilter,
+  sort,
+  sortdir = 'DESC',
+  limit,
+  skip,
+  count,
+  ids
+}) {
   var keys = [];
   var values = [];
   var ops = [];
@@ -89,13 +99,17 @@ BaseModel.findAllByFilter = async function ({ query, filter, sort, sortdir = 'DE
       if (i === 0) {
         query += ' WHERE ';
       }
-      
+
       query += `${this.table}.${keys[i]}${ops[i]}${ops[i] === '=ANY' ? `($${i + 1})` : `$${i + 1}`}`;
 
       if (keys.length > i + 1) {
         query += ' AND ';
       }
     }
+  }
+
+  if (additionalFilter) {
+    query += `${keys ? ' AND' : ''} ${additionalFilter}`;
   }
 
   if (sort && regex.safeName.exec(sort) != null) {
