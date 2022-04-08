@@ -27,6 +27,7 @@ module.exports = () => {
           null,
           null,
           true,
+          null,
           userContainer.user1Token
         );
 
@@ -37,6 +38,8 @@ module.exports = () => {
         expect(res.body[0].subaction).not.toBeNull();
         expect(res.body[0]).toHaveProperty('by_user_firstname');
         expect(res.body[0]).toHaveProperty('by_user_lastname');
+        expect(res.body[0]).toHaveProperty('of_user_firstname');
+        expect(res.body[0]).toHaveProperty('of_user_lastname');
         expect(res.body[0].subaction).not.toBeNull();
         expect(res.body[0].by_user_id).toEqual(testUser1[0].id);
       });
@@ -50,6 +53,7 @@ module.exports = () => {
           'action',
           null,
           true,
+          null,
           userContainer.user1Token
         );
 
@@ -60,6 +64,8 @@ module.exports = () => {
         expect(res.body[0].subaction).not.toBeNull();
         expect(res.body[0]).toHaveProperty('by_user_firstname');
         expect(res.body[0]).toHaveProperty('by_user_lastname');
+        expect(res.body[0]).toHaveProperty('of_user_firstname');
+        expect(res.body[0]).toHaveProperty('of_user_lastname');
         expect(res.body[0].by_user_id).toEqual(testUser1[0].id);
       });
 
@@ -72,6 +78,7 @@ module.exports = () => {
           'action',
           'ASC',
           true,
+          null,
           userContainer.user1Token
         );
 
@@ -82,6 +89,8 @@ module.exports = () => {
         expect(res.body[0].subaction).not.toBeNull();
         expect(res.body[0]).toHaveProperty('by_user_firstname');
         expect(res.body[0]).toHaveProperty('by_user_lastname');
+        expect(res.body[0]).toHaveProperty('of_user_firstname');
+        expect(res.body[0]).toHaveProperty('of_user_lastname');
         expect(res.body[0].by_user_id).toEqual(testUser1[0].id);
       });
 
@@ -94,6 +103,7 @@ module.exports = () => {
           null,
           null,
           true,
+          null,
           userContainer.user1Token
         );
 
@@ -105,6 +115,8 @@ module.exports = () => {
         expect(res.body[0].subaction).not.toBeNull();
         expect(res.body[0]).toHaveProperty('by_user_firstname');
         expect(res.body[0]).toHaveProperty('by_user_lastname');
+        expect(res.body[0]).toHaveProperty('of_user_firstname');
+        expect(res.body[0]).toHaveProperty('of_user_lastname');
         expect(res.body[0].by_user_id).toEqual(testUser1[0].id);
       });
 
@@ -117,6 +129,7 @@ module.exports = () => {
           null,
           null,
           true,
+          null,
           userContainer.user1Token
         );
 
@@ -133,6 +146,7 @@ module.exports = () => {
           null,
           null,
           true,
+          null,
           userContainer.user1Token
         );
 
@@ -143,6 +157,8 @@ module.exports = () => {
         expect(res.body[0].subaction).not.toBeNull();
         expect(res.body[0]).toHaveProperty('by_user_firstname');
         expect(res.body[0]).toHaveProperty('by_user_lastname');
+        expect(res.body[0]).toHaveProperty('of_user_firstname');
+        expect(res.body[0]).toHaveProperty('of_user_lastname');
         expect(res.body[0].by_user_id).toEqual(testUser1[0].id);
       });
 
@@ -165,6 +181,7 @@ module.exports = () => {
           null,
           null,
           true,
+          null,
           userContainer.user1Token
         );
 
@@ -186,6 +203,7 @@ module.exports = () => {
           null,
           null,
           true,
+          null,
           userContainer.user1Token
         );
 
@@ -196,6 +214,8 @@ module.exports = () => {
         expect(res.body[0].subaction).not.toBeNull();
         expect(res.body[0]).toHaveProperty('by_user_firstname');
         expect(res.body[0]).toHaveProperty('by_user_lastname');
+        expect(res.body[0]).toHaveProperty('of_user_firstname');
+        expect(res.body[0]).toHaveProperty('of_user_lastname');
         expect(res.body[0].by_user_id).toEqual(testUser1[0].id);
       });
 
@@ -213,6 +233,7 @@ module.exports = () => {
           null,
           null,
           true,
+          null,
           userContainer.user1Token
         );
 
@@ -235,6 +256,7 @@ module.exports = () => {
           null,
           null,
           true,
+          null,
           userContainer.user1Token
         );
 
@@ -245,6 +267,8 @@ module.exports = () => {
         expect(res.body[0].subaction).not.toBeNull();
         expect(res.body[0]).toHaveProperty('by_user_firstname');
         expect(res.body[0]).toHaveProperty('by_user_lastname');
+        expect(res.body[0]).toHaveProperty('of_user_firstname');
+        expect(res.body[0]).toHaveProperty('of_user_lastname');
         expect(res.body[0].of_user_id).toEqual(testUser1[0].id);
       });
 
@@ -257,6 +281,7 @@ module.exports = () => {
           'action',
           null,
           true,
+          null,
           userContainer.user1Token
         );
 
@@ -267,6 +292,8 @@ module.exports = () => {
         expect(res.body[0].subaction).not.toBeNull();
         expect(res.body[0]).toHaveProperty('by_user_firstname');
         expect(res.body[0]).toHaveProperty('by_user_lastname');
+        expect(res.body[0]).toHaveProperty('of_user_firstname');
+        expect(res.body[0]).toHaveProperty('of_user_lastname');
         expect(res.body[0].of_user_id).toEqual(testUser1[0].id);
       });
 
@@ -279,6 +306,7 @@ module.exports = () => {
           'action',
           'ASC',
           true,
+          null,
           userContainer.user1Token
         );
 
@@ -289,6 +317,8 @@ module.exports = () => {
         expect(res.body[0].subaction).not.toBeNull();
         expect(res.body[0]).toHaveProperty('by_user_firstname');
         expect(res.body[0]).toHaveProperty('by_user_lastname');
+        expect(res.body[0]).toHaveProperty('of_user_firstname');
+        expect(res.body[0]).toHaveProperty('of_user_lastname');
         expect(res.body[0].of_user_id).toEqual(testUser1[0].id);
       });
 
@@ -301,6 +331,7 @@ module.exports = () => {
           null,
           null,
           true,
+          null,
           userContainer.user1Token
         );
 
@@ -312,6 +343,8 @@ module.exports = () => {
         expect(res.body[0].subaction).not.toBeNull();
         expect(res.body[0]).toHaveProperty('by_user_firstname');
         expect(res.body[0]).toHaveProperty('by_user_lastname');
+        expect(res.body[0]).toHaveProperty('of_user_firstname');
+        expect(res.body[0]).toHaveProperty('of_user_lastname');
         expect(res.body[0].of_user_id).toEqual(testUser1[0].id);
       });
 
@@ -324,6 +357,7 @@ module.exports = () => {
           null,
           null,
           true,
+          null,
           userContainer.user1Token
         );
 
@@ -331,7 +365,14 @@ module.exports = () => {
         expect(res.body.length).toEqual(0);
       });
 
-      test('Get Audit of Test User with filter (action=EDIT)', async () => {
+      test('Get Audit of Test User with filter (action=EDIT) - With Self Exclusion', async () => {
+        // Do an edit to self
+        var edit = await Travelling.User.Current.editProperty('testofferson', 'middlename', userContainer.user1Token);
+
+        expect(edit.statusCode).toEqual(200);
+        expect(edit.body).toEqual('testofferson');
+
+        // Get all audits by edit
         const res = await Travelling.Audit.User.ofuserId(
           testUser1[0].id,
           'action=EDIT',
@@ -340,17 +381,46 @@ module.exports = () => {
           null,
           null,
           true,
+          null,
           userContainer.user1Token
         );
 
         expect(res.statusCode).toEqual(200);
+        expect(res.body.length).toBeGreaterThanOrEqual(8);
         expect(res.body[0].id).not.toBeNull();
         expect(res.body[0].created_on).not.toBeNull();
         expect(res.body[0].action).toEqual('EDIT');
         expect(res.body[0].subaction).not.toBeNull();
         expect(res.body[0]).toHaveProperty('by_user_firstname');
         expect(res.body[0]).toHaveProperty('by_user_lastname');
+        expect(res.body[0]).toHaveProperty('of_user_firstname');
+        expect(res.body[0]).toHaveProperty('of_user_lastname');
         expect(res.body[0].of_user_id).toEqual(testUser1[0].id);
+
+        // Test with exculding self ID
+        const exclusionRes = await Travelling.Audit.User.ofuserId(
+          testUser1[0].id,
+          'action=EDIT',
+          null,
+          null,
+          null,
+          null,
+          true,
+          true, // exclude self-same id
+          userContainer.user1Token
+        );
+
+        expect(exclusionRes.statusCode).toEqual(200);
+        expect(exclusionRes.body.length).toBeLessThanOrEqual(7);
+        expect(exclusionRes.body[0].id).not.toBeNull();
+        expect(exclusionRes.body[0].created_on).not.toBeNull();
+        expect(exclusionRes.body[0].action).toEqual('EDIT');
+        expect(exclusionRes.body[0].subaction).not.toBeNull();
+        expect(exclusionRes.body[0]).toHaveProperty('by_user_firstname');
+        expect(exclusionRes.body[0]).toHaveProperty('by_user_lastname');
+        expect(exclusionRes.body[0]).toHaveProperty('of_user_firstname');
+        expect(exclusionRes.body[0]).toHaveProperty('of_user_lastname');
+        expect(exclusionRes.body[0].of_user_id).toEqual(testUser1[0].id);
       });
 
       test('Get Audit of Test User with filter (action=VIEW)', async () => {
@@ -362,6 +432,7 @@ module.exports = () => {
           null,
           null,
           true,
+          null,
           userContainer.user1Token
         );
 
@@ -372,6 +443,8 @@ module.exports = () => {
         expect(res.body[0].subaction).not.toBeNull();
         expect(res.body[0]).toHaveProperty('by_user_firstname');
         expect(res.body[0]).toHaveProperty('by_user_lastname');
+        expect(res.body[0]).toHaveProperty('of_user_firstname');
+        expect(res.body[0]).toHaveProperty('of_user_lastname');
         expect(res.body[0].of_user_id).toEqual(testUser1[0].id);
       });
 
@@ -389,6 +462,7 @@ module.exports = () => {
           null,
           null,
           true,
+          null,
           userContainer.user1Token
         );
 
@@ -399,6 +473,8 @@ module.exports = () => {
         expect(res.body[0].subaction).not.toBeNull();
         expect(res.body[0]).toHaveProperty('by_user_firstname');
         expect(res.body[0]).toHaveProperty('by_user_lastname');
+        expect(res.body[0]).toHaveProperty('of_user_firstname');
+        expect(res.body[0]).toHaveProperty('of_user_lastname');
         expect(res.body[0].of_user_id).toEqual(testUser1[0].id);
       });
 
@@ -416,6 +492,7 @@ module.exports = () => {
           null,
           null,
           true,
+          null,
           userContainer.user1Token
         );
 
@@ -469,6 +546,7 @@ module.exports = () => {
           null,
           null,
           true,
+          null,
           userContainer.user1Token
         );
 
@@ -485,6 +563,7 @@ module.exports = () => {
           null,
           null,
           true,
+          null,
           userContainer.user1Token
         );
 
@@ -502,6 +581,7 @@ module.exports = () => {
           null,
           null,
           true,
+          null,
           userContainer.user1Token
         );
 
@@ -518,6 +598,7 @@ module.exports = () => {
           null,
           null,
           true,
+          null,
           userContainer.user1Token
         );
 
@@ -535,6 +616,7 @@ module.exports = () => {
           null,
           null,
           true,
+          null,
           userContainer.user1Token
         );
 
@@ -552,6 +634,7 @@ module.exports = () => {
           null,
           null,
           true,
+          null,
           userContainer.user1Token
         );
 
@@ -569,6 +652,7 @@ module.exports = () => {
           null,
           null,
           true,
+          null,
           userContainer.user1Token
         );
 
