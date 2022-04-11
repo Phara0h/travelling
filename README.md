@@ -1033,12 +1033,12 @@ Path: api/v1/audit/action/:action
 **Kind**: global class  
 
 * [AuditUser](#AuditUser)
-    * [.byuserId(id, filter, limit, skip, sort, sortdir, resolve, authorization_bearer)](#AuditUser.byuserId)
-    * [.ofuserId(id, filter, limit, skip, sort, sortdir, resolve, authorization_bearer)](#AuditUser.ofuserId)
+    * [.byuserId(id, filter, limit, skip, sort, sortdir, resolve, selfexclusion, authorization_bearer)](#AuditUser.byuserId)
+    * [.ofuserId(id, filter, limit, skip, sort, sortdir, resolve, selfexclusion, authorization_bearer)](#AuditUser.ofuserId)
 
 <a name="AuditUser.byuserId"></a>
 
-### AuditUser.byuserId(id, filter, limit, skip, sort, sortdir, resolve, authorization_bearer)
+### AuditUser.byuserId(id, filter, limit, skip, sort, sortdir, resolve, selfexclusion, authorization_bearer)
 byuserId - Gets audits by by_user id.
 
 ##### Filter Params
@@ -1066,11 +1066,12 @@ Path: api/v1/audit/user/byuser/:id
 | sort | <code>any</code> | Sort by any user object key (examples: created_on, action, etc.) (example: created_on) |
 | sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: ASC) |
 | resolve | <code>any</code> | Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields (example: true) |
+| selfexclusion | <code>any</code> | Excludes audits with the same of_user_id. (example: true) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="AuditUser.ofuserId"></a>
 
-### AuditUser.ofuserId(id, filter, limit, skip, sort, sortdir, resolve, authorization_bearer)
+### AuditUser.ofuserId(id, filter, limit, skip, sort, sortdir, resolve, selfexclusion, authorization_bearer)
 ofuserId - Gets audits by of_user id.
 
 ##### Filter Params
@@ -1091,13 +1092,14 @@ Path: api/v1/audit/user/ofuser/:id
 
 | Param | Type | Description |
 | --- | --- | --- |
-| id | <code>any</code> | Id of user that committed the action. (example: 7c93b6f6-a145-41b6-b892-a52bd3ad3e11) |
+| id | <code>any</code> | Id of user that committed the action. (example: 44aa2ae6-22e9-43ef-a6d3-3d7d39e78064) |
 | filter | <code>any</code> | Filter parameters (example: action=CREATE,subaction=USER,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-03,created_on<2021-06-06) |
 | limit | <code>any</code> | Number of maximum results. (example: 2) (example: 2) |
 | skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |
 | sort | <code>any</code> | Sort by any user object key (examples: created_on, action, etc.) (example: action) |
 | sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: DESC) |
 | resolve | <code>any</code> | Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields (example: true) |
+| selfexclusion | <code>any</code> | Excludes audits with the same by_user_id. (example: true) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="Config"></a>
@@ -3810,7 +3812,16 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v2.15.0](https://github.com/Dragohm/travelling/compare/v2.14.1...v2.15.0)
+
+- Update audit queries [`#18`](https://github.com/Dragohm/travelling/pull/18)
+- Fix #49 - User - set user state and city [`#17`](https://github.com/Dragohm/travelling/pull/17)
+- Merge pull request #17 from bddowningjennings-dev/fix-#49-set-user-city-state [`#49`](https://github.com/Dragohm/travelling/issues/49)
+- fix setUser state & city; update tests [`9385c6a`](https://github.com/Dragohm/travelling/commit/9385c6ae518669070a71aa36b60f8838d5c9ad30)
+
 #### [v2.14.1](https://github.com/Dragohm/travelling/compare/v2.14.0...v2.14.1)
+
+> 4 April 2022
 
 - Fix json and buffer data audit values [`#16`](https://github.com/Dragohm/travelling/pull/16)
 

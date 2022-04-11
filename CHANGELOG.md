@@ -1,6 +1,15 @@
 
 
+#### [v2.15.0](https://github.com/Dragohm/travelling/compare/v2.14.1...v2.15.0)
+
+- Update audit queries [`#18`](https://github.com/Dragohm/travelling/pull/18)
+- Fix #49 - User - set user state and city [`#17`](https://github.com/Dragohm/travelling/pull/17)
+- Merge pull request #17 from bddowningjennings-dev/fix-#49-set-user-city-state [`#49`](https://github.com/Dragohm/travelling/issues/49)
+- fix setUser state & city; update tests [`9385c6a`](https://github.com/Dragohm/travelling/commit/9385c6ae518669070a71aa36b60f8838d5c9ad30)
+
 #### [v2.14.1](https://github.com/Dragohm/travelling/compare/v2.14.0...v2.14.1)
+
+> 4 April 2022
 
 - Fix json and buffer data audit values [`#16`](https://github.com/Dragohm/travelling/pull/16)
 
