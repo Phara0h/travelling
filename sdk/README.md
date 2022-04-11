@@ -201,12 +201,12 @@ Path: api/v1/audit/action/:action
 **Kind**: global class  
 
 * [AuditUser](#AuditUser)
-    * [.byuserId(id, filter, limit, skip, sort, sortdir, resolve, authorization_bearer)](#AuditUser.byuserId)
-    * [.ofuserId(id, filter, limit, skip, sort, sortdir, resolve, authorization_bearer)](#AuditUser.ofuserId)
+    * [.byuserId(id, filter, limit, skip, sort, sortdir, resolve, selfexclusion, authorization_bearer)](#AuditUser.byuserId)
+    * [.ofuserId(id, filter, limit, skip, sort, sortdir, resolve, selfexclusion, authorization_bearer)](#AuditUser.ofuserId)
 
 <a name="AuditUser.byuserId"></a>
 
-### AuditUser.byuserId(id, filter, limit, skip, sort, sortdir, resolve, authorization_bearer)
+### AuditUser.byuserId(id, filter, limit, skip, sort, sortdir, resolve, selfexclusion, authorization_bearer)
 byuserId - Gets audits by by_user id.
 
 ##### Filter Params
@@ -234,11 +234,12 @@ Path: api/v1/audit/user/byuser/:id
 | sort | <code>any</code> | Sort by any user object key (examples: created_on, action, etc.) (example: created_on) |
 | sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: ASC) |
 | resolve | <code>any</code> | Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields (example: true) |
+| selfexclusion | <code>any</code> | Excludes audits with the same of_user_id. (example: true) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="AuditUser.ofuserId"></a>
 
-### AuditUser.ofuserId(id, filter, limit, skip, sort, sortdir, resolve, authorization_bearer)
+### AuditUser.ofuserId(id, filter, limit, skip, sort, sortdir, resolve, selfexclusion, authorization_bearer)
 ofuserId - Gets audits by of_user id.
 
 ##### Filter Params
@@ -259,13 +260,14 @@ Path: api/v1/audit/user/ofuser/:id
 
 | Param | Type | Description |
 | --- | --- | --- |
-| id | <code>any</code> | Id of user that committed the action. (example: 7c93b6f6-a145-41b6-b892-a52bd3ad3e11) |
+| id | <code>any</code> | Id of user that committed the action. (example: 44aa2ae6-22e9-43ef-a6d3-3d7d39e78064) |
 | filter | <code>any</code> | Filter parameters (example: action=CREATE,subaction=USER,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-03,created_on<2021-06-06) |
 | limit | <code>any</code> | Number of maximum results. (example: 2) (example: 2) |
 | skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |
 | sort | <code>any</code> | Sort by any user object key (examples: created_on, action, etc.) (example: action) |
 | sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: DESC) |
 | resolve | <code>any</code> | Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields (example: true) |
+| selfexclusion | <code>any</code> | Excludes audits with the same by_user_id. (example: true) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="Config"></a>

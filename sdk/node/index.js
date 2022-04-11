@@ -542,6 +542,7 @@ class AuditUser {
   * @param {any} sort Sort by any user object key (examples: created_on, action, etc.) (example: created_on)
   * @param {any} sortdir Sort direction (example ascending order: ASC) (example: ASC)
   * @param {any} resolve Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields (example: true)
+  * @param {any} selfexclusion Excludes audits with the same of_user_id. (example: true)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   */
   static async byuserId(
@@ -552,6 +553,7 @@ class AuditUser {
     sort,
     sortdir,
     resolve,
+    selfexclusion,
     authorization_bearer,
     opts
   ) {
@@ -559,7 +561,7 @@ class AuditUser {
       method: 'GET',
       simple: false,
       uri: hostUrl + '/' + `api/v1/audit/user/byuser/${id}`,
-      qs: { filter, limit, skip, sort, sortdir, resolve },
+      qs: { filter, limit, skip, sort, sortdir, resolve, selfexclusion },
       authorization: {
         bearer: authorization_bearer,
       },
@@ -589,13 +591,14 @@ class AuditUser {
 | new_val | *optional* (example:  new_val=leet@teel.com) |
   *
   * Path: api/v1/audit/user/ofuser/:id
-  * @param {any} id Id of user that committed the action. (example: 7c93b6f6-a145-41b6-b892-a52bd3ad3e11)
+  * @param {any} id Id of user that committed the action. (example: 44aa2ae6-22e9-43ef-a6d3-3d7d39e78064)
   * @param {any} filter Filter parameters (example: action=CREATE,subaction=USER,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-03,created_on<2021-06-06)
   * @param {any} limit Number of maximum results. (example: 2) (example: 2)
   * @param {any} skip Number of db rows skipped. (example: 10) (example: 10)
   * @param {any} sort Sort by any user object key (examples: created_on, action, etc.) (example: action)
   * @param {any} sortdir Sort direction (example ascending order: ASC) (example: DESC)
   * @param {any} resolve Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields (example: true)
+  * @param {any} selfexclusion Excludes audits with the same by_user_id. (example: true)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   */
   static async ofuserId(
@@ -606,6 +609,7 @@ class AuditUser {
     sort,
     sortdir,
     resolve,
+    selfexclusion,
     authorization_bearer,
     opts
   ) {
@@ -613,7 +617,7 @@ class AuditUser {
       method: 'GET',
       simple: false,
       uri: hostUrl + '/' + `api/v1/audit/user/ofuser/${id}`,
-      qs: { filter, limit, skip, sort, sortdir, resolve },
+      qs: { filter, limit, skip, sort, sortdir, resolve, selfexclusion },
       authorization: {
         bearer: authorization_bearer,
       },
