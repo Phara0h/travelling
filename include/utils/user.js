@@ -279,11 +279,11 @@ const utilsUser = {
     }
 
     if (props.state !== undefined) {
-      user.street_name = misc.toLower(props.street_name);
+      user.state = misc.toLower(props.state);
     }
 
     if (props.city !== undefined) {
-      user.street_name = misc.toLower(props.street_name);
+      user.city = misc.toLower(props.city);
     }
 
     if (props.zip !== undefined) {

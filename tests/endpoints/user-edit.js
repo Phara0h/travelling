@@ -142,16 +142,16 @@ module.exports = () => {
         expect(res.statusCode).toEqual(200);
       });
 
-      test('Edit [UserData] User Domain 2', async () => {
+      test('Edit [State, City, UserData] User Domain 2', async () => {
         var res = await Travelling.User.Domain.edit(
-          { user_data: { test: 1, foo: 'bar' } },
+          { state: 'WA', city: 'SEATTLE', user_data: { test: 1, foo: 'bar' } },
           'test.com',
           'test_domain_2@test.com',
           userContainer.userDomain2Token
         );
 
         expect(res.statusCode).toEqual(200);
-        expect(res.body).toMatchObject({ user_data: { test: 1, foo: 'bar' } });
+        expect(res.body).toMatchObject({ state: 'wa', city: 'seattle', user_data: { test: 1, foo: 'bar' } });
       });
 
       test('Add Group Inheritance [group1][testgroup] User Domain 2', async () => {
