@@ -81,11 +81,12 @@ class Router {
       // the route object
       var r = null;
       var routedGroup = null;
+      var domain = parse.getDomainFromHeaders(req.headers);
 
       for (var i = 0; i < groups.length; i++) {
         routedGroup = groups[i].group;
 
-        r = this.isRouteAllowed(req.raw.method, req.raw.url, groups[i].routes, sessionUser, routedGroup);
+        r = this.isRouteAllowed(req.raw.method, req.raw.url, groups[i].routes, sessionUser, routedGroup, domain);
         if (r) {
           possibleRoute = r.route;
           break;
@@ -236,7 +237,14 @@ class Router {
           } else {
             log.info(
               helpers.text(
-                'Unregistered User' + ' (anonymous)' + ' | ' + parse.getIp(req) + ' | [' + req.raw.method + '] ' + req.raw.url,
+                'Unregistered User' +
+                  ' (anonymous)' +
+                  ' | ' +
+                  parse.getIp(req) +
+                  ' | [' +
+                  req.raw.method +
+                  '] ' +
+                  req.raw.url,
                 span
               )
             );
@@ -340,8 +348,13 @@ class Router {
   // @TODO Change these regex to precompiled ones inside regex.js
 
   /* eslint-disable */
-  isRouteAllowed(method, url, routes, user, currentGroup) {
+  isRouteAllowed(method, url, routes, user, currentGroup, domain) {
     var surl = url.split('?')[0].split(/[\/]/g).filter(String);
+
+    // Check if domain mathces group allowed domain
+    if (currentGroup.domain && currentGroup.domain !== '*' && currentGroup.domain !== domain) {
+      return false;
+    }
 
     for (var i = 0; i < routes.length; i++) {
       if (!routes[i].method || !method || method == routes[i].method || routes[i].method == '*') {
