@@ -21,7 +21,6 @@ const config = {
   https: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_HTTPS), true),
   misc: {
     cloudflareIP: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_MISC_CLOUDFLAREIP), false),
-    allowedDomains: misc.isSetDefault(process.env.TRAVELLING_ALLOWED_DOMAINS, '*').split(','),
     cloudflareDomainHeader: misc.isSetDefault(process.env.TRAVELLING_MISC_CLOUDFLARE_DOMAIN_HEADER, 'CF-Worker'),
     domainCustomHeader: misc.isSetDefault(process.env.TRAVELLING_MISC_DOMAIN_CUSTOM_HEADER, null),
     deniedRedirect: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_MISC_DENIED_REDIRECT), true)

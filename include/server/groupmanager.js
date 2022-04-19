@@ -98,7 +98,7 @@ class GroupManager {
 
       mroutes.push({
         routes: this.mergedRoutes[group.type][group.name],
-        group: { name: group.name, type: group.type, domain: group.allowed.domain }
+        group: { name: group.name, type: group.type }
       });
     }
 
