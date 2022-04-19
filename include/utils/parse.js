@@ -12,7 +12,7 @@ module.exports = {
   getDomainFromHeaders: (headers) => {
     var domain = 'default';
 
-    const domainHeaders = [config.misc.cloudflareDomainHeader, config.misc.domainCustomHeader, 'host', 'origin'];
+    const domainHeaders = [config.misc.domainCustomHeader, config.misc.cloudflareDomainHeader, 'host', 'origin'];
 
     // Check headers for domain
     for (let i = 0; i < domainHeaders.length; i++) {
@@ -26,24 +26,6 @@ module.exports = {
         }
 
         break;
-      }
-    }
-
-    // Check against allowed domains
-    if (config.misc.allowedDomains[0] !== '*') {
-      const allowedDomains = config.misc.allowedDomains;
-      var allowed = false;
-
-      if (allowedDomains.length) {
-        for (let i = 0; i < allowedDomains.length; i++) {
-          if (domain === allowedDomains[i]) {
-            allowed = true;
-          }
-        }
-      }
-
-      if (!allowed) {
-        throw new Error(`'${domain}' domain not allowed.`);
       }
     }
 

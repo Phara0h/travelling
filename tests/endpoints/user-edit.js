@@ -24,14 +24,18 @@ module.exports = () => {
         expect(res.body).toEqual('test@test.com');
       });
 
-      test('Edit Test User 1 Email and UserData', async () => {
+      test('Edit Test User 1 Email, domain and UserData', async () => {
         var res = await Travelling.User.Current.edit(
-          { email: 'testasdf2@fd.foo', user_data: { test: 1, foo: 'bar' } },
+          { email: 'testasdf2@fd.foo', domain: 'traziventures.com', user_data: { test: 1, foo: 'bar' } },
           userContainer.user1Token
         );
 
         expect(res.statusCode).toEqual(200);
-        expect(res.body).toMatchObject({ email: 'testasdf2@fd.foo', user_data: { test: 1, foo: 'bar' } });
+        expect(res.body).toMatchObject({
+          email: 'testasdf2@fd.foo',
+          domain: 'traziventures.com',
+          user_data: { test: 1, foo: 'bar' }
+        });
       });
 
       test('Delete Test User 1 Token "test123token" ', async () => {
