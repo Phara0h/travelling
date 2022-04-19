@@ -73,34 +73,36 @@ module.exports = () => {
 
       test('Check Test Domain Route - Using User Domain', async () => {
         // User 1 has domain 'dragohmventures.com'
-        // Route /test/domain requires domain 'dragohmventures.com'
-
-        // Check by passing in header
-        var withHeaderDomain = await Travelling.User.Current.routeCheck(
-          'get',
-          '/' + config.serviceName + '/api/v1/test/domain',
+        // Group 6 Route /test/domain uses user domain (:domain)
+        var userInheritance = await Travelling.User.addGroupInheritance(
+          'test',
+          'group6',
+          'group',
           userContainer.user1Token
         );
+        expect(userInheritance.statusCode).toEqual(200);
 
-        expect(withHeaderDomain.statusCode).toEqual(200);
-        expect(withHeaderDomain.body).toEqual(true);
+        var res = await Travelling.User.Current.routeCheck('GET', '/test-domain', userContainer.user1Token);
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toEqual(true);
       });
 
-      test('Check Test Domain Route - Using Request Header Domain', async () => {
+      test('Check Test Domain Route - Using Request Custom Header Domain', async () => {
         // Check without passing in header
         var noHeaderDomain = await Travelling.User.Current.routeCheck(
-          'get',
-          '/' + config.serviceName + '/api/v1/test/domain/two',
+          'GET',
+          '/test-domain-two',
           userContainer.user1Token
         );
 
         expect(noHeaderDomain.statusCode).toEqual(401);
-        expect(noHeaderDomain.body).toEqual(true);
+        expect(noHeaderDomain.body).toEqual(false);
 
         // Check by passing in header
         var withHeaderDomain = await Travelling.User.Current.routeCheck(
-          'get',
-          '/' + config.serviceName + '/api/v1/test/domain/two',
+          'GET',
+          '/test-domain-two',
           userContainer.user1Token,
           {
             headers: { 'my-domain': 'dragohmventures-two.com' }
@@ -114,8 +116,8 @@ module.exports = () => {
       test('Check Test Domain Route - Route With Wildcard * Domain', async () => {
         // Check by passing in header
         var withHeaderDomain = await Travelling.User.Current.routeCheck(
-          'get',
-          '/' + config.serviceName + '/api/v1/test/domain/wildcard',
+          'GET',
+          '/test-domain-wildcard',
           userContainer.user1Token
         );
 
@@ -123,16 +125,11 @@ module.exports = () => {
         expect(withHeaderDomain.body).toEqual(true);
       });
 
-      test('Check Test Domain Route - No Match - Using Cloudflare Header Domain', async () => {
+      test('Check Test Domain Route - No Match - Using Custom Header Domain', async () => {
         // Check by passing in non-existent header
-        var res = await Travelling.User.Current.routeCheck(
-          'get',
-          '/' + config.serviceName + '/api/v1/test/domain',
-          userContainer.user1Token,
-          {
-            headers: { ['CF-Worker']: 'notamatchduuude.com' }
-          }
-        );
+        var res = await Travelling.User.Current.routeCheck('GET', '/test-domain-two', userContainer.user1Token, {
+          headers: { ['my-domain']: 'notamatchduuude.com' }
+        });
 
         expect(res.statusCode).toEqual(401);
         expect(res.body).toEqual(false);

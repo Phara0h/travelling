@@ -104,42 +104,46 @@ module.exports = () => {
         });
       });
 
-      test('Add Route to group', async () => {
-        const route1 = await Travelling.Group.addRoute(
+      test('Add Routes to new group', async () => {
+        const allowedGroups = [
           {
             method: 'GET',
-            route: '/test/domain',
+            route: '/test-domain',
             name: 'test-domain',
-            domain: 'dragohmventures.com'
+            domain: ':domain'
           },
-          'group1',
-          userContainer.user1Token
-        );
-        expect(route1.statusCode).toEqual(200);
-
-        const route2 = await Travelling.Group.addRoute(
           {
             method: 'GET',
-            route: '/test/domain/two',
+            route: '/test-domain-two',
             name: 'test-domain-two',
             domain: 'dragohmventures-two.com'
           },
-          'group1',
-          userContainer.user1Token
-        );
-        expect(route2.statusCode).toEqual(200);
-
-        const route3 = await Travelling.Group.addRoute(
           {
             method: 'GET',
-            route: '/test/domain/wildcard',
+            route: '/test-domain-wildcard',
             name: 'test-domain-wildcard',
             domain: '*'
+          }
+        ];
+
+        var res = await Travelling.Group.create(
+          {
+            name: 'group6',
+            is_default: false,
+            allowed: allowedGroups
           },
-          'group1',
           userContainer.user1Token
         );
-        expect(route3.statusCode).toEqual(200);
+
+        expect(res.body).toMatchObject({
+          name: 'group6',
+          type: 'group',
+          id: expect.any(String),
+          is_default: false,
+          inherited: null,
+          allowed: allowedGroups
+        });
+        expect(res.statusCode).toEqual(200);
       });
     });
 
@@ -314,7 +318,7 @@ module.exports = () => {
         var res = await Travelling.Groups.get(userContainer.user1Token);
 
         expect(res.statusCode).toEqual(200);
-        expect(res.body).toHaveLength(7);
+        expect(res.body).toHaveLength(8);
       });
 
       test('All Groups of "testgroup" Type', async () => {
