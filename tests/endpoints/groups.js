@@ -38,7 +38,7 @@ module.exports = () => {
 
       test('Checking Audit of (Create Group [group1])', async () => {
         if (config.audit.create.enable === true) {
-          const audit = await Audit.findAllBy({ action: "CREATE", subaction: "GROUP" });
+          const audit = await Audit.findAllBy({ action: 'CREATE', subaction: 'GROUP' });
 
           expect(audit[0]).toHaveProperty('id');
           expect(audit[0].created_on).not.toBeNull();
@@ -103,6 +103,44 @@ module.exports = () => {
           inherited: [group4.id, superadmin]
         });
       });
+
+      test('Add Route to group', async () => {
+        const route1 = await Travelling.Group.addRoute(
+          {
+            method: 'GET',
+            route: '/test/domain',
+            name: 'test-domain',
+            domain: 'dragohmventures.com'
+          },
+          'group1',
+          userContainer.user1Token
+        );
+        expect(route1.statusCode).toEqual(200);
+
+        const route2 = await Travelling.Group.addRoute(
+          {
+            method: 'GET',
+            route: '/test/domain/two',
+            name: 'test-domain-two',
+            domain: 'dragohmventures-two.com'
+          },
+          'group1',
+          userContainer.user1Token
+        );
+        expect(route2.statusCode).toEqual(200);
+
+        const route3 = await Travelling.Group.addRoute(
+          {
+            method: 'GET',
+            route: '/test/domain/wildcard',
+            name: 'test-domain-wildcard',
+            domain: '*'
+          },
+          'group1',
+          userContainer.user1Token
+        );
+        expect(route3.statusCode).toEqual(200);
+      });
     });
 
     describe('Import/Export', () => {
@@ -137,7 +175,10 @@ module.exports = () => {
 
         expect(permCheck.statusCode).toEqual(200);
 
-        var failPermCheck = await Travelling.User.Current.permissionCheck('test-one-fish-blue', userContainer.user1Token);
+        var failPermCheck = await Travelling.User.Current.permissionCheck(
+          'test-one-fish-blue',
+          userContainer.user1Token
+        );
 
         expect(failPermCheck.statusCode).toEqual(401);
       });
@@ -165,7 +206,7 @@ module.exports = () => {
 
       test('Checking Audit of (Add Group Inheritance [group4] inherit [Superadmin])', async () => {
         if (config.audit.edit.enable === true) {
-          const audit = await Audit.findAllBy({ action: "EDIT", subaction: "GROUP" });
+          const audit = await Audit.findAllBy({ action: 'EDIT', subaction: 'GROUP' });
 
           expect(audit[0]).toHaveProperty('id');
           expect(audit[0].created_on).not.toBeNull();
@@ -176,7 +217,13 @@ module.exports = () => {
 
       test('Group 1 to Inherit Superadmin', async () => {
         var superadmin = (await Travelling.Group.get('superadmin', userContainer.user1Token)).body.id;
-        var res = await Travelling.Group.Type.inheritFrom('group1', 'testgroup', 'superadmin', 'group', userContainer.user1Token);
+        var res = await Travelling.Group.Type.inheritFrom(
+          'group1',
+          'testgroup',
+          'superadmin',
+          'group',
+          userContainer.user1Token
+        );
 
         expect(res.statusCode).toEqual(200);
         expect(res.body).toMatchObject({
@@ -217,11 +264,18 @@ module.exports = () => {
       });
 
       test('Delete permission to superadmin and test permission', async () => {
-        var addPerm = await Travelling.Group.deletePermission('superadmin', 'test-one-*-three', userContainer.user1Token);
+        var addPerm = await Travelling.Group.deletePermission(
+          'superadmin',
+          'test-one-*-three',
+          userContainer.user1Token
+        );
 
         expect(addPerm.statusCode).toEqual(200);
 
-        var failPermCheck = await Travelling.User.Current.permissionCheck('test-one-fish-three', userContainer.user1Token);
+        var failPermCheck = await Travelling.User.Current.permissionCheck(
+          'test-one-fish-three',
+          userContainer.user1Token
+        );
 
         expect(failPermCheck.statusCode).toEqual(401);
       });

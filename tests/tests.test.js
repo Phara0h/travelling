@@ -97,6 +97,7 @@ test('Waste Time', async () => {
 });
 
 describe('Endpoints', require('./endpoints'));
+describe('Misc', require('./misc'));
 //describe('Email', require('./email'));
 describe('Routes', require('./routes'));
 describe('Flows', require('./flow-tests'));

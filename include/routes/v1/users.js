@@ -345,7 +345,7 @@ module.exports = function (app, opts, done) {
   app.get('/user/me/route/allowed', async (req, res) => {
     if (req.session) {
       const groups = await gm.currentGroup(req, res);
-      const domain = parse.getDomainFromHeaders(req.headers);
+      const headersDomain = parse.getDomainFromHeaders(req.headers);
 
       for (var i = 0; i < groups.length; i++) {
         if (
@@ -355,7 +355,7 @@ module.exports = function (app, opts, done) {
             groups[i].routes,
             !req.isAuthenticated ? null : req.session.data.user,
             groups[i].group,
-            domain
+            headersDomain
           )
         ) {
           res.code(200);
