@@ -34,11 +34,15 @@ module.exports = () => {
     });
 
     test('Register New OAuth2 Credentials Token as Test 2 User With Name', async () => {
-      var res = await Travelling.User.Current.registerToken({ name: 'MyServiceName', urls: ['http://localhost:6969'] }, null, {
-        headers: {
-          cookie: userContainer.user2Cookie()
+      var res = await Travelling.User.Current.registerToken(
+        { name: 'MyServiceName', urls: ['http://localhost:6969'] },
+        null,
+        {
+          headers: {
+            cookie: userContainer.user2Cookie()
+          }
         }
-      });
+      );
 
       token2 = res.body;
       expect(res.body).toMatchObject({
@@ -57,7 +61,7 @@ module.exports = () => {
       tokenDomain = res.body;
 
       expect(res.body).toMatchObject({
-        client_id:  expect.any(String),
+        client_id: expect.any(String),
         client_secret: expect.any(String)
       });
     });
@@ -72,7 +76,7 @@ module.exports = () => {
       tokenDomain2 = res.body;
 
       expect(res.body).toMatchObject({
-        client_id:  expect.any(String),
+        client_id: expect.any(String),
         client_secret: expect.any(String)
       });
     });
@@ -87,7 +91,7 @@ module.exports = () => {
       tokenDomain3 = res.body;
 
       expect(res.body).toMatchObject({
-        client_id:  expect.any(String),
+        client_id: expect.any(String),
         client_secret: expect.any(String)
       });
     });
@@ -118,7 +122,12 @@ module.exports = () => {
     });
 
     test('Get New OAuth2 Access Token as Test Domain User With No Name', async () => {
-      var res = await Travelling.Auth.accessToken('client_credentials', tokenDomain.client_id, tokenDomain.client_secret, null);
+      var res = await Travelling.Auth.accessToken(
+        'client_credentials',
+        tokenDomain.client_id,
+        tokenDomain.client_secret,
+        null
+      );
 
       accessTokenDomain = res.body.access_token;
       userContainer.userDomainToken = res.body.access_token;
@@ -131,7 +140,12 @@ module.exports = () => {
     });
 
     test('Get New OAuth2 Access Token as Test Domain User 2 With No Name', async () => {
-      var res = await Travelling.Auth.accessToken('client_credentials', tokenDomain2.client_id, tokenDomain2.client_secret, null);
+      var res = await Travelling.Auth.accessToken(
+        'client_credentials',
+        tokenDomain2.client_id,
+        tokenDomain2.client_secret,
+        null
+      );
 
       accessTokenDomain2 = res.body.access_token;
       userContainer.userDomain2Token = res.body.access_token;
@@ -144,11 +158,39 @@ module.exports = () => {
     });
 
     test('Get New OAuth2 Access Token as Test Domain User 3 With No Name', async () => {
-      var res = await Travelling.Auth.accessToken('client_credentials', tokenDomain3.client_id, tokenDomain3.client_secret, null);
+      var res = await Travelling.Auth.accessToken(
+        'client_credentials',
+        tokenDomain3.client_id,
+        tokenDomain3.client_secret,
+        null
+      );
 
       accessTokenDomain3 = res.body.access_token;
       userContainer.userDomain3Token = res.body.access_token;
 
+      expect(res.body).toMatchObject({
+        expires_in: config.token.access.expiration * 60, // seconds
+        access_token: expect.any(String),
+        token_type: 'bearer'
+      });
+    });
+
+    test('Register and Get New OAuth2 Credentials Token as Domain User 5 Without Name', async () => {
+      var res = await Travelling.User.Current.registerToken({ urls: ['http://localhost:6969'] }, null, {
+        headers: {
+          cookie: userContainer.user5Cookie()
+        }
+      });
+
+      const token5 = res.body;
+      expect(res.body).toMatchObject({
+        client_id: expect.any(String),
+        client_secret: expect.any(String)
+      });
+
+      var res = await Travelling.Auth.accessToken('client_credentials', token5.client_id, token5.client_secret, null);
+
+      userContainer.user5Token = res.body.access_token;
       expect(res.body).toMatchObject({
         expires_in: config.token.access.expiration * 60, // seconds
         access_token: expect.any(String),

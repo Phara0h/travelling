@@ -134,6 +134,16 @@ module.exports = () => {
         expect(res.body.type).toEqual('locked');
       });
     }
+
+    test('Login with Domain User 5', async () => {
+      var res = await Travelling.Auth.login({
+        password: 'Pas5w0r!d5',
+        email: 'test_domain_5@test.com'
+      });
+
+      userContainer.parseUser5Cookie(res.headers['set-cookie']);
+      expect(res.statusCode).toEqual(200);
+    });
   });
 
   describe('Invalid', () => {

@@ -71,64 +71,61 @@ module.exports = () => {
         expect(res.statusCode).toEqual(200);
       });
 
-      test('Check Test Domain Route - Using User Domain', async () => {
-        // User 1 has domain 'dragohmventures.com'
+      test('Check Test Domain Route - Using User Domain and Custom Domain Header', async () => {
+        // User 5 has domain 'dragohmventures.com'
         // Group 6 Route /test/domain uses user domain (:domain)
         var userInheritance = await Travelling.User.addGroupInheritance(
-          'test',
+          'test_domain_5',
           'group6',
           'group',
           userContainer.user1Token
         );
+
         expect(userInheritance.statusCode).toEqual(200);
 
-        var res = await Travelling.User.Current.routeCheck('GET', '/test-domain', userContainer.user1Token);
+        var res = await Travelling.User.Current.routeCheck('GET', '/test-domain', null, {
+          headers: { cookie: userContainer.user5Cookie(), mydomain: 'dragohmventures.com' }
+        });
 
         expect(res.statusCode).toEqual(200);
         expect(res.body).toEqual(true);
       });
 
-      test('Check Test Domain Route - Using Request Custom Header Domain', async () => {
+      test('Check Test Domain Route - Using Cloudflare Request Header Domain', async () => {
         // Check without passing in header
-        var noHeaderDomain = await Travelling.User.Current.routeCheck(
-          'GET',
-          '/test-domain-two',
-          userContainer.user1Token
-        );
+        var noCFHeaderDomain = await Travelling.User.Current.routeCheck('GET', '/test-domain-two', null, {
+          cookie: userContainer.user5Cookie(),
+          headers: { ['cf-worker']: 'wrong.com' }
+        });
 
-        expect(noHeaderDomain.statusCode).toEqual(401);
-        expect(noHeaderDomain.body).toEqual(false);
+        expect(noCFHeaderDomain.statusCode).toEqual(401);
+        expect(noCFHeaderDomain.body).toEqual(false);
 
         // Check by passing in header
-        var withHeaderDomain = await Travelling.User.Current.routeCheck(
-          'GET',
-          '/test-domain-two',
-          userContainer.user1Token,
-          {
-            headers: { 'my-domain': 'dragohmventures-two.com' }
-          }
-        );
+        var withCFHeaderDomain = await Travelling.User.Current.routeCheck('GET', '/test-domain-two', null, {
+          cookie: userContainer.user5Cookie(),
+          headers: { ['cf-worker']: 'dragohmventurestwo.com' }
+        });
 
-        expect(withHeaderDomain.statusCode).toEqual(200);
-        expect(withHeaderDomain.body).toEqual(true);
+        expect(withCFHeaderDomain.statusCode).toEqual(200);
+        expect(withCFHeaderDomain.body).toEqual(true);
       });
 
-      test('Check Test Domain Route - Route With Wildcard * Domain', async () => {
-        // Check by passing in header
-        var withHeaderDomain = await Travelling.User.Current.routeCheck(
-          'GET',
-          '/test-domain-wildcard',
-          userContainer.user1Token
-        );
+      test('Check Test Domain Route - Route With Wildcard Domain', async () => {
+        var res = await Travelling.User.Current.routeCheck('GET', '/test-domain-wildcard', null, {
+          cookie: userContainer.user5Cookie(),
+          headers: { mydomain: 'likewhateverr.com' }
+        });
 
-        expect(withHeaderDomain.statusCode).toEqual(200);
-        expect(withHeaderDomain.body).toEqual(true);
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toEqual(true);
       });
 
       test('Check Test Domain Route - No Match - Using Custom Header Domain', async () => {
         // Check by passing in non-existent header
-        var res = await Travelling.User.Current.routeCheck('GET', '/test-domain-two', userContainer.user1Token, {
-          headers: { ['my-domain']: 'notamatchduuude.com' }
+        var res = await Travelling.User.Current.routeCheck('GET', '/test-domain', null, {
+          cookie: userContainer.user5Cookie(),
+          headers: { mydomain: 'notamatchduuude.com' }
         });
 
         expect(res.statusCode).toEqual(401);
