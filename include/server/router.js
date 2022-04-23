@@ -355,12 +355,14 @@ class Router {
       if (!routes[i].method || !method || method == routes[i].method || routes[i].method == '*') {
         var domain = routes[i].domain || '*';
 
-        if (domain === ':domain') {
-          domain = user.domain;
-        }
+        if (domain !== '*') {
+          if (domain === ':domain') {
+            domain = user.domain;
+          }
 
-        if (domain !== '*' && headersDomain !== domain) {
-          return false;
+          if (headersDomain !== domain) {
+            continue;
+          }
         }
 
         var route = this.transformRoute(user, routes[i], routes[i].route, currentGroup);

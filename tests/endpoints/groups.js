@@ -105,21 +105,21 @@ module.exports = () => {
       });
 
       test('Add Routes to new group', async () => {
-        const allowedGroups = [
+        const allowedRoutes = [
           {
-            method: 'GET',
+            method: '*',
             route: '/test-domain',
             name: 'test-domain',
             domain: ':domain'
           },
           {
-            method: 'GET',
+            method: '*',
             route: '/test-domain-two',
             name: 'test-domain-two',
-            domain: 'traziventures-two.com'
+            domain: 'traziventurestwo.com'
           },
           {
-            method: 'GET',
+            method: '*',
             route: '/test-domain-wildcard',
             name: 'test-domain-wildcard',
             domain: '*'
@@ -130,7 +130,7 @@ module.exports = () => {
           {
             name: 'group6',
             is_default: false,
-            allowed: allowedGroups
+            allowed: allowedRoutes
           },
           userContainer.user1Token
         );
@@ -141,8 +141,9 @@ module.exports = () => {
           id: expect.any(String),
           is_default: false,
           inherited: null,
-          allowed: allowedGroups
+          allowed: allowedRoutes
         });
+
         expect(res.statusCode).toEqual(200);
       });
     });

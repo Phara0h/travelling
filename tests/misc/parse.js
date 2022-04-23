@@ -5,7 +5,7 @@ module.exports = () => {
     describe('Valid', () => {
       test('Get Domain From Headers - Domain Custom Header', async () => {
         const headers = {
-          'my-domain': 'traziventures.com'
+          mydomain: 'traziventures.com'
         };
 
         const domain = parse.getDomainFromHeaders(headers);
@@ -15,7 +15,7 @@ module.exports = () => {
 
       test('Get Domain From Headers - Cloudflare Header', async () => {
         const headers = {
-          'CF-Worker': 'traziventures.com'
+          'cf-worker': 'traziventures.com'
         };
 
         const domain = parse.getDomainFromHeaders(headers);
