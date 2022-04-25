@@ -38,7 +38,7 @@ module.exports = () => {
 
       test('Checking Audit of (Create Group [group1])', async () => {
         if (config.audit.create.enable === true) {
-          const audit = await Audit.findAllBy({ action: "CREATE", subaction: "GROUP" });
+          const audit = await Audit.findAllBy({ action: 'CREATE', subaction: 'GROUP' });
 
           expect(audit[0]).toHaveProperty('id');
           expect(audit[0].created_on).not.toBeNull();
@@ -103,6 +103,49 @@ module.exports = () => {
           inherited: [group4.id, superadmin]
         });
       });
+
+      test('Add Routes to new group', async () => {
+        const allowedRoutes = [
+          {
+            method: '*',
+            route: '/test-domain',
+            name: 'test-domain',
+            domain: ':domain'
+          },
+          {
+            method: '*',
+            route: '/test-domain-two',
+            name: 'test-domain-two',
+            domain: 'dragohmventurestwo.com'
+          },
+          {
+            method: '*',
+            route: '/test-domain-wildcard',
+            name: 'test-domain-wildcard',
+            domain: '*'
+          }
+        ];
+
+        var res = await Travelling.Group.create(
+          {
+            name: 'group6',
+            is_default: false,
+            allowed: allowedRoutes
+          },
+          userContainer.user1Token
+        );
+
+        expect(res.body).toMatchObject({
+          name: 'group6',
+          type: 'group',
+          id: expect.any(String),
+          is_default: false,
+          inherited: null,
+          allowed: allowedRoutes
+        });
+
+        expect(res.statusCode).toEqual(200);
+      });
     });
 
     describe('Import/Export', () => {
@@ -165,7 +208,7 @@ module.exports = () => {
 
       test('Checking Audit of (Add Group Inheritance [group4] inherit [Superadmin])', async () => {
         if (config.audit.edit.enable === true) {
-          const audit = await Audit.findAllBy({ action: "EDIT", subaction: "GROUP" });
+          const audit = await Audit.findAllBy({ action: 'EDIT', subaction: 'GROUP' });
 
           expect(audit[0]).toHaveProperty('id');
           expect(audit[0].created_on).not.toBeNull();
@@ -260,7 +303,7 @@ module.exports = () => {
         var res = await Travelling.Groups.get(userContainer.user1Token);
 
         expect(res.statusCode).toEqual(200);
-        expect(res.body).toHaveLength(7);
+        expect(res.body).toHaveLength(8);
       });
 
       test('All Groups of "testgroup" Type', async () => {

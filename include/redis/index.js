@@ -54,6 +54,7 @@ class Redis {
     if (config.redis.enable && value) {
       this.redisPub.publish('groupUpdate', `${this.redisPub.uuid}:${value}`);
     }
+
     return this._needsGroupUpdate;
   }
 
@@ -68,6 +69,7 @@ class Redis {
     }
   }
 }
+
 const redis = new Redis();
 
 module.exports = redis;

@@ -5,6 +5,7 @@ const Audit = require('../database/models/audit');
  */
 async function createSingleAudit(opts, prop) {
   const newAudit = createAuditObject(opts, prop, opts.oldObj, opts.newObj);
+
   await Audit.create(newAudit);
 }
 
@@ -39,18 +40,23 @@ function createAuditObject(opts, prop, oldPropValue, newPropValue) {
   if (opts.action) {
     audit.action = opts.action;
   }
+
   if (opts.subaction) {
     audit.subaction = opts.subaction;
   }
+
   if (opts.byUserId) {
     audit.by_user_id = opts.byUserId;
   }
+
   if (opts.ofUserId) {
     audit.of_user_id = opts.ofUserId;
   }
+
   if (prop) {
     audit.prop = prop.toString();
   }
+
   if (oldPropValue) {
     if (typeof oldPropValue === 'object') {
       audit.old_val = JSON.stringify(oldPropValue);
@@ -58,6 +64,7 @@ function createAuditObject(opts, prop, oldPropValue, newPropValue) {
       audit.old_val = oldPropValue.toString();
     }
   }
+
   if (newPropValue) {
     if (!newPropValue.buffer && typeof newPropValue === 'object') {
       audit.new_val = JSON.stringify(newPropValue);
