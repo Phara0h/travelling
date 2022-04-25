@@ -16,7 +16,7 @@ if (
 
 const ignored_routes = [`/${config.serviceName}/metrics`, `/${config.serviceName}/health`];
 
-const isRouteIgnored = function (url) {
+function isRouteIgnored(url) {
   for (let i = 0; i < ignored_routes.length; i++) {
     const r = ignored_routes[i];
 
@@ -24,8 +24,9 @@ const isRouteIgnored = function (url) {
       return true;
     }
   }
+
   return false;
-};
+}
 
 if (config.log.logger) {
   if (typeof config.log.logger === 'string') {
@@ -35,15 +36,19 @@ if (config.log.logger) {
       if (config.log.appendFields.app.enable) {
         appendFields.app = config.log.appendFields.app.label;
       }
+
       if (config.log.appendFields.version.enable) {
         appendFields.version = config.log.appendFields.version.label;
       }
+
       if (config.log.appendFields.environment.enable) {
         appendFields.environment = config.log.appendFields.environment.label;
       }
+
       if (config.log.appendFields.host.enable) {
         appendFields.host = config.log.appendFields.host.label;
       }
+
       if (config.log.appendFields.branch.enable) {
         appendFields.branch = config.log.appendFields.branch.label;
       }
@@ -65,6 +70,7 @@ if (config.log.logger) {
             if (isRouteIgnored(req.url)) {
               return null;
             }
+
             if (config.tracing.enable) {
               if (!req.span || req.span == '') {
                 if (is_testing) {
@@ -73,10 +79,12 @@ if (config.log.logger) {
                   req.span = trace.opentelemetry.trace.getSpan(trace.opentelemetry.context.active());
                 }
               }
+
               if (req.span) {
                 traceId = req.span.spanContext().traceId;
               }
             }
+
             var headers = {
               ...req.headers
             };
@@ -112,6 +120,7 @@ if (config.log.logger) {
     }
   }
 }
+
 var trace = null;
 
 if (config.tracing.enable) {
@@ -149,18 +158,23 @@ var pgc = {};
 if (config.pg.url) {
   pgc.connectionString = config.pg.url;
 }
+
 if (config.pg.user) {
   pgc.user = config.pg.user;
 }
+
 if (config.pg.password) {
   pgc.password = config.pg.password;
 }
+
 if (config.pg.database) {
   pgc.database = config.pg.database;
 }
+
 if (config.pg.host) {
   pgc.host = config.pg.host;
 }
+
 if (config.pg.port) {
   pgc.port = config.pg.port;
 }
@@ -193,6 +207,7 @@ if (config.tracing.enable) {
       if (request.span) {
         error.traceId = request.span.spanContext().traceId;
       }
+
       config.log.logger.error(error);
       if (request.span) {
         request.span.recordException(error);
@@ -225,6 +240,7 @@ if (config.tracing.enable) {
     try {
       config.log.logger.error(error);
     } catch (error) {}
+
     reply.code(500).send(
       JSON.stringify({
         type: 'error',
@@ -256,6 +272,7 @@ if (config.portal.enable) {
         } else {
           stream = fs.createReadStream(config.portal.icon);
         }
+
         res.type('image/x-icon').send(stream);
       });
     } catch (e) {
@@ -308,6 +325,7 @@ app.addHook('preParsing', async function (req, res, payload) {
           'Unregistered User' + ' (anonymous)' + ' | ' + parse.getIp(req) + ' | [' + req.raw.method + '] ' + req.raw.url
         );
       }
+
       res.send();
       return payload;
     }
@@ -380,6 +398,7 @@ process
 
       config.log.logger.fatal(trace.helpers.text('unhandledRejection', span));
     }
+
     config.log.logger.fatal(reason);
   })
   .on('uncaughtException', (err) => {
@@ -394,6 +413,7 @@ process
 
       config.log.logger.fatal(trace.helpers.text('uncaughtException', span));
     }
+
     config.log.logger.fatal(err);
   })
   .on('warning', (warning) => {
@@ -405,6 +425,7 @@ process
         warning.traceId = span.spanContext().traceId;
       }
     }
+
     config.log.logger.warn(warning); // Print the stack trace
   })
   .on('beforeExit', (code) => {
@@ -413,6 +434,7 @@ process
     if (config.tracing.enable && trace) {
       span = trace.opentelemetry.trace.getSpan(trace.opentelemetry.context.active());
     }
+
     config.log.logger.info(trace.helpers.text('Process beforeExit event with code: ' + code, span));
   });
 
@@ -420,15 +442,19 @@ async function init() {
   try {
     await pg.query('CREATE EXTENSION "uuid-ossp";');
   } catch (_) {}
+
   try {
     await User.createTable();
   } catch (_) {}
+
   try {
     await Group.createTable();
   } catch (_) {}
+
   try {
     await Token.createTable();
   } catch (_) {}
+
   try {
     await Audit.createTable();
   } catch (_) {}

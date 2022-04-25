@@ -77,20 +77,23 @@ class Router {
       res.code(401).send('Account Locked');
       return false;
     }
+
     if (groups) {
       // the route object
       var r = null;
       var routedGroup = null;
+      var headersDomain = parse.getDomainFromHeaders(req.headers);
 
       for (var i = 0; i < groups.length; i++) {
         routedGroup = groups[i].group;
 
-        r = this.isRouteAllowed(req.raw.method, req.raw.url, groups[i].routes, sessionUser, routedGroup);
+        r = this.isRouteAllowed(req.raw.method, req.raw.url, groups[i].routes, sessionUser, routedGroup, headersDomain);
         if (r) {
           possibleRoute = r.route;
           break;
         }
       }
+
       if (config.stats.captureGroupRoutes && !possibleRoute && ignored_log_routes.indexOf(req.raw.url) == -1) {
         var troute = req.raw.url.split('/');
 
@@ -146,6 +149,7 @@ class Router {
             )
           );
         }
+
         return false;
       }
 
@@ -156,6 +160,7 @@ class Router {
           if (!sessionGroupsData) {
             sessionGroupsData = await sessionUser.resolveGroup();
           }
+
           log.warn(
             helpers.text(
               'Unauthorized ' + sessionUser.username ||
@@ -181,6 +186,7 @@ class Router {
 
         return false;
       }
+
       // sets user id cookie every time to protect against tampering.
       if (config.proxy.sendTravellingHeaders) {
         if (config.user.username.enabled && authenticated) {
@@ -242,6 +248,7 @@ class Router {
             );
           }
         }
+
         return false;
       }
 
@@ -261,6 +268,7 @@ class Router {
       if (r.remove_from_path) {
         req.raw.url = req.raw.url.replace(this.transformRoute(sessionUser, r, r.remove_from_path, routedGroup), '');
       }
+
       if (config.log.requests && ignored_log_routes.indexOf(req.raw.url) == -1) {
         if (authenticated) {
           log.info(
@@ -307,6 +315,7 @@ class Router {
         } else {
           this.proxy.ws(req.raw, req._wssocket, target);
         }
+
         return true;
       }
 
@@ -322,6 +331,7 @@ class Router {
           //proxy(req.raw, res.raw, req.raw.url, { base: target.target });
           this.proxy.web(req.raw, res.raw, target);
         }
+
         return true;
       }
 
@@ -340,11 +350,23 @@ class Router {
   // @TODO Change these regex to precompiled ones inside regex.js
 
   /* eslint-disable */
-  isRouteAllowed(method, url, routes, user, currentGroup) {
+  isRouteAllowed(method, url, routes, user, currentGroup, headersDomain) {
     var surl = url.split('?')[0].split(/[\/]/g).filter(String);
 
     for (var i = 0; i < routes.length; i++) {
       if (!routes[i].method || !method || method == routes[i].method || routes[i].method == '*') {
+        var domain = routes[i].domain || '*';
+
+        if (domain !== '*') {
+          if (domain === ':domain') {
+            domain = user.domain;
+          }
+
+          if (headersDomain !== domain) {
+            continue;
+          }
+        }
+
         var route = this.transformRoute(user, routes[i], routes[i].route, currentGroup);
         if (!route) {
           continue;

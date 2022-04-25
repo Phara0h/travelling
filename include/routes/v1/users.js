@@ -7,6 +7,7 @@ const audit = require('../../utils/audit');
 const misc = require('../../utils/misc');
 const gm = require('../../server/groupmanager');
 const userRoutes = require('./functions/users');
+const parse = require('../../utils/parse');
 
 module.exports = function (app, opts, done) {
   const router = opts.router;
@@ -344,6 +345,7 @@ module.exports = function (app, opts, done) {
   app.get('/user/me/route/allowed', async (req, res) => {
     if (req.session) {
       const groups = await gm.currentGroup(req, res);
+      const headersDomain = parse.getDomainFromHeaders(req.headers);
 
       for (var i = 0; i < groups.length; i++) {
         if (
@@ -352,7 +354,8 @@ module.exports = function (app, opts, done) {
             req.query.route,
             groups[i].routes,
             !req.isAuthenticated ? null : req.session.data.user,
-            groups[i].group
+            groups[i].group,
+            headersDomain
           )
         ) {
           res.code(200);
@@ -405,10 +408,12 @@ module.exports = function (app, opts, done) {
           subaction: 'USER_OAUTH2_TOKEN',
           newObj: token
         };
+
         if (req.session.data) {
           auditObj.byUserId = req.session.data.user.id;
           auditObj.ofUserId = req.session.data.user.id;
         }
+
         await audit.createSingleAudit(auditObj);
       }
 
@@ -443,10 +448,12 @@ module.exports = function (app, opts, done) {
           subaction: 'USER_OAUTH2_TOKEN',
           oldObj: token
         };
+
         if (req.session.data) {
           auditObj.byUserId = req.session.data.user.id;
           auditObj.ofUserId = req.session.data.user.id;
         }
+
         await audit.createSingleAudit(auditObj);
       }
 

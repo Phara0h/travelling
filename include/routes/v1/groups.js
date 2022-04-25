@@ -1,4 +1,3 @@
-const Group = require('../../database/models/group');
 const User = require('../../database/models/user');
 
 const misc = require('../../utils/misc');
@@ -98,12 +97,9 @@ module.exports = function (app, opts, done) {
     await groupRoutes.addInheritedToGroup(req, res, router);
   });
 
-  app.put(
-    '/group/id/:groupid/type/:grouptype/inherit/from/:inheritedgroupname/type/:inheritedgrouptype',
-    async (req, res) => {
-      await groupRoutes.addInheritedToGroup(req, res, router);
-    }
-  );
+  app.put('/group/id/:groupid/type/:grouptype/inherit/from/:inheritedgroupname/type/:inheritedgrouptype', async (req, res) => {
+    await groupRoutes.addInheritedToGroup(req, res, router);
+  });
 
   app.delete('/group/id/:groupid/remove/inheritance/:inheritedgroupname/type/:inheritedgrouptype', async (req, res) => {
     await groupRoutes.removeInheritance(req, res, router);
@@ -132,6 +128,7 @@ module.exports = function (app, opts, done) {
     if (!group) {
       return;
     }
+
     res.code(200).send(group);
   });
 
@@ -141,6 +138,7 @@ module.exports = function (app, opts, done) {
     if (!group) {
       return;
     }
+
     res.code(200).send(group);
   });
 
@@ -180,6 +178,7 @@ module.exports = function (app, opts, done) {
     if (!group) {
       return;
     }
+
     if (!misc.isEmpty(req.query) && userUtils.checkValidUser(req.query)) {
       var query = userUtils.setUser({ group_ids: [group.id] }, req.query);
 
@@ -271,18 +270,12 @@ module.exports = function (app, opts, done) {
   app.get('/group/type/:grouptype/user/:id/property/:prop', async (req, res) => {
     return await groupRoutes.getUserByGroup(req, res, router);
   });
-  app.put(
-    '/group/type/:grouptype/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype',
-    async (req, res) => {
-      return await groupRoutes.addRemoveGroupInheritanceByGroup(req, res, true);
-    }
-  );
-  app.delete(
-    '/group/type/:grouptype/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype',
-    async (req, res) => {
-      return await groupRoutes.addRemoveGroupInheritanceByGroup(req, res, false);
-    }
-  );
+  app.put('/group/type/:grouptype/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype', async (req, res) => {
+    return await groupRoutes.addRemoveGroupInheritanceByGroup(req, res, true);
+  });
+  app.delete('/group/type/:grouptype/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype', async (req, res) => {
+    return await groupRoutes.addRemoveGroupInheritanceByGroup(req, res, false);
+  });
   app.put('/group/type/:grouptype/user/:id', async (req, res) => {
     return await groupRoutes.editUserByGroup(req, res, router);
   });

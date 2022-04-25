@@ -13,6 +13,7 @@ function isCircularPath(id, group, groups, nodes = []) {
   if (nodes.indexOf(id) == 0) {
     return true;
   }
+
   nodes.push(id);
 
   if (group.inherited) {
@@ -36,6 +37,7 @@ function checkCircularGroupRef(group, groups, found = []) {
       }
     }
   }
+
   return false;
 }
 
@@ -47,6 +49,7 @@ async function setGroup(req, group, router, groups = null) {
         msg: 'Group name contain invalid characters.'
       };
     }
+
     group.name = req.body.name;
   }
 
@@ -57,6 +60,7 @@ async function setGroup(req, group, router, groups = null) {
         msg: 'Group id contain invalid characters.'
       };
     }
+
     group.id = req.body.id;
   }
 
@@ -65,10 +69,7 @@ async function setGroup(req, group, router, groups = null) {
       return regex.uuidv4.exec(i) != null;
     });
 
-    if (
-      group.inherited.some((val, i) => group.inherited.indexOf(val) !== i) ||
-      group.inherited.indexOf(group.id) > -1
-    ) {
+    if (group.inherited.some((val, i) => group.inherited.indexOf(val) !== i) || group.inherited.indexOf(group.id) > -1) {
       throw {
         type: 'group-inherited-duplicate-id-error',
         msg: 'Inherited groups array contain duplicate ids or its own id'
@@ -99,6 +100,7 @@ async function setGroup(req, group, router, groups = null) {
         msg: 'Group type contain invalid characters.'
       };
     }
+
     group.type = req.body.type;
   }
 
@@ -133,6 +135,7 @@ async function getGroup(req, res, router) {
     });
     return false;
   }
+
   return fgroup;
 }
 
@@ -182,10 +185,9 @@ async function getUserByGroup(req, res, router) {
     });
     return false;
   }
+
   // console.log(groups, user.group.type, user.group_request, req.params.grouptype);
-  groups = groups.filter(
-    (g) => user.hasGroupType(g.type) || (groupRequest && user.group_request === req.params.grouptype)
-  );
+  groups = groups.filter((g) => user.hasGroupType(g.type) || (groupRequest && user.group_request === req.params.grouptype));
 
   if (req.params.groupid) {
     groups = groups.filter((g) => user.hasGroupId(req.params.groupid) || user.hasGroupName(req.params.groupid));
@@ -198,6 +200,7 @@ async function getUserByGroup(req, res, router) {
     });
     return false;
   }
+
   res.code(200);
   return prop ? user[prop] : user;
 }
@@ -257,6 +260,7 @@ async function deleteUserByGroup(req, res, router) {
     res.code(400);
     return false;
   }
+
   var deletedUser = userRoutes.deleteUser({ req, res, needsDomain: true, router });
 
   if (deletedUser && deletedUser.msg) {
@@ -286,6 +290,7 @@ async function addGroup(req, res, router) {
   if (!req.body.type) {
     req.body.type = 'group';
   }
+
   var fgroup = await gm.getGroup(req.body.id || req.body.name, req.body.type);
 
   if (fgroup) {
@@ -322,9 +327,11 @@ async function addGroup(req, res, router) {
       subaction: 'GROUP',
       newObj: ngroup
     };
+
     if (req.session.data) {
       auditObj.byUserId = req.session.data.user.id;
     }
+
     await audit.createSingleAudit(auditObj);
   }
 
@@ -369,9 +376,11 @@ async function editGroup(req, res, router) {
           oldObj: fgroup._,
           newObj: dgroup._
         };
+
         if (req.session.data) {
           auditObj.byUserId = req.session.data.user.id;
         }
+
         await audit.splitAndCreateAudits(auditObj);
       }
 
@@ -379,19 +388,19 @@ async function editGroup(req, res, router) {
 
       gm.redis.needsGroupUpdate = true;
     }
-  } else {
-    if (config.audit.edit.enable === true) {
-      var auditObj = {
-        action: 'EDIT',
-        subaction: 'GROUP',
-        oldObj: fgroup._,
-        newObj: group._
-      };
-      if (req.session.data) {
-        auditObj.byUserId = req.session.data.user.id;
-      }
-      await audit.splitAndCreateAudits(auditObj);
+  } else if (config.audit.edit.enable === true) {
+    var auditObj = {
+      action: 'EDIT',
+      subaction: 'GROUP',
+      oldObj: fgroup._,
+      newObj: group._
+    };
+
+    if (req.session.data) {
+      auditObj.byUserId = req.session.data.user.id;
     }
+
+    await audit.splitAndCreateAudits(auditObj);
   }
 
   await group.save();
@@ -441,9 +450,11 @@ async function addRouteGroup(req, res, router) {
       oldObj: previousGroup,
       newObj: newChanges
     };
+
     if (req.session.data) {
       auditObj.byUserId = req.session.data.user.id;
     }
+
     await audit.createSingleAudit(auditObj);
   }
 
@@ -491,9 +502,11 @@ async function deleteRouteGroup(req, res, router) {
       oldObj: previousGroup,
       newObj: newChanges
     };
+
     if (req.session.data) {
       auditObj.byUserId = req.session.data.user.id;
     }
+
     await audit.createSingleAudit(auditObj);
   }
 
@@ -530,9 +543,11 @@ async function deleteGroup(req, res, router) {
       subaction: 'GROUP',
       oldObj: previousGroup
     };
+
     if (req.session.data) {
       auditObj.byUserId = req.session.data.user.id;
     }
+
     await audit.createSingleAudit(auditObj);
   }
 
@@ -557,10 +572,7 @@ async function addInheritedToGroup(req, res, router) {
     return;
   }
 
-  var inhertedGroup = await gm.getGroup(
-    req.params.inheritedgroupname.toLowerCase(),
-    req.params.inheritedgrouptype.toLowerCase()
-  );
+  var inhertedGroup = await gm.getGroup(req.params.inheritedgroupname.toLowerCase(), req.params.inheritedgrouptype.toLowerCase());
 
   if (!inhertedGroup) {
     res.code(400).send({
@@ -587,10 +599,7 @@ async function removeInheritance(req, res, router) {
     return;
   }
 
-  var inhertedGroup = await gm.getGroup(
-    req.params.inheritedgroupname.toLowerCase(),
-    req.params.inheritedgrouptype.toLowerCase()
-  );
+  var inhertedGroup = await gm.getGroup(req.params.inheritedgroupname.toLowerCase(), req.params.inheritedgrouptype.toLowerCase());
 
   if (!inhertedGroup) {
     res.code(400).send({
@@ -599,6 +608,7 @@ async function removeInheritance(req, res, router) {
     });
     return;
   }
+
   var inheritedIndex = group.inherited.indexOf(inhertedGroup.id);
 
   if (!group.inherited || inheritedIndex == -1) {
@@ -647,6 +657,7 @@ async function importGroups(req, res, router) {
             inheritance[keyGroupName].push(group.inherited[j]);
           }
         }
+
         var fgroup = await gm.getGroup(group.name, group.type);
 
         if (fgroup) {
@@ -673,6 +684,7 @@ async function importGroups(req, res, router) {
           await dgroup.save();
         }
       }
+
       if (groups[i].id) {
         await groups[i].save();
       } else {
@@ -696,8 +708,10 @@ async function importGroups(req, res, router) {
         failedInheritance.push({ group: inheritanceKeys[i], inheritance: inheritance[inheritanceKeys[i]][j] });
       }
     }
+
     await savedGroups[inheritanceKeys[i]].save();
   }
+
   gm.redis.needsGroupUpdate = true;
 
   if (failedInheritance.length > 0) {
@@ -716,9 +730,11 @@ async function importGroups(req, res, router) {
       oldObj: previousGroups,
       newObj: req.body
     };
+
     if (req.session.data) {
       auditObj.byUserId = req.session.data.user.id;
     }
+
     await audit.createSingleAudit(auditObj);
   }
 
@@ -736,22 +752,27 @@ async function exportGroups(req, res) {
     if (group.inheritedGroups) {
       group.inheritedGroups = undefined;
     }
+
     if (group.inherited && group.inherited.length > 0) {
       for (var j = 0; j < group.inherited.length; j++) {
         group.inherited[j] = mappedGroups[group.inherited[j]].type + '|' + mappedGroups[group.inherited[j]].name;
       }
     }
+
     group.id = undefined;
     if (!exported[group.type]) {
       exported[group.type] = {};
     }
+
     exported[group.type][group.name] = {};
     if (group.allowed && group.allowed.length > 0) {
       exported[group.type][group.name].allowed = group.allowed;
     }
+
     if (group.inherited && group.inherited.length > 0) {
       exported[group.type][group.name].inherited = group.inherited;
     }
+
     if (group.is_default) {
       exported[group.type][group.name].is_default = group.is_default;
     }
