@@ -94,8 +94,7 @@ module.exports = () => {
       test('Check Test Domain Route - Using Cloudflare Request Header Domain', async () => {
         // Check without passing in header
         var noCFHeaderDomain = await Travelling.User.Current.routeCheck('GET', '/test-domain-two', null, {
-          cookie: userContainer.user5Cookie(),
-          headers: { ['cf-worker']: 'wrong.com' }
+          headers: { cookie: userContainer.user5Cookie(), 'cf-worker': 'wrong.com' }
         });
 
         expect(noCFHeaderDomain.statusCode).toEqual(401);
@@ -103,8 +102,7 @@ module.exports = () => {
 
         // Check by passing in header
         var withCFHeaderDomain = await Travelling.User.Current.routeCheck('GET', '/test-domain-two', null, {
-          cookie: userContainer.user5Cookie(),
-          headers: { ['cf-worker']: 'traziventurestwo.com' }
+          headers: { cookie: userContainer.user5Cookie(), 'cf-worker': 'traziventurestwo.com' }
         });
 
         expect(withCFHeaderDomain.statusCode).toEqual(200);
@@ -113,8 +111,7 @@ module.exports = () => {
 
       test('Check Test Domain Route - Route With Wildcard Domain', async () => {
         var res = await Travelling.User.Current.routeCheck('GET', '/test-domain-wildcard', null, {
-          cookie: userContainer.user5Cookie(),
-          headers: { mydomain: 'likewhateverr.com' }
+          headers: { cookie: userContainer.user5Cookie(), mydomain: 'likewhateverr.com' }
         });
 
         expect(res.statusCode).toEqual(200);
@@ -124,8 +121,7 @@ module.exports = () => {
       test('Check Test Domain Route - No Match - Using Custom Header Domain', async () => {
         // Check by passing in non-existent header
         var res = await Travelling.User.Current.routeCheck('GET', '/test-domain', null, {
-          cookie: userContainer.user5Cookie(),
-          headers: { mydomain: 'notamatchduuude.com' }
+          headers: { cookie: userContainer.user5Cookie(), mydomain: 'notamatchduuude.com' }
         });
 
         expect(res.statusCode).toEqual(401);
@@ -263,17 +259,11 @@ module.exports = () => {
       });
 
       test("Get Test2's Email By Username By Invaild Grouptype ", async () => {
-        var res = await Travelling.Group.Type.User.getProperty(
-          'testgroup',
-          userContainer.user2.username,
-          'email',
-          null,
-          {
-            headers: {
-              cookie: userContainer.user2Cookie()
-            }
+        var res = await Travelling.Group.Type.User.getProperty('testgroup', userContainer.user2.username, 'email', null, {
+          headers: {
+            cookie: userContainer.user2Cookie()
           }
-        );
+        });
 
         expect(res.statusCode).toEqual(400);
         expect(res.body).not.toEqual(userContainer.user2.email);
@@ -284,11 +274,7 @@ module.exports = () => {
   describe('Non-Current User With Domain', () => {
     describe('Valid', () => {
       test('Get User Domain 2', async () => {
-        var res = await Travelling.User.Domain.get(
-          'test.com',
-          'test_domain_2@test.com',
-          userContainer.userDomain2Token
-        );
+        var res = await Travelling.User.Domain.get('test.com', 'test_domain_2@test.com', userContainer.userDomain2Token);
 
         expect(res.statusCode).toEqual(200);
         expect(res.body.domain).toEqual('test.com');
@@ -321,11 +307,7 @@ module.exports = () => {
       });
 
       test('Get User Domain 2 invalid id', async () => {
-        var res = await Travelling.User.Domain.get(
-          'test.com',
-          'real-incorrect-id@45.wrong',
-          userContainer.userDomain2Token
-        );
+        var res = await Travelling.User.Domain.get('test.com', 'real-incorrect-id@45.wrong', userContainer.userDomain2Token);
 
         expect(res.statusCode).toEqual(400);
         expect(res.body).toHaveProperty('type', 'user-find-by-error');
