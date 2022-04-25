@@ -9,6 +9,7 @@ var logout = (req, res, oldspan) => {
   if (oldspan) {
     span = req.startSpan('logout', oldspan);
   }
+
   req.sessionStore.destroy(req.session.sessionId);
   CookieToken.removeAuthCookie(res, span);
   res.setCookie('trav:ssid', null, {
@@ -31,6 +32,7 @@ var checkAuthHeader = async (req, res, router, oldspan) => {
     // console.log(oldspan);
     span = req.startSpan('checkAuthHeader', oldspan);
   }
+
   if (req.headers.authorization) {
     var splitAuth = req.headers.authorization.split(' ');
 
@@ -38,8 +40,10 @@ var checkAuthHeader = async (req, res, router, oldspan) => {
       if (span) {
         span.end();
       }
+
       return false;
     }
+
     splitAuth[0] = splitAuth[0].toLowerCase();
 
     if (splitAuth[0] == 'basic') {
@@ -47,6 +51,7 @@ var checkAuthHeader = async (req, res, router, oldspan) => {
         span.updateName('checkAuthHeader [basic not bearer]');
         span.end();
       }
+
       return { auth: false, route: true };
     }
 
@@ -55,6 +60,7 @@ var checkAuthHeader = async (req, res, router, oldspan) => {
         span.updateName('checkAuthHeader [not bearer]');
         span.end();
       }
+
       return false;
     }
 
@@ -77,12 +83,15 @@ var checkAuthHeader = async (req, res, router, oldspan) => {
       span.updateName('checkAuthHeader [valid]');
       span.end();
     }
+
     return { auth: true, route: true };
   }
+
   if (span) {
     span.updateName('checkAuthHeader [no header found]');
     span.end();
   }
+
   return false;
 };
 
@@ -92,24 +101,30 @@ var checkSession = (req, res, router, oldspan) => {
   if (oldspan) {
     span = req.startSpan('checkSession', oldspan);
   }
+
   if (req.session && req.session.data && req.session.data.user) {
     if (req.session.data.user.locked) {
       if (span) {
         span.updateName('checkSession [user locked]');
         span.end();
       }
+
       return { auth: false, route: true };
     }
+
     if (span) {
       span.updateName('checkSession [valid]');
       span.end();
     }
+
     return { auth: true, route: true };
   }
+
   if (span) {
     span.updateName('checkSession [invalid]');
     span.end();
   }
+
   return false;
 };
 
@@ -119,6 +134,7 @@ var checkCookie = async (req, res, router, oldspan) => {
   if (oldspan) {
     span = req.startSpan('checkCookie', oldspan);
   }
+
   if (req.cookies['trav:tok']) {
     try {
       var user = await CookieToken.checkToken(req, res, router, span);
@@ -128,6 +144,7 @@ var checkCookie = async (req, res, router, oldspan) => {
           span.updateName('checkCookie [user locked]');
           span.end();
         }
+
         return { auth: false, route: true };
       }
 
@@ -148,6 +165,7 @@ var checkCookie = async (req, res, router, oldspan) => {
         span.updateName('checkCookie [valid]');
         span.end();
       }
+
       return { auth: true, route: true };
     } catch (e) {
       config.log.logger.debug(e);
@@ -156,12 +174,15 @@ var checkCookie = async (req, res, router, oldspan) => {
         span.recordException(e);
         span.end();
       }
+
       return { auth: false, route: true };
     }
   }
+
   if (span) {
     span.end();
   }
+
   return false;
 };
 
@@ -172,12 +193,14 @@ var checkLoggedIn = async (req, res, router, oldspan) => {
     //console.log(oldspan.context());
     span = req.startSpan('checkLoggedIn', oldspan);
   }
+
   var authHeader = await checkAuthHeader(req, res, router, span);
 
   if (authHeader) {
     if (span) {
       span.end();
     }
+
     return authHeader;
   }
 
@@ -187,6 +210,7 @@ var checkLoggedIn = async (req, res, router, oldspan) => {
     if (span) {
       span.end();
     }
+
     return session;
   }
 
@@ -196,11 +220,14 @@ var checkLoggedIn = async (req, res, router, oldspan) => {
     if (span) {
       span.end();
     }
+
     return cookie;
   }
+
   if (span) {
     span.end();
   }
+
   return { auth: false, route: true };
 };
 
@@ -279,15 +306,19 @@ function generateRandomPassword(passwordLength = 20, retryCount = 0, oldspan) {
     for (var i = 0; i < config.password.uppercase; i++) {
       result += uppercase.splice(Math.floor(Math.random() * uppercase.length), 1);
     }
+
     for (var i = 0; i < config.password.lowercase; i++) {
       result += lowercase.splice(Math.floor(Math.random() * lowercase.length), 1);
     }
+
     for (var i = 0; i < config.password.number; i++) {
       result += numbers.splice(Math.floor(Math.random() * numbers.length), 1);
     }
+
     for (var i = 0; i < config.password.special; i++) {
       result += specialCharacters.splice(Math.floor(Math.random() * specialCharacters.length), 1);
     }
+
     var max = config.password.maxchar === '' ? config.password.randomGenerationLength : config.password.maxchar;
     // Fill in rest with random chars until length is full
 

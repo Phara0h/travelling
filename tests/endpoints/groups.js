@@ -180,10 +180,7 @@ module.exports = () => {
 
         expect(permCheck.statusCode).toEqual(200);
 
-        var failPermCheck = await Travelling.User.Current.permissionCheck(
-          'test-one-fish-blue',
-          userContainer.user1Token
-        );
+        var failPermCheck = await Travelling.User.Current.permissionCheck('test-one-fish-blue', userContainer.user1Token);
 
         expect(failPermCheck.statusCode).toEqual(401);
       });
@@ -222,13 +219,7 @@ module.exports = () => {
 
       test('Group 1 to Inherit Superadmin', async () => {
         var superadmin = (await Travelling.Group.get('superadmin', userContainer.user1Token)).body.id;
-        var res = await Travelling.Group.Type.inheritFrom(
-          'group1',
-          'testgroup',
-          'superadmin',
-          'group',
-          userContainer.user1Token
-        );
+        var res = await Travelling.Group.Type.inheritFrom('group1', 'testgroup', 'superadmin', 'group', userContainer.user1Token);
 
         expect(res.statusCode).toEqual(200);
         expect(res.body).toMatchObject({
@@ -269,18 +260,11 @@ module.exports = () => {
       });
 
       test('Delete permission to superadmin and test permission', async () => {
-        var addPerm = await Travelling.Group.deletePermission(
-          'superadmin',
-          'test-one-*-three',
-          userContainer.user1Token
-        );
+        var addPerm = await Travelling.Group.deletePermission('superadmin', 'test-one-*-three', userContainer.user1Token);
 
         expect(addPerm.statusCode).toEqual(200);
 
-        var failPermCheck = await Travelling.User.Current.permissionCheck(
-          'test-one-fish-three',
-          userContainer.user1Token
-        );
+        var failPermCheck = await Travelling.User.Current.permissionCheck('test-one-fish-three', userContainer.user1Token);
 
         expect(failPermCheck.statusCode).toEqual(401);
       });

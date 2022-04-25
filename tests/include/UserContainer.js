@@ -83,6 +83,7 @@ class UserContainer {
         user.tok = pc['trav:tok'];
       }
     }
+
     return user;
   }
 
@@ -96,6 +97,7 @@ class UserContainer {
     if (user.tok) {
       cookies += cookie.serialize('trav:tok', user.tok) + '; ';
     }
+
     return cookies;
   }
 }

@@ -260,17 +260,11 @@ module.exports = () => {
       });
 
       test("Get Test2's Email By Username By Invaild Grouptype ", async () => {
-        var res = await Travelling.Group.Type.User.getProperty(
-          'testgroup',
-          userContainer.user2.username,
-          'email',
-          null,
-          {
-            headers: {
-              cookie: userContainer.user2Cookie()
-            }
+        var res = await Travelling.Group.Type.User.getProperty('testgroup', userContainer.user2.username, 'email', null, {
+          headers: {
+            cookie: userContainer.user2Cookie()
           }
-        );
+        });
 
         expect(res.statusCode).toEqual(400);
         expect(res.body).not.toEqual(userContainer.user2.email);
@@ -281,11 +275,7 @@ module.exports = () => {
   describe('Non-Current User With Domain', () => {
     describe('Valid', () => {
       test('Get User Domain 2', async () => {
-        var res = await Travelling.User.Domain.get(
-          'test.com',
-          'test_domain_2@test.com',
-          userContainer.userDomain2Token
-        );
+        var res = await Travelling.User.Domain.get('test.com', 'test_domain_2@test.com', userContainer.userDomain2Token);
 
         expect(res.statusCode).toEqual(200);
         expect(res.body.domain).toEqual('test.com');
@@ -318,11 +308,7 @@ module.exports = () => {
       });
 
       test('Get User Domain 2 invalid id', async () => {
-        var res = await Travelling.User.Domain.get(
-          'test.com',
-          'real-incorrect-id@45.wrong',
-          userContainer.userDomain2Token
-        );
+        var res = await Travelling.User.Domain.get('test.com', 'real-incorrect-id@45.wrong', userContainer.userDomain2Token);
 
         expect(res.statusCode).toEqual(400);
         expect(res.body).toHaveProperty('type', 'user-find-by-error');

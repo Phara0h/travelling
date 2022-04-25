@@ -1,4 +1,3 @@
-const regex = require('../../../utils/regex');
 const userUtils = require('../../../utils/user');
 const config = require('../../../utils/config');
 const misc = require('../../../utils/misc');
@@ -61,6 +60,7 @@ async function deleteUser(opts) {
       if (opts.req.session.data) {
         auditObj.byUserId = opts.req.session.data.user.id;
       }
+
       await audit.createSingleAudit(auditObj, 'DELETE');
     }
 
@@ -120,6 +120,7 @@ async function editUser(opts) {
   if (isValid === true) {
     isValid = await Database.checkDupe(model);
   }
+
   if (isValid !== true) {
     opts.res.code(400);
     return isValid;
@@ -169,6 +170,7 @@ async function editUser(opts) {
       session.data = { user: user[0], groupsData };
       await opts.req.sessionStore.set(session.sessionId, session);
     }
+
     await user[0].updated();
 
     if (config.audit.edit.enable === true) {
@@ -183,6 +185,7 @@ async function editUser(opts) {
       if (opts.req.session.data) {
         auditObj.byUserId = opts.req.session.data.user.id;
       }
+
       await audit.splitAndCreateAudits(auditObj);
     }
 
@@ -315,6 +318,7 @@ async function addRemoveGroupInheritance(user, group, add = true, req) {
         msg: `User could not ${add ? 'add' : 'remove'} group.`
       };
     }
+
     await updateSessionUser(user, req);
     await user.updated();
     if (config.audit.edit.enable === true) {

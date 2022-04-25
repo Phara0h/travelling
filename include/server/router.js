@@ -77,6 +77,7 @@ class Router {
       res.code(401).send('Account Locked');
       return false;
     }
+
     if (groups) {
       // the route object
       var r = null;
@@ -92,6 +93,7 @@ class Router {
           break;
         }
       }
+
       if (config.stats.captureGroupRoutes && !possibleRoute && ignored_log_routes.indexOf(req.raw.url) == -1) {
         var troute = req.raw.url.split('/');
 
@@ -147,6 +149,7 @@ class Router {
             )
           );
         }
+
         return false;
       }
 
@@ -157,6 +160,7 @@ class Router {
           if (!sessionGroupsData) {
             sessionGroupsData = await sessionUser.resolveGroup();
           }
+
           log.warn(
             helpers.text(
               'Unauthorized ' + sessionUser.username ||
@@ -182,6 +186,7 @@ class Router {
 
         return false;
       }
+
       // sets user id cookie every time to protect against tampering.
       if (config.proxy.sendTravellingHeaders) {
         if (config.user.username.enabled && authenticated) {
@@ -237,19 +242,13 @@ class Router {
           } else {
             log.info(
               helpers.text(
-                'Unregistered User' +
-                  ' (anonymous)' +
-                  ' | ' +
-                  parse.getIp(req) +
-                  ' | [' +
-                  req.raw.method +
-                  '] ' +
-                  req.raw.url,
+                'Unregistered User' + ' (anonymous)' + ' | ' + parse.getIp(req) + ' | [' + req.raw.method + '] ' + req.raw.url,
                 span
               )
             );
           }
         }
+
         return false;
       }
 
@@ -269,6 +268,7 @@ class Router {
       if (r.remove_from_path) {
         req.raw.url = req.raw.url.replace(this.transformRoute(sessionUser, r, r.remove_from_path, routedGroup), '');
       }
+
       if (config.log.requests && ignored_log_routes.indexOf(req.raw.url) == -1) {
         if (authenticated) {
           log.info(
@@ -315,6 +315,7 @@ class Router {
         } else {
           this.proxy.ws(req.raw, req._wssocket, target);
         }
+
         return true;
       }
 
@@ -330,6 +331,7 @@ class Router {
           //proxy(req.raw, res.raw, req.raw.url, { base: target.target });
           this.proxy.web(req.raw, res.raw, target);
         }
+
         return true;
       }
 

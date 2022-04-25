@@ -91,6 +91,7 @@ module.exports = () => {
     test('Get Users with filter created_on in date range', async () => {
       var yesterday = new Date();
       var tomorrow = new Date();
+
       yesterday.setDate(yesterday.getDate() - 1);
       tomorrow.setDate(tomorrow.getDate() + 1);
 
@@ -111,6 +112,7 @@ module.exports = () => {
     test('Get Users with filter created_on out of date range', async () => {
       var oneWeekAgo = new Date();
       var twoWeeksAgo = new Date();
+
       oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
       twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
 
@@ -131,6 +133,7 @@ module.exports = () => {
     test('Get Users with filter created_on in date range with locked [false]', async () => {
       var yesterday = new Date();
       var tomorrow = new Date();
+
       yesterday.setDate(yesterday.getDate() - 1);
       tomorrow.setDate(tomorrow.getDate() + 1);
 
@@ -163,15 +166,7 @@ module.exports = () => {
     });
 
     test('Get Users with sort, limit, filter and sortdir', async () => {
-      var res = await Travelling.Users.get(
-        'created_on',
-        1,
-        null,
-        'locked=false',
-        'ASC',
-        null,
-        userContainer.user1Token
-      );
+      var res = await Travelling.Users.get('created_on', 1, null, 'locked=false', 'ASC', null, userContainer.user1Token);
 
       expect(res.statusCode).toEqual(200);
       expect(res.body).toHaveLength(1);
@@ -180,6 +175,7 @@ module.exports = () => {
     test('Get Users with filter created_on in date range with locked [false] and sort, limit, and sortdir', async () => {
       var yesterday = new Date();
       var tomorrow = new Date();
+
       yesterday.setDate(yesterday.getDate() - 1);
       tomorrow.setDate(tomorrow.getDate() + 1);
 
@@ -200,6 +196,7 @@ module.exports = () => {
     test('Get Users with filter created_on in date range and sort, limit, skip and sortdir', async () => {
       var yesterday = new Date();
       var tomorrow = new Date();
+
       yesterday.setDate(yesterday.getDate() - 1);
       tomorrow.setDate(tomorrow.getDate() + 1);
 
@@ -225,32 +222,14 @@ module.exports = () => {
     });
 
     test('Get Users By Default Domain', async () => {
-      var res = await Travelling.Users.Domain.get(
-        'default',
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        userContainer.userDomainToken
-      );
+      var res = await Travelling.Users.Domain.get('default', null, null, null, null, null, null, userContainer.userDomainToken);
 
       expect(res.statusCode).toEqual(200);
       expect(res.body).toHaveLength(4);
     });
 
     test('Get Users By Domain', async () => {
-      var res = await Travelling.Users.Domain.get(
-        'test.com',
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        userContainer.userDomainToken
-      );
+      var res = await Travelling.Users.Domain.get('test.com', null, null, null, null, null, null, userContainer.userDomainToken);
 
       expect(res.statusCode).toEqual(200);
       expect(res.body).toHaveLength(3);
@@ -275,16 +254,7 @@ module.exports = () => {
     });
 
     test('Get Users By Domain with limit', async () => {
-      var res = await Travelling.Users.Domain.get(
-        'test.com',
-        null,
-        1,
-        null,
-        null,
-        null,
-        null,
-        userContainer.userDomainToken
-      );
+      var res = await Travelling.Users.Domain.get('test.com', null, 1, null, null, null, null, userContainer.userDomainToken);
 
       expect(res.statusCode).toEqual(200);
       expect(res.body).toHaveLength(1);
@@ -292,32 +262,14 @@ module.exports = () => {
     });
 
     test('Get Users By Domain with skip', async () => {
-      var res = await Travelling.Users.Domain.get(
-        'test.com',
-        null,
-        null,
-        1,
-        null,
-        null,
-        null,
-        userContainer.userDomainToken
-      );
+      var res = await Travelling.Users.Domain.get('test.com', null, null, 1, null, null, null, userContainer.userDomainToken);
 
       expect(res.statusCode).toEqual(200);
       expect(res.body).toHaveLength(2);
     });
 
     test('Get Users By Domain with sortdir', async () => {
-      var res = await Travelling.Users.Domain.get(
-        'test.com',
-        null,
-        null,
-        null,
-        null,
-        'ASC',
-        null,
-        userContainer.userDomainToken
-      );
+      var res = await Travelling.Users.Domain.get('test.com', null, null, null, null, 'ASC', null, userContainer.userDomainToken);
 
       expect(res.statusCode).toEqual(200);
       expect(res.body).toHaveLength(3);
@@ -344,6 +296,7 @@ module.exports = () => {
     test('Get Users By Domain with filter created_on in date range', async () => {
       var yesterday = new Date();
       var tomorrow = new Date();
+
       yesterday.setDate(yesterday.getDate() - 1);
       tomorrow.setDate(tomorrow.getDate() + 1);
 
@@ -366,6 +319,7 @@ module.exports = () => {
     test('Get Users By Domain with filter created_on out of date range', async () => {
       var oneWeekAgo = new Date();
       var twoWeeksAgo = new Date();
+
       oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
       twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
 
@@ -387,6 +341,7 @@ module.exports = () => {
     test('Get Users By Domain with filter created_on in date range with locked [false]', async () => {
       var yesterday = new Date();
       var tomorrow = new Date();
+
       yesterday.setDate(yesterday.getDate() - 1);
       tomorrow.setDate(tomorrow.getDate() + 1);
 
@@ -460,6 +415,7 @@ module.exports = () => {
     test('Get Users By Domain with filter created_on in date range with locked [false] and sort, limit, and sortdir', async () => {
       var yesterday = new Date();
       var tomorrow = new Date();
+
       yesterday.setDate(yesterday.getDate() - 1);
       tomorrow.setDate(tomorrow.getDate() + 1);
 
@@ -482,6 +438,7 @@ module.exports = () => {
     test('Get Users By Domain with filter created_on in date range and sort, limit, skip and sortdir', async () => {
       var yesterday = new Date();
       var tomorrow = new Date();
+
       yesterday.setDate(yesterday.getDate() - 1);
       tomorrow.setDate(tomorrow.getDate() + 1);
 
@@ -531,6 +488,7 @@ module.exports = () => {
     test('Get Users Count with filter created_on in date range', async () => {
       var yesterday = new Date();
       var tomorrow = new Date();
+
       yesterday.setDate(yesterday.getDate() - 1);
       tomorrow.setDate(tomorrow.getDate() + 1);
 
@@ -570,6 +528,7 @@ module.exports = () => {
     test('Get Users Count by Domain filter created_on in date range', async () => {
       var yesterday = new Date();
       var tomorrow = new Date();
+
       yesterday.setDate(yesterday.getDate() - 1);
       tomorrow.setDate(tomorrow.getDate() + 1);
 
@@ -639,6 +598,7 @@ module.exports = () => {
 
     test('Get Users By Domain with filter created_on with invalid domain', async () => {
       var yesterday = new Date();
+
       yesterday.setDate(yesterday.getDate() - 1);
 
       var res = await Travelling.Users.Domain.get(

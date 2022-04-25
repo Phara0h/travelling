@@ -6,7 +6,8 @@
   "scripts": {
     "pretest": "npm run sdk",
     "test": "TRAVELLING_ENV=.testENV jest --coverage --verbose --forceExit --detectOpenHandles",
-    "lint": "TRAVELLING_ENV=.testENV jest --coverage --verbose --forceExit --detectOpenHandles",
+    "lint": "eslint .",
+    "lint-fix": "eslint . --fix",
     "start": "node index.js",
     "debug": "node --inspect-brk index.js",
     "sdk": "sh sdk/gen-sdk.sh && npm run docs",
