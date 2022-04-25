@@ -506,7 +506,19 @@ module.exports = () => {
 
       test('Checking Audit of (Edit Test User Email Property [test2])', async () => {
         const u = await User.findAllBy({ username: 'test2' });
-        const audit = await Audit.findAllBy({ of_user_id: u[0].id, action: 'EDIT', subaction: 'USER_PROPERTY' });
+        const res = await Travelling.Audit.User.ofuserId(
+          u[0].id,
+          `action=EDIT,subaction=USER_PROPERTY`,
+          null,
+          null,
+          'created_on',
+          'ASC',
+          true,
+          null,
+          userContainer.user1Token
+        );
+
+        const audit = res.body;
 
         expect(audit[0]).toHaveProperty('id');
         expect(audit[0].created_on).not.toBeNull();
