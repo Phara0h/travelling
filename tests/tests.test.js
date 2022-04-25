@@ -61,6 +61,7 @@ afterAll(async () => {
     console.log('Flushing Redis...');
     await Redis.flushAll();
   }
+
   console.log('Deleting Users...');
   await User.deleteAll();
   console.log('Deleting Groups...');
@@ -97,6 +98,7 @@ test('Waste Time', async () => {
 });
 
 describe('Endpoints', require('./endpoints'));
+describe('Misc', require('./misc'));
 //describe('Email', require('./email'));
 describe('Routes', require('./routes'));
 describe('Flows', require('./flow-tests'));

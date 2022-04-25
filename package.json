@@ -1,12 +1,13 @@
 {
   "name": "@dragohm/travelling",
-  "version": "2.15.0",
+  "version": "2.16.0",
   "description": "A dynamic route level groups permissions middleman service",
   "main": "index.js",
   "scripts": {
     "pretest": "npm run sdk",
     "test": "TRAVELLING_ENV=.testENV jest --coverage --verbose --forceExit --detectOpenHandles",
-    "lint": "TRAVELLING_ENV=.testENV jest --coverage --verbose --forceExit --detectOpenHandles",
+    "lint": "eslint .",
+    "lint-fix": "eslint . --fix",
     "start": "node index.js",
     "debug": "node --inspect-brk index.js",
     "sdk": "sh sdk/gen-sdk.sh && npm run docs",

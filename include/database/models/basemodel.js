@@ -134,6 +134,7 @@ BaseModel.findAllByFilter = async function ({
         c = 0;
       }
     }
+
     if (limit !== null) {
       if (c >= limit) {
         return { count: limit };
@@ -153,6 +154,7 @@ BaseModel.findAllByFilter = async function ({
       delete rows[i].eprofile;
     }
   }
+
   return rows;
 };
 

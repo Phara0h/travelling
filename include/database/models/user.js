@@ -152,6 +152,7 @@ class User extends Base(BaseModel, 'users', {
     if (found == -1) {
       return false;
     }
+
     this.group_ids.splice(found, 1);
     this.group_ids = [...this.group_ids];
 
@@ -173,6 +174,7 @@ class User extends Base(BaseModel, 'users', {
         return true;
       }
     }
+
     return false;
   }
 
@@ -182,6 +184,7 @@ class User extends Base(BaseModel, 'users', {
         return true;
       }
     }
+
     return false;
   }
 
@@ -191,6 +194,7 @@ class User extends Base(BaseModel, 'users', {
     if (u.avatar != null) {
       u.avatar = u.avatar.toString('utf8');
     }
+
     if (u.user_data != null) {
       u.user_data = JSON.parse(u.user_data.toString('utf8'));
     }

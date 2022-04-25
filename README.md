@@ -3812,7 +3812,19 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v2.16.0](https://github.com/Dragohm/travelling/compare/v2.15.0...v2.16.0)
+
+- Updated eslint and fixed the problems [`a98498a`](https://github.com/Dragohm/travelling/commit/a98498a4779549323234888ceeeac59fa9c5c928)
+- Add domain to add group inheritance in test [`395c73f`](https://github.com/Dragohm/travelling/commit/395c73f2365d69b117c30209de7948f5a3ce6a36)
+- Update user-get.js [`23c183f`](https://github.com/Dragohm/travelling/commit/23c183f1fe296e31c5bfc3cbfd5797dc9c047051)
+- Update tests [`6ca40ed`](https://github.com/Dragohm/travelling/commit/6ca40eda7791abbd8fd3f45f4d0ab97cac18bd59)
+- update tests [`fc535bc`](https://github.com/Dragohm/travelling/commit/fc535bc578c9e78d948b5e64547a0b40fcdcffdb)
+- update router and add tests [`d1e560e`](https://github.com/Dragohm/travelling/commit/d1e560e877371ff9e679a088cc3d7e3039f4ee41)
+- allowed domain is route allowed [`6ac5b5a`](https://github.com/Dragohm/travelling/commit/6ac5b5a0d89f86423b1e14149711f89c56662ddd)
+
 #### [v2.15.0](https://github.com/Dragohm/travelling/compare/v2.14.1...v2.15.0)
+
+> 11 April 2022
 
 - Update audit queries [`#18`](https://github.com/Dragohm/travelling/pull/18)
 - Fix #49 - User - set user state and city [`#17`](https://github.com/Dragohm/travelling/pull/17)
