@@ -35,9 +35,11 @@ var loginRoute = async (req, res) => {
     if (req.body.username) {
       username = req.body.username = req.body.username.toLowerCase();
     }
+
     if (req.body.email) {
       email = req.body.email = req.body.email.toLowerCase();
     }
+
     if (req.params.domain) {
       domain = req.params.domain.toLowerCase();
     }
@@ -67,6 +69,7 @@ var loginRoute = async (req, res) => {
         } else {
           config.log.logger.debug(e);
         }
+
         res.code(400);
         return e.err && e.err.type == 'locked'
           ? { type: e.err.type, msg: e.err.msg, email: e.email }
@@ -92,6 +95,7 @@ var registerRoute = async (req, res) => {
   if (req.query.randomPassword === 'true') {
     req.body.password = generateRandomPassword(config.password.maxchar, 3, req.span);
   }
+
   var isValid = await checkValidUser(req.body);
 
   if (isValid === true) {
@@ -120,7 +124,6 @@ var registerRoute = async (req, res) => {
   var email = req.body.email.toLowerCase();
   var domain = 'default';
   var groupRequest;
-  var personalInfo = {};
 
   if (req.params.domain) {
     domain = req.params.domain.toLowerCase();
@@ -159,6 +162,7 @@ var registerRoute = async (req, res) => {
     if (req.session.data) {
       auditObj.byUserId = req.session.data.user.id;
     }
+
     await audit.createSingleAudit(auditObj);
   }
 
@@ -202,6 +206,7 @@ async function otpGetRoute(req, res, needsDomain = false) {
     res.code(400);
     return isValid;
   }
+
   return await Database.getOTP({ req, res, needsDomain });
 }
 
@@ -226,6 +231,7 @@ async function otpLoginRoute(req, res) {
       msg: 'OTP is invalid or expired.'
     };
   }
+
   res.code(200);
   return await login(user, req, res);
 }
@@ -289,6 +295,7 @@ async function resetPasswordRoute(req, res, autologin = false) {
       auditObj.byUserId = req.session.data.user.id;
       auditObj.ofUserId = req.session.data.user.id;
     }
+
     await audit.createSingleAudit(auditObj);
   }
 
@@ -296,6 +303,7 @@ async function resetPasswordRoute(req, res, autologin = false) {
   if (autologin) {
     return await login(user, req, res);
   }
+
   return '';
 }
 
@@ -492,6 +500,7 @@ var clientCredentialsToken = async (req, res) => {
       msg: 'client_id and/or client_secret are invalid'
     };
   }
+
   var token = await TokenHandler.checkOAuthToken(client_id, client_secret);
 
   if (!token) {
@@ -522,6 +531,7 @@ var authorizationCodeToken = async (req, res) => {
       client_id = req.body.client_id;
       client_secret = req.body.client_secret;
     }
+
     code = Buffer.from(req.body.code, 'base64').toString('utf8').split(':');
   } catch (e) {
     config.log.logger.debug(e);

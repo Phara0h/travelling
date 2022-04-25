@@ -38,6 +38,7 @@ class GroupManager {
     if (oldspan) {
       span = helpers.startSpan('updateGroupList', oldspan);
     }
+
     this.log.debug(helpers.text('Updating Groups', span));
     var grps = await Group.findAll();
 
@@ -60,6 +61,7 @@ class GroupManager {
         allPossibleRoutesTemp[this.mergedRoutes[grps[i].type][grps[i].name][j].route] = true;
       }
     }
+
     allPossibleRoutesTemp = Object.keys(allPossibleRoutesTemp);
     for (let i = 0; i < allPossibleRoutesTemp.length; i++) {
       var t = allPossibleRoutesTemp[i].split('/');
@@ -72,6 +74,7 @@ class GroupManager {
           if (!last[t[j]]) {
             last[t[j]] = {};
           }
+
           last[t[j]].name = allPossibleRoutesTemp[i];
           last = last[t[j]];
         }
@@ -113,6 +116,7 @@ class GroupManager {
         return this.groups[i];
       }
     }
+
     this.log.error('No default group set. Setting default to anonymous');
 
     for (var i = 0; i < this.groups.length; i++) {
@@ -172,6 +176,7 @@ class GroupManager {
       if (!group.inheritedGroups) {
         group.addProperty('inheritedGroups', []);
       }
+
       for (var i = 0; i < group.inherited.length; ++i) {
         for (var j = 0; j < groups.length; ++j) {
           if (groups[j].id == group.inherited[i]) {
@@ -180,12 +185,15 @@ class GroupManager {
             break;
           }
         }
+
         nallowed.push(...this.groupInheritedMerge(group.inheritedGroups[i], groups, span));
       }
     }
+
     if (span) {
       span.end();
     }
+
     return nallowed;
   }
 }

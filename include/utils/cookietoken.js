@@ -14,6 +14,7 @@ class CookieToken {
     if (oldspan) {
       span = req.startSpan('checkToken', oldspan);
     }
+
     try {
       var tok = req.cookies['trav:tok'];
 
@@ -22,6 +23,7 @@ class CookieToken {
           span.updateName('checkToken [invalid tok]');
           span.end();
         }
+
         return false;
       }
 
@@ -37,6 +39,7 @@ class CookieToken {
           span.updateName('checkToken [ipHijackProtection]');
           span.end();
         }
+
         return false;
       }
 
@@ -50,6 +53,7 @@ class CookieToken {
             span.updateName('checkToken [no user]');
             span.end();
           }
+
           return false;
         } else {
           if (user.length > 1) {
@@ -57,10 +61,12 @@ class CookieToken {
               helpers.text(`Multiple users returned back for ${cred[1]} when there should only be one!`, span)
             );
           }
+
           if (span) {
             span.updateName('checkToken [valid]');
             span.end();
           }
+
           return user[0];
         }
       } else {
@@ -69,6 +75,7 @@ class CookieToken {
           span.updateName('checkToken [invalid]');
           span.end();
         }
+
         return false;
       }
     } catch (e) {
@@ -78,6 +85,7 @@ class CookieToken {
         span.recordException(e);
         span.end();
       }
+
       config.log.logger.debug(e);
       return false;
     }
@@ -100,6 +108,7 @@ class CookieToken {
     if (oldspan) {
       span = req.startSpan('removeAuthCookie', oldspan);
     }
+
     res.setCookie('trav:tok', null, {
       expires: Date.now(),
       secure: config.https,
@@ -110,6 +119,7 @@ class CookieToken {
     if (span) {
       span.end();
     }
+
     return res;
   }
 

@@ -408,10 +408,12 @@ module.exports = function (app, opts, done) {
           subaction: 'USER_OAUTH2_TOKEN',
           newObj: token
         };
+
         if (req.session.data) {
           auditObj.byUserId = req.session.data.user.id;
           auditObj.ofUserId = req.session.data.user.id;
         }
+
         await audit.createSingleAudit(auditObj);
       }
 
@@ -446,10 +448,12 @@ module.exports = function (app, opts, done) {
           subaction: 'USER_OAUTH2_TOKEN',
           oldObj: token
         };
+
         if (req.session.data) {
           auditObj.byUserId = req.session.data.user.id;
           auditObj.ofUserId = req.session.data.user.id;
         }
+
         await audit.createSingleAudit(auditObj);
       }
 

@@ -88,6 +88,7 @@ class TokenHandler {
           reject('Invalid name');
           return;
         }
+
         if (name) {
           var fToken = await Token.findLimtedBy({ name }, 'AND', 1);
 
@@ -96,6 +97,7 @@ class TokenHandler {
             return;
           }
         }
+
         var token = await Token.create({
           user_id,
           type,
@@ -221,6 +223,7 @@ class TokenHandler {
     if (!token) {
       return false;
     }
+
     var user = await User.findLimtedBy({ id: token.secret }, 'AND', 1);
 
     return user[0];

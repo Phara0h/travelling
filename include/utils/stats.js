@@ -9,4 +9,5 @@ class Stats {
     return pstring;
   }
 }
+
 module.exports = Stats;

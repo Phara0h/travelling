@@ -76,16 +76,12 @@ class Email {
       resetPasswordSubject: Handlebars.compile(
         fs.readFileSync(require('path').resolve(config.email.template.passwordResetSubject), 'utf-8')
       ),
-      activationBody: Handlebars.compile(
-        fs.readFileSync(require('path').resolve(config.email.template.activationBody), 'utf-8')),
+      activationBody: Handlebars.compile(fs.readFileSync(require('path').resolve(config.email.template.activationBody), 'utf-8')),
       activationSubject: Handlebars.compile(
         fs.readFileSync(require('path').resolve(config.email.template.activationSubject), 'utf-8')
       ),
-      welcomeBody: Handlebars.compile(
-        fs.readFileSync(require('path').resolve(config.email.template.welcomeBody), 'utf-8')),
-      welcomeSubject: Handlebars.compile(
-        fs.readFileSync(require('path').resolve(config.email.template.welcomeSubject), 'utf-8')
-      )
+      welcomeBody: Handlebars.compile(fs.readFileSync(require('path').resolve(config.email.template.welcomeBody), 'utf-8')),
+      welcomeSubject: Handlebars.compile(fs.readFileSync(require('path').resolve(config.email.template.welcomeSubject), 'utf-8'))
     };
   }
 
@@ -94,6 +90,7 @@ class Email {
       config.log.logger.debug(`Password Recovery For: ${email}, ${token}`);
       return;
     }
+
     var body;
     var subject;
 
@@ -133,6 +130,7 @@ class Email {
       config.log.logger.debug(`Activation Email For: ${email}, ${token}`);
       return;
     }
+
     var body;
     var subject;
 
@@ -154,6 +152,7 @@ class Email {
 
     if (config.email.test.enable) {
       var testInfo = { info, url: await nodemailer.getTestMessageUrl(info) };
+
       config.log.logger.debug(testInfo);
       var tc = require('../../tests/include/TestContainer');
 
@@ -187,6 +186,7 @@ class Email {
 
     if (config.email.test.enable) {
       var testInfo = { info, url: await nodemailer.getTestMessageUrl(info) };
+
       config.log.logger.debug(testInfo);
     }
   }

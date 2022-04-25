@@ -192,6 +192,7 @@ module.exports = () => {
       test('Get Audit by Test User with filter (within date range)', async () => {
         var yesterday = new Date();
         var tomorrow = new Date();
+
         yesterday.setDate(yesterday.getDate() - 1);
         tomorrow.setDate(tomorrow.getDate() + 1);
 
@@ -222,6 +223,7 @@ module.exports = () => {
       test('Get Audit by Test User with filter (outside date range)', async () => {
         var yesterday = new Date();
         var tomorrow = new Date();
+
         yesterday.setDate(yesterday.getDate() - 1);
         tomorrow.setDate(tomorrow.getDate() + 1);
 
@@ -451,6 +453,7 @@ module.exports = () => {
       test('Get Audit of Test User with filter (within date range)', async () => {
         var yesterday = new Date();
         var tomorrow = new Date();
+
         yesterday.setDate(yesterday.getDate() - 1);
         tomorrow.setDate(tomorrow.getDate() + 1);
 
@@ -481,6 +484,7 @@ module.exports = () => {
       test('Get Audit of Test User with filter (outside date range)', async () => {
         var yesterday = new Date();
         var tomorrow = new Date();
+
         yesterday.setDate(yesterday.getDate() - 1);
         tomorrow.setDate(tomorrow.getDate() + 1);
 
@@ -608,17 +612,7 @@ module.exports = () => {
       });
 
       test('Get Audit ByUser - Missing User ID', async () => {
-        const res = await Travelling.Audit.User.byuserId(
-          '',
-          null,
-          null,
-          null,
-          null,
-          null,
-          true,
-          null,
-          userContainer.user1Token
-        );
+        const res = await Travelling.Audit.User.byuserId('', null, null, null, null, null, true, null, userContainer.user1Token);
 
         expect(res.statusCode).toEqual(400);
         expect(res.body).toHaveProperty('msg', 'Please provide a valid uuid.');
@@ -626,17 +620,7 @@ module.exports = () => {
       });
 
       test('Get Audit OfUser - Missing User Id', async () => {
-        const res = await Travelling.Audit.User.ofuserId(
-          '',
-          null,
-          null,
-          null,
-          null,
-          null,
-          true,
-          null,
-          userContainer.user1Token
-        );
+        const res = await Travelling.Audit.User.ofuserId('', null, null, null, null, null, true, null, userContainer.user1Token);
 
         expect(res.statusCode).toEqual(400);
         expect(res.body).toHaveProperty('msg', 'Please provide a valid uuid.');

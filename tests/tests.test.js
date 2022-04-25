@@ -61,6 +61,7 @@ afterAll(async () => {
     console.log('Flushing Redis...');
     await Redis.flushAll();
   }
+
   console.log('Deleting Users...');
   await User.deleteAll();
   console.log('Deleting Groups...');

@@ -29,11 +29,9 @@ const utilsUser = {
 
       if (config.email.validation.external.enable) {
         try {
-          var res = await Fasquest.request({
+          await Fasquest.request({
             method: config.email.validation.external.method,
-            uri:
-              config.email.validation.external.endpoint +
-              (config.email.validation.external.emailInEndpoint ? user.email : ''),
+            uri: config.email.validation.external.endpoint + (config.email.validation.external.emailInEndpoint ? user.email : ''),
             body: config.email.validation.external.emailInBody ? user.email : null,
             resolveWithFullResponse: true
           });
@@ -86,12 +84,14 @@ const utilsUser = {
         msg: 'Must be a valid firstname'
       };
     }
+
     if (user.middlename && (user.middlename.length > 100 || regex.safeName.exec(user.middlename) == null)) {
       return {
         type: 'middlename-error',
         msg: 'Must be a valid middlename'
       };
     }
+
     if (user.lastname && (user.lastname.length > 100 || regex.safeName.exec(user.lastname) == null)) {
       return {
         type: 'lastname-error',
@@ -175,6 +175,7 @@ const utilsUser = {
         msg: 'Must be a valid street type and less than 20 chars.'
       };
     }
+
     if (user.street_affix && (user.street_affix.length > 50 || regex.safeName.exec(user.street_affix) == null)) {
       return {
         type: 'street-affix-error',
@@ -242,6 +243,7 @@ const utilsUser = {
     if (props.username && config.user.username.enabled) {
       user.username = misc.toLower(props.username);
     }
+
     if (props.domain) {
       user.domain = misc.toLower(props.domain) || 'default';
     }
@@ -370,6 +372,7 @@ const utilsUser = {
     if (!req.params.id) {
       return null;
     }
+
     // if prob an email addresss
     if (req.params.id.indexOf('@') > -1) {
       return { email: req.params.id };

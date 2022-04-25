@@ -80,11 +80,7 @@ module.exports = () => {
       });
 
       test('Edit Test User Update Existing UserData', async () => {
-        var res = await Travelling.User.edit(
-          { user_data: { notes: 'notey totey' } },
-          'test2',
-          userContainer.user1Token
-        );
+        var res = await Travelling.User.edit({ user_data: { notes: 'notey totey' } }, 'test2', userContainer.user1Token);
 
         expect(res.statusCode).toEqual(200);
         expect(res.body).toMatchObject({ user_data: { notes: 'notey totey' } });
@@ -194,14 +190,11 @@ module.exports = () => {
       });
 
       var userDomain3;
+
       test('Delete User Domain 3', async () => {
         userDomain3 = await User.findAllBy({ email: 'test_domain_3@test.com' });
 
-        var res = await Travelling.User.Domain.delete(
-          'test.com',
-          'test_domain_3@test.com',
-          userContainer.userDomain3Token
-        );
+        var res = await Travelling.User.Domain.delete('test.com', 'test_domain_3@test.com', userContainer.userDomain3Token);
 
         expect(res.statusCode).toEqual(200);
         expect(res.body.domain).toEqual('test.com');
@@ -284,11 +277,7 @@ module.exports = () => {
       });
 
       test('Delete Already Deleted User Domain 3', async () => {
-        var res = await Travelling.User.Domain.delete(
-          'test.com',
-          'test_domain_3@test.com',
-          userContainer.userDomain2Token
-        );
+        var res = await Travelling.User.Domain.delete('test.com', 'test_domain_3@test.com', userContainer.userDomain2Token);
 
         expect(res.statusCode).toEqual(400);
         expect(res.body).toHaveProperty('type', 'user-delete-error');

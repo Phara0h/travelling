@@ -169,6 +169,7 @@ class Database {
 
       return { token: (await TokenHandler.getOTPToken(user.id)).token };
     }
+
     return {
       type: 'otp-no-user-error',
       msg: 'No user found with that id'
@@ -240,6 +241,7 @@ class Database {
       qProps.push({ username });
       qOps.push('OR');
     }
+
     if (config.user.isolateByDomain && domain) {
       qProps.push({ domain });
       qOps.push('AND');
@@ -259,6 +261,7 @@ class Database {
         msg: 'Username or email already exists'
       };
     }
+
     return true;
   }
 
@@ -268,6 +271,7 @@ class Database {
     if (config.tracing.enable) {
       span = helpers.startSpan('initGroups');
     }
+
     var grps = await Group.findAll();
 
     if (grps.length == 0) {
@@ -371,10 +375,12 @@ class Database {
 
       return true;
     }
+
     await gm.updateGroupList(span);
     if (span) {
       span.end();
     }
+
     return false;
   }
 }
