@@ -74,7 +74,8 @@ module.exports = () => {
       test('Check Test Domain Route - Using User Domain and Custom Domain Header', async () => {
         // User 5 has domain 'traziventures.com'
         // Group 6 Route /test/domain uses user domain (:domain)
-        var userInheritance = await Travelling.User.addGroupInheritance(
+        var userInheritance = await Travelling.User.Domain.addGroupInheritance(
+          'traziventures.com',
           'test_domain_5',
           'group6',
           'group',
@@ -259,11 +260,17 @@ module.exports = () => {
       });
 
       test("Get Test2's Email By Username By Invaild Grouptype ", async () => {
-        var res = await Travelling.Group.Type.User.getProperty('testgroup', userContainer.user2.username, 'email', null, {
-          headers: {
-            cookie: userContainer.user2Cookie()
+        var res = await Travelling.Group.Type.User.getProperty(
+          'testgroup',
+          userContainer.user2.username,
+          'email',
+          null,
+          {
+            headers: {
+              cookie: userContainer.user2Cookie()
+            }
           }
-        });
+        );
 
         expect(res.statusCode).toEqual(400);
         expect(res.body).not.toEqual(userContainer.user2.email);
@@ -274,7 +281,11 @@ module.exports = () => {
   describe('Non-Current User With Domain', () => {
     describe('Valid', () => {
       test('Get User Domain 2', async () => {
-        var res = await Travelling.User.Domain.get('test.com', 'test_domain_2@test.com', userContainer.userDomain2Token);
+        var res = await Travelling.User.Domain.get(
+          'test.com',
+          'test_domain_2@test.com',
+          userContainer.userDomain2Token
+        );
 
         expect(res.statusCode).toEqual(200);
         expect(res.body.domain).toEqual('test.com');
@@ -307,7 +318,11 @@ module.exports = () => {
       });
 
       test('Get User Domain 2 invalid id', async () => {
-        var res = await Travelling.User.Domain.get('test.com', 'real-incorrect-id@45.wrong', userContainer.userDomain2Token);
+        var res = await Travelling.User.Domain.get(
+          'test.com',
+          'real-incorrect-id@45.wrong',
+          userContainer.userDomain2Token
+        );
 
         expect(res.statusCode).toEqual(400);
         expect(res.body).toHaveProperty('type', 'user-find-by-error');
