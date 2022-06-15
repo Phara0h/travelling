@@ -135,6 +135,8 @@ class Fasquest {
     options.simple = opts.simple !== false;
     options.method = opts.method || 'GET';
     options.uri = opts.uri;
+    options.timeout = opts.timeout;
+
     if (opts.qs) {
       var escQS = qs.stringify(opts.qs);
 

@@ -69,7 +69,10 @@ async function setGroup(req, group, router, groups = null) {
       return regex.uuidv4.exec(i) != null;
     });
 
-    if (group.inherited.some((val, i) => group.inherited.indexOf(val) !== i) || group.inherited.indexOf(group.id) > -1) {
+    if (
+      group.inherited.some((val, i) => group.inherited.indexOf(val) !== i) ||
+      group.inherited.indexOf(group.id) > -1
+    ) {
       throw {
         type: 'group-inherited-duplicate-id-error',
         msg: 'Inherited groups array contain duplicate ids or its own id'
@@ -187,7 +190,9 @@ async function getUserByGroup(req, res, router) {
   }
 
   // console.log(groups, user.group.type, user.group_request, req.params.grouptype);
-  groups = groups.filter((g) => user.hasGroupType(g.type) || (groupRequest && user.group_request === req.params.grouptype));
+  groups = groups.filter(
+    (g) => user.hasGroupType(g.type) || (groupRequest && user.group_request === req.params.grouptype)
+  );
 
   if (req.params.groupid) {
     groups = groups.filter((g) => user.hasGroupId(req.params.groupid) || user.hasGroupName(req.params.groupid));
@@ -203,6 +208,37 @@ async function getUserByGroup(req, res, router) {
 
   res.code(200);
   return prop ? user[prop] : user;
+}
+
+async function getUsersByGroup(req, res, router) {
+  var group = await getGroup(req, res, router);
+
+  if (!group) {
+    return;
+  }
+
+  if (req.query.filter && req.query.filter.indexOf(' ') > -1) {
+    req.query.filter = req.query.filter.replace(/\s/g, '');
+  }
+
+  try {
+    return res.code(400).send(
+      await User.findAllByFilter({
+        additionalFilter: `'${group.id}'=ANY(group_ids)`,
+        filter: req.query.filter,
+        limit: req.query.limit,
+        skip: req.query.skip,
+        sort: req.query.sort,
+        sortdir: req.query.sortdir,
+        count: req.returnCountOnly === true ? true : false
+      })
+    );
+  } catch {
+    return res.code(400).send({
+      type: 'user-filter-error',
+      msg: 'Invalid filter.'
+    });
+  }
 }
 
 async function getGroupsByType(req, res, router) {
@@ -572,7 +608,10 @@ async function addInheritedToGroup(req, res, router) {
     return;
   }
 
-  var inhertedGroup = await gm.getGroup(req.params.inheritedgroupname.toLowerCase(), req.params.inheritedgrouptype.toLowerCase());
+  var inhertedGroup = await gm.getGroup(
+    req.params.inheritedgroupname.toLowerCase(),
+    req.params.inheritedgrouptype.toLowerCase()
+  );
 
   if (!inhertedGroup) {
     res.code(400).send({
@@ -599,7 +638,10 @@ async function removeInheritance(req, res, router) {
     return;
   }
 
-  var inhertedGroup = await gm.getGroup(req.params.inheritedgroupname.toLowerCase(), req.params.inheritedgrouptype.toLowerCase());
+  var inhertedGroup = await gm.getGroup(
+    req.params.inheritedgroupname.toLowerCase(),
+    req.params.inheritedgrouptype.toLowerCase()
+  );
 
   if (!inhertedGroup) {
     res.code(400).send({
@@ -789,6 +831,7 @@ module.exports = {
   setGroup,
   getGroup,
   getUserByGroup,
+  getUsersByGroup,
   getGroupsByType,
   editUserByGroup,
   addRemoveGroupInheritanceByGroup,

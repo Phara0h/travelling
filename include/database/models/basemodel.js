@@ -109,7 +109,7 @@ BaseModel.findAllByFilter = async function ({
   }
 
   if (additionalFilter) {
-    query += `${keys ? ' AND' : ''} ${additionalFilter}`;
+    query += `${keys.length > 0 ? ' AND ' : ' WHERE '} ${additionalFilter} `;
   }
 
   if (sort && regex.safeName.exec(sort) != null) {
