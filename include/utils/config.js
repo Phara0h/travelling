@@ -20,6 +20,7 @@ const config = {
   },
   https: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_HTTPS), true),
   misc: {
+    bodyLimit: misc.isSetDefault(Number(process.env.TRAVELLING_MISC_BODY_LIMIT) * 1048576, 1048576 * 10), // 10MB default
     cloudflareIP: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_MISC_CLOUDFLAREIP), false),
     cloudflareDomainHeader: misc.isSetDefault(process.env.TRAVELLING_MISC_CLOUDFLARE_DOMAIN_HEADER, 'CF-Worker'),
     domainCustomHeader: misc.isSetDefault(process.env.TRAVELLING_MISC_DOMAIN_CUSTOM_HEADER, null),
