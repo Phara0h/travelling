@@ -131,7 +131,7 @@ if (config.tracing.enable) {
 var fastifyOptions = {
   http2: false,
   logger: config.log.requests ? config.log.logger : false,
-
+  bodyLimit: config.misc.bodyLimit,
   // logger: true
   disableRequestLogging: !config.log.fastify.requestLogging,
   requestIdHeader: config.log.fastify.requestIdHeader,
