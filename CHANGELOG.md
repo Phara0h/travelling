@@ -1,6 +1,15 @@
 
 
+#### [v2.16.1](https://github.com/Dragohm/travelling/compare/v2.16.0...v2.16.1)
+
+- Feature #28 allowed domain is route allowed [`#19`](https://github.com/Dragohm/travelling/pull/19)
+- added bodylimit [`affcdb5`](https://github.com/Dragohm/travelling/commit/affcdb554cad5167567f9353346bc0b88a7f9c65)
+- Update audit test to use SDK with sort [`275d5a6`](https://github.com/Dragohm/travelling/commit/275d5a69127640aafab45b1b27d5cbc2b969a643)
+- Update package.json [`a2dd981`](https://github.com/Dragohm/travelling/commit/a2dd981c032007dfe129386b310a757ee405c7f3)
+
 #### [v2.16.0](https://github.com/Dragohm/travelling/compare/v2.15.0...v2.16.0)
+
+> 25 April 2022
 
 - Updated eslint and fixed the problems [`a98498a`](https://github.com/Dragohm/travelling/commit/a98498a4779549323234888ceeeac59fa9c5c928)
 - Add domain to add group inheritance in test [`395c73f`](https://github.com/Dragohm/travelling/commit/395c73f2365d69b117c30209de7948f5a3ce6a36)
