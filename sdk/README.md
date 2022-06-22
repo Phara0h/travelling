@@ -1055,7 +1055,8 @@ body
 
 * [GroupUsers](#GroupUsers)
     * [.inherited(id)](#GroupUsers.inherited)
-    * [.get(id)](#GroupUsers.get)
+    * [.count(id, filter, limit, skip, authorization_bearer)](#GroupUsers.count)
+    * [.get(id, filter, limit, skip, sort, sortdir, authorization_bearer)](#GroupUsers.get)
 
 <a name="GroupUsers.inherited"></a>
 
@@ -1089,9 +1090,45 @@ Path: api/v1/group/id/:id/users/inherited
 | --- | --- | --- |
 | id | <code>any</code> | id or name (example: superadmin) |
 
+<a name="GroupUsers.count"></a>
+
+### GroupUsers.count(id, filter, limit, skip, authorization_bearer)
+count - Gets all the users that belong to the group.
+
+##### Optional Query Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | *optional* (example:  user7) |
+| locked | *optional* (example:  true) |
+| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+| group_request | *optional* (example:  superadmin) |
+| failed_login_attempts | *optional* (example:  0) |
+| change_username | *optional* (example:  false) |
+| change_password | *optional* (example:  false) |
+| reset_password | *optional* (example:  false) |
+| email_verify | *optional* (example:  false) |
+| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | *optional* (example:  test@test.ai) |
+| created_on | *optional* (example:  1568419646794) |
+| last_login | *optional* (example:  null) |
+
+Path: api/v1/group/id/:id/users/count
+
+**Kind**: static method of [<code>GroupUsers</code>](#GroupUsers)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>any</code> | Group name or ID. (example: superadmin) |
+| filter | <code>any</code> | Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) |
+| limit | <code>any</code> | Number of maximum results. (example: 10) (example: 10) |
+| skip | <code>any</code> | Number of db rows skipped. (example: 2) (example: 2) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
 <a name="GroupUsers.get"></a>
 
-### GroupUsers.get(id)
+### GroupUsers.get(id, filter, limit, skip, sort, sortdir, authorization_bearer)
 get - Gets all the users that belong to the group.
 
 ##### Optional Query Params
@@ -1119,7 +1156,13 @@ Path: api/v1/group/id/:id/users
 
 | Param | Type | Description |
 | --- | --- | --- |
-| id | <code>any</code> | id or name (example: superadmin) |
+| id | <code>any</code> | Group name or ID. (example: superadmin) |
+| filter | <code>any</code> | Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) |
+| limit | <code>any</code> | Number of maximum results. (example: 10) (example: 10) |
+| skip | <code>any</code> | Number of db rows skipped. (example: 2) (example: 2) |
+| sort | <code>any</code> | Sort by any user object key (examples: id, domain, locked, etc.) (example: created_on) |
+| sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: ASC) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="GroupUser"></a>
 
@@ -1529,41 +1572,9 @@ Both requests are disabled. Dont use.
 **Kind**: global class  
 
 * [GroupTypeUsers](#GroupTypeUsers)
-    * [.get(id, type)](#GroupTypeUsers.get)
     * [.inherited(id, type)](#GroupTypeUsers.inherited)
-
-<a name="GroupTypeUsers.get"></a>
-
-### GroupTypeUsers.get(id, type)
-get - Gets all the users that belong to the group  of a particular type by its name or id.
-
-##### Optional Query Params
-
-| Param | Description |
-| --- | --- |
-| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
-| username | *optional* (example:  user7) |
-| locked | *optional* (example:  true) |
-| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
-| group_request | *optional* (example:  superadmin) |
-| failed_login_attempts | *optional* (example:  0) |
-| change_username | *optional* (example:  false) |
-| change_password | *optional* (example:  false) |
-| reset_password | *optional* (example:  false) |
-| email_verify | *optional* (example:  false) |
-| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
-| email | *optional* (example:  test@test.ai) |
-| created_on | *optional* (example:  1568419646794) |
-| last_login | *optional* (example:  null) |
-
-Path: api/v1/group/id/:id/type/:type/users
-
-**Kind**: static method of [<code>GroupTypeUsers</code>](#GroupTypeUsers)  
-
-| Param | Type |
-| --- | --- |
-| id | <code>any</code> | 
-| type | <code>any</code> | 
+    * [.count(id, type, filter, limit, skip, authorization_bearer)](#GroupTypeUsers.count)
+    * [.get(id, type, filter, limit, skip, sort, sortdir, authorization_bearer)](#GroupTypeUsers.get)
 
 <a name="GroupTypeUsers.inherited"></a>
 
@@ -1597,6 +1608,82 @@ Path: api/v1/group/id/:id/type/:type/users/inherited
 | --- | --- | --- |
 | id | <code>any</code> | (example: group4) |
 | type | <code>any</code> | The type of the group (example: groups) |
+
+<a name="GroupTypeUsers.count"></a>
+
+### GroupTypeUsers.count(id, type, filter, limit, skip, authorization_bearer)
+count - Gets all the users that belong to the group  of a particular type by its name or id.
+
+##### Optional Query Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | *optional* (example:  user7) |
+| locked | *optional* (example:  true) |
+| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+| group_request | *optional* (example:  superadmin) |
+| failed_login_attempts | *optional* (example:  0) |
+| change_username | *optional* (example:  false) |
+| change_password | *optional* (example:  false) |
+| reset_password | *optional* (example:  false) |
+| email_verify | *optional* (example:  false) |
+| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | *optional* (example:  test@test.ai) |
+| created_on | *optional* (example:  1568419646794) |
+| last_login | *optional* (example:  null) |
+
+Path: api/v1/group/id/:id/type/:type/users/count
+
+**Kind**: static method of [<code>GroupTypeUsers</code>](#GroupTypeUsers)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>any</code> | Group name or ID. (example: superadmin) |
+| type | <code>any</code> | Group type. (example: group) |
+| filter | <code>any</code> | Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) |
+| limit | <code>any</code> | Number of maximum results. (example: 10) (example: 10) |
+| skip | <code>any</code> | Number of db rows skipped. (example: 2) (example: 2) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="GroupTypeUsers.get"></a>
+
+### GroupTypeUsers.get(id, type, filter, limit, skip, sort, sortdir, authorization_bearer)
+get - Gets all the users that belong to the group  of a particular type by its name or id.
+
+##### Optional Query Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | *optional* (example:  user7) |
+| locked | *optional* (example:  true) |
+| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+| group_request | *optional* (example:  superadmin) |
+| failed_login_attempts | *optional* (example:  0) |
+| change_username | *optional* (example:  false) |
+| change_password | *optional* (example:  false) |
+| reset_password | *optional* (example:  false) |
+| email_verify | *optional* (example:  false) |
+| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | *optional* (example:  test@test.ai) |
+| created_on | *optional* (example:  1568419646794) |
+| last_login | *optional* (example:  null) |
+
+Path: api/v1/group/id/:id/type/:type/users
+
+**Kind**: static method of [<code>GroupTypeUsers</code>](#GroupTypeUsers)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>any</code> | Group name or ID. (example: superadmin) |
+| type | <code>any</code> | Group type. (example: group) |
+| filter | <code>any</code> | Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) |
+| limit | <code>any</code> | Number of maximum results. (example: 10) (example: 10) |
+| skip | <code>any</code> | Number of db rows skipped. (example: 2) (example: 2) |
+| sort | <code>any</code> | Sort by any user object key (examples: id, domain, locked, etc.) (example: created_on) |
+| sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: ASC) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="GroupTypeUser"></a>
 
@@ -2879,7 +2966,7 @@ Path: api/v1/auth/login/domain/:domain
 body
 ```json
 {
-	"email": "tesft@test.com",
+	"email": "test@test.com",
 	"password": "Pas5w0r!d"
 }
 ```
