@@ -213,7 +213,11 @@ async function getUserByGroup(req, res, router) {
 async function getUsersByGroup(req, res, router) {
   var group = await getGroup(req, res, router);
 
-  if (!group) {
+  if (!group || (req.params.grouptype && req.params.grouptype !== group.type)) {
+    res.code(400).send({
+      type: 'group-nonexistent-error',
+      msg: 'No group with the id and type exists.'
+    });
     return;
   }
 
@@ -239,6 +243,7 @@ async function getUsersByGroup(req, res, router) {
       msg: 'Invalid filter.'
     });
   }
+  return;
 }
 
 async function getGroupsByType(req, res, router) {

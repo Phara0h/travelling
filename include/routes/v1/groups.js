@@ -147,23 +147,11 @@ module.exports = function (app, opts, done) {
 
   // Get Group's Users
   app.get('/group/id/:groupid/type/:grouptype/users', async (req, res) => {
-    if (!req.query.filter) {
-      req.query.filter = 'type=' + req.params.grouptype;
-    } else {
-      req.query.filter += ',type=' + req.params.grouptype;
-    }
-
     return await groupRoutes.getUsersByGroup(req, res, router);
   });
 
   app.get('/group/id/:groupid/type/:grouptype/users/count', async (req, res) => {
     req.returnCountOnly = true;
-
-    if (!req.query.filter) {
-      req.query.filter = 'type=' + req.params.grouptype;
-    } else {
-      req.query.filter += ',type=' + req.params.grouptype;
-    }
 
     return await groupRoutes.getUsersByGroup(req, res, router);
   });
