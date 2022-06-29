@@ -222,7 +222,7 @@ async function getUsersByGroup(req, res, router) {
   }
 
   try {
-    return res.code(200).send(
+    res.code(200).send(
       await User.findAllByFilter({
         additionalFilter: `'${group.id}'=ANY(group_ids)`,
         filter: req.query.filter,
@@ -230,11 +230,11 @@ async function getUsersByGroup(req, res, router) {
         skip: req.query.skip,
         sort: req.query.sort,
         sortdir: req.query.sortdir,
-        count: req.returnCountOnly === true ? true : false
+        count: !!req.returnCountOnly
       })
     );
   } catch {
-    return res.code(400).send({
+    res.code(400).send({
       type: 'user-filter-error',
       msg: 'Invalid filter.'
     });
