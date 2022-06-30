@@ -97,9 +97,12 @@ module.exports = function (app, opts, done) {
     await groupRoutes.addInheritedToGroup(req, res, router);
   });
 
-  app.put('/group/id/:groupid/type/:grouptype/inherit/from/:inheritedgroupname/type/:inheritedgrouptype', async (req, res) => {
-    await groupRoutes.addInheritedToGroup(req, res, router);
-  });
+  app.put(
+    '/group/id/:groupid/type/:grouptype/inherit/from/:inheritedgroupname/type/:inheritedgrouptype',
+    async (req, res) => {
+      await groupRoutes.addInheritedToGroup(req, res, router);
+    }
+  );
 
   app.delete('/group/id/:groupid/remove/inheritance/:inheritedgroupname/type/:inheritedgrouptype', async (req, res) => {
     await groupRoutes.removeInheritance(req, res, router);
@@ -142,22 +145,15 @@ module.exports = function (app, opts, done) {
     res.code(200).send(group);
   });
 
-  // Get Group's User
+  // Get Group's Users
   app.get('/group/id/:groupid/type/:grouptype/users', async (req, res) => {
-    var group = await groupRoutes.getGroup(req, res, router);
+    return await groupRoutes.getUsersByGroup(req, res, router);
+  });
 
-    if (!group) {
-      return;
-    }
+  app.get('/group/id/:groupid/type/:grouptype/users/count', async (req, res) => {
+    req.returnCountOnly = true;
 
-    if (!misc.isEmpty(req.query) && userUtils.checkValidUser(req.query)) {
-      var query = userUtils.setUser({ group_ids: [group.id] }, req.query);
-
-      res.code(200).send(await User.findAllBy(query));
-      return;
-    }
-
-    res.code(200).send(await User.findAllBy({ group_ids: [group.id] }));
+    return await groupRoutes.getUsersByGroup(req, res, router);
   });
 
   app.get('/group/id/:groupid/type/:grouptype/users/inherited', async (req, res) => {
@@ -173,20 +169,13 @@ module.exports = function (app, opts, done) {
   });
 
   app.get('/group/id/:groupid/users', async (req, res) => {
-    var group = await groupRoutes.getGroup(req, res, router);
+    return await groupRoutes.getUsersByGroup(req, res, router);
+  });
 
-    if (!group) {
-      return;
-    }
+  app.get('/group/id/:groupid/users/count', async (req, res) => {
+    req.returnCountOnly = true;
 
-    if (!misc.isEmpty(req.query) && userUtils.checkValidUser(req.query)) {
-      var query = userUtils.setUser({ group_ids: [group.id] }, req.query);
-
-      res.code(200).send(await User.findAllBy(query));
-      return;
-    }
-
-    res.code(200).send(await User.findAllBy({ group_ids: [group.id] }));
+    return await groupRoutes.getUsersByGroup(req, res, router);
   });
 
   app.get('/group/id/:groupid/users/inherited', async (req, res) => {
@@ -270,12 +259,18 @@ module.exports = function (app, opts, done) {
   app.get('/group/type/:grouptype/user/:id/property/:prop', async (req, res) => {
     return await groupRoutes.getUserByGroup(req, res, router);
   });
-  app.put('/group/type/:grouptype/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype', async (req, res) => {
-    return await groupRoutes.addRemoveGroupInheritanceByGroup(req, res, true);
-  });
-  app.delete('/group/type/:grouptype/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype', async (req, res) => {
-    return await groupRoutes.addRemoveGroupInheritanceByGroup(req, res, false);
-  });
+  app.put(
+    '/group/type/:grouptype/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype',
+    async (req, res) => {
+      return await groupRoutes.addRemoveGroupInheritanceByGroup(req, res, true);
+    }
+  );
+  app.delete(
+    '/group/type/:grouptype/user/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype',
+    async (req, res) => {
+      return await groupRoutes.addRemoveGroupInheritanceByGroup(req, res, false);
+    }
+  );
   app.put('/group/type/:grouptype/user/:id', async (req, res) => {
     return await groupRoutes.editUserByGroup(req, res, router);
   });

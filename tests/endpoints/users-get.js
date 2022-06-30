@@ -5,6 +5,8 @@ const { Travelling } = require('../../sdk/node')('http://127.0.0.1:6969/' + conf
 var userContainer = require('../include/UserContainer.js');
 
 module.exports = () => {
+  var superadminGroup;
+
   describe('Valid', () => {
     test('Get Users', async () => {
       var res = await Travelling.Users.get(null, null, null, null, null, null, userContainer.user1Token);
@@ -166,7 +168,15 @@ module.exports = () => {
     });
 
     test('Get Users with sort, limit, filter and sortdir', async () => {
-      var res = await Travelling.Users.get('created_on', 1, null, 'locked=false', 'ASC', null, userContainer.user1Token);
+      var res = await Travelling.Users.get(
+        'created_on',
+        1,
+        null,
+        'locked=false',
+        'ASC',
+        null,
+        userContainer.user1Token
+      );
 
       expect(res.statusCode).toEqual(200);
       expect(res.body).toHaveLength(1);
@@ -222,14 +232,32 @@ module.exports = () => {
     });
 
     test('Get Users By Default Domain', async () => {
-      var res = await Travelling.Users.Domain.get('default', null, null, null, null, null, null, userContainer.userDomainToken);
+      var res = await Travelling.Users.Domain.get(
+        'default',
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        userContainer.userDomainToken
+      );
 
       expect(res.statusCode).toEqual(200);
       expect(res.body).toHaveLength(4);
     });
 
     test('Get Users By Domain', async () => {
-      var res = await Travelling.Users.Domain.get('test.com', null, null, null, null, null, null, userContainer.userDomainToken);
+      var res = await Travelling.Users.Domain.get(
+        'test.com',
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        userContainer.userDomainToken
+      );
 
       expect(res.statusCode).toEqual(200);
       expect(res.body).toHaveLength(3);
@@ -254,7 +282,16 @@ module.exports = () => {
     });
 
     test('Get Users By Domain with limit', async () => {
-      var res = await Travelling.Users.Domain.get('test.com', null, 1, null, null, null, null, userContainer.userDomainToken);
+      var res = await Travelling.Users.Domain.get(
+        'test.com',
+        null,
+        1,
+        null,
+        null,
+        null,
+        null,
+        userContainer.userDomainToken
+      );
 
       expect(res.statusCode).toEqual(200);
       expect(res.body).toHaveLength(1);
@@ -262,14 +299,32 @@ module.exports = () => {
     });
 
     test('Get Users By Domain with skip', async () => {
-      var res = await Travelling.Users.Domain.get('test.com', null, null, 1, null, null, null, userContainer.userDomainToken);
+      var res = await Travelling.Users.Domain.get(
+        'test.com',
+        null,
+        null,
+        1,
+        null,
+        null,
+        null,
+        userContainer.userDomainToken
+      );
 
       expect(res.statusCode).toEqual(200);
       expect(res.body).toHaveLength(2);
     });
 
     test('Get Users By Domain with sortdir', async () => {
-      var res = await Travelling.Users.Domain.get('test.com', null, null, null, null, 'ASC', null, userContainer.userDomainToken);
+      var res = await Travelling.Users.Domain.get(
+        'test.com',
+        null,
+        null,
+        null,
+        null,
+        'ASC',
+        null,
+        userContainer.userDomainToken
+      );
 
       expect(res.statusCode).toEqual(200);
       expect(res.body).toHaveLength(3);
@@ -543,6 +598,190 @@ module.exports = () => {
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.count).toEqual(3);
+    });
+
+    test('Users by group ID', async () => {
+      var groupRes = await Travelling.Group.get('superadmin', userContainer.user1Token);
+
+      superadminGroup = groupRes.body;
+
+      var res = await Travelling.Group.Users.get(superadminGroup.id, '', '', '', '', '', userContainer.user1Token);
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body).toHaveLength(8);
+    });
+
+    test('Users Count by group ID', async () => {
+      var res = await Travelling.Group.Users.count(superadminGroup.id, '', '', '', userContainer.user1Token);
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.count).toBe(8);
+    });
+
+    test('Users by group name', async () => {
+      var res = await Travelling.Group.Users.get('superadmin', '', '', '', '', '', userContainer.user1Token);
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body).toHaveLength(8);
+    });
+
+    test('Users by group name - limit', async () => {
+      var res = await Travelling.Group.Users.get('superadmin', '', 1, '', '', '', userContainer.user1Token);
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body).toHaveLength(1);
+    });
+
+    test('Users by group name - skip', async () => {
+      var res = await Travelling.Group.Users.get('superadmin', '', '', 100, '', '', userContainer.user1Token);
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body).toHaveLength(0);
+    });
+
+    test('Users by group name - date range filter', async () => {
+      var yesterday = new Date();
+      var tomorrow = new Date();
+
+      yesterday.setDate(yesterday.getDate() - 1);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+
+      var res = await Travelling.Group.Users.get(
+        'superadmin',
+        `created_on >= ${yesterday.toISOString()}, created_on <= ${tomorrow.toISOString()}`,
+        '',
+        '',
+        '',
+        '',
+        userContainer.user1Token
+      );
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body).toHaveLength(8);
+    });
+
+    test('Users by group name - sort', async () => {
+      var resDESC = await Travelling.Group.Users.get(
+        'superadmin',
+        '',
+        '',
+        '',
+        'created_on',
+        '',
+        userContainer.user1Token
+      );
+
+      expect(resDESC.statusCode).toEqual(200);
+      expect(resDESC.body).toHaveLength(8);
+
+      let sortedDESC = true;
+
+      let usersDESC = resDESC.body;
+
+      for (let i = 1; i < usersDESC.length; i++) {
+        const user = usersDESC[i];
+        const userDate = new Date(user.created_on);
+
+        const prevUser = usersDESC[i - 1];
+        let prevUserDate = new Date(prevUser.created_on);
+
+        if (prevUserDate.getTime() < userDate.getTime()) {
+          sortedDESC = false;
+        }
+      }
+
+      expect(sortedDESC).toBe(true);
+
+      var resASC = await Travelling.Group.Users.get(
+        'superadmin',
+        '',
+        '',
+        '',
+        'created_on',
+        'ASC',
+        userContainer.user1Token
+      );
+
+      expect(resASC.statusCode).toEqual(200);
+      expect(resASC.body).toHaveLength(8);
+
+      let sortedASC = true;
+
+      let usersASC = resASC.body;
+
+      for (let i = 1; i < usersASC.length; i++) {
+        const user = usersASC[i];
+        const userDate = new Date(user.created_on);
+
+        const prevUser = usersASC[i - 1];
+        let prevUserDate = new Date(prevUser.created_on);
+
+        if (prevUserDate.getTime() > userDate.getTime()) {
+          sortedASC = false;
+        }
+      }
+
+      expect(sortedASC).toBe(true);
+    });
+
+    test('Users Count by group name', async () => {
+      var res = await Travelling.Group.Users.count('superadmin', '', '', '', userContainer.user1Token);
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.count).toBe(8);
+    });
+
+    test('Users by group type and ID', async () => {
+      var res = await Travelling.Group.Type.Users.get(
+        superadminGroup.id,
+        superadminGroup.type,
+        '',
+        '',
+        '',
+        '',
+        '',
+        userContainer.user1Token
+      );
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body).toHaveLength(8);
+    });
+
+    test('Users count by group type and ID', async () => {
+      var res = await Travelling.Group.Type.Users.count(
+        superadminGroup.id,
+        superadminGroup.type,
+        '',
+        '',
+        '',
+        userContainer.user1Token
+      );
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.count).toBe(8);
+    });
+
+    test('Users by group type and Name', async () => {
+      var res = await Travelling.Group.Type.Users.get(
+        'superadmin',
+        'group',
+        '',
+        '',
+        '',
+        '',
+        '',
+        userContainer.user1Token
+      );
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body).toHaveLength(8);
+    });
+
+    test('Users by group type and Name', async () => {
+      var res = await Travelling.Group.Type.Users.count('superadmin', 'group', '', '', '', userContainer.user1Token);
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.count).toBe(8);
     });
   });
 

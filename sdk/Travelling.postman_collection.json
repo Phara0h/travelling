@@ -2,7 +2,8 @@
 	"info": {
 		"_postman_id": "9718a487-a9bf-41ec-b272-fc0438da73d3",
 		"name": "Travelling",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15847205"
 	},
 	"item": [
 		{
@@ -311,7 +312,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"email\": \"tesft@test.com\",\n\t\"password\": \"Pas5w0r!d\"\n}",
+									"raw": "{\n\t\"email\": \"test@test.com\",\n\t\"password\": \"Pas5w0r!d\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -3006,7 +3007,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{TRAVELLING}}/api/v1/users?ids=d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f",
+							"raw": "{{TRAVELLING}}/api/v1/users",
 							"host": [
 								"{{TRAVELLING}}"
 							],
@@ -3049,7 +3050,8 @@
 								{
 									"key": "ids",
 									"value": "d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f",
-									"description": "Comma seperated id values used in inclusion query"
+									"description": "Comma seperated id values used in inclusion query",
+									"disabled": true
 								}
 							]
 						},
@@ -4434,6 +4436,249 @@
 							"name": "Users",
 							"item": [
 								{
+									"name": "Get",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer",
+												"description": "The client_credentials generated OAUth2 access token.",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{TRAVELLING}}/api/v1/group/id/:id/type/:type/users",
+											"host": [
+												"{{TRAVELLING}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"group",
+												"id",
+												":id",
+												"type",
+												":type",
+												"users"
+											],
+											"query": [
+												{
+													"key": "filter",
+													"value": "locked=false,created_on>2021-06-03,created_on<2021-06-06",
+													"description": "Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)",
+													"disabled": true
+												},
+												{
+													"key": "limit",
+													"value": "10",
+													"description": "Number of maximum results. (example: 10)",
+													"disabled": true
+												},
+												{
+													"key": "skip",
+													"value": "2",
+													"description": "Number of db rows skipped. (example: 2)",
+													"disabled": true
+												},
+												{
+													"key": "sort",
+													"value": "created_on",
+													"description": "Sort by any user object key (examples: id, domain, locked, etc.)",
+													"disabled": true
+												},
+												{
+													"key": "sortdir",
+													"value": "ASC",
+													"description": "Sort direction (example ascending order: ASC)",
+													"disabled": true
+												}
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "superadmin",
+													"description": "Group name or ID."
+												},
+												{
+													"key": "type",
+													"value": "group",
+													"description": "Group type."
+												}
+											]
+										},
+										"description": "Gets all the users that belong to the group  of a particular type by its name or id.\n\n##### Optional Query Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | *optional* (example:  user7) |\n| locked | *optional* (example:  true) |\n| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |\n| group_request | *optional* (example:  superadmin) |\n| failed_login_attempts | *optional* (example:  0) |\n| change_username | *optional* (example:  false) |\n| change_password | *optional* (example:  false) |\n| reset_password | *optional* (example:  false) |\n| email_verify | *optional* (example:  false) |\n| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | *optional* (example:  test@test.ai) |\n| created_on | *optional* (example:  1568419646794) |\n| last_login | *optional* (example:  null) |"
+									},
+									"response": [
+										{
+											"name": "Get All Users",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{TRAVELLING}}/api/v1/group/:id/users",
+													"host": [
+														"{{TRAVELLING}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"group",
+														":id",
+														"users"
+													],
+													"variable": [
+														{
+															"key": "id",
+															"value": "superadmin",
+															"description": "id or name"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "content-type",
+													"value": "application/json; charset=utf-8"
+												},
+												{
+													"key": "content-length",
+													"value": "1813"
+												},
+												{
+													"key": "Date",
+													"value": "Fri, 13 Sep 2019 23:24:15 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"body": "[\n    {\n        \"id\": \"e517e311-fb37-4ca9-be4f-ff821ff9767d\",\n        \"username\": \"user5\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": false,\n        \"locked_reason\": null,\n        \"group_request\": null,\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt@abe.ai\",\n        \"created_on\": \"1568395971209\",\n        \"last_login\": {\n            \"date\": 1568416018554,\n            \"ip\": \"127.0.0.1\"\n        },\n        \"user_data\": {\n            \"activeAccountID\": \"09A75A84-A921-4F68-8FEF-B8392E3702C2\",\n            \"activeAgentID\": \"3C49E289-31F0-47D3-922E-D67ECD027B50\",\n            \"currentCuiConfigID\": \"41415261-9498-4387-BC87-9ED443E5CE1A\",\n            \"agentSlug\": \"MercMoney\"\n        },\n        \"eprofile\": null\n    },\n    {\n        \"id\": \"4d8f1190-5c7b-4dec-b766-be4a24a5df6c\",\n        \"username\": \"user7\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": true,\n        \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n        \"group_request\": \"superadmin\",\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt4@abe.ai\",\n        \"created_on\": \"1568396383891\",\n        \"last_login\": null,\n        \"user_data\": null,\n        \"eprofile\": null\n    },\n    {\n        \"id\": \"234d53a1-8b0b-4c7f-b98f-41138c41bc35\",\n        \"username\": \"user6\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": true,\n        \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n        \"group_request\": null,\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt2@abe.ai\",\n        \"created_on\": \"1568396224587\",\n        \"last_login\": null,\n        \"user_data\": null,\n        \"eprofile\": null\n    }\n]"
+										}
+									]
+								},
+								{
+									"name": "Count",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer",
+												"description": "The client_credentials generated OAUth2 access token.",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{TRAVELLING}}/api/v1/group/id/:id/type/:type/users/count",
+											"host": [
+												"{{TRAVELLING}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"group",
+												"id",
+												":id",
+												"type",
+												":type",
+												"users",
+												"count"
+											],
+											"query": [
+												{
+													"key": "filter",
+													"value": "locked=false,created_on>2021-06-03,created_on<2021-06-06",
+													"description": "Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)",
+													"disabled": true
+												},
+												{
+													"key": "limit",
+													"value": "10",
+													"description": "Number of maximum results. (example: 10)",
+													"disabled": true
+												},
+												{
+													"key": "skip",
+													"value": "2",
+													"description": "Number of db rows skipped. (example: 2)",
+													"disabled": true
+												}
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "superadmin",
+													"description": "Group name or ID."
+												},
+												{
+													"key": "type",
+													"value": "group",
+													"description": "Group type."
+												}
+											]
+										},
+										"description": "Gets all the users that belong to the group  of a particular type by its name or id.\n\n##### Optional Query Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | *optional* (example:  user7) |\n| locked | *optional* (example:  true) |\n| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |\n| group_request | *optional* (example:  superadmin) |\n| failed_login_attempts | *optional* (example:  0) |\n| change_username | *optional* (example:  false) |\n| change_password | *optional* (example:  false) |\n| reset_password | *optional* (example:  false) |\n| email_verify | *optional* (example:  false) |\n| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | *optional* (example:  test@test.ai) |\n| created_on | *optional* (example:  1568419646794) |\n| last_login | *optional* (example:  null) |"
+									},
+									"response": [
+										{
+											"name": "Get All Users",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{TRAVELLING}}/api/v1/group/:id/users",
+													"host": [
+														"{{TRAVELLING}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"group",
+														":id",
+														"users"
+													],
+													"variable": [
+														{
+															"key": "id",
+															"value": "superadmin",
+															"description": "id or name"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "content-type",
+													"value": "application/json; charset=utf-8"
+												},
+												{
+													"key": "content-length",
+													"value": "1813"
+												},
+												{
+													"key": "Date",
+													"value": "Fri, 13 Sep 2019 23:24:15 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"body": "[\n    {\n        \"id\": \"e517e311-fb37-4ca9-be4f-ff821ff9767d\",\n        \"username\": \"user5\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": false,\n        \"locked_reason\": null,\n        \"group_request\": null,\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt@abe.ai\",\n        \"created_on\": \"1568395971209\",\n        \"last_login\": {\n            \"date\": 1568416018554,\n            \"ip\": \"127.0.0.1\"\n        },\n        \"user_data\": {\n            \"activeAccountID\": \"09A75A84-A921-4F68-8FEF-B8392E3702C2\",\n            \"activeAgentID\": \"3C49E289-31F0-47D3-922E-D67ECD027B50\",\n            \"currentCuiConfigID\": \"41415261-9498-4387-BC87-9ED443E5CE1A\",\n            \"agentSlug\": \"MercMoney\"\n        },\n        \"eprofile\": null\n    },\n    {\n        \"id\": \"4d8f1190-5c7b-4dec-b766-be4a24a5df6c\",\n        \"username\": \"user7\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": true,\n        \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n        \"group_request\": \"superadmin\",\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt4@abe.ai\",\n        \"created_on\": \"1568396383891\",\n        \"last_login\": null,\n        \"user_data\": null,\n        \"eprofile\": null\n    },\n    {\n        \"id\": \"234d53a1-8b0b-4c7f-b98f-41138c41bc35\",\n        \"username\": \"user6\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": true,\n        \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n        \"group_request\": null,\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt2@abe.ai\",\n        \"created_on\": \"1568396224587\",\n        \"last_login\": null,\n        \"user_data\": null,\n        \"eprofile\": null\n    }\n]"
+										}
+									]
+								},
+								{
 									"name": "Inherited",
 									"request": {
 										"method": "GET",
@@ -4518,92 +4763,6 @@
 											],
 											"cookie": [],
 											"body": "[\n    {\n        \"id\": \"5f7c8f01-83b4-44a1-9318-91cc8d12d2f0\",\n        \"username\": \"user9\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": true,\n        \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n        \"group_request\": \"superadmin\",\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"1ac1756c-3ead-4821-8a97-3af516dcaaf3\",\n        \"email\": \"jt9@abe.ai\",\n        \"created_on\": \"1568412135673\",\n        \"last_login\": null,\n        \"user_data\": null,\n        \"eprofile\": null\n    },\n    {\n        \"id\": \"f93474bc-8dc3-48bd-acf7-842e30ad2708\",\n        \"username\": \"user39\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": true,\n        \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n        \"group_request\": \"superadmin\",\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"7ec8c351-7b8a-4ea8-95cc-0d990b225768\",\n        \"email\": \"jt94@abe.ai\",\n        \"created_on\": \"1568416015887\",\n        \"last_login\": null,\n        \"user_data\": null,\n        \"eprofile\": null\n    },\n    {\n        \"id\": \"e517e311-fb37-4ca9-be4f-ff821ff9767d\",\n        \"username\": \"user5\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": false,\n        \"locked_reason\": null,\n        \"group_request\": null,\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt@abe.ai\",\n        \"created_on\": \"1568395971209\",\n        \"last_login\": {\n            \"date\": 1568416018554,\n            \"ip\": \"127.0.0.1\"\n        },\n        \"user_data\": {\n            \"activeAccountID\": \"09A75A84-A921-4F68-8FEF-B8392E3702C2\",\n            \"activeAgentID\": \"3C49E289-31F0-47D3-922E-D67ECD027B50\",\n            \"currentCuiConfigID\": \"41415261-9498-4387-BC87-9ED443E5CE1A\",\n            \"agentSlug\": \"MercMoney\"\n        },\n        \"eprofile\": null\n    },\n    {\n        \"id\": \"4d8f1190-5c7b-4dec-b766-be4a24a5df6c\",\n        \"username\": \"user7\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": true,\n        \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n        \"group_request\": \"superadmin\",\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt4@abe.ai\",\n        \"created_on\": \"1568396383891\",\n        \"last_login\": null,\n        \"user_data\": null,\n        \"eprofile\": null\n    },\n    {\n        \"id\": \"234d53a1-8b0b-4c7f-b98f-41138c41bc35\",\n        \"username\": \"user6\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": true,\n        \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n        \"group_request\": null,\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt2@abe.ai\",\n        \"created_on\": \"1568396224587\",\n        \"last_login\": null,\n        \"user_data\": null,\n        \"eprofile\": null\n    }\n]"
-										}
-									]
-								},
-								{
-									"name": "Get",
-									"request": {
-										"method": "GET",
-										"header": [],
-										"url": {
-											"raw": "{{TRAVELLING}}/api/v1/group/id/:id/type/:type/users",
-											"host": [
-												"{{TRAVELLING}}"
-											],
-											"path": [
-												"api",
-												"v1",
-												"group",
-												"id",
-												":id",
-												"type",
-												":type",
-												"users"
-											],
-											"variable": [
-												{
-													"key": "id",
-													"value": ""
-												},
-												{
-													"key": "type",
-													"value": ""
-												}
-											]
-										},
-										"description": "Gets all the users that belong to the group  of a particular type by its name or id.\n\n##### Optional Query Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | *optional* (example:  user7) |\n| locked | *optional* (example:  true) |\n| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |\n| group_request | *optional* (example:  superadmin) |\n| failed_login_attempts | *optional* (example:  0) |\n| change_username | *optional* (example:  false) |\n| change_password | *optional* (example:  false) |\n| reset_password | *optional* (example:  false) |\n| email_verify | *optional* (example:  false) |\n| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | *optional* (example:  test@test.ai) |\n| created_on | *optional* (example:  1568419646794) |\n| last_login | *optional* (example:  null) |"
-									},
-									"response": [
-										{
-											"name": "Get All Users",
-											"originalRequest": {
-												"method": "GET",
-												"header": [],
-												"url": {
-													"raw": "{{TRAVELLING}}/api/v1/group/:id/users",
-													"host": [
-														"{{TRAVELLING}}"
-													],
-													"path": [
-														"api",
-														"v1",
-														"group",
-														":id",
-														"users"
-													],
-													"variable": [
-														{
-															"key": "id",
-															"value": "superadmin",
-															"description": "id or name"
-														}
-													]
-												}
-											},
-											"status": "OK",
-											"code": 200,
-											"_postman_previewlanguage": "json",
-											"header": [
-												{
-													"key": "content-type",
-													"value": "application/json; charset=utf-8"
-												},
-												{
-													"key": "content-length",
-													"value": "1813"
-												},
-												{
-													"key": "Date",
-													"value": "Fri, 13 Sep 2019 23:24:15 GMT"
-												},
-												{
-													"key": "Connection",
-													"value": "keep-alive"
-												}
-											],
-											"cookie": [],
-											"body": "[\n    {\n        \"id\": \"e517e311-fb37-4ca9-be4f-ff821ff9767d\",\n        \"username\": \"user5\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": false,\n        \"locked_reason\": null,\n        \"group_request\": null,\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt@abe.ai\",\n        \"created_on\": \"1568395971209\",\n        \"last_login\": {\n            \"date\": 1568416018554,\n            \"ip\": \"127.0.0.1\"\n        },\n        \"user_data\": {\n            \"activeAccountID\": \"09A75A84-A921-4F68-8FEF-B8392E3702C2\",\n            \"activeAgentID\": \"3C49E289-31F0-47D3-922E-D67ECD027B50\",\n            \"currentCuiConfigID\": \"41415261-9498-4387-BC87-9ED443E5CE1A\",\n            \"agentSlug\": \"MercMoney\"\n        },\n        \"eprofile\": null\n    },\n    {\n        \"id\": \"4d8f1190-5c7b-4dec-b766-be4a24a5df6c\",\n        \"username\": \"user7\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": true,\n        \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n        \"group_request\": \"superadmin\",\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt4@abe.ai\",\n        \"created_on\": \"1568396383891\",\n        \"last_login\": null,\n        \"user_data\": null,\n        \"eprofile\": null\n    },\n    {\n        \"id\": \"234d53a1-8b0b-4c7f-b98f-41138c41bc35\",\n        \"username\": \"user6\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": true,\n        \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n        \"group_request\": null,\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt2@abe.ai\",\n        \"created_on\": \"1568396224587\",\n        \"last_login\": null,\n        \"user_data\": null,\n        \"eprofile\": null\n    }\n]"
 										}
 									]
 								}
@@ -6739,7 +6898,14 @@
 							"name": "Get",
 							"request": {
 								"method": "GET",
-								"header": [],
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
 								"url": {
 									"raw": "{{TRAVELLING}}/api/v1/group/id/:id/users",
 									"host": [
@@ -6753,11 +6919,152 @@
 										":id",
 										"users"
 									],
+									"query": [
+										{
+											"key": "filter",
+											"value": "locked=false,created_on>2021-06-03,created_on<2021-06-06",
+											"description": "Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)",
+											"disabled": true
+										},
+										{
+											"key": "limit",
+											"value": "10",
+											"description": "Number of maximum results. (example: 10)",
+											"disabled": true
+										},
+										{
+											"key": "skip",
+											"value": "2",
+											"description": "Number of db rows skipped. (example: 2)",
+											"disabled": true
+										},
+										{
+											"key": "sort",
+											"value": "created_on",
+											"description": "Sort by any user object key (examples: id, domain, locked, etc.)",
+											"disabled": true
+										},
+										{
+											"key": "sortdir",
+											"value": "ASC",
+											"description": "Sort direction (example ascending order: ASC)",
+											"disabled": true
+										}
+									],
 									"variable": [
 										{
 											"key": "id",
 											"value": "superadmin",
-											"description": "id or name"
+											"description": "Group name or ID."
+										}
+									]
+								},
+								"description": "Gets all the users that belong to the group.\n\n##### Optional Query Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | *optional* (example:  user7) |\n| locked | *optional* (example:  true) |\n| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |\n| group_request | *optional* (example:  superadmin) |\n| failed_login_attempts | *optional* (example:  0) |\n| change_username | *optional* (example:  false) |\n| change_password | *optional* (example:  false) |\n| reset_password | *optional* (example:  false) |\n| email_verify | *optional* (example:  false) |\n| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | *optional* (example:  test@test.ai) |\n| created_on | *optional* (example:  1568419646794) |\n| last_login | *optional* (example:  null) |"
+							},
+							"response": [
+								{
+									"name": "Get All Users",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{TRAVELLING}}/api/v1/group/:id/users",
+											"host": [
+												"{{TRAVELLING}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"group",
+												":id",
+												"users"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "superadmin",
+													"description": "id or name"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "content-type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "content-length",
+											"value": "1813"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 13 Sep 2019 23:24:15 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "[\n    {\n        \"id\": \"e517e311-fb37-4ca9-be4f-ff821ff9767d\",\n        \"username\": \"user5\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": false,\n        \"locked_reason\": null,\n        \"group_request\": null,\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt@abe.ai\",\n        \"created_on\": \"1568395971209\",\n        \"last_login\": {\n            \"date\": 1568416018554,\n            \"ip\": \"127.0.0.1\"\n        },\n        \"user_data\": {\n            \"activeAccountID\": \"09A75A84-A921-4F68-8FEF-B8392E3702C2\",\n            \"activeAgentID\": \"3C49E289-31F0-47D3-922E-D67ECD027B50\",\n            \"currentCuiConfigID\": \"41415261-9498-4387-BC87-9ED443E5CE1A\",\n            \"agentSlug\": \"MercMoney\"\n        },\n        \"eprofile\": null\n    },\n    {\n        \"id\": \"4d8f1190-5c7b-4dec-b766-be4a24a5df6c\",\n        \"username\": \"user7\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": true,\n        \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n        \"group_request\": \"superadmin\",\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt4@abe.ai\",\n        \"created_on\": \"1568396383891\",\n        \"last_login\": null,\n        \"user_data\": null,\n        \"eprofile\": null\n    },\n    {\n        \"id\": \"234d53a1-8b0b-4c7f-b98f-41138c41bc35\",\n        \"username\": \"user6\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": true,\n        \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n        \"group_request\": null,\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt2@abe.ai\",\n        \"created_on\": \"1568396224587\",\n        \"last_login\": null,\n        \"user_data\": null,\n        \"eprofile\": null\n    }\n]"
+								}
+							]
+						},
+						{
+							"name": "Count",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/group/id/:id/users/count",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"group",
+										"id",
+										":id",
+										"users",
+										"count"
+									],
+									"query": [
+										{
+											"key": "filter",
+											"value": "locked=false,created_on>2021-06-03,created_on<2021-06-06",
+											"description": "Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)",
+											"disabled": true
+										},
+										{
+											"key": "limit",
+											"value": "10",
+											"description": "Number of maximum results. (example: 10)",
+											"disabled": true
+										},
+										{
+											"key": "skip",
+											"value": "2",
+											"description": "Number of db rows skipped. (example: 2)",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "superadmin",
+											"description": "Group name or ID."
 										}
 									]
 								},
