@@ -135,6 +135,8 @@ class Fasquest {
     options.simple = opts.simple !== false;
     options.method = opts.method || 'GET';
     options.uri = opts.uri;
+    options.timeout = opts.timeout;
+
     if (opts.qs) {
       var escQS = qs.stringify(opts.qs);
 
@@ -1682,6 +1684,7 @@ class GroupUsers {
   static get _postgenClassUrls() {
     return {
       inherited: 'api/v1/group/id/:id/users/inherited',
+      count: 'api/v1/group/id/:id/users/count',
       get: 'api/v1/group/id/:id/users',
     };
   }
@@ -1730,6 +1733,54 @@ class GroupUsers {
   }
 
   /**
+  * count - Gets all the users that belong to the group.
+
+##### Optional Query Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | *optional* (example:  user7) |
+| locked | *optional* (example:  true) |
+| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+| group_request | *optional* (example:  superadmin) |
+| failed_login_attempts | *optional* (example:  0) |
+| change_username | *optional* (example:  false) |
+| change_password | *optional* (example:  false) |
+| reset_password | *optional* (example:  false) |
+| email_verify | *optional* (example:  false) |
+| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | *optional* (example:  test@test.ai) |
+| created_on | *optional* (example:  1568419646794) |
+| last_login | *optional* (example:  null) |
+  *
+  * Path: api/v1/group/id/:id/users/count
+  * @param {any} id Group name or ID. (example: superadmin)
+  * @param {any} filter Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)
+  * @param {any} limit Number of maximum results. (example: 10) (example: 10)
+  * @param {any} skip Number of db rows skipped. (example: 2) (example: 2)
+  * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+  */
+  static async count(id, filter, limit, skip, authorization_bearer, opts) {
+    var options = {
+      method: 'GET',
+      simple: false,
+      uri: hostUrl + '/' + `api/v1/group/id/${id}/users/count`,
+      qs: { filter, limit, skip },
+      authorization: {
+        bearer: authorization_bearer,
+      },
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
+  }
+
+  /**
   * get - Gets all the users that belong to the group.
 
 ##### Optional Query Params
@@ -1752,13 +1803,32 @@ class GroupUsers {
 | last_login | *optional* (example:  null) |
   *
   * Path: api/v1/group/id/:id/users
-  * @param {any} id id or name (example: superadmin)
+  * @param {any} id Group name or ID. (example: superadmin)
+  * @param {any} filter Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)
+  * @param {any} limit Number of maximum results. (example: 10) (example: 10)
+  * @param {any} skip Number of db rows skipped. (example: 2) (example: 2)
+  * @param {any} sort Sort by any user object key (examples: id, domain, locked, etc.) (example: created_on)
+  * @param {any} sortdir Sort direction (example ascending order: ASC) (example: ASC)
+  * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   */
-  static async get(id, opts) {
+  static async get(
+    id,
+    filter,
+    limit,
+    skip,
+    sort,
+    sortdir,
+    authorization_bearer,
+    opts
+  ) {
     var options = {
       method: 'GET',
       simple: false,
       uri: hostUrl + '/' + `api/v1/group/id/${id}/users`,
+      qs: { filter, limit, skip, sort, sortdir },
+      authorization: {
+        bearer: authorization_bearer,
+      },
     };
     if (defaultOpts) {
       options = Object.assign(options, defaultOpts);
@@ -2511,53 +2581,13 @@ class GroupTypeUsers {
   constructor() {}
   static get _postgenClassUrls() {
     return {
-      get: 'api/v1/group/id/:id/type/:type/users',
       inherited: 'api/v1/group/id/:id/type/:type/users/inherited',
+      count: 'api/v1/group/id/:id/type/:type/users/count',
+      get: 'api/v1/group/id/:id/type/:type/users',
     };
   }
   static getFunctionsPath(name) {
     return this._postgenClassUrls[name.toLowerCase()];
-  }
-
-  /**
-  * get - Gets all the users that belong to the group  of a particular type by its name or id.
-
-##### Optional Query Params
-
-| Param | Description |
-| --- | --- |
-| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
-| username | *optional* (example:  user7) |
-| locked | *optional* (example:  true) |
-| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
-| group_request | *optional* (example:  superadmin) |
-| failed_login_attempts | *optional* (example:  0) |
-| change_username | *optional* (example:  false) |
-| change_password | *optional* (example:  false) |
-| reset_password | *optional* (example:  false) |
-| email_verify | *optional* (example:  false) |
-| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
-| email | *optional* (example:  test@test.ai) |
-| created_on | *optional* (example:  1568419646794) |
-| last_login | *optional* (example:  null) |
-  *
-  * Path: api/v1/group/id/:id/type/:type/users
-  * @param {any} id  
-  * @param {any} type  
-  */
-  static async get(id, type, opts) {
-    var options = {
-      method: 'GET',
-      simple: false,
-      uri: hostUrl + '/' + `api/v1/group/id/${id}/type/${type}/users`,
-    };
-    if (defaultOpts) {
-      options = Object.assign(options, defaultOpts);
-    }
-    if (opts) {
-      options = Object.assign(options, opts);
-    }
-    return await fasq.request(options);
   }
 
   /**
@@ -2591,6 +2621,124 @@ class GroupTypeUsers {
       method: 'GET',
       simple: false,
       uri: hostUrl + '/' + `api/v1/group/id/${id}/type/${type}/users/inherited`,
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
+  }
+
+  /**
+  * count - Gets all the users that belong to the group  of a particular type by its name or id.
+
+##### Optional Query Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | *optional* (example:  user7) |
+| locked | *optional* (example:  true) |
+| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+| group_request | *optional* (example:  superadmin) |
+| failed_login_attempts | *optional* (example:  0) |
+| change_username | *optional* (example:  false) |
+| change_password | *optional* (example:  false) |
+| reset_password | *optional* (example:  false) |
+| email_verify | *optional* (example:  false) |
+| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | *optional* (example:  test@test.ai) |
+| created_on | *optional* (example:  1568419646794) |
+| last_login | *optional* (example:  null) |
+  *
+  * Path: api/v1/group/id/:id/type/:type/users/count
+  * @param {any} id Group name or ID. (example: superadmin)
+  * @param {any} type Group type. (example: group)
+  * @param {any} filter Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)
+  * @param {any} limit Number of maximum results. (example: 10) (example: 10)
+  * @param {any} skip Number of db rows skipped. (example: 2) (example: 2)
+  * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+  */
+  static async count(
+    id,
+    type,
+    filter,
+    limit,
+    skip,
+    authorization_bearer,
+    opts
+  ) {
+    var options = {
+      method: 'GET',
+      simple: false,
+      uri: hostUrl + '/' + `api/v1/group/id/${id}/type/${type}/users/count`,
+      qs: { filter, limit, skip },
+      authorization: {
+        bearer: authorization_bearer,
+      },
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
+  }
+
+  /**
+  * get - Gets all the users that belong to the group  of a particular type by its name or id.
+
+##### Optional Query Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | *optional* (example:  user7) |
+| locked | *optional* (example:  true) |
+| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+| group_request | *optional* (example:  superadmin) |
+| failed_login_attempts | *optional* (example:  0) |
+| change_username | *optional* (example:  false) |
+| change_password | *optional* (example:  false) |
+| reset_password | *optional* (example:  false) |
+| email_verify | *optional* (example:  false) |
+| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | *optional* (example:  test@test.ai) |
+| created_on | *optional* (example:  1568419646794) |
+| last_login | *optional* (example:  null) |
+  *
+  * Path: api/v1/group/id/:id/type/:type/users
+  * @param {any} id Group name or ID. (example: superadmin)
+  * @param {any} type Group type. (example: group)
+  * @param {any} filter Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)
+  * @param {any} limit Number of maximum results. (example: 10) (example: 10)
+  * @param {any} skip Number of db rows skipped. (example: 2) (example: 2)
+  * @param {any} sort Sort by any user object key (examples: id, domain, locked, etc.) (example: created_on)
+  * @param {any} sortdir Sort direction (example ascending order: ASC) (example: ASC)
+  * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+  */
+  static async get(
+    id,
+    type,
+    filter,
+    limit,
+    skip,
+    sort,
+    sortdir,
+    authorization_bearer,
+    opts
+  ) {
+    var options = {
+      method: 'GET',
+      simple: false,
+      uri: hostUrl + '/' + `api/v1/group/id/${id}/type/${type}/users`,
+      qs: { filter, limit, skip, sort, sortdir },
+      authorization: {
+        bearer: authorization_bearer,
+      },
     };
     if (defaultOpts) {
       options = Object.assign(options, defaultOpts);
@@ -4841,7 +4989,7 @@ class AuthDomain {
   * body
   * ```json
   * {
- * 	"email": "tesft@test.com",
+ * 	"email": "test@test.com",
  * 	"password": "Pas5w0r!d"
  * }
   * ```
