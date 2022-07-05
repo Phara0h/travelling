@@ -125,7 +125,9 @@ class CookieToken {
 
   // password are the hashed password only!
   static async getToken(domain, id, password, ip, date) {
-    return await this.encrypt(`${domain}:${id}:${password}:${date}:${config.cookie.security.ipHijackProtection ? ip : ''}`);
+    return await this.encrypt(
+      `${domain}:${id}:${password}:${date}:${config.cookie.security.ipHijackProtection ? ip : ''}`
+    );
   }
 
   // password are the hashed password only!
@@ -167,34 +169,20 @@ class CookieToken {
   }
 
   static decrypt(text, setEncryptKey) {
-    return new Promise((resolve, reject) => {
-      // try {
-      text = text.split('|');
-      // console.log(text);
-      var cipher = crypto.createDecipheriv('aes-256-cbc', setEncryptKey || encryptKey, Buffer.alloc(16, text[1], 'base64'));
+    var decrypted = '';
 
-      var decrypted = '';
+    text = text.split('|');
 
-      cipher.on('readable', () => {
-        let chunk;
+    const decipher = crypto.createDecipheriv(
+      'aes-256-cbc',
+      setEncryptKey || encryptKey,
+      Buffer.alloc(16, text[1], 'base64')
+    );
 
-        while (null !== (chunk = cipher.read())) {
-          decrypted += chunk.toString('ascii');
-        }
-      });
+    decrypted = decipher.update(text[0], 'base64', 'ascii');
+    decrypted += decipher.final('ascii');
 
-      cipher.on('end', () => {
-        resolve(decrypted);
-      });
-
-      cipher.write(text[0], 'base64');
-      cipher.end();
-      // } catch (e) {
-      //     console.log(e);
-      //     console.log(text, setEncryptKey);
-      //     reject(e);
-      // }
-    });
+    return decrypted;
   }
 }
 
