@@ -1,6 +1,18 @@
 
 
+#### [v2.17.1](https://github.com/Dragohm/travelling/compare/v2.17.1...v2.17.1)
+
+- fixes for node 16.15.1 and 18.4.0 [`#21`](https://github.com/Dragohm/travelling/pull/21)
+- Update cookietoken.js [`8cd1323`](https://github.com/Dragohm/travelling/commit/8cd1323fa891a21ed7bb5facf62469409bbcb232)
+- wrap in promise [`9139fed`](https://github.com/Dragohm/travelling/commit/9139fed26991b328e629d2dd20275e40fb6843cc)
+
+#### [v2.17.1](https://github.com/Dragohm/travelling/compare/v2.17.0...v2.17.1)
+
+> 11 July 2022
+
 #### [v2.17.0](https://github.com/Dragohm/travelling/compare/v2.16.1...v2.17.0)
+
+> 11 July 2022
 
 - Fix #55 get users by group [`#20`](https://github.com/Dragohm/travelling/pull/20)
 - Merge pull request #20 from Dragohm/fix-#55-get-users-by-group [`#55`](https://github.com/Dragohm/travelling/issues/55)
