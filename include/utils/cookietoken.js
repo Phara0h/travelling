@@ -169,20 +169,26 @@ class CookieToken {
   }
 
   static decrypt(text, setEncryptKey) {
-    var decrypted = '';
+    return new Promise((resolve, reject) => {
+      var decrypted = '';
 
-    text = text.split('|');
+      try {
+        text = text.split('|');
 
-    const decipher = crypto.createDecipheriv(
-      'aes-256-cbc',
-      setEncryptKey || encryptKey,
-      Buffer.alloc(16, text[1], 'base64')
-    );
+        const decipher = crypto.createDecipheriv(
+          'aes-256-cbc',
+          setEncryptKey || encryptKey,
+          Buffer.alloc(16, text[1], 'base64')
+        );
 
-    decrypted = decipher.update(text[0], 'base64', 'ascii');
-    decrypted += decipher.final('ascii');
+        decrypted = decipher.update(text[0], 'base64', 'ascii');
+        decrypted += decipher.final('ascii');
 
-    return decrypted;
+        resolve(decrypted);
+      } catch {
+        reject(decrypted);
+      }
+    });
   }
 }
 
