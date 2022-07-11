@@ -1,6 +1,17 @@
 
 
+#### [v2.17.0](https://github.com/Trazi-Ventures/travelling/compare/v2.16.1...v2.17.0)
+
+- Fix #55 get users by group [`#20`](https://github.com/Trazi-Ventures/travelling/pull/20)
+- Merge pull request #20 from Trazi-Ventures/fix-#55-get-users-by-group [`#55`](https://github.com/Trazi-Ventures/travelling/issues/55)
+- group type comparison [`ddae09c`](https://github.com/Trazi-Ventures/travelling/commit/ddae09cb06f34640c72cb9dc7b358e1153a6a0bd)
+- MR comment fixes [`8eb1e8c`](https://github.com/Trazi-Ventures/travelling/commit/8eb1e8c5d285cf32a23182a3c8270ef5ce17d2eb)
+- Add tests. Update SDK [`d068a47`](https://github.com/Trazi-Ventures/travelling/commit/d068a47a3d99e72658618ed5e6fe5a50cde45666)
+- Add filter, sort and pagination. Fix bugs [`4cb65d9`](https://github.com/Trazi-Ventures/travelling/commit/4cb65d9ff8f66e899bf7fa3d5848fe7f466c600c)
+
 #### [v2.16.1](https://github.com/Trazi-Ventures/travelling/compare/v2.16.0...v2.16.1)
+
+> 17 June 2022
 
 - Feature #28 allowed domain is route allowed [`#19`](https://github.com/Trazi-Ventures/travelling/pull/19)
 - added bodylimit [`affcdb5`](https://github.com/Trazi-Ventures/travelling/commit/affcdb554cad5167567f9353346bc0b88a7f9c65)
