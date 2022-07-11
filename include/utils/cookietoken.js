@@ -185,8 +185,8 @@ class CookieToken {
         decrypted += decipher.final('ascii');
 
         resolve(decrypted);
-      } catch {
-        reject(decrypted);
+      } catch (e) {
+        reject(e);
       }
     });
   }
