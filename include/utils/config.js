@@ -24,7 +24,8 @@ const config = {
     cloudflareIP: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_MISC_CLOUDFLAREIP), false),
     cloudflareDomainHeader: misc.isSetDefault(process.env.TRAVELLING_MISC_CLOUDFLARE_DOMAIN_HEADER, 'CF-Worker'),
     domainCustomHeader: misc.isSetDefault(process.env.TRAVELLING_MISC_DOMAIN_CUSTOM_HEADER, null),
-    deniedRedirect: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_MISC_DENIED_REDIRECT), true)
+    deniedRedirect: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_MISC_DENIED_REDIRECT), true),
+    maxParamLength: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_MISC_MAX_PARAM_LENGTH), 100)
   },
   log: {
     enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_LOG_ENABLE), true),
@@ -51,7 +52,10 @@ const config = {
         label: misc.isSetDefault(process.env.TRAVELLING_LOG_APPEND_FIELDS_BRANCH_LABEL, 'none')
       },
       environment: {
-        enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_LOG_APPEND_FIELDS_ENVIRONMENT_ENABLE), false),
+        enable: misc.isSetDefault(
+          misc.stringToBool(process.env.TRAVELLING_LOG_APPEND_FIELDS_ENVIRONMENT_ENABLE),
+          false
+        ),
         label: misc.isSetDefault(process.env.TRAVELLING_LOG_APPEND_FIELDS_ENVIRONMENT_LABEL, 'production')
       }
     },
@@ -127,7 +131,10 @@ const config = {
   },
   proxy: {
     timeout: misc.isSetDefault(Number(process.env.TRAVELLING_PROXY_TIMEOUT), 0),
-    sendTravellingHeaders: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_PROXY_SEND_TRAVELLING_HEADERS), false)
+    sendTravellingHeaders: misc.isSetDefault(
+      misc.stringToBool(process.env.TRAVELLING_PROXY_SEND_TRAVELLING_HEADERS),
+      false
+    )
   },
   stats: {
     captureGroupRoutes: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_STATS_CAPTURE_GROUP_ROUTES), true)
@@ -154,7 +161,10 @@ const config = {
     },
     domain: misc.isSetDefault(process.env.TRAVELLING_COOKIE_DOMAIN, null),
     security: {
-      ipHijackProtection: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_COOKIE_SECURITY_IP_HIJACK_PROTECTION), true)
+      ipHijackProtection: misc.isSetDefault(
+        misc.stringToBool(process.env.TRAVELLING_COOKIE_SECURITY_IP_HIJACK_PROTECTION),
+        true
+      )
     }
   },
   user: {
@@ -203,7 +213,10 @@ const config = {
     database: misc.isSetDefault(process.env.TRAVELLING_DATABASE_NAME, null),
     host: misc.isSetDefault(process.env.TRAVELLING_DATABASE_HOST, null),
     crypto: {
-      implementation: misc.isSetDefault(process.env.TRAVELLING_PG_CRYPTO_IMPLEMENTATION, __dirname + '/cryptointerface.js'),
+      implementation: misc.isSetDefault(
+        process.env.TRAVELLING_PG_CRYPTO_IMPLEMENTATION,
+        __dirname + '/cryptointerface.js'
+      ),
       secret: misc.isSetDefault(process.env.TRAVELLING_PG_CRYPTO_IMPLEMENTATION_SECRET, null),
       salt: misc.isSetDefault(process.env.TRAVELLING_PG_CRYPTO_IMPLEMENTATION_SALT, null),
       encryptUserData: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_PG_CRYPTO_ENCRYPT_USER_DATA), false)
@@ -218,7 +231,10 @@ const config = {
           misc.stringToBool(process.env.TRAVELLING_EMAIL_VALIDATION_EXTERNAL_EMAIL_IN_ENDPOINT),
           true
         ),
-        emailInBody: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_EMAIL_VALIDATION_EXTERNAL_EMAIL_IN_BODY), false),
+        emailInBody: misc.isSetDefault(
+          misc.stringToBool(process.env.TRAVELLING_EMAIL_VALIDATION_EXTERNAL_EMAIL_IN_BODY),
+          false
+        ),
         method: misc.isSetDefault(process.env.TRAVELLING_EMAIL_VALIDATION_EXTERNAL_METHOD, 'GET')
       }
     },
@@ -243,7 +259,10 @@ const config = {
       },
       tls: {
         // do not fail on invalid certs
-        rejectUnauthorized: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_EMAIL_SMTP_TLS_REJECT_UNAUTHORIZED), true)
+        rejectUnauthorized: misc.isSetDefault(
+          misc.stringToBool(process.env.TRAVELLING_EMAIL_SMTP_TLS_REJECT_UNAUTHORIZED),
+          true
+        )
       }
     },
     aws: {
