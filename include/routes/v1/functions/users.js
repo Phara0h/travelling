@@ -243,7 +243,7 @@ async function editUser(opts) {
     }
 
     if (validUserDataEdit) {
-      return user[0].user_data;
+      return JSON.parse(user[0].user_data);
     } else {
       return opts.req.params.prop ? user[0][opts.req.params.prop] : user[0];
     }
