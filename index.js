@@ -132,6 +132,7 @@ var fastifyOptions = {
   http2: false,
   logger: config.log.requests ? config.log.logger : false,
   bodyLimit: config.misc.bodyLimit,
+  maxParamLength: config.misc.maxParamLength,
   // logger: true
   disableRequestLogging: !config.log.fastify.requestLogging,
   requestIdHeader: config.log.fastify.requestIdHeader,
