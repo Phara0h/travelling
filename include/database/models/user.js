@@ -108,9 +108,16 @@ class User extends Base(BaseModel, 'users', {
     for (var i = 0; i < this.group_ids.length; i++) {
       const group = (await this.gm.getGroup(this.group_ids[i])) || (await Group.findById(this.group_ids[i]));
 
+      // If group is not found because it was removed from the database, remove the lingering group from the user.
+      if (!group) {
+        await this.removeGroup({ id: this.group_ids[i] });
+        continue;
+      }
+
       groups.push(group);
       groupsNames.push(group.name);
       groupsTypes.push(group.type);
+
       // groups.name += group.name;
       // if (this.group_ids.length < i + 1) {
       //     groups.name += '|';
