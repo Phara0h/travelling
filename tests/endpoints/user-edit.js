@@ -17,11 +17,48 @@ module.exports = () => {
         expect(res.body).toEqual('asdf@asdf.memes');
       });
 
+      test('Edit Test User 1 Property user_data ', async () => {
+        var res = await Travelling.User.Current.editProperty(
+          'noice notes broh',
+          'user_data.notes',
+          userContainer.user1Token
+        );
+
+        expect(res.body).toStrictEqual({ notes: 'noice notes broh' });
+        expect(res.statusCode).toEqual(200);
+
+        var remove = await Travelling.User.Current.editProperty(undefined, 'user_data.notes', userContainer.user1Token);
+        expect(remove.statusCode).toEqual(200);
+        expect(remove.body).toEqual({});
+      });
+
+      test('Edit Test User 1 Edit User Data Property ', async () => {
+        var res = await Travelling.User.Current.editUserDataProperty('swagga', 'proppa', userContainer.user1Token);
+
+        expect(res.body).toStrictEqual({ proppa: 'swagga' });
+        expect(res.statusCode).toEqual(200);
+
+        var remove = await Travelling.User.Current.editUserDataProperty(undefined, 'proppa', userContainer.user1Token);
+        expect(remove.statusCode).toEqual(200);
+        expect(remove.body).toEqual({});
+      });
+
       test('Edit Test User 1 Email Property Value ', async () => {
         var res = await Travelling.User.Current.editPropertyValue('email', 'test@test.com', userContainer.user1Token);
 
         expect(res.statusCode).toEqual(200);
         expect(res.body).toEqual('test@test.com');
+      });
+
+      test('Edit Test User 1 User Data Property Value ', async () => {
+        var res = await Travelling.User.Current.editUserDataPropertyValue('qwerty', 'ytrewq', userContainer.user1Token);
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toEqual({ qwerty: 'ytrewq' });
+
+        var remove = await Travelling.User.Current.editUserDataProperty(undefined, 'qwerty', userContainer.user1Token);
+        expect(remove.statusCode).toEqual(200);
+        expect(remove.body).toEqual({});
       });
 
       test('Edit Test User 1 Email, domain and UserData', async () => {
@@ -161,6 +198,54 @@ module.exports = () => {
         expect(res.statusCode).toEqual(200);
       });
 
+      test('Edit Property user_data - User Domain 2', async () => {
+        var res = await Travelling.User.Domain.editProperty(
+          'noice value',
+          'test.com',
+          'test_domain_2_changed@test.com',
+          'user_data.domaintwo',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.body).toEqual({ domaintwo: 'noice value' });
+        expect(res.statusCode).toEqual(200);
+
+        var remove = await Travelling.User.Domain.editProperty(
+          undefined,
+          'test.com',
+          'test_domain_2_changed@test.com',
+          'user_data.domaintwo',
+          userContainer.userDomain2Token
+        );
+
+        expect(remove.body).toEqual({});
+        expect(remove.statusCode).toEqual(200);
+      });
+
+      test('Edit User Data Property - User Domain 2', async () => {
+        var res = await Travelling.User.Domain.editUserDataProperty(
+          'vcxz',
+          'test.com',
+          'test_domain_2_changed@test.com',
+          'zxcv',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.body).toEqual({ zxcv: 'vcxz' });
+        expect(res.statusCode).toEqual(200);
+
+        var remove = await Travelling.User.Domain.editUserDataProperty(
+          undefined,
+          'test.com',
+          'test_domain_2_changed@test.com',
+          'zxcv',
+          userContainer.userDomain2Token
+        );
+
+        expect(remove.body).toEqual({});
+        expect(remove.statusCode).toEqual(200);
+      });
+
       test('Edit Property Value [email] User Domain 2', async () => {
         var res = await Travelling.User.Domain.editPropertyValue(
           'test.com',
@@ -172,6 +257,42 @@ module.exports = () => {
 
         expect(res.body).toEqual('test_domain_2@test.com');
         expect(res.statusCode).toEqual(200);
+      });
+
+      test('Edit User Data Property Value - User Domain 2', async () => {
+        var res = await Travelling.User.Domain.editUserDataPropertyValue(
+          'test.com',
+          'test_domain_2@test.com',
+          'notes',
+          'wubbalubbadubdub',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.body).toEqual({ notes: 'wubbalubbadubdub' });
+        expect(res.statusCode).toEqual(200);
+
+        // Do it again for good measure
+        var res2 = await Travelling.User.Domain.editUserDataPropertyValue(
+          'test.com',
+          'test_domain_2@test.com',
+          'notes',
+          'rickytyrickytywreckd',
+          userContainer.userDomain2Token
+        );
+
+        expect(res2.body).toEqual({ notes: 'rickytyrickytywreckd' });
+        expect(res2.statusCode).toEqual(200);
+
+        var remove = await Travelling.User.Domain.editUserDataPropertyValue(
+          'test.com',
+          'test_domain_2@test.com',
+          'notes',
+          ':value',
+          userContainer.userDomain2Token
+        );
+
+        expect(remove.body).toEqual({});
+        expect(remove.statusCode).toEqual(200);
       });
 
       test('Edit [State, City, UserData] User Domain 2', async () => {
@@ -260,6 +381,19 @@ module.exports = () => {
 
         expect(res.statusCode).toEqual(400);
         expect(res.body).toHaveProperty('type', 'user-edit-error');
+      });
+
+      test('Edit User Data Property - User Domain 2 - Multiple props', async () => {
+        var res = await Travelling.User.Domain.editProperty(
+          'test_domain_2_changed@test.com',
+          'this-aint-no-real-domain.elite',
+          'test_domain_2@test.com',
+          'user_data.notes,user_data.hiii',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.statusCode).toEqual(400);
+        expect(res.body).toHaveProperty('type', 'user-prop-error');
       });
 
       test('Edit Property Value User Domain 2 Invalid Property', async () => {
