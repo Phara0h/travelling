@@ -3899,7 +3899,13 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v2.17.3](https://github.com/Dragohm/travelling/compare/v2.17.2...v2.17.3)
+
+- Update user.js [`8cf0cca`](https://github.com/Dragohm/travelling/commit/8cf0ccac72ed4d1a7f3c3929f0964a4bc60a5a29)
+
 #### [v2.17.2](https://github.com/Dragohm/travelling/compare/v2.17.1...v2.17.2)
+
+> 11 July 2022
 
 - fixes for node 16.15.1 and 18.4.0 [`#21`](https://github.com/Dragohm/travelling/pull/21)
 - Update cookietoken.js [`8cd1323`](https://github.com/Dragohm/travelling/commit/8cd1323fa891a21ed7bb5facf62469409bbcb232)
