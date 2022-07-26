@@ -103,12 +103,12 @@ async function editUser(opts) {
 
   let splitProp = [];
 
-  if (opts.req.params.prop && opts.req.params.propdata) {
+  if (opts.req.params.prop) {
     splitProp = opts.req.params.prop.split('.');
   }
 
   if (config.audit.edit.enable === true || splitProp[0] === 'user_data') {
-    if (splitProp[0] === 'user_data' && opts.req.params.propdata) {
+    if (splitProp[0] === 'user_data' && opts.req.params.prop !== 'user_data') {
       const params = opts.req.params;
       const newOpts = Object.assign({}, opts);
       // get user by id
@@ -116,7 +116,7 @@ async function editUser(opts) {
 
       const full = await getUser(newOpts);
       try {
-        oldModel = JSON.parse(full.user_data);
+        oldModel = JSON.parse(full.user_data) || {};
       } catch {
         oldModel = {};
       }
@@ -132,27 +132,26 @@ async function editUser(opts) {
   let validUserDataEdit = false;
 
   if (opts.req.params.prop) {
-    if (splitProp[0] === 'user_data' && opts.req.params.propdata) {
-      // Update user data fields (applies to endpoint that use the 'prop'
-      // and 'propdata' path params. (e.g. all the user editPropertyValue endpoints)
+    if (splitProp[0] === 'user_data' && opts.req.params.prop !== 'user_data') {
+      // Update user data fields (applies to endpoints that use the 'prop'
 
       if (splitProp.length !== 2) {
         opts.res.code(400);
         return {
           type: 'user-prop-error',
-          msg: 'Not a valid property of user_data'
+          msg: 'Can only edit one user_data property at a time.'
         };
       }
 
       // Keep old user_data
       model = { user_data: Object.assign({}, oldModel || {}) };
 
-      // if property dont exists, create it
-      if (!model.user_data[splitProp[1]]) {
-        model.user_data[splitProp[1]] = opts.req.params.propdata;
-      } else if (opts.req.params.propdata === undefined || opts.req.params.propdata === ':value') {
-        // Remove property if set to undefined
+      // Remove property if set to undefined
+      if ((opts.req.params.propdata === undefined || opts.req.params.propdata === ':value') && !opts.req.body) {
         delete model.user_data[splitProp[1]];
+      } else {
+        // update property
+        model.user_data[splitProp[1]] = opts.req.params.propdata || opts.req.body;
       }
 
       validUserDataEdit = true;

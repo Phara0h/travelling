@@ -74,7 +74,17 @@ module.exports = function (app, opts, done) {
     return await userRoutes.editUser({ req, res, needsDomain: false, router });
   });
 
+  app.put('/user/id/:id/property/userdata/:prop', async (req, res) => {
+    req.params.prop = `user_data.${req.params.prop}`;
+    return await userRoutes.editUser({ req, res, needsDomain: false, router });
+  });
+
   app.put('/user/id/:id/property/:prop/:propdata', async (req, res) => {
+    return await userRoutes.editUser({ req, res, needsDomain: false, router });
+  });
+
+  app.put('/user/id/:id/property/userdata/:prop/:propdata', async (req, res) => {
+    req.params.prop = `user_data.${req.params.prop}`;
     return await userRoutes.editUser({ req, res, needsDomain: false, router });
   });
 
@@ -141,7 +151,17 @@ module.exports = function (app, opts, done) {
     return await userRoutes.editUser({ req, res, needsDomain: true, router });
   });
 
+  app.put('/user/domain/:domain/id/:id/property/userdata/:prop', async (req, res) => {
+    req.params.prop = `user_data.${req.params.prop}`;
+    return await userRoutes.editUser({ req, res, needsDomain: true, router });
+  });
+
   app.put('/user/domain/:domain/id/:id/property/:prop/:propdata', async (req, res) => {
+    return await userRoutes.editUser({ req, res, needsDomain: true, router });
+  });
+
+  app.put('/user/domain/:domain/id/:id/property/userdata/:prop/:propdata', async (req, res) => {
+    req.params.prop = `user_data.${req.params.prop}`;
     return await userRoutes.editUser({ req, res, needsDomain: true, router });
   });
 
@@ -336,9 +356,23 @@ module.exports = function (app, opts, done) {
     return await userRoutes.editUser({ req, res, needsDomain: true, router });
   });
 
+  app.put('/user/me/property/userdata/:prop', async (req, res) => {
+    req.params.id = req.session.data.user.id;
+    req.params.domain = req.session.data.user.domain;
+    req.params.prop = `user_data.${req.params.prop}`;
+    return await userRoutes.editUser({ req, res, needsDomain: true, router });
+  });
+
   app.put('/user/me/property/:prop/:propdata', async (req, res) => {
     req.params.id = req.session.data.user.id;
     req.params.domain = req.session.data.user.domain;
+    return await userRoutes.editUser({ req, res, needsDomain: true, router });
+  });
+
+  app.put('/user/me/property/userdata/:prop/:propdata', async (req, res) => {
+    req.params.id = req.session.data.user.id;
+    req.params.domain = req.session.data.user.domain;
+    req.params.prop = `user_data.${req.params.prop}`;
     return await userRoutes.editUser({ req, res, needsDomain: true, router });
   });
 
