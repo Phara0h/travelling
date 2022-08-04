@@ -115,11 +115,8 @@ async function editUser(opts) {
       newOpts.req.params = { id: opts.req.params.id, domain: opts.req.params.domain };
 
       const full = await getUser(newOpts);
-      try {
-        oldModel = JSON.parse(full.user_data) || {};
-      } catch {
-        oldModel = {};
-      }
+
+      oldModel = full.user_data || {};
 
       // put all params back on
       opts.req.params = params;
@@ -147,7 +144,7 @@ async function editUser(opts) {
       model = { user_data: Object.assign({}, oldModel || {}) };
 
       // Remove property if set to undefined
-      if ((opts.req.params.propdata === undefined || opts.req.params.propdata === ':value') && !opts.req.body) {
+      if ((opts.req.params.propdata === undefined || opts.req.params.propdata === 'undefined') && !opts.req.body) {
         delete model.user_data[splitProp[1]];
       } else {
         // update property
@@ -242,7 +239,7 @@ async function editUser(opts) {
     }
 
     if (validUserDataEdit) {
-      return JSON.parse(user[0].user_data);
+      return user[0].user_data;
     } else {
       return opts.req.params.prop ? user[0][opts.req.params.prop] : user[0];
     }

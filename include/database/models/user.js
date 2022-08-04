@@ -202,10 +202,6 @@ class User extends Base(BaseModel, 'users', {
       u.avatar = u.avatar.toString('utf8');
     }
 
-    if (u.user_data != null) {
-      u.user_data = JSON.parse(u.user_data.toString('utf8'));
-    }
-
     delete u.password;
     return u;
   }
