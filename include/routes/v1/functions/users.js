@@ -103,7 +103,7 @@ async function editUser(opts) {
 
   let splitProp = [];
 
-  if (opts.req.params.prop) {
+  if (opts.req.params.prop && typeof opts.req.params.prop === 'string' && opts.req.params.prop.indexOf('.' >= 0)) {
     splitProp = opts.req.params.prop.split('.');
   }
 
