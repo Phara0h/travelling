@@ -110,15 +110,14 @@ async function editUser(opts) {
   if (config.audit.edit.enable === true || splitProp[0] === 'user_data') {
     if (splitProp[0] === 'user_data' && opts.req.params.prop !== 'user_data') {
       const params = opts.req.params;
-      const newOpts = Object.assign({}, opts);
-      // get user by id
-      newOpts.req.params = { id: opts.req.params.id, domain: opts.req.params.domain };
 
-      const full = await getUser(newOpts);
+      // get user by id and domain (instead of by user_data)
+      opts.req.params = { id: params.id, domain: params.domain };
+      const full = await getUser(opts);
 
       oldModel = full.user_data || {};
 
-      // put all params back on
+      // Put original params back in
       opts.req.params = params;
     } else {
       oldModel = await getUser(opts);
