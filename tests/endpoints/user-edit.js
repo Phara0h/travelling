@@ -93,9 +93,10 @@ module.exports = () => {
         // Setting user_data.prop = undefined deletes object
         var res = await Travelling.User.Current.editPropertyValue(
           'user_data.coolprop',
-          ':value',
+          undefined,
           userContainer.user1Token
         );
+
         expect(res.statusCode).toEqual(200);
         expect(res.body).toStrictEqual({
           test: 1,
@@ -287,7 +288,7 @@ module.exports = () => {
           'test.com',
           'test_domain_2@test.com',
           'notes',
-          ':value',
+          undefined,
           userContainer.userDomain2Token
         );
 
