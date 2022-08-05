@@ -31,7 +31,9 @@ const utilsUser = {
         try {
           await Fasquest.request({
             method: config.email.validation.external.method,
-            uri: config.email.validation.external.endpoint + (config.email.validation.external.emailInEndpoint ? user.email : ''),
+            uri:
+              config.email.validation.external.endpoint +
+              (config.email.validation.external.emailInEndpoint ? user.email : ''),
             body: config.email.validation.external.emailInBody ? user.email : null,
             resolveWithFullResponse: true
           });
@@ -202,6 +204,19 @@ const utilsUser = {
     }
 
     if (user.user_data) {
+      // Check if user data contains only approved values
+      const keys = Object.keys(user.user_data);
+
+      for (let i = 0; i < keys.length; i++) {
+        if (regex.safeName.exec(keys[i]) == null || regex.safeName.exec(user.user_data[keys[i]]) == null) {
+          return {
+            type: 'user-data-error',
+            msg: 'User data contains invalid character(s).'
+          };
+        }
+      }
+
+      // Check if user data is valid JSON
       try {
         user.user_data = JSON.stringify(user.user_data);
       } catch (e) {
