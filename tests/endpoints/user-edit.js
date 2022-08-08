@@ -7,6 +7,35 @@ const { Travelling } = require('../../sdk/node')('http://127.0.0.1:6969/' + conf
 
 var userContainer = require('../include/UserContainer.js');
 
+const XSS_AND_SQL_INJECTION = [
+  `>"><script>alert("XSS")</script>&`,
+  `<IMG SRC="javascript:alert('XSS');">`,
+  `<IMG SRC=JaVaScRiPt:alert(&quot;XSS<WBR>&quot;)>`,
+  `"><STYLE>@import"javascript:alert('XSS')";</STYLE>`,
+  `>"'>`,
+  `<img%20src%3D%26%23x6a;%26%23x61;%26%23x76;%26%23x61;%26%23x73;%26%23x63;%26%23x72;%26%23x69;%26%23x70;%26%23x74;%26%23x3a;`,
+  `alert(%26quot;%26%23x20;XSS%26%23x20;Test%26%23x20;Successful%26quot;)>`,
+  `">`,
+  `>"`,
+  `'';!--"<XSS>=&{()}`,
+  `&<WBR>#x27&#x58&#x53&#x53&#x27&#x29>`,
+  `OR 1=1`,
+  `' OR 1=1--`,
+  `' OR '1'='1`,
+  `; OR '1'='1'`,
+  `'||(elt(-3+5,bin(15),ord(10),hex(char(45))))`,
+  `||6`,
+  `'||'6`,
+  `(||6)`,
+  `) UNION SELECT%20*%20FROM%20INFORMATION_SCHEMA.TABLES;`,
+  `' having 1=1--`,
+  `UNI/**/ON SEL/**/ECT`,
+  `+or+isnull%281%2F0%29+%2F*`,
+  `OR/**/1=1`,
+  `$$/**/1=1`,
+  `$$ 1=1`
+];
+
 module.exports = () => {
   describe('Current User', () => {
     describe('Valid', () => {
@@ -420,6 +449,118 @@ module.exports = () => {
 
         expect(res.statusCode).toEqual(400);
         expect(res.body).toHaveProperty('type', 'user-prop-error');
+      });
+
+      test('Edit Current User (user 1) - Edit user_data security', async () => {
+        for (let i = 0; i < XSS_AND_SQL_INJECTION.length; i++) {
+          // Edit
+          var editRes = await Travelling.User.Current.edit(
+            { user_data: { asdf: XSS_AND_SQL_INJECTION[i] } },
+            userContainer.user1Token
+          );
+
+          expect(editRes.body.msg).toEqual('User data contains invalid character(s).');
+          expect(editRes.statusCode).toEqual(400);
+
+          // Edit property
+          var editPropertyRes = await Travelling.User.Current.editProperty(
+            XSS_AND_SQL_INJECTION[i],
+            `user_data.badprop`,
+            userContainer.user1Token
+          );
+
+          expect(editPropertyRes.body.msg).toEqual('User data contains invalid character(s).');
+          expect(editPropertyRes.statusCode).toEqual(400);
+
+          // Edit user_data property
+          var editUserDataPropertyRes = await Travelling.User.Current.editUserDataProperty(
+            XSS_AND_SQL_INJECTION[i],
+            'badprop',
+            userContainer.user1Token
+          );
+
+          expect(editUserDataPropertyRes.body.msg).toEqual('User data contains invalid character(s).');
+          expect(editUserDataPropertyRes.statusCode).toEqual(400);
+        }
+      });
+
+      test('Edit Current User (user 1) - Edit user_data property value security', async () => {
+        // Edit property value
+        var editPropertyValueRes = await Travelling.User.Current.editPropertyValue(
+          `user_data.bad$%^`,
+          '$>',
+          userContainer.user1Token
+        );
+        expect([400, 404]).toContain(editPropertyValueRes.statusCode);
+
+        // Edit user_data property value
+        var editUserDataPropertyValueRes = await Travelling.User.Current.editUserDataPropertyValue(
+          `user_data.bad(.)`,
+          '*!',
+          userContainer.user1Token
+        );
+        expect([400, 404]).toContain(editUserDataPropertyValueRes.statusCode);
+      });
+
+      test('Edit Current User (userDomain2Token) - Edit user_data security', async () => {
+        for (let i = 0; i < XSS_AND_SQL_INJECTION.length; i++) {
+          // Edit
+          var editRes = await Travelling.User.Domain.edit(
+            { user_data: { asdf: XSS_AND_SQL_INJECTION[i] } },
+            'test.com',
+            'test_domain_2@test.com',
+            userContainer.user1Token
+          );
+
+          expect(editRes.body.msg).toEqual('User data contains invalid character(s).');
+          expect(editRes.statusCode).toEqual(400);
+
+          // Edit property
+          var editPropertyRes = await Travelling.User.Domain.editProperty(
+            XSS_AND_SQL_INJECTION[i],
+            'test.com',
+            'test_domain_2@test.com',
+            `user_data.badprop`,
+            userContainer.user1Token
+          );
+
+          expect(editPropertyRes.body.msg).toEqual('User data contains invalid character(s).');
+          expect(editPropertyRes.statusCode).toEqual(400);
+
+          // Edit user_data property
+          var editUserDataPropertyRes = await Travelling.User.Domain.editUserDataProperty(
+            XSS_AND_SQL_INJECTION[i],
+            'test.com',
+            'test_domain_2@test.com',
+            'badprop',
+            userContainer.user1Token
+          );
+
+          expect(editUserDataPropertyRes.body.msg).toEqual('User data contains invalid character(s).');
+          expect(editUserDataPropertyRes.statusCode).toEqual(400);
+        }
+      });
+
+      test('Edit Current User (user 1) - Edit user_data property value security', async () => {
+        // Edit property value
+        var editPropertyValueRes = await Travelling.User.Domain.editPropertyValue(
+          'test.com',
+          'test_domain_2@test.com',
+          `user_data.bad$%^`,
+          '$>',
+          userContainer.user1Token
+        );
+        expect([400, 404]).toContain(editPropertyValueRes.statusCode);
+
+        // Edit user_data property value
+        var editUserDataPropertyValueRes = await Travelling.User.Domain.editUserDataPropertyValue(
+          'test.com',
+          'test_domain_2@test.com',
+          `user_data.bad(.)`,
+          '*!',
+          userContainer.user1Token
+        );
+        expect([400, 404]).toContain(editUserDataPropertyValueRes.statusCode);
       });
 
       test('Add [Pre-Existing] Group Inheritance User Domain 2', async () => {
