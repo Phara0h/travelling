@@ -1,6 +1,20 @@
 
 
+#### [v2.18.0](https://github.com/Dragohm/travelling/compare/v2.17.3...v2.18.0)
+
+- Feature #60 edit user data with dot notation [`#22`](https://github.com/Dragohm/travelling/pull/22)
+- Add user data sec tests [`6a1e809`](https://github.com/Dragohm/travelling/commit/6a1e8099f892d1d68fff5885fccafe3ea6b17d11)
+- Add user data validation [`d3f6733`](https://github.com/Dragohm/travelling/commit/d3f67336ab65e4f5b8c5112a01fed8c738f9cd96)
+- Other mr comment fix [`5a1a1ea`](https://github.com/Dragohm/travelling/commit/5a1a1ea33041aaa2bca068c0df269f02fe7e8267)
+- MR comment update [`2046af5`](https://github.com/Dragohm/travelling/commit/2046af57e5c9ab87ce2c9408eb3d7c82e5aed5ac)
+- fix stuff [`db48839`](https://github.com/Dragohm/travelling/commit/db488393a0359064d03c0736f818ceff75577ffc)
+- Add endpoints [`cf27f51`](https://github.com/Dragohm/travelling/commit/cf27f511f0f41fe3611b35e88c0a39262d780984)
+- Add tests [`3723929`](https://github.com/Dragohm/travelling/commit/3723929a408a3a425a152270b2c8d8919ff469f2)
+- Add user prop object editing by value [`1b7c46d`](https://github.com/Dragohm/travelling/commit/1b7c46dab3e138a1dadc7a7e97e1196b431da5db)
+
 #### [v2.17.3](https://github.com/Dragohm/travelling/compare/v2.17.2...v2.17.3)
+
+> 26 July 2022
 
 - Update user.js [`8cf0cca`](https://github.com/Dragohm/travelling/commit/8cf0ccac72ed4d1a7f3c3929f0964a4bc60a5a29)
 
