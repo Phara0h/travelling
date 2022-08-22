@@ -85,7 +85,7 @@ class User extends Base(BaseModel, 'users', {
                   email_verify boolean DEFAULT false,
                   avatar bytea,
                   created_on timestamp with time zone default current_timestamp ,
-                  user_data text,
+                  user_data json,
                   __user_data character varying(258),
                   updated_on timestamp with time zone default current_timestamp,
                   eprofile character varying(350),
@@ -200,10 +200,6 @@ class User extends Base(BaseModel, 'users', {
 
     if (u.avatar != null) {
       u.avatar = u.avatar.toString('utf8');
-    }
-
-    if (u.user_data != null) {
-      u.user_data = JSON.parse(u.user_data.toString('utf8'));
     }
 
     delete u.password;

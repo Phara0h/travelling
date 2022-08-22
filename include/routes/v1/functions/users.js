@@ -101,17 +101,65 @@ async function editUser(opts) {
   var model = opts.req.body;
   var oldModel;
 
-  if (config.audit.edit.enable === true) {
-    oldModel = await getUser(opts);
+  let splitProp = [];
+
+  if (opts.req.params.prop && typeof opts.req.params.prop === 'string' && opts.req.params.prop.indexOf('.' >= 0)) {
+    splitProp = opts.req.params.prop.split('.');
   }
 
-  if (opts.req.params.prop) {
-    model = opts.req.params.propdata
-      ? { [opts.req.params.prop]: opts.req.params.propdata }
-      : { [opts.req.params.prop]: opts.req.body };
+  if (config.audit.edit.enable === true || splitProp[0] === 'user_data') {
+    if (splitProp[0] === 'user_data' && opts.req.params.prop !== 'user_data') {
+      const params = opts.req.params;
 
-    if (config.audit.edit.enable === true) {
-      oldModel = { [opts.req.params.prop]: oldModel };
+      // get user by id and domain (instead of by user_data)
+      opts.req.params = { id: params.id, domain: params.domain };
+      const full = await getUser(opts);
+
+      oldModel = full.user_data || {};
+
+      // Put original params back in
+      opts.req.params = params;
+    } else {
+      oldModel = await getUser(opts);
+    }
+  }
+
+  // Verify if user_data edit it valid
+  let validUserDataEdit = false;
+
+  if (opts.req.params.prop) {
+    if (splitProp[0] === 'user_data' && opts.req.params.prop !== 'user_data') {
+      // Update user data fields (applies to endpoints that use the 'prop'
+
+      if (splitProp.length !== 2) {
+        opts.res.code(400);
+        return {
+          type: 'user-prop-error',
+          msg: 'Can only edit one user_data property at a time.'
+        };
+      }
+
+      // Keep old user_data
+      model = { user_data: Object.assign({}, oldModel || {}) };
+
+      // Remove property if set to undefined
+      if ((opts.req.params.propdata === undefined || opts.req.params.propdata === 'undefined') && !opts.req.body) {
+        delete model.user_data[splitProp[1]];
+      } else {
+        // update property
+        model.user_data[splitProp[1]] = opts.req.params.propdata || opts.req.body;
+      }
+
+      validUserDataEdit = true;
+    } else {
+      // Update props other than 'user_data'
+      model = opts.req.params.propdata
+        ? { [opts.req.params.prop]: opts.req.params.propdata }
+        : { [opts.req.params.prop]: opts.req.body };
+
+      if (config.audit.edit.enable === true) {
+        oldModel = { [opts.req.params.prop]: oldModel };
+      }
     }
   }
 
@@ -151,7 +199,7 @@ async function editUser(opts) {
   }
 
   if (user && user.length > 0) {
-    if (opts.req.params.prop && user[0][opts.req.params.prop] === undefined) {
+    if (opts.req.params.prop && user[0][opts.req.params.prop] === undefined && !validUserDataEdit) {
       opts.res.code(400);
       return {
         type: 'user-prop-error',
@@ -189,7 +237,11 @@ async function editUser(opts) {
       await audit.splitAndCreateAudits(auditObj);
     }
 
-    return opts.req.params.prop ? user[0][opts.req.params.prop] : user[0];
+    if (validUserDataEdit) {
+      return user[0].user_data;
+    } else {
+      return opts.req.params.prop ? user[0][opts.req.params.prop] : user[0];
+    }
   }
 
   opts.res.code(400);
