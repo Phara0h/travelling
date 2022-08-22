@@ -3563,7 +3563,10 @@ class User {
         'api/v1/user/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype',
       addgroupinheritance:
         'api/v1/user/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype',
+      edituserdatapropertyvalue:
+        'api/v1/user/id/:id/property/userdata/:property/:value',
       editpropertyvalue: 'api/v1/user/id/:id/property/:property/:value',
+      edituserdataproperty: 'api/v1/user/id/:id/property/userdata/:property',
       editproperty: 'api/v1/user/id/:id/property/:property',
       edit: 'api/v1/user/id/:id',
       getproperty: 'api/v1/user/id/:id/property/:property',
@@ -3672,6 +3675,42 @@ class User {
   }
 
   /**
+   * editUserDataPropertyValue - Edit a current user's property data as a path param.
+   *
+   * Path: api/v1/user/id/:id/property/userdata/:property/:value
+   * @param {any} id Id or Username  (example: 595d3f9a-5383-4da9-a465-b975d8a5e28e)
+   * @param {any} property user_data object's property to edit. (example: notes)
+   * @param {any} value user_data object's property value. (example: asdfa sdfa sdf)
+   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+   */
+  static async editUserDataPropertyValue(
+    id,
+    property,
+    value,
+    authorization_bearer,
+    opts
+  ) {
+    var options = {
+      method: 'PUT',
+      simple: false,
+      uri:
+        hostUrl +
+        '/' +
+        `api/v1/user/id/${id}/property/userdata/${property}/${value}`,
+      authorization: {
+        bearer: authorization_bearer,
+      },
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
+  }
+
+  /**
    * editPropertyValue - Edit a current user's property data as a path param.
    *
    * Path: api/v1/user/id/:id/property/:property/:value
@@ -3691,6 +3730,45 @@ class User {
       method: 'PUT',
       simple: false,
       uri: hostUrl + '/' + `api/v1/user/id/${id}/property/${property}/${value}`,
+      authorization: {
+        bearer: authorization_bearer,
+      },
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
+  }
+
+  /**
+   * editUserDataProperty - Edit a user's property by id.
+   *
+   * Path: api/v1/user/id/:id/property/userdata/:property
+   * @param {Object} body
+   * @param {any} id Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA)
+   * @param {any} property user_data object's property to edit. (example: notes)
+   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+   * @example
+   * body
+   * ```text
+   * asdfasdf
+   * ```
+   */
+  static async editUserDataProperty(
+    body,
+    id,
+    property,
+    authorization_bearer,
+    opts
+  ) {
+    var options = {
+      method: 'PUT',
+      simple: false,
+      uri: hostUrl + '/' + `api/v1/user/id/${id}/property/userdata/${property}`,
+      body,
       authorization: {
         bearer: authorization_bearer,
       },
@@ -3845,8 +3923,12 @@ class UserDomain {
         'api/v1/user/domain/:domain/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype',
       addgroupinheritance:
         'api/v1/user/domain/:domain/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype',
+      edituserdatapropertyvalue:
+        'api/v1/user/domain/:domain/id/:id/property/userdata/:property/:value',
       editpropertyvalue:
         'api/v1/user/domain/:domain/id/:id/property/:property/:value',
+      edituserdataproperty:
+        'api/v1/user/domain/:domain/id/:id/property/userdata/:property',
       editproperty: 'api/v1/user/domain/:domain/id/:id/property/:property',
       edit: 'api/v1/user/domain/:domain/id/:id',
       getproperty: 'api/v1/user/domain/:domain/id/:id/property/:property',
@@ -3960,6 +4042,44 @@ class UserDomain {
   }
 
   /**
+   * editUserDataPropertyValue - Edit a current user's property data as a path param.
+   *
+   * Path: api/v1/user/domain/:domain/id/:id/property/userdata/:property/:value
+   * @param {any} domain Domain (example: test.com) (example: test.com)
+   * @param {any} id id, username or email. (example: 75d2ed5e-bc5b-4129-a1ec-657cf27e6294)
+   * @param {any} property Property to modify (example: locked) (example: notes)
+   * @param {any} value Value to change property to. (example: asdf asdfawsdf)
+   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+   */
+  static async editUserDataPropertyValue(
+    domain,
+    id,
+    property,
+    value,
+    authorization_bearer,
+    opts
+  ) {
+    var options = {
+      method: 'PUT',
+      simple: false,
+      uri:
+        hostUrl +
+        '/' +
+        `api/v1/user/domain/${domain}/id/${id}/property/userdata/${property}/${value}`,
+      authorization: {
+        bearer: authorization_bearer,
+      },
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
+  }
+
+  /**
    * editPropertyValue - Edit a current user's property data as a path param.
    *
    * Path: api/v1/user/domain/:domain/id/:id/property/:property/:value
@@ -3984,6 +4104,50 @@ class UserDomain {
         hostUrl +
         '/' +
         `api/v1/user/domain/${domain}/id/${id}/property/${property}/${value}`,
+      authorization: {
+        bearer: authorization_bearer,
+      },
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
+  }
+
+  /**
+   * editUserDataProperty - Edit a user's property by id.
+   *
+   * Path: api/v1/user/domain/:domain/id/:id/property/userdata/:property
+   * @param {Object} body
+   * @param {any} domain Domain (example: test.com) (example: test.com)
+   * @param {any} id id, username or email. (example: 75d2ed5e-bc5b-4129-a1ec-657cf27e6294)
+   * @param {any} property Property to modify (example: locked) (example: notes)
+   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+   * @example
+   * body
+   * ```text
+   * asdfasdf asdf
+   * ```
+   */
+  static async editUserDataProperty(
+    body,
+    domain,
+    id,
+    property,
+    authorization_bearer,
+    opts
+  ) {
+    var options = {
+      method: 'PUT',
+      simple: false,
+      uri:
+        hostUrl +
+        '/' +
+        `api/v1/user/domain/${domain}/id/${id}/property/userdata/${property}`,
+      body,
       authorization: {
         bearer: authorization_bearer,
       },
@@ -4147,7 +4311,10 @@ class UserCurrent {
         'api/v1/user/me/inheritance/group/:inheritgroupid/type/:inheritgrouptype',
       addgroupinheritance:
         'api/v1/user/me/inheritance/group/:inheritgroupid/type/:inheritgrouptype',
+      edituserdatapropertyvalue:
+        'api/v1/user/me/property/userdata/:property/:value',
       editpropertyvalue: 'api/v1/user/me/property/:property/:value',
+      edituserdataproperty: 'api/v1/user/me/property/userdata/:property',
       editproperty: 'api/v1/user/me/property/:property',
       deletetoken: 'api/v1/user/me/token/:id',
       edit: 'api/v1/user/me',
@@ -4268,6 +4435,38 @@ class UserCurrent {
   }
 
   /**
+   * editUserDataPropertyValue - Edit a current user's property data as a path param.
+   *
+   * Path: api/v1/user/me/property/userdata/:property/:value
+   * @param {any} property user_data object's property to edit. (example: notes)
+   * @param {any} value user_data object's property value. (example: asdf asdfasdf asdf )
+   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+   */
+  static async editUserDataPropertyValue(
+    property,
+    value,
+    authorization_bearer,
+    opts
+  ) {
+    var options = {
+      method: 'PUT',
+      simple: false,
+      uri:
+        hostUrl + '/' + `api/v1/user/me/property/userdata/${property}/${value}`,
+      authorization: {
+        bearer: authorization_bearer,
+      },
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
+  }
+
+  /**
    * editPropertyValue - Edit a current user's property data as a path param.
    *
    * Path: api/v1/user/me/property/:property/:value
@@ -4280,6 +4479,43 @@ class UserCurrent {
       method: 'PUT',
       simple: false,
       uri: hostUrl + '/' + `api/v1/user/me/property/${property}/${value}`,
+      authorization: {
+        bearer: authorization_bearer,
+      },
+    };
+    if (defaultOpts) {
+      options = Object.assign(options, defaultOpts);
+    }
+    if (opts) {
+      options = Object.assign(options, opts);
+    }
+    return await fasq.request(options);
+  }
+
+  /**
+   * editUserDataProperty - Edit a current user's property data.
+   *
+   * Path: api/v1/user/me/property/userdata/:property
+   * @param {Object} body
+   * @param {any} property user_data object's property to edit. (example: notes)
+   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+   * @example
+   * body
+   * ```text
+   * asdfsasdfdsadf
+   * ```
+   */
+  static async editUserDataProperty(
+    body,
+    property,
+    authorization_bearer,
+    opts
+  ) {
+    var options = {
+      method: 'PUT',
+      simple: false,
+      uri: hostUrl + '/' + `api/v1/user/me/property/userdata/${property}`,
+      body,
       authorization: {
         bearer: authorization_bearer,
       },

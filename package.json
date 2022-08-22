@@ -61,7 +61,7 @@
     "http-proxy": "^1.17.0",
     "ioredis": "^4.14.1",
     "nodemailer": "^6.3.0",
-    "nstats": "latest",
+    "nstats": "4.2.0",
     "wog": "latest"
   },
   "devDependencies": {

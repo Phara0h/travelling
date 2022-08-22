@@ -1784,6 +1784,53 @@
 							"response": []
 						},
 						{
+							"name": "Edit User Data Property",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "asdfsasdfdsadf",
+									"options": {
+										"raw": {
+											"language": "text"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/user/me/property/userdata/:property",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"me",
+										"property",
+										"userdata",
+										":property"
+									],
+									"variable": [
+										{
+											"key": "property",
+											"value": "notes",
+											"description": "user_data object's property to edit."
+										}
+									]
+								},
+								"description": "Edit a current user's property data."
+							},
+							"response": []
+						},
+						{
 							"name": "Edit Property Value",
 							"request": {
 								"method": "PUT",
@@ -1817,6 +1864,50 @@
 										{
 											"key": "value",
 											"value": "595d3f9a-5383-4da9-a465-b975d8a5e28e"
+										}
+									]
+								},
+								"description": "Edit a current user's property data as a path param."
+							},
+							"response": []
+						},
+						{
+							"name": "Edit User Data Property Value",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/user/me/property/userdata/:property/:value",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"me",
+										"property",
+										"userdata",
+										":property",
+										":value"
+									],
+									"variable": [
+										{
+											"key": "property",
+											"value": "notes",
+											"description": "user_data object's property to edit."
+										},
+										{
+											"key": "value",
+											"value": "asdf asdfasdf asdf ",
+											"description": "user_data object's property value."
 										}
 									]
 								},
@@ -2249,6 +2340,66 @@
 							"response": []
 						},
 						{
+							"name": "Edit User Data Property",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "asdfasdf asdf",
+									"options": {
+										"raw": {
+											"language": "text"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/user/domain/:domain/id/:id/property/userdata/:property",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"domain",
+										":domain",
+										"id",
+										":id",
+										"property",
+										"userdata",
+										":property"
+									],
+									"variable": [
+										{
+											"key": "domain",
+											"value": "test.com",
+											"description": "Domain (example: test.com)"
+										},
+										{
+											"key": "id",
+											"value": "75d2ed5e-bc5b-4129-a1ec-657cf27e6294",
+											"description": "id, username or email."
+										},
+										{
+											"key": "property",
+											"value": "notes",
+											"description": "Property to modify (example: locked)"
+										}
+									]
+								},
+								"description": "Edit a user's property by id."
+							},
+							"response": []
+						},
+						{
 							"name": "Edit Property Value",
 							"request": {
 								"method": "PUT",
@@ -2296,6 +2447,63 @@
 										{
 											"key": "value",
 											"value": "true",
+											"description": "Value to change property to."
+										}
+									]
+								},
+								"description": "Edit a current user's property data as a path param."
+							},
+							"response": []
+						},
+						{
+							"name": "Edit User Data Property Value",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/user/domain/:domain/id/:id/property/userdata/:property/:value",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"domain",
+										":domain",
+										"id",
+										":id",
+										"property",
+										"userdata",
+										":property",
+										":value"
+									],
+									"variable": [
+										{
+											"key": "domain",
+											"value": "test.com",
+											"description": "Domain (example: test.com)"
+										},
+										{
+											"key": "id",
+											"value": "75d2ed5e-bc5b-4129-a1ec-657cf27e6294",
+											"description": "id, username or email."
+										},
+										{
+											"key": "property",
+											"value": "notes",
+											"description": "Property to modify (example: locked)"
+										},
+										{
+											"key": "value",
+											"value": "asdf asdfawsdf",
 											"description": "Value to change property to."
 										}
 									]
@@ -2645,6 +2853,59 @@
 					"response": []
 				},
 				{
+					"name": "Edit User Data Property",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "asdfasdf",
+							"options": {
+								"raw": {
+									"language": "text"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TRAVELLING}}/api/v1/user/id/:id/property/userdata/:property",
+							"host": [
+								"{{TRAVELLING}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"id",
+								":id",
+								"property",
+								"userdata",
+								":property"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "39A2BC37-61AE-434C-B245-A731A27CF8DA",
+									"description": "Id or Username "
+								},
+								{
+									"key": "property",
+									"value": "notes",
+									"description": "user_data object's property to edit."
+								}
+							]
+						},
+						"description": "Edit a user's property by id."
+					},
+					"response": []
+				},
+				{
 					"name": "Edit Property Value",
 					"request": {
 						"method": "PUT",
@@ -2684,6 +2945,56 @@
 								{
 									"key": "value",
 									"value": "595d3f9a-5383-4da9-a465-b975d8a5e28e"
+								}
+							]
+						},
+						"description": "Edit a current user's property data as a path param."
+					},
+					"response": []
+				},
+				{
+					"name": "Edit User Data Property Value",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{TRAVELLING}}/api/v1/user/id/:id/property/userdata/:property/:value",
+							"host": [
+								"{{TRAVELLING}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"id",
+								":id",
+								"property",
+								"userdata",
+								":property",
+								":value"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "595d3f9a-5383-4da9-a465-b975d8a5e28e",
+									"description": "Id or Username "
+								},
+								{
+									"key": "property",
+									"value": "notes",
+									"description": "user_data object's property to edit."
+								},
+								{
+									"key": "value",
+									"value": "asdfa sdfa sdf",
+									"description": "user_data object's property value."
 								}
 							]
 						},

@@ -2155,7 +2155,9 @@ Path: api/v1/users/domain/:domain
     * [.delete(id, authorization_bearer)](#User.delete)
     * [.removeGroupInheritance(id, inheritgroupid, inheritgrouptype, authorization_bearer)](#User.removeGroupInheritance)
     * [.addGroupInheritance(id, inheritgroupid, inheritgrouptype, authorization_bearer)](#User.addGroupInheritance)
+    * [.editUserDataPropertyValue(id, property, value, authorization_bearer)](#User.editUserDataPropertyValue)
     * [.editPropertyValue(id, property, value, authorization_bearer)](#User.editPropertyValue)
+    * [.editUserDataProperty(body, id, property, authorization_bearer)](#User.editUserDataProperty)
     * [.editProperty(body, id, property, authorization_bearer)](#User.editProperty)
     * [.edit(body, id, authorization_bearer)](#User.edit)
     * [.getProperty(id, property, authorization_bearer)](#User.getProperty)
@@ -2207,6 +2209,22 @@ Path: api/v1/user/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptyp
 | inheritgrouptype | <code>any</code> | type of the  group to inherit (example: testgroup) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
+<a name="User.editUserDataPropertyValue"></a>
+
+### User.editUserDataPropertyValue(id, property, value, authorization_bearer)
+editUserDataPropertyValue - Edit a current user's property data as a path param.
+
+Path: api/v1/user/id/:id/property/userdata/:property/:value
+
+**Kind**: static method of [<code>User</code>](#User)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>any</code> | Id or Username  (example: 595d3f9a-5383-4da9-a465-b975d8a5e28e) |
+| property | <code>any</code> | user_data object's property to edit. (example: notes) |
+| value | <code>any</code> | user_data object's property value. (example: asdfa sdfa sdf) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
 <a name="User.editPropertyValue"></a>
 
 ### User.editPropertyValue(id, property, value, authorization_bearer)
@@ -2223,6 +2241,27 @@ Path: api/v1/user/id/:id/property/:property/:value
 | value | <code>any</code> | (example: 595d3f9a-5383-4da9-a465-b975d8a5e28e) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
+<a name="User.editUserDataProperty"></a>
+
+### User.editUserDataProperty(body, id, property, authorization_bearer)
+editUserDataProperty - Edit a user's property by id.
+
+Path: api/v1/user/id/:id/property/userdata/:property
+
+**Kind**: static method of [<code>User</code>](#User)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| id | <code>any</code> | Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA) |
+| property | <code>any</code> | user_data object's property to edit. (example: notes) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+**Example**  
+body
+```text
+asdfasdf
+```
 <a name="User.editProperty"></a>
 
 ### User.editProperty(body, id, property, authorization_bearer)
@@ -2305,7 +2344,9 @@ Path: api/v1/user/id/:id
     * [.delete(domain, id, authorization_bearer)](#UserDomain.delete)
     * [.removeGroupInheritance(domain, id, inheritgroupid, inheritgrouptype, authorization_bearer)](#UserDomain.removeGroupInheritance)
     * [.addGroupInheritance(domain, id, inheritgroupid, inheritgrouptype, authorization_bearer)](#UserDomain.addGroupInheritance)
+    * [.editUserDataPropertyValue(domain, id, property, value, authorization_bearer)](#UserDomain.editUserDataPropertyValue)
     * [.editPropertyValue(domain, id, property, value, authorization_bearer)](#UserDomain.editPropertyValue)
+    * [.editUserDataProperty(body, domain, id, property, authorization_bearer)](#UserDomain.editUserDataProperty)
     * [.editProperty(body, domain, id, property, authorization_bearer)](#UserDomain.editProperty)
     * [.edit(body, domain, id, authorization_bearer)](#UserDomain.edit)
     * [.getProperty(domain, id, property, authorization_bearer)](#UserDomain.getProperty)
@@ -2360,6 +2401,23 @@ Path: api/v1/user/domain/:domain/id/:id/inheritance/group/:inheritgroupid/type/:
 | inheritgrouptype | <code>any</code> | type of the group to inherit (example: group) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
+<a name="UserDomain.editUserDataPropertyValue"></a>
+
+### UserDomain.editUserDataPropertyValue(domain, id, property, value, authorization_bearer)
+editUserDataPropertyValue - Edit a current user's property data as a path param.
+
+Path: api/v1/user/domain/:domain/id/:id/property/userdata/:property/:value
+
+**Kind**: static method of [<code>UserDomain</code>](#UserDomain)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| domain | <code>any</code> | Domain (example: test.com) (example: test.com) |
+| id | <code>any</code> | id, username or email. (example: 75d2ed5e-bc5b-4129-a1ec-657cf27e6294) |
+| property | <code>any</code> | Property to modify (example: locked) (example: notes) |
+| value | <code>any</code> | Value to change property to. (example: asdf asdfawsdf) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
 <a name="UserDomain.editPropertyValue"></a>
 
 ### UserDomain.editPropertyValue(domain, id, property, value, authorization_bearer)
@@ -2377,6 +2435,28 @@ Path: api/v1/user/domain/:domain/id/:id/property/:property/:value
 | value | <code>any</code> | Value to change property to. (example: true) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
+<a name="UserDomain.editUserDataProperty"></a>
+
+### UserDomain.editUserDataProperty(body, domain, id, property, authorization_bearer)
+editUserDataProperty - Edit a user's property by id.
+
+Path: api/v1/user/domain/:domain/id/:id/property/userdata/:property
+
+**Kind**: static method of [<code>UserDomain</code>](#UserDomain)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| domain | <code>any</code> | Domain (example: test.com) (example: test.com) |
+| id | <code>any</code> | id, username or email. (example: 75d2ed5e-bc5b-4129-a1ec-657cf27e6294) |
+| property | <code>any</code> | Property to modify (example: locked) (example: notes) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+**Example**  
+body
+```text
+asdfasdf asdf
+```
 <a name="UserDomain.editProperty"></a>
 
 ### UserDomain.editProperty(body, domain, id, property, authorization_bearer)
@@ -2463,7 +2543,9 @@ Path: api/v1/user/domain/:domain/id/:id
     * [.registerToken(body, authorization_bearer)](#UserCurrent.registerToken)
     * [.removeGroupInheritance(inheritgroupid, inheritgrouptype, authorization_bearer)](#UserCurrent.removeGroupInheritance)
     * [.addGroupInheritance(inheritgroupid, inheritgrouptype, authorization_bearer)](#UserCurrent.addGroupInheritance)
+    * [.editUserDataPropertyValue(property, value, authorization_bearer)](#UserCurrent.editUserDataPropertyValue)
     * [.editPropertyValue(property, value, authorization_bearer)](#UserCurrent.editPropertyValue)
+    * [.editUserDataProperty(body, property, authorization_bearer)](#UserCurrent.editUserDataProperty)
     * [.editProperty(body, property, authorization_bearer)](#UserCurrent.editProperty)
     * [.deleteToken(id, authorization_bearer)](#UserCurrent.deleteToken)
     * [.edit(body, authorization_bearer)](#UserCurrent.edit)
@@ -2526,6 +2608,21 @@ Path: api/v1/user/me/inheritance/group/:inheritgroupid/type/:inheritgrouptype
 | inheritgrouptype | <code>any</code> | type of the  group to inherit (example: group) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
+<a name="UserCurrent.editUserDataPropertyValue"></a>
+
+### UserCurrent.editUserDataPropertyValue(property, value, authorization_bearer)
+editUserDataPropertyValue - Edit a current user's property data as a path param.
+
+Path: api/v1/user/me/property/userdata/:property/:value
+
+**Kind**: static method of [<code>UserCurrent</code>](#UserCurrent)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| property | <code>any</code> | user_data object's property to edit. (example: notes) |
+| value | <code>any</code> | user_data object's property value. (example: asdf asdfasdf asdf ) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
 <a name="UserCurrent.editPropertyValue"></a>
 
 ### UserCurrent.editPropertyValue(property, value, authorization_bearer)
@@ -2541,6 +2638,26 @@ Path: api/v1/user/me/property/:property/:value
 | value | <code>any</code> | (example: 595d3f9a-5383-4da9-a465-b975d8a5e28e) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
+<a name="UserCurrent.editUserDataProperty"></a>
+
+### UserCurrent.editUserDataProperty(body, property, authorization_bearer)
+editUserDataProperty - Edit a current user's property data.
+
+Path: api/v1/user/me/property/userdata/:property
+
+**Kind**: static method of [<code>UserCurrent</code>](#UserCurrent)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| property | <code>any</code> | user_data object's property to edit. (example: notes) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+**Example**  
+body
+```text
+asdfsasdfdsadf
+```
 <a name="UserCurrent.editProperty"></a>
 
 ### UserCurrent.editProperty(body, property, authorization_bearer)
