@@ -398,7 +398,7 @@ _How long the persistent token cookie will last for in days._ </br>
 
 > **Default**: `30`
 
-#### TRAVELLING_COOKIE_TOKEN_CHECKABLE
+##### TRAVELLING_COOKIE_TOKEN_CHECKABLE
 
 _Adds JavaScript accessible cookie, called `trav:ls`, contianing the expiration of the `trav:tok` cookie._ </br>
 
