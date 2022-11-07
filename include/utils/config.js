@@ -157,7 +157,8 @@ const config = {
     token: {
       secret: misc.isSetDefault(process.env.TRAVELLING_COOKIE_TOKEN_SECRET, null),
       salt: misc.isSetDefault(process.env.TRAVELLING_COOKIE_TOKEN_SALT, null),
-      expiration: misc.isSetDefault(Number(process.env.TRAVELLING_COOKIE_TOKEN_EXPIRATION), 30) // days
+      expiration: misc.isSetDefault(Number(process.env.TRAVELLING_COOKIE_TOKEN_EXPIRATION), 30), // days
+      checkable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_COOKIE_TOKEN_CHECKABLE), true) // Adds js accessible cookie (trav:ls) contianing expiration of trav:tok
     },
     domain: misc.isSetDefault(process.env.TRAVELLING_COOKIE_DOMAIN, null),
     security: {
