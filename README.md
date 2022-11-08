@@ -4016,7 +4016,13 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v2.18.1](https://github.com/Trazi-Ventures/travelling/compare/v2.18.0...v2.18.1)
+
+- Update auth.js [`0f42d75`](https://github.com/Trazi-Ventures/travelling/commit/0f42d75b8c84ff53fd31785561ab23c726ec3f28)
+
 #### [v2.18.0](https://github.com/Trazi-Ventures/travelling/compare/v2.17.3...v2.18.0)
+
+> 22 August 2022
 
 - Feature #60 edit user data with dot notation [`#22`](https://github.com/Trazi-Ventures/travelling/pull/22)
 - Add user data sec tests [`6a1e809`](https://github.com/Trazi-Ventures/travelling/commit/6a1e8099f892d1d68fff5885fccafe3ea6b17d11)
