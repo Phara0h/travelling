@@ -310,7 +310,7 @@ async function resetPasswordRoute(req, res, autologin = false) {
 var logoutRoute = async (req, res) => {
   req.logout(req, res);
 
-  if (req.query.redirect_uri) {
+  if (req.query.redirect_uri && config.portal.enable) {
     res.sendFile(config.portal.filePath + '/src/redirect.html');
     return;
   }
@@ -357,12 +357,18 @@ var getOAuthAuthorizeRoute = async (req, res) => {
         httpOnly: true,
         path: '/' + config.serviceName + '/api/v1/auth/oauth/authorize'
       });
-
-      res.sendFile(
-        !config.token.code.authorizeFlow && userID != ''
-          ? config.portal.filePath + '/src/submit.html'
-          : config.portal.filePath + '/index.html'
-      );
+      if(config.portal.enable) {
+        res.sendFile(
+          !config.token.code.authorizeFlow && userID != ''
+            ? config.portal.filePath + '/src/submit.html'
+            : config.portal.filePath + '/index.html'
+        );
+      } else {
+        res.code(400).send({
+          error: 'invalid_request',
+          error_description: 'Portal is disabled.'
+        });
+      }
     });
   });
 };
