@@ -1,4 +1,5 @@
 const cookie = require('cookie');
+const config = require('../../include/utils/config');
 
 class UserContainer {
   constructor() {
@@ -82,6 +83,12 @@ class UserContainer {
       if (pc['trav:tok']) {
         user.tok = pc['trav:tok'];
       }
+
+      if (config.cookie.token.checkable === true) {
+        if (pc['trav:ls']) {
+          user.ls = pc['trav:ls'];
+        }
+      }
     }
 
     return user;
@@ -96,6 +103,12 @@ class UserContainer {
 
     if (user.tok) {
       cookies += cookie.serialize('trav:tok', user.tok) + '; ';
+    }
+
+    if (config.cookie.token.checkable === true) {
+      if (user.ls) {
+        cookies += cookie.serialize('trav:ls', user.ls) + '; ';
+      }
     }
 
     return cookies;
