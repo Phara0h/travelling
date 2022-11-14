@@ -92,13 +92,27 @@ class CookieToken {
   }
 
   static setAuthCookie(tok, res, date) {
+    const expires = new Date(date.getTime() + config.cookie.token.expiration * 86400000);
+
     res.setCookie('trav:tok', tok, {
-      expires: new Date(date.getTime() + config.cookie.token.expiration * 86400000),
+      expires,
       secure: config.https,
       httpOnly: true,
       domain: config.cookie.domain,
       path: '/'
     });
+
+    if (config.cookie.token.checkable === true) {
+      // Also send accessible cookie with token expiration
+      res.setCookie('trav:ls', 1, {
+        expires,
+        secure: config.https,
+        httpOnly: false, // This should be the only cookie set to false
+        domain: config.cookie.domain,
+        path: '/'
+      });
+    }
+
     return res;
   }
 
@@ -116,6 +130,17 @@ class CookieToken {
       domain: config.cookie.domain,
       path: '/'
     });
+
+    if (config.cookie.token.checkable === true) {
+      res.setCookie('trav:ls', 1, {
+        expires: Date.now(),
+        secure: config.https,
+        httpOnly: false,
+        domain: config.cookie.domain,
+        path: '/'
+      });
+    }
+
     if (span) {
       span.end();
     }
