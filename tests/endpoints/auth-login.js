@@ -1,3 +1,4 @@
+const cookie = require('cookie');
 const config = require('../../include/utils/config');
 
 const { Travelling } = require('../../sdk/node')('http://127.0.0.1:6969/' + config.serviceName, {
@@ -6,10 +7,13 @@ const { Travelling } = require('../../sdk/node')('http://127.0.0.1:6969/' + conf
 var userContainer = require('../include/UserContainer.js');
 var testContainer = require('../include/TestContainer.js');
 const fasq = require('fasquest');
+const { hexToBase64 } = require('@opentelemetry/core');
 
 module.exports = () => {
   describe('Valid', () => {
     test('Login with Test User', async () => {
+      const start = new Date()
+
       var res = await Travelling.Auth.login({
         username: 'test',
         password: 'Pas5w0r!d'
@@ -18,6 +22,29 @@ module.exports = () => {
       userContainer.parseUser1Cookie(res.headers['set-cookie']);
 
       expect(res.statusCode).toEqual(200);
+
+      // Make sure trav.ls token is correct
+      if (config.cookie.token.checkable) {
+        var ls = {}
+        var tok = {}
+
+        for (var i = 0; i < res.headers['set-cookie'].length; i++) {
+          var pc = cookie.parse(res.headers['set-cookie'][i]);
+
+          if (pc['trav:ls']) {
+            ls = pc
+          } else if (pc['trav:tok']) {
+            tok = pc
+          }
+        }
+
+        expect(ls['trav:ls']).toBe('1')
+        expect(ls.Path).toBe('/')
+        expect(ls.Expires).toEqual(tok.Expires)
+
+        const cookieExpires = new Date(ls.Expires)
+        expect(cookieExpires.getTime()).toBeGreaterThan(start.getTime())
+      }
     });
 
     test('Login with Test2 User', async () => {
@@ -28,6 +55,13 @@ module.exports = () => {
 
       userContainer.parseUser2Cookie(res.headers['set-cookie']);
       expect(res.statusCode).toEqual(200);
+
+      expect(userContainer.user2).toHaveProperty('tok');
+      expect(userContainer.user2).toHaveProperty('ssid');
+
+      if (config.cookie.token.checkable) {
+        expect(userContainer.user2).toHaveProperty('ls', '1');
+      }
     });
 
     test('Login with Test2 User Again', async () => {
@@ -58,6 +92,8 @@ module.exports = () => {
     });
 
     test('Login with Test Domain User', async () => {
+      const start = new Date()
+
       var res = await Travelling.Auth.login({
         password: 'Pas5w0r!d',
         email: 'test_domain_1@test.com'
@@ -66,6 +102,29 @@ module.exports = () => {
       userContainer.parseUserDomainCookie(res.headers['set-cookie']);
 
       expect(res.statusCode).toEqual(200);
+
+      // Make sure trav.ls token is correct
+      if (config.cookie.token.checkable) {
+        var ls = {}
+        var tok = {}
+
+        for (var i = 0; i < res.headers['set-cookie'].length; i++) {
+          var pc = cookie.parse(res.headers['set-cookie'][i]);
+
+          if (pc['trav:ls']) {
+            ls = pc
+          } else if (pc['trav:tok']) {
+            tok = pc
+          }
+        }
+
+        expect(ls['trav:ls']).toBe('1')
+        expect(ls.Path).toBe('/')
+        expect(ls.Expires).toEqual(tok.Expires)
+
+        const cookieExpires = new Date(ls.Expires)
+        expect(cookieExpires.getTime()).toBeGreaterThan(start.getTime())
+      }
     });
 
     test('Login with Test Domain User 2', async () => {
