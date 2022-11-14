@@ -1,6 +1,17 @@
 
 
+#### [v2.19.0](https://github.com/Trazi-Ventures/travelling/compare/v2.18.1...v2.19.0)
+
+- Feature #66 - Add checkable cookie [`#23`](https://github.com/Trazi-Ventures/travelling/pull/23)
+- Add ls token tests [`c944378`](https://github.com/Trazi-Ventures/travelling/commit/c944378dd4c3bd1c33beaac29e8bdb0a1663d53e)
+- Update package.json [`349372a`](https://github.com/Trazi-Ventures/travelling/commit/349372aedf5b9feb94072ac4f0e48c0efbe9d3b1)
+- update config.md [`69ba80b`](https://github.com/Trazi-Ventures/travelling/commit/69ba80bd5f4006ed3cb2ee0f087822718b622916)
+- update config.md [`d65c70c`](https://github.com/Trazi-Ventures/travelling/commit/d65c70cd5637975c7c0e0ba40e5d4e5c0282df01)
+- Add trav:ls cookie [`f0d9770`](https://github.com/Trazi-Ventures/travelling/commit/f0d97702af28e62f4157583e5b7208bf60208dc9)
+
 #### [v2.18.1](https://github.com/Trazi-Ventures/travelling/compare/v2.18.0...v2.18.1)
+
+> 8 November 2022
 
 - Update auth.js [`0f42d75`](https://github.com/Trazi-Ventures/travelling/commit/0f42d75b8c84ff53fd31785561ab23c726ec3f28)
 
