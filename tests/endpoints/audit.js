@@ -40,8 +40,14 @@ module.exports = () => {
         expect(res.body[0]).toHaveProperty('by_user_lastname');
         expect(res.body[0]).toHaveProperty('of_user_firstname');
         expect(res.body[0]).toHaveProperty('of_user_lastname');
+        expect(res.body[0]).toHaveProperty('old_val');
+        expect(res.body[0]).toHaveProperty('new_val');
         expect(res.body[0].subaction).not.toBeNull();
         expect(res.body[0].by_user_id).toEqual(testUser1[0].id);
+
+        // Make sure we dont have any hashes
+        expect(res.body[0]).not.toHaveProperty('__old_val');
+        expect(res.body[0]).not.toHaveProperty('__new_val');
       });
 
       test('Get Audit by Test User with Sort', async () => {

@@ -152,6 +152,15 @@ BaseModel.findAllByFilter = async function ({
       rows[i] = await this.decrypt(rows[i], this.getEncryptedProfile(rows[i]), true);
       delete rows[i].password;
       delete rows[i].eprofile;
+
+      const keys = Object.keys(rows[i])
+
+      // Delete rows that begin with '__'
+      for (var j = 0; j < keys.length; j++) {
+        if (keys[j] && keys[j][0] + keys[j][1] === '__') {
+          delete rows[i][keys[j]]
+        }
+      }
     }
   }
 
