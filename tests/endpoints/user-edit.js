@@ -90,6 +90,19 @@ module.exports = () => {
         expect(remove.body).toEqual({});
       });
 
+      test('Edit Test User 1 Email - Newlines and tabs', async () => {
+        const paragraph = `\tasdf asd f sadf.\n\tasdf asdf.\n   asdf!`
+        var res = await Travelling.User.Current.edit(
+          { user_data: { paragraph } },
+          userContainer.user1Token
+        );
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toMatchObject({
+          user_data: { paragraph }
+        });
+      });
+
       test('Edit Test User 1 Email, domain and UserData', async () => {
         var res = await Travelling.User.Current.edit(
           { email: 'testasdf2@fd.foo', user_data: { test: 1, foo: 'bar' } },
@@ -102,7 +115,6 @@ module.exports = () => {
           user_data: { test: 1, foo: 'bar' }
         });
       });
-
       test('Edit Test User 1 - user_data - one property value', async () => {
         var res = await Travelling.User.Current.editPropertyValue(
           'user_data.coolprop',
@@ -130,6 +142,36 @@ module.exports = () => {
         expect(res.body).toStrictEqual({
           test: 1,
           foo: 'bar'
+        });
+      });
+
+      test('Edit Test User 1 - user_data - Newlines and tabs', async () => {
+        const properWriting = `     A very well formatted paragraph, with all the English you could ever need!\n\n\tNow that we are a line under we can write a sentence ending with a period.`
+
+        var res = await Travelling.User.Current.editProperty(
+          properWriting,
+          'user_data.proper-writing',
+          userContainer.user1Token
+        );
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toStrictEqual({
+          test: 1,
+          foo: 'bar',
+          'proper-writing': properWriting
+        });
+
+        // Delete the properness
+        var del = await Travelling.User.Current.editProperty(
+          '',
+          'user_data.proper-writing',
+          userContainer.user1Token
+        );
+
+        expect(del.statusCode).toEqual(200);
+        expect(del.body).toStrictEqual({
+          test: 1,
+          foo: 'bar',
         });
       });
 
@@ -337,6 +379,32 @@ module.exports = () => {
           'test.com',
           'test_domain_2_changed@test.com',
           'zxcv',
+          userContainer.userDomain2Token
+        );
+
+        expect(remove.body).toEqual({});
+        expect(remove.statusCode).toEqual(200);
+      });
+
+      test('Edit User Data Property - Newlines and tabs', async () => {
+        const properWriting = `     A very well formatted paragraph, with all the English you could ever need!\n\n\tNow that we are a line under we can write a sentence ending with a period.`
+
+        var res = await Travelling.User.Domain.editUserDataProperty(
+          properWriting,
+          'test.com',
+          'test_domain_2_changed@test.com',
+          'proper-writing',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.body).toEqual({ 'proper-writing': properWriting });
+        expect(res.statusCode).toEqual(200);
+
+        var remove = await Travelling.User.Domain.editUserDataProperty(
+          undefined,
+          'test.com',
+          'test_domain_2_changed@test.com',
+          'proper-writing',
           userContainer.userDomain2Token
         );
 
