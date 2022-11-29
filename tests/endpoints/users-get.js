@@ -15,6 +15,10 @@ module.exports = () => {
 
       expect(res.statusCode).toEqual(200);
       expect(res.body).toHaveLength(8);
+
+      // Make sure we dont have any hashes
+      expect(res.body[0]).not.toHaveProperty('__email');
+      expect(res.body[0]).not.toHaveProperty('__user_data');
     });
 
     test('Get Users with sort', async () => {
@@ -245,6 +249,10 @@ module.exports = () => {
 
       expect(res.statusCode).toEqual(200);
       expect(res.body).toHaveLength(4);
+
+      // Make sure we dont have any hashes
+      expect(res.body[0]).not.toHaveProperty('__email');
+      expect(res.body[0]).not.toHaveProperty('__user_data');
     });
 
     test('Get Users By Domain', async () => {
@@ -609,6 +617,10 @@ module.exports = () => {
 
       expect(res.statusCode).toEqual(200);
       expect(res.body).toHaveLength(8);
+
+      // Make sure we dont have any hashes
+      expect(res.body[0]).not.toHaveProperty('__email');
+      expect(res.body[0]).not.toHaveProperty('__user_data');
     });
 
     test('Users Count by group ID', async () => {
