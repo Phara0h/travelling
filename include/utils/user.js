@@ -208,7 +208,7 @@ const utilsUser = {
       const keys = Object.keys(user.user_data);
 
       for (let i = 0; i < keys.length; i++) {
-        if (regex.safeName.exec(keys[i]) == null || regex.safeName.exec(user.user_data[keys[i]]) == null) {
+        if (regex.safeName.exec(keys[i]) == null || regex.userData.exec(user.user_data[keys[i]]) == null) {
           return {
             type: 'user-data-error',
             msg: 'User data contains invalid character(s).'

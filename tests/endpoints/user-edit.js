@@ -90,6 +90,19 @@ module.exports = () => {
         expect(remove.body).toEqual({});
       });
 
+      test('Edit Test User 1 Email - Newlines and tabs', async () => {
+        const paragraph = `\tasdf asd f sadf.\n\tasdf asdf.\n   asdf!`
+        var res = await Travelling.User.Current.edit(
+          { user_data: { paragraph } },
+          userContainer.user1Token
+        );
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toMatchObject({
+          user_data: { paragraph }
+        });
+      });
+
       test('Edit Test User 1 Email, domain and UserData', async () => {
         var res = await Travelling.User.Current.edit(
           { email: 'testasdf2@fd.foo', user_data: { test: 1, foo: 'bar' } },
@@ -102,7 +115,6 @@ module.exports = () => {
           user_data: { test: 1, foo: 'bar' }
         });
       });
-
       test('Edit Test User 1 - user_data - one property value', async () => {
         var res = await Travelling.User.Current.editPropertyValue(
           'user_data.coolprop',
@@ -133,6 +145,51 @@ module.exports = () => {
         });
       });
 
+      test('Edit Test User 1 - user_data - Newlines and tabs', async () => {
+        const properWriting = `     A very well formatted paragraph, with all the English you could ever need!\n\n\tNow that we are a line under we can write a sentence ending with a period.`
+
+        var res = await Travelling.User.Current.editProperty(
+          properWriting,
+          'user_data.proper-writing',
+          userContainer.user1Token
+        );
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toStrictEqual({
+          test: 1,
+          foo: 'bar',
+          'proper-writing': properWriting
+        });
+
+        // Delete the properness
+        var del = await Travelling.User.Current.editProperty(
+          '',
+          'user_data.proper-writing',
+          userContainer.user1Token
+        );
+
+        expect(del.statusCode).toEqual(200);
+        expect(del.body).toStrictEqual({
+          test: 1,
+          foo: 'bar',
+        });
+      });
+
+      test('Edit Test User 1 - user_data - allowed special characters', async () => {
+        var res = await Travelling.User.Current.editProperty(
+          ' .,!?$:~#%&-_@',
+          'user_data.speshial',
+          userContainer.user1Token
+        );
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toStrictEqual({
+          test: 1,
+          foo: 'bar',
+          speshial: ' .,!?$:~#%&-_@'
+        });
+      });
+
       test('Delete Test User 1 Token "test123token" ', async () => {
         var res = await Travelling.User.Current.registerToken(
           { name: 'test123token', urls: ['http://127.0.0.1'] },
@@ -144,6 +201,59 @@ module.exports = () => {
         res = await Travelling.User.Current.deleteToken('test123token', userContainer.user1Token);
 
         expect(res.statusCode).toEqual(200);
+      });
+    });
+
+    describe('Invalid', () => {
+      test('Edit Current User (user 1) - Edit user_data security', async () => {
+        for (let i = 0; i < XSS_AND_SQL_INJECTION.length; i++) {
+          // Edit
+          var editRes = await Travelling.User.Current.edit(
+            { user_data: { asdf: XSS_AND_SQL_INJECTION[i] } },
+            userContainer.user1Token
+          );
+
+          expect(editRes.body.msg).toEqual('User data contains invalid character(s).');
+          expect(editRes.statusCode).toEqual(400);
+
+          // Edit property
+          var editPropertyRes = await Travelling.User.Current.editProperty(
+            XSS_AND_SQL_INJECTION[i],
+            `user_data.badprop`,
+            userContainer.user1Token
+          );
+
+          expect(editPropertyRes.body.msg).toEqual('User data contains invalid character(s).');
+          expect(editPropertyRes.statusCode).toEqual(400);
+
+          // Edit user_data property
+          var editUserDataPropertyRes = await Travelling.User.Current.editUserDataProperty(
+            XSS_AND_SQL_INJECTION[i],
+            'badprop',
+            userContainer.user1Token
+          );
+
+          expect(editUserDataPropertyRes.body.msg).toEqual('User data contains invalid character(s).');
+          expect(editUserDataPropertyRes.statusCode).toEqual(400);
+        }
+      });
+
+      test('Edit Current User (user 1) - Edit user_data property value security', async () => {
+        // Edit property value
+        var editPropertyValueRes = await Travelling.User.Current.editPropertyValue(
+          `user_data.bad$%^`,
+          '$>',
+          userContainer.user1Token
+        );
+        expect([400, 404]).toContain(editPropertyValueRes.statusCode);
+
+        // Edit user_data property value
+        var editUserDataPropertyValueRes = await Travelling.User.Current.editUserDataPropertyValue(
+          `user_data.bad(.)`,
+          '*!',
+          userContainer.user1Token
+        );
+        expect([400, 404]).toContain(editUserDataPropertyValueRes.statusCode);
       });
     });
   });
@@ -276,6 +386,32 @@ module.exports = () => {
         expect(remove.statusCode).toEqual(200);
       });
 
+      test('Edit User Data Property - Newlines and tabs', async () => {
+        const properWriting = `     A very well formatted paragraph, with all the English you could ever need!\n\n\tNow that we are a line under we can write a sentence ending with a period.`
+
+        var res = await Travelling.User.Domain.editUserDataProperty(
+          properWriting,
+          'test.com',
+          'test_domain_2_changed@test.com',
+          'proper-writing',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.body).toEqual({ 'proper-writing': properWriting });
+        expect(res.statusCode).toEqual(200);
+
+        var remove = await Travelling.User.Domain.editUserDataProperty(
+          undefined,
+          'test.com',
+          'test_domain_2_changed@test.com',
+          'proper-writing',
+          userContainer.userDomain2Token
+        );
+
+        expect(remove.body).toEqual({});
+        expect(remove.statusCode).toEqual(200);
+      });
+
       test('Edit Property Value [email] User Domain 2', async () => {
         var res = await Travelling.User.Domain.editPropertyValue(
           'test.com',
@@ -323,6 +459,21 @@ module.exports = () => {
 
         expect(remove.body).toEqual({});
         expect(remove.statusCode).toEqual(200);
+      });
+
+      test('Edit Test User Domain 2 - user_data - allowed special characters', async () => {
+        var res = await Travelling.User.Domain.editProperty(
+          ' .,!?$:~#%&-_@',
+          'test.com',
+          'test_domain_2@test.com',
+          'user_data.speshial',
+          userContainer.user1Token
+        );
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toStrictEqual({
+          speshial: ' .,!?$:~#%&-_@'
+        });
       });
 
       test('Edit [State, City, UserData] User Domain 2', async () => {
@@ -449,57 +600,6 @@ module.exports = () => {
 
         expect(res.statusCode).toEqual(400);
         expect(res.body).toHaveProperty('type', 'user-prop-error');
-      });
-
-      test('Edit Current User (user 1) - Edit user_data security', async () => {
-        for (let i = 0; i < XSS_AND_SQL_INJECTION.length; i++) {
-          // Edit
-          var editRes = await Travelling.User.Current.edit(
-            { user_data: { asdf: XSS_AND_SQL_INJECTION[i] } },
-            userContainer.user1Token
-          );
-
-          expect(editRes.body.msg).toEqual('User data contains invalid character(s).');
-          expect(editRes.statusCode).toEqual(400);
-
-          // Edit property
-          var editPropertyRes = await Travelling.User.Current.editProperty(
-            XSS_AND_SQL_INJECTION[i],
-            `user_data.badprop`,
-            userContainer.user1Token
-          );
-
-          expect(editPropertyRes.body.msg).toEqual('User data contains invalid character(s).');
-          expect(editPropertyRes.statusCode).toEqual(400);
-
-          // Edit user_data property
-          var editUserDataPropertyRes = await Travelling.User.Current.editUserDataProperty(
-            XSS_AND_SQL_INJECTION[i],
-            'badprop',
-            userContainer.user1Token
-          );
-
-          expect(editUserDataPropertyRes.body.msg).toEqual('User data contains invalid character(s).');
-          expect(editUserDataPropertyRes.statusCode).toEqual(400);
-        }
-      });
-
-      test('Edit Current User (user 1) - Edit user_data property value security', async () => {
-        // Edit property value
-        var editPropertyValueRes = await Travelling.User.Current.editPropertyValue(
-          `user_data.bad$%^`,
-          '$>',
-          userContainer.user1Token
-        );
-        expect([400, 404]).toContain(editPropertyValueRes.statusCode);
-
-        // Edit user_data property value
-        var editUserDataPropertyValueRes = await Travelling.User.Current.editUserDataPropertyValue(
-          `user_data.bad(.)`,
-          '*!',
-          userContainer.user1Token
-        );
-        expect([400, 404]).toContain(editUserDataPropertyValueRes.statusCode);
       });
 
       test('Edit Current User (userDomain2Token) - Edit user_data security', async () => {
