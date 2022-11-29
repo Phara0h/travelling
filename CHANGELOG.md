@@ -1,6 +1,18 @@
 
 
+#### [v2.20.0](https://github.com/Dragohm/travelling/compare/v2.19.0...v2.20.0)
+
+- Fix #70 Remove hashes from responses [`#24`](https://github.com/Dragohm/travelling/pull/24)
+- Feature #71 user data special chars [`#25`](https://github.com/Dragohm/travelling/pull/25)
+- Merge pull request #24 from Dragohm/fix-#70-rm-hashes-from-res [`#70`](https://github.com/Dragohm/travelling/issues/70)
+- add user_data newlines and tabs [`db4cb12`](https://github.com/Dragohm/travelling/commit/db4cb126cf6b6683bb84fc81ba94c5ebb1af242a)
+- up regex limit [`743ea2e`](https://github.com/Dragohm/travelling/commit/743ea2e9c4e718421dcb7c4b154b9dece79b2426)
+- allow special chats user_data [`5286f14`](https://github.com/Dragohm/travelling/commit/5286f14556c796c3047e9c928f6f9325348059e2)
+- rm hashes and update  tests [`7099048`](https://github.com/Dragohm/travelling/commit/70990487853f5248392753e4001f273ca384e41b)
+
 #### [v2.19.0](https://github.com/Dragohm/travelling/compare/v2.18.1...v2.19.0)
+
+> 14 November 2022
 
 - Feature #66 - Add checkable cookie [`#23`](https://github.com/Dragohm/travelling/pull/23)
 - Add ls token tests [`c944378`](https://github.com/Dragohm/travelling/commit/c944378dd4c3bd1c33beaac29e8bdb0a1663d53e)
