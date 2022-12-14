@@ -12,7 +12,7 @@ const { hexToBase64 } = require('@opentelemetry/core');
 module.exports = () => {
   describe('Valid', () => {
     test('Login with Test User', async () => {
-      const start = new Date()
+      const start = new Date();
 
       var res = await Travelling.Auth.login({
         username: 'test',
@@ -25,25 +25,25 @@ module.exports = () => {
 
       // Make sure trav.ls token is correct
       if (config.cookie.token.checkable) {
-        var ls = {}
-        var tok = {}
+        var ls = {};
+        var tok = {};
 
         for (var i = 0; i < res.headers['set-cookie'].length; i++) {
           var pc = cookie.parse(res.headers['set-cookie'][i]);
 
           if (pc['trav:ls']) {
-            ls = pc
+            ls = pc;
           } else if (pc['trav:tok']) {
-            tok = pc
+            tok = pc;
           }
         }
 
-        expect(ls['trav:ls']).toBe('1')
-        expect(ls.Path).toBe('/')
-        expect(ls.Expires).toEqual(tok.Expires)
+        expect(ls['trav:ls']).toBe('1');
+        expect(ls.Path).toBe('/');
+        expect(ls.Expires).toEqual(tok.Expires);
 
-        const cookieExpires = new Date(ls.Expires)
-        expect(cookieExpires.getTime()).toBeGreaterThan(start.getTime())
+        const cookieExpires = new Date(ls.Expires);
+        expect(cookieExpires.getTime()).toBeGreaterThan(start.getTime());
       }
     });
 
@@ -92,12 +92,15 @@ module.exports = () => {
     });
 
     test('Login with Test Domain User', async () => {
-      const start = new Date()
+      const start = new Date();
 
-      var res = await Travelling.Auth.login({
-        password: 'Pas5w0r!d',
-        email: 'test_domain_1@test.com'
-      });
+      var res = await Travelling.Auth.Domain.login(
+        {
+          password: 'Pas5w0r!d',
+          email: 'test_domain_1@test.com'
+        },
+        'traziventures.com'
+      );
 
       userContainer.parseUserDomainCookie(res.headers['set-cookie']);
 
@@ -105,33 +108,36 @@ module.exports = () => {
 
       // Make sure trav.ls token is correct
       if (config.cookie.token.checkable) {
-        var ls = {}
-        var tok = {}
+        var ls = {};
+        var tok = {};
 
         for (var i = 0; i < res.headers['set-cookie'].length; i++) {
           var pc = cookie.parse(res.headers['set-cookie'][i]);
 
           if (pc['trav:ls']) {
-            ls = pc
+            ls = pc;
           } else if (pc['trav:tok']) {
-            tok = pc
+            tok = pc;
           }
         }
 
-        expect(ls['trav:ls']).toBe('1')
-        expect(ls.Path).toBe('/')
-        expect(ls.Expires).toEqual(tok.Expires)
+        expect(ls['trav:ls']).toBe('1');
+        expect(ls.Path).toBe('/');
+        expect(ls.Expires).toEqual(tok.Expires);
 
-        const cookieExpires = new Date(ls.Expires)
-        expect(cookieExpires.getTime()).toBeGreaterThan(start.getTime())
+        const cookieExpires = new Date(ls.Expires);
+        expect(cookieExpires.getTime()).toBeGreaterThan(start.getTime());
       }
     });
 
     test('Login with Test Domain User 2', async () => {
-      var res = await Travelling.Auth.login({
-        password: 'Pas5w0r!d',
-        email: 'test_domain_2@test.com'
-      });
+      var res = await Travelling.Auth.Domain.login(
+        {
+          password: 'Pas5w0r!d',
+          email: 'test_domain_2@test.com'
+        },
+        'traziventures.com'
+      );
 
       userContainer.parseUserDomain2Cookie(res.headers['set-cookie']);
 
@@ -139,10 +145,13 @@ module.exports = () => {
     });
 
     test('Login with Test Domain User 3 [Gets deleted in user-edit]', async () => {
-      var res = await Travelling.Auth.login({
-        password: 'Pas5w0r!d',
-        email: 'test_domain_3@test.com'
-      });
+      var res = await Travelling.Auth.Domain.login(
+        {
+          password: 'Pas5w0r!d',
+          email: 'test_domain_3@test.com'
+        },
+        'traziventures.com'
+      );
 
       userContainer.parseUserDomain3Cookie(res.headers['set-cookie']);
 
@@ -195,12 +204,28 @@ module.exports = () => {
     }
 
     test('Login with Domain User 5', async () => {
-      var res = await Travelling.Auth.login({
-        password: 'Pas5w0r!d5',
-        email: 'test_domain_5@test.com'
-      });
+      var res = await Travelling.Auth.Domain.login(
+        {
+          password: 'Pas5w0r!d5',
+          email: 'test_domain_5@test.com'
+        },
+        'traziventures.com'
+      );
 
       userContainer.parseUser5Cookie(res.headers['set-cookie']);
+      expect(res.statusCode).toEqual(200);
+    });
+
+    test('Login with Domain User 6', async () => {
+      var res = await Travelling.Auth.Domain.login(
+        {
+          password: 'Pas5w0r!d6',
+          email: 'test_domain_6@test.com'
+        },
+        'traziventures.com'
+      );
+
+      userContainer.parseUserDomain6Cookie(res.headers['set-cookie']);
       expect(res.statusCode).toEqual(200);
     });
   });
