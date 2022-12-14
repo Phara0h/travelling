@@ -1,4 +1,5 @@
 const User = require('../../database/models/user');
+const Token = require('../../database/models/token');
 const TokenHandler = require('../../token');
 
 const userUtils = require('../../utils/user');
@@ -8,6 +9,7 @@ const misc = require('../../utils/misc');
 const gm = require('../../server/groupmanager');
 const userRoutes = require('./functions/users');
 const parse = require('../../utils/parse');
+const regex = require('../../utils/regex');
 
 module.exports = function (app, opts, done) {
   const router = opts.router;
@@ -428,6 +430,10 @@ module.exports = function (app, opts, done) {
   app.post('/user/me/token', async (req, res) => {
     let token;
 
+    if (!regex.uuidCheck(req.session.data.user.id)) {
+      throw new Error('Invalid user id.');
+    }
+
     try {
       token = await TokenHandler.getOAuthToken(
         req.session.data.user.id,
@@ -437,10 +443,13 @@ module.exports = function (app, opts, done) {
       );
 
       if (config.audit.create.enable === true) {
+        var hashedToken = await Token.findById(token.id);
+        delete hashedToken.secret_encrypt;
+
         var auditObj = {
           action: 'CREATE',
           subaction: 'USER_OAUTH2_TOKEN',
-          newObj: token
+          newObj: hashedToken
         };
 
         if (req.session.data) {
