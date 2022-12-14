@@ -269,7 +269,7 @@ async function resetPasswordRoute(req, res, autologin = false) {
     var oldUser = await User.findLimtedBy({ id: token[2] }, 'AND', 1);
 
     if (oldUser.length > 0 && oldUser[0]) {
-      oldPassword = oldUser.password;
+      oldPassword = oldUser[0].password;
     }
   }
 
@@ -357,7 +357,7 @@ var getOAuthAuthorizeRoute = async (req, res) => {
         httpOnly: true,
         path: '/' + config.serviceName + '/api/v1/auth/oauth/authorize'
       });
-      if(config.portal.enable) {
+      if (config.portal.enable) {
         res.sendFile(
           !config.token.code.authorizeFlow && userID != ''
             ? config.portal.filePath + '/src/submit.html'
@@ -396,7 +396,9 @@ var postOAuthAuthorizeRoute = async (req, res) => {
     var code = Buffer.from(`${token.client_id}:${token.client_secret}`, 'ascii').toString('base64');
 
     res.headers['Cache-Control'] = 'no-cache';
-    res.redirect(encodeURI(req.query.redirect_uri + `?code=${code}&state=${req.query.state}&client_id=${req.query.client_id}`));
+    res.redirect(
+      encodeURI(req.query.redirect_uri + `?code=${code}&state=${req.query.state}&client_id=${req.query.client_id}`)
+    );
     return;
   } catch (e) {
     config.log.logger.debug(e);
