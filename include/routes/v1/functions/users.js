@@ -166,6 +166,10 @@ async function editUser(opts) {
   var isValid = await userUtils.checkValidUser(model);
 
   if (isValid === true) {
+    if (opts.needsDomain && (model.email || model.username)) {
+      model.domain = domain;
+    }
+
     isValid = await Database.checkDupe(model);
   }
 
