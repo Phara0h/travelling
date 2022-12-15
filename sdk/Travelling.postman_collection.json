@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "e66330cf-84da-4b78-8bf1-eff6e90b8c6b",
+		"_postman_id": "9718a487-a9bf-41ec-b272-fc0438da73d3",
 		"name": "Travelling",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15847205"
 	},
 	"item": [
 		{
@@ -20,9 +21,9 @@
 										"method": "PUT",
 										"header": [
 											{
-												"key": "Content-Type",
-												"name": "Content-Type",
-												"value": "application/json",
+												"key": "Authorization",
+												"value": "Bearer",
+												"description": "The client_credentials generated OAUth2 access token.",
 												"type": "text"
 											}
 										],
@@ -36,7 +37,7 @@
 											}
 										},
 										"url": {
-											"raw": "{{TRAVELLING}}/api/v1/auth/password/forgot",
+											"raw": "{{TRAVELLING}}/api/v1/auth/token/password/forgot/domain/:domain",
 											"host": [
 												"{{TRAVELLING}}"
 											],
@@ -44,13 +45,131 @@
 												"api",
 												"v1",
 												"auth",
+												"token",
 												"password",
-												"forgot"
+												"forgot",
+												"domain",
+												":domain"
+											],
+											"variable": [
+												{
+													"key": "domain",
+													"value": ""
+												}
 											]
 										},
 										"description": "Generates a recovery token and returns the token to the attached user (if they exist) instead of sending an email. \n**CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**"
 									},
 									"response": []
+								},
+								{
+									"name": "OTP",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer",
+												"description": "The client_credentials generated OAUth2 access token.",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{TRAVELLING}}/api/v1/auth/token/otp/domain/:domain/id/:id",
+											"host": [
+												"{{TRAVELLING}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"auth",
+												"token",
+												"otp",
+												"domain",
+												":domain",
+												"id",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "domain",
+													"value": "traziventures.com"
+												},
+												{
+													"key": "id",
+													"value": "test@test.com"
+												}
+											]
+										},
+										"description": "Generates a one time use password and returns the token to the attached user (if they exist) instead of sending an email.  \n**CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**"
+									},
+									"response": [
+										{
+											"name": "OTP",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{TRAVELLING}}/api/v1/auth/token/otp/domain/:domain/id/:id",
+													"host": [
+														"{{TRAVELLING}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"auth",
+														"token",
+														"otp",
+														"domain",
+														":domain",
+														"id",
+														":id"
+													],
+													"variable": [
+														{
+															"key": "domain",
+															"value": "traziventures.com"
+														},
+														{
+															"key": "id",
+															"value": "test@test.com"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "content-type",
+													"value": "application/json; charset=utf-8"
+												},
+												{
+													"key": "set-cookie",
+													"value": "trav:ssid=7cdb5f41-ff4a-45c8-b701-c4ed3a5441e2%3AP1qzV8tYSCL4%2F6resKVPdg%3D%3D.couvYbEmzLJw7XikB1WWTFjTvpanFL39C6x6%2F%2B2Vqm4; Max-Age=4; Path=/; Expires=Tue, 11 Jan 2022 19:25:08 GMT; HttpOnly"
+												},
+												{
+													"key": "content-length",
+													"value": "165"
+												},
+												{
+													"key": "Date",
+													"value": "Tue, 11 Jan 2022 19:25:08 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=5"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"token\": \"zzLcLL2gtG5LiflWu7dwhhrzelsM9XXbmG5OD1xxPwdDDGgCaDr_McB7gRlGLzJJl1cRMe9GgzpHpMhahzG8e0yVwGQROP5cl6b3TVkt-2rftCy3DjscJsE3rt59l4Pr|v1mhC9aKdCOKyFiV3ZQcNQ==\"\n}"
+										}
+									]
 								}
 							]
 						},
@@ -60,15 +179,15 @@
 								"method": "POST",
 								"header": [
 									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"type": "text",
-										"value": "application/json"
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"username\":\"test\",\n\t\"password\":\"Pas5w0r!d\",\n\t\"email\": \"test@test.com\"\n}",
+									"raw": "{\n\t\"email\": \"tesft@test.com\",\n\t\"password\": \"Pas5w0r!d\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -88,10 +207,19 @@
 										"domain",
 										":domain"
 									],
+									"query": [
+										{
+											"key": "randomPassword",
+											"value": "true",
+											"description": "Generates a random password on the backend securely if set to `true`",
+											"disabled": true
+										}
+									],
 									"variable": [
 										{
 											"key": "domain",
-											"value": "test.com"
+											"value": "traziventures.com",
+											"description": "Domain name (example: test.com)"
 										}
 									]
 								},
@@ -176,15 +304,15 @@
 								"method": "PUT",
 								"header": [
 									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"value": "application/json",
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
 										"type": "text"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"username\": \"test\",\n\t\"password\": \"Pas5w0r!d\",\n    \"domain\": \"default\"\n}",
+									"raw": "{\n\t\"email\": \"test@test.com\",\n\t\"password\": \"Pas5w0r!d\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -207,11 +335,12 @@
 									"variable": [
 										{
 											"key": "domain",
-											"value": "test.com"
+											"value": "traziventures.com",
+											"description": "Domain name (example: test.com)"
 										}
 									]
 								},
-								"description": "Register a user"
+								"description": "Login a user\n\n##### Body Properties\n\n| Prop | Description |\n| --- | --- |\n| email/username | *required* String (example:  test@test.com) |\n| password | *required* String (example:  fakePassword123) |\n| domain | *required* String (example:  test.com) |\n| remember | *optional* Boolean if you would like to be logged in automatically (example:  true) |"
 							},
 							"response": [
 								{
@@ -283,15 +412,15 @@
 								"method": "PUT",
 								"header": [
 									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"value": "application/json",
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
 										"type": "text"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"email\": \"test@test.com\"\n}",
+									"raw": "{\n\t\"email\": \"kelvin@traziventures.com\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -315,7 +444,8 @@
 									"variable": [
 										{
 											"key": "domain",
-											"value": "test.com"
+											"value": "traziventures.com",
+											"description": "Domain name (example: test.com)"
 										}
 									]
 								},
@@ -350,7 +480,7 @@
 									}
 								},
 								"url": {
-									"raw": "{{TRAVELLING}}/api/v1/auth/password/forgot",
+									"raw": "{{TRAVELLING}}/api/v1/auth/token/password/forgot",
 									"host": [
 										"{{TRAVELLING}}"
 									],
@@ -358,6 +488,7 @@
 										"api",
 										"v1",
 										"auth",
+										"token",
 										"password",
 										"forgot"
 									]
@@ -365,6 +496,106 @@
 								"description": "Generates a recovery token and returns the token to the attached user (if they exist) instead of sending an email. \n**CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**"
 							},
 							"response": []
+						},
+						{
+							"name": "OTP",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/auth/token/otp/id/:id",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"token",
+										"otp",
+										"id",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "test@test.com"
+										}
+									]
+								},
+								"description": "Generates a one time use password and returns the token to the attached user (if they exist) instead of sending an email.  \n**CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**"
+							},
+							"response": [
+								{
+									"name": "OTP",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{TRAVELLING}}/api/v1/auth/token/otp/id/:id",
+											"host": [
+												"{{TRAVELLING}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"auth",
+												"token",
+												"otp",
+												"id",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "test@test.com"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "content-type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "set-cookie",
+											"value": "trav:ssid=7cdb5f41-ff4a-45c8-b701-c4ed3a5441e2%3AFdDmkZKbysf%2FBV7%2Flj8Q4w%3D%3D.%2B9uzqbadc%2FC1VXiTeJBOtxj2YQs2pC%2F5DvtMIZdxmWU; Max-Age=4; Path=/; Expires=Tue, 11 Jan 2022 19:25:43 GMT; HttpOnly"
+										},
+										{
+											"key": "content-length",
+											"value": "165"
+										},
+										{
+											"key": "Date",
+											"value": "Tue, 11 Jan 2022 19:25:43 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"token\": \"yHoGLBYyxS8L6mwcPMtratD7muGkRCRSSuJ_RshbMDOh_jXNsdlHzCOwMa74JzGq2mQuBmWZhSc92qW-q3L0QFuRbbWtZTx5Wk5mkm9PtTb_ONrbthPyOl9ZBICyQTOH|PBO27SAzoAiYrrY8URPL5A==\"\n}"
+								}
+							]
 						}
 					]
 				},
@@ -374,15 +605,15 @@
 						"method": "POST",
 						"header": [
 							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"username\":\"test\",\n\t\"password\":\"Pas5w0r!d\",\n\t\"email\": \"test@test.com\",\n    \"domain\": \"default\"\n}",
+							"raw": "{\n\t\"username\":\"test\",\n\t\"email\": \"test34@test.com\",\n    \"domain\": \"default\",\n    \"password\": \"Pas5w0r!d\"\n\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -399,6 +630,14 @@
 								"v1",
 								"auth",
 								"register"
+							],
+							"query": [
+								{
+									"key": "randomPassword",
+									"value": "true",
+									"description": "Generates a random password on the backend securely if set to `true`",
+									"disabled": true
+								}
 							]
 						},
 						"description": "Register a user\n\n`group_request`\tis optional."
@@ -482,15 +721,15 @@
 						"method": "PUT",
 						"header": [
 							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"username\": \"test\",\n\t\"password\": \"Pas5w0r!d\",\n    \"domain\": \"default\"\n}",
+							"raw": "{\n\t\"email\": \"test@test.com\",\n\t\"password\": \"Pas5w0r!d\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -509,7 +748,7 @@
 								"login"
 							]
 						},
-						"description": "Register a user"
+						"description": "Login a user\n\n##### Body Properties\n\n| Prop | Description |\n| --- | --- |\n| email/username | *required* String (example:  test@test.com) |\n| password | *required* String (example:  fakePassword123) |\n| remember | *optional* Boolean if you would like to be logged in automatically (example:  true) |"
 					},
 					"response": [
 						{
@@ -526,10 +765,10 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"username\":\"test\",\n\t\"password\":\"swagmoney69xd420\",\n\t\"email\": \"test@test.com\"\n}"
+									"raw": "{\n    \"username\":fakeusername\n\t\"password\":\"fakepassword\",\n\t\"email\": \"test@test.com\"\n}"
 								},
 								"url": {
-									"raw": "{{TRAVELLING}}/api/v1/auth/login",
+									"raw": "{{TRAVELLING}}/api/v1/auth/login/domain/:domain",
 									"host": [
 										"{{TRAVELLING}}"
 									],
@@ -537,7 +776,128 @@
 										"api",
 										"v1",
 										"auth",
-										"login"
+										"login",
+										"domain",
+										":domain"
+									],
+									"variable": [
+										{
+											"key": "domain",
+											"value": null
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "set-cookie",
+									"value": "trav:tok=db34b933bf4b7b7afeebd1e258a0c8c0fa80bb0132cf74186d8f32033dbce7ebb4779527aa9d05ed3e9eba54b41510167f4d3b63a067591a49dc1fadf97b06ce46f0499b241f0a9855429b750880bc7c00c0130fc012427b73326b7beff6f15b%2Fde3086b22638e56370f2397334a788ed; Path=/; Expires=Thu, 19 Sep 2019 20:11:42 GMT; HttpOnly; Secure"
+								},
+								{
+									"key": "set-cookie",
+									"value": "trav:ssid=0bQDu3Vb-5PZR8o9uuqsMkecjGi6Nguv.RPBOsJtYuAWeno7%2F7JJ5VUHnj8Z2MEfhXIYYhK0GmAk; Path=/; HttpOnly; Secure"
+								},
+								{
+									"key": "content-length",
+									"value": "24"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 20 Aug 2019 20:11:42 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"msg\": \"Access Granted\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Login OTP",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {},
+						"strictSSL": false,
+						"followOriginalHttpMethod": true,
+						"followAuthorizationHeader": true,
+						"removeRefererHeaderOnRedirect": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{TRAVELLING}}/api/v1/auth/login/otp?token=JQHGH9QuIIhpGuFBG920TdnWkSECFp-ONP0NadfPCclsX708wYaXKHFb5nUj1fmZFHcN1KpKqzkOkjfZGYdfsIt0KnWV69mmt5Uqpw3HiMYD1mBfr4SQap2cg8vH78bb|6Rzt6ubKWXJKY6Pg4GAePg==",
+							"host": [
+								"{{TRAVELLING}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login",
+								"otp"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "JQHGH9QuIIhpGuFBG920TdnWkSECFp-ONP0NadfPCclsX708wYaXKHFb5nUj1fmZFHcN1KpKqzkOkjfZGYdfsIt0KnWV69mmt5Uqpw3HiMYD1mBfr4SQap2cg8vH78bb|6Rzt6ubKWXJKY6Pg4GAePg=="
+								}
+							]
+						},
+						"description": "Login via an OTP"
+					},
+					"response": [
+						{
+							"name": "Login",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\":fakeusername\n\t\"password\":\"fakepassword\",\n\t\"email\": \"test@test.com\"\n}"
+								},
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/auth/login/domain/:domain",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"login",
+										"domain",
+										":domain"
+									],
+									"variable": [
+										{
+											"key": "domain",
+											"value": null
+										}
 									]
 								}
 							},
@@ -579,7 +939,14 @@
 					"name": "Logout",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{TRAVELLING}}/api/v1/auth/logout",
 							"host": [
@@ -652,9 +1019,9 @@
 						"method": "PUT",
 						"header": [
 							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
 								"type": "text"
 							}
 						],
@@ -690,9 +1057,9 @@
 						"method": "PUT",
 						"header": [
 							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
 								"type": "text"
 							}
 						],
@@ -734,9 +1101,9 @@
 						"method": "PUT",
 						"header": [
 							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
 								"type": "text"
 							}
 						],
@@ -777,7 +1144,14 @@
 					"name": "Activate",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "{{TRAVELLING}}/api/v1/auth/activate?token=activation_token",
 							"host": [
@@ -1035,17 +1409,10 @@
 								"method": "GET",
 								"header": [
 									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									},
-									{
 										"key": "Authorization",
 										"value": "Bearer",
 										"description": "The client_credentials generated OAUth2 access token.",
-										"type": "text",
-										"disabled": true
+										"type": "text"
 									}
 								],
 								"url": {
@@ -1307,7 +1674,7 @@
 									"variable": [
 										{
 											"key": "id",
-											"value": "",
+											"value": "74b3c2f2-3f94-4b5d-b3e2-4b3bd2c5d6fe",
 											"description": "id or name of the token"
 										}
 									]
@@ -1385,10 +1752,10 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"test\": 123\n}",
+									"raw": "newpasss",
 									"options": {
 										"raw": {
-											"language": "json"
+											"language": "text"
 										}
 									}
 								},
@@ -1408,7 +1775,54 @@
 									"variable": [
 										{
 											"key": "property",
-											"value": "user_data"
+											"value": "password"
+										}
+									]
+								},
+								"description": "Edit a current user's property data."
+							},
+							"response": []
+						},
+						{
+							"name": "Edit User Data Property",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "asdfsasdfdsadf",
+									"options": {
+										"raw": {
+											"language": "text"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/user/me/property/userdata/:property",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"me",
+										"property",
+										"userdata",
+										":property"
+									],
+									"variable": [
+										{
+											"key": "property",
+											"value": "notes",
+											"description": "user_data object's property to edit."
 										}
 									]
 								},
@@ -1450,6 +1864,50 @@
 										{
 											"key": "value",
 											"value": "595d3f9a-5383-4da9-a465-b975d8a5e28e"
+										}
+									]
+								},
+								"description": "Edit a current user's property data as a path param."
+							},
+							"response": []
+						},
+						{
+							"name": "Edit User Data Property Value",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/user/me/property/userdata/:property/:value",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"me",
+										"property",
+										"userdata",
+										":property",
+										":value"
+									],
+									"variable": [
+										{
+											"key": "property",
+											"value": "notes",
+											"description": "user_data object's property to edit."
+										},
+										{
+											"key": "value",
+											"value": "asdf asdfasdf asdf ",
+											"description": "user_data object's property value."
 										}
 									]
 								},
@@ -1567,7 +2025,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"name\": \"conversate\"\n}",
+									"raw": "{\n    \"urls\": [\n        \"http://127.0.0.1\",\n        \"http://checkpeople.com\"\n    ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1645,6 +2103,573 @@
 									"body": "{\n    \"client_id\": \"tesadasd\",\n    \"client_secret\": \"e0352d359201aa574d17c41f8f65dbf987569e4c52cc05c47dec91323d2bdbc70a8d3189fb435970c8621d92da0ebd0a998bb42a9e0336eb43fd351ed68ee00d\"\n}"
 								}
 							]
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Domain",
+					"item": [
+						{
+							"name": "Get",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/user/domain/:domain/id/:id",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"domain",
+										":domain",
+										"id",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "domain",
+											"value": "test.com",
+											"description": "Domain (example: test.com)"
+										},
+										{
+											"key": "id",
+											"value": "d1bf9986-9938-4d47-b8aa-79184b37cc16",
+											"description": "id, username or email."
+										}
+									]
+								},
+								"description": "Get a user by it's id."
+							},
+							"response": []
+						},
+						{
+							"name": "Get Property",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/user/domain/:domain/id/:id/property/:property",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"domain",
+										":domain",
+										"id",
+										":id",
+										"property",
+										":property"
+									],
+									"variable": [
+										{
+											"key": "domain",
+											"value": "test.com",
+											"description": "Domain (example: test.com)"
+										},
+										{
+											"key": "id",
+											"value": "75d2ed5e-bc5b-4129-a1ec-657cf27e6294",
+											"description": "id, username or email."
+										},
+										{
+											"key": "property",
+											"value": "locked",
+											"description": "Property to get (example: locked)"
+										}
+									]
+								},
+								"description": "Get a user's property by it's id."
+							},
+							"response": []
+						},
+						{
+							"name": "Edit",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"username\" : \"user6\",\n\t\"password\" : \"Awickednewawesomepasword4242!@\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/user/domain/:domain/id/:id",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"domain",
+										":domain",
+										"id",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "domain",
+											"value": "test.com",
+											"description": "Domain (example: test.com)"
+										},
+										{
+											"key": "id",
+											"value": "75d2ed5e-bc5b-4129-a1ec-657cf27e6294",
+											"description": "id, username or email."
+										}
+									]
+								},
+								"description": "Edit a user's by id."
+							},
+							"response": []
+						},
+						{
+							"name": "Edit Property",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "false",
+									"options": {
+										"raw": {
+											"language": "text"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/user/domain/:domain/id/:id/property/:property",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"domain",
+										":domain",
+										"id",
+										":id",
+										"property",
+										":property"
+									],
+									"variable": [
+										{
+											"key": "domain",
+											"value": "test.com",
+											"description": "Domain (example: test.com)"
+										},
+										{
+											"key": "id",
+											"value": "75d2ed5e-bc5b-4129-a1ec-657cf27e6294",
+											"description": "id, username or email."
+										},
+										{
+											"key": "property",
+											"value": "locked",
+											"description": "Property to modify (example: locked)"
+										}
+									]
+								},
+								"description": "Edit a user's property by id."
+							},
+							"response": []
+						},
+						{
+							"name": "Edit User Data Property",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "asdfasdf asdf",
+									"options": {
+										"raw": {
+											"language": "text"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/user/domain/:domain/id/:id/property/userdata/:property",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"domain",
+										":domain",
+										"id",
+										":id",
+										"property",
+										"userdata",
+										":property"
+									],
+									"variable": [
+										{
+											"key": "domain",
+											"value": "test.com",
+											"description": "Domain (example: test.com)"
+										},
+										{
+											"key": "id",
+											"value": "75d2ed5e-bc5b-4129-a1ec-657cf27e6294",
+											"description": "id, username or email."
+										},
+										{
+											"key": "property",
+											"value": "notes",
+											"description": "Property to modify (example: locked)"
+										}
+									]
+								},
+								"description": "Edit a user's property by id."
+							},
+							"response": []
+						},
+						{
+							"name": "Edit Property Value",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/user/domain/:domain/id/:id/property/:property/:value",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"domain",
+										":domain",
+										"id",
+										":id",
+										"property",
+										":property",
+										":value"
+									],
+									"variable": [
+										{
+											"key": "domain",
+											"value": "test.com",
+											"description": "Domain (example: test.com)"
+										},
+										{
+											"key": "id",
+											"value": "75d2ed5e-bc5b-4129-a1ec-657cf27e6294",
+											"description": "id, username or email."
+										},
+										{
+											"key": "property",
+											"value": "locked",
+											"description": "Property to modify (example: locked)"
+										},
+										{
+											"key": "value",
+											"value": "true",
+											"description": "Value to change property to."
+										}
+									]
+								},
+								"description": "Edit a current user's property data as a path param."
+							},
+							"response": []
+						},
+						{
+							"name": "Edit User Data Property Value",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/user/domain/:domain/id/:id/property/userdata/:property/:value",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"domain",
+										":domain",
+										"id",
+										":id",
+										"property",
+										"userdata",
+										":property",
+										":value"
+									],
+									"variable": [
+										{
+											"key": "domain",
+											"value": "test.com",
+											"description": "Domain (example: test.com)"
+										},
+										{
+											"key": "id",
+											"value": "75d2ed5e-bc5b-4129-a1ec-657cf27e6294",
+											"description": "id, username or email."
+										},
+										{
+											"key": "property",
+											"value": "notes",
+											"description": "Property to modify (example: locked)"
+										},
+										{
+											"key": "value",
+											"value": "asdf asdfawsdf",
+											"description": "Value to change property to."
+										}
+									]
+								},
+								"description": "Edit a current user's property data as a path param."
+							},
+							"response": []
+						},
+						{
+							"name": "Add Group Inheritance",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"description": "The client_credentials generated OAUth2 access token.",
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer"
+									}
+								],
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/user/domain/:domain/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"domain",
+										":domain",
+										"id",
+										":id",
+										"inheritance",
+										"group",
+										":inheritgroupid",
+										"type",
+										":inheritgrouptype"
+									],
+									"variable": [
+										{
+											"key": "domain",
+											"value": "test.com",
+											"description": "Domain (example: test.com)"
+										},
+										{
+											"key": "id",
+											"value": "user5",
+											"description": "id, username or email."
+										},
+										{
+											"key": "inheritgroupid",
+											"value": "group2",
+											"description": "id or name of the group to inherit"
+										},
+										{
+											"key": "inheritgrouptype",
+											"value": "group",
+											"description": "type of the group to inherit"
+										}
+									]
+								},
+								"description": "Add a user to a group."
+							},
+							"response": []
+						},
+						{
+							"name": "Remove Group Inheritance",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"description": "The client_credentials generated OAUth2 access token.",
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer"
+									}
+								],
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/user/domain/:domain/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"domain",
+										":domain",
+										"id",
+										":id",
+										"inheritance",
+										"group",
+										":inheritgroupid",
+										"type",
+										":inheritgrouptype"
+									],
+									"variable": [
+										{
+											"key": "domain",
+											"value": "test.com",
+											"description": "Domain (example: test.com)"
+										},
+										{
+											"key": "id",
+											"value": "d1bf9986-9938-4d47-b8aa-79184b37cc16",
+											"description": "id, username or email."
+										},
+										{
+											"key": "inheritgroupid",
+											"value": "group1",
+											"description": "id or name of the group to inherit"
+										},
+										{
+											"key": "inheritgrouptype",
+											"value": "testgroup",
+											"description": "type of the group to inherit"
+										}
+									]
+								},
+								"description": "Remove a user from a group."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/user/domain/:domain/id/:id",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"user",
+										"domain",
+										":domain",
+										"id",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "domain",
+											"value": "test.com",
+											"description": "Domain (example: test.com)"
+										},
+										{
+											"key": "id",
+											"value": "75d2ed5e-bc5b-4129-a1ec-657cf27e6294",
+											"description": "id, username or email."
+										}
+									]
+								},
+								"description": "Delete a user by it's Id."
+							},
+							"response": []
 						}
 					]
 				},
@@ -1828,6 +2853,59 @@
 					"response": []
 				},
 				{
+					"name": "Edit User Data Property",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "asdfasdf",
+							"options": {
+								"raw": {
+									"language": "text"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{TRAVELLING}}/api/v1/user/id/:id/property/userdata/:property",
+							"host": [
+								"{{TRAVELLING}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"id",
+								":id",
+								"property",
+								"userdata",
+								":property"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "39A2BC37-61AE-434C-B245-A731A27CF8DA",
+									"description": "Id or Username "
+								},
+								{
+									"key": "property",
+									"value": "notes",
+									"description": "user_data object's property to edit."
+								}
+							]
+						},
+						"description": "Edit a user's property by id."
+					},
+					"response": []
+				},
+				{
 					"name": "Edit Property Value",
 					"request": {
 						"method": "PUT",
@@ -1875,6 +2953,56 @@
 					"response": []
 				},
 				{
+					"name": "Edit User Data Property Value",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{TRAVELLING}}/api/v1/user/id/:id/property/userdata/:property/:value",
+							"host": [
+								"{{TRAVELLING}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"id",
+								":id",
+								"property",
+								"userdata",
+								":property",
+								":value"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "595d3f9a-5383-4da9-a465-b975d8a5e28e",
+									"description": "Id or Username "
+								},
+								{
+									"key": "property",
+									"value": "notes",
+									"description": "user_data object's property to edit."
+								},
+								{
+									"key": "value",
+									"value": "asdfa sdfa sdf",
+									"description": "user_data object's property value."
+								}
+							]
+						},
+						"description": "Edit a current user's property data as a path param."
+					},
+					"response": []
+				},
+				{
 					"name": "Add Group Inheritance",
 					"request": {
 						"method": "PUT",
@@ -1906,17 +3034,17 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "user5",
+									"value": "99a64193-b5a8-448d-8933-05d27f366094",
 									"description": "id or name of the user"
 								},
 								{
 									"key": "inheritgroupid",
-									"value": "group2",
+									"value": "group1",
 									"description": "id or name of the  group to inherit"
 								},
 								{
 									"key": "inheritgrouptype",
-									"value": "group",
+									"value": "testgroup",
 									"description": "type of the  group to inherit"
 								}
 							]
@@ -1957,17 +3085,17 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "user5",
+									"value": "99a64193-b5a8-448d-8933-05d27f366094",
 									"description": "id or name of the user"
 								},
 								{
 									"key": "inheritgroupid",
-									"value": "group2",
+									"value": "group",
 									"description": "id or name of the  group to inherit"
 								},
 								{
 									"key": "inheritgrouptype",
-									"value": "group",
+									"value": "testgroup",
 									"description": "type of the  group to inherit"
 								}
 							]
@@ -2068,21 +3196,99 @@
 										{
 											"key": "sort",
 											"value": "created_on",
+											"description": "Sort by any user object key (examples: id, domain, locked, etc.)",
 											"disabled": true
 										},
 										{
 											"key": "limit",
-											"value": "200",
+											"value": "1",
+											"description": "Number of maximum results. (example: 2)",
+											"disabled": true
+										},
+										{
+											"key": "skip",
+											"value": "10",
+											"description": "Number of db rows skipped. (example: 10)",
 											"disabled": true
 										},
 										{
 											"key": "filter",
-											"value": "locked=false",
+											"value": "created_on>2021-06-01,created_on<2021-06-08",
+											"description": "Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)",
 											"disabled": true
 										},
 										{
 											"key": "sortdir",
 											"value": "ASC",
+											"description": "Sort direction (example ascending order: ASC)",
+											"disabled": true
+										},
+										{
+											"key": "ids",
+											"value": "d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f",
+											"description": "Comma seperated id values used in inclusion query",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "domain",
+											"value": "traziventures.com"
+										}
+									]
+								},
+								"description": "Gets all the users\n\n##### Filter Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | *optional* (example:  user7) |\n| locked | *optional* (example:  true) |\n| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |\n| group_request | *optional* (example:  superadmin) |\n| failed_login_attempts | *optional* (example:  0) |\n| change_username | *optional* (example:  false) |\n| change_password | *optional* (example:  false) |\n| reset_password | *optional* (example:  false) |\n| email_verify | *optional* (example:  false) |\n| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | *optional* (example:  test@test.ai) |\n| created_on | *optional* (example:  1568419646794) |\n| last_login | *optional* (example:  null) |"
+							},
+							"response": []
+						},
+						{
+							"name": "Count",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/users/domain/:domain/count",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"domain",
+										":domain",
+										"count"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "5",
+											"description": "Number of maximum results. (example: 2)",
+											"disabled": true
+										},
+										{
+											"key": "skip",
+											"value": "10",
+											"description": "Number of db rows skipped. (example: 10)",
+											"disabled": true
+										},
+										{
+											"key": "filter",
+											"value": "created_on>2022-06-01,created_on<2022-06-08",
+											"description": "Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)",
+											"disabled": true
+										},
+										{
+											"key": "ids",
+											"value": "d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f",
+											"description": "Comma seperated id values used in inclusion query",
 											"disabled": true
 										}
 									],
@@ -2125,21 +3331,91 @@
 								{
 									"key": "sort",
 									"value": "created_on",
+									"description": "Sort by any user object key (examples: id, domain, locked, etc.)",
 									"disabled": true
 								},
 								{
 									"key": "limit",
-									"value": "200",
+									"value": "2",
+									"description": "Number of maximum results. (example: 2)",
+									"disabled": true
+								},
+								{
+									"key": "skip",
+									"value": "10",
+									"description": "Number of db rows skipped. (example: 10)",
 									"disabled": true
 								},
 								{
 									"key": "filter",
-									"value": "locked=false",
+									"value": "locked=false,created_on>2021-06-03,created_on<2021-06-06",
+									"description": "Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)",
 									"disabled": true
 								},
 								{
 									"key": "sortdir",
 									"value": "ASC",
+									"description": "Sort direction (example ascending order: ASC)",
+									"disabled": true
+								},
+								{
+									"key": "ids",
+									"value": "d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f",
+									"description": "Comma seperated id values used in inclusion query",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Gets all the users\n\n##### Filter Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | *optional* (example:  user7) |\n| locked | *optional* (example:  true) |\n| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |\n| group_request | *optional* (example:  superadmin) |\n| failed_login_attempts | *optional* (example:  0) |\n| change_username | *optional* (example:  false) |\n| change_password | *optional* (example:  false) |\n| reset_password | *optional* (example:  false) |\n| email_verify | *optional* (example:  false) |\n| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | *optional* (example:  test@test.ai) |\n| created_on | *optional* (example:  1568419646794) |\n| last_login | *optional* (example:  null) |"
+					},
+					"response": []
+				},
+				{
+					"name": "Count",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{TRAVELLING}}/api/v1/users/count",
+							"host": [
+								"{{TRAVELLING}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"count"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "2",
+									"description": "Number of maximum results. (example: 2)",
+									"disabled": true
+								},
+								{
+									"key": "skip",
+									"value": "10",
+									"description": "Number of db rows skipped. (example: 10)",
+									"disabled": true
+								},
+								{
+									"key": "filter",
+									"value": "created_on>2021-06-06,created_on<2021-06-08",
+									"description": "Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)",
+									"disabled": true
+								},
+								{
+									"key": "ids",
+									"value": "d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f",
+									"description": "Comma seperated id values used in inclusion query",
 									"disabled": true
 								}
 							]
@@ -3471,6 +4747,249 @@
 							"name": "Users",
 							"item": [
 								{
+									"name": "Get",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer",
+												"description": "The client_credentials generated OAUth2 access token.",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{TRAVELLING}}/api/v1/group/id/:id/type/:type/users",
+											"host": [
+												"{{TRAVELLING}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"group",
+												"id",
+												":id",
+												"type",
+												":type",
+												"users"
+											],
+											"query": [
+												{
+													"key": "filter",
+													"value": "locked=false,created_on>2021-06-03,created_on<2021-06-06",
+													"description": "Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)",
+													"disabled": true
+												},
+												{
+													"key": "limit",
+													"value": "10",
+													"description": "Number of maximum results. (example: 10)",
+													"disabled": true
+												},
+												{
+													"key": "skip",
+													"value": "2",
+													"description": "Number of db rows skipped. (example: 2)",
+													"disabled": true
+												},
+												{
+													"key": "sort",
+													"value": "created_on",
+													"description": "Sort by any user object key (examples: id, domain, locked, etc.)",
+													"disabled": true
+												},
+												{
+													"key": "sortdir",
+													"value": "ASC",
+													"description": "Sort direction (example ascending order: ASC)",
+													"disabled": true
+												}
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "superadmin",
+													"description": "Group name or ID."
+												},
+												{
+													"key": "type",
+													"value": "group",
+													"description": "Group type."
+												}
+											]
+										},
+										"description": "Gets all the users that belong to the group  of a particular type by its name or id.\n\n##### Optional Query Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | *optional* (example:  user7) |\n| locked | *optional* (example:  true) |\n| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |\n| group_request | *optional* (example:  superadmin) |\n| failed_login_attempts | *optional* (example:  0) |\n| change_username | *optional* (example:  false) |\n| change_password | *optional* (example:  false) |\n| reset_password | *optional* (example:  false) |\n| email_verify | *optional* (example:  false) |\n| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | *optional* (example:  test@test.ai) |\n| created_on | *optional* (example:  1568419646794) |\n| last_login | *optional* (example:  null) |"
+									},
+									"response": [
+										{
+											"name": "Get All Users",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{TRAVELLING}}/api/v1/group/:id/users",
+													"host": [
+														"{{TRAVELLING}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"group",
+														":id",
+														"users"
+													],
+													"variable": [
+														{
+															"key": "id",
+															"value": "superadmin",
+															"description": "id or name"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "content-type",
+													"value": "application/json; charset=utf-8"
+												},
+												{
+													"key": "content-length",
+													"value": "1813"
+												},
+												{
+													"key": "Date",
+													"value": "Fri, 13 Sep 2019 23:24:15 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"body": "[\n    {\n        \"id\": \"e517e311-fb37-4ca9-be4f-ff821ff9767d\",\n        \"username\": \"user5\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": false,\n        \"locked_reason\": null,\n        \"group_request\": null,\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt@abe.ai\",\n        \"created_on\": \"1568395971209\",\n        \"last_login\": {\n            \"date\": 1568416018554,\n            \"ip\": \"127.0.0.1\"\n        },\n        \"user_data\": {\n            \"activeAccountID\": \"09A75A84-A921-4F68-8FEF-B8392E3702C2\",\n            \"activeAgentID\": \"3C49E289-31F0-47D3-922E-D67ECD027B50\",\n            \"currentCuiConfigID\": \"41415261-9498-4387-BC87-9ED443E5CE1A\",\n            \"agentSlug\": \"MercMoney\"\n        },\n        \"eprofile\": null\n    },\n    {\n        \"id\": \"4d8f1190-5c7b-4dec-b766-be4a24a5df6c\",\n        \"username\": \"user7\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": true,\n        \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n        \"group_request\": \"superadmin\",\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt4@abe.ai\",\n        \"created_on\": \"1568396383891\",\n        \"last_login\": null,\n        \"user_data\": null,\n        \"eprofile\": null\n    },\n    {\n        \"id\": \"234d53a1-8b0b-4c7f-b98f-41138c41bc35\",\n        \"username\": \"user6\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": true,\n        \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n        \"group_request\": null,\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt2@abe.ai\",\n        \"created_on\": \"1568396224587\",\n        \"last_login\": null,\n        \"user_data\": null,\n        \"eprofile\": null\n    }\n]"
+										}
+									]
+								},
+								{
+									"name": "Count",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Bearer",
+												"description": "The client_credentials generated OAUth2 access token.",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{TRAVELLING}}/api/v1/group/id/:id/type/:type/users/count",
+											"host": [
+												"{{TRAVELLING}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"group",
+												"id",
+												":id",
+												"type",
+												":type",
+												"users",
+												"count"
+											],
+											"query": [
+												{
+													"key": "filter",
+													"value": "locked=false,created_on>2021-06-03,created_on<2021-06-06",
+													"description": "Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)",
+													"disabled": true
+												},
+												{
+													"key": "limit",
+													"value": "10",
+													"description": "Number of maximum results. (example: 10)",
+													"disabled": true
+												},
+												{
+													"key": "skip",
+													"value": "2",
+													"description": "Number of db rows skipped. (example: 2)",
+													"disabled": true
+												}
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "superadmin",
+													"description": "Group name or ID."
+												},
+												{
+													"key": "type",
+													"value": "group",
+													"description": "Group type."
+												}
+											]
+										},
+										"description": "Gets all the users that belong to the group  of a particular type by its name or id.\n\n##### Optional Query Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | *optional* (example:  user7) |\n| locked | *optional* (example:  true) |\n| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |\n| group_request | *optional* (example:  superadmin) |\n| failed_login_attempts | *optional* (example:  0) |\n| change_username | *optional* (example:  false) |\n| change_password | *optional* (example:  false) |\n| reset_password | *optional* (example:  false) |\n| email_verify | *optional* (example:  false) |\n| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | *optional* (example:  test@test.ai) |\n| created_on | *optional* (example:  1568419646794) |\n| last_login | *optional* (example:  null) |"
+									},
+									"response": [
+										{
+											"name": "Get All Users",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{TRAVELLING}}/api/v1/group/:id/users",
+													"host": [
+														"{{TRAVELLING}}"
+													],
+													"path": [
+														"api",
+														"v1",
+														"group",
+														":id",
+														"users"
+													],
+													"variable": [
+														{
+															"key": "id",
+															"value": "superadmin",
+															"description": "id or name"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "content-type",
+													"value": "application/json; charset=utf-8"
+												},
+												{
+													"key": "content-length",
+													"value": "1813"
+												},
+												{
+													"key": "Date",
+													"value": "Fri, 13 Sep 2019 23:24:15 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "keep-alive"
+												}
+											],
+											"cookie": [],
+											"body": "[\n    {\n        \"id\": \"e517e311-fb37-4ca9-be4f-ff821ff9767d\",\n        \"username\": \"user5\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": false,\n        \"locked_reason\": null,\n        \"group_request\": null,\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt@abe.ai\",\n        \"created_on\": \"1568395971209\",\n        \"last_login\": {\n            \"date\": 1568416018554,\n            \"ip\": \"127.0.0.1\"\n        },\n        \"user_data\": {\n            \"activeAccountID\": \"09A75A84-A921-4F68-8FEF-B8392E3702C2\",\n            \"activeAgentID\": \"3C49E289-31F0-47D3-922E-D67ECD027B50\",\n            \"currentCuiConfigID\": \"41415261-9498-4387-BC87-9ED443E5CE1A\",\n            \"agentSlug\": \"MercMoney\"\n        },\n        \"eprofile\": null\n    },\n    {\n        \"id\": \"4d8f1190-5c7b-4dec-b766-be4a24a5df6c\",\n        \"username\": \"user7\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": true,\n        \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n        \"group_request\": \"superadmin\",\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt4@abe.ai\",\n        \"created_on\": \"1568396383891\",\n        \"last_login\": null,\n        \"user_data\": null,\n        \"eprofile\": null\n    },\n    {\n        \"id\": \"234d53a1-8b0b-4c7f-b98f-41138c41bc35\",\n        \"username\": \"user6\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": true,\n        \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n        \"group_request\": null,\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt2@abe.ai\",\n        \"created_on\": \"1568396224587\",\n        \"last_login\": null,\n        \"user_data\": null,\n        \"eprofile\": null\n    }\n]"
+										}
+									]
+								},
+								{
 									"name": "Inherited",
 									"request": {
 										"method": "GET",
@@ -3555,92 +5074,6 @@
 											],
 											"cookie": [],
 											"body": "[\n    {\n        \"id\": \"5f7c8f01-83b4-44a1-9318-91cc8d12d2f0\",\n        \"username\": \"user9\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": true,\n        \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n        \"group_request\": \"superadmin\",\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"1ac1756c-3ead-4821-8a97-3af516dcaaf3\",\n        \"email\": \"jt9@abe.ai\",\n        \"created_on\": \"1568412135673\",\n        \"last_login\": null,\n        \"user_data\": null,\n        \"eprofile\": null\n    },\n    {\n        \"id\": \"f93474bc-8dc3-48bd-acf7-842e30ad2708\",\n        \"username\": \"user39\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": true,\n        \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n        \"group_request\": \"superadmin\",\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"7ec8c351-7b8a-4ea8-95cc-0d990b225768\",\n        \"email\": \"jt94@abe.ai\",\n        \"created_on\": \"1568416015887\",\n        \"last_login\": null,\n        \"user_data\": null,\n        \"eprofile\": null\n    },\n    {\n        \"id\": \"e517e311-fb37-4ca9-be4f-ff821ff9767d\",\n        \"username\": \"user5\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": false,\n        \"locked_reason\": null,\n        \"group_request\": null,\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt@abe.ai\",\n        \"created_on\": \"1568395971209\",\n        \"last_login\": {\n            \"date\": 1568416018554,\n            \"ip\": \"127.0.0.1\"\n        },\n        \"user_data\": {\n            \"activeAccountID\": \"09A75A84-A921-4F68-8FEF-B8392E3702C2\",\n            \"activeAgentID\": \"3C49E289-31F0-47D3-922E-D67ECD027B50\",\n            \"currentCuiConfigID\": \"41415261-9498-4387-BC87-9ED443E5CE1A\",\n            \"agentSlug\": \"MercMoney\"\n        },\n        \"eprofile\": null\n    },\n    {\n        \"id\": \"4d8f1190-5c7b-4dec-b766-be4a24a5df6c\",\n        \"username\": \"user7\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": true,\n        \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n        \"group_request\": \"superadmin\",\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt4@abe.ai\",\n        \"created_on\": \"1568396383891\",\n        \"last_login\": null,\n        \"user_data\": null,\n        \"eprofile\": null\n    },\n    {\n        \"id\": \"234d53a1-8b0b-4c7f-b98f-41138c41bc35\",\n        \"username\": \"user6\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": true,\n        \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n        \"group_request\": null,\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt2@abe.ai\",\n        \"created_on\": \"1568396224587\",\n        \"last_login\": null,\n        \"user_data\": null,\n        \"eprofile\": null\n    }\n]"
-										}
-									]
-								},
-								{
-									"name": "Get",
-									"request": {
-										"method": "GET",
-										"header": [],
-										"url": {
-											"raw": "{{TRAVELLING}}/api/v1/group/id/:id/type/:type/users",
-											"host": [
-												"{{TRAVELLING}}"
-											],
-											"path": [
-												"api",
-												"v1",
-												"group",
-												"id",
-												":id",
-												"type",
-												":type",
-												"users"
-											],
-											"variable": [
-												{
-													"key": "id",
-													"value": ""
-												},
-												{
-													"key": "type",
-													"value": ""
-												}
-											]
-										},
-										"description": "Gets all the users that belong to the group  of a particular type by its name or id.\n\n##### Optional Query Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | *optional* (example:  user7) |\n| locked | *optional* (example:  true) |\n| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |\n| group_request | *optional* (example:  superadmin) |\n| failed_login_attempts | *optional* (example:  0) |\n| change_username | *optional* (example:  false) |\n| change_password | *optional* (example:  false) |\n| reset_password | *optional* (example:  false) |\n| email_verify | *optional* (example:  false) |\n| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | *optional* (example:  test@test.ai) |\n| created_on | *optional* (example:  1568419646794) |\n| last_login | *optional* (example:  null) |"
-									},
-									"response": [
-										{
-											"name": "Get All Users",
-											"originalRequest": {
-												"method": "GET",
-												"header": [],
-												"url": {
-													"raw": "{{TRAVELLING}}/api/v1/group/:id/users",
-													"host": [
-														"{{TRAVELLING}}"
-													],
-													"path": [
-														"api",
-														"v1",
-														"group",
-														":id",
-														"users"
-													],
-													"variable": [
-														{
-															"key": "id",
-															"value": "superadmin",
-															"description": "id or name"
-														}
-													]
-												}
-											},
-											"status": "OK",
-											"code": 200,
-											"_postman_previewlanguage": "json",
-											"header": [
-												{
-													"key": "content-type",
-													"value": "application/json; charset=utf-8"
-												},
-												{
-													"key": "content-length",
-													"value": "1813"
-												},
-												{
-													"key": "Date",
-													"value": "Fri, 13 Sep 2019 23:24:15 GMT"
-												},
-												{
-													"key": "Connection",
-													"value": "keep-alive"
-												}
-											],
-											"cookie": [],
-											"body": "[\n    {\n        \"id\": \"e517e311-fb37-4ca9-be4f-ff821ff9767d\",\n        \"username\": \"user5\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": false,\n        \"locked_reason\": null,\n        \"group_request\": null,\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt@abe.ai\",\n        \"created_on\": \"1568395971209\",\n        \"last_login\": {\n            \"date\": 1568416018554,\n            \"ip\": \"127.0.0.1\"\n        },\n        \"user_data\": {\n            \"activeAccountID\": \"09A75A84-A921-4F68-8FEF-B8392E3702C2\",\n            \"activeAgentID\": \"3C49E289-31F0-47D3-922E-D67ECD027B50\",\n            \"currentCuiConfigID\": \"41415261-9498-4387-BC87-9ED443E5CE1A\",\n            \"agentSlug\": \"MercMoney\"\n        },\n        \"eprofile\": null\n    },\n    {\n        \"id\": \"4d8f1190-5c7b-4dec-b766-be4a24a5df6c\",\n        \"username\": \"user7\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": true,\n        \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n        \"group_request\": \"superadmin\",\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt4@abe.ai\",\n        \"created_on\": \"1568396383891\",\n        \"last_login\": null,\n        \"user_data\": null,\n        \"eprofile\": null\n    },\n    {\n        \"id\": \"234d53a1-8b0b-4c7f-b98f-41138c41bc35\",\n        \"username\": \"user6\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": true,\n        \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n        \"group_request\": null,\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt2@abe.ai\",\n        \"created_on\": \"1568396224587\",\n        \"last_login\": null,\n        \"user_data\": null,\n        \"eprofile\": null\n    }\n]"
 										}
 									]
 								}
@@ -5776,7 +7209,14 @@
 							"name": "Get",
 							"request": {
 								"method": "GET",
-								"header": [],
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
 								"url": {
 									"raw": "{{TRAVELLING}}/api/v1/group/id/:id/users",
 									"host": [
@@ -5790,11 +7230,152 @@
 										":id",
 										"users"
 									],
+									"query": [
+										{
+											"key": "filter",
+											"value": "locked=false,created_on>2021-06-03,created_on<2021-06-06",
+											"description": "Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)",
+											"disabled": true
+										},
+										{
+											"key": "limit",
+											"value": "10",
+											"description": "Number of maximum results. (example: 10)",
+											"disabled": true
+										},
+										{
+											"key": "skip",
+											"value": "2",
+											"description": "Number of db rows skipped. (example: 2)",
+											"disabled": true
+										},
+										{
+											"key": "sort",
+											"value": "created_on",
+											"description": "Sort by any user object key (examples: id, domain, locked, etc.)",
+											"disabled": true
+										},
+										{
+											"key": "sortdir",
+											"value": "ASC",
+											"description": "Sort direction (example ascending order: ASC)",
+											"disabled": true
+										}
+									],
 									"variable": [
 										{
 											"key": "id",
 											"value": "superadmin",
-											"description": "id or name"
+											"description": "Group name or ID."
+										}
+									]
+								},
+								"description": "Gets all the users that belong to the group.\n\n##### Optional Query Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | *optional* (example:  user7) |\n| locked | *optional* (example:  true) |\n| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |\n| group_request | *optional* (example:  superadmin) |\n| failed_login_attempts | *optional* (example:  0) |\n| change_username | *optional* (example:  false) |\n| change_password | *optional* (example:  false) |\n| reset_password | *optional* (example:  false) |\n| email_verify | *optional* (example:  false) |\n| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | *optional* (example:  test@test.ai) |\n| created_on | *optional* (example:  1568419646794) |\n| last_login | *optional* (example:  null) |"
+							},
+							"response": [
+								{
+									"name": "Get All Users",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{TRAVELLING}}/api/v1/group/:id/users",
+											"host": [
+												"{{TRAVELLING}}"
+											],
+											"path": [
+												"api",
+												"v1",
+												"group",
+												":id",
+												"users"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "superadmin",
+													"description": "id or name"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "content-type",
+											"value": "application/json; charset=utf-8"
+										},
+										{
+											"key": "content-length",
+											"value": "1813"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 13 Sep 2019 23:24:15 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "keep-alive"
+										}
+									],
+									"cookie": [],
+									"body": "[\n    {\n        \"id\": \"e517e311-fb37-4ca9-be4f-ff821ff9767d\",\n        \"username\": \"user5\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": false,\n        \"locked_reason\": null,\n        \"group_request\": null,\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt@abe.ai\",\n        \"created_on\": \"1568395971209\",\n        \"last_login\": {\n            \"date\": 1568416018554,\n            \"ip\": \"127.0.0.1\"\n        },\n        \"user_data\": {\n            \"activeAccountID\": \"09A75A84-A921-4F68-8FEF-B8392E3702C2\",\n            \"activeAgentID\": \"3C49E289-31F0-47D3-922E-D67ECD027B50\",\n            \"currentCuiConfigID\": \"41415261-9498-4387-BC87-9ED443E5CE1A\",\n            \"agentSlug\": \"MercMoney\"\n        },\n        \"eprofile\": null\n    },\n    {\n        \"id\": \"4d8f1190-5c7b-4dec-b766-be4a24a5df6c\",\n        \"username\": \"user7\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": true,\n        \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n        \"group_request\": \"superadmin\",\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt4@abe.ai\",\n        \"created_on\": \"1568396383891\",\n        \"last_login\": null,\n        \"user_data\": null,\n        \"eprofile\": null\n    },\n    {\n        \"id\": \"234d53a1-8b0b-4c7f-b98f-41138c41bc35\",\n        \"username\": \"user6\",\n        \"password\": \"17c24abfa17fda309c844062bc23b1cbf7af96cc0bd1c399800fc23be18a86f8\",\n        \"avatar\": null,\n        \"locked\": true,\n        \"locked_reason\": \"Activation Required, email your admin to get your account activated\",\n        \"group_request\": null,\n        \"failed_login_attempts\": 0,\n        \"change_username\": false,\n        \"change_password\": false,\n        \"reset_password\": false,\n        \"email_verify\": false,\n        \"group_id\": \"6172b28b-7455-4f9e-bf63-9e7a05107133\",\n        \"email\": \"jt2@abe.ai\",\n        \"created_on\": \"1568396224587\",\n        \"last_login\": null,\n        \"user_data\": null,\n        \"eprofile\": null\n    }\n]"
+								}
+							]
+						},
+						{
+							"name": "Count",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/group/id/:id/users/count",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"group",
+										"id",
+										":id",
+										"users",
+										"count"
+									],
+									"query": [
+										{
+											"key": "filter",
+											"value": "locked=false,created_on>2021-06-03,created_on<2021-06-06",
+											"description": "Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)",
+											"disabled": true
+										},
+										{
+											"key": "limit",
+											"value": "10",
+											"description": "Number of maximum results. (example: 10)",
+											"disabled": true
+										},
+										{
+											"key": "skip",
+											"value": "2",
+											"description": "Number of db rows skipped. (example: 2)",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "superadmin",
+											"description": "Group name or ID."
 										}
 									]
 								},
@@ -5954,7 +7535,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"group1\",\n    \"type\": \"accounts\",\n    \"allowed\": [\n        {\n            \"route\": \"/test\",\n            \"host\": \"http://127.0.0.1:1237/\",\n            \"remove_from_path\": \"test\",\n            \"method\": \"*\",\n            \"name\": \"all-test\"\n        }\n    ],\n    \"is_default\": false\n}",
+							"raw": "{\n    \"name\": \"group1\",\n    \"type\": \"testgroup\",\n    \"allowed\": [\n        {\n            \"route\": \"/test\",\n            \"host\": \"http://127.0.0.1:1237/\",\n            \"remove_from_path\": \"test\",\n            \"method\": \"*\",\n            \"name\": \"all-test\"\n        }\n    ],\n    \"is_default\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -6325,7 +7906,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "",
+									"value": "group1",
 									"description": "id or name "
 								}
 							]
@@ -7212,7 +8793,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"group\": {\n        \"anonymous\": {\n            \"type\": \"group\",\n            \"allowed\": [\n                {\n                    \"route\": \"/travelling/portal/*\",\n                    \"host\": null,\n                    \"name\": \"*-travelling-portal-*\"\n                },\n                {\n                    \"route\": \"/travelling/api/v1/auth/*\",\n                    \"host\": null,\n                    \"name\": \"*-travelling-api-v1-auth-*\"\n                },\n                {\n                    \"route\": \"/travelling/api/v1/user/me/route/allowed\",\n                    \"host\": null,\n                    \"method\": \"GET\",\n                    \"name\": \"get-travelling-api-v1-user-me-route-allowed\"\n                },\n                {\n                    \"route\": \"/travelling/api/v1/user/me/permission/allowed/*\",\n                    \"host\": null,\n                    \"method\": \"GET\",\n                    \"name\": \"get-travelling-api-v1-user-me-permission-allowed-*\"\n                },\n                {\n                    \"route\": \"/travelling/assets/*\",\n                    \"host\": null,\n                    \"removeFromPath\": \"/travelling/assets/\",\n                    \"method\": \"GET\",\n                    \"name\": \"get-travelling-assets-*\"\n                },\n                {\n                    \"route\": \"/travelling/api/v1/config/password\",\n                    \"host\": null,\n                    \"method\": \"GET\",\n                    \"name\": \"get-travelling-api-v1-config-password\"\n                },\n                {\n                    \"route\": \"/favicon.ico\",\n                    \"host\": null,\n                    \"method\": \"GET\",\n                    \"name\": \"get-favicon.ico\"\n                }\n            ],\n            \"inherited\": null,\n            \"is_default\": false\n        },\n        \"group3\": {\n            \"type\": \"group\",\n            \"allowed\": null,\n            \"inherited\": [\n                \"testgroup|group1\",\n                \"group|group2\"\n            ],\n            \"is_default\": false\n        },\n        \"superadmin\": {\n            \"type\": \"group\",\n            \"allowed\": [\n                {\n                    \"host\": null,\n                    \"route\": \"/travelling/*\",\n                    \"name\": \"*-travelling-*\"\n                },\n                {\n                    \"name\": \"test-one-*-three\"\n                }\n            ],\n            \"inherited\": [\n                \"group|anonymous\"\n            ],\n            \"is_default\": false\n        },\n        \"group4\": {\n            \"type\": \"group\",\n            \"allowed\": null,\n            \"inherited\": [],\n            \"is_default\": false\n        },\n        \"group2\": {\n            \"type\": \"group\",\n            \"allowed\": [\n                {\n                    \"route\": \"/test/get\",\n                    \"host\": \"https://127.0.0.1:4268/:username/:group\",\n                    \"removeFromPath\": \"/test/get\",\n                    \"method\": \"GET\",\n                    \"name\": \"get-test-get\"\n                },\n                {\n                    \"route\": \"/test/post\",\n                    \"host\": \"http://127.0.0.1:4267/?id=:id&permission=:permission\",\n                    \"removeFromPath\": \"/test/post\",\n                    \"method\": \"POST\",\n                    \"name\": \"post-test-post\"\n                }\n            ],\n            \"inherited\": [\n                \"testgroup|group1\"\n            ],\n            \"is_default\": false\n        },\n        \"group5\": {\n            \"type\": \"group\",\n            \"allowed\": [\n                {\n                    \"route\": \"/test/delete/:grouptype\",\n                    \"host\": \"https://127.0.0.1:4268\",\n                    \"removeFromPath\": \"/test/delete\",\n                    \"method\": \"DELETE\",\n                    \"name\": \"delete-test-delete-:grouptype\"\n                }\n            ],\n            \"inherited\": [\n                \"group|group4\",\n                \"group|superadmin\"\n            ],\n            \"is_default\": true\n        },\n        \"group1\": {\n            \"type\": \"group\",\n            \"allowed\": null,\n            \"inherited\": null,\n            \"is_default\": false\n        }\n    },\n    \"testgroup\": {\n        \"group1\": {\n            \"type\": \"testgroup\",\n            \"allowed\": null,\n            \"inherited\": [\n                \"group|group4\"\n            ],\n            \"is_default\": false\n        },\n        \"superadmin\": {\n            \"type\": \"testgroup\",\n            \"allowed\": null,\n            \"inherited\": null,\n            \"is_default\": false\n        }\n    }\n}",
+							"raw": "{\n    \"global\": {\n        \"user\": {\n            \"allowed\": [\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/account/api/v1/auth/logout\",\n                    \"name\": \"get-account-api-v1-auth-logout\"\n                },\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/account/api/v1/user/me/*\",\n                    \"name\": \"get-account-api-v1-user-me-*\"\n                },\n                {\n                    \"method\": \"PUT\",\n                    \"route\": \"/account/api/v1/user/me/property/password/*\",\n                    \"name\": \"put-account-api-v1-user-me-property-password-*\"\n                },\n                {\n                    \"method\": \"PUT\",\n                    \"route\": \"/account/api/v1/user/me/property/avatar/*\",\n                    \"name\": \"put-account-api-v1-user-me-property-avatar-*\"\n                },\n                {\n                    \"method\": \"PUT\",\n                    \"route\": \"/account/api/v1/user/me/property/email/*\",\n                    \"name\": \"put-account-api-v1-user-me-property-email-*\"\n                }\n            ],\n            \"inherited\": [\n                \"group|anonymous\"\n            ],\n            \"is_default\": true\n        },\n        \"developer\": {\n            \"allowed\": [\n                {\n                    \"method\": \"POST\",\n                    \"route\": \"/account/api/v1/user/me/token\",\n                    \"name\": \"post-account-api-v1-user-me-token\"\n                },\n                {\n                    \"method\": \"DELETE\",\n                    \"route\": \"/account/api/v1/user/me/token/*\",\n                    \"name\": \"delete-account-api-v1-user-me-token-*\"\n                }\n            ],\n            \"inherited\": [\n                \"global|user\"\n            ]\n        },\n        \"service\": {\n            \"allowed\": [\n                {\n                    \"method\": \"POST\",\n                    \"route\": \"/account/api/v1/user/me/token\",\n                    \"name\": \"post-account-api-v1-user-me-token\"\n                },\n                {\n                    \"method\": \"DELETE\",\n                    \"route\": \"/account/api/v1/user/me/token/*\",\n                    \"name\": \"delete-account-api-v1-user-me-token-*\"\n                }\n            ],\n            \"inherited\": [\n                \"global|user\",\n                \"global|superadmin\"\n            ]\n        },\n        \"crm-public\": {\n            \"allowed\": [\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/crm\",\n                    \"host\": \"http://localhost:1337\",\n                    \"name\": \"get-crm\"\n                },\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/crm/auth/*\",\n                    \"host\": \"http://localhost:1337\",\n                    \"name\": \"get-crm-auth-*\"\n                }\n            ]\n        },\n        \"leads-public\": {\n            \"allowed\": [\n                {\n                    \"method\": \"POST\",\n                    \"route\": \"/api/leads/v1/new/lead\",\n                    \"remove_from_path\": \"/api\",\n                    \"host\": \"http://leads.trazidev.com\",\n                    \"name\": \"post-api-leads-v1-new-lead\"\n                }\n            ]\n        },\n        \"import-report-public\": {\n            \"allowed\": [\n                {\n                    \"method\": \"POST\",\n                    \"route\": \"/api/import-report/v1/tlo/people/cid/*\",\n                    \"remove_from_path\": \"/api\",\n                    \"host\": \"http://import-report.trazidev.com\",\n                    \"name\": \"post-api-import-report-v1-tlo-people-cid-*\"\n                }\n            ]\n        },\n        \"subscribed\": {},\n        \"admin\": {\n            \"inherited\": [\n                \"global|user\",\n                \"global|csrall\"\n            ]\n        },\n        \"superadmin\": {\n            \"allowed\": [\n                {\n                    \"route\": \"/account/*\",\n                    \"name\": \"*-account-*\"\n                },\n                {\n                    \"name\": \"account-*\"\n                }\n            ],\n            \"inherited\": [\n                \"global|admin\"\n            ]\n        },\n        \"csrall\": {\n            \"allowed\": [\n                {\n                    \"method\": \"*\",\n                    \"route\": \"/api/opt-out/v1/*\",\n                    \"remove_from_path\": \"/api\",\n                    \"host\": \"http://opt-out.trazidev.com\",\n                    \"name\": \"*-api-opt-out-v1-*\"\n                },\n                {\n                    \"method\": \"*\",\n                    \"route\": \"/api/search/v1/*\",\n                    \"remove_from_path\": \"/api\",\n                    \"host\": \"http://search.trazidev.com\",\n                    \"name\": \"*-api-search-v1-*\"\n                },\n                {\n                    \"method\": \"*\",\n                    \"route\": \"/api/email/v1/*\",\n                    \"remove_from_path\": \"/api\",\n                    \"host\": \"http://email.trazidev.com\",\n                    \"name\": \"*-api-email-v1-*\"\n                }\n            ],\n            \"inherited\": [\n                \"global|user\",\n                \"global|crm-private\"\n            ]\n        },\n        \"auth\": {\n            \"allowed\": [\n                {\n                    \"method\": \"POST\",\n                    \"route\": \"/account/api/v1/auth/register/domain/unmask.com\",\n                    \"name\": \"post-account-api-v1-auth-register-domain-unmask.com\"\n                },\n                {\n                    \"method\": \"PUT\",\n                    \"route\": \"/account/api/v1/auth/login/domain/unmask.com\",\n                    \"name\": \"put-account-api-v1-auth-login-domain-unmask.com\"\n                },\n                {\n                    \"method\": \"PUT\",\n                    \"route\": \"/account/api/v1/auth/password/forgot/domain/unmask.com\",\n                    \"name\": \"put-account-api-v1-auth-password-forgot-domain-unmask.com\"\n                },\n                {\n                    \"method\": \"POST\",\n                    \"route\": \"/account/api/v1/auth/register/domain/checkpeople.com\",\n                    \"name\": \"post-account-api-v1-auth-register-domain-checkpeople.com\"\n                },\n                {\n                    \"method\": \"PUT\",\n                    \"route\": \"/account/api/v1/auth/login/domain/checkpeople.com\",\n                    \"name\": \"put-account-api-v1-auth-login-domain-checkpeople.com\"\n                },\n                {\n                    \"method\": \"PUT\",\n                    \"route\": \"/account/api/v1/auth/password/forgot/domain/checkpeople.com\",\n                    \"name\": \"put-account-api-v1-auth-password-forgot-domain-checkpeople.com\"\n                },\n                {\n                    \"method\": \"POST\",\n                    \"route\": \"/account/api/v1/auth/register/domain/traziventures.com\",\n                    \"name\": \"post-account-api-v1-auth-register-domain-traziventures.com\"\n                },\n                {\n                    \"method\": \"PUT\",\n                    \"route\": \"/account/api/v1/auth/login/domain/traziventures.com\",\n                    \"name\": \"put-account-api-v1-auth-login-domain-traziventures.com\"\n                },\n                {\n                    \"method\": \"PUT\",\n                    \"route\": \"/account/api/v1/auth/password/forgot/domain/traziventures.com\",\n                    \"name\": \"put-account-api-v1-auth-password-forgot-domain-traziventures.com\"\n                },\n                {\n                    \"method\": \"PUT\",\n                    \"route\": \"/account/api/v1/auth/password/reset/login\",\n                    \"name\": \"put-account-api-v1-auth-password-reset-login\"\n                }\n            ]\n        },\n        \"crm-private\": {\n            \"allowed\": [\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/crm/admin/*\",\n                    \"host\": \"http://staging.crm.trazidev.com\",\n                    \"name\": \"get-crm-admin-*\"\n                }\n            ]\n        },\n        \"csr\": {\n            \"allowed\": [\n                {\n                    \"method\": \"*\",\n                    \"route\": \"/api/opt-out/v1/cids\",\n                    \"remove_from_path\": \"/api\",\n                    \"host\": \"http://opt-out.trazidev.com\",\n                    \"name\": \"*-api-opt-out-v1-cids\"\n                },\n                {\n                    \"method\": \"*\",\n                    \"route\": \"/api/opt-out/v1/id/*\",\n                    \"remove_from_path\": \"/api\",\n                    \"host\": \"http://opt-out.trazidev.com\",\n                    \"name\": \"*-api-opt-out-v1-id-*\"\n                },\n                {\n                    \"method\": \"*\",\n                    \"route\": \"/api/opt-out/v1/domain/:grouptype.com\",\n                    \"remove_from_path\": \"/api\",\n                    \"host\": \"http://opt-out.trazidev.com\",\n                    \"name\": \"*-api-opt-out-v1-domain-:grouptype.com\"\n                },\n                {\n                    \"method\": \"*\",\n                    \"route\": \"/api/opt-out/v1/domain/:grouptype.com/*\",\n                    \"remove_from_path\": \"/api\",\n                    \"host\": \"http://opt-out.trazidev.com\",\n                    \"name\": \"*-api-opt-out-v1-domain-:grouptype.com-*\"\n                },\n                {\n                    \"method\": \"*\",\n                    \"route\": \"/api/search/v1/*\",\n                    \"remove_from_path\": \"/api\",\n                    \"host\": \"http://search.trazidev.com\",\n                    \"name\": \"*-api-search-v1-*\"\n                },\n                {\n                    \"method\": \"*\",\n                    \"route\": \"/api/email/v1/*\",\n                    \"remove_from_path\": \"/api\",\n                    \"host\": \"http://email.trazidev.com\",\n                    \"name\": \"*-api-email-v1-*\"\n                }\n            ],\n            \"inherited\": [\n                \"global|user\",\n                \"global|crm-private\"\n            ]\n        }\n    },\n    \"group\": {\n        \"superadmin\": {\n            \"allowed\": [\n                {\n                    \"host\": null,\n                    \"route\": \"/account/*\",\n                    \"name\": \"*-account-*\"\n                }\n            ],\n            \"inherited\": [\n                \"group|anonymous\"\n            ]\n        },\n        \"anonymous\": {\n            \"allowed\": [\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/account/dashboard/*\",\n                    \"remove_from_path\": \"/account/dashboard\",\n                    \"host\": \"https://unmask.com\",\n                    \"name\": \"get-account-dashboard-*\"\n                },\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/account/portal/*\",\n                    \"name\": \"get-account-portal-*\"\n                },\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/account/assets/*\",\n                    \"name\": \"get-account-assets-*\"\n                },\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/favicon.ico\",\n                    \"name\": \"get-favicon.ico\"\n                },\n                {\n                    \"method\": \"PUT\",\n                    \"route\": \"/account/api/v1/auth/password/forgot\",\n                    \"name\": \"put-account-api-v1-auth-password-forgot\"\n                },\n                {\n                    \"method\": \"PUT\",\n                    \"route\": \"/account/api/v1/auth/password/reset\",\n                    \"name\": \"put-account-api-v1-auth-password-reset\"\n                },\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/account/api/v1/auth/activate\",\n                    \"name\": \"get-account-api-v1-auth-activate\"\n                },\n                {\n                    \"method\": \"POST\",\n                    \"route\": \"/account/api/v1/auth/token\",\n                    \"name\": \"post-account-api-v1-auth-token\"\n                },\n                {\n                    \"method\": \"POST\",\n                    \"route\": \"/account/api/v1//auth/oauth/authorize\",\n                    \"name\": \"post-account-api-v1--auth-oauth-authorize\"\n                },\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/account/api/v1//auth/oauth/authorize\",\n                    \"name\": \"get-account-api-v1--auth-oauth-authorize\"\n                },\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/account/api/v1/user/me/permission/allowed/*\",\n                    \"name\": \"get-account-api-v1-user-me-permission-allowed-*\"\n                },\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/account/api/v1/user/me/route/allowed\",\n                    \"name\": \"get-account-api-v1-user-me-route-allowed\"\n                },\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/account/api/v1/config/password\",\n                    \"name\": \"get-account-api-v1-config-password\"\n                },\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/account/api/v1/config/portal/webclient\",\n                    \"name\": \"get-account-api-v1-config-portal-webclient\"\n                },\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/account/metrics\",\n                    \"name\": \"get-account-metrics\"\n                },\n                {\n                    \"method\": \"GET\",\n                    \"route\": \"/account/health\",\n                    \"name\": \"get-account-health\"\n                }\n            ],\n            \"inherited\": [\n                \"global|auth\",\n                \"global|leads-public\",\n                \"global|import-report-public\",\n                \"global|opt-out-public\",\n                \"global|crm-public\"\n            ]\n        }\n    },\n    \"unmask\": {\n        \"csr\": {\n            \"inherited\": [\n                \"global|csr\"\n            ]\n        }\n    },\n    \"checkpeople\": {\n        \"csr\": {\n            \"inherited\": [\n                \"global|csr\"\n            ]\n        }\n    },\n    \"information\": {\n        \"csr\": {\n            \"inherited\": [\n                \"global|csr\"\n            ]\n        }\n    },\n    \"products\": {\n        \"full_reports\": {},\n        \"pdf_generation\": {},\n        \"report_monitoring\": {}\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -7616,6 +9197,407 @@
 			]
 		},
 		{
+			"name": "Audit",
+			"item": [
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "OfUser ID",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/audit/user/ofuser/:id",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"audit",
+										"user",
+										"ofuser",
+										":id"
+									],
+									"query": [
+										{
+											"key": "filter",
+											"value": "created_on>2021-06-03,created_on<2021-06-06",
+											"description": "Filter parameters (example: action=CREATE,subaction=USER,created_on>2021-06-03,created_on<2021-06-06)",
+											"disabled": true
+										},
+										{
+											"key": "limit",
+											"value": "2",
+											"description": "Number of maximum results. (example: 2)",
+											"disabled": true
+										},
+										{
+											"key": "skip",
+											"value": "10",
+											"description": "Number of db rows skipped. (example: 10)",
+											"disabled": true
+										},
+										{
+											"key": "sort",
+											"value": "action",
+											"description": "Sort by any user object key (examples: created_on, action, etc.)",
+											"disabled": true
+										},
+										{
+											"key": "sortdir",
+											"value": "DESC",
+											"description": "Sort direction (example ascending order: ASC)",
+											"disabled": true
+										},
+										{
+											"key": "resolve",
+											"value": "true",
+											"description": "Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields",
+											"disabled": true
+										},
+										{
+											"key": "selfexclusion",
+											"value": "true",
+											"description": "Excludes audits with the same by_user_id.",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "44aa2ae6-22e9-43ef-a6d3-3d7d39e78064",
+											"description": "Id of user that committed the action."
+										}
+									]
+								},
+								"description": "Gets audits by of_user id.\n\n##### Filter Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |\n| created_on | *optional* (example:  created_on>=2021-06-09) |\n| action | *optional* (example:  action=CREATE) |\n| subaction | *optional* (example:  subaction=USER) |\n| prop | *optional* (example:  prop=email) |\n| old_val | *optional* (example:  old_val=swagger@email.69) |\n| new_val | *optional* (example:  new_val=leet@teel.com) |"
+							},
+							"response": []
+						},
+						{
+							"name": "ByUser ID",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/audit/user/byuser/:id",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"audit",
+										"user",
+										"byuser",
+										":id"
+									],
+									"query": [
+										{
+											"key": "filter",
+											"value": "created_on>2021-06-03,created_on<2021-06-06",
+											"description": "Filter parameters (example: action=CREATE,subaction=USER,created_on>2021-06-03,created_on<2021-06-06)",
+											"disabled": true
+										},
+										{
+											"key": "limit",
+											"value": "2",
+											"description": "Number of maximum results. (example: 2)",
+											"disabled": true
+										},
+										{
+											"key": "skip",
+											"value": "1",
+											"description": "Number of db rows skipped. (example: 10)",
+											"disabled": true
+										},
+										{
+											"key": "sort",
+											"value": "created_on",
+											"description": "Sort by any user object key (examples: created_on, action, etc.)",
+											"disabled": true
+										},
+										{
+											"key": "sortdir",
+											"value": "ASC",
+											"description": "Sort direction (example ascending order: ASC)",
+											"disabled": true
+										},
+										{
+											"key": "resolve",
+											"value": "true",
+											"description": "Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields",
+											"disabled": true
+										},
+										{
+											"key": "selfexclusion",
+											"value": "true",
+											"description": "Excludes audits with the same of_user_id.",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "44aa2ae6-22e9-43ef-a6d3-3d7d39e78064",
+											"description": "Id of user that committed the action."
+										}
+									]
+								},
+								"description": "Gets audits by by_user id.\n\n##### Filter Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |\n| created_on | *optional* (example:  created_on>=2021-06-09) |\n| action | *optional* (example:  action=CREATE) |\n| subaction | *optional* (example:  subaction=USER) |\n| prop | *optional* (example:  prop=email) |\n| old_val | *optional* (example:  old_val=swagger@email.69) |\n| new_val | *optional* (example:  new_val=leet@teel.com) |"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "By Action",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{TRAVELLING}}/api/v1/audit/action/:action",
+							"host": [
+								"{{TRAVELLING}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"audit",
+								"action",
+								":action"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "2",
+									"description": "Number of maximum results. (example: 2)",
+									"disabled": true
+								},
+								{
+									"key": "skip",
+									"value": "1",
+									"description": "Number of db rows skipped. (example: 10)",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "created_on",
+									"description": "Sort by any user object key (examples: created_on, action, etc.)",
+									"disabled": true
+								},
+								{
+									"key": "sortdir",
+									"value": "ASC",
+									"description": "Sort direction (example ascending order: ASC)",
+									"disabled": true
+								},
+								{
+									"key": "filter",
+									"value": "created_on>2021-06-03,created_on<2021-06-06",
+									"description": "Filter parameters (example: action=created_on>2021-06-03,created_on<2021-06-06)",
+									"disabled": true
+								},
+								{
+									"key": "resolve",
+									"value": "true",
+									"description": "Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "action",
+									"value": "CREATE",
+									"description": "Audit action type."
+								}
+							]
+						},
+						"description": "Gets audits by action type.\n\n##### Filter Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |\n| created_on | *optional* (example:  created_on>=2021-06-09) |\n| prop | *optional* (example: prop=email) |\n| old_val | *optional* (example:  old_val=swagger@email.69) |\n| new_val | *optional* (example:  new_val=leet@teel.com) |"
+					},
+					"response": []
+				},
+				{
+					"name": "By Subaction",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{TRAVELLING}}/api/v1/audit/subaction/:subaction",
+							"host": [
+								"{{TRAVELLING}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"audit",
+								"subaction",
+								":subaction"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "2",
+									"description": "Number of maximum results. (example: 2)",
+									"disabled": true
+								},
+								{
+									"key": "skip",
+									"value": "1",
+									"description": "Number of db rows skipped. (example: 10)",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "created_on",
+									"description": "Sort by any user object key (examples: created_on, action, etc.)",
+									"disabled": true
+								},
+								{
+									"key": "sortdir",
+									"value": "ASC",
+									"description": "Sort direction (example ascending order: ASC)",
+									"disabled": true
+								},
+								{
+									"key": "filter",
+									"value": "created_on>2021-06-03,created_on<2021-06-06",
+									"description": "Filter parameters (example: action=created_on>2021-06-03,created_on<2021-06-06)",
+									"disabled": true
+								},
+								{
+									"key": "resolve",
+									"value": "true",
+									"description": "Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "subaction",
+									"value": "USER",
+									"description": "Audit subaction type."
+								}
+							]
+						},
+						"description": "Gets audits by subaction type.\n\n##### Filter Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |\n| created_on | *optional* (example:  created_on>=2021-06-09) |\n| prop | *optional* (example: prop=email) |\n| old_val | *optional* (example:  old_val=swagger@email.69) |\n| new_val | *optional* (example:  new_val=leet@teel.com) |"
+					},
+					"response": []
+				},
+				{
+					"name": "By Action and Subaction",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer",
+								"description": "The client_credentials generated OAUth2 access token.",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{TRAVELLING}}/api/v1/audit/action/:action/subaction/:subaction",
+							"host": [
+								"{{TRAVELLING}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"audit",
+								"action",
+								":action",
+								"subaction",
+								":subaction"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "2",
+									"description": "Number of maximum results. (example: 2)",
+									"disabled": true
+								},
+								{
+									"key": "skip",
+									"value": "1",
+									"description": "Number of db rows skipped. (example: 10)",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "created_on",
+									"description": "Sort by any user object key (examples: created_on, action, etc.)",
+									"disabled": true
+								},
+								{
+									"key": "sortdir",
+									"value": "ASC",
+									"description": "Sort direction (example ascending order: ASC)",
+									"disabled": true
+								},
+								{
+									"key": "filter",
+									"value": "created_on>2021-06-03,created_on<2021-06-06",
+									"description": "Filter parameters (example: action=created_on>2021-06-03,created_on<2021-06-06)",
+									"disabled": true
+								},
+								{
+									"key": "resolve",
+									"value": "true",
+									"description": "Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "action",
+									"value": "CREATE",
+									"description": "Audti action type."
+								},
+								{
+									"key": "subaction",
+									"value": "GROUP",
+									"description": "Audit subaction type."
+								}
+							]
+						},
+						"description": "Gets audits by action and subaction type.\n\n##### Filter Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |\n| created_on | *optional* (example:  created_on>=2021-06-09) |\n| prop | *optional* (example: prop=email) |\n| old_val | *optional* (example:  old_val=swagger@email.69) |\n| new_val | *optional* (example:  new_val=leet@teel.com) |"
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Metrics",
 			"request": {
 				"method": "GET",
@@ -7684,12 +9666,6 @@
 					""
 				]
 			}
-		}
-	],
-	"variable": [
-		{
-			"key": "TRAVELLING",
-			"value": "http://127.0.0.1:6969/account"
 		}
 	]
 }

@@ -4,6 +4,7 @@ const User = require('./models/user');
 const config = require('../utils/config');
 const crypto = require(config.pg.crypto.implementation);
 const Email = require('../utils/email');
+const userUtils = require('../utils/user');
 const TokenHandler = require('../token');
 const gm = require('../server/groupmanager.js');
 const helpers = require('../server/tracing/helpers')();
@@ -51,8 +52,7 @@ class Database {
     // Password check
     if (user.password == (await crypto.hash(password, null, user.getEncryptedProfile(user)))) {
       user.failed_login_attempts = 0;
-      await user.save();
-
+      await user.updated();
       return { user, err: null };
     }
 
@@ -62,7 +62,7 @@ class Database {
       user.locked = true;
       user.locked_reason = config.user.locked.message;
       user.change_password = true;
-      await user.save();
+      await user.updated();
       throw {
         user: user,
         err: {
@@ -72,7 +72,7 @@ class Database {
       };
     }
 
-    await user.save();
+    await user.updated();
     throw {
       user: user,
       err: {
@@ -82,17 +82,24 @@ class Database {
     };
   }
 
-  static async createAccount(username, password, email, group_ids, group_request = null, hostname, domain = 'default') {
-    var userProp = {
-      username,
-      password,
-      email,
-      group_request,
-      group_ids,
-      domain,
-      change_username: false,
-      change_password: false
-    };
+  static async createAccount(
+    username,
+    password,
+    email,
+    group_ids,
+    group_request = null,
+    hostname,
+    domain = 'default',
+    userProp = {}
+  ) {
+    userProp.username = username;
+    userProp.password = password;
+    userProp.email = email;
+    userProp.group_ids = group_ids;
+    userProp.group_request = group_request;
+    userProp.domain = domain;
+    userProp.change_username = false;
+    userProp.change_password = false;
 
     if (config.registration.requireManualActivation) {
       userProp.locked = true;
@@ -107,7 +114,7 @@ class Database {
       var token = await TokenHandler.getActivationToken(user.id);
 
       user.email_verify = true;
-      await user.save();
+      await user.updated();
 
       await Email.sendActivation(user, user.email, token.token, hostname);
     }
@@ -126,7 +133,7 @@ class Database {
       var rt = await TokenHandler.getRecoveryToken(user.id);
 
       user.reset_password = true;
-      await user.save();
+      await user.updated();
 
       if (sendemail) {
         Email.sendPasswordRecovery(user, domain, ip, user.email, rt.token);
@@ -135,6 +142,52 @@ class Database {
 
       return rt;
     }
+  }
+
+  static async getOTP(opts) {
+    var id = userUtils.getId(opts.req);
+    var domain = opts.req.params.domain;
+
+    if (opts.needsDomain && !domain) {
+      opts.res.code(400);
+      return {
+        type: 'otp-missing-param-error',
+        msg: 'No domain was provided.'
+      };
+    }
+
+    domain = domain || 'default';
+
+    if (config.user.isolateByDomain && domain) {
+      id.domain = domain;
+    }
+
+    var user = await User.findLimtedBy(id, 'AND', 1);
+
+    if (user && user.length > 0) {
+      user = user[0];
+
+      return { token: (await TokenHandler.getOTPToken(user.id)).token };
+    }
+
+    return {
+      type: 'otp-no-user-error',
+      msg: 'No user found with that id'
+    };
+  }
+
+  static async consumeOTP(token) {
+    var user = await User.findLimtedBy({ id: token[2] }, 'AND', 1);
+
+    if (!user || user.length < 1) {
+      return false;
+    }
+
+    user = user[0];
+
+    await TokenHandler.deleteAllTempTokens(token[2]);
+
+    return user;
   }
 
   static async resetPassword(token, password) {
@@ -154,7 +207,7 @@ class Database {
       user.locked_reason = '';
     }
 
-    await user.save();
+    await user.updated();
 
     await TokenHandler.deleteAllTempTokens(token[2]);
 
@@ -173,7 +226,7 @@ class Database {
     user.email_verify = false;
     user.locked = false;
     user.locked_reason = null;
-    await user.save();
+    await user.updated();
 
     await TokenHandler.deleteAllTempTokens(token[2]);
 
@@ -188,6 +241,7 @@ class Database {
       qProps.push({ username });
       qOps.push('OR');
     }
+
     if (config.user.isolateByDomain && domain) {
       qProps.push({ domain });
       qOps.push('AND');
@@ -201,13 +255,13 @@ class Database {
   static async checkDupe(user) {
     var found = await this.findUser(user.email, user.username, user.domain);
 
-    //console.log(user, qProps, qOps, found);
     if (found && found.length > 0) {
       return {
         type: 'exists-error',
         msg: 'Username or email already exists'
       };
     }
+
     return true;
   }
 
@@ -217,6 +271,7 @@ class Database {
     if (config.tracing.enable) {
       span = helpers.startSpan('initGroups');
     }
+
     var grps = await Group.findAll();
 
     if (grps.length == 0) {
@@ -320,10 +375,12 @@ class Database {
 
       return true;
     }
+
     await gm.updateGroupList(span);
     if (span) {
       span.end();
     }
+
     return false;
   }
 }

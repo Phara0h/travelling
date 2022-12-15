@@ -3,6 +3,10 @@
 <dl>
 <dt><a href="#Travelling">Travelling</a></dt>
 <dd></dd>
+<dt><a href="#Audit">Audit</a></dt>
+<dd></dd>
+<dt><a href="#AuditUser">AuditUser</a></dt>
+<dd></dd>
 <dt><a href="#Config">Config</a></dt>
 <dd></dd>
 <dt><a href="#Groups">Groups</a></dt>
@@ -31,6 +35,8 @@
 <dt><a href="#UsersDomain">UsersDomain</a></dt>
 <dd></dd>
 <dt><a href="#User">User</a></dt>
+<dd></dd>
+<dt><a href="#UserDomain">UserDomain</a></dt>
 <dd></dd>
 <dt><a href="#UserCurrent">UserCurrent</a></dt>
 <dd></dd>
@@ -86,6 +92,182 @@ Path: metrics
 
 | Param | Type | Description |
 | --- | --- | --- |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="Audit"></a>
+
+## Audit
+**Kind**: global class  
+
+* [Audit](#Audit)
+    * [.byActionAndSubaction(action, subaction, limit, skip, sort, sortdir, filter, resolve, authorization_bearer)](#Audit.byActionAndSubaction)
+    * [.bySubaction(subaction, limit, skip, sort, sortdir, filter, resolve, authorization_bearer)](#Audit.bySubaction)
+    * [.byAction(action, limit, skip, sort, sortdir, filter, resolve, authorization_bearer)](#Audit.byAction)
+
+<a name="Audit.byActionAndSubaction"></a>
+
+### Audit.byActionAndSubaction(action, subaction, limit, skip, sort, sortdir, filter, resolve, authorization_bearer)
+byActionAndSubaction - Gets audits by action and subaction type.
+
+##### Filter Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | *optional* (example:  created_on>=2021-06-09) |
+| prop | *optional* (example: prop=email) |
+| old_val | *optional* (example:  old_val=swagger@email.69) |
+| new_val | *optional* (example:  new_val=leet@teel.com) |
+
+Path: api/v1/audit/action/:action/subaction/:subaction
+
+**Kind**: static method of [<code>Audit</code>](#Audit)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| action | <code>any</code> | Audti action type. (example: CREATE) |
+| subaction | <code>any</code> | Audit subaction type. (example: GROUP) |
+| limit | <code>any</code> | Number of maximum results. (example: 2) (example: 2) |
+| skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 1) |
+| sort | <code>any</code> | Sort by any user object key (examples: created_on, action, etc.) (example: created_on) |
+| sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: ASC) |
+| filter | <code>any</code> | Filter parameters (example: action=created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-03,created_on<2021-06-06) |
+| resolve | <code>any</code> | Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields (example: true) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="Audit.bySubaction"></a>
+
+### Audit.bySubaction(subaction, limit, skip, sort, sortdir, filter, resolve, authorization_bearer)
+bySubaction - Gets audits by subaction type.
+
+##### Filter Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | *optional* (example:  created_on>=2021-06-09) |
+| prop | *optional* (example: prop=email) |
+| old_val | *optional* (example:  old_val=swagger@email.69) |
+| new_val | *optional* (example:  new_val=leet@teel.com) |
+
+Path: api/v1/audit/subaction/:subaction
+
+**Kind**: static method of [<code>Audit</code>](#Audit)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| subaction | <code>any</code> | Audit subaction type. (example: USER) |
+| limit | <code>any</code> | Number of maximum results. (example: 2) (example: 2) |
+| skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 1) |
+| sort | <code>any</code> | Sort by any user object key (examples: created_on, action, etc.) (example: created_on) |
+| sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: ASC) |
+| filter | <code>any</code> | Filter parameters (example: action=created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-03,created_on<2021-06-06) |
+| resolve | <code>any</code> | Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields (example: true) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="Audit.byAction"></a>
+
+### Audit.byAction(action, limit, skip, sort, sortdir, filter, resolve, authorization_bearer)
+byAction - Gets audits by action type.
+
+##### Filter Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | *optional* (example:  created_on>=2021-06-09) |
+| prop | *optional* (example: prop=email) |
+| old_val | *optional* (example:  old_val=swagger@email.69) |
+| new_val | *optional* (example:  new_val=leet@teel.com) |
+
+Path: api/v1/audit/action/:action
+
+**Kind**: static method of [<code>Audit</code>](#Audit)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| action | <code>any</code> | Audit action type. (example: CREATE) |
+| limit | <code>any</code> | Number of maximum results. (example: 2) (example: 2) |
+| skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 1) |
+| sort | <code>any</code> | Sort by any user object key (examples: created_on, action, etc.) (example: created_on) |
+| sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: ASC) |
+| filter | <code>any</code> | Filter parameters (example: action=created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-03,created_on<2021-06-06) |
+| resolve | <code>any</code> | Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields (example: true) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="AuditUser"></a>
+
+## AuditUser
+**Kind**: global class  
+
+* [AuditUser](#AuditUser)
+    * [.byuserId(id, filter, limit, skip, sort, sortdir, resolve, selfexclusion, authorization_bearer)](#AuditUser.byuserId)
+    * [.ofuserId(id, filter, limit, skip, sort, sortdir, resolve, selfexclusion, authorization_bearer)](#AuditUser.ofuserId)
+
+<a name="AuditUser.byuserId"></a>
+
+### AuditUser.byuserId(id, filter, limit, skip, sort, sortdir, resolve, selfexclusion, authorization_bearer)
+byuserId - Gets audits by by_user id.
+
+##### Filter Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | *optional* (example:  created_on>=2021-06-09) |
+| action | *optional* (example:  action=CREATE) |
+| subaction | *optional* (example:  subaction=USER) |
+| prop | *optional* (example:  prop=email) |
+| old_val | *optional* (example:  old_val=swagger@email.69) |
+| new_val | *optional* (example:  new_val=leet@teel.com) |
+
+Path: api/v1/audit/user/byuser/:id
+
+**Kind**: static method of [<code>AuditUser</code>](#AuditUser)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>any</code> | Id of user that committed the action. (example: 44aa2ae6-22e9-43ef-a6d3-3d7d39e78064) |
+| filter | <code>any</code> | Filter parameters (example: action=CREATE,subaction=USER,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-03,created_on<2021-06-06) |
+| limit | <code>any</code> | Number of maximum results. (example: 2) (example: 2) |
+| skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 1) |
+| sort | <code>any</code> | Sort by any user object key (examples: created_on, action, etc.) (example: created_on) |
+| sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: ASC) |
+| resolve | <code>any</code> | Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields (example: true) |
+| selfexclusion | <code>any</code> | Excludes audits with the same of_user_id. (example: true) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="AuditUser.ofuserId"></a>
+
+### AuditUser.ofuserId(id, filter, limit, skip, sort, sortdir, resolve, selfexclusion, authorization_bearer)
+ofuserId - Gets audits by of_user id.
+
+##### Filter Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | *optional* (example:  created_on>=2021-06-09) |
+| action | *optional* (example:  action=CREATE) |
+| subaction | *optional* (example:  subaction=USER) |
+| prop | *optional* (example:  prop=email) |
+| old_val | *optional* (example:  old_val=swagger@email.69) |
+| new_val | *optional* (example:  new_val=leet@teel.com) |
+
+Path: api/v1/audit/user/ofuser/:id
+
+**Kind**: static method of [<code>AuditUser</code>](#AuditUser)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>any</code> | Id of user that committed the action. (example: 44aa2ae6-22e9-43ef-a6d3-3d7d39e78064) |
+| filter | <code>any</code> | Filter parameters (example: action=CREATE,subaction=USER,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-03,created_on<2021-06-06) |
+| limit | <code>any</code> | Number of maximum results. (example: 2) (example: 2) |
+| skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |
+| sort | <code>any</code> | Sort by any user object key (examples: created_on, action, etc.) (example: action) |
+| sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: DESC) |
+| resolve | <code>any</code> | Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields (example: true) |
+| selfexclusion | <code>any</code> | Excludes audits with the same by_user_id. (example: true) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="Config"></a>
@@ -147,149 +329,410 @@ Path: api/v1/groups/import
 body
 ```json
 {
-    "group": {
-        "anonymous": {
-            "type": "group",
+    "global": {
+        "user": {
             "allowed": [
                 {
-                    "route": "/travelling/portal/*",
-                    "host": null,
-                    "name": "*-travelling-portal-*"
-                },
-                {
-                    "route": "/travelling/api/v1/auth/*",
-                    "host": null,
-                    "name": "*-travelling-api-v1-auth-*"
-                },
-                {
-                    "route": "/travelling/api/v1/user/me/route/allowed",
-                    "host": null,
                     "method": "GET",
-                    "name": "get-travelling-api-v1-user-me-route-allowed"
+                    "route": "/account/api/v1/auth/logout",
+                    "name": "get-account-api-v1-auth-logout"
                 },
                 {
-                    "route": "/travelling/api/v1/user/me/permission/allowed/*",
-                    "host": null,
                     "method": "GET",
-                    "name": "get-travelling-api-v1-user-me-permission-allowed-*"
+                    "route": "/account/api/v1/user/me/*",
+                    "name": "get-account-api-v1-user-me-*"
                 },
                 {
-                    "route": "/travelling/assets/*",
-                    "host": null,
-                    "removeFromPath": "/travelling/assets/",
-                    "method": "GET",
-                    "name": "get-travelling-assets-*"
+                    "method": "PUT",
+                    "route": "/account/api/v1/user/me/property/password/*",
+                    "name": "put-account-api-v1-user-me-property-password-*"
                 },
                 {
-                    "route": "/travelling/api/v1/config/password",
-                    "host": null,
-                    "method": "GET",
-                    "name": "get-travelling-api-v1-config-password"
+                    "method": "PUT",
+                    "route": "/account/api/v1/user/me/property/avatar/*",
+                    "name": "put-account-api-v1-user-me-property-avatar-*"
                 },
                 {
-                    "route": "/favicon.ico",
-                    "host": null,
-                    "method": "GET",
-                    "name": "get-favicon.ico"
-                }
-            ],
-            "inherited": null,
-            "is_default": false
-        },
-        "group3": {
-            "type": "group",
-            "allowed": null,
-            "inherited": [
-                "testgroup|group1",
-                "group|group2"
-            ],
-            "is_default": false
-        },
-        "superadmin": {
-            "type": "group",
-            "allowed": [
-                {
-                    "host": null,
-                    "route": "/travelling/*",
-                    "name": "*-travelling-*"
-                },
-                {
-                    "name": "test-one-*-three"
+                    "method": "PUT",
+                    "route": "/account/api/v1/user/me/property/email/*",
+                    "name": "put-account-api-v1-user-me-property-email-*"
                 }
             ],
             "inherited": [
                 "group|anonymous"
             ],
-            "is_default": false
-        },
-        "group4": {
-            "type": "group",
-            "allowed": null,
-            "inherited": [],
-            "is_default": false
-        },
-        "group2": {
-            "type": "group",
-            "allowed": [
-                {
-                    "route": "/test/get",
-                    "host": "https://127.0.0.1:4268/:username/:group",
-                    "removeFromPath": "/test/get",
-                    "method": "GET",
-                    "name": "get-test-get"
-                },
-                {
-                    "route": "/test/post",
-                    "host": "http://127.0.0.1:4267/?id=:id&permission=:permission",
-                    "removeFromPath": "/test/post",
-                    "method": "POST",
-                    "name": "post-test-post"
-                }
-            ],
-            "inherited": [
-                "testgroup|group1"
-            ],
-            "is_default": false
-        },
-        "group5": {
-            "type": "group",
-            "allowed": [
-                {
-                    "route": "/test/delete/:grouptype",
-                    "host": "https://127.0.0.1:4268",
-                    "removeFromPath": "/test/delete",
-                    "method": "DELETE",
-                    "name": "delete-test-delete-:grouptype"
-                }
-            ],
-            "inherited": [
-                "group|group4",
-                "group|superadmin"
-            ],
             "is_default": true
         },
-        "group1": {
-            "type": "group",
-            "allowed": null,
-            "inherited": null,
-            "is_default": false
-        }
-    },
-    "testgroup": {
-        "group1": {
-            "type": "testgroup",
-            "allowed": null,
-            "inherited": [
-                "group|group4"
+        "developer": {
+            "allowed": [
+                {
+                    "method": "POST",
+                    "route": "/account/api/v1/user/me/token",
+                    "name": "post-account-api-v1-user-me-token"
+                },
+                {
+                    "method": "DELETE",
+                    "route": "/account/api/v1/user/me/token/*",
+                    "name": "delete-account-api-v1-user-me-token-*"
+                }
             ],
-            "is_default": false
+            "inherited": [
+                "global|user"
+            ]
+        },
+        "service": {
+            "allowed": [
+                {
+                    "method": "POST",
+                    "route": "/account/api/v1/user/me/token",
+                    "name": "post-account-api-v1-user-me-token"
+                },
+                {
+                    "method": "DELETE",
+                    "route": "/account/api/v1/user/me/token/*",
+                    "name": "delete-account-api-v1-user-me-token-*"
+                }
+            ],
+            "inherited": [
+                "global|user",
+                "global|superadmin"
+            ]
+        },
+        "crm-public": {
+            "allowed": [
+                {
+                    "method": "GET",
+                    "route": "/crm",
+                    "host": "http://localhost:1337",
+                    "name": "get-crm"
+                },
+                {
+                    "method": "GET",
+                    "route": "/crm/auth/*",
+                    "host": "http://localhost:1337",
+                    "name": "get-crm-auth-*"
+                }
+            ]
+        },
+        "leads-public": {
+            "allowed": [
+                {
+                    "method": "POST",
+                    "route": "/api/leads/v1/new/lead",
+                    "remove_from_path": "/api",
+                    "host": "http://leads.trazidev.com",
+                    "name": "post-api-leads-v1-new-lead"
+                }
+            ]
+        },
+        "import-report-public": {
+            "allowed": [
+                {
+                    "method": "POST",
+                    "route": "/api/import-report/v1/tlo/people/cid/*",
+                    "remove_from_path": "/api",
+                    "host": "http://import-report.trazidev.com",
+                    "name": "post-api-import-report-v1-tlo-people-cid-*"
+                }
+            ]
+        },
+        "subscribed": {},
+        "admin": {
+            "inherited": [
+                "global|user",
+                "global|csrall"
+            ]
         },
         "superadmin": {
-            "type": "testgroup",
-            "allowed": null,
-            "inherited": null,
-            "is_default": false
+            "allowed": [
+                {
+                    "route": "/account/*",
+                    "name": "*-account-*"
+                },
+                {
+                    "name": "account-*"
+                }
+            ],
+            "inherited": [
+                "global|admin"
+            ]
+        },
+        "csrall": {
+            "allowed": [
+                {
+                    "method": "*",
+                    "route": "/api/opt-out/v1/*",
+                    "remove_from_path": "/api",
+                    "host": "http://opt-out.trazidev.com",
+                    "name": "*-api-opt-out-v1-*"
+                },
+                {
+                    "method": "*",
+                    "route": "/api/search/v1/*",
+                    "remove_from_path": "/api",
+                    "host": "http://search.trazidev.com",
+                    "name": "*-api-search-v1-*"
+                },
+                {
+                    "method": "*",
+                    "route": "/api/email/v1/*",
+                    "remove_from_path": "/api",
+                    "host": "http://email.trazidev.com",
+                    "name": "*-api-email-v1-*"
+                }
+            ],
+            "inherited": [
+                "global|user",
+                "global|crm-private"
+            ]
+        },
+        "auth": {
+            "allowed": [
+                {
+                    "method": "POST",
+                    "route": "/account/api/v1/auth/register/domain/unmask.com",
+                    "name": "post-account-api-v1-auth-register-domain-unmask.com"
+                },
+                {
+                    "method": "PUT",
+                    "route": "/account/api/v1/auth/login/domain/unmask.com",
+                    "name": "put-account-api-v1-auth-login-domain-unmask.com"
+                },
+                {
+                    "method": "PUT",
+                    "route": "/account/api/v1/auth/password/forgot/domain/unmask.com",
+                    "name": "put-account-api-v1-auth-password-forgot-domain-unmask.com"
+                },
+                {
+                    "method": "POST",
+                    "route": "/account/api/v1/auth/register/domain/checkpeople.com",
+                    "name": "post-account-api-v1-auth-register-domain-checkpeople.com"
+                },
+                {
+                    "method": "PUT",
+                    "route": "/account/api/v1/auth/login/domain/checkpeople.com",
+                    "name": "put-account-api-v1-auth-login-domain-checkpeople.com"
+                },
+                {
+                    "method": "PUT",
+                    "route": "/account/api/v1/auth/password/forgot/domain/checkpeople.com",
+                    "name": "put-account-api-v1-auth-password-forgot-domain-checkpeople.com"
+                },
+                {
+                    "method": "POST",
+                    "route": "/account/api/v1/auth/register/domain/traziventures.com",
+                    "name": "post-account-api-v1-auth-register-domain-traziventures.com"
+                },
+                {
+                    "method": "PUT",
+                    "route": "/account/api/v1/auth/login/domain/traziventures.com",
+                    "name": "put-account-api-v1-auth-login-domain-traziventures.com"
+                },
+                {
+                    "method": "PUT",
+                    "route": "/account/api/v1/auth/password/forgot/domain/traziventures.com",
+                    "name": "put-account-api-v1-auth-password-forgot-domain-traziventures.com"
+                },
+                {
+                    "method": "PUT",
+                    "route": "/account/api/v1/auth/password/reset/login",
+                    "name": "put-account-api-v1-auth-password-reset-login"
+                }
+            ]
+        },
+        "crm-private": {
+            "allowed": [
+                {
+                    "method": "GET",
+                    "route": "/crm/admin/*",
+                    "host": "http://staging.crm.trazidev.com",
+                    "name": "get-crm-admin-*"
+                }
+            ]
+        },
+        "csr": {
+            "allowed": [
+                {
+                    "method": "*",
+                    "route": "/api/opt-out/v1/cids",
+                    "remove_from_path": "/api",
+                    "host": "http://opt-out.trazidev.com",
+                    "name": "*-api-opt-out-v1-cids"
+                },
+                {
+                    "method": "*",
+                    "route": "/api/opt-out/v1/id/*",
+                    "remove_from_path": "/api",
+                    "host": "http://opt-out.trazidev.com",
+                    "name": "*-api-opt-out-v1-id-*"
+                },
+                {
+                    "method": "*",
+                    "route": "/api/opt-out/v1/domain/:grouptype.com",
+                    "remove_from_path": "/api",
+                    "host": "http://opt-out.trazidev.com",
+                    "name": "*-api-opt-out-v1-domain-:grouptype.com"
+                },
+                {
+                    "method": "*",
+                    "route": "/api/opt-out/v1/domain/:grouptype.com/*",
+                    "remove_from_path": "/api",
+                    "host": "http://opt-out.trazidev.com",
+                    "name": "*-api-opt-out-v1-domain-:grouptype.com-*"
+                },
+                {
+                    "method": "*",
+                    "route": "/api/search/v1/*",
+                    "remove_from_path": "/api",
+                    "host": "http://search.trazidev.com",
+                    "name": "*-api-search-v1-*"
+                },
+                {
+                    "method": "*",
+                    "route": "/api/email/v1/*",
+                    "remove_from_path": "/api",
+                    "host": "http://email.trazidev.com",
+                    "name": "*-api-email-v1-*"
+                }
+            ],
+            "inherited": [
+                "global|user",
+                "global|crm-private"
+            ]
         }
+    },
+    "group": {
+        "superadmin": {
+            "allowed": [
+                {
+                    "host": null,
+                    "route": "/account/*",
+                    "name": "*-account-*"
+                }
+            ],
+            "inherited": [
+                "group|anonymous"
+            ]
+        },
+        "anonymous": {
+            "allowed": [
+                {
+                    "method": "GET",
+                    "route": "/account/dashboard/*",
+                    "remove_from_path": "/account/dashboard",
+                    "host": "https://unmask.com",
+                    "name": "get-account-dashboard-*"
+                },
+                {
+                    "method": "GET",
+                    "route": "/account/portal/*",
+                    "name": "get-account-portal-*"
+                },
+                {
+                    "method": "GET",
+                    "route": "/account/assets/*",
+                    "name": "get-account-assets-*"
+                },
+                {
+                    "method": "GET",
+                    "route": "/favicon.ico",
+                    "name": "get-favicon.ico"
+                },
+                {
+                    "method": "PUT",
+                    "route": "/account/api/v1/auth/password/forgot",
+                    "name": "put-account-api-v1-auth-password-forgot"
+                },
+                {
+                    "method": "PUT",
+                    "route": "/account/api/v1/auth/password/reset",
+                    "name": "put-account-api-v1-auth-password-reset"
+                },
+                {
+                    "method": "GET",
+                    "route": "/account/api/v1/auth/activate",
+                    "name": "get-account-api-v1-auth-activate"
+                },
+                {
+                    "method": "POST",
+                    "route": "/account/api/v1/auth/token",
+                    "name": "post-account-api-v1-auth-token"
+                },
+                {
+                    "method": "POST",
+                    "route": "/account/api/v1//auth/oauth/authorize",
+                    "name": "post-account-api-v1--auth-oauth-authorize"
+                },
+                {
+                    "method": "GET",
+                    "route": "/account/api/v1//auth/oauth/authorize",
+                    "name": "get-account-api-v1--auth-oauth-authorize"
+                },
+                {
+                    "method": "GET",
+                    "route": "/account/api/v1/user/me/permission/allowed/*",
+                    "name": "get-account-api-v1-user-me-permission-allowed-*"
+                },
+                {
+                    "method": "GET",
+                    "route": "/account/api/v1/user/me/route/allowed",
+                    "name": "get-account-api-v1-user-me-route-allowed"
+                },
+                {
+                    "method": "GET",
+                    "route": "/account/api/v1/config/password",
+                    "name": "get-account-api-v1-config-password"
+                },
+                {
+                    "method": "GET",
+                    "route": "/account/api/v1/config/portal/webclient",
+                    "name": "get-account-api-v1-config-portal-webclient"
+                },
+                {
+                    "method": "GET",
+                    "route": "/account/metrics",
+                    "name": "get-account-metrics"
+                },
+                {
+                    "method": "GET",
+                    "route": "/account/health",
+                    "name": "get-account-health"
+                }
+            ],
+            "inherited": [
+                "global|auth",
+                "global|leads-public",
+                "global|import-report-public",
+                "global|opt-out-public",
+                "global|crm-public"
+            ]
+        }
+    },
+    "unmask": {
+        "csr": {
+            "inherited": [
+                "global|csr"
+            ]
+        }
+    },
+    "checkpeople": {
+        "csr": {
+            "inherited": [
+                "global|csr"
+            ]
+        }
+    },
+    "information": {
+        "csr": {
+            "inherited": [
+                "global|csr"
+            ]
+        }
+    },
+    "products": {
+        "full_reports": {},
+        "pdf_generation": {},
+        "report_monitoring": {}
     }
 }
 ```
@@ -482,7 +925,7 @@ Path: api/v1/group/id/:id
 
 | Param | Type | Description |
 | --- | --- | --- |
-| id | <code>any</code> | id or name |
+| id | <code>any</code> | id or name  (example: group1) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="Group.edit"></a>
@@ -592,7 +1035,7 @@ body
 ```json
 {
     "name": "group1",
-    "type": "accounts",
+    "type": "testgroup",
     "allowed": [
         {
             "route": "/test",
@@ -612,7 +1055,8 @@ body
 
 * [GroupUsers](#GroupUsers)
     * [.inherited(id)](#GroupUsers.inherited)
-    * [.get(id)](#GroupUsers.get)
+    * [.count(id, filter, limit, skip, authorization_bearer)](#GroupUsers.count)
+    * [.get(id, filter, limit, skip, sort, sortdir, authorization_bearer)](#GroupUsers.get)
 
 <a name="GroupUsers.inherited"></a>
 
@@ -646,9 +1090,45 @@ Path: api/v1/group/id/:id/users/inherited
 | --- | --- | --- |
 | id | <code>any</code> | id or name (example: superadmin) |
 
+<a name="GroupUsers.count"></a>
+
+### GroupUsers.count(id, filter, limit, skip, authorization_bearer)
+count - Gets all the users that belong to the group.
+
+##### Optional Query Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | *optional* (example:  user7) |
+| locked | *optional* (example:  true) |
+| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+| group_request | *optional* (example:  superadmin) |
+| failed_login_attempts | *optional* (example:  0) |
+| change_username | *optional* (example:  false) |
+| change_password | *optional* (example:  false) |
+| reset_password | *optional* (example:  false) |
+| email_verify | *optional* (example:  false) |
+| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | *optional* (example:  test@test.ai) |
+| created_on | *optional* (example:  1568419646794) |
+| last_login | *optional* (example:  null) |
+
+Path: api/v1/group/id/:id/users/count
+
+**Kind**: static method of [<code>GroupUsers</code>](#GroupUsers)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>any</code> | Group name or ID. (example: superadmin) |
+| filter | <code>any</code> | Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) |
+| limit | <code>any</code> | Number of maximum results. (example: 10) (example: 10) |
+| skip | <code>any</code> | Number of db rows skipped. (example: 2) (example: 2) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
 <a name="GroupUsers.get"></a>
 
-### GroupUsers.get(id)
+### GroupUsers.get(id, filter, limit, skip, sort, sortdir, authorization_bearer)
 get - Gets all the users that belong to the group.
 
 ##### Optional Query Params
@@ -676,7 +1156,13 @@ Path: api/v1/group/id/:id/users
 
 | Param | Type | Description |
 | --- | --- | --- |
-| id | <code>any</code> | id or name (example: superadmin) |
+| id | <code>any</code> | Group name or ID. (example: superadmin) |
+| filter | <code>any</code> | Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) |
+| limit | <code>any</code> | Number of maximum results. (example: 10) (example: 10) |
+| skip | <code>any</code> | Number of db rows skipped. (example: 2) (example: 2) |
+| sort | <code>any</code> | Sort by any user object key (examples: id, domain, locked, etc.) (example: created_on) |
+| sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: ASC) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="GroupUser"></a>
 
@@ -1086,41 +1572,9 @@ Both requests are disabled. Dont use.
 **Kind**: global class  
 
 * [GroupTypeUsers](#GroupTypeUsers)
-    * [.get(id, type)](#GroupTypeUsers.get)
     * [.inherited(id, type)](#GroupTypeUsers.inherited)
-
-<a name="GroupTypeUsers.get"></a>
-
-### GroupTypeUsers.get(id, type)
-get - Gets all the users that belong to the group  of a particular type by its name or id.
-
-##### Optional Query Params
-
-| Param | Description |
-| --- | --- |
-| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
-| username | *optional* (example:  user7) |
-| locked | *optional* (example:  true) |
-| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
-| group_request | *optional* (example:  superadmin) |
-| failed_login_attempts | *optional* (example:  0) |
-| change_username | *optional* (example:  false) |
-| change_password | *optional* (example:  false) |
-| reset_password | *optional* (example:  false) |
-| email_verify | *optional* (example:  false) |
-| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
-| email | *optional* (example:  test@test.ai) |
-| created_on | *optional* (example:  1568419646794) |
-| last_login | *optional* (example:  null) |
-
-Path: api/v1/group/id/:id/type/:type/users
-
-**Kind**: static method of [<code>GroupTypeUsers</code>](#GroupTypeUsers)  
-
-| Param | Type |
-| --- | --- |
-| id | <code>any</code> | 
-| type | <code>any</code> | 
+    * [.count(id, type, filter, limit, skip, authorization_bearer)](#GroupTypeUsers.count)
+    * [.get(id, type, filter, limit, skip, sort, sortdir, authorization_bearer)](#GroupTypeUsers.get)
 
 <a name="GroupTypeUsers.inherited"></a>
 
@@ -1154,6 +1608,82 @@ Path: api/v1/group/id/:id/type/:type/users/inherited
 | --- | --- | --- |
 | id | <code>any</code> | (example: group4) |
 | type | <code>any</code> | The type of the group (example: groups) |
+
+<a name="GroupTypeUsers.count"></a>
+
+### GroupTypeUsers.count(id, type, filter, limit, skip, authorization_bearer)
+count - Gets all the users that belong to the group  of a particular type by its name or id.
+
+##### Optional Query Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | *optional* (example:  user7) |
+| locked | *optional* (example:  true) |
+| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+| group_request | *optional* (example:  superadmin) |
+| failed_login_attempts | *optional* (example:  0) |
+| change_username | *optional* (example:  false) |
+| change_password | *optional* (example:  false) |
+| reset_password | *optional* (example:  false) |
+| email_verify | *optional* (example:  false) |
+| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | *optional* (example:  test@test.ai) |
+| created_on | *optional* (example:  1568419646794) |
+| last_login | *optional* (example:  null) |
+
+Path: api/v1/group/id/:id/type/:type/users/count
+
+**Kind**: static method of [<code>GroupTypeUsers</code>](#GroupTypeUsers)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>any</code> | Group name or ID. (example: superadmin) |
+| type | <code>any</code> | Group type. (example: group) |
+| filter | <code>any</code> | Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) |
+| limit | <code>any</code> | Number of maximum results. (example: 10) (example: 10) |
+| skip | <code>any</code> | Number of db rows skipped. (example: 2) (example: 2) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="GroupTypeUsers.get"></a>
+
+### GroupTypeUsers.get(id, type, filter, limit, skip, sort, sortdir, authorization_bearer)
+get - Gets all the users that belong to the group  of a particular type by its name or id.
+
+##### Optional Query Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | *optional* (example:  user7) |
+| locked | *optional* (example:  true) |
+| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+| group_request | *optional* (example:  superadmin) |
+| failed_login_attempts | *optional* (example:  0) |
+| change_username | *optional* (example:  false) |
+| change_password | *optional* (example:  false) |
+| reset_password | *optional* (example:  false) |
+| email_verify | *optional* (example:  false) |
+| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | *optional* (example:  test@test.ai) |
+| created_on | *optional* (example:  1568419646794) |
+| last_login | *optional* (example:  null) |
+
+Path: api/v1/group/id/:id/type/:type/users
+
+**Kind**: static method of [<code>GroupTypeUsers</code>](#GroupTypeUsers)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>any</code> | Group name or ID. (example: superadmin) |
+| type | <code>any</code> | Group type. (example: group) |
+| filter | <code>any</code> | Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) |
+| limit | <code>any</code> | Number of maximum results. (example: 10) (example: 10) |
+| skip | <code>any</code> | Number of db rows skipped. (example: 2) (example: 2) |
+| sort | <code>any</code> | Sort by any user object key (examples: id, domain, locked, etc.) (example: created_on) |
+| sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: ASC) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="GroupTypeUser"></a>
 
@@ -1421,7 +1951,8 @@ body
 
 * [Users](#Users)
     * [.byGroupRequest(group_request, authorization_bearer)](#Users.byGroupRequest)
-    * [.get(sort, limit, filter, sortdir, authorization_bearer)](#Users.get)
+    * [.count(limit, skip, filter, ids, authorization_bearer)](#Users.count)
+    * [.get(sort, limit, skip, filter, sortdir, ids, authorization_bearer)](#Users.get)
 
 <a name="Users.byGroupRequest"></a>
 
@@ -1456,12 +1987,48 @@ Path: api/v1/users/group/request/:group_request
 | group_request | <code>any</code> | name of the group  (example: superadmin) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
-<a name="Users.get"></a>
+<a name="Users.count"></a>
 
-### Users.get(sort, limit, filter, sortdir, authorization_bearer)
-get - Gets all the users
+### Users.count(limit, skip, filter, ids, authorization_bearer)
+count - Gets all the users
 
 ##### Optional Query Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | *optional* (example:  user7) |
+| locked | *optional* (example:  true) |
+| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+| group_request | *optional* (example:  superadmin) |
+| failed_login_attempts | *optional* (example:  0) |
+| change_username | *optional* (example:  false) |
+| change_password | *optional* (example:  false) |
+| reset_password | *optional* (example:  false) |
+| email_verify | *optional* (example:  false) |
+| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | *optional* (example:  test@test.ai) |
+| created_on | *optional* (example:  1568419646794) |
+| last_login | *optional* (example:  null) |
+
+Path: api/v1/users/count
+
+**Kind**: static method of [<code>Users</code>](#Users)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| limit | <code>any</code> | Number of maximum results. (example: 2) (example: 2) |
+| skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |
+| filter | <code>any</code> | Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-06,created_on<2021-06-08) |
+| ids | <code>any</code> | Comma seperated id values used in inclusion query (example: d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="Users.get"></a>
+
+### Users.get(sort, limit, skip, filter, sortdir, ids, authorization_bearer)
+get - Gets all the users
+
+##### Filter Params
 
 | Param | Description |
 | --- | --- |
@@ -1486,22 +2053,66 @@ Path: api/v1/users
 
 | Param | Type | Description |
 | --- | --- | --- |
-| sort | <code>any</code> | (example: created_on) |
-| limit | <code>any</code> | (example: 200) |
-| filter | <code>any</code> | (example: locked=false) |
-| sortdir | <code>any</code> | (example: ASC) |
+| sort | <code>any</code> | Sort by any user object key (examples: id, domain, locked, etc.) (example: created_on) |
+| limit | <code>any</code> | Number of maximum results. (example: 2) (example: 2) |
+| skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |
+| filter | <code>any</code> | Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) |
+| sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: ASC) |
+| ids | <code>any</code> | Comma seperated id values used in inclusion query (example: d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="UsersDomain"></a>
 
 ## UsersDomain
 **Kind**: global class  
-<a name="UsersDomain.get"></a>
 
-### UsersDomain.get(domain, sort, limit, filter, sortdir, authorization_bearer)
-get - Gets all the users
+* [UsersDomain](#UsersDomain)
+    * [.count(domain, limit, skip, filter, ids, authorization_bearer)](#UsersDomain.count)
+    * [.get(domain, sort, limit, skip, filter, sortdir, ids, authorization_bearer)](#UsersDomain.get)
+
+<a name="UsersDomain.count"></a>
+
+### UsersDomain.count(domain, limit, skip, filter, ids, authorization_bearer)
+count - Gets all the users
 
 ##### Optional Query Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | *optional* (example:  user7) |
+| locked | *optional* (example:  true) |
+| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
+| group_request | *optional* (example:  superadmin) |
+| failed_login_attempts | *optional* (example:  0) |
+| change_username | *optional* (example:  false) |
+| change_password | *optional* (example:  false) |
+| reset_password | *optional* (example:  false) |
+| email_verify | *optional* (example:  false) |
+| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | *optional* (example:  test@test.ai) |
+| created_on | *optional* (example:  1568419646794) |
+| last_login | *optional* (example:  null) |
+
+Path: api/v1/users/domain/:domain/count
+
+**Kind**: static method of [<code>UsersDomain</code>](#UsersDomain)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| domain | <code>any</code> | (example: traziventures.com) |
+| limit | <code>any</code> | Number of maximum results. (example: 2) (example: 5) |
+| skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |
+| filter | <code>any</code> | Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2022-06-01,created_on<2022-06-08) |
+| ids | <code>any</code> | Comma seperated id values used in inclusion query (example: d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="UsersDomain.get"></a>
+
+### UsersDomain.get(domain, sort, limit, skip, filter, sortdir, ids, authorization_bearer)
+get - Gets all the users
+
+##### Filter Params
 
 | Param | Description |
 | --- | --- |
@@ -1527,10 +2138,12 @@ Path: api/v1/users/domain/:domain
 | Param | Type | Description |
 | --- | --- | --- |
 | domain | <code>any</code> | (example: traziventures.com) |
-| sort | <code>any</code> | (example: created_on) |
-| limit | <code>any</code> | (example: 200) |
-| filter | <code>any</code> | (example: locked=false) |
-| sortdir | <code>any</code> | (example: ASC) |
+| sort | <code>any</code> | Sort by any user object key (examples: id, domain, locked, etc.) (example: created_on) |
+| limit | <code>any</code> | Number of maximum results. (example: 2) (example: 1) |
+| skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |
+| filter | <code>any</code> | Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-01,created_on<2021-06-08) |
+| sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: ASC) |
+| ids | <code>any</code> | Comma seperated id values used in inclusion query (example: d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="User"></a>
@@ -1542,7 +2155,9 @@ Path: api/v1/users/domain/:domain
     * [.delete(id, authorization_bearer)](#User.delete)
     * [.removeGroupInheritance(id, inheritgroupid, inheritgrouptype, authorization_bearer)](#User.removeGroupInheritance)
     * [.addGroupInheritance(id, inheritgroupid, inheritgrouptype, authorization_bearer)](#User.addGroupInheritance)
+    * [.editUserDataPropertyValue(id, property, value, authorization_bearer)](#User.editUserDataPropertyValue)
     * [.editPropertyValue(id, property, value, authorization_bearer)](#User.editPropertyValue)
+    * [.editUserDataProperty(body, id, property, authorization_bearer)](#User.editUserDataProperty)
     * [.editProperty(body, id, property, authorization_bearer)](#User.editProperty)
     * [.edit(body, id, authorization_bearer)](#User.edit)
     * [.getProperty(id, property, authorization_bearer)](#User.getProperty)
@@ -1573,9 +2188,9 @@ Path: api/v1/user/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptyp
 
 | Param | Type | Description |
 | --- | --- | --- |
-| id | <code>any</code> | id or name of the user (example: user5) |
-| inheritgroupid | <code>any</code> | id or name of the  group to inherit (example: group2) |
-| inheritgrouptype | <code>any</code> | type of the  group to inherit (example: group) |
+| id | <code>any</code> | id or name of the user (example: 99a64193-b5a8-448d-8933-05d27f366094) |
+| inheritgroupid | <code>any</code> | id or name of the  group to inherit (example: group) |
+| inheritgrouptype | <code>any</code> | type of the  group to inherit (example: testgroup) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="User.addGroupInheritance"></a>
@@ -1589,9 +2204,25 @@ Path: api/v1/user/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptyp
 
 | Param | Type | Description |
 | --- | --- | --- |
-| id | <code>any</code> | id or name of the user (example: user5) |
-| inheritgroupid | <code>any</code> | id or name of the  group to inherit (example: group2) |
-| inheritgrouptype | <code>any</code> | type of the  group to inherit (example: group) |
+| id | <code>any</code> | id or name of the user (example: 99a64193-b5a8-448d-8933-05d27f366094) |
+| inheritgroupid | <code>any</code> | id or name of the  group to inherit (example: group1) |
+| inheritgrouptype | <code>any</code> | type of the  group to inherit (example: testgroup) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="User.editUserDataPropertyValue"></a>
+
+### User.editUserDataPropertyValue(id, property, value, authorization_bearer)
+editUserDataPropertyValue - Edit a current user's property data as a path param.
+
+Path: api/v1/user/id/:id/property/userdata/:property/:value
+
+**Kind**: static method of [<code>User</code>](#User)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>any</code> | Id or Username  (example: 595d3f9a-5383-4da9-a465-b975d8a5e28e) |
+| property | <code>any</code> | user_data object's property to edit. (example: notes) |
+| value | <code>any</code> | user_data object's property value. (example: asdfa sdfa sdf) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="User.editPropertyValue"></a>
@@ -1610,6 +2241,27 @@ Path: api/v1/user/id/:id/property/:property/:value
 | value | <code>any</code> | (example: 595d3f9a-5383-4da9-a465-b975d8a5e28e) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
+<a name="User.editUserDataProperty"></a>
+
+### User.editUserDataProperty(body, id, property, authorization_bearer)
+editUserDataProperty - Edit a user's property by id.
+
+Path: api/v1/user/id/:id/property/userdata/:property
+
+**Kind**: static method of [<code>User</code>](#User)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| id | <code>any</code> | Id or Username  (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA) |
+| property | <code>any</code> | user_data object's property to edit. (example: notes) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+**Example**  
+body
+```text
+asdfasdf
+```
 <a name="User.editProperty"></a>
 
 ### User.editProperty(body, id, property, authorization_bearer)
@@ -1683,6 +2335,205 @@ Path: api/v1/user/id/:id
 | id | <code>any</code> | (example: 39A2BC37-61AE-434C-B245-A731A27CF8DA) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
+<a name="UserDomain"></a>
+
+## UserDomain
+**Kind**: global class  
+
+* [UserDomain](#UserDomain)
+    * [.delete(domain, id, authorization_bearer)](#UserDomain.delete)
+    * [.removeGroupInheritance(domain, id, inheritgroupid, inheritgrouptype, authorization_bearer)](#UserDomain.removeGroupInheritance)
+    * [.addGroupInheritance(domain, id, inheritgroupid, inheritgrouptype, authorization_bearer)](#UserDomain.addGroupInheritance)
+    * [.editUserDataPropertyValue(domain, id, property, value, authorization_bearer)](#UserDomain.editUserDataPropertyValue)
+    * [.editPropertyValue(domain, id, property, value, authorization_bearer)](#UserDomain.editPropertyValue)
+    * [.editUserDataProperty(body, domain, id, property, authorization_bearer)](#UserDomain.editUserDataProperty)
+    * [.editProperty(body, domain, id, property, authorization_bearer)](#UserDomain.editProperty)
+    * [.edit(body, domain, id, authorization_bearer)](#UserDomain.edit)
+    * [.getProperty(domain, id, property, authorization_bearer)](#UserDomain.getProperty)
+    * [.get(domain, id, authorization_bearer)](#UserDomain.get)
+
+<a name="UserDomain.delete"></a>
+
+### UserDomain.delete(domain, id, authorization_bearer)
+delete - Delete a user by it's Id.
+
+Path: api/v1/user/domain/:domain/id/:id
+
+**Kind**: static method of [<code>UserDomain</code>](#UserDomain)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| domain | <code>any</code> | Domain (example: test.com) (example: test.com) |
+| id | <code>any</code> | id, username or email. (example: 75d2ed5e-bc5b-4129-a1ec-657cf27e6294) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="UserDomain.removeGroupInheritance"></a>
+
+### UserDomain.removeGroupInheritance(domain, id, inheritgroupid, inheritgrouptype, authorization_bearer)
+removeGroupInheritance - Remove a user from a group.
+
+Path: api/v1/user/domain/:domain/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype
+
+**Kind**: static method of [<code>UserDomain</code>](#UserDomain)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| domain | <code>any</code> | Domain (example: test.com) (example: test.com) |
+| id | <code>any</code> | id, username or email. (example: d1bf9986-9938-4d47-b8aa-79184b37cc16) |
+| inheritgroupid | <code>any</code> | id or name of the group to inherit (example: group1) |
+| inheritgrouptype | <code>any</code> | type of the group to inherit (example: testgroup) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="UserDomain.addGroupInheritance"></a>
+
+### UserDomain.addGroupInheritance(domain, id, inheritgroupid, inheritgrouptype, authorization_bearer)
+addGroupInheritance - Add a user to a group.
+
+Path: api/v1/user/domain/:domain/id/:id/inheritance/group/:inheritgroupid/type/:inheritgrouptype
+
+**Kind**: static method of [<code>UserDomain</code>](#UserDomain)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| domain | <code>any</code> | Domain (example: test.com) (example: test.com) |
+| id | <code>any</code> | id, username or email. (example: user5) |
+| inheritgroupid | <code>any</code> | id or name of the group to inherit (example: group2) |
+| inheritgrouptype | <code>any</code> | type of the group to inherit (example: group) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="UserDomain.editUserDataPropertyValue"></a>
+
+### UserDomain.editUserDataPropertyValue(domain, id, property, value, authorization_bearer)
+editUserDataPropertyValue - Edit a current user's property data as a path param.
+
+Path: api/v1/user/domain/:domain/id/:id/property/userdata/:property/:value
+
+**Kind**: static method of [<code>UserDomain</code>](#UserDomain)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| domain | <code>any</code> | Domain (example: test.com) (example: test.com) |
+| id | <code>any</code> | id, username or email. (example: 75d2ed5e-bc5b-4129-a1ec-657cf27e6294) |
+| property | <code>any</code> | Property to modify (example: locked) (example: notes) |
+| value | <code>any</code> | Value to change property to. (example: asdf asdfawsdf) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="UserDomain.editPropertyValue"></a>
+
+### UserDomain.editPropertyValue(domain, id, property, value, authorization_bearer)
+editPropertyValue - Edit a current user's property data as a path param.
+
+Path: api/v1/user/domain/:domain/id/:id/property/:property/:value
+
+**Kind**: static method of [<code>UserDomain</code>](#UserDomain)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| domain | <code>any</code> | Domain (example: test.com) (example: test.com) |
+| id | <code>any</code> | id, username or email. (example: 75d2ed5e-bc5b-4129-a1ec-657cf27e6294) |
+| property | <code>any</code> | Property to modify (example: locked) (example: locked) |
+| value | <code>any</code> | Value to change property to. (example: true) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="UserDomain.editUserDataProperty"></a>
+
+### UserDomain.editUserDataProperty(body, domain, id, property, authorization_bearer)
+editUserDataProperty - Edit a user's property by id.
+
+Path: api/v1/user/domain/:domain/id/:id/property/userdata/:property
+
+**Kind**: static method of [<code>UserDomain</code>](#UserDomain)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| domain | <code>any</code> | Domain (example: test.com) (example: test.com) |
+| id | <code>any</code> | id, username or email. (example: 75d2ed5e-bc5b-4129-a1ec-657cf27e6294) |
+| property | <code>any</code> | Property to modify (example: locked) (example: notes) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+**Example**  
+body
+```text
+asdfasdf asdf
+```
+<a name="UserDomain.editProperty"></a>
+
+### UserDomain.editProperty(body, domain, id, property, authorization_bearer)
+editProperty - Edit a user's property by id.
+
+Path: api/v1/user/domain/:domain/id/:id/property/:property
+
+**Kind**: static method of [<code>UserDomain</code>](#UserDomain)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| domain | <code>any</code> | Domain (example: test.com) (example: test.com) |
+| id | <code>any</code> | id, username or email. (example: 75d2ed5e-bc5b-4129-a1ec-657cf27e6294) |
+| property | <code>any</code> | Property to modify (example: locked) (example: locked) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+**Example**  
+body
+```text
+false
+```
+<a name="UserDomain.edit"></a>
+
+### UserDomain.edit(body, domain, id, authorization_bearer)
+edit - Edit a user's by id.
+
+Path: api/v1/user/domain/:domain/id/:id
+
+**Kind**: static method of [<code>UserDomain</code>](#UserDomain)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| domain | <code>any</code> | Domain (example: test.com) (example: test.com) |
+| id | <code>any</code> | id, username or email. (example: 75d2ed5e-bc5b-4129-a1ec-657cf27e6294) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+**Example**  
+body
+```json
+{
+	"username" : "user6",
+	"password" : "Awickednewawesomepasword4242!@"
+}
+```
+<a name="UserDomain.getProperty"></a>
+
+### UserDomain.getProperty(domain, id, property, authorization_bearer)
+getProperty - Get a user's property by it's id.
+
+Path: api/v1/user/domain/:domain/id/:id/property/:property
+
+**Kind**: static method of [<code>UserDomain</code>](#UserDomain)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| domain | <code>any</code> | Domain (example: test.com) (example: test.com) |
+| id | <code>any</code> | id, username or email. (example: 75d2ed5e-bc5b-4129-a1ec-657cf27e6294) |
+| property | <code>any</code> | Property to get (example: locked) (example: locked) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="UserDomain.get"></a>
+
+### UserDomain.get(domain, id, authorization_bearer)
+get - Get a user by it's id.
+
+Path: api/v1/user/domain/:domain/id/:id
+
+**Kind**: static method of [<code>UserDomain</code>](#UserDomain)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| domain | <code>any</code> | Domain (example: test.com) (example: test.com) |
+| id | <code>any</code> | id, username or email. (example: d1bf9986-9938-4d47-b8aa-79184b37cc16) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
 <a name="UserCurrent"></a>
 
 ## UserCurrent
@@ -1692,7 +2543,9 @@ Path: api/v1/user/id/:id
     * [.registerToken(body, authorization_bearer)](#UserCurrent.registerToken)
     * [.removeGroupInheritance(inheritgroupid, inheritgrouptype, authorization_bearer)](#UserCurrent.removeGroupInheritance)
     * [.addGroupInheritance(inheritgroupid, inheritgrouptype, authorization_bearer)](#UserCurrent.addGroupInheritance)
+    * [.editUserDataPropertyValue(property, value, authorization_bearer)](#UserCurrent.editUserDataPropertyValue)
     * [.editPropertyValue(property, value, authorization_bearer)](#UserCurrent.editPropertyValue)
+    * [.editUserDataProperty(body, property, authorization_bearer)](#UserCurrent.editUserDataProperty)
     * [.editProperty(body, property, authorization_bearer)](#UserCurrent.editProperty)
     * [.deleteToken(id, authorization_bearer)](#UserCurrent.deleteToken)
     * [.edit(body, authorization_bearer)](#UserCurrent.edit)
@@ -1719,7 +2572,10 @@ Path: api/v1/user/me/token
 body
 ```json
 {
-	"name": "conversate"
+    "urls": [
+        "http://127.0.0.1",
+        "http://checkpeople.com"
+    ]
 }
 ```
 <a name="UserCurrent.removeGroupInheritance"></a>
@@ -1752,6 +2608,21 @@ Path: api/v1/user/me/inheritance/group/:inheritgroupid/type/:inheritgrouptype
 | inheritgrouptype | <code>any</code> | type of the  group to inherit (example: group) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
+<a name="UserCurrent.editUserDataPropertyValue"></a>
+
+### UserCurrent.editUserDataPropertyValue(property, value, authorization_bearer)
+editUserDataPropertyValue - Edit a current user's property data as a path param.
+
+Path: api/v1/user/me/property/userdata/:property/:value
+
+**Kind**: static method of [<code>UserCurrent</code>](#UserCurrent)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| property | <code>any</code> | user_data object's property to edit. (example: notes) |
+| value | <code>any</code> | user_data object's property value. (example: asdf asdfasdf asdf ) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
 <a name="UserCurrent.editPropertyValue"></a>
 
 ### UserCurrent.editPropertyValue(property, value, authorization_bearer)
@@ -1767,6 +2638,26 @@ Path: api/v1/user/me/property/:property/:value
 | value | <code>any</code> | (example: 595d3f9a-5383-4da9-a465-b975d8a5e28e) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
+<a name="UserCurrent.editUserDataProperty"></a>
+
+### UserCurrent.editUserDataProperty(body, property, authorization_bearer)
+editUserDataProperty - Edit a current user's property data.
+
+Path: api/v1/user/me/property/userdata/:property
+
+**Kind**: static method of [<code>UserCurrent</code>](#UserCurrent)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| property | <code>any</code> | user_data object's property to edit. (example: notes) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+**Example**  
+body
+```text
+asdfsasdfdsadf
+```
 <a name="UserCurrent.editProperty"></a>
 
 ### UserCurrent.editProperty(body, property, authorization_bearer)
@@ -1779,15 +2670,13 @@ Path: api/v1/user/me/property/:property
 | Param | Type | Description |
 | --- | --- | --- |
 | body | <code>Object</code> |  |
-| property | <code>any</code> | (example: user_data) |
+| property | <code>any</code> | (example: password) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
 body
-```json
-{
-	"test": 123
-}
+```text
+newpasss
 ```
 <a name="UserCurrent.deleteToken"></a>
 
@@ -1800,7 +2689,7 @@ Path: api/v1/user/me/token/:id
 
 | Param | Type | Description |
 | --- | --- | --- |
-| id | <code>any</code> | id or name of the token |
+| id | <code>any</code> | id or name of the token (example: 74b3c2f2-3f94-4b5d-b3e2-4b3bd2c5d6fe) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="UserCurrent.edit"></a>
@@ -1891,13 +2780,14 @@ Path: api/v1/user/me
 * [Auth](#Auth)
     * [.accessToken()](#Auth.accessToken)
     * [.authorize(client_id, response_type, state, redirect_uri, group_request)](#Auth.authorize)
-    * [.activate(token)](#Auth.activate)
-    * [.resetPasswordAutoLogin(body, token)](#Auth.resetPasswordAutoLogin)
-    * [.resetPassword(body, token)](#Auth.resetPassword)
-    * [.forgotPassword(body)](#Auth.forgotPassword)
-    * [.logout()](#Auth.logout)
-    * [.login(body)](#Auth.login)
-    * [.register(body)](#Auth.register)
+    * [.activate(token, authorization_bearer)](#Auth.activate)
+    * [.resetPasswordAutoLogin(body, token, authorization_bearer)](#Auth.resetPasswordAutoLogin)
+    * [.resetPassword(body, token, authorization_bearer)](#Auth.resetPassword)
+    * [.forgotPassword(body, authorization_bearer)](#Auth.forgotPassword)
+    * [.logout(authorization_bearer)](#Auth.logout)
+    * [.loginOtp(token, authorization_bearer)](#Auth.loginOtp)
+    * [.login(body, authorization_bearer)](#Auth.login)
+    * [.register(body, randomPassword, authorization_bearer)](#Auth.register)
 
 <a name="Auth.accessToken"></a>
 
@@ -1926,7 +2816,7 @@ Path: api/v1/auth/oauth/authorize
 
 <a name="Auth.activate"></a>
 
-### Auth.activate(token)
+### Auth.activate(token, authorization_bearer)
 activate - Activates and unlocks user
 
 Path: api/v1/auth/activate
@@ -1936,10 +2826,11 @@ Path: api/v1/auth/activate
 | Param | Type | Description |
 | --- | --- | --- |
 | token | <code>any</code> | (example: activation_token) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="Auth.resetPasswordAutoLogin"></a>
 
-### Auth.resetPasswordAutoLogin(body, token)
+### Auth.resetPasswordAutoLogin(body, token, authorization_bearer)
 resetPasswordAutoLogin - Resets the password if the recovery token is valid of the user, then authenticates the user and returns cookies.
 
 Path: api/v1/auth/password/reset/login
@@ -1950,6 +2841,7 @@ Path: api/v1/auth/password/reset/login
 | --- | --- | --- |
 | body | <code>Object</code> |  |
 | token | <code>any</code> | (example: [thegeneratedtoken]) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
 body
@@ -1960,7 +2852,7 @@ body
 ```
 <a name="Auth.resetPassword"></a>
 
-### Auth.resetPassword(body, token)
+### Auth.resetPassword(body, token, authorization_bearer)
 resetPassword - Resets the password if the recovery token is valid of the user.
 
 Path: api/v1/auth/password/reset
@@ -1971,6 +2863,7 @@ Path: api/v1/auth/password/reset
 | --- | --- | --- |
 | body | <code>Object</code> |  |
 | token | <code>any</code> | (example: [thegeneratedtoken]) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
 body
@@ -1981,16 +2874,17 @@ body
 ```
 <a name="Auth.forgotPassword"></a>
 
-### Auth.forgotPassword(body)
+### Auth.forgotPassword(body, authorization_bearer)
 forgotPassword - Generates a recovery token and sends a email to the attached user (if they exist)
 
 Path: api/v1/auth/password/forgot
 
 **Kind**: static method of [<code>Auth</code>](#Auth)  
 
-| Param | Type |
-| --- | --- |
-| body | <code>Object</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
 body
@@ -2001,37 +2895,64 @@ body
 ```
 <a name="Auth.logout"></a>
 
-### Auth.logout()
+### Auth.logout(authorization_bearer)
 logout -
 
 Path: api/v1/auth/logout
 
 **Kind**: static method of [<code>Auth</code>](#Auth)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="Auth.loginOtp"></a>
+
+### Auth.loginOtp(token, authorization_bearer)
+loginOtp - Login via an OTP
+
+Path: api/v1/auth/login/otp
+
+**Kind**: static method of [<code>Auth</code>](#Auth)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| token | <code>any</code> | (example: JQHGH9QuIIhpGuFBG920TdnWkSECFp-ONP0NadfPCclsX708wYaXKHFb5nUj1fmZFHcN1KpKqzkOkjfZGYdfsIt0KnWV69mmt5Uqpw3HiMYD1mBfr4SQap2cg8vH78bb|6Rzt6ubKWXJKY6Pg4GAePg==) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
 <a name="Auth.login"></a>
 
-### Auth.login(body)
-login - Register a user
+### Auth.login(body, authorization_bearer)
+login - Login a user
+
+##### Body Properties
+
+| Prop | Description |
+| --- | --- |
+| email/username | *required* String (example:  test@test.com) |
+| password | *required* String (example:  fakePassword123) |
+| remember | *optional* Boolean if you would like to be logged in automatically (example:  true) |
 
 Path: api/v1/auth/login
 
 **Kind**: static method of [<code>Auth</code>](#Auth)  
 
-| Param | Type |
-| --- | --- |
-| body | <code>Object</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
 body
 ```json
 {
-	"username": "test",
-	"password": "Pas5w0r!d",
-    "domain": "default"
+	"email": "test@test.com",
+	"password": "Pas5w0r!d"
 }
 ```
 <a name="Auth.register"></a>
 
-### Auth.register(body)
+### Auth.register(body, randomPassword, authorization_bearer)
 register - Register a user
 
 `group_request`	is optional.
@@ -2040,31 +2961,54 @@ Path: api/v1/auth/register
 
 **Kind**: static method of [<code>Auth</code>](#Auth)  
 
-| Param | Type |
-| --- | --- |
-| body | <code>Object</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| randomPassword | <code>any</code> | Generates a random password on the backend securely if set to `true` (example: true) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
 body
 ```json
 {
 	"username":"test",
-	"password":"Pas5w0r!d",
-	"email": "test@test.com",
-    "domain": "default"
+	"email": "test34@test.com",
+    "domain": "default",
+    "password": "Pas5w0r!d"
+
 }
 ```
 <a name="AuthToken"></a>
 
 ## AuthToken
 **Kind**: global class  
+
+* [AuthToken](#AuthToken)
+    * [.otp(id, authorization_bearer)](#AuthToken.otp)
+    * [.forgotPassword(body)](#AuthToken.forgotPassword)
+
+<a name="AuthToken.otp"></a>
+
+### AuthToken.otp(id, authorization_bearer)
+otp - Generates a one time use password and returns the token to the attached user (if they exist) instead of sending an email.
+*CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**
+
+Path: api/v1/auth/token/otp/id/:id
+
+**Kind**: static method of [<code>AuthToken</code>](#AuthToken)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>any</code> | (example: test@test.com) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
 <a name="AuthToken.forgotPassword"></a>
 
 ### AuthToken.forgotPassword(body)
 forgotPassword - Generates a recovery token and returns the token to the attached user (if they exist) instead of sending an email.
 *CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**
 
-Path: api/v1/auth/password/forgot
+Path: api/v1/auth/token/password/forgot
 
 **Kind**: static method of [<code>AuthToken</code>](#AuthToken)  
 
@@ -2085,13 +3029,13 @@ body
 **Kind**: global class  
 
 * [AuthDomain](#AuthDomain)
-    * [.forgotPassword(body, domain)](#AuthDomain.forgotPassword)
-    * [.login(body, domain)](#AuthDomain.login)
-    * [.register(body, domain)](#AuthDomain.register)
+    * [.forgotPassword(body, domain, authorization_bearer)](#AuthDomain.forgotPassword)
+    * [.login(body, domain, authorization_bearer)](#AuthDomain.login)
+    * [.register(body, domain, randomPassword, authorization_bearer)](#AuthDomain.register)
 
 <a name="AuthDomain.forgotPassword"></a>
 
-### AuthDomain.forgotPassword(body, domain)
+### AuthDomain.forgotPassword(body, domain, authorization_bearer)
 forgotPassword - Generates a recovery token and sends a email to the attached user (if they exist)
 
 Path: api/v1/auth/password/forgot/domain/:domain
@@ -2101,19 +3045,29 @@ Path: api/v1/auth/password/forgot/domain/:domain
 | Param | Type | Description |
 | --- | --- | --- |
 | body | <code>Object</code> |  |
-| domain | <code>any</code> | (example: test.com) |
+| domain | <code>any</code> | Domain name (example: test.com) (example: traziventures.com) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
 body
 ```json
 {
-	"email": "test@test.com"
+	"email": "kelvin@traziventures.com"
 }
 ```
 <a name="AuthDomain.login"></a>
 
-### AuthDomain.login(body, domain)
-login - Register a user
+### AuthDomain.login(body, domain, authorization_bearer)
+login - Login a user
+
+##### Body Properties
+
+| Prop | Description |
+| --- | --- |
+| email/username | *required* String (example:  test@test.com) |
+| password | *required* String (example:  fakePassword123) |
+| domain | *required* String (example:  test.com) |
+| remember | *optional* Boolean if you would like to be logged in automatically (example:  true) |
 
 Path: api/v1/auth/login/domain/:domain
 
@@ -2122,20 +3076,20 @@ Path: api/v1/auth/login/domain/:domain
 | Param | Type | Description |
 | --- | --- | --- |
 | body | <code>Object</code> |  |
-| domain | <code>any</code> | (example: test.com) |
+| domain | <code>any</code> | Domain name (example: test.com) (example: traziventures.com) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
 body
 ```json
 {
-	"username": "test",
-	"password": "Pas5w0r!d",
-    "domain": "default"
+	"email": "test@test.com",
+	"password": "Pas5w0r!d"
 }
 ```
 <a name="AuthDomain.register"></a>
 
-### AuthDomain.register(body, domain)
+### AuthDomain.register(body, domain, randomPassword, authorization_bearer)
 register - Register a user
 
 `group_request`	is optional.
@@ -2147,34 +3101,58 @@ Path: api/v1/auth/register/domain/:domain
 | Param | Type | Description |
 | --- | --- | --- |
 | body | <code>Object</code> |  |
-| domain | <code>any</code> | (example: test.com) |
+| domain | <code>any</code> | Domain name (example: test.com) (example: traziventures.com) |
+| randomPassword | <code>any</code> | Generates a random password on the backend securely if set to `true` (example: true) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
 body
 ```json
 {
-	"username":"test",
-	"password":"Pas5w0r!d",
-	"email": "test@test.com"
+	"email": "tesft@test.com",
+	"password": "Pas5w0r!d"
 }
 ```
 <a name="AuthDomainToken"></a>
 
 ## AuthDomainToken
 **Kind**: global class  
-<a name="AuthDomainToken.forgotPassword"></a>
 
-### AuthDomainToken.forgotPassword(body)
-forgotPassword - Generates a recovery token and returns the token to the attached user (if they exist) instead of sending an email.
+* [AuthDomainToken](#AuthDomainToken)
+    * [.otp(domain, id, authorization_bearer)](#AuthDomainToken.otp)
+    * [.forgotPassword(body, domain, authorization_bearer)](#AuthDomainToken.forgotPassword)
+
+<a name="AuthDomainToken.otp"></a>
+
+### AuthDomainToken.otp(domain, id, authorization_bearer)
+otp - Generates a one time use password and returns the token to the attached user (if they exist) instead of sending an email.
 *CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**
 
-Path: api/v1/auth/password/forgot
+Path: api/v1/auth/token/otp/domain/:domain/id/:id
 
 **Kind**: static method of [<code>AuthDomainToken</code>](#AuthDomainToken)  
 
-| Param | Type |
-| --- | --- |
-| body | <code>Object</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| domain | <code>any</code> | (example: traziventures.com) |
+| id | <code>any</code> | (example: test@test.com) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="AuthDomainToken.forgotPassword"></a>
+
+### AuthDomainToken.forgotPassword(body, domain, authorization_bearer)
+forgotPassword - Generates a recovery token and returns the token to the attached user (if they exist) instead of sending an email.
+*CAUTION SECURITY RISK: Would not expose this URL publicly or have it be allowed by anyone who is not a superadmin type level**
+
+Path: api/v1/auth/token/password/forgot/domain/:domain
+
+**Kind**: static method of [<code>AuthDomainToken</code>](#AuthDomainToken)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| domain | <code>any</code> |  |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 **Example**  
 body

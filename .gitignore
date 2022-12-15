@@ -10,3 +10,4 @@ coverage
 test.export.json
 workspace.*
 .env-local
+.vscode

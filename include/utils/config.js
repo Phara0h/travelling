@@ -1,4 +1,4 @@
-const { resolve, dirname } = require('path');
+const { resolve } = require('path');
 
 require('dotenv').config({ path: resolve(process.cwd(), process.env.TRAVELLING_ENV || '.env') });
 
@@ -20,7 +20,12 @@ const config = {
   },
   https: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_HTTPS), true),
   misc: {
-    cloudflareIP: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_MISC_CLOUDFLAREIP), false)
+    bodyLimit: misc.isSetDefault(Number(process.env.TRAVELLING_MISC_BODY_LIMIT) * 1048576, 1048576 * 10), // 10MB default
+    cloudflareIP: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_MISC_CLOUDFLAREIP), false),
+    cloudflareDomainHeader: misc.isSetDefault(process.env.TRAVELLING_MISC_CLOUDFLARE_DOMAIN_HEADER, 'CF-Worker'),
+    domainCustomHeader: misc.isSetDefault(process.env.TRAVELLING_MISC_DOMAIN_CUSTOM_HEADER, null),
+    deniedRedirect: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_MISC_DENIED_REDIRECT), true),
+    maxParamLength: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_MISC_MAX_PARAM_LENGTH), 100)
   },
   log: {
     enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_LOG_ENABLE), true),
@@ -47,7 +52,10 @@ const config = {
         label: misc.isSetDefault(process.env.TRAVELLING_LOG_APPEND_FIELDS_BRANCH_LABEL, 'none')
       },
       environment: {
-        enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_LOG_APPEND_FIELDS_ENVIRONMENT_ENABLE), false),
+        enable: misc.isSetDefault(
+          misc.stringToBool(process.env.TRAVELLING_LOG_APPEND_FIELDS_ENVIRONMENT_ENABLE),
+          false
+        ),
         label: misc.isSetDefault(process.env.TRAVELLING_LOG_APPEND_FIELDS_ENVIRONMENT_LABEL, 'production')
       }
     },
@@ -71,6 +79,20 @@ const config = {
           process.env.TRAVELLING_LOG_FASTIFY_LOGGER_REQ_ID_LOG_LABEL,
         'travellingReqID'
       )
+    }
+  },
+  audit: {
+    create: {
+      enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_AUDIT_CREATE_ENABLE), false)
+    },
+    edit: {
+      enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_AUDIT_EDIT_ENABLE), false)
+    },
+    delete: {
+      enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_AUDIT_DELETE_ENABLE), false)
+    },
+    view: {
+      enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_AUDIT_VIEW_ENABLE), false)
     }
   },
   tracing: {
@@ -109,7 +131,13 @@ const config = {
   },
   proxy: {
     timeout: misc.isSetDefault(Number(process.env.TRAVELLING_PROXY_TIMEOUT), 0),
-    sendTravellingHeaders: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_PROXY_SEND_TRAVELLING_HEADERS), false)
+    sendTravellingHeaders: misc.isSetDefault(
+      misc.stringToBool(process.env.TRAVELLING_PROXY_SEND_TRAVELLING_HEADERS),
+      false
+    )
+  },
+  stats: {
+    captureGroupRoutes: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_STATS_CAPTURE_GROUP_ROUTES), true)
   },
   redis: {
     enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_REDIS_ENABLE), false),
@@ -129,11 +157,15 @@ const config = {
     token: {
       secret: misc.isSetDefault(process.env.TRAVELLING_COOKIE_TOKEN_SECRET, null),
       salt: misc.isSetDefault(process.env.TRAVELLING_COOKIE_TOKEN_SALT, null),
-      expiration: misc.isSetDefault(Number(process.env.TRAVELLING_COOKIE_TOKEN_EXPIRATION), 30) // days
+      expiration: misc.isSetDefault(Number(process.env.TRAVELLING_COOKIE_TOKEN_EXPIRATION), 30), // days
+      checkable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_COOKIE_TOKEN_CHECKABLE), true) // Adds js accessible cookie (trav:ls) contianing expiration of trav:tok
     },
     domain: misc.isSetDefault(process.env.TRAVELLING_COOKIE_DOMAIN, null),
     security: {
-      ipHijackProtection: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_COOKIE_SECURITY_IP_HIJACK_PROTECTION), true)
+      ipHijackProtection: misc.isSetDefault(
+        misc.stringToBool(process.env.TRAVELLING_COOKIE_SECURITY_IP_HIJACK_PROTECTION),
+        true
+      )
     }
   },
   user: {
@@ -150,6 +182,7 @@ const config = {
     }
   },
   password: {
+    randomGenerationLength: misc.isSetDefault(Number(process.env.TRAVELLING_PASSWORD_RANDOM_GENERATION_LENGTH), 30),
     consecutive: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_PASSWORD_CONSECUTIVE), false),
     minchar: misc.isSetDefault(Number(process.env.TRAVELLING_PASSWORD_MINCHAR), 8),
     maxchar: misc.isSetDefault(Number(process.env.TRAVELLING_PASSWORD_MAXCHAR), ''),
@@ -170,6 +203,9 @@ const config = {
       authorizeFlow: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_TOKEN_CODE_AUTHORIZE_FLOW), true)
     }
   },
+  otp: {
+    expiration: misc.isSetDefault(Number(process.env.TRAVELLING_OTP_EXPIRATION), 5 * 60) // seconds
+  },
   pg: {
     url: misc.isSetDefault(process.env.TRAVELLING_DATABASE_URL, null),
     user: misc.isSetDefault(process.env.TRAVELLING_DATABASE_USER, null),
@@ -178,7 +214,10 @@ const config = {
     database: misc.isSetDefault(process.env.TRAVELLING_DATABASE_NAME, null),
     host: misc.isSetDefault(process.env.TRAVELLING_DATABASE_HOST, null),
     crypto: {
-      implementation: misc.isSetDefault(process.env.TRAVELLING_PG_CRYPTO_IMPLEMENTATION, __dirname + '/cryptointerface.js'),
+      implementation: misc.isSetDefault(
+        process.env.TRAVELLING_PG_CRYPTO_IMPLEMENTATION,
+        __dirname + '/cryptointerface.js'
+      ),
       secret: misc.isSetDefault(process.env.TRAVELLING_PG_CRYPTO_IMPLEMENTATION_SECRET, null),
       salt: misc.isSetDefault(process.env.TRAVELLING_PG_CRYPTO_IMPLEMENTATION_SALT, null),
       encryptUserData: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_PG_CRYPTO_ENCRYPT_USER_DATA), false)
@@ -193,7 +232,10 @@ const config = {
           misc.stringToBool(process.env.TRAVELLING_EMAIL_VALIDATION_EXTERNAL_EMAIL_IN_ENDPOINT),
           true
         ),
-        emailInBody: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_EMAIL_VALIDATION_EXTERNAL_EMAIL_IN_BODY), false),
+        emailInBody: misc.isSetDefault(
+          misc.stringToBool(process.env.TRAVELLING_EMAIL_VALIDATION_EXTERNAL_EMAIL_IN_BODY),
+          false
+        ),
         method: misc.isSetDefault(process.env.TRAVELLING_EMAIL_VALIDATION_EXTERNAL_METHOD, 'GET')
       }
     },
@@ -218,7 +260,10 @@ const config = {
       },
       tls: {
         // do not fail on invalid certs
-        rejectUnauthorized: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_EMAIL_SMTP_TLS_REJECT_UNAUTHORIZED), true)
+        rejectUnauthorized: misc.isSetDefault(
+          misc.stringToBool(process.env.TRAVELLING_EMAIL_SMTP_TLS_REJECT_UNAUTHORIZED),
+          true
+        )
       }
     },
     aws: {
@@ -229,7 +274,8 @@ const config = {
       enable: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_EMAIL_REST_ENABLE), false),
       passwordRecoveryEndpoint: misc.isSetDefault(process.env.TRAVELLING_EMAIL_REST_PASSWORD_RECOVERY_ENDPOINT, null),
       activationEndpoint: misc.isSetDefault(process.env.TRAVELLING_EMAIL_REST_ACTIVATION_ENDPOINT, null),
-      lockedEndpoint: misc.isSetDefault(process.env.TRAVELLING_EMAIL_REST_LOCKED_ENDPOINT, null)
+      lockedEndpoint: misc.isSetDefault(process.env.TRAVELLING_EMAIL_REST_LOCKED_ENDPOINT, null),
+      welcomeEndpoint: misc.isSetDefault(process.env.TRAVELLING_EMAIL_REST_WELCOME_ENDPOINT, null)
     },
     send: {
       onLocked: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_EMAIL_SEND_ON_LOCKED), true),
@@ -251,6 +297,14 @@ const config = {
       activationSubject: misc.isSetDefault(
         process.env.TRAVELLING_EMAIL_ACTIVATION_TEMPLATE_SUBJECT,
         __dirname + '/../../templates/email-activation-subject.html'
+      ),
+      welcomeBody: misc.isSetDefault(
+        process.env.TRAVELLING_EMAIL_WELCOME_TEMPLATE_BODY,
+        __dirname + '/../../templates/email-welcome-body.html'
+      ),
+      welcomeSubject: misc.isSetDefault(
+        process.env.TRAVELLING_EMAIL_WELCOME_TEMPLATE_SUBJECT,
+        __dirname + '/../../templates/email-welcome-subject.html'
       )
     }
   },

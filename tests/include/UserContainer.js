@@ -1,9 +1,15 @@
 const cookie = require('cookie');
+const config = require('../../include/utils/config');
 
 class UserContainer {
   constructor() {
     this.user1 = {};
     this.user2 = {};
+    this.user5 = {};
+    this.userDomain = {};
+    this.userDomain2 = {};
+    this.userDomain3 = {};
+    this.userDomain4 = {};
   }
 
   parseUser1Cookie(carray) {
@@ -14,12 +20,52 @@ class UserContainer {
     this.user2 = this.parseCookie(carray, this.user2);
   }
 
+  parseUser5Cookie(carray) {
+    this.user5 = this.parseCookie(carray, this.user5);
+  }
+
+  parseUserDomainCookie(carray) {
+    this.userDomain = this.parseCookie(carray, this.userDomain);
+  }
+
+  parseUserDomain2Cookie(carray) {
+    this.userDomain2 = this.parseCookie(carray, this.userDomain2);
+  }
+
+  parseUserDomain3Cookie(carray) {
+    this.userDomain3 = this.parseCookie(carray, this.userDomain3);
+  }
+
+  parseUserDomain4Cookie(carray) {
+    this.userDomain4 = this.parseCookie(carray, this.userDomain4);
+  }
+
   user1Cookie() {
     return this.getCookie(this.user1);
   }
 
   user2Cookie() {
     return this.getCookie(this.user2);
+  }
+
+  user5Cookie() {
+    return this.getCookie(this.user5);
+  }
+
+  userDomainCookie() {
+    return this.getCookie(this.userDomain);
+  }
+
+  userDomain2Cookie() {
+    return this.getCookie(this.userDomain2);
+  }
+
+  userDomain3Cookie() {
+    return this.getCookie(this.userDomain3);
+  }
+
+  userDomain4Cookie() {
+    return this.getCookie(this.userDomain4);
   }
 
   parseCookie(carray, user) {
@@ -37,7 +83,14 @@ class UserContainer {
       if (pc['trav:tok']) {
         user.tok = pc['trav:tok'];
       }
+
+      if (config.cookie.token.checkable === true) {
+        if (pc['trav:ls']) {
+          user.ls = pc['trav:ls'];
+        }
+      }
     }
+
     return user;
   }
 
@@ -51,6 +104,13 @@ class UserContainer {
     if (user.tok) {
       cookies += cookie.serialize('trav:tok', user.tok) + '; ';
     }
+
+    if (config.cookie.token.checkable === true) {
+      if (user.ls) {
+        cookies += cookie.serialize('trav:ls', user.ls) + '; ';
+      }
+    }
+
     return cookies;
   }
 }

@@ -1,6 +1,6 @@
 {
-  "name": "travelling-sdk",
-  "version": "1.2.1",
+  "name": "@trazi/travelling-sdk",
+  "version": "2.15.0",
   "description": "",
   "main": "node/index.js",
   "files": [

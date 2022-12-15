@@ -1,4 +1,5 @@
 const config = require('../../include/utils/config');
+const Audit = require('../../include/database/models/audit');
 const { Travelling } = require('../../sdk/node')('http://127.0.0.1:6969/' + config.serviceName, {
   resolveWithFullResponse: true
 });
@@ -33,6 +34,17 @@ module.exports = () => {
 
         group1 = res.body;
         expect(res.body).toMatchObject({ name: 'group1', id: expect.any(String), is_default: false });
+      });
+
+      test('Checking Audit of (Create Group [group1])', async () => {
+        if (config.audit.create.enable === true) {
+          const audit = await Audit.findAllBy({ action: 'CREATE', subaction: 'GROUP' });
+
+          expect(audit[0]).toHaveProperty('id');
+          expect(audit[0].created_on).not.toBeNull();
+          expect(audit[0].by_user_id).not.toBeNull();
+          expect(audit[0].new_val).not.toBeNull();
+        }
       });
 
       test('Create a Group With Name group2 and Inherited From group1', async () => {
@@ -90,6 +102,49 @@ module.exports = () => {
           is_default: true,
           inherited: [group4.id, superadmin]
         });
+      });
+
+      test('Add Routes to new group', async () => {
+        const allowedRoutes = [
+          {
+            method: '*',
+            route: '/test-domain',
+            name: 'test-domain',
+            domain: ':domain'
+          },
+          {
+            method: '*',
+            route: '/test-domain-two',
+            name: 'test-domain-two',
+            domain: 'traziventurestwo.com'
+          },
+          {
+            method: '*',
+            route: '/test-domain-wildcard',
+            name: 'test-domain-wildcard',
+            domain: '*'
+          }
+        ];
+
+        var res = await Travelling.Group.create(
+          {
+            name: 'group6',
+            is_default: false,
+            allowed: allowedRoutes
+          },
+          userContainer.user1Token
+        );
+
+        expect(res.body).toMatchObject({
+          name: 'group6',
+          type: 'group',
+          id: expect.any(String),
+          is_default: false,
+          inherited: null,
+          allowed: allowedRoutes
+        });
+
+        expect(res.statusCode).toEqual(200);
       });
     });
 
@@ -149,6 +204,17 @@ module.exports = () => {
           is_default: false,
           inherited: [group3.id, superadmin]
         });
+      });
+
+      test('Checking Audit of (Add Group Inheritance [group4] inherit [Superadmin])', async () => {
+        if (config.audit.edit.enable === true) {
+          const audit = await Audit.findAllBy({ action: 'EDIT', subaction: 'GROUP' });
+
+          expect(audit[0]).toHaveProperty('id');
+          expect(audit[0].created_on).not.toBeNull();
+          expect(audit[0].by_user_id).not.toBeNull();
+          expect(audit[0].new_val).not.toBeNull();
+        }
       });
 
       test('Group 1 to Inherit Superadmin', async () => {
@@ -237,7 +303,7 @@ module.exports = () => {
         var res = await Travelling.Groups.get(userContainer.user1Token);
 
         expect(res.statusCode).toEqual(200);
-        expect(res.body).toHaveLength(7);
+        expect(res.body).toHaveLength(8);
       });
 
       test('All Groups of "testgroup" Type', async () => {

@@ -71,6 +71,64 @@ module.exports = () => {
         expect(res.statusCode).toEqual(200);
       });
 
+      test('Check Test Domain Route - Using User Domain and Custom Domain Header', async () => {
+        // User 5 has domain 'traziventures.com'
+        // Group 6 Route /test/domain uses user domain (:domain)
+        var userInheritance = await Travelling.User.Domain.addGroupInheritance(
+          'traziventures.com',
+          'test_domain_5',
+          'group6',
+          'group',
+          userContainer.user1Token
+        );
+
+        expect(userInheritance.statusCode).toEqual(200);
+
+        var res = await Travelling.User.Current.routeCheck('GET', '/test-domain', null, {
+          headers: { cookie: userContainer.user5Cookie(), mydomain: 'traziventures.com' }
+        });
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toEqual(true);
+      });
+
+      test('Check Test Domain Route - Using Cloudflare Request Header Domain', async () => {
+        // Check without passing in header
+        var noCFHeaderDomain = await Travelling.User.Current.routeCheck('GET', '/test-domain-two', null, {
+          headers: { cookie: userContainer.user5Cookie(), 'cf-worker': 'wrong.com' }
+        });
+
+        expect(noCFHeaderDomain.statusCode).toEqual(401);
+        expect(noCFHeaderDomain.body).toEqual(false);
+
+        // Check by passing in header
+        var withCFHeaderDomain = await Travelling.User.Current.routeCheck('GET', '/test-domain-two', null, {
+          headers: { cookie: userContainer.user5Cookie(), 'cf-worker': 'traziventurestwo.com' }
+        });
+
+        expect(withCFHeaderDomain.statusCode).toEqual(200);
+        expect(withCFHeaderDomain.body).toEqual(true);
+      });
+
+      test('Check Test Domain Route - Route With Wildcard Domain', async () => {
+        var res = await Travelling.User.Current.routeCheck('GET', '/test-domain-wildcard', null, {
+          headers: { cookie: userContainer.user5Cookie(), mydomain: 'likewhateverr.com' }
+        });
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toEqual(true);
+      });
+
+      test('Check Test Domain Route - No Match - Using Custom Header Domain', async () => {
+        // Check by passing in non-existent header
+        var res = await Travelling.User.Current.routeCheck('GET', '/test-domain', null, {
+          headers: { cookie: userContainer.user5Cookie(), mydomain: 'notamatchduuude.com' }
+        });
+
+        expect(res.statusCode).toEqual(401);
+        expect(res.body).toEqual(false);
+      });
+
       test("Check Anonymous's Permission", async () => {
         var res = await Travelling.User.Current.permissionCheck('delete-travelling-api-v1-user-me');
 
@@ -109,16 +167,6 @@ module.exports = () => {
 
   describe('Non-Current User', () => {
     describe('Valid', () => {
-      test('Get All Users', async () => {
-        var res = await Travelling.Users.get(null, {
-          headers: {
-            cookie: userContainer.user1Cookie()
-          }
-        });
-
-        expect(res.body).toHaveLength(4);
-      });
-
       test('Get By Id', async () => {
         var res = await Travelling.User.get(userContainer.user1.id, null, {
           headers: {
@@ -220,6 +268,62 @@ module.exports = () => {
 
         expect(res.statusCode).toEqual(400);
         expect(res.body).not.toEqual(userContainer.user2.email);
+      });
+    });
+  });
+
+  describe('Non-Current User With Domain', () => {
+    describe('Valid', () => {
+      test('Get User Domain 2', async () => {
+        var res = await Travelling.User.Domain.get('test.com', 'test_domain_2@test.com', userContainer.userDomain2Token);
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body.domain).toEqual('test.com');
+        expect(res.body.email).toEqual('test_domain_2@test.com');
+      });
+
+      test('Get Property User Domain 2', async () => {
+        var res = await Travelling.User.Domain.getProperty(
+          'test.com',
+          'test_domain_2@test.com',
+          'domain',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toEqual('test.com');
+      });
+    });
+
+    describe('Invalid', () => {
+      test('Get User Domain 2 non-existent domain', async () => {
+        var res = await Travelling.User.Domain.get(
+          'this-aint-no-real-domain.elite',
+          'test_domain_2@test.com',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.statusCode).toEqual(400);
+        expect(res.body).toHaveProperty('type', 'user-find-by-error');
+      });
+
+      test('Get User Domain 2 invalid id', async () => {
+        var res = await Travelling.User.Domain.get('test.com', 'real-incorrect-id@45.wrong', userContainer.userDomain2Token);
+
+        expect(res.statusCode).toEqual(400);
+        expect(res.body).toHaveProperty('type', 'user-find-by-error');
+      });
+
+      test('Get User Domain 2 invalid property', async () => {
+        var res = await Travelling.User.Domain.getProperty(
+          'test.com',
+          'test_domain_2@test.com',
+          'asdfasdfasdf',
+          userContainer.userDomain2Token
+        );
+
+        expect(res.statusCode).toEqual(400);
+        expect(res.body).toHaveProperty('type', 'user-prop-error');
       });
     });
   });

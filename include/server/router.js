@@ -6,11 +6,12 @@ const gm = require('./groupmanager');
 const log = config.log.logger;
 const regex = require('../utils/regex');
 const parse = require('../utils/parse');
+const helpers = require('./tracing/helpers')();
 //const { proxy } = require('fast-proxy')({});
 const ignored_log_routes = ['/' + config.serviceName + '/metrics', '/' + config.serviceName + '/health'];
 
 class Router {
-  constructor(server) {
+  constructor(server, nstats) {
     this.proxy = httpProxy.createProxyServer({
       ws: true,
       secure: false,
@@ -46,9 +47,17 @@ class Router {
       res.statusCode = 504;
       res.end();
     });
+    this.nstats = nstats;
   }
 
   async routeUrl(req, res, oldspan) {
+    var sTime;
+    var possibleRoute;
+
+    if (config.stats.captureGroupRoutes) {
+      sTime = process.hrtime.bigint();
+    }
+
     var authenticated = req.isAuthenticated;
     var sessionUser = req.session.data ? req.session.data.user : null;
     var sessionGroupsData = req.session.data ? req.session.data.groupsData : null;
@@ -68,16 +77,37 @@ class Router {
       res.code(401).send('Account Locked');
       return false;
     }
+
     if (groups) {
       // the route object
       var r = null;
       var routedGroup = null;
+      var headersDomain = parse.getDomainFromHeaders(req.headers);
 
       for (var i = 0; i < groups.length; i++) {
         routedGroup = groups[i].group;
-        r = this.isRouteAllowed(req.raw.method, req.raw.url, groups[i].routes, sessionUser, routedGroup);
+
+        r = this.isRouteAllowed(req.raw.method, req.raw.url, groups[i].routes, sessionUser, routedGroup, headersDomain);
         if (r) {
+          possibleRoute = r.route;
           break;
+        }
+      }
+
+      if (config.stats.captureGroupRoutes && !possibleRoute && ignored_log_routes.indexOf(req.raw.url) == -1) {
+        var troute = req.raw.url.split('/');
+
+        troute.shift();
+        var last = gm.allPossibleRoutes;
+
+        for (var i = 0; i < troute.length; i++) {
+          if (last[troute[i]]) {
+            possibleRoute = last[troute[i]].name;
+            last = last[troute[i]];
+          } else if (last['*']) {
+            possibleRoute = last['*'].name;
+            last = last['*'];
+          }
         }
       }
 
@@ -93,7 +123,8 @@ class Router {
         if (
           req.raw.url != config.portal.path &&
           req.raw.url.indexOf('/' + config.serviceName + '/api/') != 0 &&
-          req.raw.url.indexOf('/' + config.serviceName + '/assets/') != 0
+          req.raw.url.indexOf('/' + config.serviceName + '/assets/') != 0 &&
+          config.misc.deniedRedirect
         ) {
           // console.log(req.raw.url, req.raw.url, config.portal.path)
           this.setBackurl(res, req);
@@ -105,10 +136,20 @@ class Router {
 
         if (config.log.unauthorizedAccess) {
           log.warn(
-            'Unauthorized',
-            'Unregistered User' + ' (anonymous)' + ' | ' + parse.getIp(req) + ' | [' + req.raw.method + '] ' + req.raw.url
+            helpers.text(
+              'Unauthorized Unregistered User' +
+                ' (anonymous)' +
+                ' | ' +
+                parse.getIp(req) +
+                ' | [' +
+                req.raw.method +
+                '] ' +
+                req.raw.url,
+              span
+            )
           );
         }
+
         return false;
       }
 
@@ -119,57 +160,100 @@ class Router {
           if (!sessionGroupsData) {
             sessionGroupsData = await sessionUser.resolveGroup();
           }
+
           log.warn(
-            'Unauthorized',
-            sessionUser.username +
-              ' (' +
-              sessionGroupsData.names +
-              ') | ' +
-              parse.getIp(req) +
-              ' | [' +
-              req.raw.method +
-              '] ' +
-              req.raw.url
+            helpers.text(
+              'Unauthorized ' + sessionUser.username ||
+                sessionUser.email +
+                  ' (' +
+                  sessionGroupsData.names +
+                  ',' +
+                  sessionUser.domain +
+                  ') | ' +
+                  parse.getIp(req) +
+                  ' | [' +
+                  req.raw.method +
+                  '] ' +
+                  req.raw.url,
+              span
+            )
           );
         }
+
+        if (config.stats.captureGroupRoutes && req.raw.url.indexOf('/' + config.serviceName + '/') == -1) {
+          this.nstats.addWeb({ routerPath: possibleRoute, method: req.raw.method, socket: req.raw.socket }, res, sTime);
+        }
+
         return false;
       }
+
       // sets user id cookie every time to protect against tampering.
-      if (authenticated && config.proxy.sendTravellingHeaders) {
-        if (config.user.username.enabled) {
+      if (config.proxy.sendTravellingHeaders) {
+        if (config.user.username.enabled && authenticated) {
           req.headers['t-user'] = sessionUser.username;
+        }
+
+        if (authenticated) {
+          req.headers['t-dom'] = sessionUser.domain;
+          req.headers['t-id'] = sessionUser.id;
+          req.headers['t-email'] = sessionUser.email;
+        } else {
+          // possibly add an option to skip anti header tampering for speed increase.
+          delete req.headers['t-dom'];
+          delete req.headers['t-id'];
+          delete req.headers['t-email'];
         }
 
         req.headers['t-grpn'] = routedGroup.name;
         req.headers['t-grpt'] = routedGroup.type;
-        req.headers['t-dom'] = sessionUser.domain;
-        req.headers['t-id'] = sessionUser.id;
-        req.headers['t-email'] = sessionUser.email;
         req.headers['t-perm'] = r.name;
         req.headers['t-ip'] = parse.getIp(req) || '0.0.0.0';
+      } else {
+        // possibly add an option to skip anti header tampering for speed increase.
+        delete req.headers['t-user'];
+        delete req.headers['t-dom'];
+        delete req.headers['t-id'];
+        delete req.headers['t-email'];
+        delete req.headers['t-grpn'];
+        delete req.headers['t-grpt'];
+        delete req.headers['t-perm'];
+        delete req.headers['t-ip'];
       }
 
       if (req.raw.url.indexOf('/' + config.serviceName + '/') == 0 && !r.host) {
         if (config.log.requests && ignored_log_routes.indexOf(req.raw.url) == -1) {
           if (authenticated) {
             log.info(
-              (sessionUser.username || sessionUser.email) +
-                ' (' +
-                routedGroup.name +
-                ') | ' +
-                parse.getIp(req) +
-                ' | [' +
-                req.raw.method +
-                '] ' +
-                req.raw.url
+              helpers.text(
+                (sessionUser.username || sessionUser.email) +
+                  ' (' +
+                  routedGroup.name +
+                  ',' +
+                  sessionUser.domain +
+                  ') | ' +
+                  parse.getIp(req) +
+                  ' | [' +
+                  req.raw.method +
+                  '] ' +
+                  req.raw.url,
+                span
+              )
             );
           } else {
             log.info(
-              'Unregistered User' + ' (anonymous)' + ' | ' + parse.getIp(req) + ' | [' + req.raw.method + '] ' + req.raw.url
+              helpers.text(
+                'Unregistered User' + ' (anonymous)' + ' | ' + parse.getIp(req) + ' | [' + req.raw.method + '] ' + req.raw.url,
+                span
+              )
             );
           }
         }
+
         return false;
+      }
+
+      if (config.stats.captureGroupRoutes) {
+        this.nstats.addWeb({ routerPath: possibleRoute, method: req.raw.method, socket: req.raw.socket }, res, sTime);
       }
 
       var target = {
@@ -184,34 +268,43 @@ class Router {
       if (r.remove_from_path) {
         req.raw.url = req.raw.url.replace(this.transformRoute(sessionUser, r, r.remove_from_path, routedGroup), '');
       }
+
       if (config.log.requests && ignored_log_routes.indexOf(req.raw.url) == -1) {
         if (authenticated) {
           log.info(
-            (sessionUser.username || sessionUser.email) +
-              ' (' +
-              routedGroup.name +
-              ') | ' +
-              parse.getIp(req) +
-              ' | [' +
-              req.raw.method +
-              '] ' +
-              req.raw.url +
-              ' -> ' +
-              target.target +
-              req.raw.url
+            helpers.text(
+              (sessionUser.username || sessionUser.email) +
+                ' (' +
+                routedGroup.name +
+                ',' +
+                sessionUser.domain +
+                ') | ' +
+                parse.getIp(req) +
+                ' | [' +
+                req.raw.method +
+                '] ' +
+                req.raw.url +
+                ' -> ' +
+                target.target +
+                req.raw.url,
+              span
+            )
           );
         } else {
           log.info(
-            'Unregistered User' +
-              ' (anonymous)' +
-              ' | ' +
-              parse.getIp(req) +
-              ' | [' +
-              req.raw.method +
-              '] ' +
-              req.raw.url +
-              ' -> ' +
-              target.target
+            helpers.text(
+              'Unregistered User' +
+                ' (anonymous)' +
+                ' | ' +
+                parse.getIp(req) +
+                ' | [' +
+                req.raw.method +
+                '] ' +
+                req.raw.url +
+                ' -> ' +
+                target.target,
+              span
+            )
           );
         }
       }
@@ -222,6 +315,7 @@ class Router {
         } else {
           this.proxy.ws(req.raw, req._wssocket, target);
         }
+
         return true;
       }
 
@@ -237,6 +331,7 @@ class Router {
           //proxy(req.raw, res.raw, req.raw.url, { base: target.target });
           this.proxy.web(req.raw, res.raw, target);
         }
+
         return true;
       }
 
@@ -248,20 +343,31 @@ class Router {
     // res.redirect(config.portal.path);
 
     // Should never get here;
-    log.wtf('router you what?');
+    log.wtf(helpers.text('router you what?', span));
     return false;
   }
 
   // @TODO Change these regex to precompiled ones inside regex.js
 
   /* eslint-disable */
-  isRouteAllowed(method, url, routes, user, currentGroup) {
+  isRouteAllowed(method, url, routes, user, currentGroup, headersDomain) {
     var surl = url.split('?')[0].split(/[\/]/g).filter(String);
 
     for (var i = 0; i < routes.length; i++) {
       if (!routes[i].method || !method || method == routes[i].method || routes[i].method == '*') {
-        var route = this.transformRoute(user, routes[i], routes[i].route, currentGroup);
+        var domain = routes[i].domain || '*';
 
+        if (domain !== '*') {
+          if (domain === ':domain') {
+            domain = user.domain;
+          }
+
+          if (headersDomain !== domain) {
+            continue;
+          }
+        }
+
+        var route = this.transformRoute(user, routes[i], routes[i].route, currentGroup);
         if (!route) {
           continue;
         }
@@ -337,19 +443,19 @@ class Router {
     }
     return path.replace(regex.transformRoute, (a, b, c) => {
       var prop = '';
-
       switch (a) {
         case ':id':
           prop = user.id || prop;
           break;
         case ':username':
-          prop = user.username || prop;
+          prop = user.username || user.email || prop;
           break;
         case ':email':
           prop = user.email || prop;
           break;
         case ':domain':
           prop = user.domain || prop;
+          break;
         case ':grouptype':
           prop = group.type || prop;
           break;

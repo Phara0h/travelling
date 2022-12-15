@@ -13,6 +13,7 @@ module.exports = () => {
           password: 'Pas5w0r!d2',
           email: 'test2@test.com'
         },
+        null,
         {
           headers: {
             cookie: userContainer.user2Cookie()
@@ -40,6 +41,7 @@ module.exports = () => {
           password: 'Pas5w0r!d2',
           email: 'test2@test.com'
         },
+        null,
         {
           headers: {
             cookie: userContainer.user2Cookie()
@@ -51,6 +53,58 @@ module.exports = () => {
 
       expect(res.statusCode).toBe(200);
       expect(ssid).not.toEqual(userContainer.user2.ssid);
+    });
+
+    test('Login remember [false] with Test Domain 4 User After Session Expires 4 Seconds', async () => {
+      jest.setTimeout(20000);
+
+      // Login
+      var res = await Travelling.Auth.login(
+        {
+          password: 'Pas5w0r!d',
+          email: 'test_domain_4@test.com',
+          remember: false
+        },
+        null,
+        {
+          headers: {
+            cookie: userContainer.userDomain4Cookie()
+          }
+        }
+      );
+
+      userContainer.parseUserDomain4Cookie(res.headers['set-cookie']);
+      expect(res.statusCode).toBe(200);
+
+      // Current User
+      var userRes1 = await Travelling.User.Current.get(null, {
+        headers: {
+          cookie: userContainer.userDomain4Cookie()
+        }
+      });
+
+      expect(userRes1.statusCode).toEqual(200);
+
+      // Wait for session to expire
+      var p = new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve();
+        }, 4900);
+      });
+
+      await p;
+
+      expect(userContainer.userDomain4.tok).toBeUndefined();
+      expect(userContainer.userDomain4.ssid).toBeDefined();
+
+      // Current User again
+      var userRes2 = await Travelling.User.Current.get(null, {
+        headers: {
+          cookie: userContainer.userDomain4Cookie()
+        }
+      });
+
+      expect(userRes2.statusCode).toEqual(401);
     });
 
     test('Token and No Session', async () => {

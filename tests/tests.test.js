@@ -2,6 +2,7 @@ const config = require('../include/utils/config');
 const Group = require('../include/database/models/group');
 const User = require('../include/database/models/user');
 const Token = require('../include/database/models/token');
+const Audit = require('../include/database/models/audit');
 
 const Redis = require('../include/redis');
 //
@@ -18,17 +19,20 @@ const Redis = require('../include/redis');
 var deletedUsers = [];
 var deletedGroups = [];
 var deletedTokens = [];
+var deletedAudits = [];
 
 beforeAll(async () => {
   try {
     deletedUsers = await User.deleteAll();
     deletedGroups = await Group.deleteAll();
     deletedTokens = await Token.deleteAll();
+    deletedAudits = await Audit.deleteAll();
 
     console.log('Clear Database');
     console.log('Deleted Groups: ', deletedGroups);
     console.log('Deleted Users: ', deletedUsers);
     console.log('Deleted Tokens: ', deletedTokens);
+    console.log('Deleted Audits: ', deletedAudits);
   } catch (e) {
     console.error(e);
   }
@@ -57,12 +61,15 @@ afterAll(async () => {
     console.log('Flushing Redis...');
     await Redis.flushAll();
   }
+
   console.log('Deleting Users...');
   await User.deleteAll();
   console.log('Deleting Groups...');
   await Group.deleteAll();
   console.log('Deleting Tokens...');
   await Token.deleteAll();
+  console.log('Deleting Audits...');
+  await Audit.deleteAll();
 
   // var group = Base(PGBaseModel, Group.table, Group._defaultModel);
   // var user = Base(PGBaseModel, User.table, User._defaultModel);
@@ -91,6 +98,7 @@ test('Waste Time', async () => {
 });
 
 describe('Endpoints', require('./endpoints'));
+describe('Misc', require('./misc'));
 //describe('Email', require('./email'));
 describe('Routes', require('./routes'));
 describe('Flows', require('./flow-tests'));

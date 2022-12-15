@@ -1,5 +1,6 @@
 const config = require('../../include/utils/config');
-
+const Audit = require('../../include/database/models/audit');
+const User = require('../../include/database/models/user');
 const { Travelling } = require('../../sdk/node')('http://127.0.0.1:6969/' + config.serviceName, {
   resolveWithFullResponse: true
 });
@@ -29,6 +30,18 @@ module.exports = () => {
       expect(res.statusCode).toEqual(200);
     });
 
+    test('Checking Audit of (Create Test User [test2])', async () => {
+      if (config.audit.create.enable === true) {
+        const u = await User.findAllBy({ email: 'test2@test.com' });
+        const audit = await Audit.findAllBy({ of_user_id: u[0].id, action: 'CREATE', subaction: 'USER' });
+
+        expect(audit[0]).toHaveProperty('id');
+        expect(audit[0].created_on).not.toBeNull();
+        expect(audit[0].action).toEqual('CREATE');
+        expect(audit[0].subaction).toEqual('USER');
+      }
+    });
+
     test('Create Test User [test3] Manual Activation Request Group Type Test', async () => {
       config.registration.requireManualActivation = true;
       var res = await Travelling.Auth.register({
@@ -41,7 +54,7 @@ module.exports = () => {
       expect(res.statusCode).toEqual(200);
     });
 
-    test('Create Test User [test4] Email Activaation', async () => {
+    test('Create Test User [test4] Email Activation', async () => {
       config.registration.requireEmailActivation = true;
       var res = await Travelling.Auth.register({
         username: 'test4',
@@ -50,6 +63,73 @@ module.exports = () => {
       });
 
       config.registration.requireEmailActivation = false;
+
+      expect(res.statusCode).toEqual(200);
+    });
+
+    test('Create Test User [test_domain_1]', async () => {
+      var res = await Travelling.Auth.Domain.register(
+        {
+          username: 'test_domain_1',
+          password: 'Pas5w0r!d',
+          email: 'test_domain_1@test.com'
+        },
+        'test.com'
+      );
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body).toEqual('Account Created');
+    });
+
+    test('Create Test User [test_domain_2]', async () => {
+      var res = await Travelling.Auth.Domain.register(
+        {
+          username: 'test_domain_2',
+          password: 'Pas5w0r!d',
+          email: 'test_domain_2@test.com'
+        },
+        'test.com'
+      );
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body).toEqual('Account Created');
+    });
+
+    test('Create Test User [test_domain_3] Gets deleted in user-edit', async () => {
+      var res = await Travelling.Auth.Domain.register(
+        {
+          username: 'test_domain_3',
+          password: 'Pas5w0r!d',
+          email: 'test_domain_3@test.com'
+        },
+        'test.com'
+      );
+
+      expect(res.statusCode).toEqual(200);
+    });
+
+    test('Create Test User [test_domain_4] login remember [false]', async () => {
+      var res = await Travelling.Auth.Domain.register(
+        {
+          username: 'test_domain_4',
+          password: 'Pas5w0r!d',
+          email: 'test_domain_4@test.com'
+        },
+        'test.com'
+      );
+
+      expect(res.statusCode).toEqual(200);
+    });
+
+    test('Create Test User [test_domain_5]', async () => {
+      var res = await Travelling.Auth.Domain.register(
+        {
+          username: 'test_domain_5',
+          password: 'Pas5w0r!d5',
+          email: 'test_domain_5@test.com'
+        },
+        'traziventures.com'
+      );
 
       expect(res.statusCode).toEqual(200);
     });
