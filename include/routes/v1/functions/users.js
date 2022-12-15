@@ -6,6 +6,7 @@ const audit = require('../../../utils/audit');
 
 const Database = require('../../../database');
 const User = require('../../../database/models/user');
+const regex = require('../../../utils/regex');
 
 async function deleteUser(opts) {
   var id = userUtils.getId(opts.req);
@@ -20,7 +21,7 @@ async function deleteUser(opts) {
     };
   }
 
-  if (opts.needsDomain && !domain) {
+  if (opts.needsDomain && (!domain || regex.domain.exec(domain) == null)) {
     opts.res.code(400);
     return {
       type: 'user-missing-param-error',
@@ -87,7 +88,7 @@ async function editUser(opts) {
     };
   }
 
-  if (opts.needsDomain && !domain) {
+  if (opts.needsDomain && (!domain || regex.domain.exec(domain) == null)) {
     opts.res.code(400);
     return {
       type: 'user-missing-param-error',
@@ -275,7 +276,7 @@ async function getUser(opts) {
     };
   }
 
-  if (opts.needsDomain && !domain) {
+  if (opts.needsDomain && (!domain || regex.domain.exec(domain) == null)) {
     opts.res.code(400);
     return {
       type: 'user-missing-param-error',
