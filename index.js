@@ -16,6 +16,18 @@ if (
 
 const ignored_routes = [`/${config.serviceName}/metrics`, `/${config.serviceName}/health`];
 
+function isRouteIgnored(url) {
+  for (let i = 0; i < ignored_routes.length; i++) {
+    const r = ignored_routes[i];
+
+    if (url.indexOf(r) > -1) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 if (config.log.logger) {
   if (typeof config.log.logger === 'string') {
     if (config.log.logger == 'wog') {
@@ -24,15 +36,19 @@ if (config.log.logger) {
       if (config.log.appendFields.app.enable) {
         appendFields.app = config.log.appendFields.app.label;
       }
+
       if (config.log.appendFields.version.enable) {
         appendFields.version = config.log.appendFields.version.label;
       }
+
       if (config.log.appendFields.environment.enable) {
         appendFields.environment = config.log.appendFields.environment.label;
       }
+
       if (config.log.appendFields.host.enable) {
         appendFields.host = config.log.appendFields.host.label;
       }
+
       if (config.log.appendFields.branch.enable) {
         appendFields.branch = config.log.appendFields.branch.label;
       }
@@ -51,22 +67,24 @@ if (config.log.logger) {
           req: function (req) {
             var traceId = '';
 
-            if (ignored_routes.indexOf(req.url) > -1) {
+            if (isRouteIgnored(req.url)) {
               return null;
             }
 
             if (config.tracing.enable) {
               if (!req.span || req.span == '') {
                 if (is_testing) {
-                  req.span = trace.tracer.startSpan('root', trace.opentelemetry.context.active());
+                  req.span = trace.tracer.startSpan('root', undefined, trace.opentelemetry.context.active());
                 } else {
-                  req.span = trace.opentelemetry.getSpan(trace.opentelemetry.context.active());
+                  req.span = trace.opentelemetry.trace.getSpan(trace.opentelemetry.context.active());
                 }
               }
+
               if (req.span) {
-                traceId = req.span.context().traceId;
+                traceId = req.span.spanContext().traceId;
               }
             }
+
             var headers = {
               ...req.headers
             };
@@ -85,13 +103,14 @@ if (config.log.logger) {
           },
 
           res: function (reply) {
-            if (ignored_routes.indexOf(reply.request.url) > -1) {
+            if (isRouteIgnored(reply.request.url)) {
               return null;
             }
+
             return {
               wog_type: 'reply',
               statusCode: reply.statusCode,
-              traceId: config.tracing.enable && reply.request.span ? reply.request.span.context().traceId : ''
+              traceId: config.tracing.enable && reply.request.span ? reply.request.span.spanContext().traceId : ''
             };
           }
         }
@@ -101,6 +120,7 @@ if (config.log.logger) {
     }
   }
 }
+
 var trace = null;
 
 if (config.tracing.enable) {
@@ -110,8 +130,9 @@ if (config.tracing.enable) {
 
 var fastifyOptions = {
   http2: false,
-  logger: config.log.logger,
-
+  logger: config.log.requests ? config.log.logger : false,
+  bodyLimit: config.misc.bodyLimit,
+  maxParamLength: config.misc.maxParamLength,
   // logger: true
   disableRequestLogging: !config.log.fastify.requestLogging,
   requestIdHeader: config.log.fastify.requestIdHeader,
@@ -138,18 +159,23 @@ var pgc = {};
 if (config.pg.url) {
   pgc.connectionString = config.pg.url;
 }
+
 if (config.pg.user) {
   pgc.user = config.pg.user;
 }
+
 if (config.pg.password) {
   pgc.password = config.pg.password;
 }
+
 if (config.pg.database) {
   pgc.database = config.pg.database;
 }
+
 if (config.pg.host) {
   pgc.host = config.pg.host;
 }
+
 if (config.pg.port) {
   pgc.port = config.pg.port;
 }
@@ -163,23 +189,31 @@ const Database = require('./include/database');
 const Group = require('./include/database/models/group');
 const User = require('./include/database/models/user');
 const Token = require('./include/database/models/token');
+const Audit = require('./include/database/models/audit');
 
 const redis = require('./include/redis');
+const Stats = require('./include/utils/stats');
+const stats = new Stats(redis.sessionStore);
+const nstats = require('nstats')();
 
 const Router = require('./include/server/router');
-const router = new Router(app.server);
+const router = new Router(app.server, nstats);
 
 const auth = require('./include/utils/auth');
 const Email = require('./include/utils/email');
 
-const nstats = require('nstats')();
-
 if (config.tracing.enable) {
   app.setErrorHandler((error, request, reply) => {
-    error.traceId = request.span.context().traceId;
-    config.log.logger.error(error);
+    try {
+      if (request.span) {
+        error.traceId = request.span.spanContext().traceId;
+      }
 
-    request.span.recordException(error);
+      config.log.logger.error(error);
+      if (request.span) {
+        request.span.recordException(error);
+      }
+    } catch (error) {}
 
     reply.code(500).send(
       JSON.stringify({
@@ -188,6 +222,7 @@ if (config.tracing.enable) {
       })
     );
   });
+
   app.decorateRequest('span', '');
   app.decorateRequest('startSpan', trace.helpers.startSpan);
   // if (is_testing) {
@@ -203,7 +238,10 @@ if (config.tracing.enable) {
   // }
 } else {
   app.setErrorHandler(function (error, request, reply) {
-    config.log.logger.error(error);
+    try {
+      config.log.logger.error(error);
+    } catch (error) {}
+
     reply.code(500).send(
       JSON.stringify({
         type: 'error',
@@ -216,11 +254,12 @@ if (config.tracing.enable) {
 app.register(require('./include/server/cors.js'), { router });
 
 app.get('/' + config.serviceName + '/metrics', (req, res) => {
-  res.code(200).send(nstats.toPrometheus());
+  res.code(200).send(nstats.toPrometheus() + stats.toPrometheus());
 });
 app.get('/' + config.serviceName + '/health', (req, res) => res.code(200).send('All Systems Nominal'));
 app.register(nstats.fastify(), {
-  ignored_routes
+  ignored_routes,
+  ignore_non_router_paths: true
 });
 
 if (config.portal.enable) {
@@ -234,6 +273,7 @@ if (config.portal.enable) {
         } else {
           stream = fs.createReadStream(config.portal.icon);
         }
+
         res.type('image/x-icon').send(stream);
       });
     } catch (e) {
@@ -266,39 +306,45 @@ app.decorateRequest('checkLoggedIn', async function (req, res, router, span) {
 app.decorateRequest('logout', auth.logout);
 app.decorateRequest('isAuthenticated', false);
 
-app.addHook('preParsing', function (req, res, payload, next) {
-  req.checkLoggedIn(req, res, router, req.span).then((auth) => {
-    req.isAuthenticated = auth.auth;
+app.addHook('preParsing', async function (req, res, payload) {
+  var auth = await req.checkLoggedIn(req, res, router, req.span);
 
-    if (!auth.route) {
-      res.code(401);
-      if (auth.invalidToken) {
-        res.send({
-          error: 'invalid_client',
-          error_description: 'Invalid Access Token'
-        });
-      } else {
-        res.send();
-        if (config.log.requests) {
-          config.log.logger.warn(
-            'Unauthorized',
-            'Unregistered User' + ' (anonymous)' + ' | ' + parse.getIp(req) + ' | [' + req.raw.method + '] ' + req.raw.url
-          );
-        }
-      }
-    } else {
-      router.routeUrl(req, res, req.span).then((route) => {
-        if (!route) {
-          next();
-        }
+  req.isAuthenticated = auth.auth;
+
+  if (!auth.route) {
+    res.code(401);
+    if (auth.invalidToken) {
+      res.send({
+        error: 'invalid_client',
+        error_description: 'Invalid Access Token'
       });
+      return payload;
+    } else {
+      if (config.log.requests) {
+        config.log.logger.warn(
+          'Unauthorized',
+          'Unregistered User' + ' (anonymous)' + ' | ' + parse.getIp(req) + ' | [' + req.raw.method + '] ' + req.raw.url
+        );
+      }
+
+      res.send();
+      return payload;
     }
-  });
+  } else {
+    var route = await router.routeUrl(req, res, req.span);
+
+    if (!route) {
+      return payload;
+    } else {
+      return res;
+    }
+  }
 });
 
 app.register(require('./include/routes/v1/auth'), { prefix: '/' + config.serviceName + '/api/v1', router });
 app.register(require('./include/routes/v1/groups'), { prefix: '/' + config.serviceName + '/api/v1', router });
-app.register(require('./include/routes/v1/users').routes, { prefix: '/' + config.serviceName + '/api/v1', router });
+app.register(require('./include/routes/v1/users'), { prefix: '/' + config.serviceName + '/api/v1', router });
+app.register(require('./include/routes/v1/audit'), { prefix: '/' + config.serviceName + '/api/v1', router });
 app.get('/' + config.serviceName + '/api/v1/config/:prop', (req, res) => {
   res.code(200).send(config[req.params.prop]);
 });
@@ -340,18 +386,78 @@ app.ready(() => {
   }
 });
 
+process
+  .on('unhandledRejection', (reason, p) => {
+    var span = null;
+
+    if (config.tracing.enable && trace) {
+      span = trace.opentelemetry.trace.getSpan(trace.opentelemetry.context.active());
+      if (span) {
+        reason.traceId = span.spanContext().traceId;
+        span.recordException(reason);
+      }
+
+      config.log.logger.fatal(trace.helpers.text('unhandledRejection', span));
+    }
+
+    config.log.logger.fatal(reason);
+  })
+  .on('uncaughtException', (err) => {
+    var span = null;
+
+    if (config.tracing.enable && trace) {
+      span = trace.opentelemetry.trace.getSpan(trace.opentelemetry.context.active());
+      if (span) {
+        err.traceId = span.spanContext().traceId;
+        span.recordException(err);
+      }
+
+      config.log.logger.fatal(trace.helpers.text('uncaughtException', span));
+    }
+
+    config.log.logger.fatal(err);
+  })
+  .on('warning', (warning) => {
+    var span = null;
+
+    if (config.tracing.enable && trace) {
+      if (span) {
+        span = trace.opentelemetry.trace.getSpan(trace.opentelemetry.context.active());
+        warning.traceId = span.spanContext().traceId;
+      }
+    }
+
+    config.log.logger.warn(warning); // Print the stack trace
+  })
+  .on('beforeExit', (code) => {
+    var span = null;
+
+    if (config.tracing.enable && trace) {
+      span = trace.opentelemetry.trace.getSpan(trace.opentelemetry.context.active());
+    }
+
+    config.log.logger.info(trace.helpers.text('Process beforeExit event with code: ' + code, span));
+  });
+
 async function init() {
   try {
     await pg.query('CREATE EXTENSION "uuid-ossp";');
   } catch (_) {}
+
   try {
     await User.createTable();
   } catch (_) {}
+
   try {
     await Group.createTable();
   } catch (_) {}
+
   try {
     await Token.createTable();
+  } catch (_) {}
+
+  try {
+    await Audit.createTable();
   } catch (_) {}
 
   await Database.initGroups(router);

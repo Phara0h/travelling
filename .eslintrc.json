@@ -1,19 +1,22 @@
 {
   "parserOptions": {
-    "ecmaVersion": 9
+    "ecmaVersion": 2020,
+    "requireConfigFile": false
   },
-  "ignorePatterns": ["**/sdk/**", "**/gitlab-ci/**"],
+  "parser": "@babel/eslint-parser",
+  "ignorePatterns": ["**/sdk/**", "**/gitlab-ci/**", "**/node_modules/**", "**.md", "usa.js", "client/**"],
   "extends": ["prettier"],
   "plugins": ["prettier"],
   "env": {
     "node": true,
-    "jest": true
+    "jest": true,
+    "es6": true
   },
   "rules": {
     "comma-dangle": ["error", "never"],
     "no-cond-assign": 2,
     "no-constant-condition": 2,
-    "no-control-regex": 2,
+    "no-control-regex": 0,
     "no-debugger": 2,
     "no-dupe-args": 2,
     "no-dupe-keys": 2,
@@ -28,7 +31,8 @@
     "no-unreachable": 2,
     "use-isnan": 2,
     "no-unexpected-multiline": 2,
-    "curly": 2,
+    "class-methods-use-this": 1,
+    "curly": [2, "all"],
     "dot-location": [2, "property"],
     "no-alert": 2,
     "no-caller": 1,
@@ -50,7 +54,10 @@
         "allowSingleLine": true
       }
     ],
-    "camelcase": 1,
+    "camelcase": [
+      1,
+      { "properties": "never", "ignoreDestructuring": true, "ignoreImports": true, "ignoreGlobals": true }
+    ],
     "comma-spacing": [
       2,
       {
@@ -80,9 +87,17 @@
       }
     ],
     "linebreak-style": [2, "unix"],
-    "new-cap": 2,
+    "new-cap": 1,
     "new-parens": 2,
-    "newline-after-var": [2, "always"],
+    "padding-line-between-statements": [
+      2,
+      {
+        "blankLine": "always",
+        "prev": ["const", "let", "var", "for", "function", "switch", "class", "while", "block-like", "block"],
+        "next": "*"
+      },
+      { "blankLine": "any", "prev": ["const", "let", "var"], "next": ["const", "let", "var"] }
+    ],
     "no-array-constructor": 2,
     "no-inline-comments": 0,
     "no-lonely-if": 2,
@@ -128,7 +143,8 @@
         "tabWidth": 2,
         "singleQuote": true,
         "printWidth": 130,
-        "trailingComma": "none"
+        "trailingComma": "none",
+        "arrowParens": "always"
       },
       {
         "usePrettierrc": true

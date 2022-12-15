@@ -1,244 +1,15 @@
-const regex = require('../../utils/regex');
 const User = require('../../database/models/user');
 const TokenHandler = require('../../token');
+
 const userUtils = require('../../utils/user');
 const config = require('../../utils/config');
+const audit = require('../../utils/audit');
 const misc = require('../../utils/misc');
 const gm = require('../../server/groupmanager');
-const Database = require('../../database');
+const userRoutes = require('./functions/users');
+const parse = require('../../utils/parse');
 
-async function deleteUser(req, res, router) {
-  var id = _getId(req);
-
-  if (!id) {
-    res.code(400);
-    return {
-      type: 'user-find-by-error',
-      msg: 'No user by that username or id was found.'
-    };
-  }
-
-  var user = await User.deleteAllBy(id, 'AND');
-
-  if (user && user.length > 0) {
-    await user[0].resolveGroup(router);
-
-    var session = await req.sessionStore.get(user[0].id);
-
-    if (session) {
-      await req.sessionStore.destroy(session.sessionId);
-    }
-
-    res.code(200);
-    return user[0];
-  }
-
-  res.code(400);
-  return {
-    type: 'user-delete-error',
-    msg: 'No user by that username or id was found.'
-  };
-}
-
-async function editUser(req, res, router) {
-  var id = _getId(req);
-
-  if (!id) {
-    res.code(400);
-    return {
-      type: 'user-find-by-error',
-      msg: 'No user by that username or id was found.'
-    };
-  }
-
-  // filter group_id
-  req.body = filterUser(req);
-
-  var model = req.body;
-
-  if (req.params.prop) {
-    model = req.params.propdata ? { [req.params.prop]: req.params.propdata } : { [req.params.prop]: req.body };
-  }
-
-  var isValid = await userUtils.checkValidUser(model);
-
-  if (isValid === true) {
-    isValid = await Database.checkDupe(model);
-  }
-  if (isValid !== true) {
-    res.code(400);
-    return isValid;
-  }
-
-  var updatedProps = userUtils.setUser({}, model);
-
-  if (misc.isEmpty(updatedProps)) {
-    res.code(400);
-    return {
-      type: 'user-prop-error',
-      msg: 'Not a property of user'
-    };
-  }
-
-  var user = await User.updateLimitedBy(id, updatedProps, 'AND', 1);
-
-  if (user && user.length > 0) {
-    if (req.params.prop && user[0][req.params.prop] === undefined) {
-      res.code(400);
-      return {
-        type: 'user-prop-error',
-        msg: 'Not a property of user'
-      };
-    }
-
-    const groupsData = await user[0].resolveGroup(router);
-
-    res.code(200);
-    // Update any current logged in users
-    var session = await req.sessionStore.get(user[0].id);
-
-    if (session) {
-      session.data = { user: user[0], groupsData };
-      await req.sessionStore.set(session.sessionId, session);
-    }
-
-    return req.params.prop ? user[0][req.params.prop] : user[0];
-  }
-
-  res.code(400);
-  return {
-    type: 'user-edit-error',
-    msg: 'No user by that username or id was found.'
-  };
-}
-
-async function getUser(req, res) {
-  var id = _getId(req);
-
-  if (!id) {
-    res.code(400);
-    return {
-      type: 'user-find-by-error',
-      msg: 'No user by that username or id was found.'
-    };
-  }
-
-  var user = await User.findLimtedBy(id, 'AND', 1);
-
-  if (user && user.length > 0) {
-    if (req.params.prop && user[0][req.params.prop] === undefined) {
-      res.code(400);
-      return {
-        type: 'user-prop-error',
-        msg: 'Not a property of user'
-      };
-    }
-
-    await user[0].resolveGroup();
-
-    res.code(200);
-    return req.params.prop ? user[0][req.params.prop] : user[0];
-  }
-
-  res.code(400);
-  return {
-    type: 'user-find-by-error',
-    msg: 'No user by that username or id was found.'
-  };
-}
-async function updateSessionUser(user, req) {
-  const groupsData = await user.resolveGroup();
-  // Update any current logged in users
-  var session = await req.sessionStore.get(user.id);
-
-  if (session) {
-    session.data = { user, groupsData };
-    await req.sessionStore.set(session.sessionId, session);
-  }
-}
-
-async function getGroup(req, res) {
-  var group = null;
-
-  if (req.params.groupid) {
-    group = await gm.getGroup(req.params.groupid, req.params.grouptype || 'group');
-  }
-
-  if (!group) {
-    return {
-      type: 'user-edit-group-error',
-      msg: 'No group with that type by that name or id was found.'
-    };
-  }
-
-  return group;
-}
-
-async function addRemoveGroupInheritance(user, group, add = true, req) {
-  if (user) {
-    // console.log(group);
-    user = add ? await user.addGroup(group) : await user.removeGroup(group);
-
-    if (!user) {
-      return {
-        type: `user-${add ? 'add' : 'remove'}-group-error`,
-        msg: `User could not ${add ? 'add' : 'remove'} group.`
-      };
-    }
-    await updateSessionUser(user, req);
-    return user;
-  }
-
-  // console.log(user);
-
-  return {
-    type: 'user-edit-error',
-    msg: 'No user by that username or id was found.'
-  };
-}
-function filterUser(req) {
-  if (!req.body) {
-    return req.body;
-  }
-
-  if (req.body.group_ids) {
-    // if (req.params.prop == 'group_ids' && req.params.propdata) {
-    // req.body.group_ids = req.params.propdata;
-    // } else {
-    delete req.body.group_ids;
-    // }
-  }
-
-  if (config.user.isolateByDomain) {
-    if (req.body.domain) {
-      delete req.body.domain;
-    }
-  }
-
-  return req.body;
-}
-
-function _getId(req) {
-  if (!req.params.id) {
-    return null;
-  }
-  // if prob an email addresss
-  if (req.params.id.indexOf('@') > -1) {
-    return { email: req.params.id };
-  }
-
-  if (!regex.uuidCheck(req.params.id)) {
-    if (regex.username.exec(req.params.id)) {
-      return { username: req.params.id };
-    } else {
-      return null;
-    }
-  }
-
-  return { id: req.params.id };
-}
-
-function routes(app, opts, done) {
+module.exports = function (app, opts, done) {
   const router = opts.router;
 
   // var getUserResolveGroup = async (req, res) => {
@@ -246,67 +17,156 @@ function routes(app, opts, done) {
   // };
 
   app.get('/user/id/:id', async (req, res) => {
-    return await getUser(req, res, router);
+    return await userRoutes.getUser({ req, res, needsDomain: false, router });
   });
+
   app.get('/user/id/:id/property/:prop', async (req, res) => {
-    return await getUser(req, res, router);
+    return await userRoutes.getUser({ req, res, needsDomain: false, router });
   });
 
   app.put('/user/id/:id/inheritance/group/:groupid/type/:grouptype', async (req, res) => {
-    const group = await getGroup(req, res);
+    const group = await userRoutes.getGroup(req, res);
 
-    // console.log(group);
     if (group && group.msg) {
       res.code(400);
       return group;
     }
 
-    var user = await getUser(req, res);
+    var user = await userRoutes.getUser({ req, res, needsDomain: false });
 
     if (user && user.msg) {
       res.code(400);
       return user;
     }
 
-    user = await addRemoveGroupInheritance(user, group, true, req);
+    user = await userRoutes.addRemoveGroupInheritance(user, group, true, req);
     res.code(user && user.msg ? 400 : 200);
 
     return user;
   });
 
   app.delete('/user/id/:id/inheritance/group/:groupid/type/:grouptype', async (req, res) => {
-    const group = await getGroup(req, res);
+    const group = await userRoutes.getGroup(req, res);
 
     if (group && group.msg) {
       res.code(400);
       return group;
     }
 
-    var user = await getUser(req, res);
+    var user = await userRoutes.getUser({ req, res, needsDomain: false });
 
     if (user && user.msg) {
       res.code(400);
       return user;
     }
 
-    user = await addRemoveGroupInheritance(user, group, false, req);
+    user = await userRoutes.addRemoveGroupInheritance(user, group, false, req);
     res.code(user && user.msg ? 400 : 200);
 
     return user;
   });
 
   app.put('/user/id/:id', async (req, res) => {
-    return await editUser(req, res, router);
+    return await userRoutes.editUser({ req, res, needsDomain: false, router });
   });
+
   app.put('/user/id/:id/property/:prop', async (req, res) => {
-    return await editUser(req, res, router);
+    return await userRoutes.editUser({ req, res, needsDomain: false, router });
   });
+
+  app.put('/user/id/:id/property/userdata/:prop', async (req, res) => {
+    req.params.prop = `user_data.${req.params.prop}`;
+    return await userRoutes.editUser({ req, res, needsDomain: false, router });
+  });
+
   app.put('/user/id/:id/property/:prop/:propdata', async (req, res) => {
-    return await editUser(req, res, router);
+    return await userRoutes.editUser({ req, res, needsDomain: false, router });
+  });
+
+  app.put('/user/id/:id/property/userdata/:prop/:propdata', async (req, res) => {
+    req.params.prop = `user_data.${req.params.prop}`;
+    return await userRoutes.editUser({ req, res, needsDomain: false, router });
   });
 
   app.delete('/user/id/:id', async (req, res) => {
-    return await deleteUser(req, res, router);
+    return await userRoutes.deleteUser({ req, res, needsDomain: false, router });
+  });
+
+  // Domain operations
+  app.get('/user/domain/:domain/id/:id', async (req, res) => {
+    return await userRoutes.getUser({ req, res, needsDomain: true, router });
+  });
+
+  app.get('/user/domain/:domain/id/:id/property/:prop', async (req, res) => {
+    return await userRoutes.getUser({ req, res, needsDomain: true, router });
+  });
+
+  app.put('/user/domain/:domain/id/:id/inheritance/group/:groupid/type/:grouptype', async (req, res) => {
+    const group = await userRoutes.getGroup(req, res);
+
+    if (group && group.msg) {
+      res.code(400);
+      return group;
+    }
+
+    var user = await userRoutes.getUser({ req, res, needsDomain: true });
+
+    if (user && user.msg) {
+      res.code(400);
+      return user;
+    }
+
+    user = await userRoutes.addRemoveGroupInheritance(user, group, true, req);
+    res.code(user && user.msg ? 400 : 200);
+
+    return user;
+  });
+
+  app.delete('/user/domain/:domain/id/:id/inheritance/group/:groupid/type/:grouptype', async (req, res) => {
+    const group = await userRoutes.getGroup(req, res);
+
+    if (group && group.msg) {
+      res.code(400);
+      return group;
+    }
+
+    var user = await userRoutes.getUser({ req, res, needsDomain: true });
+
+    if (user && user.msg) {
+      res.code(400);
+      return user;
+    }
+
+    user = await userRoutes.addRemoveGroupInheritance(user, group, false, req);
+    res.code(user && user.msg ? 400 : 200);
+
+    return user;
+  });
+
+  app.put('/user/domain/:domain/id/:id', async (req, res) => {
+    return await userRoutes.editUser({ req, res, needsDomain: true, router });
+  });
+
+  app.put('/user/domain/:domain/id/:id/property/:prop', async (req, res) => {
+    return await userRoutes.editUser({ req, res, needsDomain: true, router });
+  });
+
+  app.put('/user/domain/:domain/id/:id/property/userdata/:prop', async (req, res) => {
+    req.params.prop = `user_data.${req.params.prop}`;
+    return await userRoutes.editUser({ req, res, needsDomain: true, router });
+  });
+
+  app.put('/user/domain/:domain/id/:id/property/:prop/:propdata', async (req, res) => {
+    return await userRoutes.editUser({ req, res, needsDomain: true, router });
+  });
+
+  app.put('/user/domain/:domain/id/:id/property/userdata/:prop/:propdata', async (req, res) => {
+    req.params.prop = `user_data.${req.params.prop}`;
+    return await userRoutes.editUser({ req, res, needsDomain: true, router });
+  });
+
+  app.delete('/user/domain/:domain/id/:id', async (req, res) => {
+    return await userRoutes.deleteUser({ req, res, needsDomain: true, router });
   });
 
   // app.get('/user/resolve/group/username/:username', getUserResolveGroup);
@@ -315,17 +175,101 @@ function routes(app, opts, done) {
   // app.get('/user/resolve/group/name/:id/:prop', getUserResolveGroup);
 
   app.get('/users', async (req, res) => {
-    return await User.findAllByFilter(req.query.filter, req.query.sort, req.query.limit, req.query.sortdir);
+    if (req.query.filter && req.query.filter.indexOf(' ') > -1) {
+      req.query.filter = req.query.filter.replace(/\s/g, '');
+    }
+
+    try {
+      return await User.findAllByFilter({
+        sort: req.query.sort,
+        limit: req.query.limit,
+        skip: req.query.skip,
+        filter: req.query.filter,
+        sortdir: req.query.sortdir,
+        ids: req.query.ids
+      });
+    } catch {
+      res.code(400).send({
+        type: 'user-filter-error',
+        msg: 'Invalid filter.'
+      });
+    }
+  });
+
+  app.get('/users/count', async (req, res) => {
+    if (req.query.filter && req.query.filter.indexOf(' ') > -1) {
+      req.query.filter = req.query.filter.replace(/\s/g, '');
+    }
+
+    try {
+      return await User.findAllByFilter({
+        limit: req.query.limit,
+        skip: req.query.skip,
+        filter: req.query.filter,
+        ids: req.query.ids,
+        count: true
+      });
+    } catch (e) {
+      res.code(400).send({
+        type: 'user-filter-error',
+        msg: 'Invalid filter.'
+      });
+    }
   });
 
   app.get('/users/domain/:domain', async (req, res) => {
+    if (req.query.filter && req.query.filter.indexOf(' ') > -1) {
+      req.query.filter = req.query.filter.replace(/\s/g, '');
+    }
+
     if (!req.query.filter) {
       req.query.filter = 'domain=' + req.params.domain;
     } else {
       req.query.filter += ',domain=' + req.params.domain;
     }
 
-    return await User.findAllByFilter(req.query.filter, req.query.sort, req.query.limit, req.query.sortdir);
+    try {
+      return await User.findAllByFilter({
+        sort: req.query.sort,
+        limit: req.query.limit,
+        skip: req.query.skip,
+        filter: req.query.filter,
+        sortdir: req.query.sortdir,
+        ids: req.query.ids
+      });
+    } catch {
+      res.code(400).send({
+        type: 'user-filter-error',
+        msg: 'Invalid filter.'
+      });
+    }
+  });
+
+  app.get('/users/domain/:domain/count', async (req, res) => {
+    if (req.query.filter && req.query.filter.indexOf(' ') > -1) {
+      req.query.filter = req.query.filter.replace(/\s/g, '');
+    }
+
+    if (!req.query.filter) {
+      req.query.filter = 'domain=' + req.params.domain;
+    } else {
+      req.query.filter += ',domain=' + req.params.domain;
+    }
+
+    try {
+      return await User.findAllByFilter({
+        limit: req.query.limit,
+        skip: req.query.skip,
+        filter: req.query.filter,
+        ids: req.query.ids,
+        count: true
+      });
+    } catch {
+      res.code(400).send({
+        type: 'user-filter-error',
+        msg: 'Invalid filter.'
+      });
+    }
   });
 
   app.get('/users/group/request/:group_request', async (req, res) => {
@@ -344,7 +288,7 @@ function routes(app, opts, done) {
   });
 
   app.get('/user/me/property/:prop', (req, res) => {
-    if (req.session.data.user[req.params.prop] !== undefined) {
+    if (userUtils.checkUserProps(req.params.prop)) {
       res.code(200).send(req.session.data.user[req.params.prop]);
     } else {
       res.code(400).send({
@@ -357,21 +301,21 @@ function routes(app, opts, done) {
   app.put('/user/me/inheritance/group/:groupid/type/:grouptype', async (req, res) => {
     req.params.id = req.session.data.user.id;
 
-    const group = await getGroup(req, res);
+    const group = await userRoutes.getGroup(req, res);
 
     if (group && group.msg) {
       res.code(400);
       return group;
     }
 
-    var user = await getUser(req, res);
+    var user = await userRoutes.getUser({ req, res, needsDomain: false });
 
     if (user && user.msg) {
       res.code(400);
       return user;
     }
 
-    user = await addRemoveGroupInheritance(user, group, true, req);
+    user = await userRoutes.addRemoveGroupInheritance(user, group, true, req);
     res.code(user && user.msg ? 400 : 200);
 
     return user;
@@ -380,21 +324,21 @@ function routes(app, opts, done) {
   app.delete('/user/me/inheritance/group/:groupid/type/:grouptype', async (req, res) => {
     req.params.id = req.session.data.user.id;
 
-    const group = await getGroup(req, res);
+    const group = await userRoutes.getGroup(req, res);
 
     if (group && group.msg) {
       res.code(400);
       return group;
     }
 
-    var user = await getUser(req, res);
+    var user = await userRoutes.getUser({ req, res, needsDomain: false });
 
     if (user && user.msg) {
       res.code(400);
       return user;
     }
 
-    user = await addRemoveGroupInheritance(user, group, false, req);
+    user = await userRoutes.addRemoveGroupInheritance(user, group, false, req);
     res.code(user && user.msg ? 400 : 200);
 
     return user;
@@ -402,22 +346,40 @@ function routes(app, opts, done) {
 
   app.put('/user/me', async (req, res) => {
     req.params.id = req.session.data.user.id;
-    return await editUser(req, res, router);
+    req.params.domain = req.session.data.user.domain;
+    return await userRoutes.editUser({ req, res, needsDomain: true, router });
   });
 
   app.put('/user/me/property/:prop', async (req, res) => {
     req.params.id = req.session.data.user.id;
-    return await editUser(req, res, router);
+    req.params.domain = req.session.data.user.domain;
+    return await userRoutes.editUser({ req, res, needsDomain: true, router });
+  });
+
+  app.put('/user/me/property/userdata/:prop', async (req, res) => {
+    req.params.id = req.session.data.user.id;
+    req.params.domain = req.session.data.user.domain;
+    req.params.prop = `user_data.${req.params.prop}`;
+    return await userRoutes.editUser({ req, res, needsDomain: true, router });
   });
 
   app.put('/user/me/property/:prop/:propdata', async (req, res) => {
     req.params.id = req.session.data.user.id;
-    return await editUser(req, res, router);
+    req.params.domain = req.session.data.user.domain;
+    return await userRoutes.editUser({ req, res, needsDomain: true, router });
+  });
+
+  app.put('/user/me/property/userdata/:prop/:propdata', async (req, res) => {
+    req.params.id = req.session.data.user.id;
+    req.params.domain = req.session.data.user.domain;
+    req.params.prop = `user_data.${req.params.prop}`;
+    return await userRoutes.editUser({ req, res, needsDomain: true, router });
   });
 
   app.get('/user/me/route/allowed', async (req, res) => {
     if (req.session) {
       const groups = await gm.currentGroup(req, res);
+      const headersDomain = parse.getDomainFromHeaders(req.headers);
 
       for (var i = 0; i < groups.length; i++) {
         if (
@@ -426,7 +388,8 @@ function routes(app, opts, done) {
             req.query.route,
             groups[i].routes,
             !req.isAuthenticated ? null : req.session.data.user,
-            groups[i].group
+            groups[i].group,
+            headersDomain
           )
         ) {
           res.code(200);
@@ -472,6 +435,22 @@ function routes(app, opts, done) {
         req.body.name || null,
         req.body.urls
       );
+
+      if (config.audit.create.enable === true) {
+        var auditObj = {
+          action: 'CREATE',
+          subaction: 'USER_OAUTH2_TOKEN',
+          newObj: token
+        };
+
+        if (req.session.data) {
+          auditObj.byUserId = req.session.data.user.id;
+          auditObj.ofUserId = req.session.data.user.id;
+        }
+
+        await audit.createSingleAudit(auditObj);
+      }
+
       res.code(200).send({ client_id: token.name || token.id, client_secret: token.secret });
       return;
     } catch (e) {
@@ -496,6 +475,22 @@ function routes(app, opts, done) {
         });
         return;
       }
+
+      if (config.audit.delete.enable === true) {
+        var auditObj = {
+          action: 'DELETE',
+          subaction: 'USER_OAUTH2_TOKEN',
+          oldObj: token
+        };
+
+        if (req.session.data) {
+          auditObj.byUserId = req.session.data.user.id;
+          auditObj.ofUserId = req.session.data.user.id;
+        }
+
+        await audit.createSingleAudit(auditObj);
+      }
+
       res.code(200).send();
       return;
     } catch (e) {
@@ -509,12 +504,4 @@ function routes(app, opts, done) {
   });
 
   done();
-}
-
-module.exports = {
-  routes,
-  getUser,
-  deleteUser,
-  editUser,
-  addRemoveGroupInheritance
 };

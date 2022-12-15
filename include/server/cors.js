@@ -7,6 +7,7 @@ module.exports = function (app, opts, done) {
     if (config.cors.origin) {
       configOrigin = config.cors.origin.split('.');
     }
+
     app.use((req, res, next) => {
       if (req.headers['origin'] && configOrigin) {
         var reqOrigin = req.headers['origin'].split('.');
@@ -20,6 +21,7 @@ module.exports = function (app, opts, done) {
               break;
             }
           }
+
           if (isAllowed) {
             res.setHeader('access-control-allow-origin', req.headers['origin']);
           }
@@ -42,6 +44,7 @@ module.exports = function (app, opts, done) {
       if (req.url.indexOf('/' + config.serviceName + '/api/v1/auth') > -1) {
         res.setHeader('access-control-allow-credentials', true);
       }
+
       next();
     });
     app.options('/' + config.serviceName + '/api/v1/*', (req, res) => {

@@ -1,12 +1,8 @@
-const BaseModel = require('adost').PGActiveModel;
+const BaseModel = require('./basemodel.js');
 const Base = require('adost').Base;
 const PGTypes = require('adost').PGTypes;
 const Group = require('./group');
 const config = require('../../utils/config');
-const gm = require('../../server/groupmanager');
-const userUtil = require('../../utils/user');
-const regex = require('../../utils/regex');
-const misc = require('../../utils/misc');
 
 class User extends Base(BaseModel, 'users', {
   id: PGTypes.PK,
@@ -42,11 +38,13 @@ class User extends Base(BaseModel, 'users', {
   email: PGTypes.AutoCrypt,
   created_on: null,
   last_login: null,
+  updated_on: null,
   user_data: config.pg.crypto.encryptUserData ? PGTypes.AutoCrypt : null,
   eprofile: PGTypes.EncryptProfile
 }) {
   constructor(...args) {
     super(...args);
+    this.gm = require('../../server/groupmanager');
   }
 
   static async createTable() {
@@ -87,8 +85,9 @@ class User extends Base(BaseModel, 'users', {
                   email_verify boolean DEFAULT false,
                   avatar bytea,
                   created_on timestamp with time zone default current_timestamp ,
-                  user_data text,
+                  user_data json,
                   __user_data character varying(258),
+                  updated_on timestamp with time zone default current_timestamp,
                   eprofile character varying(350),
                   PRIMARY KEY (id)
                 );`);
@@ -107,11 +106,18 @@ class User extends Base(BaseModel, 'users', {
     // groups.type = '';
 
     for (var i = 0; i < this.group_ids.length; i++) {
-      const group = (await gm.getGroup(this.group_ids[i])) || (await Group.findById(this.group_ids[i]));
+      const group = (await this.gm.getGroup(this.group_ids[i])) || (await Group.findById(this.group_ids[i]));
+
+      // If group is not found because it was removed from the database, remove the lingering group from the user.
+      if (!group) {
+        await this.removeGroup({ id: this.group_ids[i] });
+        continue;
+      }
 
       groups.push(group);
       groupsNames.push(group.name);
       groupsTypes.push(group.type);
+
       // groups.name += group.name;
       // if (this.group_ids.length < i + 1) {
       //     groups.name += '|';
@@ -140,7 +146,7 @@ class User extends Base(BaseModel, 'users', {
     this.group_ids.push(group.id);
     this.group_ids = [...this.group_ids];
 
-    return await this.save();
+    return await this.updated();
   }
 
   async removeGroup(group) {
@@ -153,9 +159,15 @@ class User extends Base(BaseModel, 'users', {
     if (found == -1) {
       return false;
     }
+
     this.group_ids.splice(found, 1);
     this.group_ids = [...this.group_ids];
 
+    return await this.updated();
+  }
+
+  async updated() {
+    this.updated_on = new Date();
     return await this.save();
   }
 
@@ -169,6 +181,7 @@ class User extends Base(BaseModel, 'users', {
         return true;
       }
     }
+
     return false;
   }
 
@@ -178,111 +191,8 @@ class User extends Base(BaseModel, 'users', {
         return true;
       }
     }
+
     return false;
-  }
-
-  static async findAllByFilter(filter, sort, limit, sortdir = 'DESC') {
-    var query = `SELECT * FROM ${this.table} `;
-
-    var values;
-
-    if (filter) {
-      if (filter.indexOf(',') > -1) {
-        filter = filter.split(',');
-      } else {
-        filter = [filter];
-      }
-      values = [];
-      query += ' WHERE ';
-
-      var user = {};
-      var opts = [];
-
-      //console.log(filter);
-      for (var i = 0; i < filter.length; i++) {
-        var opt = '=';
-        var key;
-        var value;
-
-        if (filter[i].indexOf('>=') > -1) {
-          var kv = filter[i].split('>=');
-
-          opt = '>=';
-          key = kv[0];
-          value = kv[1];
-        } else if (filter[i].indexOf('<=') > -1) {
-          var kv = filter[i].split('<=');
-
-          opt = '<=';
-          key = kv[0];
-          value = kv[1];
-        } else if (filter[i].indexOf('>') > -1) {
-          var kv = filter[i].split('>');
-
-          opt = '>';
-          key = kv[0];
-          value = kv[1];
-        } else if (filter[i].indexOf('<') > -1) {
-          var kv = filter[i].split('<');
-
-          opt = '<';
-          key = kv[0];
-          value = kv[1];
-        } else if (filter[i].indexOf('=') > -1) {
-          var kv = filter[i].split('=');
-
-          key = kv[0];
-          value = kv[1];
-        }
-        // console.log(key, value);
-
-        if (this._defaultModel[key] !== undefined) {
-          if (this._encryptionFields[key] !== undefined) {
-            value = (await this._queryFieldsHash({ [key]: value }))['__' + key];
-            key = '__' + key;
-          }
-          opts.push(opt);
-          user[key] = misc.stringToNativeType(value);
-        }
-      }
-      var validUser = await userUtil.checkValidUser(user);
-
-      if (validUser !== true) {
-        throw validUser;
-      }
-      user = userUtil.setUser(user, user);
-      var keys = Object.keys(user);
-
-      for (var i = 0; i < keys.length; i++) {
-        query += `"${keys[i]}"${opts[i]}$${i + 1} `;
-
-        values.push(user[keys[i]]);
-        if (keys.length > i + 1) {
-          query += ' AND ';
-        }
-      }
-    }
-
-    if (sort && regex.safeName.exec(sort) != null) {
-      query += ' ORDER BY ' + sort + ' ' + (sortdir == 'ASC' ? 'ASC' : 'DESC');
-    }
-
-    if (limit && !isNaN(Number(limit))) {
-      query += ' LIMIT ' + Number(limit);
-    }
-
-    console.log(query, values);
-
-    const newModels = await this.query(query, values);
-
-    for (var i = 0; i < newModels.length; i++) {
-      if (newModels[i]) {
-        newModels[i] = await this.decrypt(newModels[i], this.getEncryptedProfile(newModels[i]), true);
-        delete newModels[i].password;
-        delete newModels[i].eprofile;
-      }
-    }
-    return newModels;
   }
 
   toJSON() {
@@ -290,9 +200,6 @@ class User extends Base(BaseModel, 'users', {
 
     if (u.avatar != null) {
       u.avatar = u.avatar.toString('utf8');
-    }
-    if (u.user_data != null) {
-      u.user_data = JSON.parse(u.user_data.toString('utf8'));
     }
 
     delete u.password;
