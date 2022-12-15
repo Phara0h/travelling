@@ -430,10 +430,6 @@ module.exports = function (app, opts, done) {
   app.post('/user/me/token', async (req, res) => {
     let token;
 
-    if (!regex.uuidCheck(req.session.data.user.id)) {
-      throw new Error('Invalid user id.');
-    }
-
     try {
       token = await TokenHandler.getOAuthToken(
         req.session.data.user.id,
