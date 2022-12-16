@@ -21,7 +21,7 @@ async function deleteUser(opts) {
     };
   }
 
-  if (opts.needsDomain && (!domain || regex.domain.exec(domain) == null)) {
+  if (opts.needsDomain && (!domain || regex.safeName.exec(domain) == null)) {
     opts.res.code(400);
     return {
       type: 'user-missing-param-error',
@@ -88,7 +88,7 @@ async function editUser(opts) {
     };
   }
 
-  if (opts.needsDomain && (!domain || regex.domain.exec(domain) == null)) {
+  if (opts.needsDomain && (!domain || regex.safeName.exec(domain) == null)) {
     opts.res.code(400);
     return {
       type: 'user-missing-param-error',
@@ -276,7 +276,7 @@ async function getUser(opts) {
     };
   }
 
-  if (opts.needsDomain && (!domain || regex.domain.exec(domain) == null)) {
+  if (opts.needsDomain && (!domain || regex.safeName.exec(domain) == null)) {
     opts.res.code(400);
     return {
       type: 'user-missing-param-error',
