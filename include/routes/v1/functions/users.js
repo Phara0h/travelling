@@ -6,6 +6,7 @@ const audit = require('../../../utils/audit');
 
 const Database = require('../../../database');
 const User = require('../../../database/models/user');
+const regex = require('../../../utils/regex');
 
 async function deleteUser(opts) {
   var id = userUtils.getId(opts.req);
@@ -20,7 +21,7 @@ async function deleteUser(opts) {
     };
   }
 
-  if (opts.needsDomain && !domain) {
+  if (opts.needsDomain && (!domain || regex.safeName.exec(domain) == null)) {
     opts.res.code(400);
     return {
       type: 'user-missing-param-error',
@@ -87,7 +88,7 @@ async function editUser(opts) {
     };
   }
 
-  if (opts.needsDomain && !domain) {
+  if (opts.needsDomain && (!domain || regex.safeName.exec(domain) == null)) {
     opts.res.code(400);
     return {
       type: 'user-missing-param-error',
@@ -166,6 +167,10 @@ async function editUser(opts) {
   var isValid = await userUtils.checkValidUser(model);
 
   if (isValid === true) {
+    if (opts.needsDomain && (model.email || model.username)) {
+      model.domain = domain;
+    }
+
     isValid = await Database.checkDupe(model);
   }
 
@@ -184,12 +189,6 @@ async function editUser(opts) {
     };
   }
 
-  let changedProps;
-
-  if (config.audit.edit.enable === true) {
-    changedProps = Object.assign({}, updatedProps);
-  }
-
   var user;
 
   if (opts.needsDomain) {
@@ -198,8 +197,10 @@ async function editUser(opts) {
     user = await User.updateLimitedBy(id, updatedProps, 'AND', 1);
   }
 
-  if (user && user.length > 0) {
-    if (opts.req.params.prop && user[0][opts.req.params.prop] === undefined && !validUserDataEdit) {
+  user = Array.isArray(user) ? user[0] : user;
+
+  if (user) {
+    if (opts.req.params.prop && user[opts.req.params.prop] === undefined && !validUserDataEdit) {
       opts.res.code(400);
       return {
         type: 'user-prop-error',
@@ -207,25 +208,36 @@ async function editUser(opts) {
       };
     }
 
-    const groupsData = await user[0].resolveGroup(opts.router);
+    var changedProps;
+
+    if (config.audit.edit.enable === true) {
+      const keys = Object.keys(updatedProps);
+      changedProps = {};
+
+      for (var i = 0; i < keys.length; i++) {
+        changedProps[keys[i]] = user[keys[i]];
+      }
+    }
+
+    const groupsData = await user.resolveGroup(opts.router);
 
     opts.res.code(200);
 
     // Update any current logged in users
-    var session = await opts.req.sessionStore.get(user[0].id);
+    var session = await opts.req.sessionStore.get(user.id);
 
     if (session) {
-      session.data = { user: user[0], groupsData };
+      session.data = { user, groupsData };
       await opts.req.sessionStore.set(session.sessionId, session);
     }
 
-    await user[0].updated();
+    await user.updated();
 
     if (config.audit.edit.enable === true) {
       var auditObj = {
         action: 'EDIT',
         subaction: 'USER_PROPERTY',
-        ofUserId: user[0].id,
+        ofUserId: user.id,
         oldObj: oldModel,
         newObj: changedProps
       };
@@ -238,9 +250,9 @@ async function editUser(opts) {
     }
 
     if (validUserDataEdit) {
-      return user[0].user_data;
+      return user.user_data;
     } else {
-      return opts.req.params.prop ? user[0][opts.req.params.prop] : user[0];
+      return opts.req.params.prop ? user[opts.req.params.prop] : user;
     }
   }
 
@@ -264,7 +276,7 @@ async function getUser(opts) {
     };
   }
 
-  if (opts.needsDomain && !domain) {
+  if (opts.needsDomain && (!domain || regex.safeName.exec(domain) == null)) {
     opts.res.code(400);
     return {
       type: 'user-missing-param-error',
