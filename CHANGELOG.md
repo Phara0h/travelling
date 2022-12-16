@@ -1,6 +1,20 @@
 
 
+#### [v2.21.0](https://github.com/Dragohm/travelling/compare/v2.20.0...v2.21.0)
+
+- Fix #76 audit log sensitive data leaks [`#27`](https://github.com/Dragohm/travelling/pull/27)
+- Add domains to audit logs [`#26`](https://github.com/Dragohm/travelling/pull/26)
+- Merge pull request #27 from Dragohm/fix-#76-audit-log-sensitive-data-leaks [`#76`](https://github.com/Dragohm/travelling/issues/76)
+- Updated adost and postgen [`6652f2e`](https://github.com/Dragohm/travelling/commit/6652f2e7158a83b28e6ab8210f70ec0c12d9456a)
+- rm domain regex [`74a8231`](https://github.com/Dragohm/travelling/commit/74a82316d03f7a79b268b7a8c22e41cf31402900)
+- Add domain validation [`757381e`](https://github.com/Dragohm/travelling/commit/757381ea68ff80488b33a011f54f2b51a62dc939)
+- little fixes [`8f7e0a6`](https://github.com/Dragohm/travelling/commit/8f7e0a605e861f1fe72320d5ed2e54d36043034e)
+- Add and update tests [`072e8fb`](https://github.com/Dragohm/travelling/commit/072e8fb6a5b33f7e2b399a91107053141cfc5df8)
+- audits to save password and token hashes [`9bc4100`](https://github.com/Dragohm/travelling/commit/9bc410054df91950c9e790ac231fd888d375a3b3)
+
 #### [v2.20.0](https://github.com/Dragohm/travelling/compare/v2.19.0...v2.20.0)
+
+> 29 November 2022
 
 - Fix #70 Remove hashes from responses [`#24`](https://github.com/Dragohm/travelling/pull/24)
 - Feature #71 user data special chars [`#25`](https://github.com/Dragohm/travelling/pull/25)
