@@ -133,6 +133,19 @@ module.exports = () => {
 
       expect(res.statusCode).toEqual(200);
     });
+
+    test('Create Test User [test_domain_6]', async () => {
+      var res = await Travelling.Auth.Domain.register(
+        {
+          username: 'test_domain_6',
+          password: 'Pas5w0r!d6',
+          email: 'test_domain_6@test.com'
+        },
+        'traziventures.com'
+      );
+
+      expect(res.statusCode).toEqual(200);
+    });
   });
 
   describe('Invalid', () => {
