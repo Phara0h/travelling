@@ -44,7 +44,7 @@ class CookieToken {
       }
 
       if (Date.now() - Number(cred[3]) < config.cookie.token.expiration * 86400000) {
-        // 90 days in millls
+        // 90 days in millis
 
         var user = await User.findAllBy({ domain: cred[0], id: cred[1], password: cred[2] });
 
