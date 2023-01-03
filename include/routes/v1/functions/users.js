@@ -7,6 +7,7 @@ const audit = require('../../../utils/audit');
 const Database = require('../../../database');
 const User = require('../../../database/models/user');
 const regex = require('../../../utils/regex');
+const CookieToken = require('../../../utils/cookietoken');
 
 async function deleteUser(opts) {
   var id = userUtils.getId(opts.req);
@@ -229,6 +230,11 @@ async function editUser(opts) {
     if (session) {
       session.data = { user, groupsData };
       await opts.req.sessionStore.set(session.sessionId, session);
+
+      // Issue new token if current user changes their password
+      if (changedProps.password) {
+        await CookieToken.newTokenInCookie(user.domain, user.id, user.password, user.last_login.ip, opts.res);
+      }
     }
 
     await user.updated();

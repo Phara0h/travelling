@@ -186,23 +186,24 @@ module.exports = () => {
       test('Edit Test Domain User 6 Password and verify audit log', async () => {
         const newPassword = 'Pas5w0r!d';
 
+        const travtok = userContainer.userDomain6;
+
         var res = await Travelling.User.Current.editProperty(newPassword, 'password', null, {
           headers: {
-            cookie: userContainer.userDomain6Cookie()
+            cookie: 'trav:tok=' + travtok.tok
           }
         });
 
-        expect(res.body).not.toBe(newPassword); // Make sure only has is returned
+        expect(res.body).not.toBe(newPassword); // Make sure only the hash is returned
         expect(res.statusCode).toEqual(200);
 
-        var login = await Travelling.Auth.login({
-          password: newPassword,
-          email: 'test_domain_6@test.com'
-        });
-
+        // Should get a new token when changing password
         userContainer.parseUserDomain6Cookie(res.headers['set-cookie']);
-        expect(login.statusCode).toEqual(200);
 
+        // Wait before accessing resource to ensure an invalid token wont work
+        await new Promise((resolve) => setTimeout(resolve, 5000));
+
+        // Make sure token authenticates
         var currentUser = await Travelling.User.Current.get(null, {
           headers: {
             cookie: userContainer.userDomain6Cookie()
