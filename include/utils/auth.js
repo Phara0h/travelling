@@ -57,7 +57,7 @@ var checkAuthHeader = async (req, res, router, oldspan) => {
 
     if (splitAuth[0] != 'bearer') {
       if (span) {
-        span.updateName('checkAuthHeader [bearer]');
+        span.updateName('checkAuthHeader [not bearer]');
         span.end();
       }
 
