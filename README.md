@@ -4022,7 +4022,15 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v2.21.1](https://github.com/Dragohm/travelling/compare/v2.21.0...v2.21.1)
+
+- Feature #77 Renew trav token on password change [`#28`](https://github.com/Dragohm/travelling/pull/28)
+- undo type [`b13c525`](https://github.com/Dragohm/travelling/commit/b13c5254edf75d8952a23701d4fe47dc10c5eeb4)
+- Renew trav tok on password change [`8548351`](https://github.com/Dragohm/travelling/commit/85483519ae06cea61be6f4703614abdc7d8fced3)
+
 #### [v2.21.0](https://github.com/Dragohm/travelling/compare/v2.20.0...v2.21.0)
+
+> 16 December 2022
 
 - Fix #76 audit log sensitive data leaks [`#27`](https://github.com/Dragohm/travelling/pull/27)
 - Add domains to audit logs [`#26`](https://github.com/Dragohm/travelling/pull/26)
