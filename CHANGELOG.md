@@ -1,6 +1,12 @@
 
 
+#### [v2.21.2](https://github.com/Dragohm/travelling/compare/v2.21.1...v2.21.2)
+
+- Added x-forward for ip stuff [`f990a53`](https://github.com/Dragohm/travelling/commit/f990a5398291adbd5f681d4d95c44daffa379fd3)
+
 #### [v2.21.1](https://github.com/Dragohm/travelling/compare/v2.21.0...v2.21.1)
+
+> 18 January 2023
 
 - Feature #77 Renew trav token on password change [`#28`](https://github.com/Dragohm/travelling/pull/28)
 - undo type [`b13c525`](https://github.com/Dragohm/travelling/commit/b13c5254edf75d8952a23701d4fe47dc10c5eeb4)
