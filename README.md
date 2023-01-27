@@ -4022,7 +4022,13 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v2.21.3](https://github.com/Dragohm/travelling/compare/v2.21.2...v2.21.3)
+
+- Update parse.js [`2ae9d19`](https://github.com/Dragohm/travelling/commit/2ae9d19934446e30d4bfeeacfbfbcb971ac5455a)
+
 #### [v2.21.2](https://github.com/Dragohm/travelling/compare/v2.21.1...v2.21.2)
+
+> 26 January 2023
 
 - Added x-forward for ip stuff [`f990a53`](https://github.com/Dragohm/travelling/commit/f990a5398291adbd5f681d4d95c44daffa379fd3)
 
