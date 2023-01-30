@@ -139,9 +139,16 @@ var checkCookie = async (req, res, router, oldspan) => {
     try {
       var user = await CookieToken.checkToken(req, res, router, span);
 
-      if (!user || user.locked) {
+      if (user && user.locked) {
         if (span) {
           span.updateName('checkCookie [user locked]');
+          span.end();
+        }
+
+        return { auth: false, route: true };
+      } else if (!user) {
+        if (span) {
+          span.updateName('checkCookie [no user]');
           span.end();
         }
 
@@ -176,6 +183,10 @@ var checkCookie = async (req, res, router, oldspan) => {
       }
 
       return { auth: false, route: true };
+    }
+  } else {
+    if (span) {
+      span.updateName('checkCookie [no cookie]');
     }
   }
 
