@@ -1,6 +1,13 @@
 
 
+#### [v2.22.0](https://github.com/Dragohm/travelling/compare/v2.21.3...v2.22.0)
+
+- Update package.json [`f9b56b6`](https://github.com/Dragohm/travelling/commit/f9b56b6ee777e0541fafd6e7b1b7df1771be1e80)
+- Updated some spans for cookie checking [`9dfbeab`](https://github.com/Dragohm/travelling/commit/9dfbeabd9c0c68c499b0204bc8931d2522c88520)
+
 #### [v2.21.3](https://github.com/Dragohm/travelling/compare/v2.21.2...v2.21.3)
+
+> 27 January 2023
 
 - Update parse.js [`2ae9d19`](https://github.com/Dragohm/travelling/commit/2ae9d19934446e30d4bfeeacfbfbcb971ac5455a)
 
