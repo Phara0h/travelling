@@ -1,6 +1,12 @@
 
 
+#### [v2.23.0](https://github.com/Dragohm/travelling/compare/v2.22.0...v2.23.0)
+
+- Update cookietoken.js [`b188a27`](https://github.com/Dragohm/travelling/commit/b188a2734506c03e7fb5b2bf11cf8dcf3c949926)
+
 #### [v2.22.0](https://github.com/Dragohm/travelling/compare/v2.21.3...v2.22.0)
+
+> 30 January 2023
 
 - Update package.json [`f9b56b6`](https://github.com/Dragohm/travelling/commit/f9b56b6ee777e0541fafd6e7b1b7df1771be1e80)
 - Updated some spans for cookie checking [`9dfbeab`](https://github.com/Dragohm/travelling/commit/9dfbeabd9c0c68c499b0204bc8931d2522c88520)
