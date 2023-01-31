@@ -31,7 +31,7 @@ class CookieToken {
 
       //console.log(tok, tok.toString('ascii'), tok.toString('base64'));
       var dToken = await this.decrypt(tok.toString('ascii'));
-      var cred = dToken.split(':');
+      var cred = dToken.split('|');
 
       //console.log(cred, cred[4], ip);
       if (config.cookie.security.ipHijackProtection && cred[4] != ip) {
@@ -151,7 +151,7 @@ class CookieToken {
   // password are the hashed password only!
   static async getToken(domain, id, password, ip, date) {
     return await this.encrypt(
-      `${domain}:${id}:${password}:${date}:${config.cookie.security.ipHijackProtection ? ip : ''}`
+      `${domain}|${id}|${password}|${date}|${config.cookie.security.ipHijackProtection ? ip : ''}`
     );
   }
 
