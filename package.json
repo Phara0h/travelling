@@ -1,6 +1,6 @@
 {
   "name": "@trazi/travelling",
-  "version": "2.23.1",
+  "version": "3.0.0",
   "description": "A dynamic route level groups permissions middleman service",
   "main": "index.js",
   "scripts": {

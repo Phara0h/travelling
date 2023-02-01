@@ -4022,7 +4022,13 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v3.0.0](https://github.com/Trazi-Ventures/travelling/compare/v2.23.1...v3.0.0)
+
+- Updated user object's groups prop to only have id,name & type [`31a8835`](https://github.com/Trazi-Ventures/travelling/commit/31a8835afe85180b2f71cc049ab305943995fb83)
+
 #### [v2.23.1](https://github.com/Trazi-Ventures/travelling/compare/v2.23.0...v2.23.1)
+
+> 1 February 2023
 
 - made some fixes? [`cb37ee0`](https://github.com/Trazi-Ventures/travelling/commit/cb37ee09d1dd9b1ad55a079c68193d61bda62a23)
 
