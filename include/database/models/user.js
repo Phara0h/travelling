@@ -196,13 +196,57 @@ class User extends Base(BaseModel, 'users', {
   }
 
   toJSON() {
-    var u = { ...this._ };
+    var u = { 
+      id: this._.id,
+      domain: this._.domain,
+      username: this._.username,
+      email: this._.email,
+      group_request: this._.group_request,
+      firstname: this._.firstname,
+      lastname: this._.lastname,
+      middlename: this._.middlename,
+      gender: this._.gender,
+      dob: this._.dob,
+      phone: this._.phone,
+      state: this._.state,
+      city: this._.city,
+      zip: this._.zip,
+      street_physical: this._.street_physical,
+      street_number: this._.street_number,
+      street_name: this._.street_name,
+      street_type: this._.street_type,
+      street_affix: this._.street_affix,
+      locked_reason: this._.locked_reason,
+      locked: this._.locked,
+      last_login: this._.last_login,
+      has_webauthn: this._.has_webauthn,
+      has_2fa: this._.has_2fa,
+      group_ids: this._.group_ids,
+      failed_login_attempts: this._.failed_login_attempts,
+      change_username: this._.change_username,
+      change_password: this._.change_password,
+      reset_password: this._.reset_password,
+      email_verify: this._.email_verify,
+      avatar: this._.avatar,
+      created_on: this._.created_on,
+      user_data: this._.user_data,
+      updated_on: this._.updated_on,
+      groups: []
+    }
 
     if (u.avatar != null) {
       u.avatar = u.avatar.toString('utf8');
     }
+    if(this.groups) {
+      for(var i = 0; i < this.groups.length; i++) {
+        u.groups.push({
+          id: this.groups[i].id,
+          name: this.groups[i].name,
+          type: this.groups[i].type,
+        });
+      }
+    }
 
-    delete u.password;
     return u;
   }
 }
