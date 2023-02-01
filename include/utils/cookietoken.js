@@ -37,6 +37,9 @@ class CookieToken {
       if (config.cookie.security.ipHijackProtection && cred[4] != ip) {
         if (span) {
           span.updateName('checkToken [ipHijackProtection]');
+          config.log.logger.warn(
+            helpers.text(`IP Hijack Detected": (${cred[0]}, ${cred[1]}) ${cred[4]} =/= ${ip}`, span)
+          );
           span.end();
         }
 

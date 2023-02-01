@@ -9,7 +9,7 @@ const User = require('.././../../database/models/user');
 const CookieToken = require('../../../utils/cookietoken');
 const TokenHandler = require('../../../token');
 const Email = require('../../../utils/email');
-
+const helpers = require('../../../server/tracing/helpers')();
 /*************************** ROUTE FUNCTIONS ****************************/
 
 /** Validates and Authenticates user credentials. */
@@ -145,7 +145,7 @@ var registerRoute = async (req, res) => {
     getPersonalInfo(req.body)
   );
 
-  config.log.logger.info(`New User Created: ${username || ''}(${email})[${domain}] | ${parse.getIp(req)}`);
+  config.log.logger.info(helpers.text(`New User Created: ${username || ''}(${email})[${domain}] | ${parse.getIp(req)}`,req.span));
 
   if (config.email.send.onNewUser === true && email) {
     await Email.sendWelcome(user);

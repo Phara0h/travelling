@@ -227,7 +227,7 @@ class Router {
               helpers.text(
                 (sessionUser.username || sessionUser.email) +
                   ' (' +
-                  routedGroup.name +
+                  routedGroup.type + ':' +  routedGroup.name +
                   ',' +
                   sessionUser.domain +
                   ') | ' +
@@ -275,7 +275,7 @@ class Router {
             helpers.text(
               (sessionUser.username || sessionUser.email) +
                 ' (' +
-                routedGroup.name +
+                routedGroup.type + ':' +  routedGroup.name +
                 ',' +
                 sessionUser.domain +
                 ') | ' +
