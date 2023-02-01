@@ -4022,7 +4022,13 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v2.23.1](https://github.com/Trazi-Ventures/travelling/compare/v2.23.0...v2.23.1)
+
+- made some fixes? [`cb37ee0`](https://github.com/Trazi-Ventures/travelling/commit/cb37ee09d1dd9b1ad55a079c68193d61bda62a23)
+
 #### [v2.23.0](https://github.com/Trazi-Ventures/travelling/compare/v2.22.0...v2.23.0)
+
+> 31 January 2023
 
 - Update cookietoken.js [`b188a27`](https://github.com/Trazi-Ventures/travelling/commit/b188a2734506c03e7fb5b2bf11cf8dcf3c949926)
 
