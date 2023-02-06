@@ -59,7 +59,7 @@ var loginRoute = async (req, res) => {
       return isValid;
     } else {
       try {
-        var user = await Database.checkAuth(username, email, req.body.password, domain, parse.getIp(req), req.span);
+        var user = await Database.checkAuth(username, email, req.body.password, domain, parse.getIp(req), req);
 
         return await login(user.user, req, res);
       } catch (e) {

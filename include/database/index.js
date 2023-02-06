@@ -12,11 +12,11 @@ const helpers = require('../server/tracing/helpers')();
 class Database {
   constructor() {}
 
-  static async checkAuth(name, email, password, domain = 'default', ip = null, oldspan) {
+  static async checkAuth(name, email, password, domain = 'default', ip = null, req) {
     var span;
 
-    if (oldspan) {
-      span = req.startSpan(`Database.checkAuth()`, oldspan);
+    if (req.span) {
+      span = req.startSpan(`Database.checkAuth()`, req.span);
     }
 
     var user = null;
