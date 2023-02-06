@@ -1,6 +1,13 @@
 
 
-#### [v3.0.0](https://github.com/Dragohm/travelling/compare/v2.23.1...v3.0.0)
+#### [v3.0.1](https://github.com/Dragohm/travelling/compare/v3.0.0...v3.0.1)
+
+- Update index.js [`c3018ab`](https://github.com/Dragohm/travelling/commit/c3018ab551a9f479b7da28a074b7021b93ad5ea4)
+- Make sure people can't get locked out while logged in for password attempts [`4903766`](https://github.com/Dragohm/travelling/commit/4903766822afd823777bcd7ccda3840680a0055e)
+
+### [v3.0.0](https://github.com/Dragohm/travelling/compare/v2.23.1...v3.0.0)
+
+> 1 February 2023
 
 - Updated user object's groups prop to only have id,name & type [`31a8835`](https://github.com/Dragohm/travelling/commit/31a8835afe85180b2f71cc049ab305943995fb83)
 
