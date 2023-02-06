@@ -12,12 +12,19 @@ const helpers = require('../server/tracing/helpers')();
 class Database {
   constructor() {}
 
-  static async checkAuth(name, email, password, domain = 'default') {
+  static async checkAuth(name, email, password, domain = 'default', ip = null, oldspan) {
+    var span;
+
+    if (oldspan) {
+      span = req.startSpan(`Database.checkAuth()`, oldspan);
+    }
+
     var user = null;
     var users = await this.findUser(email, name, domain);
 
     //config.log.logger.trace('checkAuth: ', users);
     if (users == null || users.length == 0) {
+      if(span) {span.end();}
       throw {
         user: null,
         err: {
@@ -40,6 +47,7 @@ class Database {
 
     // Locked check
     if (user.locked) {
+      if(span) {span.end();}
       throw {
         user: user,
         err: {
@@ -51,33 +59,49 @@ class Database {
 
     // Password check
     if (user.password == (await crypto.hash(password, null, user.getEncryptedProfile(user)))) {
-      user.failed_login_attempts = 0;
-      await user.updated();
-      return { user, err: null };
+      if (config.login.maxLoginAttempts && (user.failed_login_attempts + 1) >= config.login.maxLoginAttempts && (!user.last_login.ip || user.last_login.ip !== ip)) {
+        log.warn(helpers.text(`[Security Flag]: Possible attempt at account hijacking via password brute force. Attacker IP: ${parse.getIp(req)} on account ${sessionUser.email} (${sessionUser.domain})`,span))
+        await lockUserFailedPassword(user, span);
+      } else {
+        user.failed_login_attempts = 0;
+        await user.updated();
+        span.end();
+        return { user, err: null };
+      }
+    } else {
+      user.failed_login_attempts += 1;
     }
 
     // Failed login
-    user.failed_login_attempts += 1;
-    if (config.login.maxLoginAttempts && user.failed_login_attempts >= config.login.maxLoginAttempts && !user.locked) {
-      user.locked = true;
-      user.locked_reason = config.user.locked.message;
-      user.change_password = true;
-      await user.updated();
-      throw {
-        user: user,
-        err: {
-          type: 'locked',
-          msg: user.locked_reason
-        }
-      };
-    }
 
-    await user.updated();
+    if (config.login.maxLoginAttempts && user.failed_login_attempts >= config.login.maxLoginAttempts) {
+      await lockUserFailedPassword(user, span);
+    } else {
+      await user.updated();
+    }
+    if(span) {span.end();}
     throw {
       user: user,
       err: {
         type: 'password',
         msg: 'invalid password'
+      }
+    };
+  }
+
+  static async lockUserFailedPassword(user,span) {
+    user.locked = true;
+    user.locked_reason = config.user.locked.message;
+    user.change_password = true;
+    await user.updated();
+
+    if(span) {span.end();}
+    
+    throw {
+      user: user,
+      err: {
+        type: 'locked',
+        msg: user.locked_reason
       }
     };
   }

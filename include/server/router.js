@@ -73,9 +73,14 @@ class Router {
     var groups = await gm.currentGroup(req, res);
 
     if (sessionUser && sessionUser.locked) {
-      req.logout(req, res);
-      res.code(401).send('Account Locked');
-      return false;
+      if(config.user.locked.message !== sessionUser.locked_reason) {
+        req.logout(req, res);
+        res.code(401).send('Account Locked');
+        if(span) {
+          span.end();
+        }
+        return false;
+      }
     }
 
     if (groups) {
@@ -112,6 +117,9 @@ class Router {
       }
 
       if (req.raw.url.indexOf(config.portal.path) == 0) {
+        if(span) {
+          span.end();
+        }
         return false;
       }
 
@@ -149,7 +157,9 @@ class Router {
             )
           );
         }
-
+        if(span) {
+          span.end();
+        }
         return false;
       }
 
@@ -182,6 +192,10 @@ class Router {
 
         if (config.stats.captureGroupRoutes && req.raw.url.indexOf('/' + config.serviceName + '/') == -1) {
           this.nstats.addWeb({ routerPath: possibleRoute, method: req.raw.method, socket: req.raw.socket }, res, sTime);
+        }
+
+        if(span) {
+          span.end();
         }
 
         return false;
@@ -247,6 +261,10 @@ class Router {
               )
             );
           }
+        }
+
+        if(span) {
+          span.end();
         }
 
         return false;
@@ -316,6 +334,10 @@ class Router {
           this.proxy.ws(req.raw, req._wssocket, target);
         }
 
+        if(span) {
+          span.end();
+        }
+
         return true;
       }
 
@@ -332,7 +354,15 @@ class Router {
           this.proxy.web(req.raw, res.raw, target);
         }
 
+        if(span) {
+          span.end();
+        }
+
         return true;
+      }
+
+      if(span) {
+        span.end();
       }
 
       return false;
@@ -344,6 +374,11 @@ class Router {
 
     // Should never get here;
     log.wtf(helpers.text('router you what?', span));
+
+    if(span) {
+      span.end();
+    }
+
     return false;
   }
 

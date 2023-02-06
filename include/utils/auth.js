@@ -74,6 +74,13 @@ var checkAuthHeader = async (req, res, router, oldspan) => {
       }
 
       return { auth: false, route: false, invalidToken: true };
+    } else if (user && user.locked && user.locked_reason !== config.user.locked.message) {
+      if (span) {
+        span.updateName('checkAuthHeader [user locked]');
+        span.end();
+      }
+
+      return { auth: false, route: true };
     }
 
     var groups = await user.resolveGroup(span);
@@ -103,7 +110,7 @@ var checkSession = (req, res, router, oldspan) => {
   }
 
   if (req.session && req.session.data && req.session.data.user) {
-    if (req.session.data.user.locked) {
+    if (req.session.data.user.locked && req.session.data.user.locked_reason !== config.user.locked.message) {
       if (span) {
         span.updateName('checkSession [user locked]');
         span.end();
@@ -139,7 +146,7 @@ var checkCookie = async (req, res, router, oldspan) => {
     try {
       var user = await CookieToken.checkToken(req, res, router, span);
 
-      if (user && user.locked) {
+      if (user && user.locked && user.locked_reason !== config.user.locked.message) {
         if (span) {
           span.updateName('checkCookie [user locked]');
           span.end();
