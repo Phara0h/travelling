@@ -60,7 +60,7 @@ class Database {
     // Password check
     if (user.password == (await crypto.hash(password, null, user.getEncryptedProfile(user)))) {
       if (config.login.maxLoginAttempts && (user.failed_login_attempts + 1) >= config.login.maxLoginAttempts && (!user.last_login.ip || user.last_login.ip !== ip)) {
-        log.warn(helpers.text(`[Security Flag]: Possible attempt at account hijacking via password brute force. Attacker IP: ${parse.getIp(req)} on account ${sessionUser.email} (${sessionUser.domain})`,span))
+        config.log.warn(helpers.text(`[Security Flag]: Possible attempt at account hijacking via password brute force. Attacker IP: ${parse.getIp(req)} on account ${sessionUser.email} (${sessionUser.domain})`,span))
         await lockUserFailedPassword(user, span);
       } else {
         user.failed_login_attempts = 0;
