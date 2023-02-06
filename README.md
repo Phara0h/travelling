@@ -4022,7 +4022,13 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v3.0.2](https://github.com/Dragohm/travelling/compare/v3.0.1...v3.0.2)
+
+- fix [`49f9a97`](https://github.com/Dragohm/travelling/commit/49f9a974f6bd4f3757c2af1d9078abb9ecf9be95)
+
 #### [v3.0.1](https://github.com/Dragohm/travelling/compare/v3.0.0...v3.0.1)
+
+> 6 February 2023
 
 - Update index.js [`c3018ab`](https://github.com/Dragohm/travelling/commit/c3018ab551a9f479b7da28a074b7021b93ad5ea4)
 - Make sure people can't get locked out while logged in for password attempts [`4903766`](https://github.com/Dragohm/travelling/commit/4903766822afd823777bcd7ccda3840680a0055e)
