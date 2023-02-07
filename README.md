@@ -4022,7 +4022,13 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v3.0.3](https://github.com/Trazi-Ventures/travelling/compare/v3.0.2...v3.0.3)
+
+- Update auth.js [`3730494`](https://github.com/Trazi-Ventures/travelling/commit/37304945933ca8892664f07891e4ed5c5234d89a)
+
 #### [v3.0.2](https://github.com/Trazi-Ventures/travelling/compare/v3.0.1...v3.0.2)
+
+> 6 February 2023
 
 - fix [`49f9a97`](https://github.com/Trazi-Ventures/travelling/commit/49f9a974f6bd4f3757c2af1d9078abb9ecf9be95)
 
