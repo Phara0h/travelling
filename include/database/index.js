@@ -65,7 +65,7 @@ class Database {
       } else {
         user.failed_login_attempts = 0;
         await user.updated();
-        span.end();
+        if(span) {span.end();}
         return { user, err: null };
       }
     } else {
