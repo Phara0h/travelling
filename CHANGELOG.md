@@ -1,6 +1,14 @@
 
 
+#### [v3.0.4](https://github.com/Trazi-Ventures/travelling/compare/v3.0.3...v3.0.4)
+
+- Fix #79 fix login crash [`#29`](https://github.com/Trazi-Ventures/travelling/pull/29)
+- Merge pull request #29 from Trazi-Ventures/fix-#79-login-crashed [`#79`](https://github.com/Trazi-Ventures/travelling/issues/79)
+- add span check [`e6897c8`](https://github.com/Trazi-Ventures/travelling/commit/e6897c8154214371523ef7dc5c23a9e8fd7dedf1)
+
 #### [v3.0.3](https://github.com/Trazi-Ventures/travelling/compare/v3.0.2...v3.0.3)
+
+> 7 February 2023
 
 - Update auth.js [`3730494`](https://github.com/Trazi-Ventures/travelling/commit/37304945933ca8892664f07891e4ed5c5234d89a)
 
