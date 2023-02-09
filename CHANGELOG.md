@@ -1,6 +1,12 @@
 
 
+#### [v3.0.6](https://github.com/Trazi-Ventures/travelling/compare/v3.0.5...v3.0.6)
+
+- Update regex.js [`68d33e4`](https://github.com/Trazi-Ventures/travelling/commit/68d33e42f97b4bbfa1dbf0d45fa589a70d002634)
+
 #### [v3.0.5](https://github.com/Trazi-Ventures/travelling/compare/v3.0.4...v3.0.5)
+
+> 9 February 2023
 
 - Feature #81 User Data allow arrays and objects [`#30`](https://github.com/Trazi-Ventures/travelling/pull/30)
 - Drop user_data char limit [`c2ead31`](https://github.com/Trazi-Ventures/travelling/commit/c2ead31559b5c6419e0d5dc25677a7cdcb3a0a77)
