@@ -4022,7 +4022,13 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v3.0.7](https://github.com/Trazi-Ventures/travelling/compare/v3.0.6...v3.0.7)
+
+- Added zcs and less restrict state/city req [`21d6edc`](https://github.com/Trazi-Ventures/travelling/commit/21d6edcbcae3d236dcfcb43a94cc01f87b845ebb)
+
 #### [v3.0.6](https://github.com/Trazi-Ventures/travelling/compare/v3.0.5...v3.0.6)
+
+> 9 February 2023
 
 - Update regex.js [`68d33e4`](https://github.com/Trazi-Ventures/travelling/commit/68d33e42f97b4bbfa1dbf0d45fa589a70d002634)
 
