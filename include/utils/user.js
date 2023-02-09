@@ -1,10 +1,14 @@
 const config = require('./config');
 const misc = require('./misc');
 const regex = require('./regex');
-const usa = require('./usa');
 const Fasquest = require('fasquest');
 const User = require('../database/models/user');
 const userSchema = new User()._defaultModel;
+const {
+  getByZip,
+  validZip,
+  validState
+} = (require("zcs")).zcs({});
 const utilsUser = {
   checkValidUser: async function checkValidUser(user) {
     if (!user) {
@@ -122,45 +126,46 @@ const utilsUser = {
       };
     }
 
-    if (user.state && !usa.states[user.state.toUpperCase()]) {
+    if (user.state && !validState(user.state)) {
       return {
         type: 'state-request-error',
         msg: 'Invalid state.'
       };
     }
 
-    if (user.city && !usa.cities[user.city.toUpperCase()]) {
-      return {
-        type: 'city-request-error',
-        msg: 'Invalid city.'
-      };
-    }
+    //// Might be to restrictive
+    // if (user.city && !usa.cities[user.city.toUpperCase()]) {
+    //   return {
+    //     type: 'city-request-error',
+    //     msg: 'Invalid city.'
+    //   };
+    // }
 
-    if (user.state && user.city && !usa.states[user.state.toUpperCase()][user.city.toUpperCase()]) {
-      return {
-        type: 'city-state-request-error',
-        msg: 'This city is not inside of the specified state.'
-      };
-    }
+    // if (user.state && user.city && !usa.states[user.state.toUpperCase()][user.city.toUpperCase()]) {
+    //   return {
+    //     type: 'city-state-request-error',
+    //     msg: 'This city is not inside of the specified state.'
+    //   };
+    // }
 
-    if (user.zip && !usa.zips[user.zip]) {
+    // if (user.zip && user.state && usa.zips[user.zip].state != user.state.toUpperCase()) {
+    //   return {
+    //     type: 'zip-state-request-error',
+    //     msg: 'This zipcode is not belong to the specified state.'
+    //   };
+    // }
+
+    // if (user.zip && user.city && usa.zips[user.zip].city != user.city.toUpperCase()) {
+    //   return {
+    //     type: 'zip-city-request-error',
+    //     msg: 'This zipcode is not belong to the specified city.'
+    //   };
+    // }
+
+    if (user.zip && !validZip(user.zip)) {
       return {
         type: 'zip-request-error',
         msg: 'Invalid zipcode'
-      };
-    }
-
-    if (user.zip && user.state && usa.zips[user.zip].state != user.state.toUpperCase()) {
-      return {
-        type: 'zip-state-request-error',
-        msg: 'This zipcode is not belong to the specified state.'
-      };
-    }
-
-    if (user.zip && user.city && usa.zips[user.zip].city != user.city.toUpperCase()) {
-      return {
-        type: 'zip-city-request-error',
-        msg: 'This zipcode is not belong to the specified city.'
       };
     }
 
@@ -304,7 +309,12 @@ const utilsUser = {
     }
 
     if (props.zip !== undefined) {
-      user.zip = Number(props.zip);
+      user.zip = props.zip;
+      if(!user.city || !user.state) {
+        const {state, city} = getByZip(user.zip);
+        user.city = city;
+        user.state = state;
+      }
     }
 
     if (props.street_name !== undefined) {
