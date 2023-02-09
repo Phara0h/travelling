@@ -4022,7 +4022,15 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v3.0.5](https://github.com/Dragohm/travelling/compare/v3.0.4...v3.0.5)
+
+- Feature #81 User Data allow arrays and objects [`#30`](https://github.com/Dragohm/travelling/pull/30)
+- Drop user_data char limit [`c2ead31`](https://github.com/Dragohm/travelling/commit/c2ead31559b5c6419e0d5dc25677a7cdcb3a0a77)
+- allow user_data arrays and objects [`5707cfa`](https://github.com/Dragohm/travelling/commit/5707cfa33c17e27f621364ce96282e213db9dfdf)
+
 #### [v3.0.4](https://github.com/Dragohm/travelling/compare/v3.0.3...v3.0.4)
+
+> 8 February 2023
 
 - Fix #79 fix login crash [`#29`](https://github.com/Dragohm/travelling/pull/29)
 - Merge pull request #29 from Dragohm/fix-#79-login-crashed [`#79`](https://github.com/Dragohm/travelling/issues/79)
