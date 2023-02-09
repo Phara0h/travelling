@@ -62,7 +62,8 @@
     "ioredis": "^4.14.1",
     "nodemailer": "^6.3.0",
     "nstats": "4.2.0",
-    "wog": "latest"
+    "wog": "latest",
+    "zcs": "^2.1.0"
   },
   "devDependencies": {
     "@abeai/recho": "^1.4.0",
