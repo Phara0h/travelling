@@ -1,6 +1,12 @@
 
 
+#### [v3.1.0](https://github.com/Trazi-Ventures/travelling/compare/v3.0.7...v3.1.0)
+
+- Added Routes check for bulk permission checking [`05a6c27`](https://github.com/Trazi-Ventures/travelling/commit/05a6c27ade2296111181c83685e6af75316c7a16)
+
 #### [v3.0.7](https://github.com/Trazi-Ventures/travelling/compare/v3.0.6...v3.0.7)
+
+> 9 February 2023
 
 - Added zcs and less restrict state/city req [`21d6edc`](https://github.com/Trazi-Ventures/travelling/commit/21d6edcbcae3d236dcfcb43a94cc01f87b845ebb)
 
