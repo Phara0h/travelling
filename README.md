@@ -1167,410 +1167,149 @@ Path: api/v1/groups/import
 body
 ```json
 {
-    "global": {
-        "user": {
-            "allowed": [
-                {
-                    "method": "GET",
-                    "route": "/account/api/v1/auth/logout",
-                    "name": "get-account-api-v1-auth-logout"
-                },
-                {
-                    "method": "GET",
-                    "route": "/account/api/v1/user/me/*",
-                    "name": "get-account-api-v1-user-me-*"
-                },
-                {
-                    "method": "PUT",
-                    "route": "/account/api/v1/user/me/property/password/*",
-                    "name": "put-account-api-v1-user-me-property-password-*"
-                },
-                {
-                    "method": "PUT",
-                    "route": "/account/api/v1/user/me/property/avatar/*",
-                    "name": "put-account-api-v1-user-me-property-avatar-*"
-                },
-                {
-                    "method": "PUT",
-                    "route": "/account/api/v1/user/me/property/email/*",
-                    "name": "put-account-api-v1-user-me-property-email-*"
-                }
-            ],
-            "inherited": [
-                "group|anonymous"
-            ],
-            "is_default": true
-        },
-        "developer": {
-            "allowed": [
-                {
-                    "method": "POST",
-                    "route": "/account/api/v1/user/me/token",
-                    "name": "post-account-api-v1-user-me-token"
-                },
-                {
-                    "method": "DELETE",
-                    "route": "/account/api/v1/user/me/token/*",
-                    "name": "delete-account-api-v1-user-me-token-*"
-                }
-            ],
-            "inherited": [
-                "global|user"
-            ]
-        },
-        "service": {
-            "allowed": [
-                {
-                    "method": "POST",
-                    "route": "/account/api/v1/user/me/token",
-                    "name": "post-account-api-v1-user-me-token"
-                },
-                {
-                    "method": "DELETE",
-                    "route": "/account/api/v1/user/me/token/*",
-                    "name": "delete-account-api-v1-user-me-token-*"
-                }
-            ],
-            "inherited": [
-                "global|user",
-                "global|superadmin"
-            ]
-        },
-        "crm-public": {
-            "allowed": [
-                {
-                    "method": "GET",
-                    "route": "/crm",
-                    "host": "http://localhost:1337",
-                    "name": "get-crm"
-                },
-                {
-                    "method": "GET",
-                    "route": "/crm/auth/*",
-                    "host": "http://localhost:1337",
-                    "name": "get-crm-auth-*"
-                }
-            ]
-        },
-        "leads-public": {
-            "allowed": [
-                {
-                    "method": "POST",
-                    "route": "/api/leads/v1/new/lead",
-                    "remove_from_path": "/api",
-                    "host": "http://leads.dragohmdev.com",
-                    "name": "post-api-leads-v1-new-lead"
-                }
-            ]
-        },
-        "import-report-public": {
-            "allowed": [
-                {
-                    "method": "POST",
-                    "route": "/api/import-report/v1/tlo/people/cid/*",
-                    "remove_from_path": "/api",
-                    "host": "http://import-report.dragohmdev.com",
-                    "name": "post-api-import-report-v1-tlo-people-cid-*"
-                }
-            ]
-        },
-        "subscribed": {},
-        "admin": {
-            "inherited": [
-                "global|user",
-                "global|csrall"
-            ]
-        },
-        "superadmin": {
-            "allowed": [
-                {
-                    "route": "/account/*",
-                    "name": "*-account-*"
-                },
-                {
-                    "name": "account-*"
-                }
-            ],
-            "inherited": [
-                "global|admin"
-            ]
-        },
-        "csrall": {
-            "allowed": [
-                {
-                    "method": "*",
-                    "route": "/api/opt-out/v1/*",
-                    "remove_from_path": "/api",
-                    "host": "http://opt-out.dragohmdev.com",
-                    "name": "*-api-opt-out-v1-*"
-                },
-                {
-                    "method": "*",
-                    "route": "/api/search/v1/*",
-                    "remove_from_path": "/api",
-                    "host": "http://search.dragohmdev.com",
-                    "name": "*-api-search-v1-*"
-                },
-                {
-                    "method": "*",
-                    "route": "/api/email/v1/*",
-                    "remove_from_path": "/api",
-                    "host": "http://email.dragohmdev.com",
-                    "name": "*-api-email-v1-*"
-                }
-            ],
-            "inherited": [
-                "global|user",
-                "global|crm-private"
-            ]
-        },
-        "auth": {
-            "allowed": [
-                {
-                    "method": "POST",
-                    "route": "/account/api/v1/auth/register/domain/unmask.com",
-                    "name": "post-account-api-v1-auth-register-domain-unmask.com"
-                },
-                {
-                    "method": "PUT",
-                    "route": "/account/api/v1/auth/login/domain/unmask.com",
-                    "name": "put-account-api-v1-auth-login-domain-unmask.com"
-                },
-                {
-                    "method": "PUT",
-                    "route": "/account/api/v1/auth/password/forgot/domain/unmask.com",
-                    "name": "put-account-api-v1-auth-password-forgot-domain-unmask.com"
-                },
-                {
-                    "method": "POST",
-                    "route": "/account/api/v1/auth/register/domain/checkpeople.com",
-                    "name": "post-account-api-v1-auth-register-domain-checkpeople.com"
-                },
-                {
-                    "method": "PUT",
-                    "route": "/account/api/v1/auth/login/domain/checkpeople.com",
-                    "name": "put-account-api-v1-auth-login-domain-checkpeople.com"
-                },
-                {
-                    "method": "PUT",
-                    "route": "/account/api/v1/auth/password/forgot/domain/checkpeople.com",
-                    "name": "put-account-api-v1-auth-password-forgot-domain-checkpeople.com"
-                },
-                {
-                    "method": "POST",
-                    "route": "/account/api/v1/auth/register/domain/dragohmventures.com",
-                    "name": "post-account-api-v1-auth-register-domain-dragohmventures.com"
-                },
-                {
-                    "method": "PUT",
-                    "route": "/account/api/v1/auth/login/domain/dragohmventures.com",
-                    "name": "put-account-api-v1-auth-login-domain-dragohmventures.com"
-                },
-                {
-                    "method": "PUT",
-                    "route": "/account/api/v1/auth/password/forgot/domain/dragohmventures.com",
-                    "name": "put-account-api-v1-auth-password-forgot-domain-dragohmventures.com"
-                },
-                {
-                    "method": "PUT",
-                    "route": "/account/api/v1/auth/password/reset/login",
-                    "name": "put-account-api-v1-auth-password-reset-login"
-                }
-            ]
-        },
-        "crm-private": {
-            "allowed": [
-                {
-                    "method": "GET",
-                    "route": "/crm/admin/*",
-                    "host": "http://staging.crm.dragohmdev.com",
-                    "name": "get-crm-admin-*"
-                }
-            ]
-        },
-        "csr": {
-            "allowed": [
-                {
-                    "method": "*",
-                    "route": "/api/opt-out/v1/cids",
-                    "remove_from_path": "/api",
-                    "host": "http://opt-out.dragohmdev.com",
-                    "name": "*-api-opt-out-v1-cids"
-                },
-                {
-                    "method": "*",
-                    "route": "/api/opt-out/v1/id/*",
-                    "remove_from_path": "/api",
-                    "host": "http://opt-out.dragohmdev.com",
-                    "name": "*-api-opt-out-v1-id-*"
-                },
-                {
-                    "method": "*",
-                    "route": "/api/opt-out/v1/domain/:grouptype.com",
-                    "remove_from_path": "/api",
-                    "host": "http://opt-out.dragohmdev.com",
-                    "name": "*-api-opt-out-v1-domain-:grouptype.com"
-                },
-                {
-                    "method": "*",
-                    "route": "/api/opt-out/v1/domain/:grouptype.com/*",
-                    "remove_from_path": "/api",
-                    "host": "http://opt-out.dragohmdev.com",
-                    "name": "*-api-opt-out-v1-domain-:grouptype.com-*"
-                },
-                {
-                    "method": "*",
-                    "route": "/api/search/v1/*",
-                    "remove_from_path": "/api",
-                    "host": "http://search.dragohmdev.com",
-                    "name": "*-api-search-v1-*"
-                },
-                {
-                    "method": "*",
-                    "route": "/api/email/v1/*",
-                    "remove_from_path": "/api",
-                    "host": "http://email.dragohmdev.com",
-                    "name": "*-api-email-v1-*"
-                }
-            ],
-            "inherited": [
-                "global|user",
-                "global|crm-private"
-            ]
-        }
-    },
     "group": {
+        "anonymous": {
+            "type": "group",
+            "allowed": [
+                {
+                    "route": "/travelling/portal/*",
+                    "host": null,
+                    "name": "*-travelling-portal-*"
+                },
+                {
+                    "route": "/travelling/api/v1/auth/*",
+                    "host": null,
+                    "name": "*-travelling-api-v1-auth-*"
+                },
+                {
+                    "route": "/travelling/api/v1/user/me/route/allowed",
+                    "host": null,
+                    "method": "GET",
+                    "name": "get-travelling-api-v1-user-me-route-allowed"
+                },
+                {
+                    "route": "/travelling/api/v1/user/me/permission/allowed/*",
+                    "host": null,
+                    "method": "GET",
+                    "name": "get-travelling-api-v1-user-me-permission-allowed-*"
+                },
+                {
+                    "route": "/travelling/assets/*",
+                    "host": null,
+                    "removeFromPath": "/travelling/assets/",
+                    "method": "GET",
+                    "name": "get-travelling-assets-*"
+                },
+                {
+                    "route": "/travelling/api/v1/config/password",
+                    "host": null,
+                    "method": "GET",
+                    "name": "get-travelling-api-v1-config-password"
+                },
+                {
+                    "route": "/favicon.ico",
+                    "host": null,
+                    "method": "GET",
+                    "name": "get-favicon.ico"
+                }
+            ],
+            "inherited": null,
+            "is_default": false
+        },
+        "group3": {
+            "type": "group",
+            "allowed": null,
+            "inherited": [
+                "testgroup|group1",
+                "group|group2"
+            ],
+            "is_default": false
+        },
         "superadmin": {
+            "type": "group",
             "allowed": [
                 {
                     "host": null,
-                    "route": "/account/*",
-                    "name": "*-account-*"
+                    "route": "/travelling/*",
+                    "name": "*-travelling-*"
+                },
+                {
+                    "name": "test-one-*-three"
                 }
             ],
             "inherited": [
                 "group|anonymous"
-            ]
+            ],
+            "is_default": false
         },
-        "anonymous": {
+        "group4": {
+            "type": "group",
+            "allowed": null,
+            "inherited": [],
+            "is_default": false
+        },
+        "group2": {
+            "type": "group",
             "allowed": [
                 {
+                    "route": "/test/get",
+                    "host": "https://127.0.0.1:4268/:username/:group",
+                    "removeFromPath": "/test/get",
                     "method": "GET",
-                    "route": "/account/dashboard/*",
-                    "remove_from_path": "/account/dashboard",
-                    "host": "https://unmask.com",
-                    "name": "get-account-dashboard-*"
+                    "name": "get-test-get"
                 },
                 {
-                    "method": "GET",
-                    "route": "/account/portal/*",
-                    "name": "get-account-portal-*"
-                },
-                {
-                    "method": "GET",
-                    "route": "/account/assets/*",
-                    "name": "get-account-assets-*"
-                },
-                {
-                    "method": "GET",
-                    "route": "/favicon.ico",
-                    "name": "get-favicon.ico"
-                },
-                {
-                    "method": "PUT",
-                    "route": "/account/api/v1/auth/password/forgot",
-                    "name": "put-account-api-v1-auth-password-forgot"
-                },
-                {
-                    "method": "PUT",
-                    "route": "/account/api/v1/auth/password/reset",
-                    "name": "put-account-api-v1-auth-password-reset"
-                },
-                {
-                    "method": "GET",
-                    "route": "/account/api/v1/auth/activate",
-                    "name": "get-account-api-v1-auth-activate"
-                },
-                {
+                    "route": "/test/post",
+                    "host": "http://127.0.0.1:4267/?id=:id&permission=:permission",
+                    "removeFromPath": "/test/post",
                     "method": "POST",
-                    "route": "/account/api/v1/auth/token",
-                    "name": "post-account-api-v1-auth-token"
-                },
-                {
-                    "method": "POST",
-                    "route": "/account/api/v1//auth/oauth/authorize",
-                    "name": "post-account-api-v1--auth-oauth-authorize"
-                },
-                {
-                    "method": "GET",
-                    "route": "/account/api/v1//auth/oauth/authorize",
-                    "name": "get-account-api-v1--auth-oauth-authorize"
-                },
-                {
-                    "method": "GET",
-                    "route": "/account/api/v1/user/me/permission/allowed/*",
-                    "name": "get-account-api-v1-user-me-permission-allowed-*"
-                },
-                {
-                    "method": "GET",
-                    "route": "/account/api/v1/user/me/route/allowed",
-                    "name": "get-account-api-v1-user-me-route-allowed"
-                },
-                {
-                    "method": "GET",
-                    "route": "/account/api/v1/config/password",
-                    "name": "get-account-api-v1-config-password"
-                },
-                {
-                    "method": "GET",
-                    "route": "/account/api/v1/config/portal/webclient",
-                    "name": "get-account-api-v1-config-portal-webclient"
-                },
-                {
-                    "method": "GET",
-                    "route": "/account/metrics",
-                    "name": "get-account-metrics"
-                },
-                {
-                    "method": "GET",
-                    "route": "/account/health",
-                    "name": "get-account-health"
+                    "name": "post-test-post"
                 }
             ],
             "inherited": [
-                "global|auth",
-                "global|leads-public",
-                "global|import-report-public",
-                "global|opt-out-public",
-                "global|crm-public"
-            ]
-        }
-    },
-    "unmask": {
-        "csr": {
+                "testgroup|group1"
+            ],
+            "is_default": false
+        },
+        "group5": {
+            "type": "group",
+            "allowed": [
+                {
+                    "route": "/test/delete/:grouptype",
+                    "host": "https://127.0.0.1:4268",
+                    "removeFromPath": "/test/delete",
+                    "method": "DELETE",
+                    "name": "delete-test-delete-:grouptype"
+                }
+            ],
             "inherited": [
-                "global|csr"
-            ]
+                "group|group4",
+                "group|superadmin"
+            ],
+            "is_default": true
+        },
+        "group1": {
+            "type": "group",
+            "allowed": null,
+            "inherited": null,
+            "is_default": false
         }
     },
-    "checkpeople": {
-        "csr": {
+    "testgroup": {
+        "group1": {
+            "type": "testgroup",
+            "allowed": null,
             "inherited": [
-                "global|csr"
-            ]
+                "group|group4"
+            ],
+            "is_default": false
+        },
+        "superadmin": {
+            "type": "testgroup",
+            "allowed": null,
+            "inherited": null,
+            "is_default": false
         }
-    },
-    "information": {
-        "csr": {
-            "inherited": [
-                "global|csr"
-            ]
-        }
-    },
-    "products": {
-        "full_reports": {},
-        "pdf_generation": {},
-        "report_monitoring": {}
     }
 }
 ```
@@ -3388,6 +3127,7 @@ Path: api/v1/user/domain/:domain/id/:id
     * [.deleteToken(id, authorization_bearer)](#UserCurrent.deleteToken)
     * [.edit(body, authorization_bearer)](#UserCurrent.edit)
     * [.getProperty(property, authorization_bearer)](#UserCurrent.getProperty)
+    * [.routesCheck(body, authorization_bearer)](#UserCurrent.routesCheck)
     * [.routeCheck(method, route, authorization_bearer)](#UserCurrent.routeCheck)
     * [.permissionCheck(permission, authorization_bearer)](#UserCurrent.permissionCheck)
     * [.get(authorization_bearer)](#UserCurrent.get)
@@ -3566,6 +3306,33 @@ Path: api/v1/user/me/property/:property
 | property | <code>any</code> | (example: username) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
+<a name="UserCurrent.routesCheck"></a>
+
+### UserCurrent.routesCheck(body, authorization_bearer)
+routesCheck - Checks if current logged in user can access the routes specified within the body array.
+
+Path: api/v1/user/me/routes/allowed
+
+**Kind**: static method of [<code>UserCurrent</code>](#UserCurrent)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+**Example**  
+body
+```json
+[
+    {
+        "method": "GET",
+        "route": "/account/api/user/me"
+    },
+    {
+        "route": "/t/api/user/me/asdf"
+    }
+]
+```
 <a name="UserCurrent.routeCheck"></a>
 
 ### UserCurrent.routeCheck(method, route, authorization_bearer)
@@ -3921,7 +3688,7 @@ Path: api/v1/auth/login/domain/:domain
 body
 ```json
 {
-	"email": "test@test.com",
+    "email": "test@test.com",
 	"password": "Pas5w0r!d"
 }
 ```
@@ -3947,7 +3714,7 @@ Path: api/v1/auth/register/domain/:domain
 body
 ```json
 {
-	"email": "tesft@test.com",
+	"email": "test@test.com",
 	"password": "Pas5w0r!d"
 }
 ```
@@ -4022,7 +3789,13 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v3.1.0](https://github.com/Dragohm/travelling/compare/v3.0.7...v3.1.0)
+
+- Added Routes check for bulk permission checking [`05a6c27`](https://github.com/Dragohm/travelling/commit/05a6c27ade2296111181c83685e6af75316c7a16)
+
 #### [v3.0.7](https://github.com/Dragohm/travelling/compare/v3.0.6...v3.0.7)
+
+> 9 February 2023
 
 - Added zcs and less restrict state/city req [`21d6edc`](https://github.com/Dragohm/travelling/commit/21d6edcbcae3d236dcfcb43a94cc01f87b845ebb)
 
