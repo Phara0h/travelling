@@ -404,6 +404,39 @@ module.exports = function (app, opts, done) {
     return false;
   });
 
+  app.post('/user/me/routes/allowed', async (req, res) => {
+    if (req.session) {
+      const groups = await gm.currentGroup(req, res);
+      const headersDomain = parse.getDomainFromHeaders(req.headers);
+      if (req.body && req.body.length) {
+        var routes = [];
+        for (var j = 0; j < req.body.length; j++) {
+          var method = req.body[j].method || `*`;
+          var route = req.body[j].route;
+          if (route) {
+            for (var i = 0; i < groups.length; i++) {
+                routes.push({ 
+                  method,
+                  route,
+                  allowed: router.isRouteAllowed(method,route,groups[i].routes,!req.isAuthenticated ? null : req.session.data.user,groups[i].group, headersDomain) ? true : false
+                })
+            }
+          }
+        }
+        res.code(200);
+        return routes;
+      } else {
+        res.code(400);
+        return {
+          type: 'routes-check-error',
+          msg: 'No array of routes provided'
+        }
+      }
+    }
+    res.code(401);
+    return false;
+  });
+
   app.get('/user/me/permission/allowed/:permission', async (req, res) => {
     if (req.session) {
       const groups = await gm.currentGroup(req, res);
