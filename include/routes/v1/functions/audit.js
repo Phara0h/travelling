@@ -28,7 +28,8 @@ async function getAudits(opts) {
       limit: opts.req.query.limit,
       skip: opts.req.query.skip,
       sort: opts.req.query.sort,
-      sortdir: opts.req.query.sortdir
+      sortdir: opts.req.query.sortdir,
+      count: opts.count
     });
   } catch (e) {
     opts.res.code(400);

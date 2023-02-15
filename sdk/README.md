@@ -201,8 +201,42 @@ Path: api/v1/audit/action/:action
 **Kind**: global class  
 
 * [AuditUser](#AuditUser)
+    * [.countByuserId(id, filter, limit, skip, sort, sortdir, selfexclusion, authorization_bearer)](#AuditUser.countByuserId)
     * [.byuserId(id, filter, limit, skip, sort, sortdir, resolve, selfexclusion, authorization_bearer)](#AuditUser.byuserId)
+    * [.countOfuserId(id, filter, limit, skip, sort, sortdir, selfexclusion, authorization_bearer)](#AuditUser.countOfuserId)
     * [.ofuserId(id, filter, limit, skip, sort, sortdir, resolve, selfexclusion, authorization_bearer)](#AuditUser.ofuserId)
+
+<a name="AuditUser.countByuserId"></a>
+
+### AuditUser.countByuserId(id, filter, limit, skip, sort, sortdir, selfexclusion, authorization_bearer)
+countByuserId - Gets audits by by_user id.
+
+##### Filter Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | *optional* (example:  created_on>=2021-06-09) |
+| action | *optional* (example:  action=CREATE) |
+| subaction | *optional* (example:  subaction=USER) |
+| prop | *optional* (example:  prop=email) |
+| old_val | *optional* (example:  old_val=swagger@email.69) |
+| new_val | *optional* (example:  new_val=leet@teel.com) |
+
+Path: api/v1/audit/count/user/byuser/:id
+
+**Kind**: static method of [<code>AuditUser</code>](#AuditUser)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>any</code> | Id of user that committed the action. (example: bf1b1e49-a105-43dc-b9a2-32c69a17fb5f) |
+| filter | <code>any</code> | Filter parameters (example: action=CREATE,subaction=USER,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2023-01-03,created_on<2023-06-06) |
+| limit | <code>any</code> | Number of maximum results. (example: 2) (example: 2) |
+| skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 1) |
+| sort | <code>any</code> | Sort by any user object key (examples: created_on, action, etc.) (example: created_on) |
+| sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: ASC) |
+| selfexclusion | <code>any</code> | Excludes audits with the same of_user_id. (example: true) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="AuditUser.byuserId"></a>
 
@@ -235,6 +269,38 @@ Path: api/v1/audit/user/byuser/:id
 | sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: ASC) |
 | resolve | <code>any</code> | Joins users table to obtain 'by_user_firstname' and 'by_user'lastname' fields (example: true) |
 | selfexclusion | <code>any</code> | Excludes audits with the same of_user_id. (example: true) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+<a name="AuditUser.countOfuserId"></a>
+
+### AuditUser.countOfuserId(id, filter, limit, skip, sort, sortdir, selfexclusion, authorization_bearer)
+countOfuserId - Gets audits by of_user id.
+
+##### Filter Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | *optional* (example:  created_on>=2021-06-09) |
+| action | *optional* (example:  action=CREATE) |
+| subaction | *optional* (example:  subaction=USER) |
+| prop | *optional* (example:  prop=email) |
+| old_val | *optional* (example:  old_val=swagger@email.69) |
+| new_val | *optional* (example:  new_val=leet@teel.com) |
+
+Path: api/v1/audit/count/user/ofuser/:id
+
+**Kind**: static method of [<code>AuditUser</code>](#AuditUser)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>any</code> | Id of user that committed the action. (example: bf1b1e49-a105-43dc-b9a2-32c69a17fb5f) |
+| filter | <code>any</code> | Filter parameters (example: action=CREATE,subaction=USER,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-03,created_on<2021-06-06) |
+| limit | <code>any</code> | Number of maximum results. (example: 2) (example: 2) |
+| skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |
+| sort | <code>any</code> | Sort by any user object key (examples: created_on, action, etc.) (example: action) |
+| sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: DESC) |
+| selfexclusion | <code>any</code> | Excludes audits with the same by_user_id. (example: true) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="AuditUser.ofuserId"></a>
