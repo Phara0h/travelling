@@ -534,12 +534,68 @@ function SDK(host, opts) {
     constructor() {}
     static get _postgenClassUrls() {
       return {
+        countbyuserid: 'api/v1/audit/count/user/byuser/:id',
         byuserid: 'api/v1/audit/user/byuser/:id',
+        countofuserid: 'api/v1/audit/count/user/ofuser/:id',
         ofuserid: 'api/v1/audit/user/ofuser/:id',
       };
     }
     static getFunctionsPath(name) {
       return this._postgenClassUrls[name.toLowerCase()];
+    }
+
+    /**
+  * countByuserId - Gets audits by by_user id.
+
+##### Filter Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | *optional* (example:  created_on>=2021-06-09) |
+| action | *optional* (example:  action=CREATE) |
+| subaction | *optional* (example:  subaction=USER) |
+| prop | *optional* (example:  prop=email) |
+| old_val | *optional* (example:  old_val=swagger@email.69) |
+| new_val | *optional* (example:  new_val=leet@teel.com) |
+  *
+  * Path: api/v1/audit/count/user/byuser/:id
+  * @param {any} id Id of user that committed the action. (example: bf1b1e49-a105-43dc-b9a2-32c69a17fb5f)
+  * @param {any} filter Filter parameters (example: action=CREATE,subaction=USER,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2023-01-03,created_on<2023-06-06)
+  * @param {any} limit Number of maximum results. (example: 2) (example: 2)
+  * @param {any} skip Number of db rows skipped. (example: 10) (example: 1)
+  * @param {any} sort Sort by any user object key (examples: created_on, action, etc.) (example: created_on)
+  * @param {any} sortdir Sort direction (example ascending order: ASC) (example: ASC)
+  * @param {any} selfexclusion Excludes audits with the same of_user_id. (example: true)
+  * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+  */
+    static async countByuserId(
+      id,
+      filter,
+      limit,
+      skip,
+      sort,
+      sortdir,
+      selfexclusion,
+      authorization_bearer,
+      opts
+    ) {
+      var options = {
+        method: 'GET',
+        simple: false,
+        uri: hostUrl + '/' + `api/v1/audit/count/user/byuser/${id}`,
+        qs: { filter, limit, skip, sort, sortdir, selfexclusion },
+        authorization: {
+          bearer: authorization_bearer,
+        },
+      };
+      if (defaultOpts) {
+        options = Object.assign(options, defaultOpts);
+      }
+      if (opts) {
+        options = Object.assign(options, opts);
+      }
+      return await fasq.request(options);
     }
 
     /**
@@ -585,6 +641,60 @@ function SDK(host, opts) {
         simple: false,
         uri: hostUrl + '/' + `api/v1/audit/user/byuser/${id}`,
         qs: { filter, limit, skip, sort, sortdir, resolve, selfexclusion },
+        authorization: {
+          bearer: authorization_bearer,
+        },
+      };
+      if (defaultOpts) {
+        options = Object.assign(options, defaultOpts);
+      }
+      if (opts) {
+        options = Object.assign(options, opts);
+      }
+      return await fasq.request(options);
+    }
+
+    /**
+  * countOfuserId - Gets audits by of_user id.
+
+##### Filter Params
+
+| Param | Description |
+| --- | --- |
+| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | *optional* (example:  created_on>=2021-06-09) |
+| action | *optional* (example:  action=CREATE) |
+| subaction | *optional* (example:  subaction=USER) |
+| prop | *optional* (example:  prop=email) |
+| old_val | *optional* (example:  old_val=swagger@email.69) |
+| new_val | *optional* (example:  new_val=leet@teel.com) |
+  *
+  * Path: api/v1/audit/count/user/ofuser/:id
+  * @param {any} id Id of user that committed the action. (example: bf1b1e49-a105-43dc-b9a2-32c69a17fb5f)
+  * @param {any} filter Filter parameters (example: action=CREATE,subaction=USER,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-03,created_on<2021-06-06)
+  * @param {any} limit Number of maximum results. (example: 2) (example: 2)
+  * @param {any} skip Number of db rows skipped. (example: 10) (example: 10)
+  * @param {any} sort Sort by any user object key (examples: created_on, action, etc.) (example: action)
+  * @param {any} sortdir Sort direction (example ascending order: ASC) (example: DESC)
+  * @param {any} selfexclusion Excludes audits with the same by_user_id. (example: true)
+  * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
+  */
+    static async countOfuserId(
+      id,
+      filter,
+      limit,
+      skip,
+      sort,
+      sortdir,
+      selfexclusion,
+      authorization_bearer,
+      opts
+    ) {
+      var options = {
+        method: 'GET',
+        simple: false,
+        uri: hostUrl + '/' + `api/v1/audit/count/user/ofuser/${id}`,
+        qs: { filter, limit, skip, sort, sortdir, selfexclusion },
         authorization: {
           bearer: authorization_bearer,
         },
