@@ -3,7 +3,7 @@
 		"_postman_id": "9718a487-a9bf-41ec-b272-fc0438da73d3",
 		"name": "Travelling",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "208035"
+		"_exporter_id": "15847205"
 	},
 	"item": [
 		{
@@ -9379,6 +9379,82 @@
 							"response": []
 						},
 						{
+							"name": "Count OfUser ID",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/audit/count/user/ofuser/:id",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"audit",
+										"count",
+										"user",
+										"ofuser",
+										":id"
+									],
+									"query": [
+										{
+											"key": "filter",
+											"value": "created_on>2021-06-03,created_on<2021-06-06",
+											"description": "Filter parameters (example: action=CREATE,subaction=USER,created_on>2021-06-03,created_on<2021-06-06)",
+											"disabled": true
+										},
+										{
+											"key": "limit",
+											"value": "2",
+											"description": "Number of maximum results. (example: 2)",
+											"disabled": true
+										},
+										{
+											"key": "skip",
+											"value": "10",
+											"description": "Number of db rows skipped. (example: 10)",
+											"disabled": true
+										},
+										{
+											"key": "sort",
+											"value": "action",
+											"description": "Sort by any user object key (examples: created_on, action, etc.)",
+											"disabled": true
+										},
+										{
+											"key": "sortdir",
+											"value": "DESC",
+											"description": "Sort direction (example ascending order: ASC)",
+											"disabled": true
+										},
+										{
+											"key": "selfexclusion",
+											"value": "true",
+											"description": "Excludes audits with the same by_user_id.",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "bf1b1e49-a105-43dc-b9a2-32c69a17fb5f",
+											"description": "Id of user that committed the action."
+										}
+									]
+								},
+								"description": "Gets audits by of_user id.\n\n##### Filter Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |\n| created_on | *optional* (example:  created_on>=2021-06-09) |\n| action | *optional* (example:  action=CREATE) |\n| subaction | *optional* (example:  subaction=USER) |\n| prop | *optional* (example:  prop=email) |\n| old_val | *optional* (example:  old_val=swagger@email.69) |\n| new_val | *optional* (example:  new_val=leet@teel.com) |"
+							},
+							"response": []
+						},
+						{
 							"name": "ByUser ID",
 							"request": {
 								"method": "GET",
@@ -9451,6 +9527,76 @@
 										{
 											"key": "id",
 											"value": "44aa2ae6-22e9-43ef-a6d3-3d7d39e78064",
+											"description": "Id of user that committed the action."
+										}
+									]
+								},
+								"description": "Gets audits by by_user id.\n\n##### Filter Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |\n| created_on | *optional* (example:  created_on>=2021-06-09) |\n| action | *optional* (example:  action=CREATE) |\n| subaction | *optional* (example:  subaction=USER) |\n| prop | *optional* (example:  prop=email) |\n| old_val | *optional* (example:  old_val=swagger@email.69) |\n| new_val | *optional* (example:  new_val=leet@teel.com) |"
+							},
+							"response": []
+						},
+						{
+							"name": "Count ByUser ID",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer",
+										"description": "The client_credentials generated OAUth2 access token.",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{TRAVELLING}}/api/v1/audit/count/user/byuser/:id?filter=created_on>2023-01-03,created_on<2023-06-06&limit=2&skip=1&sort=created_on&sortdir=ASC&selfexclusion=true",
+									"host": [
+										"{{TRAVELLING}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"audit",
+										"count",
+										"user",
+										"byuser",
+										":id"
+									],
+									"query": [
+										{
+											"key": "filter",
+											"value": "created_on>2023-01-03,created_on<2023-06-06",
+											"description": "Filter parameters (example: action=CREATE,subaction=USER,created_on>2021-06-03,created_on<2021-06-06)"
+										},
+										{
+											"key": "limit",
+											"value": "2",
+											"description": "Number of maximum results. (example: 2)"
+										},
+										{
+											"key": "skip",
+											"value": "1",
+											"description": "Number of db rows skipped. (example: 10)"
+										},
+										{
+											"key": "sort",
+											"value": "created_on",
+											"description": "Sort by any user object key (examples: created_on, action, etc.)"
+										},
+										{
+											"key": "sortdir",
+											"value": "ASC",
+											"description": "Sort direction (example ascending order: ASC)"
+										},
+										{
+											"key": "selfexclusion",
+											"value": "true",
+											"description": "Excludes audits with the same of_user_id."
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "bf1b1e49-a105-43dc-b9a2-32c69a17fb5f",
 											"description": "Id of user that committed the action."
 										}
 									]

@@ -261,6 +261,26 @@ module.exports = () => {
       });
     });
 
+    describe('Valid Count OfUser', () => {
+      test('Get Audit by Test User (No Query Params)', async () => {
+        testUser1 = await User.findAllBy({ username: 'test' });
+
+        const res = await Travelling.Audit.User.countOfuserId(
+          testUser1[0].id,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          userContainer.user1Token
+        );
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body.count).toBeGreaterThanOrEqual(1);
+      });
+    });
+
     describe('Valid OfUser', () => {
       var testUser1;
 
@@ -582,6 +602,26 @@ module.exports = () => {
         expect(audit[4].prop).toEqual('user_data');
         expect(audit[4].old_val).toMatch('{"test":1,"foo":"bar"}');
         expect(audit[4].new_val).toMatch('{"notes":"notey totey"}');
+      });
+    });
+
+    describe('Valid Count ByUser', () => {
+      test('Get Audit by Test User (No Query Params)', async () => {
+        testUser1 = await User.findAllBy({ username: 'test' });
+
+        const res = await Travelling.Audit.User.countByuserId(
+          testUser1[0].id,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          userContainer.user1Token
+        );
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body.count).toBeGreaterThanOrEqual(1);
       });
     });
 
