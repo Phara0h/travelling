@@ -261,7 +261,7 @@ module.exports = () => {
       });
     });
 
-    describe('Valid Count ByUser', () => {
+    describe('Valid Count OfUser', () => {
       test('Get Audit by Test User (No Query Params)', async () => {
         testUser1 = await User.findAllBy({ username: 'test' });
 
