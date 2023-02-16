@@ -1,6 +1,14 @@
 
 
+#### [v3.1.1](https://github.com/Trazi-Ventures/travelling/compare/v3.1.0...v3.1.1)
+
+- Feature #48 Audits of and by user count endpoints [`#31`](https://github.com/Trazi-Ventures/travelling/pull/31)
+- typo fix [`f2e7493`](https://github.com/Trazi-Ventures/travelling/commit/f2e7493122191b1a2bc7ff6ebdcfc030088fb6ad)
+- Add audits counts endpoints [`1016a5d`](https://github.com/Trazi-Ventures/travelling/commit/1016a5d2be85f9554da2d5d04a7ddb099495056a)
+
 #### [v3.1.0](https://github.com/Trazi-Ventures/travelling/compare/v3.0.7...v3.1.0)
+
+> 10 February 2023
 
 - Added Routes check for bulk permission checking [`05a6c27`](https://github.com/Trazi-Ventures/travelling/commit/05a6c27ade2296111181c83685e6af75316c7a16)
 
