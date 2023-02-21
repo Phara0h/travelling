@@ -52,7 +52,7 @@ var loginRoute = async (req, res) => {
       return;
     }
 
-    var isValid = await checkValidUser(req.body);
+    var isValid = await checkValidUser(req.body, false);
 
     if (isValid !== true) {
       res.code(400);
@@ -108,7 +108,7 @@ var registerRoute = async (req, res) => {
     (!req.body.username && config.user.username.enabled)
   ) {
     res.code(400);
-    config.log.logger.debug(helpers.text(`User is not valid ${Object.values(req.body)}`,req.span));
+    config.log.logger.debug(helpers.text(`User is not valid ${Object.values(req.body)}`, req.span));
     return {
       type: 'register-error',
       msg: 'A valid username, password and email are required.'
@@ -117,7 +117,7 @@ var registerRoute = async (req, res) => {
 
   if (isValid !== true) {
     res.code(400);
-    config.log.logger.debug(helpers.text(`User is not valid ${Object.values(req.body)}`,req.span));
+    config.log.logger.debug(helpers.text(`User is not valid ${Object.values(req.body)}`, req.span));
     return isValid;
   }
 
@@ -147,7 +147,9 @@ var registerRoute = async (req, res) => {
     getPersonalInfo(req.body)
   );
 
-  config.log.logger.info(helpers.text(`New User Created: ${username || ''}(${email})[${domain}] | ${parse.getIp(req)}`,req.span));
+  config.log.logger.info(
+    helpers.text(`New User Created: ${username || ''}(${email})[${domain}] | ${parse.getIp(req)}`, req.span)
+  );
 
   if (config.email.send.onNewUser === true && email) {
     await Email.sendWelcome(user);
