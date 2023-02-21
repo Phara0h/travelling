@@ -21,7 +21,7 @@ module.exports = () => {
         }
       );
 
-      expect(res.body.type).toEqual('login-session-error');
+      expect(res.body.msg).toEqual('Access Granted');
     });
 
     test('Login with Test2 User Again After Session Expires 4 Seconds', async () => {
