@@ -79,7 +79,7 @@ module.exports = () => {
       );
 
       console.log(res);
-      expect(res.body.type).toEqual('login-session-error');
+      expect(res.body.msg).toEqual('Access Granted');
     });
 
     test('Login with Test3 User [Locked]', async () => {
