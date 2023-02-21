@@ -27,7 +27,7 @@ const utilsUser = {
         msg: 'Must be a real email'
       };
 
-      if (!validateEmail) {
+      if (validateEmail) {
         if (config.email.validation.external.enable) {
           try {
             await Fasquest.request({
