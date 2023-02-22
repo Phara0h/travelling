@@ -12,13 +12,7 @@ var logout = (req, res, oldspan) => {
 
   req.sessionStore.destroy(req.session.sessionId);
   CookieToken.removeAuthCookie(res, span);
-  res.setCookie('trav:ssid', null, {
-    expires: Date.now(),
-    httpOnly: true,
-    secure: config.https,
-    domain: config.cookie.domain,
-    path: '/'
-  });
+
   req.isAuthenticated = false;
   if (span) {
     span.end();
