@@ -4,13 +4,9 @@ const regex = require('./regex');
 const Fasquest = require('fasquest');
 const User = require('../database/models/user');
 const userSchema = new User()._defaultModel;
-const {
-  getByZip,
-  validZip,
-  validState
-} = (require("zcs")).zcs({});
+const { getByZip, validZip, validState } = require('zcs').zcs({});
 const utilsUser = {
-  checkValidUser: async function checkValidUser(user) {
+  checkValidUser: async function checkValidUser(user, validateEmail = true) {
     if (!user) {
       return {
         type: 'body-error',
@@ -31,21 +27,23 @@ const utilsUser = {
         msg: 'Must be a real email'
       };
 
-      if (config.email.validation.external.enable) {
-        try {
-          await Fasquest.request({
-            method: config.email.validation.external.method,
-            uri:
-              config.email.validation.external.endpoint +
-              (config.email.validation.external.emailInEndpoint ? user.email : ''),
-            body: config.email.validation.external.emailInBody ? user.email : null,
-            resolveWithFullResponse: true
-          });
-        } catch (error) {
+      if (validateEmail) {
+        if (config.email.validation.external.enable) {
+          try {
+            await Fasquest.request({
+              method: config.email.validation.external.method,
+              uri:
+                config.email.validation.external.endpoint +
+                (config.email.validation.external.emailInEndpoint ? user.email : ''),
+              body: config.email.validation.external.emailInBody ? user.email : null,
+              resolveWithFullResponse: true
+            });
+          } catch (error) {
+            return emailError;
+          }
+        } else if (regex.email.exec(user.email.toLowerCase()) == null) {
           return emailError;
         }
-      } else if (regex.email.exec(user.email.toLowerCase()) == null) {
-        return emailError;
       }
     }
 
@@ -310,8 +308,8 @@ const utilsUser = {
 
     if (props.zip !== undefined) {
       user.zip = props.zip;
-      if(!user.city || !user.state) {
-        const {state, city} = getByZip(user.zip);
+      if (!user.city || !user.state) {
+        const { state, city } = getByZip(user.zip);
         user.city = city;
         user.state = state;
       }
