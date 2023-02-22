@@ -3855,7 +3855,15 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v3.1.3](https://github.com/Trazi-Ventures/travelling/compare/v3.1.2...v3.1.3)
+
+- Fix #75 email lowercase bugs [`#33`](https://github.com/Trazi-Ventures/travelling/pull/33)
+- Merge pull request #33 from Trazi-Ventures/fix-#75-email-lowercase-bugs [`#75`](https://github.com/Trazi-Ventures/travelling/issues/75)
+- update email lowercase placement [`a9344ed`](https://github.com/Trazi-Ventures/travelling/commit/a9344edd8c35c078b7f79e6a5d1008fe8cfce40f)
+
 #### [v3.1.2](https://github.com/Trazi-Ventures/travelling/compare/v3.1.1...v3.1.2)
+
+> 22 February 2023
 
 - Feature #82 reissue cookies on login [`#32`](https://github.com/Trazi-Ventures/travelling/pull/32)
 - fix #84 update conditional [`#84`](https://github.com/Trazi-Ventures/travelling/issues/84)
