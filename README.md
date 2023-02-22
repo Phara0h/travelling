@@ -3855,7 +3855,18 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v3.1.2](https://github.com/Dragohm/travelling/compare/v3.1.1...v3.1.2)
+
+- Feature #82 reissue cookies on login [`#32`](https://github.com/Dragohm/travelling/pull/32)
+- fix #84 update conditional [`#84`](https://github.com/Dragohm/travelling/issues/84)
+- Fixes #80 and #84 [`#80`](https://github.com/Dragohm/travelling/issues/80)
+- opt [`87eb041`](https://github.com/Dragohm/travelling/commit/87eb0412cf39311240acd70b4fdeaeca0f90e8a8)
+- feature #82 reissue cookies on login [`4106d8a`](https://github.com/Dragohm/travelling/commit/4106d8a48aca2286846e7d195d0e6dd779083de4)
+- Update package.json [`c6947ec`](https://github.com/Dragohm/travelling/commit/c6947ec49bdd02fb141e0391fb6bd7772fe3ff1b)
+
 #### [v3.1.1](https://github.com/Dragohm/travelling/compare/v3.1.0...v3.1.1)
+
+> 16 February 2023
 
 - Feature #48 Audits of and by user count endpoints [`#31`](https://github.com/Dragohm/travelling/pull/31)
 - typo fix [`f2e7493`](https://github.com/Dragohm/travelling/commit/f2e7493122191b1a2bc7ff6ebdcfc030088fb6ad)
