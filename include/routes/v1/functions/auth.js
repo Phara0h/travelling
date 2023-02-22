@@ -84,17 +84,6 @@ var registerRoute = async (req, res) => {
   //     });
   //     return;
   // }
-  req.body.domain = req.params.domain || 'default';
-  if (req.query.randomPassword === 'true') {
-    req.body.password = generateRandomPassword(config.password.maxchar, 3, req.span);
-  }
-
-  var isValid = await checkValidUser(req.body);
-
-  if (isValid === true) {
-    isValid = await Database.checkDupe(req.body);
-  }
-
   if (
     (!req.body.password && req.query.randomPassword !== 'true') ||
     !req.body.email ||
@@ -106,6 +95,23 @@ var registerRoute = async (req, res) => {
       type: 'register-error',
       msg: 'A valid username, password and email are required.'
     };
+  }
+
+  req.body.domain = req.params.domain || 'default';
+  req.body.email = req.body.email.toLowerCase();
+
+  if (config.user.username.enabled) {
+    req.body.username = req.body.username.toLowerCase();
+  }
+
+  if (req.query.randomPassword === 'true') {
+    req.body.password = generateRandomPassword(config.password.maxchar, 3, req.span);
+  }
+
+  var isValid = await checkValidUser(req.body);
+
+  if (isValid === true) {
+    isValid = await Database.checkDupe(req.body);
   }
 
   if (isValid !== true) {
@@ -176,6 +182,8 @@ async function forgotPasswordRoute(req, res, sendemail = true) {
       msg: 'A valid email is required.'
     };
   }
+
+  req.body.email = req.body.email.toLowerCase();
 
   var isValid = await checkValidUser(req.body, false);
 
