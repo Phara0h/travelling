@@ -112,7 +112,7 @@ BaseModel.findAllByFilter = async function ({
     query += `${keys.length > 0 ? ' AND ' : ' WHERE '} ${additionalFilter} `;
   }
 
-  if (sort && regex.safeName.exec(sort) != null) {
+  if (sort && regex.safeName.exec(sort) != null && this._defaultModel[sort] !== undefined) {
     query += ' ORDER BY ' + sort + ' ' + (sortdir == 'ASC' ? 'ASC' : 'DESC');
   }
 
@@ -153,12 +153,12 @@ BaseModel.findAllByFilter = async function ({
       delete rows[i].password;
       delete rows[i].eprofile;
 
-      const keys = Object.keys(rows[i])
+      const keys = Object.keys(rows[i]);
 
       // Delete rows that begin with '__'
       for (var j = 0; j < keys.length; j++) {
         if (keys[j] && keys[j][0] + keys[j][1] === '__') {
-          delete rows[i][keys[j]]
+          delete rows[i][keys[j]];
         }
       }
     }

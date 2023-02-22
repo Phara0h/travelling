@@ -125,9 +125,9 @@ class CookieToken {
     if (oldspan) {
       span = req.startSpan('removeAuthCookie', oldspan);
     }
-
+    const expires = Date.now();
     res.setCookie('trav:tok', null, {
-      expires: Date.now(),
+      expires,
       secure: config.https,
       httpOnly: true,
       domain: config.cookie.domain,
@@ -135,14 +135,22 @@ class CookieToken {
     });
 
     if (config.cookie.token.checkable === true) {
-      res.setCookie('trav:ls', 1, {
-        expires: Date.now(),
+      res.setCookie('trav:ls', null, {
+        expires,
         secure: config.https,
         httpOnly: false,
         domain: config.cookie.domain,
         path: '/'
       });
     }
+
+    res.setCookie('trav:ssid', null, {
+      expires,
+      httpOnly: true,
+      secure: config.https,
+      domain: config.cookie.domain,
+      path: '/'
+    });
 
     if (span) {
       span.end();

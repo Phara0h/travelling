@@ -14,70 +14,63 @@ const helpers = require('../../../server/tracing/helpers')();
 
 /** Validates and Authenticates user credentials. */
 var loginRoute = async (req, res) => {
-  if (req.isAuthenticated) {
-    res.code(200).send({
-      type: 'login-session-error',
-      msg: 'Logged in already.'
+  if (!req.body) {
+    res.code(400).send({
+      type: 'body-login-error',
+      msg: 'No body sent with request'
     });
+    return;
+  }
+
+  var username;
+  var email;
+  var domain;
+
+  if (req.body.username) {
+    username = req.body.username = req.body.username.toLowerCase();
+  }
+
+  if (req.body.email) {
+    email = req.body.email = req.body.email.toLowerCase();
+  }
+
+  if (req.params.domain) {
+    domain = req.params.domain.toLowerCase();
+  }
+
+  if ((!req.body.email && !req.body.username) || !req.body.password) {
+    res.code(400).send({
+      type: 'body-login-error',
+      msg: 'A valid username or email and password is required.'
+    });
+    return;
+  }
+
+  var isValid = await checkValidUser(req.body, false);
+
+  if (isValid !== true) {
+    res.code(400);
+    return isValid;
   } else {
-    if (!req.body) {
-      res.code(400).send({
-        type: 'body-login-error',
-        msg: 'No body sent with request'
-      });
-      return;
-    }
+    try {
+      var user = await Database.checkAuth(username, email, req.body.password, domain, parse.getIp(req), req);
 
-    var username;
-    var email;
-    var domain;
-
-    if (req.body.username) {
-      username = req.body.username = req.body.username.toLowerCase();
-    }
-
-    if (req.body.email) {
-      email = req.body.email = req.body.email.toLowerCase();
-    }
-
-    if (req.params.domain) {
-      domain = req.params.domain.toLowerCase();
-    }
-
-    if ((!req.body.email && !req.body.username) || !req.body.password) {
-      res.code(400).send({
-        type: 'body-login-error',
-        msg: 'A valid username or email and password is required.'
-      });
-      return;
-    }
-
-    var isValid = await checkValidUser(req.body);
-
-    if (isValid !== true) {
-      res.code(400);
-      return isValid;
-    } else {
-      try {
-        var user = await Database.checkAuth(username, email, req.body.password, domain, parse.getIp(req), req);
-
-        return await login(user.user, req, res);
-      } catch (e) {
-        if (e.err && e.err.msg) {
-          config.log.logger.debug(e.err, e.user ? e.user._ : null);
-          config.log.logger.info(`Failed Auth (${e.err.msg}): ${username}, ${email}, ${domain}`);
-        } else {
-          config.log.logger.debug(e);
-        }
-
-        res.code(400);
-        return e.err && e.err.type == 'locked'
-          ? { type: e.err.type, msg: e.err.msg, email: e.email }
-          : {
-              type: 'login-error',
-              msg: 'Invalid login'
-            };
+      return await login(user.user, req, res);
+    } catch (e) {
+      if (e.err && e.err.msg) {
+        config.log.logger.debug(e.err, e.user ? e.user._ : null);
+        config.log.logger.info(`Failed Auth (${e.err.msg}): ${username}, ${email}, ${domain}`);
+      } else {
+        config.log.logger.debug(e);
       }
+
+      res.code(400);
+      return e.err && e.err.type == 'locked'
+        ? { type: e.err.type, msg: e.err.msg, email: e.email }
+        : {
+            type: 'login-error',
+            msg: 'Invalid login'
+          };
     }
   }
 };
@@ -108,7 +101,7 @@ var registerRoute = async (req, res) => {
     (!req.body.username && config.user.username.enabled)
   ) {
     res.code(400);
-    config.log.logger.debug(helpers.text(`User is not valid ${Object.values(req.body)}`,req.span));
+    config.log.logger.debug(helpers.text(`User is not valid ${Object.values(req.body)}`, req.span));
     return {
       type: 'register-error',
       msg: 'A valid username, password and email are required.'
@@ -117,7 +110,7 @@ var registerRoute = async (req, res) => {
 
   if (isValid !== true) {
     res.code(400);
-    config.log.logger.debug(helpers.text(`User is not valid ${Object.values(req.body)}`,req.span));
+    config.log.logger.debug(helpers.text(`User is not valid ${Object.values(req.body)}`, req.span));
     return isValid;
   }
 
@@ -147,7 +140,9 @@ var registerRoute = async (req, res) => {
     getPersonalInfo(req.body)
   );
 
-  config.log.logger.info(helpers.text(`New User Created: ${username || ''}(${email})[${domain}] | ${parse.getIp(req)}`,req.span));
+  config.log.logger.info(
+    helpers.text(`New User Created: ${username || ''}(${email})[${domain}] | ${parse.getIp(req)}`, req.span)
+  );
 
   if (config.email.send.onNewUser === true && email) {
     await Email.sendWelcome(user);
