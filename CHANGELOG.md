@@ -1,6 +1,12 @@
 
 
+#### [v3.1.4](https://github.com/Dragohm/travelling/compare/v3.1.3...v3.1.4)
+
+- Update cookietoken.js [`948f326`](https://github.com/Dragohm/travelling/commit/948f3267ca797b279667187b49a4229f299eed01)
+
 #### [v3.1.3](https://github.com/Dragohm/travelling/compare/v3.1.2...v3.1.3)
+
+> 22 February 2023
 
 - Fix #75 email lowercase bugs [`#33`](https://github.com/Dragohm/travelling/pull/33)
 - Merge pull request #33 from Dragohm/fix-#75-email-lowercase-bugs [`#75`](https://github.com/Dragohm/travelling/issues/75)
