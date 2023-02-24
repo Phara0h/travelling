@@ -4,7 +4,7 @@ const crypto = require('crypto');
 const encryptKey = crypto.scryptSync(config.cookie.token.secret, config.cookie.token.salt, 32);
 
 const User = require('../database/models/user');
-
+const helpers = require('../server/tracing/helpers')();
 class CookieToken {
   constructor() {}
 
@@ -57,6 +57,7 @@ class CookieToken {
             span.end();
           }
 
+          /* Ending the span. */
           return false;
         } else {
           if (user.length > 1) {
@@ -122,9 +123,10 @@ class CookieToken {
   static removeAuthCookie(res, oldspan) {
     var span;
 
-    if (oldspan) {
-      span = req.startSpan('removeAuthCookie', oldspan);
+    if (oldspan && helpers) {
+      span = helpers.startSpan('removeAuthCookie', oldspan);
     }
+
     const expires = Date.now();
     res.setCookie('trav:tok', null, {
       expires,
