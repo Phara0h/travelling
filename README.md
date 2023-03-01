@@ -3855,7 +3855,13 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v3.1.5](https://github.com/Trazi-Ventures/travelling/compare/v3.1.4...v3.1.5)
+
+- Fixed routes endpoint and cookies on ip hijack [`cd03830`](https://github.com/Trazi-Ventures/travelling/commit/cd038302e2ddd6e9ddb65becc19c2bc4e34eb0fd)
+
 #### [v3.1.4](https://github.com/Trazi-Ventures/travelling/compare/v3.1.3...v3.1.4)
+
+> 24 February 2023
 
 - Update cookietoken.js [`948f326`](https://github.com/Trazi-Ventures/travelling/commit/948f3267ca797b279667187b49a4229f299eed01)
 
