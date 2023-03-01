@@ -40,6 +40,11 @@ class CookieToken {
           config.log.logger.warn(
             helpers.text(`IP Hijack Detected": (${cred[0]}, ${cred[1]}) ${cred[4]} =/= ${ip}`, span)
           );
+        }
+
+        this.removeAuthCookie(res, span)
+        
+        if(span) {
           span.end();
         }
 
