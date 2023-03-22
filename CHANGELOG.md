@@ -1,6 +1,12 @@
 
 
+#### [v3.2.1](https://github.com/Trazi-Ventures/travelling/compare/v3.2.0...v3.2.1)
+
+- Update package.json [`e34774f`](https://github.com/Trazi-Ventures/travelling/commit/e34774f2cc05617d3b97aa2cf8bd4d5b949f2f02)
+
 #### [v3.2.0](https://github.com/Trazi-Ventures/travelling/compare/v3.1.5...v3.2.0)
+
+> 22 March 2023
 
 - Feature #83 Whitelist filter range operators [`#35`](https://github.com/Trazi-Ventures/travelling/pull/35)
 - Feature #85 User Data allow more special chars [`#34`](https://github.com/Trazi-Ventures/travelling/pull/34)
