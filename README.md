@@ -949,13 +949,15 @@ byActionAndSubaction - Gets audits by action and subaction type.
 
 ##### Filter Params
 
+\*Note: you can only use range operators (<,B >,B >=,B <=) on the following columns: created_on.
+
 | Param | Description |
 | --- | --- |
-| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
-| created_on | *optional* (example:  created_on>=2021-06-09) |
-| prop | *optional* (example: prop=email) |
-| old_val | *optional* (example:  old_val=swagger@email.69) |
-| new_val | *optional* (example:  new_val=leet@teel.com) |
+| id | _optional_ (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | _optional_ (example: created_on>=2021-06-09) |
+| prop | _optional_ (example: prop=email) |
+| old_val | _optional_ (example: old_val=swagger@email.69) |
+| new_val | _optional_ (example: new_val=leet@teel.com) |
 
 Path: api/v1/audit/action/:action/subaction/:subaction
 
@@ -980,13 +982,15 @@ bySubaction - Gets audits by subaction type.
 
 ##### Filter Params
 
+\*Note: you can only use range operators (<,B >,B >=,B <=) on the following columns: created_on.
+
 | Param | Description |
 | --- | --- |
-| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
-| created_on | *optional* (example:  created_on>=2021-06-09) |
-| prop | *optional* (example: prop=email) |
-| old_val | *optional* (example:  old_val=swagger@email.69) |
-| new_val | *optional* (example:  new_val=leet@teel.com) |
+| id | _optional_ (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | _optional_ (example: created_on>=2021-06-09) |
+| prop | _optional_ (example: prop=email) |
+| old_val | _optional_ (example: old_val=swagger@email.69) |
+| new_val | _optional_ (example: new_val=leet@teel.com) |
 
 Path: api/v1/audit/subaction/:subaction
 
@@ -1010,13 +1014,15 @@ byAction - Gets audits by action type.
 
 ##### Filter Params
 
+\*Note: you can only use range operators (<,B >,B >=,B <=) on the following columns: created_on.
+
 | Param | Description |
 | --- | --- |
-| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
-| created_on | *optional* (example:  created_on>=2021-06-09) |
-| prop | *optional* (example: prop=email) |
-| old_val | *optional* (example:  old_val=swagger@email.69) |
-| new_val | *optional* (example:  new_val=leet@teel.com) |
+| id | _optional_ (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | _optional_ (example: created_on>=2021-06-09) |
+| prop | _optional_ (example: prop=email) |
+| old_val | _optional_ (example: old_val=swagger@email.69) |
+| new_val | _optional_ (example: new_val=leet@teel.com) |
 
 Path: api/v1/audit/action/:action
 
@@ -1051,15 +1057,17 @@ countByuserId - Gets audits by by_user id.
 
 ##### Filter Params
 
+\*Note: you can only use range operators (<,B >,B >=,B <=) on the following columns: created_on.
+
 | Param | Description |
 | --- | --- |
-| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
-| created_on | *optional* (example:  created_on>=2021-06-09) |
-| action | *optional* (example:  action=CREATE) |
-| subaction | *optional* (example:  subaction=USER) |
-| prop | *optional* (example:  prop=email) |
-| old_val | *optional* (example:  old_val=swagger@email.69) |
-| new_val | *optional* (example:  new_val=leet@teel.com) |
+| id | _optional_ (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | _optional_ (example: created_on>=2021-06-09) |
+| action | _optional_ (example: action=CREATE) |
+| subaction | _optional_ (example: subaction=USER) |
+| prop | _optional_ (example: prop=email) |
+| old_val | _optional_ (example: old_val=swagger@email.69) |
+| new_val | _optional_ (example: new_val=leet@teel.com) |
 
 Path: api/v1/audit/count/user/byuser/:id
 
@@ -1083,15 +1091,17 @@ byuserId - Gets audits by by_user id.
 
 ##### Filter Params
 
+\*Note: you can only use range operators (<,B >,B >=,B <=) on the following columns: created_on.
+
 | Param | Description |
 | --- | --- |
-| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
-| created_on | *optional* (example:  created_on>=2021-06-09) |
-| action | *optional* (example:  action=CREATE) |
-| subaction | *optional* (example:  subaction=USER) |
-| prop | *optional* (example:  prop=email) |
-| old_val | *optional* (example:  old_val=swagger@email.69) |
-| new_val | *optional* (example:  new_val=leet@teel.com) |
+| id | _optional_ (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | _optional_ (example: created_on>=2021-06-09) |
+| action | _optional_ (example: action=CREATE) |
+| subaction | _optional_ (example: subaction=USER) |
+| prop | _optional_ (example: prop=email) |
+| old_val | _optional_ (example: old_val=swagger@email.69) |
+| new_val | _optional_ (example: new_val=leet@teel.com) |
 
 Path: api/v1/audit/user/byuser/:id
 
@@ -1116,15 +1126,17 @@ countOfuserId - Gets audits by of_user id.
 
 ##### Filter Params
 
+\*Note: you can only use range operators (<,B >,B >=,B <=) on the following columns: created_on.
+
 | Param | Description |
 | --- | --- |
-| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
-| created_on | *optional* (example:  created_on>=2021-06-09) |
-| action | *optional* (example:  action=CREATE) |
-| subaction | *optional* (example:  subaction=USER) |
-| prop | *optional* (example:  prop=email) |
-| old_val | *optional* (example:  old_val=swagger@email.69) |
-| new_val | *optional* (example:  new_val=leet@teel.com) |
+| id | _optional_ (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | _optional_ (example: created_on>=2021-06-09) |
+| action | _optional_ (example: action=CREATE) |
+| subaction | _optional_ (example: subaction=USER) |
+| prop | _optional_ (example: prop=email) |
+| old_val | _optional_ (example: old_val=swagger@email.69) |
+| new_val | _optional_ (example: new_val=leet@teel.com) |
 
 Path: api/v1/audit/count/user/ofuser/:id
 
@@ -1148,15 +1160,17 @@ ofuserId - Gets audits by of_user id.
 
 ##### Filter Params
 
+\*Note: you can only use range operators (<,B >,B >=,B <=) on the following columns: created_on.
+
 | Param | Description |
 | --- | --- |
-| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
-| created_on | *optional* (example:  created_on>=2021-06-09) |
-| action | *optional* (example:  action=CREATE) |
-| subaction | *optional* (example:  subaction=USER) |
-| prop | *optional* (example:  prop=email) |
-| old_val | *optional* (example:  old_val=swagger@email.69) |
-| new_val | *optional* (example:  new_val=leet@teel.com) |
+| id | _optional_ (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | _optional_ (example: created_on>=2021-06-09) |
+| action | _optional_ (example: action=CREATE) |
+| subaction | _optional_ (example: subaction=USER) |
+| prop | _optional_ (example: prop=email) |
+| old_val | _optional_ (example: old_val=swagger@email.69) |
+| new_val | _optional_ (example: new_val=leet@teel.com) |
 
 Path: api/v1/audit/user/ofuser/:id
 
@@ -1740,22 +1754,24 @@ count - Gets all the users that belong to the group.
 
 ##### Optional Query Params
 
+\*Note: you can only use range operators (<,B >,B >=,B <=) on the following columns: created_on, updated_on, dob.
+
 | Param | Description |
 | --- | --- |
-| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
-| username | *optional* (example:  user7) |
-| locked | *optional* (example:  true) |
-| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
-| group_request | *optional* (example:  superadmin) |
-| failed_login_attempts | *optional* (example:  0) |
-| change_username | *optional* (example:  false) |
-| change_password | *optional* (example:  false) |
-| reset_password | *optional* (example:  false) |
-| email_verify | *optional* (example:  false) |
-| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
-| email | *optional* (example:  test@test.ai) |
-| created_on | *optional* (example:  1568419646794) |
-| last_login | *optional* (example:  null) |
+| id | _optional_ (example: 26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | _optional_ (example: user7) |
+| locked | _optional_ (example: true) |
+| locked_reason | _optional_ (example: Activation Required email your admin to get your account activated) |
+| group_request | _optional_ (example: superadmin) |
+| failed_login_attempts | _optional_ (example: 0) |
+| change_username | _optional_ (example: false) |
+| change_password | _optional_ (example: false) |
+| reset_password | _optional_ (example: false) |
+| email_verify | _optional_ (example: false) |
+| group_id | _optional_ (example: 7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | _optional_ (example: [test@test.ai](mailto:test@test.ai)) |
+| created_on | _optional_ (example: 1568419646794) |
+| last_login | _optional_ (example: null) |
 
 Path: api/v1/group/id/:id/users/count
 
@@ -1776,22 +1792,24 @@ get - Gets all the users that belong to the group.
 
 ##### Optional Query Params
 
+\*Note: you can only use range operators (<,B >,B >=,B <=) on the following columns: created_on, updated_on, dob.
+
 | Param | Description |
 | --- | --- |
-| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
-| username | *optional* (example:  user7) |
-| locked | *optional* (example:  true) |
-| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
-| group_request | *optional* (example:  superadmin) |
-| failed_login_attempts | *optional* (example:  0) |
-| change_username | *optional* (example:  false) |
-| change_password | *optional* (example:  false) |
-| reset_password | *optional* (example:  false) |
-| email_verify | *optional* (example:  false) |
-| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
-| email | *optional* (example:  test@test.ai) |
-| created_on | *optional* (example:  1568419646794) |
-| last_login | *optional* (example:  null) |
+| id | _optional_ (example: 26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | _optional_ (example: user7) |
+| locked | _optional_ (example: true) |
+| locked_reason | _optional_ (example: Activation Required email your admin to get your account activated) |
+| group_request | _optional_ (example: superadmin) |
+| failed_login_attempts | _optional_ (example: 0) |
+| change_username | _optional_ (example: false) |
+| change_password | _optional_ (example: false) |
+| reset_password | _optional_ (example: false) |
+| email_verify | _optional_ (example: false) |
+| group_id | _optional_ (example: 7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | _optional_ (example: [test@test.ai](mailto:test@test.ai)) |
+| created_on | _optional_ (example: 1568419646794) |
+| last_login | _optional_ (example: null) |
 
 Path: api/v1/group/id/:id/users
 
@@ -2255,26 +2273,28 @@ Path: api/v1/group/id/:id/type/:type/users/inherited
 <a name="GroupTypeUsers.count"></a>
 
 ### GroupTypeUsers.count(id, type, filter, limit, skip, authorization_bearer)
-count - Gets all the users that belong to the group  of a particular type by its name or id.
+count - Gets all the users that belong to the group of a particular type by its name or id.
 
 ##### Optional Query Params
 
+\*Note: you can only use range operators (<,B >,B >=,B <=) on the following columns: created_on, updated_on, dob.
+
 | Param | Description |
 | --- | --- |
-| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
-| username | *optional* (example:  user7) |
-| locked | *optional* (example:  true) |
-| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
-| group_request | *optional* (example:  superadmin) |
-| failed_login_attempts | *optional* (example:  0) |
-| change_username | *optional* (example:  false) |
-| change_password | *optional* (example:  false) |
-| reset_password | *optional* (example:  false) |
-| email_verify | *optional* (example:  false) |
-| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
-| email | *optional* (example:  test@test.ai) |
-| created_on | *optional* (example:  1568419646794) |
-| last_login | *optional* (example:  null) |
+| id | _optional_ (example: 26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | _optional_ (example: user7) |
+| locked | _optional_ (example: true) |
+| locked_reason | _optional_ (example: Activation Required email your admin to get your account activated) |
+| group_request | _optional_ (example: superadmin) |
+| failed_login_attempts | _optional_ (example: 0) |
+| change_username | _optional_ (example: false) |
+| change_password | _optional_ (example: false) |
+| reset_password | _optional_ (example: false) |
+| email_verify | _optional_ (example: false) |
+| group_id | _optional_ (example: 7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | _optional_ (example: [test@test.ai](mailto:test@test.ai)) |
+| created_on | _optional_ (example: 1568419646794) |
+| last_login | _optional_ (example: null) |
 
 Path: api/v1/group/id/:id/type/:type/users/count
 
@@ -2292,26 +2312,28 @@ Path: api/v1/group/id/:id/type/:type/users/count
 <a name="GroupTypeUsers.get"></a>
 
 ### GroupTypeUsers.get(id, type, filter, limit, skip, sort, sortdir, authorization_bearer)
-get - Gets all the users that belong to the group  of a particular type by its name or id.
+get - Gets all the users that belong to the group of a particular type by its name or id.
 
 ##### Optional Query Params
 
+\*Note: you can only use range operators (<,B >,B >=,B <=) on the following columns: created_on, updated_on, dob.
+
 | Param | Description |
 | --- | --- |
-| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
-| username | *optional* (example:  user7) |
-| locked | *optional* (example:  true) |
-| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
-| group_request | *optional* (example:  superadmin) |
-| failed_login_attempts | *optional* (example:  0) |
-| change_username | *optional* (example:  false) |
-| change_password | *optional* (example:  false) |
-| reset_password | *optional* (example:  false) |
-| email_verify | *optional* (example:  false) |
-| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
-| email | *optional* (example:  test@test.ai) |
-| created_on | *optional* (example:  1568419646794) |
-| last_login | *optional* (example:  null) |
+| id | _optional_ (example: 26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | _optional_ (example: user7) |
+| locked | _optional_ (example: true) |
+| locked_reason | _optional_ (example: Activation Required email your admin to get your account activated) |
+| group_request | _optional_ (example: superadmin) |
+| failed_login_attempts | _optional_ (example: 0) |
+| change_username | _optional_ (example: false) |
+| change_password | _optional_ (example: false) |
+| reset_password | _optional_ (example: false) |
+| email_verify | _optional_ (example: false) |
+| group_id | _optional_ (example: 7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | _optional_ (example: [test@test.ai](mailto:test@test.ai)) |
+| created_on | _optional_ (example: 1568419646794) |
+| last_login | _optional_ (example: null) |
 
 Path: api/v1/group/id/:id/type/:type/users
 
@@ -2637,22 +2659,24 @@ count - Gets all the users
 
 ##### Optional Query Params
 
+\*Note: you can only use range operators (<,B >,B >=,B <=) on the following columns: created_on, updated_on, dob.
+
 | Param | Description |
 | --- | --- |
-| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
-| username | *optional* (example:  user7) |
-| locked | *optional* (example:  true) |
-| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
-| group_request | *optional* (example:  superadmin) |
-| failed_login_attempts | *optional* (example:  0) |
-| change_username | *optional* (example:  false) |
-| change_password | *optional* (example:  false) |
-| reset_password | *optional* (example:  false) |
-| email_verify | *optional* (example:  false) |
-| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
-| email | *optional* (example:  test@test.ai) |
-| created_on | *optional* (example:  1568419646794) |
-| last_login | *optional* (example:  null) |
+| id | _optional_ (example: 26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | _optional_ (example: user7) |
+| locked | _optional_ (example: true) |
+| locked_reason | _optional_ (example: Activation Required email your admin to get your account activated) |
+| group_request | _optional_ (example: superadmin) |
+| failed_login_attempts | _optional_ (example: 0) |
+| change_username | _optional_ (example: false) |
+| change_password | _optional_ (example: false) |
+| reset_password | _optional_ (example: false) |
+| email_verify | _optional_ (example: false) |
+| group_id | _optional_ (example: 7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | _optional_ (example: [test@test.ai](mailto:test@test.ai)) |
+| created_on | _optional_ (example: 1568419646794) |
+| last_login | _optional_ (example: null) |
 
 Path: api/v1/users/count
 
@@ -2673,22 +2697,24 @@ get - Gets all the users
 
 ##### Filter Params
 
+\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on, updated_on, dob.
+
 | Param | Description |
 | --- | --- |
-| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
-| username | *optional* (example:  user7) |
-| locked | *optional* (example:  true) |
-| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
-| group_request | *optional* (example:  superadmin) |
-| failed_login_attempts | *optional* (example:  0) |
-| change_username | *optional* (example:  false) |
-| change_password | *optional* (example:  false) |
-| reset_password | *optional* (example:  false) |
-| email_verify | *optional* (example:  false) |
-| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
-| email | *optional* (example:  test@test.ai) |
-| created_on | *optional* (example:  1568419646794) |
-| last_login | *optional* (example:  null) |
+| id | _optional_ (example: 26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | _optional_ (example: user7) |
+| locked | _optional_ (example: true) |
+| locked_reason | _optional_ (example: Activation Required email your admin to get your account activated) |
+| group_request | _optional_ (example: superadmin) |
+| failed_login_attempts | _optional_ (example: 0) |
+| change_username | _optional_ (example: false) |
+| change_password | _optional_ (example: false) |
+| reset_password | _optional_ (example: false) |
+| email_verify | _optional_ (example: false) |
+| group_id | _optional_ (example: 7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | _optional_ (example: [test@test.ai](mailto:test@test.ai)) |
+| created_on | _optional_ (example: 1568419646794) |
+| last_login | _optional_ (example: null) |
 
 Path: api/v1/users
 
@@ -2720,22 +2746,24 @@ count - Gets all the users
 
 ##### Optional Query Params
 
+\*Note: you can only use range operators (<,B >,B >=,B <=) on the following columns: created_on, updated_on, dob.
+
 | Param | Description |
 | --- | --- |
-| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
-| username | *optional* (example:  user7) |
-| locked | *optional* (example:  true) |
-| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
-| group_request | *optional* (example:  superadmin) |
-| failed_login_attempts | *optional* (example:  0) |
-| change_username | *optional* (example:  false) |
-| change_password | *optional* (example:  false) |
-| reset_password | *optional* (example:  false) |
-| email_verify | *optional* (example:  false) |
-| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
-| email | *optional* (example:  test@test.ai) |
-| created_on | *optional* (example:  1568419646794) |
-| last_login | *optional* (example:  null) |
+| id | _optional_ (example: 26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | _optional_ (example: user7) |
+| locked | _optional_ (example: true) |
+| locked_reason | _optional_ (example: Activation Required email your admin to get your account activated) |
+| group_request | _optional_ (example: superadmin) |
+| failed_login_attempts | _optional_ (example: 0) |
+| change_username | _optional_ (example: false) |
+| change_password | _optional_ (example: false) |
+| reset_password | _optional_ (example: false) |
+| email_verify | _optional_ (example: false) |
+| group_id | _optional_ (example: 7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | _optional_ (example: [test@test.ai](mailto:test@test.ai)) |
+| created_on | _optional_ (example: 1568419646794) |
+| last_login | _optional_ (example: null) |
 
 Path: api/v1/users/domain/:domain/count
 
@@ -2757,22 +2785,24 @@ get - Gets all the users
 
 ##### Filter Params
 
+\*Note: you can only use range operators (<,B >,B >=,B <=) on the following columns: created_on, updated_on, dob.
+
 | Param | Description |
 | --- | --- |
-| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
-| username | *optional* (example:  user7) |
-| locked | *optional* (example:  true) |
-| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
-| group_request | *optional* (example:  superadmin) |
-| failed_login_attempts | *optional* (example:  0) |
-| change_username | *optional* (example:  false) |
-| change_password | *optional* (example:  false) |
-| reset_password | *optional* (example:  false) |
-| email_verify | *optional* (example:  false) |
-| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
-| email | *optional* (example:  test@test.ai) |
-| created_on | *optional* (example:  1568419646794) |
-| last_login | *optional* (example:  null) |
+| id | _optional_ (example: 26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | _optional_ (example: user7) |
+| locked | _optional_ (example: true) |
+| locked_reason | _optional_ (example: Activation Required email your admin to get your account activated) |
+| group_request | _optional_ (example: superadmin) |
+| failed_login_attempts | _optional_ (example: 0) |
+| change_username | _optional_ (example: false) |
+| change_password | _optional_ (example: false) |
+| reset_password | _optional_ (example: false) |
+| email_verify | _optional_ (example: false) |
+| group_id | _optional_ (example: 7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | _optional_ (example: [test@test.ai](mailto:test@test.ai)) |
+| created_on | _optional_ (example: 1568419646794) |
+| last_login | _optional_ (example: null) |
 
 Path: api/v1/users/domain/:domain
 
@@ -3396,6 +3426,10 @@ body
     },
     {
         "route": "/t/api/user/me/asdf"
+    },
+        {
+        "method": "*",
+        "route": "/account/api/user/me"
     }
 ]
 ```
@@ -3855,7 +3889,17 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v3.2.0](https://github.com/Trazi-Ventures/travelling/compare/v3.1.5...v3.2.0)
+
+- Feature #83 Whitelist filter range operators [`#35`](https://github.com/Trazi-Ventures/travelling/pull/35)
+- Feature #85 User Data allow more special chars [`#34`](https://github.com/Trazi-Ventures/travelling/pull/34)
+- add docs [`e646bfb`](https://github.com/Trazi-Ventures/travelling/commit/e646bfbdda9ea5cac928503f86c606edd50cdeae)
+- Whitelist db fields with op filters [`39d90df`](https://github.com/Trazi-Ventures/travelling/commit/39d90df1114eb2d7d77d1a8217cd594b8bffcbf9)
+- update regex [`b2e176d`](https://github.com/Trazi-Ventures/travelling/commit/b2e176d5f8348a47eb9d3b5bc2fecc4cd7a17546)
+
 #### [v3.1.5](https://github.com/Trazi-Ventures/travelling/compare/v3.1.4...v3.1.5)
+
+> 1 March 2023
 
 - Fixed routes endpoint and cookies on ip hijack [`cd03830`](https://github.com/Trazi-Ventures/travelling/commit/cd038302e2ddd6e9ddb65becc19c2bc4e34eb0fd)
 
