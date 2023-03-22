@@ -1,6 +1,16 @@
 
 
+#### [v3.2.0](https://github.com/Dragohm/travelling/compare/v3.1.5...v3.2.0)
+
+- Feature #83 Whitelist filter range operators [`#35`](https://github.com/Dragohm/travelling/pull/35)
+- Feature #85 User Data allow more special chars [`#34`](https://github.com/Dragohm/travelling/pull/34)
+- add docs [`e646bfb`](https://github.com/Dragohm/travelling/commit/e646bfbdda9ea5cac928503f86c606edd50cdeae)
+- Whitelist db fields with op filters [`39d90df`](https://github.com/Dragohm/travelling/commit/39d90df1114eb2d7d77d1a8217cd594b8bffcbf9)
+- update regex [`b2e176d`](https://github.com/Dragohm/travelling/commit/b2e176d5f8348a47eb9d3b5bc2fecc4cd7a17546)
+
 #### [v3.1.5](https://github.com/Dragohm/travelling/compare/v3.1.4...v3.1.5)
+
+> 1 March 2023
 
 - Fixed routes endpoint and cookies on ip hijack [`cd03830`](https://github.com/Dragohm/travelling/commit/cd038302e2ddd6e9ddb65becc19c2bc4e34eb0fd)
 
