@@ -1510,7 +1510,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "[\n    {\n        \"method\": \"GET\",\n        \"route\": \"/account/api/user/me\"\n    },\n    {\n        \"route\": \"/t/api/user/me/asdf\"\n    }\n]",
+									"raw": "[\n    {\n        \"method\": \"GET\",\n        \"route\": \"/account/api/user/me\"\n    },\n    {\n        \"route\": \"/t/api/user/me/asdf\"\n    },\n        {\n        \"method\": \"*\",\n        \"route\": \"/account/api/user/me\"\n    }\n]",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -3332,7 +3332,7 @@
 										}
 									]
 								},
-								"description": "Gets all the users\n\n##### Filter Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | *optional* (example:  user7) |\n| locked | *optional* (example:  true) |\n| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |\n| group_request | *optional* (example:  superadmin) |\n| failed_login_attempts | *optional* (example:  0) |\n| change_username | *optional* (example:  false) |\n| change_password | *optional* (example:  false) |\n| reset_password | *optional* (example:  false) |\n| email_verify | *optional* (example:  false) |\n| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | *optional* (example:  test@test.ai) |\n| created_on | *optional* (example:  1568419646794) |\n| last_login | *optional* (example:  null) |"
+								"description": "Gets all the users\n\n##### Filter Params\n\n\\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on, updated_on, dob.\n\n| Param | Description |\n| --- | --- |\n| id | _optional_ (example: 26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | _optional_ (example: user7) |\n| locked | _optional_ (example: true) |\n| locked_reason | _optional_ (example: Activation Required email your admin to get your account activated) |\n| group_request | _optional_ (example: superadmin) |\n| failed_login_attempts | _optional_ (example: 0) |\n| change_username | _optional_ (example: false) |\n| change_password | _optional_ (example: false) |\n| reset_password | _optional_ (example: false) |\n| email_verify | _optional_ (example: false) |\n| group_id | _optional_ (example: 7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | _optional_ (example: [test@test.ai](mailto:test@test.ai)) |\n| created_on | _optional_ (example: 1568419646794) |\n| last_login | _optional_ (example: null) |"
 							},
 							"response": []
 						},
@@ -3394,7 +3394,7 @@
 										}
 									]
 								},
-								"description": "Gets all the users\n\n##### Optional Query Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | *optional* (example:  user7) |\n| locked | *optional* (example:  true) |\n| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |\n| group_request | *optional* (example:  superadmin) |\n| failed_login_attempts | *optional* (example:  0) |\n| change_username | *optional* (example:  false) |\n| change_password | *optional* (example:  false) |\n| reset_password | *optional* (example:  false) |\n| email_verify | *optional* (example:  false) |\n| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | *optional* (example:  test@test.ai) |\n| created_on | *optional* (example:  1568419646794) |\n| last_login | *optional* (example:  null) |"
+								"description": "Gets all the users\n\n##### Optional Query Params\n\n\\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on, updated_on, dob.\n\n| Param | Description |\n| --- | --- |\n| id | _optional_ (example: 26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | _optional_ (example: user7) |\n| locked | _optional_ (example: true) |\n| locked_reason | _optional_ (example: Activation Required email your admin to get your account activated) |\n| group_request | _optional_ (example: superadmin) |\n| failed_login_attempts | _optional_ (example: 0) |\n| change_username | _optional_ (example: false) |\n| change_password | _optional_ (example: false) |\n| reset_password | _optional_ (example: false) |\n| email_verify | _optional_ (example: false) |\n| group_id | _optional_ (example: 7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | _optional_ (example: [test@test.ai](mailto:test@test.ai)) |\n| created_on | _optional_ (example: 1568419646794) |\n| last_login | _optional_ (example: null) |"
 							},
 							"response": []
 						}
@@ -3461,7 +3461,7 @@
 								}
 							]
 						},
-						"description": "Gets all the users\n\n##### Filter Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | *optional* (example:  user7) |\n| locked | *optional* (example:  true) |\n| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |\n| group_request | *optional* (example:  superadmin) |\n| failed_login_attempts | *optional* (example:  0) |\n| change_username | *optional* (example:  false) |\n| change_password | *optional* (example:  false) |\n| reset_password | *optional* (example:  false) |\n| email_verify | *optional* (example:  false) |\n| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | *optional* (example:  test@test.ai) |\n| created_on | *optional* (example:  1568419646794) |\n| last_login | *optional* (example:  null) |"
+						"description": "Gets all the users\n\n##### Filter Params\n\n\\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on, updated_on, dob.\n\n| Param | Description |\n| --- | --- |\n| id | _optional_ (example: 26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | _optional_ (example: user7) |\n| locked | _optional_ (example: true) |\n| locked_reason | _optional_ (example: Activation Required email your admin to get your account activated) |\n| group_request | _optional_ (example: superadmin) |\n| failed_login_attempts | _optional_ (example: 0) |\n| change_username | _optional_ (example: false) |\n| change_password | _optional_ (example: false) |\n| reset_password | _optional_ (example: false) |\n| email_verify | _optional_ (example: false) |\n| group_id | _optional_ (example: 7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | _optional_ (example: [test@test.ai](mailto:test@test.ai)) |\n| created_on | _optional_ (example: 1568419646794) |\n| last_login | _optional_ (example: null) |"
 					},
 					"response": []
 				},
@@ -3515,7 +3515,7 @@
 								}
 							]
 						},
-						"description": "Gets all the users\n\n##### Optional Query Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | *optional* (example:  user7) |\n| locked | *optional* (example:  true) |\n| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |\n| group_request | *optional* (example:  superadmin) |\n| failed_login_attempts | *optional* (example:  0) |\n| change_username | *optional* (example:  false) |\n| change_password | *optional* (example:  false) |\n| reset_password | *optional* (example:  false) |\n| email_verify | *optional* (example:  false) |\n| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | *optional* (example:  test@test.ai) |\n| created_on | *optional* (example:  1568419646794) |\n| last_login | *optional* (example:  null) |"
+						"description": "Gets all the users\n\n##### Optional Query Params\n\n\\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on, updated_on, dob.\n\n| Param | Description |\n| --- | --- |\n| id | _optional_ (example: 26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | _optional_ (example: user7) |\n| locked | _optional_ (example: true) |\n| locked_reason | _optional_ (example: Activation Required email your admin to get your account activated) |\n| group_request | _optional_ (example: superadmin) |\n| failed_login_attempts | _optional_ (example: 0) |\n| change_username | _optional_ (example: false) |\n| change_password | _optional_ (example: false) |\n| reset_password | _optional_ (example: false) |\n| email_verify | _optional_ (example: false) |\n| group_id | _optional_ (example: 7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | _optional_ (example: [test@test.ai](mailto:test@test.ai)) |\n| created_on | _optional_ (example: 1568419646794) |\n| last_login | _optional_ (example: null) |"
 					},
 					"response": []
 				},
@@ -4913,7 +4913,7 @@
 												}
 											]
 										},
-										"description": "Gets all the users that belong to the group  of a particular type by its name or id.\n\n##### Optional Query Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | *optional* (example:  user7) |\n| locked | *optional* (example:  true) |\n| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |\n| group_request | *optional* (example:  superadmin) |\n| failed_login_attempts | *optional* (example:  0) |\n| change_username | *optional* (example:  false) |\n| change_password | *optional* (example:  false) |\n| reset_password | *optional* (example:  false) |\n| email_verify | *optional* (example:  false) |\n| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | *optional* (example:  test@test.ai) |\n| created_on | *optional* (example:  1568419646794) |\n| last_login | *optional* (example:  null) |"
+										"description": "Gets all the users that belong to the group of a particular type by its name or id.\n\n##### Optional Query Params\n\n\\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on, updated_on, dob.\n\n| Param | Description |\n| --- | --- |\n| id | _optional_ (example: 26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | _optional_ (example: user7) |\n| locked | _optional_ (example: true) |\n| locked_reason | _optional_ (example: Activation Required email your admin to get your account activated) |\n| group_request | _optional_ (example: superadmin) |\n| failed_login_attempts | _optional_ (example: 0) |\n| change_username | _optional_ (example: false) |\n| change_password | _optional_ (example: false) |\n| reset_password | _optional_ (example: false) |\n| email_verify | _optional_ (example: false) |\n| group_id | _optional_ (example: 7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | _optional_ (example: [test@test.ai](mailto:test@test.ai)) |\n| created_on | _optional_ (example: 1568419646794) |\n| last_login | _optional_ (example: null) |"
 									},
 									"response": [
 										{
@@ -5029,7 +5029,7 @@
 												}
 											]
 										},
-										"description": "Gets all the users that belong to the group  of a particular type by its name or id.\n\n##### Optional Query Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | *optional* (example:  user7) |\n| locked | *optional* (example:  true) |\n| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |\n| group_request | *optional* (example:  superadmin) |\n| failed_login_attempts | *optional* (example:  0) |\n| change_username | *optional* (example:  false) |\n| change_password | *optional* (example:  false) |\n| reset_password | *optional* (example:  false) |\n| email_verify | *optional* (example:  false) |\n| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | *optional* (example:  test@test.ai) |\n| created_on | *optional* (example:  1568419646794) |\n| last_login | *optional* (example:  null) |"
+										"description": "Gets all the users that belong to the group of a particular type by its name or id.\n\n##### Optional Query Params\n\n\\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on, updated_on, dob.\n\n| Param | Description |\n| --- | --- |\n| id | _optional_ (example: 26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | _optional_ (example: user7) |\n| locked | _optional_ (example: true) |\n| locked_reason | _optional_ (example: Activation Required email your admin to get your account activated) |\n| group_request | _optional_ (example: superadmin) |\n| failed_login_attempts | _optional_ (example: 0) |\n| change_username | _optional_ (example: false) |\n| change_password | _optional_ (example: false) |\n| reset_password | _optional_ (example: false) |\n| email_verify | _optional_ (example: false) |\n| group_id | _optional_ (example: 7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | _optional_ (example: [test@test.ai](mailto:test@test.ai)) |\n| created_on | _optional_ (example: 1568419646794) |\n| last_login | _optional_ (example: null) |"
 									},
 									"response": [
 										{
@@ -7365,7 +7365,7 @@
 										}
 									]
 								},
-								"description": "Gets all the users that belong to the group.\n\n##### Optional Query Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | *optional* (example:  user7) |\n| locked | *optional* (example:  true) |\n| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |\n| group_request | *optional* (example:  superadmin) |\n| failed_login_attempts | *optional* (example:  0) |\n| change_username | *optional* (example:  false) |\n| change_password | *optional* (example:  false) |\n| reset_password | *optional* (example:  false) |\n| email_verify | *optional* (example:  false) |\n| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | *optional* (example:  test@test.ai) |\n| created_on | *optional* (example:  1568419646794) |\n| last_login | *optional* (example:  null) |"
+								"description": "Gets all the users that belong to the group.\n\n##### Optional Query Params\n\n\\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on, updated_on, dob.\n\n| Param | Description |\n| --- | --- |\n| id | _optional_ (example: 26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | _optional_ (example: user7) |\n| locked | _optional_ (example: true) |\n| locked_reason | _optional_ (example: Activation Required email your admin to get your account activated) |\n| group_request | _optional_ (example: superadmin) |\n| failed_login_attempts | _optional_ (example: 0) |\n| change_username | _optional_ (example: false) |\n| change_password | _optional_ (example: false) |\n| reset_password | _optional_ (example: false) |\n| email_verify | _optional_ (example: false) |\n| group_id | _optional_ (example: 7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | _optional_ (example: [test@test.ai](mailto:test@test.ai)) |\n| created_on | _optional_ (example: 1568419646794) |\n| last_login | _optional_ (example: null) |"
 							},
 							"response": [
 								{
@@ -7474,7 +7474,7 @@
 										}
 									]
 								},
-								"description": "Gets all the users that belong to the group.\n\n##### Optional Query Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | *optional* (example:  user7) |\n| locked | *optional* (example:  true) |\n| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |\n| group_request | *optional* (example:  superadmin) |\n| failed_login_attempts | *optional* (example:  0) |\n| change_username | *optional* (example:  false) |\n| change_password | *optional* (example:  false) |\n| reset_password | *optional* (example:  false) |\n| email_verify | *optional* (example:  false) |\n| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | *optional* (example:  test@test.ai) |\n| created_on | *optional* (example:  1568419646794) |\n| last_login | *optional* (example:  null) |"
+								"description": "Gets all the users that belong to the group.\n\n##### Optional Query Params\n\n\\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on, updated_on, dob.\n\n| Param | Description |\n| --- | --- |\n| id | _optional_ (example: 26c6aeff-ab95-4bdd-8260-534cf92d1c23) |\n| username | _optional_ (example: user7) |\n| locked | _optional_ (example: true) |\n| locked_reason | _optional_ (example: Activation Required email your admin to get your account activated) |\n| group_request | _optional_ (example: superadmin) |\n| failed_login_attempts | _optional_ (example: 0) |\n| change_username | _optional_ (example: false) |\n| change_password | _optional_ (example: false) |\n| reset_password | _optional_ (example: false) |\n| email_verify | _optional_ (example: false) |\n| group_id | _optional_ (example: 7320292c-627e-4e5a-b059-583eabdd6264) |\n| email | _optional_ (example: [test@test.ai](mailto:test@test.ai)) |\n| created_on | _optional_ (example: 1568419646794) |\n| last_login | _optional_ (example: null) |"
 							},
 							"response": [
 								{
@@ -9374,7 +9374,7 @@
 										}
 									]
 								},
-								"description": "Gets audits by of_user id.\n\n##### Filter Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |\n| created_on | *optional* (example:  created_on>=2021-06-09) |\n| action | *optional* (example:  action=CREATE) |\n| subaction | *optional* (example:  subaction=USER) |\n| prop | *optional* (example:  prop=email) |\n| old_val | *optional* (example:  old_val=swagger@email.69) |\n| new_val | *optional* (example:  new_val=leet@teel.com) |"
+								"description": "Gets audits by of_user id.\n\n##### Filter Params\n\n\\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on.\n\n| Param | Description |\n| --- | --- |\n| id | _optional_ (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |\n| created_on | _optional_ (example: created_on>=2021-06-09) |\n| action | _optional_ (example: action=CREATE) |\n| subaction | _optional_ (example: subaction=USER) |\n| prop | _optional_ (example: prop=email) |\n| old_val | _optional_ (example: old_val=swagger@email.69) |\n| new_val | _optional_ (example: new_val=leet@teel.com) |"
 							},
 							"response": []
 						},
@@ -9450,7 +9450,7 @@
 										}
 									]
 								},
-								"description": "Gets audits by of_user id.\n\n##### Filter Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |\n| created_on | *optional* (example:  created_on>=2021-06-09) |\n| action | *optional* (example:  action=CREATE) |\n| subaction | *optional* (example:  subaction=USER) |\n| prop | *optional* (example:  prop=email) |\n| old_val | *optional* (example:  old_val=swagger@email.69) |\n| new_val | *optional* (example:  new_val=leet@teel.com) |"
+								"description": "Gets audits by of_user id.\n\n##### Filter Params\n\n\\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on.\n\n| Param | Description |\n| --- | --- |\n| id | _optional_ (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |\n| created_on | _optional_ (example: created_on>=2021-06-09) |\n| action | _optional_ (example: action=CREATE) |\n| subaction | _optional_ (example: subaction=USER) |\n| prop | _optional_ (example: prop=email) |\n| old_val | _optional_ (example: old_val=swagger@email.69) |\n| new_val | _optional_ (example: new_val=leet@teel.com) |"
 							},
 							"response": []
 						},
@@ -9531,7 +9531,7 @@
 										}
 									]
 								},
-								"description": "Gets audits by by_user id.\n\n##### Filter Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |\n| created_on | *optional* (example:  created_on>=2021-06-09) |\n| action | *optional* (example:  action=CREATE) |\n| subaction | *optional* (example:  subaction=USER) |\n| prop | *optional* (example:  prop=email) |\n| old_val | *optional* (example:  old_val=swagger@email.69) |\n| new_val | *optional* (example:  new_val=leet@teel.com) |"
+								"description": "Gets audits by by_user id.\n\n##### Filter Params\n\n\\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on.\n\n| Param | Description |\n| --- | --- |\n| id | _optional_ (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |\n| created_on | _optional_ (example: created_on>=2021-06-09) |\n| action | _optional_ (example: action=CREATE) |\n| subaction | _optional_ (example: subaction=USER) |\n| prop | _optional_ (example: prop=email) |\n| old_val | _optional_ (example: old_val=swagger@email.69) |\n| new_val | _optional_ (example: new_val=leet@teel.com) |"
 							},
 							"response": []
 						},
@@ -9601,7 +9601,7 @@
 										}
 									]
 								},
-								"description": "Gets audits by by_user id.\n\n##### Filter Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |\n| created_on | *optional* (example:  created_on>=2021-06-09) |\n| action | *optional* (example:  action=CREATE) |\n| subaction | *optional* (example:  subaction=USER) |\n| prop | *optional* (example:  prop=email) |\n| old_val | *optional* (example:  old_val=swagger@email.69) |\n| new_val | *optional* (example:  new_val=leet@teel.com) |"
+								"description": "Gets audits by by_user id.\n\n##### Filter Params\n\n\\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on.\n\n| Param | Description |\n| --- | --- |\n| id | _optional_ (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |\n| created_on | _optional_ (example: created_on>=2021-06-09) |\n| action | _optional_ (example: action=CREATE) |\n| subaction | _optional_ (example: subaction=USER) |\n| prop | _optional_ (example: prop=email) |\n| old_val | _optional_ (example: old_val=swagger@email.69) |\n| new_val | _optional_ (example: new_val=leet@teel.com) |"
 							},
 							"response": []
 						}
@@ -9677,7 +9677,7 @@
 								}
 							]
 						},
-						"description": "Gets audits by action type.\n\n##### Filter Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |\n| created_on | *optional* (example:  created_on>=2021-06-09) |\n| prop | *optional* (example: prop=email) |\n| old_val | *optional* (example:  old_val=swagger@email.69) |\n| new_val | *optional* (example:  new_val=leet@teel.com) |"
+						"description": "Gets audits by action type.\n\n##### Filter Params\n\n\\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on.\n\n| Param | Description |\n| --- | --- |\n| id | _optional_ (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |\n| created_on | _optional_ (example: created_on>=2021-06-09) |\n| prop | _optional_ (example: prop=email) |\n| old_val | _optional_ (example: old_val=swagger@email.69) |\n| new_val | _optional_ (example: new_val=leet@teel.com) |"
 					},
 					"response": []
 				},
@@ -9751,7 +9751,7 @@
 								}
 							]
 						},
-						"description": "Gets audits by subaction type.\n\n##### Filter Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |\n| created_on | *optional* (example:  created_on>=2021-06-09) |\n| prop | *optional* (example: prop=email) |\n| old_val | *optional* (example:  old_val=swagger@email.69) |\n| new_val | *optional* (example:  new_val=leet@teel.com) |"
+						"description": "Gets audits by subaction type.\n\n##### Filter Params\n\n\\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on.\n\n| Param | Description |\n| --- | --- |\n| id | _optional_ (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |\n| created_on | _optional_ (example: created_on>=2021-06-09) |\n| prop | _optional_ (example: prop=email) |\n| old_val | _optional_ (example: old_val=swagger@email.69) |\n| new_val | _optional_ (example: new_val=leet@teel.com) |"
 					},
 					"response": []
 				},
@@ -9832,7 +9832,7 @@
 								}
 							]
 						},
-						"description": "Gets audits by action and subaction type.\n\n##### Filter Params\n\n| Param | Description |\n| --- | --- |\n| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |\n| created_on | *optional* (example:  created_on>=2021-06-09) |\n| prop | *optional* (example: prop=email) |\n| old_val | *optional* (example:  old_val=swagger@email.69) |\n| new_val | *optional* (example:  new_val=leet@teel.com) |"
+						"description": "Gets audits by action and subaction type.\n\n##### Filter Params\n\n\\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on.\n\n| Param | Description |\n| --- | --- |\n| id | _optional_ (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |\n| created_on | _optional_ (example: created_on>=2021-06-09) |\n| prop | _optional_ (example: prop=email) |\n| old_val | _optional_ (example: old_val=swagger@email.69) |\n| new_val | _optional_ (example: new_val=leet@teel.com) |"
 					},
 					"response": []
 				}

@@ -76,6 +76,17 @@ BaseModel.findAllByFilter = async function ({
       }
 
       if (this._defaultModel[key] !== undefined) {
+        if (op === '>' || op === '<' || op === '>=' || op === '<=') {
+          // Whitelist range operator columns
+          if (this.table === 'users' && key !== 'date' && key !== 'created_on' && key !== 'updated_on') {
+            continue;
+          }
+
+          if (this.table === 'audits' && key !== 'created_on') {
+            continue;
+          }
+        }
+
         if (this._encryptionFields[key] !== undefined) {
           value = (await this._queryFieldsHash({ [key]: value }))['__' + key];
           key = '__' + key;
