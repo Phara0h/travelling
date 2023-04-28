@@ -1,4 +1,5 @@
 const User = require('../../database/models/user');
+const Token = require('../../database/models/token');
 const TokenHandler = require('../../token');
 
 const userUtils = require('../../utils/user');
@@ -8,6 +9,7 @@ const misc = require('../../utils/misc');
 const gm = require('../../server/groupmanager');
 const userRoutes = require('./functions/users');
 const parse = require('../../utils/parse');
+const regex = require('../../utils/regex');
 
 module.exports = function (app, opts, done) {
   const router = opts.router;
@@ -402,6 +404,61 @@ module.exports = function (app, opts, done) {
     return false;
   });
 
+  app.post('/user/me/routes/allowed', async (req, res) => {
+    if (req.session) {
+      const groups = await gm.currentGroup(req, res);
+      const headersDomain = parse.getDomainFromHeaders(req.headers);
+      const addedRoutes = [];
+
+      if (req.body && req.body.length) {
+        var routes = [];
+        for (var j = 0; j < req.body.length; j++) {
+          var method = req.body[j].method || `*`;
+          var route = req.body[j].route;
+
+          if (route) {
+            for (var i = 0; i < groups.length; i++) {
+              if(addedRoutes[`${method}-${route}`] === undefined) {
+                var croute = { 
+                  method,
+                  route,
+                  allowed: router.isRouteAllowed(method,route,groups[i].routes,!req.isAuthenticated ? null : req.session.data.user,groups[i].group, headersDomain) ? true : false
+                };
+                routes.push(croute)
+
+                if(croute.allowed) {
+                  break;
+                }
+
+                addedRoutes[`${method}-${route}`] = routes.length - 1;
+              } else {
+                var croute = routes[addedRoutes[`${method}-${route}`]];
+                if(!croute.allowed) {
+                  croute.allowed = router.isRouteAllowed(method,route,groups[i].routes,!req.isAuthenticated ? null : req.session.data.user,groups[i].group, headersDomain) ? true : false;
+                  routes[addedRoutes[`${method}-${route}`]] = croute;
+                  
+                  if(croute.allowed ) {
+                    break;
+                  }
+                }
+              }
+            }
+          }
+        }
+        res.code(200);
+        return routes;
+      } else {
+        res.code(400);
+        return {
+          type: 'routes-check-error',
+          msg: 'No array of routes provided'
+        }
+      }
+    }
+    res.code(401);
+    return false;
+  });
+
   app.get('/user/me/permission/allowed/:permission', async (req, res) => {
     if (req.session) {
       const groups = await gm.currentGroup(req, res);
@@ -437,10 +494,13 @@ module.exports = function (app, opts, done) {
       );
 
       if (config.audit.create.enable === true) {
+        var hashedToken = await Token.findById(token.id);
+        delete hashedToken.secret_encrypt;
+
         var auditObj = {
           action: 'CREATE',
           subaction: 'USER_OAUTH2_TOKEN',
-          newObj: token
+          newObj: hashedToken
         };
 
         if (req.session.data) {

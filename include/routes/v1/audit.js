@@ -23,6 +23,26 @@ module.exports = function (app, opts, done) {
     return await auditRoutes.getAudits({ req, res });
   });
 
+  app.get('/audit/count/user/byuser/:id', async (req, res) => {
+    const id = req.params.id;
+
+    if (!id || !regex.uuidCheck(id)) {
+      res.code(400);
+      return {
+        type: 'validation-error',
+        msg: 'Please provide a valid uuid.'
+      };
+    }
+
+    if (!req.query.filter) {
+      req.query.filter = `by_user_id=${id}`;
+    } else {
+      req.query.filter += `,by_user_id=${id}`;
+    }
+
+    return await auditRoutes.getAudits({ req, res, count: true });
+  });
+
   app.get('/audit/user/ofuser/:id', async (req, res) => {
     const id = req.params.id;
 
@@ -41,6 +61,26 @@ module.exports = function (app, opts, done) {
     }
 
     return await auditRoutes.getAudits({ req, res });
+  });
+
+  app.get('/audit/count/user/ofuser/:id', async (req, res) => {
+    const id = req.params.id;
+
+    if (!id || !regex.uuidCheck(id)) {
+      res.code(400);
+      return {
+        type: 'validation-error',
+        msg: 'Please provide a valid uuid.'
+      };
+    }
+
+    if (!req.query.filter) {
+      req.query.filter = `of_user_id=${id}`;
+    } else {
+      req.query.filter += `,of_user_id=${id}`;
+    }
+
+    return await auditRoutes.getAudits({ req, res, count: true });
   });
 
   app.get('/audit/action/:action', async (req, res) => {

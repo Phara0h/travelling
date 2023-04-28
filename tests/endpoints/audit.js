@@ -1,6 +1,5 @@
 const config = require('../../include/utils/config');
 const User = require('../../include/database/models/user');
-const Audit = require('../../include/database/models/audit');
 const { Travelling } = require('../../sdk/node')('http://127.0.0.1:6969/' + config.serviceName, {
   resolveWithFullResponse: true
 });
@@ -38,8 +37,10 @@ module.exports = () => {
         expect(res.body[0].subaction).not.toBeNull();
         expect(res.body[0]).toHaveProperty('by_user_firstname');
         expect(res.body[0]).toHaveProperty('by_user_lastname');
+        expect(res.body[0]).toHaveProperty('by_user_domain');
         expect(res.body[0]).toHaveProperty('of_user_firstname');
         expect(res.body[0]).toHaveProperty('of_user_lastname');
+        expect(res.body[0]).toHaveProperty('of_user_domain');
         expect(res.body[0]).toHaveProperty('old_val');
         expect(res.body[0]).toHaveProperty('new_val');
         expect(res.body[0].subaction).not.toBeNull();
@@ -70,8 +71,10 @@ module.exports = () => {
         expect(res.body[0].subaction).not.toBeNull();
         expect(res.body[0]).toHaveProperty('by_user_firstname');
         expect(res.body[0]).toHaveProperty('by_user_lastname');
+        expect(res.body[0]).toHaveProperty('by_user_domain');
         expect(res.body[0]).toHaveProperty('of_user_firstname');
         expect(res.body[0]).toHaveProperty('of_user_lastname');
+        expect(res.body[0]).toHaveProperty('of_user_domain');
         expect(res.body[0].by_user_id).toEqual(testUser1[0].id);
       });
 
@@ -95,8 +98,10 @@ module.exports = () => {
         expect(res.body[0].subaction).not.toBeNull();
         expect(res.body[0]).toHaveProperty('by_user_firstname');
         expect(res.body[0]).toHaveProperty('by_user_lastname');
+        expect(res.body[0]).toHaveProperty('by_user_domain');
         expect(res.body[0]).toHaveProperty('of_user_firstname');
         expect(res.body[0]).toHaveProperty('of_user_lastname');
+        expect(res.body[0]).toHaveProperty('of_user_domain');
         expect(res.body[0].by_user_id).toEqual(testUser1[0].id);
       });
 
@@ -121,8 +126,10 @@ module.exports = () => {
         expect(res.body[0].subaction).not.toBeNull();
         expect(res.body[0]).toHaveProperty('by_user_firstname');
         expect(res.body[0]).toHaveProperty('by_user_lastname');
+        expect(res.body[0]).toHaveProperty('by_user_domain');
         expect(res.body[0]).toHaveProperty('of_user_firstname');
         expect(res.body[0]).toHaveProperty('of_user_lastname');
+        expect(res.body[0]).toHaveProperty('of_user_domain');
         expect(res.body[0].by_user_id).toEqual(testUser1[0].id);
       });
 
@@ -163,8 +170,10 @@ module.exports = () => {
         expect(res.body[0].subaction).not.toBeNull();
         expect(res.body[0]).toHaveProperty('by_user_firstname');
         expect(res.body[0]).toHaveProperty('by_user_lastname');
+        expect(res.body[0]).toHaveProperty('by_user_domain');
         expect(res.body[0]).toHaveProperty('of_user_firstname');
         expect(res.body[0]).toHaveProperty('of_user_lastname');
+        expect(res.body[0]).toHaveProperty('of_user_domain');
         expect(res.body[0].by_user_id).toEqual(testUser1[0].id);
       });
 
@@ -221,8 +230,10 @@ module.exports = () => {
         expect(res.body[0].subaction).not.toBeNull();
         expect(res.body[0]).toHaveProperty('by_user_firstname');
         expect(res.body[0]).toHaveProperty('by_user_lastname');
+        expect(res.body[0]).toHaveProperty('by_user_domain');
         expect(res.body[0]).toHaveProperty('of_user_firstname');
         expect(res.body[0]).toHaveProperty('of_user_lastname');
+        expect(res.body[0]).toHaveProperty('of_user_domain');
         expect(res.body[0].by_user_id).toEqual(testUser1[0].id);
       });
 
@@ -247,6 +258,26 @@ module.exports = () => {
 
         expect(res.statusCode).toEqual(200);
         expect(res.body.length).toEqual(0);
+      });
+    });
+
+    describe('Valid Count OfUser', () => {
+      test('Get Audit by Test User (No Query Params)', async () => {
+        testUser1 = await User.findAllBy({ username: 'test' });
+
+        const res = await Travelling.Audit.User.countOfuserId(
+          testUser1[0].id,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          userContainer.user1Token
+        );
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body.count).toBeGreaterThanOrEqual(1);
       });
     });
 
@@ -275,8 +306,10 @@ module.exports = () => {
         expect(res.body[0].subaction).not.toBeNull();
         expect(res.body[0]).toHaveProperty('by_user_firstname');
         expect(res.body[0]).toHaveProperty('by_user_lastname');
+        expect(res.body[0]).toHaveProperty('by_user_domain');
         expect(res.body[0]).toHaveProperty('of_user_firstname');
         expect(res.body[0]).toHaveProperty('of_user_lastname');
+        expect(res.body[0]).toHaveProperty('of_user_domain');
         expect(res.body[0].of_user_id).toEqual(testUser1[0].id);
       });
 
@@ -300,8 +333,10 @@ module.exports = () => {
         expect(res.body[0].subaction).not.toBeNull();
         expect(res.body[0]).toHaveProperty('by_user_firstname');
         expect(res.body[0]).toHaveProperty('by_user_lastname');
+        expect(res.body[0]).toHaveProperty('by_user_domain');
         expect(res.body[0]).toHaveProperty('of_user_firstname');
         expect(res.body[0]).toHaveProperty('of_user_lastname');
+        expect(res.body[0]).toHaveProperty('of_user_domain');
         expect(res.body[0].of_user_id).toEqual(testUser1[0].id);
       });
 
@@ -325,8 +360,10 @@ module.exports = () => {
         expect(res.body[0].subaction).not.toBeNull();
         expect(res.body[0]).toHaveProperty('by_user_firstname');
         expect(res.body[0]).toHaveProperty('by_user_lastname');
+        expect(res.body[0]).toHaveProperty('by_user_domain');
         expect(res.body[0]).toHaveProperty('of_user_firstname');
         expect(res.body[0]).toHaveProperty('of_user_lastname');
+        expect(res.body[0]).toHaveProperty('of_user_domain');
         expect(res.body[0].of_user_id).toEqual(testUser1[0].id);
       });
 
@@ -351,8 +388,10 @@ module.exports = () => {
         expect(res.body[0].subaction).not.toBeNull();
         expect(res.body[0]).toHaveProperty('by_user_firstname');
         expect(res.body[0]).toHaveProperty('by_user_lastname');
+        expect(res.body[0]).toHaveProperty('by_user_domain');
         expect(res.body[0]).toHaveProperty('of_user_firstname');
         expect(res.body[0]).toHaveProperty('of_user_lastname');
+        expect(res.body[0]).toHaveProperty('of_user_domain');
         expect(res.body[0].of_user_id).toEqual(testUser1[0].id);
       });
 
@@ -401,8 +440,10 @@ module.exports = () => {
         expect(res.body[0].subaction).not.toBeNull();
         expect(res.body[0]).toHaveProperty('by_user_firstname');
         expect(res.body[0]).toHaveProperty('by_user_lastname');
+        expect(res.body[0]).toHaveProperty('by_user_domain');
         expect(res.body[0]).toHaveProperty('of_user_firstname');
         expect(res.body[0]).toHaveProperty('of_user_lastname');
+        expect(res.body[0]).toHaveProperty('of_user_domain');
         expect(res.body[0].of_user_id).toEqual(testUser1[0].id);
 
         // Test with exculding self ID
@@ -426,8 +467,10 @@ module.exports = () => {
         expect(exclusionRes.body[0].subaction).not.toBeNull();
         expect(exclusionRes.body[0]).toHaveProperty('by_user_firstname');
         expect(exclusionRes.body[0]).toHaveProperty('by_user_lastname');
+        expect(exclusionRes.body[0]).toHaveProperty('by_user_domain');
         expect(exclusionRes.body[0]).toHaveProperty('of_user_firstname');
         expect(exclusionRes.body[0]).toHaveProperty('of_user_lastname');
+        expect(exclusionRes.body[0]).toHaveProperty('of_user_domain');
         expect(exclusionRes.body[0].of_user_id).toEqual(testUser1[0].id);
       });
 
@@ -451,8 +494,10 @@ module.exports = () => {
         expect(res.body[0].subaction).not.toBeNull();
         expect(res.body[0]).toHaveProperty('by_user_firstname');
         expect(res.body[0]).toHaveProperty('by_user_lastname');
+        expect(res.body[0]).toHaveProperty('by_user_domain');
         expect(res.body[0]).toHaveProperty('of_user_firstname');
         expect(res.body[0]).toHaveProperty('of_user_lastname');
+        expect(res.body[0]).toHaveProperty('of_user_domain');
         expect(res.body[0].of_user_id).toEqual(testUser1[0].id);
       });
 
@@ -482,8 +527,10 @@ module.exports = () => {
         expect(res.body[0].subaction).not.toBeNull();
         expect(res.body[0]).toHaveProperty('by_user_firstname');
         expect(res.body[0]).toHaveProperty('by_user_lastname');
+        expect(res.body[0]).toHaveProperty('by_user_domain');
         expect(res.body[0]).toHaveProperty('of_user_firstname');
         expect(res.body[0]).toHaveProperty('of_user_lastname');
+        expect(res.body[0]).toHaveProperty('of_user_domain');
         expect(res.body[0].of_user_id).toEqual(testUser1[0].id);
       });
 
@@ -555,6 +602,26 @@ module.exports = () => {
         expect(audit[4].prop).toEqual('user_data');
         expect(audit[4].old_val).toMatch('{"test":1,"foo":"bar"}');
         expect(audit[4].new_val).toMatch('{"notes":"notey totey"}');
+      });
+    });
+
+    describe('Valid Count ByUser', () => {
+      test('Get Audit by Test User (No Query Params)', async () => {
+        testUser1 = await User.findAllBy({ username: 'test' });
+
+        const res = await Travelling.Audit.User.countByuserId(
+          testUser1[0].id,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          userContainer.user1Token
+        );
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body.count).toBeGreaterThanOrEqual(1);
       });
     });
 
@@ -630,7 +697,17 @@ module.exports = () => {
       });
 
       test('Get Audit ByUser - Missing User ID', async () => {
-        const res = await Travelling.Audit.User.byuserId('', null, null, null, null, null, true, null, userContainer.user1Token);
+        const res = await Travelling.Audit.User.byuserId(
+          '',
+          null,
+          null,
+          null,
+          null,
+          null,
+          true,
+          null,
+          userContainer.user1Token
+        );
 
         expect(res.statusCode).toEqual(400);
         expect(res.body).toHaveProperty('msg', 'Please provide a valid uuid.');
@@ -638,7 +715,17 @@ module.exports = () => {
       });
 
       test('Get Audit OfUser - Missing User Id', async () => {
-        const res = await Travelling.Audit.User.ofuserId('', null, null, null, null, null, true, null, userContainer.user1Token);
+        const res = await Travelling.Audit.User.ofuserId(
+          '',
+          null,
+          null,
+          null,
+          null,
+          null,
+          true,
+          null,
+          userContainer.user1Token
+        );
 
         expect(res.statusCode).toEqual(400);
         expect(res.body).toHaveProperty('msg', 'Please provide a valid uuid.');
