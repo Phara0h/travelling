@@ -76,6 +76,17 @@ BaseModel.findAllByFilter = async function ({
       }
 
       if (this._defaultModel[key] !== undefined) {
+        if (op === '>' || op === '<' || op === '>=' || op === '<=') {
+          // Whitelist range operator columns
+          if (this.table === 'users' && key !== 'date' && key !== 'created_on' && key !== 'updated_on') {
+            continue;
+          }
+
+          if (this.table === 'audits' && key !== 'created_on') {
+            continue;
+          }
+        }
+
         if (this._encryptionFields[key] !== undefined) {
           value = (await this._queryFieldsHash({ [key]: value }))['__' + key];
           key = '__' + key;
@@ -112,7 +123,7 @@ BaseModel.findAllByFilter = async function ({
     query += `${keys.length > 0 ? ' AND ' : ' WHERE '} ${additionalFilter} `;
   }
 
-  if (sort && regex.safeName.exec(sort) != null) {
+  if (sort && regex.safeName.exec(sort) != null && this._defaultModel[sort] !== undefined) {
     query += ' ORDER BY ' + sort + ' ' + (sortdir == 'ASC' ? 'ASC' : 'DESC');
   }
 
@@ -153,12 +164,12 @@ BaseModel.findAllByFilter = async function ({
       delete rows[i].password;
       delete rows[i].eprofile;
 
-      const keys = Object.keys(rows[i])
+      const keys = Object.keys(rows[i]);
 
       // Delete rows that begin with '__'
       for (var j = 0; j < keys.length; j++) {
         if (keys[j] && keys[j][0] + keys[j][1] === '__') {
-          delete rows[i][keys[j]]
+          delete rows[i][keys[j]];
         }
       }
     }

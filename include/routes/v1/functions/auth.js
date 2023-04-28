@@ -9,75 +9,68 @@ const User = require('.././../../database/models/user');
 const CookieToken = require('../../../utils/cookietoken');
 const TokenHandler = require('../../../token');
 const Email = require('../../../utils/email');
-
+const helpers = require('../../../server/tracing/helpers')();
 /*************************** ROUTE FUNCTIONS ****************************/
 
 /** Validates and Authenticates user credentials. */
 var loginRoute = async (req, res) => {
-  if (req.isAuthenticated) {
-    res.code(200).send({
-      type: 'login-session-error',
-      msg: 'Logged in already.'
+  if (!req.body) {
+    res.code(400).send({
+      type: 'body-login-error',
+      msg: 'No body sent with request'
     });
+    return;
+  }
+
+  var username;
+  var email;
+  var domain;
+
+  if (req.body.username) {
+    username = req.body.username = req.body.username.toLowerCase();
+  }
+
+  if (req.body.email) {
+    email = req.body.email = req.body.email.toLowerCase();
+  }
+
+  if (req.params.domain) {
+    domain = req.params.domain.toLowerCase();
+  }
+
+  if ((!req.body.email && !req.body.username) || !req.body.password) {
+    res.code(400).send({
+      type: 'body-login-error',
+      msg: 'A valid username or email and password is required.'
+    });
+    return;
+  }
+
+  var isValid = await checkValidUser(req.body, false);
+
+  if (isValid !== true) {
+    res.code(400);
+    return isValid;
   } else {
-    if (!req.body) {
-      res.code(400).send({
-        type: 'body-login-error',
-        msg: 'No body sent with request'
-      });
-      return;
-    }
+    try {
+      var user = await Database.checkAuth(username, email, req.body.password, domain, parse.getIp(req), req);
 
-    var username;
-    var email;
-    var domain;
-
-    if (req.body.username) {
-      username = req.body.username = req.body.username.toLowerCase();
-    }
-
-    if (req.body.email) {
-      email = req.body.email = req.body.email.toLowerCase();
-    }
-
-    if (req.params.domain) {
-      domain = req.params.domain.toLowerCase();
-    }
-
-    if ((!req.body.email && !req.body.username) || !req.body.password) {
-      res.code(400).send({
-        type: 'body-login-error',
-        msg: 'A valid username or email and password is required.'
-      });
-      return;
-    }
-
-    var isValid = await checkValidUser(req.body);
-
-    if (isValid !== true) {
-      res.code(400);
-      return isValid;
-    } else {
-      try {
-        var user = await Database.checkAuth(username, email, req.body.password, domain);
-
-        return await login(user.user, req, res);
-      } catch (e) {
-        if (e.err && e.err.msg) {
-          config.log.logger.debug(e.err, e.user ? e.user._ : null);
-          config.log.logger.info(`Failed Auth (${e.err.msg}): ${username}, ${email}, ${domain}`);
-        } else {
-          config.log.logger.debug(e);
-        }
-
-        res.code(400);
-        return e.err && e.err.type == 'locked'
-          ? { type: e.err.type, msg: e.err.msg, email: e.email }
-          : {
-              type: 'login-error',
-              msg: 'Invalid login'
-            };
+      return await login(user.user, req, res);
+    } catch (e) {
+      if (e.err && e.err.msg) {
+        config.log.logger.debug(e.err, e.user ? e.user._ : null);
+        config.log.logger.info(`Failed Auth (${e.err.msg}): ${username}, ${email}, ${domain}`);
+      } else {
+        config.log.logger.debug(e);
       }
+
+      res.code(400);
+      return e.err && e.err.type == 'locked'
+        ? { type: e.err.type, msg: e.err.msg, email: e.email }
+        : {
+            type: 'login-error',
+            msg: 'Invalid login'
+          };
     }
   }
 };
@@ -91,7 +84,26 @@ var registerRoute = async (req, res) => {
   //     });
   //     return;
   // }
+  if (
+    (!req.body.password && req.query.randomPassword !== 'true') ||
+    !req.body.email ||
+    (!req.body.username && config.user.username.enabled)
+  ) {
+    res.code(400);
+    config.log.logger.debug(helpers.text(`User is not valid ${Object.values(req.body)}`, req.span));
+    return {
+      type: 'register-error',
+      msg: 'A valid username, password and email are required.'
+    };
+  }
+
   req.body.domain = req.params.domain || 'default';
+  req.body.email = req.body.email.toLowerCase();
+
+  if (config.user.username.enabled) {
+    req.body.username = req.body.username.toLowerCase();
+  }
+
   if (req.query.randomPassword === 'true') {
     req.body.password = generateRandomPassword(config.password.maxchar, 3, req.span);
   }
@@ -102,20 +114,9 @@ var registerRoute = async (req, res) => {
     isValid = await Database.checkDupe(req.body);
   }
 
-  if (
-    (!req.body.password && req.query.randomPassword !== 'true') ||
-    !req.body.email ||
-    (!req.body.username && config.user.username.enabled)
-  ) {
-    res.code(400);
-    return {
-      type: 'register-error',
-      msg: 'A valid username, password and email are required.'
-    };
-  }
-
   if (isValid !== true) {
     res.code(400);
+    config.log.logger.debug(helpers.text(`User is not valid ${Object.values(req.body)}`, req.span));
     return isValid;
   }
 
@@ -145,7 +146,9 @@ var registerRoute = async (req, res) => {
     getPersonalInfo(req.body)
   );
 
-  config.log.logger.info(`New User Created: ${username || ''}(${email})[${domain}] | ${parse.getIp(req)}`);
+  config.log.logger.info(
+    helpers.text(`New User Created: ${username || ''}(${email})[${domain}] | ${parse.getIp(req)}`, req.span)
+  );
 
   if (config.email.send.onNewUser === true && email) {
     await Email.sendWelcome(user);
@@ -179,6 +182,8 @@ async function forgotPasswordRoute(req, res, sendemail = true) {
       msg: 'A valid email is required.'
     };
   }
+
+  req.body.email = req.body.email.toLowerCase();
 
   var isValid = await checkValidUser(req.body, false);
 
@@ -269,7 +274,7 @@ async function resetPasswordRoute(req, res, autologin = false) {
     var oldUser = await User.findLimtedBy({ id: token[2] }, 'AND', 1);
 
     if (oldUser.length > 0 && oldUser[0]) {
-      oldPassword = oldUser.password;
+      oldPassword = oldUser[0].password;
     }
   }
 
@@ -357,7 +362,7 @@ var getOAuthAuthorizeRoute = async (req, res) => {
         httpOnly: true,
         path: '/' + config.serviceName + '/api/v1/auth/oauth/authorize'
       });
-      if(config.portal.enable) {
+      if (config.portal.enable) {
         res.sendFile(
           !config.token.code.authorizeFlow && userID != ''
             ? config.portal.filePath + '/src/submit.html'
@@ -396,7 +401,9 @@ var postOAuthAuthorizeRoute = async (req, res) => {
     var code = Buffer.from(`${token.client_id}:${token.client_secret}`, 'ascii').toString('base64');
 
     res.headers['Cache-Control'] = 'no-cache';
-    res.redirect(encodeURI(req.query.redirect_uri + `?code=${code}&state=${req.query.state}&client_id=${req.query.client_id}`));
+    res.redirect(
+      encodeURI(req.query.redirect_uri + `?code=${code}&state=${req.query.state}&client_id=${req.query.client_id}`)
+    );
     return;
   } catch (e) {
     config.log.logger.debug(e);

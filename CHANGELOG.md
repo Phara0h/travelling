@@ -1,6 +1,173 @@
 
 
+#### [v3.2.1](https://github.com/Dragohm/travelling/compare/v3.2.0...v3.2.1)
+
+- Update package.json [`e34774f`](https://github.com/Dragohm/travelling/commit/e34774f2cc05617d3b97aa2cf8bd4d5b949f2f02)
+
+#### [v3.2.0](https://github.com/Dragohm/travelling/compare/v3.1.5...v3.2.0)
+
+> 22 March 2023
+
+- Feature #83 Whitelist filter range operators [`#35`](https://github.com/Dragohm/travelling/pull/35)
+- Feature #85 User Data allow more special chars [`#34`](https://github.com/Dragohm/travelling/pull/34)
+- add docs [`e646bfb`](https://github.com/Dragohm/travelling/commit/e646bfbdda9ea5cac928503f86c606edd50cdeae)
+- Whitelist db fields with op filters [`39d90df`](https://github.com/Dragohm/travelling/commit/39d90df1114eb2d7d77d1a8217cd594b8bffcbf9)
+- update regex [`b2e176d`](https://github.com/Dragohm/travelling/commit/b2e176d5f8348a47eb9d3b5bc2fecc4cd7a17546)
+
+#### [v3.1.5](https://github.com/Dragohm/travelling/compare/v3.1.4...v3.1.5)
+
+> 1 March 2023
+
+- Fixed routes endpoint and cookies on ip hijack [`cd03830`](https://github.com/Dragohm/travelling/commit/cd038302e2ddd6e9ddb65becc19c2bc4e34eb0fd)
+
+#### [v3.1.4](https://github.com/Dragohm/travelling/compare/v3.1.3...v3.1.4)
+
+> 24 February 2023
+
+- Update cookietoken.js [`948f326`](https://github.com/Dragohm/travelling/commit/948f3267ca797b279667187b49a4229f299eed01)
+
+#### [v3.1.3](https://github.com/Dragohm/travelling/compare/v3.1.2...v3.1.3)
+
+> 22 February 2023
+
+- Fix #75 email lowercase bugs [`#33`](https://github.com/Dragohm/travelling/pull/33)
+- Merge pull request #33 from Dragohm/fix-#75-email-lowercase-bugs [`#75`](https://github.com/Dragohm/travelling/issues/75)
+- update email lowercase placement [`a9344ed`](https://github.com/Dragohm/travelling/commit/a9344edd8c35c078b7f79e6a5d1008fe8cfce40f)
+
+#### [v3.1.2](https://github.com/Dragohm/travelling/compare/v3.1.1...v3.1.2)
+
+> 22 February 2023
+
+- Feature #82 reissue cookies on login [`#32`](https://github.com/Dragohm/travelling/pull/32)
+- fix #84 update conditional [`#84`](https://github.com/Dragohm/travelling/issues/84)
+- Fixes #80 and #84 [`#80`](https://github.com/Dragohm/travelling/issues/80)
+- opt [`87eb041`](https://github.com/Dragohm/travelling/commit/87eb0412cf39311240acd70b4fdeaeca0f90e8a8)
+- feature #82 reissue cookies on login [`4106d8a`](https://github.com/Dragohm/travelling/commit/4106d8a48aca2286846e7d195d0e6dd779083de4)
+- Update package.json [`c6947ec`](https://github.com/Dragohm/travelling/commit/c6947ec49bdd02fb141e0391fb6bd7772fe3ff1b)
+
+#### [v3.1.1](https://github.com/Dragohm/travelling/compare/v3.1.0...v3.1.1)
+
+> 16 February 2023
+
+- Feature #48 Audits of and by user count endpoints [`#31`](https://github.com/Dragohm/travelling/pull/31)
+- typo fix [`f2e7493`](https://github.com/Dragohm/travelling/commit/f2e7493122191b1a2bc7ff6ebdcfc030088fb6ad)
+- Add audits counts endpoints [`1016a5d`](https://github.com/Dragohm/travelling/commit/1016a5d2be85f9554da2d5d04a7ddb099495056a)
+
+#### [v3.1.0](https://github.com/Dragohm/travelling/compare/v3.0.7...v3.1.0)
+
+> 10 February 2023
+
+- Added Routes check for bulk permission checking [`05a6c27`](https://github.com/Dragohm/travelling/commit/05a6c27ade2296111181c83685e6af75316c7a16)
+
+#### [v3.0.7](https://github.com/Dragohm/travelling/compare/v3.0.6...v3.0.7)
+
+> 9 February 2023
+
+- Added zcs and less restrict state/city req [`21d6edc`](https://github.com/Dragohm/travelling/commit/21d6edcbcae3d236dcfcb43a94cc01f87b845ebb)
+
+#### [v3.0.6](https://github.com/Dragohm/travelling/compare/v3.0.5...v3.0.6)
+
+> 9 February 2023
+
+- Update regex.js [`68d33e4`](https://github.com/Dragohm/travelling/commit/68d33e42f97b4bbfa1dbf0d45fa589a70d002634)
+
+#### [v3.0.5](https://github.com/Dragohm/travelling/compare/v3.0.4...v3.0.5)
+
+> 9 February 2023
+
+- Feature #81 User Data allow arrays and objects [`#30`](https://github.com/Dragohm/travelling/pull/30)
+- Drop user_data char limit [`c2ead31`](https://github.com/Dragohm/travelling/commit/c2ead31559b5c6419e0d5dc25677a7cdcb3a0a77)
+- allow user_data arrays and objects [`5707cfa`](https://github.com/Dragohm/travelling/commit/5707cfa33c17e27f621364ce96282e213db9dfdf)
+
+#### [v3.0.4](https://github.com/Dragohm/travelling/compare/v3.0.3...v3.0.4)
+
+> 8 February 2023
+
+- Fix #79 fix login crash [`#29`](https://github.com/Dragohm/travelling/pull/29)
+- Merge pull request #29 from Dragohm/fix-#79-login-crashed [`#79`](https://github.com/Dragohm/travelling/issues/79)
+- add span check [`e6897c8`](https://github.com/Dragohm/travelling/commit/e6897c8154214371523ef7dc5c23a9e8fd7dedf1)
+
+#### [v3.0.3](https://github.com/Dragohm/travelling/compare/v3.0.2...v3.0.3)
+
+> 7 February 2023
+
+- Update auth.js [`3730494`](https://github.com/Dragohm/travelling/commit/37304945933ca8892664f07891e4ed5c5234d89a)
+
+#### [v3.0.2](https://github.com/Dragohm/travelling/compare/v3.0.1...v3.0.2)
+
+> 6 February 2023
+
+- fix [`49f9a97`](https://github.com/Dragohm/travelling/commit/49f9a974f6bd4f3757c2af1d9078abb9ecf9be95)
+
+#### [v3.0.1](https://github.com/Dragohm/travelling/compare/v3.0.0...v3.0.1)
+
+> 6 February 2023
+
+- Update index.js [`c3018ab`](https://github.com/Dragohm/travelling/commit/c3018ab551a9f479b7da28a074b7021b93ad5ea4)
+- Make sure people can't get locked out while logged in for password attempts [`4903766`](https://github.com/Dragohm/travelling/commit/4903766822afd823777bcd7ccda3840680a0055e)
+
+### [v3.0.0](https://github.com/Dragohm/travelling/compare/v2.23.1...v3.0.0)
+
+> 1 February 2023
+
+- Updated user object's groups prop to only have id,name & type [`31a8835`](https://github.com/Dragohm/travelling/commit/31a8835afe85180b2f71cc049ab305943995fb83)
+
+#### [v2.23.1](https://github.com/Dragohm/travelling/compare/v2.23.0...v2.23.1)
+
+> 1 February 2023
+
+- made some fixes? [`cb37ee0`](https://github.com/Dragohm/travelling/commit/cb37ee09d1dd9b1ad55a079c68193d61bda62a23)
+
+#### [v2.23.0](https://github.com/Dragohm/travelling/compare/v2.22.0...v2.23.0)
+
+> 31 January 2023
+
+- Update cookietoken.js [`b188a27`](https://github.com/Dragohm/travelling/commit/b188a2734506c03e7fb5b2bf11cf8dcf3c949926)
+
+#### [v2.22.0](https://github.com/Dragohm/travelling/compare/v2.21.3...v2.22.0)
+
+> 30 January 2023
+
+- Update package.json [`f9b56b6`](https://github.com/Dragohm/travelling/commit/f9b56b6ee777e0541fafd6e7b1b7df1771be1e80)
+- Updated some spans for cookie checking [`9dfbeab`](https://github.com/Dragohm/travelling/commit/9dfbeabd9c0c68c499b0204bc8931d2522c88520)
+
+#### [v2.21.3](https://github.com/Dragohm/travelling/compare/v2.21.2...v2.21.3)
+
+> 27 January 2023
+
+- Update parse.js [`2ae9d19`](https://github.com/Dragohm/travelling/commit/2ae9d19934446e30d4bfeeacfbfbcb971ac5455a)
+
+#### [v2.21.2](https://github.com/Dragohm/travelling/compare/v2.21.1...v2.21.2)
+
+> 26 January 2023
+
+- Added x-forward for ip stuff [`f990a53`](https://github.com/Dragohm/travelling/commit/f990a5398291adbd5f681d4d95c44daffa379fd3)
+
+#### [v2.21.1](https://github.com/Dragohm/travelling/compare/v2.21.0...v2.21.1)
+
+> 18 January 2023
+
+- Feature #77 Renew trav token on password change [`#28`](https://github.com/Dragohm/travelling/pull/28)
+- undo type [`b13c525`](https://github.com/Dragohm/travelling/commit/b13c5254edf75d8952a23701d4fe47dc10c5eeb4)
+- Renew trav tok on password change [`8548351`](https://github.com/Dragohm/travelling/commit/85483519ae06cea61be6f4703614abdc7d8fced3)
+
+#### [v2.21.0](https://github.com/Dragohm/travelling/compare/v2.20.0...v2.21.0)
+
+> 16 December 2022
+
+- Fix #76 audit log sensitive data leaks [`#27`](https://github.com/Dragohm/travelling/pull/27)
+- Add domains to audit logs [`#26`](https://github.com/Dragohm/travelling/pull/26)
+- Merge pull request #27 from Dragohm/fix-#76-audit-log-sensitive-data-leaks [`#76`](https://github.com/Dragohm/travelling/issues/76)
+- Updated adost and postgen [`6652f2e`](https://github.com/Dragohm/travelling/commit/6652f2e7158a83b28e6ab8210f70ec0c12d9456a)
+- rm domain regex [`74a8231`](https://github.com/Dragohm/travelling/commit/74a82316d03f7a79b268b7a8c22e41cf31402900)
+- Add domain validation [`757381e`](https://github.com/Dragohm/travelling/commit/757381ea68ff80488b33a011f54f2b51a62dc939)
+- little fixes [`8f7e0a6`](https://github.com/Dragohm/travelling/commit/8f7e0a605e861f1fe72320d5ed2e54d36043034e)
+- Add and update tests [`072e8fb`](https://github.com/Dragohm/travelling/commit/072e8fb6a5b33f7e2b399a91107053141cfc5df8)
+- audits to save password and token hashes [`9bc4100`](https://github.com/Dragohm/travelling/commit/9bc410054df91950c9e790ac231fd888d375a3b3)
+
 #### [v2.20.0](https://github.com/Dragohm/travelling/compare/v2.19.0...v2.20.0)
+
+> 29 November 2022
 
 - Fix #70 Remove hashes from responses [`#24`](https://github.com/Dragohm/travelling/pull/24)
 - Feature #71 user data special chars [`#25`](https://github.com/Dragohm/travelling/pull/25)

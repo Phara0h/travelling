@@ -111,13 +111,15 @@ byActionAndSubaction - Gets audits by action and subaction type.
 
 ##### Filter Params
 
+\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on.
+
 | Param | Description |
 | --- | --- |
-| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
-| created_on | *optional* (example:  created_on>=2021-06-09) |
-| prop | *optional* (example: prop=email) |
-| old_val | *optional* (example:  old_val=swagger@email.69) |
-| new_val | *optional* (example:  new_val=leet@teel.com) |
+| id | _optional_ (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | _optional_ (example: created_on>=2021-06-09) |
+| prop | _optional_ (example: prop=email) |
+| old_val | _optional_ (example: old_val=swagger@email.69) |
+| new_val | _optional_ (example: new_val=leet@teel.com) |
 
 Path: api/v1/audit/action/:action/subaction/:subaction
 
@@ -142,13 +144,15 @@ bySubaction - Gets audits by subaction type.
 
 ##### Filter Params
 
+\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on.
+
 | Param | Description |
 | --- | --- |
-| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
-| created_on | *optional* (example:  created_on>=2021-06-09) |
-| prop | *optional* (example: prop=email) |
-| old_val | *optional* (example:  old_val=swagger@email.69) |
-| new_val | *optional* (example:  new_val=leet@teel.com) |
+| id | _optional_ (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | _optional_ (example: created_on>=2021-06-09) |
+| prop | _optional_ (example: prop=email) |
+| old_val | _optional_ (example: old_val=swagger@email.69) |
+| new_val | _optional_ (example: new_val=leet@teel.com) |
 
 Path: api/v1/audit/subaction/:subaction
 
@@ -172,13 +176,15 @@ byAction - Gets audits by action type.
 
 ##### Filter Params
 
+\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on.
+
 | Param | Description |
 | --- | --- |
-| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
-| created_on | *optional* (example:  created_on>=2021-06-09) |
-| prop | *optional* (example: prop=email) |
-| old_val | *optional* (example:  old_val=swagger@email.69) |
-| new_val | *optional* (example:  new_val=leet@teel.com) |
+| id | _optional_ (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | _optional_ (example: created_on>=2021-06-09) |
+| prop | _optional_ (example: prop=email) |
+| old_val | _optional_ (example: old_val=swagger@email.69) |
+| new_val | _optional_ (example: new_val=leet@teel.com) |
 
 Path: api/v1/audit/action/:action
 
@@ -201,8 +207,44 @@ Path: api/v1/audit/action/:action
 **Kind**: global class  
 
 * [AuditUser](#AuditUser)
+    * [.countByuserId(id, filter, limit, skip, sort, sortdir, selfexclusion, authorization_bearer)](#AuditUser.countByuserId)
     * [.byuserId(id, filter, limit, skip, sort, sortdir, resolve, selfexclusion, authorization_bearer)](#AuditUser.byuserId)
+    * [.countOfuserId(id, filter, limit, skip, sort, sortdir, selfexclusion, authorization_bearer)](#AuditUser.countOfuserId)
     * [.ofuserId(id, filter, limit, skip, sort, sortdir, resolve, selfexclusion, authorization_bearer)](#AuditUser.ofuserId)
+
+<a name="AuditUser.countByuserId"></a>
+
+### AuditUser.countByuserId(id, filter, limit, skip, sort, sortdir, selfexclusion, authorization_bearer)
+countByuserId - Gets audits by by_user id.
+
+##### Filter Params
+
+\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on.
+
+| Param | Description |
+| --- | --- |
+| id | _optional_ (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | _optional_ (example: created_on>=2021-06-09) |
+| action | _optional_ (example: action=CREATE) |
+| subaction | _optional_ (example: subaction=USER) |
+| prop | _optional_ (example: prop=email) |
+| old_val | _optional_ (example: old_val=swagger@email.69) |
+| new_val | _optional_ (example: new_val=leet@teel.com) |
+
+Path: api/v1/audit/count/user/byuser/:id
+
+**Kind**: static method of [<code>AuditUser</code>](#AuditUser)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>any</code> | Id of user that committed the action. (example: bf1b1e49-a105-43dc-b9a2-32c69a17fb5f) |
+| filter | <code>any</code> | Filter parameters (example: action=CREATE,subaction=USER,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2023-01-03,created_on<2023-06-06) |
+| limit | <code>any</code> | Number of maximum results. (example: 2) (example: 2) |
+| skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 1) |
+| sort | <code>any</code> | Sort by any user object key (examples: created_on, action, etc.) (example: created_on) |
+| sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: ASC) |
+| selfexclusion | <code>any</code> | Excludes audits with the same of_user_id. (example: true) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="AuditUser.byuserId"></a>
 
@@ -211,15 +253,17 @@ byuserId - Gets audits by by_user id.
 
 ##### Filter Params
 
+\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on.
+
 | Param | Description |
 | --- | --- |
-| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
-| created_on | *optional* (example:  created_on>=2021-06-09) |
-| action | *optional* (example:  action=CREATE) |
-| subaction | *optional* (example:  subaction=USER) |
-| prop | *optional* (example:  prop=email) |
-| old_val | *optional* (example:  old_val=swagger@email.69) |
-| new_val | *optional* (example:  new_val=leet@teel.com) |
+| id | _optional_ (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | _optional_ (example: created_on>=2021-06-09) |
+| action | _optional_ (example: action=CREATE) |
+| subaction | _optional_ (example: subaction=USER) |
+| prop | _optional_ (example: prop=email) |
+| old_val | _optional_ (example: old_val=swagger@email.69) |
+| new_val | _optional_ (example: new_val=leet@teel.com) |
 
 Path: api/v1/audit/user/byuser/:id
 
@@ -237,6 +281,40 @@ Path: api/v1/audit/user/byuser/:id
 | selfexclusion | <code>any</code> | Excludes audits with the same of_user_id. (example: true) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
+<a name="AuditUser.countOfuserId"></a>
+
+### AuditUser.countOfuserId(id, filter, limit, skip, sort, sortdir, selfexclusion, authorization_bearer)
+countOfuserId - Gets audits by of_user id.
+
+##### Filter Params
+
+\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on.
+
+| Param | Description |
+| --- | --- |
+| id | _optional_ (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | _optional_ (example: created_on>=2021-06-09) |
+| action | _optional_ (example: action=CREATE) |
+| subaction | _optional_ (example: subaction=USER) |
+| prop | _optional_ (example: prop=email) |
+| old_val | _optional_ (example: old_val=swagger@email.69) |
+| new_val | _optional_ (example: new_val=leet@teel.com) |
+
+Path: api/v1/audit/count/user/ofuser/:id
+
+**Kind**: static method of [<code>AuditUser</code>](#AuditUser)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>any</code> | Id of user that committed the action. (example: bf1b1e49-a105-43dc-b9a2-32c69a17fb5f) |
+| filter | <code>any</code> | Filter parameters (example: action=CREATE,subaction=USER,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-03,created_on<2021-06-06) |
+| limit | <code>any</code> | Number of maximum results. (example: 2) (example: 2) |
+| skip | <code>any</code> | Number of db rows skipped. (example: 10) (example: 10) |
+| sort | <code>any</code> | Sort by any user object key (examples: created_on, action, etc.) (example: action) |
+| sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: DESC) |
+| selfexclusion | <code>any</code> | Excludes audits with the same by_user_id. (example: true) |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
 <a name="AuditUser.ofuserId"></a>
 
 ### AuditUser.ofuserId(id, filter, limit, skip, sort, sortdir, resolve, selfexclusion, authorization_bearer)
@@ -244,15 +322,17 @@ ofuserId - Gets audits by of_user id.
 
 ##### Filter Params
 
+\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on.
+
 | Param | Description |
 | --- | --- |
-| id | *optional* (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
-| created_on | *optional* (example:  created_on>=2021-06-09) |
-| action | *optional* (example:  action=CREATE) |
-| subaction | *optional* (example:  subaction=USER) |
-| prop | *optional* (example:  prop=email) |
-| old_val | *optional* (example:  old_val=swagger@email.69) |
-| new_val | *optional* (example:  new_val=leet@teel.com) |
+| id | _optional_ (example: id=415c87e9-eaad-4b8e-8ce8-655c911e20ae) |
+| created_on | _optional_ (example: created_on>=2021-06-09) |
+| action | _optional_ (example: action=CREATE) |
+| subaction | _optional_ (example: subaction=USER) |
+| prop | _optional_ (example: prop=email) |
+| old_val | _optional_ (example: old_val=swagger@email.69) |
+| new_val | _optional_ (example: new_val=leet@teel.com) |
 
 Path: api/v1/audit/user/ofuser/:id
 
@@ -329,410 +409,149 @@ Path: api/v1/groups/import
 body
 ```json
 {
-    "global": {
-        "user": {
-            "allowed": [
-                {
-                    "method": "GET",
-                    "route": "/account/api/v1/auth/logout",
-                    "name": "get-account-api-v1-auth-logout"
-                },
-                {
-                    "method": "GET",
-                    "route": "/account/api/v1/user/me/*",
-                    "name": "get-account-api-v1-user-me-*"
-                },
-                {
-                    "method": "PUT",
-                    "route": "/account/api/v1/user/me/property/password/*",
-                    "name": "put-account-api-v1-user-me-property-password-*"
-                },
-                {
-                    "method": "PUT",
-                    "route": "/account/api/v1/user/me/property/avatar/*",
-                    "name": "put-account-api-v1-user-me-property-avatar-*"
-                },
-                {
-                    "method": "PUT",
-                    "route": "/account/api/v1/user/me/property/email/*",
-                    "name": "put-account-api-v1-user-me-property-email-*"
-                }
-            ],
-            "inherited": [
-                "group|anonymous"
-            ],
-            "is_default": true
-        },
-        "developer": {
-            "allowed": [
-                {
-                    "method": "POST",
-                    "route": "/account/api/v1/user/me/token",
-                    "name": "post-account-api-v1-user-me-token"
-                },
-                {
-                    "method": "DELETE",
-                    "route": "/account/api/v1/user/me/token/*",
-                    "name": "delete-account-api-v1-user-me-token-*"
-                }
-            ],
-            "inherited": [
-                "global|user"
-            ]
-        },
-        "service": {
-            "allowed": [
-                {
-                    "method": "POST",
-                    "route": "/account/api/v1/user/me/token",
-                    "name": "post-account-api-v1-user-me-token"
-                },
-                {
-                    "method": "DELETE",
-                    "route": "/account/api/v1/user/me/token/*",
-                    "name": "delete-account-api-v1-user-me-token-*"
-                }
-            ],
-            "inherited": [
-                "global|user",
-                "global|superadmin"
-            ]
-        },
-        "crm-public": {
-            "allowed": [
-                {
-                    "method": "GET",
-                    "route": "/crm",
-                    "host": "http://localhost:1337",
-                    "name": "get-crm"
-                },
-                {
-                    "method": "GET",
-                    "route": "/crm/auth/*",
-                    "host": "http://localhost:1337",
-                    "name": "get-crm-auth-*"
-                }
-            ]
-        },
-        "leads-public": {
-            "allowed": [
-                {
-                    "method": "POST",
-                    "route": "/api/leads/v1/new/lead",
-                    "remove_from_path": "/api",
-                    "host": "http://leads.dragohmdev.com",
-                    "name": "post-api-leads-v1-new-lead"
-                }
-            ]
-        },
-        "import-report-public": {
-            "allowed": [
-                {
-                    "method": "POST",
-                    "route": "/api/import-report/v1/tlo/people/cid/*",
-                    "remove_from_path": "/api",
-                    "host": "http://import-report.dragohmdev.com",
-                    "name": "post-api-import-report-v1-tlo-people-cid-*"
-                }
-            ]
-        },
-        "subscribed": {},
-        "admin": {
-            "inherited": [
-                "global|user",
-                "global|csrall"
-            ]
-        },
-        "superadmin": {
-            "allowed": [
-                {
-                    "route": "/account/*",
-                    "name": "*-account-*"
-                },
-                {
-                    "name": "account-*"
-                }
-            ],
-            "inherited": [
-                "global|admin"
-            ]
-        },
-        "csrall": {
-            "allowed": [
-                {
-                    "method": "*",
-                    "route": "/api/opt-out/v1/*",
-                    "remove_from_path": "/api",
-                    "host": "http://opt-out.dragohmdev.com",
-                    "name": "*-api-opt-out-v1-*"
-                },
-                {
-                    "method": "*",
-                    "route": "/api/search/v1/*",
-                    "remove_from_path": "/api",
-                    "host": "http://search.dragohmdev.com",
-                    "name": "*-api-search-v1-*"
-                },
-                {
-                    "method": "*",
-                    "route": "/api/email/v1/*",
-                    "remove_from_path": "/api",
-                    "host": "http://email.dragohmdev.com",
-                    "name": "*-api-email-v1-*"
-                }
-            ],
-            "inherited": [
-                "global|user",
-                "global|crm-private"
-            ]
-        },
-        "auth": {
-            "allowed": [
-                {
-                    "method": "POST",
-                    "route": "/account/api/v1/auth/register/domain/unmask.com",
-                    "name": "post-account-api-v1-auth-register-domain-unmask.com"
-                },
-                {
-                    "method": "PUT",
-                    "route": "/account/api/v1/auth/login/domain/unmask.com",
-                    "name": "put-account-api-v1-auth-login-domain-unmask.com"
-                },
-                {
-                    "method": "PUT",
-                    "route": "/account/api/v1/auth/password/forgot/domain/unmask.com",
-                    "name": "put-account-api-v1-auth-password-forgot-domain-unmask.com"
-                },
-                {
-                    "method": "POST",
-                    "route": "/account/api/v1/auth/register/domain/checkpeople.com",
-                    "name": "post-account-api-v1-auth-register-domain-checkpeople.com"
-                },
-                {
-                    "method": "PUT",
-                    "route": "/account/api/v1/auth/login/domain/checkpeople.com",
-                    "name": "put-account-api-v1-auth-login-domain-checkpeople.com"
-                },
-                {
-                    "method": "PUT",
-                    "route": "/account/api/v1/auth/password/forgot/domain/checkpeople.com",
-                    "name": "put-account-api-v1-auth-password-forgot-domain-checkpeople.com"
-                },
-                {
-                    "method": "POST",
-                    "route": "/account/api/v1/auth/register/domain/dragohmventures.com",
-                    "name": "post-account-api-v1-auth-register-domain-dragohmventures.com"
-                },
-                {
-                    "method": "PUT",
-                    "route": "/account/api/v1/auth/login/domain/dragohmventures.com",
-                    "name": "put-account-api-v1-auth-login-domain-dragohmventures.com"
-                },
-                {
-                    "method": "PUT",
-                    "route": "/account/api/v1/auth/password/forgot/domain/dragohmventures.com",
-                    "name": "put-account-api-v1-auth-password-forgot-domain-dragohmventures.com"
-                },
-                {
-                    "method": "PUT",
-                    "route": "/account/api/v1/auth/password/reset/login",
-                    "name": "put-account-api-v1-auth-password-reset-login"
-                }
-            ]
-        },
-        "crm-private": {
-            "allowed": [
-                {
-                    "method": "GET",
-                    "route": "/crm/admin/*",
-                    "host": "http://staging.crm.dragohmdev.com",
-                    "name": "get-crm-admin-*"
-                }
-            ]
-        },
-        "csr": {
-            "allowed": [
-                {
-                    "method": "*",
-                    "route": "/api/opt-out/v1/cids",
-                    "remove_from_path": "/api",
-                    "host": "http://opt-out.dragohmdev.com",
-                    "name": "*-api-opt-out-v1-cids"
-                },
-                {
-                    "method": "*",
-                    "route": "/api/opt-out/v1/id/*",
-                    "remove_from_path": "/api",
-                    "host": "http://opt-out.dragohmdev.com",
-                    "name": "*-api-opt-out-v1-id-*"
-                },
-                {
-                    "method": "*",
-                    "route": "/api/opt-out/v1/domain/:grouptype.com",
-                    "remove_from_path": "/api",
-                    "host": "http://opt-out.dragohmdev.com",
-                    "name": "*-api-opt-out-v1-domain-:grouptype.com"
-                },
-                {
-                    "method": "*",
-                    "route": "/api/opt-out/v1/domain/:grouptype.com/*",
-                    "remove_from_path": "/api",
-                    "host": "http://opt-out.dragohmdev.com",
-                    "name": "*-api-opt-out-v1-domain-:grouptype.com-*"
-                },
-                {
-                    "method": "*",
-                    "route": "/api/search/v1/*",
-                    "remove_from_path": "/api",
-                    "host": "http://search.dragohmdev.com",
-                    "name": "*-api-search-v1-*"
-                },
-                {
-                    "method": "*",
-                    "route": "/api/email/v1/*",
-                    "remove_from_path": "/api",
-                    "host": "http://email.dragohmdev.com",
-                    "name": "*-api-email-v1-*"
-                }
-            ],
-            "inherited": [
-                "global|user",
-                "global|crm-private"
-            ]
-        }
-    },
     "group": {
+        "anonymous": {
+            "type": "group",
+            "allowed": [
+                {
+                    "route": "/travelling/portal/*",
+                    "host": null,
+                    "name": "*-travelling-portal-*"
+                },
+                {
+                    "route": "/travelling/api/v1/auth/*",
+                    "host": null,
+                    "name": "*-travelling-api-v1-auth-*"
+                },
+                {
+                    "route": "/travelling/api/v1/user/me/route/allowed",
+                    "host": null,
+                    "method": "GET",
+                    "name": "get-travelling-api-v1-user-me-route-allowed"
+                },
+                {
+                    "route": "/travelling/api/v1/user/me/permission/allowed/*",
+                    "host": null,
+                    "method": "GET",
+                    "name": "get-travelling-api-v1-user-me-permission-allowed-*"
+                },
+                {
+                    "route": "/travelling/assets/*",
+                    "host": null,
+                    "removeFromPath": "/travelling/assets/",
+                    "method": "GET",
+                    "name": "get-travelling-assets-*"
+                },
+                {
+                    "route": "/travelling/api/v1/config/password",
+                    "host": null,
+                    "method": "GET",
+                    "name": "get-travelling-api-v1-config-password"
+                },
+                {
+                    "route": "/favicon.ico",
+                    "host": null,
+                    "method": "GET",
+                    "name": "get-favicon.ico"
+                }
+            ],
+            "inherited": null,
+            "is_default": false
+        },
+        "group3": {
+            "type": "group",
+            "allowed": null,
+            "inherited": [
+                "testgroup|group1",
+                "group|group2"
+            ],
+            "is_default": false
+        },
         "superadmin": {
+            "type": "group",
             "allowed": [
                 {
                     "host": null,
-                    "route": "/account/*",
-                    "name": "*-account-*"
+                    "route": "/travelling/*",
+                    "name": "*-travelling-*"
+                },
+                {
+                    "name": "test-one-*-three"
                 }
             ],
             "inherited": [
                 "group|anonymous"
-            ]
+            ],
+            "is_default": false
         },
-        "anonymous": {
+        "group4": {
+            "type": "group",
+            "allowed": null,
+            "inherited": [],
+            "is_default": false
+        },
+        "group2": {
+            "type": "group",
             "allowed": [
                 {
+                    "route": "/test/get",
+                    "host": "https://127.0.0.1:4268/:username/:group",
+                    "removeFromPath": "/test/get",
                     "method": "GET",
-                    "route": "/account/dashboard/*",
-                    "remove_from_path": "/account/dashboard",
-                    "host": "https://unmask.com",
-                    "name": "get-account-dashboard-*"
+                    "name": "get-test-get"
                 },
                 {
-                    "method": "GET",
-                    "route": "/account/portal/*",
-                    "name": "get-account-portal-*"
-                },
-                {
-                    "method": "GET",
-                    "route": "/account/assets/*",
-                    "name": "get-account-assets-*"
-                },
-                {
-                    "method": "GET",
-                    "route": "/favicon.ico",
-                    "name": "get-favicon.ico"
-                },
-                {
-                    "method": "PUT",
-                    "route": "/account/api/v1/auth/password/forgot",
-                    "name": "put-account-api-v1-auth-password-forgot"
-                },
-                {
-                    "method": "PUT",
-                    "route": "/account/api/v1/auth/password/reset",
-                    "name": "put-account-api-v1-auth-password-reset"
-                },
-                {
-                    "method": "GET",
-                    "route": "/account/api/v1/auth/activate",
-                    "name": "get-account-api-v1-auth-activate"
-                },
-                {
+                    "route": "/test/post",
+                    "host": "http://127.0.0.1:4267/?id=:id&permission=:permission",
+                    "removeFromPath": "/test/post",
                     "method": "POST",
-                    "route": "/account/api/v1/auth/token",
-                    "name": "post-account-api-v1-auth-token"
-                },
-                {
-                    "method": "POST",
-                    "route": "/account/api/v1//auth/oauth/authorize",
-                    "name": "post-account-api-v1--auth-oauth-authorize"
-                },
-                {
-                    "method": "GET",
-                    "route": "/account/api/v1//auth/oauth/authorize",
-                    "name": "get-account-api-v1--auth-oauth-authorize"
-                },
-                {
-                    "method": "GET",
-                    "route": "/account/api/v1/user/me/permission/allowed/*",
-                    "name": "get-account-api-v1-user-me-permission-allowed-*"
-                },
-                {
-                    "method": "GET",
-                    "route": "/account/api/v1/user/me/route/allowed",
-                    "name": "get-account-api-v1-user-me-route-allowed"
-                },
-                {
-                    "method": "GET",
-                    "route": "/account/api/v1/config/password",
-                    "name": "get-account-api-v1-config-password"
-                },
-                {
-                    "method": "GET",
-                    "route": "/account/api/v1/config/portal/webclient",
-                    "name": "get-account-api-v1-config-portal-webclient"
-                },
-                {
-                    "method": "GET",
-                    "route": "/account/metrics",
-                    "name": "get-account-metrics"
-                },
-                {
-                    "method": "GET",
-                    "route": "/account/health",
-                    "name": "get-account-health"
+                    "name": "post-test-post"
                 }
             ],
             "inherited": [
-                "global|auth",
-                "global|leads-public",
-                "global|import-report-public",
-                "global|opt-out-public",
-                "global|crm-public"
-            ]
-        }
-    },
-    "unmask": {
-        "csr": {
+                "testgroup|group1"
+            ],
+            "is_default": false
+        },
+        "group5": {
+            "type": "group",
+            "allowed": [
+                {
+                    "route": "/test/delete/:grouptype",
+                    "host": "https://127.0.0.1:4268",
+                    "removeFromPath": "/test/delete",
+                    "method": "DELETE",
+                    "name": "delete-test-delete-:grouptype"
+                }
+            ],
             "inherited": [
-                "global|csr"
-            ]
+                "group|group4",
+                "group|superadmin"
+            ],
+            "is_default": true
+        },
+        "group1": {
+            "type": "group",
+            "allowed": null,
+            "inherited": null,
+            "is_default": false
         }
     },
-    "checkpeople": {
-        "csr": {
+    "testgroup": {
+        "group1": {
+            "type": "testgroup",
+            "allowed": null,
             "inherited": [
-                "global|csr"
-            ]
+                "group|group4"
+            ],
+            "is_default": false
+        },
+        "superadmin": {
+            "type": "testgroup",
+            "allowed": null,
+            "inherited": null,
+            "is_default": false
         }
-    },
-    "information": {
-        "csr": {
-            "inherited": [
-                "global|csr"
-            ]
-        }
-    },
-    "products": {
-        "full_reports": {},
-        "pdf_generation": {},
-        "report_monitoring": {}
     }
 }
 ```
@@ -1097,22 +916,24 @@ count - Gets all the users that belong to the group.
 
 ##### Optional Query Params
 
+\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on, updated_on, dob.
+
 | Param | Description |
 | --- | --- |
-| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
-| username | *optional* (example:  user7) |
-| locked | *optional* (example:  true) |
-| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
-| group_request | *optional* (example:  superadmin) |
-| failed_login_attempts | *optional* (example:  0) |
-| change_username | *optional* (example:  false) |
-| change_password | *optional* (example:  false) |
-| reset_password | *optional* (example:  false) |
-| email_verify | *optional* (example:  false) |
-| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
-| email | *optional* (example:  test@test.ai) |
-| created_on | *optional* (example:  1568419646794) |
-| last_login | *optional* (example:  null) |
+| id | _optional_ (example: 26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | _optional_ (example: user7) |
+| locked | _optional_ (example: true) |
+| locked_reason | _optional_ (example: Activation Required email your admin to get your account activated) |
+| group_request | _optional_ (example: superadmin) |
+| failed_login_attempts | _optional_ (example: 0) |
+| change_username | _optional_ (example: false) |
+| change_password | _optional_ (example: false) |
+| reset_password | _optional_ (example: false) |
+| email_verify | _optional_ (example: false) |
+| group_id | _optional_ (example: 7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | _optional_ (example: [test@test.ai](mailto:test@test.ai)) |
+| created_on | _optional_ (example: 1568419646794) |
+| last_login | _optional_ (example: null) |
 
 Path: api/v1/group/id/:id/users/count
 
@@ -1133,22 +954,24 @@ get - Gets all the users that belong to the group.
 
 ##### Optional Query Params
 
+\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on, updated_on, dob.
+
 | Param | Description |
 | --- | --- |
-| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
-| username | *optional* (example:  user7) |
-| locked | *optional* (example:  true) |
-| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
-| group_request | *optional* (example:  superadmin) |
-| failed_login_attempts | *optional* (example:  0) |
-| change_username | *optional* (example:  false) |
-| change_password | *optional* (example:  false) |
-| reset_password | *optional* (example:  false) |
-| email_verify | *optional* (example:  false) |
-| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
-| email | *optional* (example:  test@test.ai) |
-| created_on | *optional* (example:  1568419646794) |
-| last_login | *optional* (example:  null) |
+| id | _optional_ (example: 26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | _optional_ (example: user7) |
+| locked | _optional_ (example: true) |
+| locked_reason | _optional_ (example: Activation Required email your admin to get your account activated) |
+| group_request | _optional_ (example: superadmin) |
+| failed_login_attempts | _optional_ (example: 0) |
+| change_username | _optional_ (example: false) |
+| change_password | _optional_ (example: false) |
+| reset_password | _optional_ (example: false) |
+| email_verify | _optional_ (example: false) |
+| group_id | _optional_ (example: 7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | _optional_ (example: [test@test.ai](mailto:test@test.ai)) |
+| created_on | _optional_ (example: 1568419646794) |
+| last_login | _optional_ (example: null) |
 
 Path: api/v1/group/id/:id/users
 
@@ -1612,26 +1435,28 @@ Path: api/v1/group/id/:id/type/:type/users/inherited
 <a name="GroupTypeUsers.count"></a>
 
 ### GroupTypeUsers.count(id, type, filter, limit, skip, authorization_bearer)
-count - Gets all the users that belong to the group  of a particular type by its name or id.
+count - Gets all the users that belong to the group of a particular type by its name or id.
 
 ##### Optional Query Params
 
+\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on, updated_on, dob.
+
 | Param | Description |
 | --- | --- |
-| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
-| username | *optional* (example:  user7) |
-| locked | *optional* (example:  true) |
-| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
-| group_request | *optional* (example:  superadmin) |
-| failed_login_attempts | *optional* (example:  0) |
-| change_username | *optional* (example:  false) |
-| change_password | *optional* (example:  false) |
-| reset_password | *optional* (example:  false) |
-| email_verify | *optional* (example:  false) |
-| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
-| email | *optional* (example:  test@test.ai) |
-| created_on | *optional* (example:  1568419646794) |
-| last_login | *optional* (example:  null) |
+| id | _optional_ (example: 26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | _optional_ (example: user7) |
+| locked | _optional_ (example: true) |
+| locked_reason | _optional_ (example: Activation Required email your admin to get your account activated) |
+| group_request | _optional_ (example: superadmin) |
+| failed_login_attempts | _optional_ (example: 0) |
+| change_username | _optional_ (example: false) |
+| change_password | _optional_ (example: false) |
+| reset_password | _optional_ (example: false) |
+| email_verify | _optional_ (example: false) |
+| group_id | _optional_ (example: 7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | _optional_ (example: [test@test.ai](mailto:test@test.ai)) |
+| created_on | _optional_ (example: 1568419646794) |
+| last_login | _optional_ (example: null) |
 
 Path: api/v1/group/id/:id/type/:type/users/count
 
@@ -1649,26 +1474,28 @@ Path: api/v1/group/id/:id/type/:type/users/count
 <a name="GroupTypeUsers.get"></a>
 
 ### GroupTypeUsers.get(id, type, filter, limit, skip, sort, sortdir, authorization_bearer)
-get - Gets all the users that belong to the group  of a particular type by its name or id.
+get - Gets all the users that belong to the group of a particular type by its name or id.
 
 ##### Optional Query Params
 
+\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on, updated_on, dob.
+
 | Param | Description |
 | --- | --- |
-| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
-| username | *optional* (example:  user7) |
-| locked | *optional* (example:  true) |
-| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
-| group_request | *optional* (example:  superadmin) |
-| failed_login_attempts | *optional* (example:  0) |
-| change_username | *optional* (example:  false) |
-| change_password | *optional* (example:  false) |
-| reset_password | *optional* (example:  false) |
-| email_verify | *optional* (example:  false) |
-| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
-| email | *optional* (example:  test@test.ai) |
-| created_on | *optional* (example:  1568419646794) |
-| last_login | *optional* (example:  null) |
+| id | _optional_ (example: 26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | _optional_ (example: user7) |
+| locked | _optional_ (example: true) |
+| locked_reason | _optional_ (example: Activation Required email your admin to get your account activated) |
+| group_request | _optional_ (example: superadmin) |
+| failed_login_attempts | _optional_ (example: 0) |
+| change_username | _optional_ (example: false) |
+| change_password | _optional_ (example: false) |
+| reset_password | _optional_ (example: false) |
+| email_verify | _optional_ (example: false) |
+| group_id | _optional_ (example: 7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | _optional_ (example: [test@test.ai](mailto:test@test.ai)) |
+| created_on | _optional_ (example: 1568419646794) |
+| last_login | _optional_ (example: null) |
 
 Path: api/v1/group/id/:id/type/:type/users
 
@@ -1994,22 +1821,24 @@ count - Gets all the users
 
 ##### Optional Query Params
 
+\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on, updated_on, dob.
+
 | Param | Description |
 | --- | --- |
-| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
-| username | *optional* (example:  user7) |
-| locked | *optional* (example:  true) |
-| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
-| group_request | *optional* (example:  superadmin) |
-| failed_login_attempts | *optional* (example:  0) |
-| change_username | *optional* (example:  false) |
-| change_password | *optional* (example:  false) |
-| reset_password | *optional* (example:  false) |
-| email_verify | *optional* (example:  false) |
-| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
-| email | *optional* (example:  test@test.ai) |
-| created_on | *optional* (example:  1568419646794) |
-| last_login | *optional* (example:  null) |
+| id | _optional_ (example: 26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | _optional_ (example: user7) |
+| locked | _optional_ (example: true) |
+| locked_reason | _optional_ (example: Activation Required email your admin to get your account activated) |
+| group_request | _optional_ (example: superadmin) |
+| failed_login_attempts | _optional_ (example: 0) |
+| change_username | _optional_ (example: false) |
+| change_password | _optional_ (example: false) |
+| reset_password | _optional_ (example: false) |
+| email_verify | _optional_ (example: false) |
+| group_id | _optional_ (example: 7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | _optional_ (example: [test@test.ai](mailto:test@test.ai)) |
+| created_on | _optional_ (example: 1568419646794) |
+| last_login | _optional_ (example: null) |
 
 Path: api/v1/users/count
 
@@ -2030,22 +1859,24 @@ get - Gets all the users
 
 ##### Filter Params
 
+\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on, updated_on, dob.
+
 | Param | Description |
 | --- | --- |
-| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
-| username | *optional* (example:  user7) |
-| locked | *optional* (example:  true) |
-| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
-| group_request | *optional* (example:  superadmin) |
-| failed_login_attempts | *optional* (example:  0) |
-| change_username | *optional* (example:  false) |
-| change_password | *optional* (example:  false) |
-| reset_password | *optional* (example:  false) |
-| email_verify | *optional* (example:  false) |
-| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
-| email | *optional* (example:  test@test.ai) |
-| created_on | *optional* (example:  1568419646794) |
-| last_login | *optional* (example:  null) |
+| id | _optional_ (example: 26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | _optional_ (example: user7) |
+| locked | _optional_ (example: true) |
+| locked_reason | _optional_ (example: Activation Required email your admin to get your account activated) |
+| group_request | _optional_ (example: superadmin) |
+| failed_login_attempts | _optional_ (example: 0) |
+| change_username | _optional_ (example: false) |
+| change_password | _optional_ (example: false) |
+| reset_password | _optional_ (example: false) |
+| email_verify | _optional_ (example: false) |
+| group_id | _optional_ (example: 7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | _optional_ (example: [test@test.ai](mailto:test@test.ai)) |
+| created_on | _optional_ (example: 1568419646794) |
+| last_login | _optional_ (example: null) |
 
 Path: api/v1/users
 
@@ -2077,22 +1908,24 @@ count - Gets all the users
 
 ##### Optional Query Params
 
+\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on, updated_on, dob.
+
 | Param | Description |
 | --- | --- |
-| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
-| username | *optional* (example:  user7) |
-| locked | *optional* (example:  true) |
-| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
-| group_request | *optional* (example:  superadmin) |
-| failed_login_attempts | *optional* (example:  0) |
-| change_username | *optional* (example:  false) |
-| change_password | *optional* (example:  false) |
-| reset_password | *optional* (example:  false) |
-| email_verify | *optional* (example:  false) |
-| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
-| email | *optional* (example:  test@test.ai) |
-| created_on | *optional* (example:  1568419646794) |
-| last_login | *optional* (example:  null) |
+| id | _optional_ (example: 26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | _optional_ (example: user7) |
+| locked | _optional_ (example: true) |
+| locked_reason | _optional_ (example: Activation Required email your admin to get your account activated) |
+| group_request | _optional_ (example: superadmin) |
+| failed_login_attempts | _optional_ (example: 0) |
+| change_username | _optional_ (example: false) |
+| change_password | _optional_ (example: false) |
+| reset_password | _optional_ (example: false) |
+| email_verify | _optional_ (example: false) |
+| group_id | _optional_ (example: 7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | _optional_ (example: [test@test.ai](mailto:test@test.ai)) |
+| created_on | _optional_ (example: 1568419646794) |
+| last_login | _optional_ (example: null) |
 
 Path: api/v1/users/domain/:domain/count
 
@@ -2114,22 +1947,24 @@ get - Gets all the users
 
 ##### Filter Params
 
+\*Note: you can only use range operators (<, >, >=, <=) on the following columns: created_on, updated_on, dob.
+
 | Param | Description |
 | --- | --- |
-| id | *optional* (example:  26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
-| username | *optional* (example:  user7) |
-| locked | *optional* (example:  true) |
-| locked_reason | *optional* (example:  Activation Required email your admin to get your account activated) |
-| group_request | *optional* (example:  superadmin) |
-| failed_login_attempts | *optional* (example:  0) |
-| change_username | *optional* (example:  false) |
-| change_password | *optional* (example:  false) |
-| reset_password | *optional* (example:  false) |
-| email_verify | *optional* (example:  false) |
-| group_id | *optional* (example:  7320292c-627e-4e5a-b059-583eabdd6264) |
-| email | *optional* (example:  test@test.ai) |
-| created_on | *optional* (example:  1568419646794) |
-| last_login | *optional* (example:  null) |
+| id | _optional_ (example: 26c6aeff-ab95-4bdd-8260-534cf92d1c23) |
+| username | _optional_ (example: user7) |
+| locked | _optional_ (example: true) |
+| locked_reason | _optional_ (example: Activation Required email your admin to get your account activated) |
+| group_request | _optional_ (example: superadmin) |
+| failed_login_attempts | _optional_ (example: 0) |
+| change_username | _optional_ (example: false) |
+| change_password | _optional_ (example: false) |
+| reset_password | _optional_ (example: false) |
+| email_verify | _optional_ (example: false) |
+| group_id | _optional_ (example: 7320292c-627e-4e5a-b059-583eabdd6264) |
+| email | _optional_ (example: [test@test.ai](mailto:test@test.ai)) |
+| created_on | _optional_ (example: 1568419646794) |
+| last_login | _optional_ (example: null) |
 
 Path: api/v1/users/domain/:domain
 
@@ -2550,6 +2385,7 @@ Path: api/v1/user/domain/:domain/id/:id
     * [.deleteToken(id, authorization_bearer)](#UserCurrent.deleteToken)
     * [.edit(body, authorization_bearer)](#UserCurrent.edit)
     * [.getProperty(property, authorization_bearer)](#UserCurrent.getProperty)
+    * [.routesCheck(body, authorization_bearer)](#UserCurrent.routesCheck)
     * [.routeCheck(method, route, authorization_bearer)](#UserCurrent.routeCheck)
     * [.permissionCheck(permission, authorization_bearer)](#UserCurrent.permissionCheck)
     * [.get(authorization_bearer)](#UserCurrent.get)
@@ -2728,6 +2564,37 @@ Path: api/v1/user/me/property/:property
 | property | <code>any</code> | (example: username) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
+<a name="UserCurrent.routesCheck"></a>
+
+### UserCurrent.routesCheck(body, authorization_bearer)
+routesCheck - Checks if current logged in user can access the routes specified within the body array.
+
+Path: api/v1/user/me/routes/allowed
+
+**Kind**: static method of [<code>UserCurrent</code>](#UserCurrent)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| body | <code>Object</code> |  |
+| authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
+
+**Example**  
+body
+```json
+[
+    {
+        "method": "GET",
+        "route": "/account/api/user/me"
+    },
+    {
+        "route": "/t/api/user/me/asdf"
+    },
+        {
+        "method": "*",
+        "route": "/account/api/user/me"
+    }
+]
+```
 <a name="UserCurrent.routeCheck"></a>
 
 ### UserCurrent.routeCheck(method, route, authorization_bearer)
@@ -3083,7 +2950,7 @@ Path: api/v1/auth/login/domain/:domain
 body
 ```json
 {
-	"email": "test@test.com",
+    "email": "test@test.com",
 	"password": "Pas5w0r!d"
 }
 ```
@@ -3109,7 +2976,7 @@ Path: api/v1/auth/register/domain/:domain
 body
 ```json
 {
-	"email": "tesft@test.com",
+	"email": "test@test.com",
 	"password": "Pas5w0r!d"
 }
 ```

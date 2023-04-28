@@ -4,7 +4,7 @@ const crypto = require('crypto');
 const encryptKey = crypto.scryptSync(config.cookie.token.secret, config.cookie.token.salt, 32);
 
 const User = require('../database/models/user');
-
+const helpers = require('../server/tracing/helpers')();
 class CookieToken {
   constructor() {}
 
@@ -31,12 +31,20 @@ class CookieToken {
 
       //console.log(tok, tok.toString('ascii'), tok.toString('base64'));
       var dToken = await this.decrypt(tok.toString('ascii'));
-      var cred = dToken.split(':');
+      var cred = dToken.split('|');
 
       //console.log(cred, cred[4], ip);
       if (config.cookie.security.ipHijackProtection && cred[4] != ip) {
         if (span) {
           span.updateName('checkToken [ipHijackProtection]');
+          config.log.logger.warn(
+            helpers.text(`IP Hijack Detected": (${cred[0]}, ${cred[1]}) ${cred[4]} =/= ${ip}`, span)
+          );
+        }
+
+        this.removeAuthCookie(res, span)
+        
+        if(span) {
           span.end();
         }
 
@@ -44,7 +52,7 @@ class CookieToken {
       }
 
       if (Date.now() - Number(cred[3]) < config.cookie.token.expiration * 86400000) {
-        // 90 days in millls
+        // 90 days in millis
 
         var user = await User.findAllBy({ domain: cred[0], id: cred[1], password: cred[2] });
 
@@ -54,6 +62,7 @@ class CookieToken {
             span.end();
           }
 
+          /* Ending the span. */
           return false;
         } else {
           if (user.length > 1) {
@@ -119,12 +128,13 @@ class CookieToken {
   static removeAuthCookie(res, oldspan) {
     var span;
 
-    if (oldspan) {
-      span = req.startSpan('removeAuthCookie', oldspan);
+    if (oldspan && helpers) {
+      span = helpers.startSpan('removeAuthCookie', oldspan);
     }
 
+    const expires = Date.now();
     res.setCookie('trav:tok', null, {
-      expires: Date.now(),
+      expires,
       secure: config.https,
       httpOnly: true,
       domain: config.cookie.domain,
@@ -132,14 +142,22 @@ class CookieToken {
     });
 
     if (config.cookie.token.checkable === true) {
-      res.setCookie('trav:ls', 1, {
-        expires: Date.now(),
+      res.setCookie('trav:ls', null, {
+        expires,
         secure: config.https,
         httpOnly: false,
         domain: config.cookie.domain,
         path: '/'
       });
     }
+
+    res.setCookie('trav:ssid', null, {
+      expires,
+      httpOnly: true,
+      secure: config.https,
+      domain: config.cookie.domain,
+      path: '/'
+    });
 
     if (span) {
       span.end();
@@ -151,7 +169,7 @@ class CookieToken {
   // password are the hashed password only!
   static async getToken(domain, id, password, ip, date) {
     return await this.encrypt(
-      `${domain}:${id}:${password}:${date}:${config.cookie.security.ipHijackProtection ? ip : ''}`
+      `${domain}|${id}|${password}|${date}|${config.cookie.security.ipHijackProtection ? ip : ''}`
     );
   }
 

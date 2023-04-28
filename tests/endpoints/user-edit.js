@@ -91,11 +91,8 @@ module.exports = () => {
       });
 
       test('Edit Test User 1 Email - Newlines and tabs', async () => {
-        const paragraph = `\tasdf asd f sadf.\n\tasdf asdf.\n   asdf!`
-        var res = await Travelling.User.Current.edit(
-          { user_data: { paragraph } },
-          userContainer.user1Token
-        );
+        const paragraph = `\tasdf asd f sadf.\n\tasdf asdf.\n   asdf!`;
+        var res = await Travelling.User.Current.edit({ user_data: { paragraph } }, userContainer.user1Token);
 
         expect(res.statusCode).toEqual(200);
         expect(res.body).toMatchObject({
@@ -146,7 +143,7 @@ module.exports = () => {
       });
 
       test('Edit Test User 1 - user_data - Newlines and tabs', async () => {
-        const properWriting = `     A very well formatted paragraph, with all the English you could ever need!\n\n\tNow that we are a line under we can write a sentence ending with a period.`
+        const properWriting = `     A very well formatted paragraph, with all the English you could ever need!\n\n\tNow that we are a line under we can write a sentence ending with a period.`;
 
         var res = await Travelling.User.Current.editProperty(
           properWriting,
@@ -162,16 +159,12 @@ module.exports = () => {
         });
 
         // Delete the properness
-        var del = await Travelling.User.Current.editProperty(
-          '',
-          'user_data.proper-writing',
-          userContainer.user1Token
-        );
+        var del = await Travelling.User.Current.editProperty('', 'user_data.proper-writing', userContainer.user1Token);
 
         expect(del.statusCode).toEqual(200);
         expect(del.body).toStrictEqual({
           test: 1,
-          foo: 'bar',
+          foo: 'bar'
         });
       });
 
@@ -190,6 +183,61 @@ module.exports = () => {
         });
       });
 
+      test('Edit Test Domain User 6 Password and verify audit log', async () => {
+        const newPassword = 'Pas5w0r!d';
+
+        const travtok = userContainer.userDomain6;
+
+        var res = await Travelling.User.Current.editProperty(newPassword, 'password', null, {
+          headers: {
+            cookie: 'trav:tok=' + travtok.tok
+          }
+        });
+
+        expect(res.body).not.toBe(newPassword); // Make sure only the hash is returned
+        expect(res.statusCode).toEqual(200);
+
+        // Should get a new token when changing password
+        userContainer.parseUserDomain6Cookie(res.headers['set-cookie']);
+
+        // Wait before accessing resource to ensure an invalid token wont work
+        await new Promise((resolve) => setTimeout(resolve, 5000));
+
+        // Make sure token authenticates
+        var currentUser = await Travelling.User.Current.get(null, {
+          headers: {
+            cookie: userContainer.userDomain6Cookie()
+          }
+        });
+
+        expect(currentUser.statusCode).toEqual(200);
+
+        if (config.audit.edit.enable === true) {
+          // Check audit log to make sure password is hashed
+          const audit = await Audit.findAllBy({
+            by_user_id: currentUser.body.id,
+            action: 'EDIT',
+            subaction: 'USER_PROPERTY',
+            prop: 'password'
+          });
+
+          expect(audit.length).toBe(1);
+          expect(audit[0]).toHaveProperty('id');
+          expect(audit[0]).toHaveProperty('created_on');
+          expect(audit[0]).toHaveProperty('action', 'EDIT');
+          expect(audit[0]).toHaveProperty('subaction', 'USER_PROPERTY');
+          expect(audit[0]).toHaveProperty('by_user_id', currentUser.body.id);
+          expect(audit[0]).toHaveProperty('of_user_id', currentUser.body.id);
+          expect(audit[0]).toHaveProperty('prop', 'password');
+          expect(audit[0]).toHaveProperty('old_val');
+          expect(audit[0].old_val).not.toBeNull();
+          expect(audit[0].new_val).not.toBe('Pas5w0r!d6'); // This is the old password from the register test suite
+          expect(audit[0]).toHaveProperty('new_val');
+          expect(audit[0].new_val).not.toBeNull();
+          expect(audit[0].new_val).not.toBe(newPassword); // Make sure its hashed
+        }
+      });
+
       test('Delete Test User 1 Token "test123token" ', async () => {
         var res = await Travelling.User.Current.registerToken(
           { name: 'test123token', urls: ['http://127.0.0.1'] },
@@ -197,6 +245,36 @@ module.exports = () => {
         );
 
         expect(res.statusCode).toEqual(200);
+        expect(res.body).toHaveProperty('client_id', 'test123token');
+        expect(res.body).toHaveProperty('client_secret');
+
+        if (config.audit.create.enable === true) {
+          const clientSecret = res.body.client_secret;
+
+          var currentUser = await Travelling.User.Current.get(userContainer.user1Token);
+
+          expect(currentUser.statusCode).toEqual(200);
+
+          // Make sure audit log doesnt leak token
+          const audit = await Audit.findAllBy({
+            by_user_id: currentUser.body.id,
+            action: 'CREATE',
+            subaction: 'USER_OAUTH2_TOKEN'
+          });
+
+          expect(audit.length).toBeGreaterThanOrEqual(1);
+          expect(audit[0]).toHaveProperty('id');
+          expect(audit[0]).toHaveProperty('created_on');
+          expect(audit[0]).toHaveProperty('action', 'CREATE');
+          expect(audit[0]).toHaveProperty('subaction', 'USER_OAUTH2_TOKEN');
+          expect(audit[0]).toHaveProperty('by_user_id', currentUser.body.id);
+          expect(audit[0]).toHaveProperty('of_user_id', currentUser.body.id);
+          expect(audit[0]).toHaveProperty('prop', null);
+          expect(audit[0]).toHaveProperty('old_val', null);
+          expect(audit[0]).toHaveProperty('new_val');
+          expect(audit[0].new_val).not.toBeNull();
+          expect(audit[0].new_val).not.toBe(clientSecret); // make sure its hashed
+        }
 
         res = await Travelling.User.Current.deleteToken('test123token', userContainer.user1Token);
 
@@ -387,7 +465,7 @@ module.exports = () => {
       });
 
       test('Edit User Data Property - Newlines and tabs', async () => {
-        const properWriting = `     A very well formatted paragraph, with all the English you could ever need!\n\n\tNow that we are a line under we can write a sentence ending with a period.`
+        const properWriting = `     A very well formatted paragraph, with all the English you could ever need!\n\n\tNow that we are a line under we can write a sentence ending with a period.`;
 
         var res = await Travelling.User.Domain.editUserDataProperty(
           properWriting,

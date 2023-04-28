@@ -1,6 +1,6 @@
 {
   "name": "@dragohm/travelling",
-  "version": "2.20.0",
+  "version": "3.2.1",
   "description": "A dynamic route level groups permissions middleman service",
   "main": "index.js",
   "scripts": {
@@ -43,40 +43,41 @@
     "@opentelemetry/core": "^0.26.0",
     "@opentelemetry/instrumentation": "^0.26.0",
     "@opentelemetry/instrumentation-http": "^0.26.0",
-    "@opentelemetry/sdk-trace-node": "^0.26.0",
     "@opentelemetry/sdk-trace-base": "^0.26.0",
-    "adost": "^1.4.0",
+    "@opentelemetry/sdk-trace-node": "^0.26.0",
+    "adost": "^2.0.0",
     "aws-sdk": "^2.516.0",
     "dotenv": "^8.2.0",
     "fasquest": "^3.1.1",
-    "fast-proxy": "^1.8.0",
+    "fast-proxy": "^1.0.0",
     "fastify": "^3.11.0",
     "fastify-cookie": "^5.1.0",
     "fastify-favicon": "^3.0.0",
     "fastify-good-sessions": "^1.4.4",
     "fastify-jaeger": "^1.0.1",
     "fastify-plugin": "^3.0.0",
-    "fastify-static": "^3.4.0",
+    "fastify-static": "^4.7.0",
     "handlebars": "^4.7.3",
     "http-proxy": "^1.17.0",
     "ioredis": "^4.14.1",
     "nodemailer": "^6.3.0",
     "nstats": "4.2.0",
-    "wog": "latest"
+    "wog": "latest",
+    "zcs": "^2.2.0"
   },
   "devDependencies": {
     "@abeai/recho": "^1.4.0",
-    "cookie": "^0.4.0",
     "auto-changelog": "^2.2.0",
+    "cookie": "^0.4.0",
     "eslint": "^7.8.1",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
     "jest": "^26.1.0",
     "jest-junit": "^11.0.1",
-    "jsdoc-to-markdown": "^6.0.1",
+    "jsdoc-to-markdown": "^8.0.0",
     "mdsquash": "^1.0.6",
+    "postgen": "^5.0.0",
     "prettier": "^2.0.5",
-    "prettier-eslint": "^11.0.0",
-    "postgen": "^4.6.4"
+    "prettier-eslint": "^11.0.0"
   }
 }
