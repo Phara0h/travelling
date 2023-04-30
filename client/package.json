@@ -28,6 +28,6 @@
     "rollup-plugin-babel": "^4.3.0",
     "rollup-plugin-node-resolve": "^4.0.0",
     "@webcomponents/webcomponentsjs": "^2.2.4",
-    "serve": "^10.1.1"
+    "serve": "^14.1.2"
   }
 }
