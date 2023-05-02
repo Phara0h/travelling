@@ -76,12 +76,18 @@ class Email {
       resetPasswordSubject: Handlebars.compile(
         fs.readFileSync(require('path').resolve(config.email.template.passwordResetSubject), 'utf-8')
       ),
-      activationBody: Handlebars.compile(fs.readFileSync(require('path').resolve(config.email.template.activationBody), 'utf-8')),
+      activationBody: Handlebars.compile(
+        fs.readFileSync(require('path').resolve(config.email.template.activationBody), 'utf-8')
+      ),
       activationSubject: Handlebars.compile(
         fs.readFileSync(require('path').resolve(config.email.template.activationSubject), 'utf-8')
       ),
-      welcomeBody: Handlebars.compile(fs.readFileSync(require('path').resolve(config.email.template.welcomeBody), 'utf-8')),
-      welcomeSubject: Handlebars.compile(fs.readFileSync(require('path').resolve(config.email.template.welcomeSubject), 'utf-8'))
+      welcomeBody: Handlebars.compile(
+        fs.readFileSync(require('path').resolve(config.email.template.welcomeBody), 'utf-8')
+      ),
+      welcomeSubject: Handlebars.compile(
+        fs.readFileSync(require('path').resolve(config.email.template.welcomeSubject), 'utf-8')
+      )
     };
   }
 
@@ -102,6 +108,10 @@ class Email {
       subject = templates.resetPasswordSubject({ user });
     }
 
+    const d = new Date();
+    const e = new Date(d.getTime() + config.email.recovery.expiration * 1000);
+    const tokenExpiry = e.toUTCString(); // Could change display formatting here.
+
     var info = await transporter.sendMail({
       from: config.email.from,
       to: email,
@@ -111,7 +121,8 @@ class Email {
       user,
       config,
       token,
-      clientip
+      clientip,
+      data: { ip: clientip, tokenExpiry: tokenExpiry.toString() }
     });
 
     if (config.email.test.enable) {
