@@ -8,7 +8,6 @@ class Group extends Base(BaseModel, 'groups', {
   id: PGTypes.PK,
   name: null,
   type: null,
-
   /**
     allowed is an array of objects with this struct:
     {
@@ -16,7 +15,8 @@ class Group extends Base(BaseModel, 'groups', {
         method: String,
         remove_from_path: String,
         route: String,
-        host: String
+        host: String,
+        redirect: String
     }
     **/
   allowed: null,
