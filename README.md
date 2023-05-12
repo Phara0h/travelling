@@ -3889,7 +3889,13 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v3.2.3](https://github.com/Trazi-Ventures/travelling/compare/v3.2.2...v3.2.3)
+
+- Fix #101 password recovery email data [`#101`](https://github.com/Trazi-Ventures/travelling/issues/101)
+
 #### [v3.2.2](https://github.com/Trazi-Ventures/travelling/compare/v3.2.1...v3.2.2)
+
+> 12 May 2023
 
 - Feature #101 Add data to password recovery email [`#36`](https://github.com/Trazi-Ventures/travelling/pull/36)
 - add data to password recovery email [`3c4baeb`](https://github.com/Trazi-Ventures/travelling/commit/3c4baeb46d6eb27e5c920f78179df03dd18d280a)
