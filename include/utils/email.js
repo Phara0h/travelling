@@ -28,7 +28,12 @@ const restTransporter = {
         simple: false,
         uri,
         json: true,
-        body: { user: mail.data.user, token: mail.data.token, clientip: mail.data.clientip }
+        body: {
+          user: mail.data.user,
+          token: mail.data.token,
+          clientip: mail.data.clientip,
+          data: mail.data.data ? { ip: mail.data.data.ip, tokenExpiry: mail.data.data.tokenExpiry } : {}
+        }
       });
       callback(null, true);
     } catch (e) {
