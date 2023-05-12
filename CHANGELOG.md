@@ -1,6 +1,14 @@
 
 
+#### [v3.2.2](https://github.com/Dragohm/travelling/compare/v3.2.1...v3.2.2)
+
+- Feature #101 Add data to password recovery email [`#36`](https://github.com/Dragohm/travelling/pull/36)
+- add data to password recovery email [`3c4baeb`](https://github.com/Dragohm/travelling/commit/3c4baeb46d6eb27e5c920f78179df03dd18d280a)
+- Update Travelling.postman_collection.json [`474eff0`](https://github.com/Dragohm/travelling/commit/474eff08a76ef20325ccb210eea56736770cb759)
+
 #### [v3.2.1](https://github.com/Dragohm/travelling/compare/v3.2.0...v3.2.1)
+
+> 22 March 2023
 
 - Update package.json [`e34774f`](https://github.com/Dragohm/travelling/commit/e34774f2cc05617d3b97aa2cf8bd4d5b949f2f02)
 
