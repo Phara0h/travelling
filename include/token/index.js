@@ -114,9 +114,7 @@ class TokenHandler {
 
   static getOAuthCode(user_id, client_id, redirectURI) {
     return new Promise(async (resolve, reject) => {
-      var token = (
-        await Token.findLimtedBy(regex.uuidCheck(client_id) ? { id: client_id } : { name: client_id }, 'AND', 1)
-      )[0];
+      var token = (await Token.findLimtedBy(regex.uuidCheck(client_id) ? { id: client_id } : { name: client_id }, 'AND', 1))[0];
 
       if (!token || !token.urls) {
         reject('No token found for the client_id ' + client_id);
@@ -170,12 +168,7 @@ class TokenHandler {
         }
 
         resolve(
-          await TokenStore.set(
-            secret.toString('hex'),
-            'code',
-            client_id + '_' + user_id,
-            config.token.code.expiration * 60000
-          )
+          await TokenStore.set(secret.toString('hex'), 'code', client_id + '_' + user_id, config.token.code.expiration * 60000)
         ); // min to ms;
       });
     });
