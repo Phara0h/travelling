@@ -1,6 +1,14 @@
 
 
+#### [v3.2.4](https://github.com/Dragohm/travelling/compare/v3.2.3...v3.2.4)
+
+- Fix #102 Fix max login attempts account locking [`#37`](https://github.com/Dragohm/travelling/pull/37)
+- Merge pull request #37 from Dragohm/fix-#102-lock-accounts-on-max-attempts [`#102`](https://github.com/Dragohm/travelling/issues/102)
+- Fix max attempts lock user issue [`8fc5c96`](https://github.com/Dragohm/travelling/commit/8fc5c96ba68fdccc7da0b6dbaf11b65cb28cc89b)
+
 #### [v3.2.3](https://github.com/Dragohm/travelling/compare/v3.2.2...v3.2.3)
+
+> 12 May 2023
 
 - Fix #101 password recovery email data [`#101`](https://github.com/Dragohm/travelling/issues/101)
 
