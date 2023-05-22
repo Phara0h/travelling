@@ -63,7 +63,7 @@
     "nodemailer": "^6.3.0",
     "nstats": "4.2.0",
     "wog": "latest",
-    "zcs": "^2.2.0"
+    "zcs": "^2.4.0"
   },
   "devDependencies": {
     "@abeai/recho": "^1.4.0",
