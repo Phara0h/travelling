@@ -73,10 +73,10 @@ class Router {
     var groups = await gm.currentGroup(req, res);
 
     if (sessionUser && sessionUser.locked) {
-      if(config.user.locked.message !== sessionUser.locked_reason) {
+      if (config.user.locked.message !== sessionUser.locked_reason) {
         req.logout(req, res);
         res.code(401).send('Account Locked');
-        if(span) {
+        if (span) {
           span.end();
         }
         return false;
@@ -94,7 +94,7 @@ class Router {
 
         r = this.isRouteAllowed(req.raw.method, req.raw.url, groups[i].routes, sessionUser, routedGroup, headersDomain);
         if (r) {
-          possibleRoute = r.route;
+          possibleRoute = r;
           break;
         }
       }
@@ -107,17 +107,17 @@ class Router {
 
         for (var i = 0; i < troute.length; i++) {
           if (last[troute[i]]) {
-            possibleRoute = last[troute[i]].name;
+            possibleRoute = last[troute[i]];
             last = last[troute[i]];
           } else if (last['*']) {
-            possibleRoute = last['*'].name;
+            possibleRoute = last['*'];
             last = last['*'];
           }
         }
       }
 
       if (req.raw.url.indexOf(config.portal.path) == 0) {
-        if(span) {
+        if (span) {
           span.end();
         }
         return false;
@@ -137,6 +137,8 @@ class Router {
           // console.log(req.raw.url, req.raw.url, config.portal.path)
           this.setBackurl(res, req);
           res.redirect(config.portal.path);
+        } else if (possibleRoute && possibleRoute.redirect) {
+          res.redirect(possibleRoute.redirect);
         } else {
           res.code(401).send('Access Denied');
         }
@@ -157,7 +159,7 @@ class Router {
             )
           );
         }
-        if(span) {
+        if (span) {
           span.end();
         }
         return false;
@@ -191,10 +193,14 @@ class Router {
         }
 
         if (config.stats.captureGroupRoutes && req.raw.url.indexOf('/' + config.serviceName + '/') == -1) {
-          this.nstats.addWeb({ routerPath: possibleRoute, method: req.raw.method, socket: req.raw.socket }, res, sTime);
+          this.nstats.addWeb(
+            { routerPath: possibleRoute.name, method: req.raw.method, socket: req.raw.socket },
+            res,
+            sTime
+          );
         }
 
-        if(span) {
+        if (span) {
           span.end();
         }
 
@@ -241,7 +247,9 @@ class Router {
               helpers.text(
                 (sessionUser.username || sessionUser.email) +
                   ' (' +
-                  routedGroup.type + ':' +  routedGroup.name +
+                  routedGroup.type +
+                  ':' +
+                  routedGroup.name +
                   ',' +
                   sessionUser.domain +
                   ') | ' +
@@ -256,14 +264,21 @@ class Router {
           } else {
             log.info(
               helpers.text(
-                'Unregistered User' + ' (anonymous)' + ' | ' + parse.getIp(req) + ' | [' + req.raw.method + '] ' + req.raw.url,
+                'Unregistered User' +
+                  ' (anonymous)' +
+                  ' | ' +
+                  parse.getIp(req) +
+                  ' | [' +
+                  req.raw.method +
+                  '] ' +
+                  req.raw.url,
                 span
               )
             );
           }
         }
 
-        if(span) {
+        if (span) {
           span.end();
         }
 
@@ -271,7 +286,11 @@ class Router {
       }
 
       if (config.stats.captureGroupRoutes) {
-        this.nstats.addWeb({ routerPath: possibleRoute, method: req.raw.method, socket: req.raw.socket }, res, sTime);
+        this.nstats.addWeb(
+          { routerPath: possibleRoute.name, method: req.raw.method, socket: req.raw.socket },
+          res,
+          sTime
+        );
       }
 
       var target = {
@@ -293,7 +312,9 @@ class Router {
             helpers.text(
               (sessionUser.username || sessionUser.email) +
                 ' (' +
-                routedGroup.type + ':' +  routedGroup.name +
+                routedGroup.type +
+                ':' +
+                routedGroup.name +
                 ',' +
                 sessionUser.domain +
                 ') | ' +
@@ -334,7 +355,7 @@ class Router {
           this.proxy.ws(req.raw, req._wssocket, target);
         }
 
-        if(span) {
+        if (span) {
           span.end();
         }
 
@@ -354,14 +375,14 @@ class Router {
           this.proxy.web(req.raw, res.raw, target);
         }
 
-        if(span) {
+        if (span) {
           span.end();
         }
 
         return true;
       }
 
-      if(span) {
+      if (span) {
         span.end();
       }
 
@@ -375,7 +396,7 @@ class Router {
     // Should never get here;
     log.wtf(helpers.text('router you what?', span));
 
-    if(span) {
+    if (span) {
       span.end();
     }
 
