@@ -287,7 +287,7 @@ class Router {
 
       if (config.stats.captureGroupRoutes) {
         this.nstats.addWeb(
-          { routerPath: possibleRoute.name, method: req.raw.method, socket: req.raw.socket },
+          { routerPath: possibleRoute.route, method: req.raw.method, socket: req.raw.socket },
           res,
           sTime
         );
