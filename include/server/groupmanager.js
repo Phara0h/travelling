@@ -58,13 +58,14 @@ class GroupManager {
       this.mergedRoutes[grps[i].type][grps[i].name] = this.groupInheritedMerge(new Group(grps[i]._), grps, span);
 
       for (var j = 0; j < this.mergedRoutes[grps[i].type][grps[i].name].length; j++) {
-        allPossibleRoutesTemp[this.mergedRoutes[grps[i].type][grps[i].name][j].route] = true;
+        allPossibleRoutesTemp[this.mergedRoutes[grps[i].type][grps[i].name][j].route] =
+          this.mergedRoutes[grps[i].type][grps[i].name][j];
       }
     }
 
-    allPossibleRoutesTemp = Object.keys(allPossibleRoutesTemp);
-    for (let i = 0; i < allPossibleRoutesTemp.length; i++) {
-      var t = allPossibleRoutesTemp[i].split('/');
+    const allPossibleRoutesTempKeys = Object.keys(allPossibleRoutesTemp);
+    for (let i = 0; i < allPossibleRoutesTempKeys.length; i++) {
+      var t = allPossibleRoutesTempKeys[i].split('/');
 
       t.shift();
       var last = this.allPossibleRoutes;
@@ -75,7 +76,9 @@ class GroupManager {
             last[t[j]] = {};
           }
 
-          last[t[j]].name = allPossibleRoutesTemp[i];
+          last[t[j]].name = allPossibleRoutesTempKeys[i];
+          last[t[j]].redirect = allPossibleRoutesTemp[allPossibleRoutesTempKeys[i]].redirect;
+
           last = last[t[j]];
         }
       }
