@@ -3889,7 +3889,14 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v3.2.5](https://github.com/Dragohm/travelling/compare/v3.2.4...v3.2.5)
+
+- Update regex.js [`77b9bcb`](https://github.com/Dragohm/travelling/commit/77b9bcbd3fc3f7ecaafa8e1eeb8487de49b26d76)
+- Update package.json [`4ffdf10`](https://github.com/Dragohm/travelling/commit/4ffdf105f5f874e59bc7ff44f74c2767e856d5e7)
+
 #### [v3.2.4](https://github.com/Dragohm/travelling/compare/v3.2.3...v3.2.4)
+
+> 19 May 2023
 
 - Fix #102 Fix max login attempts account locking [`#37`](https://github.com/Dragohm/travelling/pull/37)
 - Merge pull request #37 from Dragohm/fix-#102-lock-accounts-on-max-attempts [`#102`](https://github.com/Dragohm/travelling/issues/102)
