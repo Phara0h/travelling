@@ -1,5 +1,5 @@
 const config = require('../include/utils/config');
-const { Travelling } = require('../sdk/node')('http://127.0.0.1:6969/' + config.serviceName,{
+const { Travelling } = require('../sdk/node')('http://127.0.0.1:6969/' + config.serviceName, {
   resolveWithFullResponse: true
 });
 var userContainer = require('./include/UserContainer.js');
@@ -67,6 +67,67 @@ module.exports = () => {
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.params).toEqual({ param1: 'routes', param2: 'group5' });
+    });
+
+    test('[GET] redirect route - to health check with unauthenticated user', async () => {
+      const originalVal = config.misc.deniedRedirect;
+
+      // Set deniedRedirect to false for this test
+      config.misc.deniedRedirect = false;
+
+      await Travelling.Group.addRoute(
+        {
+          method: '*',
+          route: '/test-domain-redirect',
+          name: 'test-domain-redirect',
+          domain: '*',
+          redirect: 'http://example.com'
+        },
+        'group6',
+        accessToken
+      );
+
+      var res = await fasq.request({
+        method: 'GET',
+        resolveWithFullResponse: true,
+        simple: false,
+        uri: 'http://127.0.0.1:6969/test-domain-redirect',
+        authorization: {
+          bearer: ''
+        }
+      });
+
+      config.misc.deniedRedirect = originalVal;
+
+      expect(res.body).not.toBe('Access Denied');
+      expect(res.body.includes('html')).toBe(true);
+      expect(res.statusCode).toEqual(200);
+    });
+
+    test('[GET] access denied on route with no redirect', async () => {
+      await Travelling.Group.addRoute(
+        {
+          method: '*',
+          route: '/test-domain-nada',
+          name: 'test-domain-nada',
+          domain: '*'
+        },
+        'group6',
+        accessToken
+      );
+
+      var res = await fasq.request({
+        method: 'GET',
+        resolveWithFullResponse: true,
+        simple: false,
+        uri: 'http://127.0.0.1:6969/test-domain-nada',
+        authorization: {
+          bearer: userContainer.user1Token // User1 shouldnt have group 6
+        }
+      });
+
+      expect(res.statusCode).toEqual(401);
+      expect(res.body).toBe('Access Denied');
     });
 
     test('[POST] with ID and Permission in Query Params HTTP', async () => {
