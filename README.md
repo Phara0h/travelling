@@ -3889,7 +3889,21 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v3.2.7](https://github.com/Trazi-Ventures/travelling/compare/v3.2.6...v3.2.7)
+
+- Feature #88 Add route redirects [`#38`](https://github.com/Trazi-Ventures/travelling/pull/38)
+- add tests [`f8548d2`](https://github.com/Trazi-Ventures/travelling/commit/f8548d230e4afff23f843f6ae55db0c526e17e10)
+- use other param [`23d0206`](https://github.com/Trazi-Ventures/travelling/commit/23d02064366c8bcdd40e028f2b1091fd194a4881)
+- add route redirect logic [`fc3272a`](https://github.com/Trazi-Ventures/travelling/commit/fc3272ae350b8500dc4b0c9f448b3a4fdccaccb2)
+- add route redirect logic [`200bbc9`](https://github.com/Trazi-Ventures/travelling/commit/200bbc9b6a53ff00399cc69fd4ed4f3c589c884a)
+- Revert "redirects start" [`e2fd904`](https://github.com/Trazi-Ventures/travelling/commit/e2fd9044cc5954ed10637140f1f9159703bacc67)
+- Revert "redirects start" [`fa45685`](https://github.com/Trazi-Ventures/travelling/commit/fa456854812802f4c1f064a06a59882452781054)
+- redirects start [`a3fd160`](https://github.com/Trazi-Ventures/travelling/commit/a3fd1601fd16123a72e7479bf1a67bb8ca45a1d5)
+- redirects start [`d650bfe`](https://github.com/Trazi-Ventures/travelling/commit/d650bfe664c2d3455c374d84fa5df87ba6ee5a49)
+
 #### [v3.2.6](https://github.com/Trazi-Ventures/travelling/compare/v3.2.5...v3.2.6)
+
+> 21 June 2023
 
 #### [v3.2.5](https://github.com/Trazi-Ventures/travelling/compare/v3.2.4...v3.2.5)
 
