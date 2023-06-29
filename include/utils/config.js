@@ -239,7 +239,7 @@ const config = {
         method: misc.isSetDefault(process.env.TRAVELLING_EMAIL_VALIDATION_EXTERNAL_METHOD, 'GET')
       },
       internal: {
-        dedupeGmail: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_EMAIL_GMAIL_DEDUPE), true)
+        dedupeGmail: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_EMAIL_GMAIL_DEDUPE), false)
       }
     },
     from: misc.isSetDefault(process.env.TRAVELLING_EMAIL_FROM, null),
