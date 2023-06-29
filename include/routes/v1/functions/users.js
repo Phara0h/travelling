@@ -165,6 +165,22 @@ async function editUser(opts) {
     }
   }
 
+  if (model.email) {
+    model.email = model.email.toLowerCase();
+    if (model.email.toLowerCase().includes('@gmail.com') && config.email.validation.internal.dedupeGmail) {
+      let [email, domain] = model.email.toLowerCase().split('@');
+      if (email.indexOf('.') > -1) {
+        email = email.replace(/\./g, '');
+      }
+
+      if (email.indexOf('+') > -1) {
+        email = email.split('+')[0];
+      }
+
+      model.email = `${email}@${domain}`;
+    }
+  }
+
   var isValid = await userUtils.checkValidUser(model);
 
   if (isValid === true) {

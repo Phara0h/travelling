@@ -99,6 +99,18 @@ var registerRoute = async (req, res) => {
 
   req.body.domain = req.params.domain || 'default';
   req.body.email = req.body.email.toLowerCase();
+  if (req.body.email.toLowerCase().includes('@gmail.com') && config.email.validation.internal.dedupeGmail) {
+    let [email, domain] = req.body.email.toLowerCase().split('@');
+    if (email.indexOf('.') > -1) {
+      email = email.replace(/\./g, '');
+    }
+
+    if (email.indexOf('+') > -1) {
+      email = email.split('+')[0];
+    }
+
+    req.body.email = `${email}@${domain}`;
+  }
 
   if (config.user.username.enabled) {
     req.body.username = req.body.username.toLowerCase();
@@ -122,7 +134,7 @@ var registerRoute = async (req, res) => {
 
   var username = config.user.username.enabled ? req.body.username.toLowerCase() : '';
   var password = req.body.password;
-  var email = req.body.email.toLowerCase();
+  var email = req.body.email;
   var domain = 'default';
   var groupRequest;
 
