@@ -146,6 +146,21 @@ module.exports = () => {
 
       expect(res.statusCode).toEqual(200);
     });
+
+    if (config.email.validation.internal.dedupeGmail) {
+      test('Create Test User [test_domain_7] - GMAIL', async () => {
+        var res = await Travelling.Auth.Domain.register(
+          {
+            username: 'test_domain_7',
+            password: 'Pas5w0r!d6',
+            email: 'test@gmail.com'
+          },
+          'dragohmventures.com'
+        );
+
+        expect(res.statusCode).toEqual(200);
+      });
+    }
   });
 
   describe('Invalid', () => {
@@ -213,6 +228,28 @@ module.exports = () => {
 
       expect(res.statusCode).toEqual(400);
     });
+
+    if (config.email.validation.internal.dedupeGmail) {
+      test('Duplicate Email - with GMAIL dedupe (+)', async () => {
+        var res = await Travelling.Auth.register({
+          username: 'test1',
+          password: 'Pas5w0r!d',
+          email: 'test+123+6969@gmail.com'
+        });
+
+        expect(res.statusCode).toEqual(400);
+      });
+
+      test('Duplicate Email - with GMAIL dedupe (.)', async () => {
+        var res = await Travelling.Auth.register({
+          username: 'test1',
+          password: 'Pas5w0r!d',
+          email: 't.e.s.t+123+6969@gmail.com'
+        });
+
+        expect(res.statusCode).toEqual(400);
+      });
+    }
 
     test('No Email', async () => {
       var res = await Travelling.Auth.register({
