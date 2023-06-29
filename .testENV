@@ -1,4 +1,4 @@
-TRAVELLING_DATABASE_URL=postgres://benjones@localhost/travelling-test
+TRAVELLING_DATABASE_URL=postgres://postgres@localhost/travelling-test
 NODE_TLS_REJECT_UNAUTHORIZED=0
 
 ## Server Settings
