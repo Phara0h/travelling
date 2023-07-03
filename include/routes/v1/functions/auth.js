@@ -99,7 +99,7 @@ var registerRoute = async (req, res) => {
 
   req.body.domain = req.params.domain || 'default';
   req.body.email = req.body.email.toLowerCase();
-  if (req.body.email.toLowerCase().includes('@gmail.com') && config.email.validation.internal.dedupeGmail) {
+  if (req.body.email.includes('@gmail.com') && config.email.validation.internal.dedupeGmail) {
     let [email, domain] = req.body.email.toLowerCase().split('@');
     if (email.indexOf('.') > -1) {
       email = email.replace(/\./g, '');
