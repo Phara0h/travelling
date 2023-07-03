@@ -165,6 +165,8 @@ async function editUser(opts) {
     }
   }
 
+  var isValid = await userUtils.checkValidUser(model);
+
   if (model.email) {
     model.email = model.email.toLowerCase();
     if (model.email.toLowerCase().includes('@gmail.com') && config.email.validation.internal.dedupeGmail) {
@@ -180,8 +182,6 @@ async function editUser(opts) {
       model.email = `${email}@${domain}`;
     }
   }
-
-  var isValid = await userUtils.checkValidUser(model);
 
   if (isValid === true) {
     if (opts.needsDomain && (model.email || model.username)) {
