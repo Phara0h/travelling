@@ -28,9 +28,13 @@ const utilsUser = {
         msg: 'Must be a real email'
       };
 
-      if (validateEmail) {
-        user.email = user.email.toLowerCase();
+      user.email = user.email.toLowerCase();
 
+      if (config.email.validation.internal.dedupeGmail && user.email.includes('@gmail.com')) {
+        user.email = EmailUtils.dedupeGmail(user.email);
+      }
+
+      if (validateEmail) {
         if (config.email.validation.external.enable) {
           try {
             await Fasquest.request({
@@ -46,10 +50,6 @@ const utilsUser = {
           }
         } else if (regex.email.exec(user.email.toLowerCase()) == null) {
           return emailError;
-        }
-
-        if (user.email.includes('@gmail.com') && config.email.validation.internal.dedupeGmail) {
-          user.email = EmailUtils.dedupeGmail(user.email);
         }
       }
     }
