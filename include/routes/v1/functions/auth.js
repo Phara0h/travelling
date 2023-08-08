@@ -109,10 +109,6 @@ var registerRoute = async (req, res) => {
 
   var isValid = await checkValidUser(req.body);
 
-  if (req.body.email.includes('@gmail.com') && config.email.validation.internal.dedupeGmail) {
-    req.body.email = Email.dedupeGmail(req.body.email);
-  }
-
   if (isValid === true) {
     isValid = await Database.checkDupe(req.body);
   }
