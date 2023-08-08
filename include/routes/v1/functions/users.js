@@ -1,5 +1,4 @@
 const userUtils = require('../../../utils/user');
-const EmailUtils = require('../../../utils/email');
 const config = require('../../../utils/config');
 const misc = require('../../../utils/misc');
 const gm = require('../../../server/groupmanager');
