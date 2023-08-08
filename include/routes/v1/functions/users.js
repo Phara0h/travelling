@@ -168,13 +168,6 @@ async function editUser(opts) {
 
   var isValid = await userUtils.checkValidUser(model);
 
-  if (model.email) {
-    model.email = model.email.toLowerCase();
-    if (model.email.toLowerCase().includes('@gmail.com') && config.email.validation.internal.dedupeGmail) {
-      model.email = EmailUtils.dedupeGmail(model.email);
-    }
-  }
-
   if (isValid === true) {
     if (opts.needsDomain && (model.email || model.username)) {
       model.domain = domain;

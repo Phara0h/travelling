@@ -3,6 +3,7 @@ const misc = require('./misc');
 const regex = require('./regex');
 const Fasquest = require('fasquest');
 const User = require('../database/models/user');
+const EmailUtils = require('./email');
 const userSchema = new User()._defaultModel;
 const { getByZip, validZip, validState } = require('zcs').zcs({});
 const utilsUser = {
@@ -28,6 +29,8 @@ const utilsUser = {
       };
 
       if (validateEmail) {
+        user.email = user.email.toLowerCase();
+
         if (config.email.validation.external.enable) {
           try {
             await Fasquest.request({
@@ -43,6 +46,10 @@ const utilsUser = {
           }
         } else if (regex.email.exec(user.email.toLowerCase()) == null) {
           return emailError;
+        }
+
+        if (user.email.includes('@gmail.com') && config.email.validation.internal.dedupeGmail) {
+          user.email = EmailUtils.dedupeGmail(user.email);
         }
       }
     }
