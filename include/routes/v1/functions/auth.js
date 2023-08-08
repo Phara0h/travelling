@@ -99,7 +99,7 @@ var registerRoute = async (req, res) => {
 
   req.body.domain = req.params.domain || 'default';
   req.body.email = req.body.email.toLowerCase();
-  
+
   if (config.user.username.enabled) {
     req.body.username = req.body.username.toLowerCase();
   }
@@ -111,18 +111,8 @@ var registerRoute = async (req, res) => {
   var isValid = await checkValidUser(req.body);
 
   if (req.body.email.includes('@gmail.com') && config.email.validation.internal.dedupeGmail) {
-    let [email, domain] = req.body.email.toLowerCase().split('@');
-    if (email.indexOf('.') > -1) {
-      email = email.replace(/\./g, '');
-    }
-
-    if (email.indexOf('+') > -1) {
-      email = email.split('+')[0];
-    }
-
-    req.body.email = `${email}@${domain}`;
+    req.body.email = Email.dedupeGmail(req.body.email);
   }
-
 
   if (isValid === true) {
     isValid = await Database.checkDupe(req.body);

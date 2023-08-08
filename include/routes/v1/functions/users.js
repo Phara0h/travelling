@@ -1,4 +1,5 @@
 const userUtils = require('../../../utils/user');
+const EmailUtils = require('../../../utils/email');
 const config = require('../../../utils/config');
 const misc = require('../../../utils/misc');
 const gm = require('../../../server/groupmanager');
@@ -170,16 +171,7 @@ async function editUser(opts) {
   if (model.email) {
     model.email = model.email.toLowerCase();
     if (model.email.toLowerCase().includes('@gmail.com') && config.email.validation.internal.dedupeGmail) {
-      let [email, domain] = model.email.toLowerCase().split('@');
-      if (email.indexOf('.') > -1) {
-        email = email.replace(/\./g, '');
-      }
-
-      if (email.indexOf('+') > -1) {
-        email = email.split('+')[0];
-      }
-
-      model.email = `${email}@${domain}`;
+      model.email = EmailUtils.dedupeGmail(model.email);
     }
   }
 
