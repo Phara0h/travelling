@@ -206,6 +206,19 @@ class Email {
       config.log.logger.debug(testInfo);
     }
   }
+
+  static dedupeGmail(emailRaw = '') {
+    let [email, domain] = emailRaw.toLowerCase().split('@');
+    if (email.indexOf('.') > -1) {
+      email = email.replace(/\./g, '');
+    }
+
+    if (email.indexOf('+') > -1) {
+      email = email.split('+')[0];
+    }
+
+    return `${email}@${domain}`;
+  }
 }
 
 module.exports = Email;
