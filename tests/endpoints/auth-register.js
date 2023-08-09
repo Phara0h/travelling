@@ -147,20 +147,18 @@ module.exports = () => {
       expect(res.statusCode).toEqual(200);
     });
 
-    if (config.email.validation.internal.dedupeGmail) {
-      test('Create Test User [test_domain_7] - GMAIL', async () => {
-        var res = await Travelling.Auth.Domain.register(
-          {
-            username: 'test_domain_7',
-            password: 'Pas5w0r!d6',
-            email: 'test@gmail.com'
-          },
-          'traziventures.com'
-        );
+    test('Create Test User [test_domain_7] - GMAIL', async () => {
+      var res = await Travelling.Auth.Domain.register(
+        {
+          username: 'test_domain_7',
+          password: 'Pas5w0r!d6',
+          email: 'test@gmail.com'
+        },
+        'traziventures.com'
+      );
 
-        expect(res.statusCode).toEqual(200);
-      });
-    }
+      expect(res.statusCode).toEqual(200);
+    });
   });
 
   describe('Invalid', () => {
