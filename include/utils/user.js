@@ -3,7 +3,6 @@ const misc = require('./misc');
 const regex = require('./regex');
 const Fasquest = require('fasquest');
 const User = require('../database/models/user');
-const EmailUtils = require('./email');
 const userSchema = new User()._defaultModel;
 const { getByZip, validZip, validState } = require('zcs').zcs({});
 const utilsUser = {
@@ -27,12 +26,6 @@ const utilsUser = {
         type: 'email-error',
         msg: 'Must be a real email'
       };
-
-      user.email = user.email.toLowerCase();
-
-      if (config.email.validation.internal.dedupeGmail && user.email.includes('@gmail.com')) {
-        user.email = EmailUtils.dedupeGmail(user.email);
-      }
 
       if (validateEmail) {
         if (config.email.validation.external.enable) {
