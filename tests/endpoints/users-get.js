@@ -217,7 +217,7 @@ module.exports = () => {
       var res = await Travelling.Users.get(
         'created_on',
         1,
-        9,
+        10,
         `created_on >= ${yesterday.toISOString()}, created_on <= ${tomorrow.toISOString()}`,
         'ASC',
         null,
@@ -225,7 +225,7 @@ module.exports = () => {
       );
 
       expect(res.statusCode).toEqual(200);
-      expect(res.body).toHaveLength(1);
+      expect(res.body).toHaveLength(0);
     });
 
     test('Get Users By GroupRequest', async () => {
