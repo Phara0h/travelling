@@ -110,6 +110,10 @@ var registerRoute = async (req, res) => {
 
   var isValid = await checkValidUser(req.body);
 
+  if (config.email.validation.internal.dedupeGmail && req.body.email.includes('@gmail.com')) {
+    req.body.email = Email.dedupeGmail(req.body.email);
+  }
+
   if (isValid === true) {
     isValid = await Database.checkDupe(req.body);
   }
@@ -122,7 +126,7 @@ var registerRoute = async (req, res) => {
 
   var username = config.user.username.enabled ? req.body.username.toLowerCase() : '';
   var password = req.body.password;
-  var email = req.body.email.toLowerCase();
+  var email = req.body.email;
   var domain = 'default';
   var groupRequest;
 
