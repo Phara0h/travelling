@@ -1,6 +1,12 @@
 
 
+#### [v4.0.0](https://github.com/Trazi-Ventures/travelling/compare/v3.3.0...v4.0.0)
+
+- Added ability to change default eprofile [`1986203`](https://github.com/Trazi-Ventures/travelling/commit/19862031613249ed51aab7c85663b265d9939eca)
+
 #### [v3.3.0](https://github.com/Trazi-Ventures/travelling/compare/v3.2.7...v3.3.0)
+
+> 14 August 2023
 
 - Feature #107 Add Gmail dedupe config [`#39`](https://github.com/Trazi-Ventures/travelling/pull/39)
 - Update users-get.js [`9f457c2`](https://github.com/Trazi-Ventures/travelling/commit/9f457c2d75ea20b9dd5ac9b956b8b777b2527581)
