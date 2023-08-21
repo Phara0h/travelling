@@ -103,7 +103,8 @@ class TokenHandler {
           type,
           name,
           urls,
-          secret: secret.toString('hex')
+          secret: secret.toString('hex'),
+          eprofile: config.pg.crypto.eprofile
         });
 
         token.secret = secret.toString('hex');

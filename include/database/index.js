@@ -145,6 +145,7 @@ class Database {
     userProp.domain = domain;
     userProp.change_username = false;
     userProp.change_password = false;
+    userProp.eprofile = config.pg.crypto.eprofile;
 
     if (config.registration.requireManualActivation) {
       userProp.locked = true;
