@@ -220,6 +220,7 @@ const config = {
       ),
       secret: misc.isSetDefault(process.env.TRAVELLING_PG_CRYPTO_IMPLEMENTATION_SECRET, null),
       salt: misc.isSetDefault(process.env.TRAVELLING_PG_CRYPTO_IMPLEMENTATION_SALT, null),
+      eprofile: misc.isSetDefault(process.env.TRAVELLING_PG_CRYPTO_IMPLEMENTATION_EPROFILE, null),
       encryptUserData: misc.isSetDefault(misc.stringToBool(process.env.TRAVELLING_PG_CRYPTO_ENCRYPT_USER_DATA), false)
     }
   },
