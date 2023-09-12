@@ -4226,8 +4226,6 @@ class Fasquest {
       (e.host = t.host);
   }
 }
-var Fasquest_1 = new Fasquest();
-export default Fasquest_1;
 
 /**
  * SDK - importing the SDK for use
