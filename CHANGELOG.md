@@ -1,6 +1,13 @@
 
 
-#### [v4.0.0](https://github.com/Trazi-Ventures/travelling/compare/v3.3.0...v4.0.0)
+#### [v4.0.1](https://github.com/Trazi-Ventures/travelling/compare/v4.0.0...v4.0.1)
+
+- Update package.json [`aebd216`](https://github.com/Trazi-Ventures/travelling/commit/aebd216c8db7558a570f327835e04fcb98b6b062)
+- Updated web sdk to remove double exports [`f7fd354`](https://github.com/Trazi-Ventures/travelling/commit/f7fd354aea5ecaf363f22d53643c442079d9120d)
+
+### [v4.0.0](https://github.com/Trazi-Ventures/travelling/compare/v3.3.0...v4.0.0)
+
+> 21 August 2023
 
 - Added ability to change default eprofile [`1986203`](https://github.com/Trazi-Ventures/travelling/commit/19862031613249ed51aab7c85663b265d9939eca)
 
