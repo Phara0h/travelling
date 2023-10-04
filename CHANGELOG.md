@@ -1,6 +1,13 @@
 
 
+#### [v4.1.0](https://github.com/Dragohm/travelling/compare/v4.0.1...v4.1.0)
+
+- Added param's filtering on users endpoints [`70414c7`](https://github.com/Dragohm/travelling/commit/70414c768e6b0523d162e623814978709e1318b7)
+- Updated sdk [`cd95404`](https://github.com/Dragohm/travelling/commit/cd95404a1405ba984522d6063b867b74285807fd)
+
 #### [v4.0.1](https://github.com/Dragohm/travelling/compare/v4.0.0...v4.0.1)
+
+> 12 September 2023
 
 - Update package.json [`aebd216`](https://github.com/Dragohm/travelling/commit/aebd216c8db7558a570f327835e04fcb98b6b062)
 - Updated web sdk to remove double exports [`f7fd354`](https://github.com/Dragohm/travelling/commit/f7fd354aea5ecaf363f22d53643c442079d9120d)
