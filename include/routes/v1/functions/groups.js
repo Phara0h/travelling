@@ -234,7 +234,8 @@ async function getUsersByGroup(req, res, router) {
         skip: req.query.skip,
         sort: req.query.sort,
         sortdir: req.query.sortdir,
-        count: !!req.returnCountOnly
+        count: !!req.returnCountOnly,
+        params: req.query.params
       })
     );
   } catch {

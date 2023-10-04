@@ -11,7 +11,8 @@ BaseModel.findAllByFilter = async function ({
   limit,
   skip,
   count,
-  ids
+  ids,
+  params
 }) {
   var keys = [];
   var values = [];
@@ -20,11 +21,27 @@ BaseModel.findAllByFilter = async function ({
   if (!query) {
     if (count) {
       query = `SELECT COUNT(id) FROM ${this.table} `;
+    }
+    else if(params) {
+        if (params.indexOf(',') > -1) {
+          params = params.split(',');
+        } else {
+          params = [params];
+        }
+        var query = `SELECT `
+        for (var i = 0; i < params.length; i++) {
+        
+          if (this._defaultModel[params[i]] === null || typeof this._defaultModel[params[i]] === 'string') {
+            query += `${params[i]}${params.length > i + 1 ? ',' : ''}`;
+          }
+        }
+        query += ` FROM ${this.table} `;
+      
     } else {
       query = `SELECT * FROM ${this.table} `;
     }
   }
-
+  console.log(query)
   if ((limit && isNaN(limit)) || (skip && isNaN(skip))) {
     throw new Error('Invalid filter');
   }

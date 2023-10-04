@@ -5018,151 +5018,31 @@ function SDK(host, opts) {
      * body
      * ```json
      * {
-     *     "group": {
-     *         "anonymous": {
-     *             "type": "group",
-     *             "allowed": [
-     *                 {
-     *                     "route": "/travelling/portal/*",
-     *                     "host": null,
-     *                     "name": "*-travelling-portal-*"
-     *                 },
-     *                 {
-     *                     "route": "/travelling/api/v1/auth/*",
-     *                     "host": null,
-     *                     "name": "*-travelling-api-v1-auth-*"
-     *                 },
-     *                 {
-     *                     "route": "/travelling/api/v1/user/me/route/allowed",
-     *                     "host": null,
-     *                     "method": "GET",
-     *                     "name": "get-travelling-api-v1-user-me-route-allowed"
-     *                 },
-     *                 {
-     *                     "route": "/travelling/api/v1/user/me/permission/allowed/*",
-     *                     "host": null,
-     *                     "method": "GET",
-     *                     "name": "get-travelling-api-v1-user-me-permission-allowed-*"
-     *                 },
-     *                 {
-     *                     "route": "/travelling/assets/*",
-     *                     "host": null,
-     *                     "removeFromPath": "/travelling/assets/",
-     *                     "method": "GET",
-     *                     "name": "get-travelling-assets-*"
-     *                 },
-     *                 {
-     *                     "route": "/travelling/api/v1/config/password",
-     *                     "host": null,
-     *                     "method": "GET",
-     *                     "name": "get-travelling-api-v1-config-password"
-     *                 },
-     *                 {
-     *                     "route": "/favicon.ico",
-     *                     "host": null,
-     *                     "method": "GET",
-     *                     "name": "get-favicon.ico"
-     *                 }
-     *             ],
-     *             "inherited": null,
-     *             "is_default": false
-     *         },
-     *         "group3": {
-     *             "type": "group",
-     *             "allowed": null,
-     *             "inherited": [
-     *                 "testgroup|group1",
-     *                 "group|group2"
-     *             ],
-     *             "is_default": false
-     *         },
-     *         "superadmin": {
-     *             "type": "group",
-     *             "allowed": [
-     *                 {
-     *                     "host": null,
-     *                     "route": "/travelling/*",
-     *                     "name": "*-travelling-*"
-     *                 },
-     *                 {
-     *                     "name": "test-one-*-three"
-     *                 }
-     *             ],
-     *             "inherited": [
-     *                 "group|anonymous"
-     *             ],
-     *             "is_default": false
-     *         },
-     *         "group4": {
-     *             "type": "group",
-     *             "allowed": null,
-     *             "inherited": [],
-     *             "is_default": false
-     *         },
-     *         "group2": {
-     *             "type": "group",
-     *             "allowed": [
-     *                 {
-     *                     "route": "/test/get",
-     *                     "host": "https://127.0.0.1:4268/:username/:group",
-     *                     "removeFromPath": "/test/get",
-     *                     "method": "GET",
-     *                     "name": "get-test-get"
-     *                 },
-     *                 {
-     *                     "route": "/test/post",
-     *                     "host": "http://127.0.0.1:4267/?id=:id&permission=:permission",
-     *                     "removeFromPath": "/test/post",
-     *                     "method": "POST",
-     *                     "name": "post-test-post"
-     *                 }
-     *             ],
-     *             "inherited": [
-     *                 "testgroup|group1"
-     *             ],
-     *             "is_default": false
-     *         },
-     *         "group5": {
-     *             "type": "group",
-     *             "allowed": [
-     *                 {
-     *                     "route": "/test/delete/:grouptype",
-     *                     "host": "https://127.0.0.1:4268",
-     *                     "removeFromPath": "/test/delete",
-     *                     "method": "DELETE",
-     *                     "name": "delete-test-delete-:grouptype"
-     *                 }
-     *             ],
-     *             "inherited": [
-     *                 "group|group4",
-     *                 "group|superadmin"
-     *             ],
-     *             "is_default": true
-     *         },
-     *         "group1": {
-     *             "type": "group",
-     *             "allowed": null,
-     *             "inherited": null,
-     *             "is_default": false
-     *         }
-     *     },
-     *     "testgroup": {
-     *         "group1": {
-     *             "type": "testgroup",
-     *             "allowed": null,
-     *             "inherited": [
-     *                 "group|group4"
-     *             ],
-     *             "is_default": false
-     *         },
-     *         "superadmin": {
-     *             "type": "testgroup",
-     *             "allowed": null,
-     *             "inherited": null,
-     *             "is_default": false
-     *         }
+     *   "group": {
+     *     "anonymous": {
+     *       "allowed": [
+     *         {"method": "GET", "route": "/account/portal/*"},
+     *         {"method": "GET", "route": "/account/assets/*"},
+     *         {"method": "GET", "route": "/favicon.ico"},
+     *         {"method": "GET", "route": "/account/api/v1/auth/logout"},
+     *         {"method": "PUT", "route": "/account/api/v1/auth/password/forgot"},
+     *         {"method": "PUT", "route": "/account/api/v1/auth/password/reset"},
+     *         {"method": "GET", "route": "/account/api/v1/auth/activate"},
+     *         {"method": "POST", "route": "/account/api/v1/auth/token"},
+     *         {"method": "GET", "route": "/account/api/v1/auth/login/otp"},
+     *         {"method": "POST","route":"/account/api/v1/auth/oauth/authorize"},
+     *         {"method": "GET","route":"/account/api/v1/auth/oauth/authorize"},
+     *         {"method": "GET", "route": "/account/api/v1/user/me/permission/allowed/*"},
+     *         {"method": "GET", "route": "/account/api/v1/user/me/route/allowed"},
+     *         {"method": "GET", "route": "/account/api/v1/config/password"},
+     *         {"method": "GET", "route": "/account/api/v1/config/portal/webclient"},
+     *         {"method": "GET", "route": "/account/metrics"},
+     *         {"method": "GET", "route": "/account/health"}
+     *       ]
      *     }
+     *   }
      * }
+     *
      * ```
      */
     static async import(body, authorization_bearer, opts) {
@@ -7443,6 +7323,7 @@ function SDK(host, opts) {
   * @param {any} filter Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)
   * @param {any} sortdir Sort direction (example ascending order: ASC) (example: ASC)
   * @param {any} ids Comma seperated id values used in inclusion query (example: d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f)
+  * @param {any} params  (example: id)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   */
     static async get(
@@ -7452,6 +7333,7 @@ function SDK(host, opts) {
       filter,
       sortdir,
       ids,
+      params,
       authorization_bearer,
       opts
     ) {
@@ -7459,7 +7341,7 @@ function SDK(host, opts) {
         method: 'GET',
         simple: false,
         uri: hostUrl + '/' + `api/v1/users`,
-        qs: { sort, limit, skip, filter, sortdir, ids },
+        qs: { sort, limit, skip, filter, sortdir, ids, params },
         authorization: {
           bearer: authorization_bearer,
         },
@@ -7583,6 +7465,7 @@ function SDK(host, opts) {
   * @param {any} filter Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-01,created_on<2021-06-08)
   * @param {any} sortdir Sort direction (example ascending order: ASC) (example: ASC)
   * @param {any} ids Comma seperated id values used in inclusion query (example: d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f)
+  * @param {any} params  (example: id,created_on)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   */
     static async get(
@@ -7593,6 +7476,7 @@ function SDK(host, opts) {
       filter,
       sortdir,
       ids,
+      params,
       authorization_bearer,
       opts
     ) {
@@ -7600,7 +7484,7 @@ function SDK(host, opts) {
         method: 'GET',
         simple: false,
         uri: hostUrl + '/' + `api/v1/users/domain/${domain}`,
-        qs: { sort, limit, skip, filter, sortdir, ids },
+        qs: { sort, limit, skip, filter, sortdir, ids, params },
         authorization: {
           bearer: authorization_bearer,
         },
@@ -9379,15 +9263,15 @@ function SDK(host, opts) {
   *
   * Path: api/v1/auth/register/domain/:domain
   * @param {Object} body
-  * @param {any} domain Domain name (example: test.com) (example: dragohmventures.com)
+  * @param {any} domain Domain name (example: test.com) (example: contactsource.com)
   * @param {any} randomPassword Generates a random password on the backend securely if set to `true` (example: true)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   * @example
   * body
   * ```json
   * {
- * 	"email": "test@test.com",
- * 	"password": "Pas5w0r!d"
+ * 	"email": "mark+test@dragohm.com",
+ * 	"password": "Trazi123**"
  * }
   * ```
   */
