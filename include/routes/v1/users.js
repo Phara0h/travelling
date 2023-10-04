@@ -188,7 +188,8 @@ module.exports = function (app, opts, done) {
         skip: req.query.skip,
         filter: req.query.filter,
         sortdir: req.query.sortdir,
-        ids: req.query.ids
+        ids: req.query.ids,
+        params: req.query.params
       });
     } catch {
       res.code(400).send({
@@ -237,7 +238,8 @@ module.exports = function (app, opts, done) {
         skip: req.query.skip,
         filter: req.query.filter,
         sortdir: req.query.sortdir,
-        ids: req.query.ids
+        ids: req.query.ids,
+        params: req.query.params
       });
     } catch {
       res.code(400).send({
