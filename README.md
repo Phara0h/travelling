@@ -1247,151 +1247,31 @@ Path: api/v1/groups/import
 body
 ```json
 {
-    "group": {
-        "anonymous": {
-            "type": "group",
-            "allowed": [
-                {
-                    "route": "/travelling/portal/*",
-                    "host": null,
-                    "name": "*-travelling-portal-*"
-                },
-                {
-                    "route": "/travelling/api/v1/auth/*",
-                    "host": null,
-                    "name": "*-travelling-api-v1-auth-*"
-                },
-                {
-                    "route": "/travelling/api/v1/user/me/route/allowed",
-                    "host": null,
-                    "method": "GET",
-                    "name": "get-travelling-api-v1-user-me-route-allowed"
-                },
-                {
-                    "route": "/travelling/api/v1/user/me/permission/allowed/*",
-                    "host": null,
-                    "method": "GET",
-                    "name": "get-travelling-api-v1-user-me-permission-allowed-*"
-                },
-                {
-                    "route": "/travelling/assets/*",
-                    "host": null,
-                    "removeFromPath": "/travelling/assets/",
-                    "method": "GET",
-                    "name": "get-travelling-assets-*"
-                },
-                {
-                    "route": "/travelling/api/v1/config/password",
-                    "host": null,
-                    "method": "GET",
-                    "name": "get-travelling-api-v1-config-password"
-                },
-                {
-                    "route": "/favicon.ico",
-                    "host": null,
-                    "method": "GET",
-                    "name": "get-favicon.ico"
-                }
-            ],
-            "inherited": null,
-            "is_default": false
-        },
-        "group3": {
-            "type": "group",
-            "allowed": null,
-            "inherited": [
-                "testgroup|group1",
-                "group|group2"
-            ],
-            "is_default": false
-        },
-        "superadmin": {
-            "type": "group",
-            "allowed": [
-                {
-                    "host": null,
-                    "route": "/travelling/*",
-                    "name": "*-travelling-*"
-                },
-                {
-                    "name": "test-one-*-three"
-                }
-            ],
-            "inherited": [
-                "group|anonymous"
-            ],
-            "is_default": false
-        },
-        "group4": {
-            "type": "group",
-            "allowed": null,
-            "inherited": [],
-            "is_default": false
-        },
-        "group2": {
-            "type": "group",
-            "allowed": [
-                {
-                    "route": "/test/get",
-                    "host": "https://127.0.0.1:4268/:username/:group",
-                    "removeFromPath": "/test/get",
-                    "method": "GET",
-                    "name": "get-test-get"
-                },
-                {
-                    "route": "/test/post",
-                    "host": "http://127.0.0.1:4267/?id=:id&permission=:permission",
-                    "removeFromPath": "/test/post",
-                    "method": "POST",
-                    "name": "post-test-post"
-                }
-            ],
-            "inherited": [
-                "testgroup|group1"
-            ],
-            "is_default": false
-        },
-        "group5": {
-            "type": "group",
-            "allowed": [
-                {
-                    "route": "/test/delete/:grouptype",
-                    "host": "https://127.0.0.1:4268",
-                    "removeFromPath": "/test/delete",
-                    "method": "DELETE",
-                    "name": "delete-test-delete-:grouptype"
-                }
-            ],
-            "inherited": [
-                "group|group4",
-                "group|superadmin"
-            ],
-            "is_default": true
-        },
-        "group1": {
-            "type": "group",
-            "allowed": null,
-            "inherited": null,
-            "is_default": false
-        }
-    },
-    "testgroup": {
-        "group1": {
-            "type": "testgroup",
-            "allowed": null,
-            "inherited": [
-                "group|group4"
-            ],
-            "is_default": false
-        },
-        "superadmin": {
-            "type": "testgroup",
-            "allowed": null,
-            "inherited": null,
-            "is_default": false
-        }
+  "group": {
+    "anonymous": {
+      "allowed": [
+        {"method": "GET", "route": "/account/portal/*"},
+        {"method": "GET", "route": "/account/assets/*"},
+        {"method": "GET", "route": "/favicon.ico"},
+        {"method": "GET", "route": "/account/api/v1/auth/logout"},
+        {"method": "PUT", "route": "/account/api/v1/auth/password/forgot"},
+        {"method": "PUT", "route": "/account/api/v1/auth/password/reset"},
+        {"method": "GET", "route": "/account/api/v1/auth/activate"},
+        {"method": "POST", "route": "/account/api/v1/auth/token"},
+        {"method": "GET", "route": "/account/api/v1/auth/login/otp"},
+        {"method": "POST","route":"/account/api/v1/auth/oauth/authorize"},
+        {"method": "GET","route":"/account/api/v1/auth/oauth/authorize"},
+        {"method": "GET", "route": "/account/api/v1/user/me/permission/allowed/*"},
+        {"method": "GET", "route": "/account/api/v1/user/me/route/allowed"},
+        {"method": "GET", "route": "/account/api/v1/config/password"},
+        {"method": "GET", "route": "/account/api/v1/config/portal/webclient"},
+        {"method": "GET", "route": "/account/metrics"},
+        {"method": "GET", "route": "/account/health"}
+      ]
     }
+  }
 }
+
 ```
 <a name="Groups.get"></a>
 
@@ -2617,7 +2497,7 @@ body
 * [Users](#Users)
     * [.byGroupRequest(group_request, authorization_bearer)](#Users.byGroupRequest)
     * [.count(limit, skip, filter, ids, authorization_bearer)](#Users.count)
-    * [.get(sort, limit, skip, filter, sortdir, ids, authorization_bearer)](#Users.get)
+    * [.get(sort, limit, skip, filter, sortdir, ids, params, authorization_bearer)](#Users.get)
 
 <a name="Users.byGroupRequest"></a>
 
@@ -2692,7 +2572,7 @@ Path: api/v1/users/count
 
 <a name="Users.get"></a>
 
-### Users.get(sort, limit, skip, filter, sortdir, ids, authorization_bearer)
+### Users.get(sort, limit, skip, filter, sortdir, ids, params, authorization_bearer)
 get - Gets all the users
 
 ##### Filter Params
@@ -2728,6 +2608,7 @@ Path: api/v1/users
 | filter | <code>any</code> | Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) |
 | sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: ASC) |
 | ids | <code>any</code> | Comma seperated id values used in inclusion query (example: d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f) |
+| params | <code>any</code> | (example: id) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="UsersDomain"></a>
@@ -2737,7 +2618,7 @@ Path: api/v1/users
 
 * [UsersDomain](#UsersDomain)
     * [.count(domain, limit, skip, filter, ids, authorization_bearer)](#UsersDomain.count)
-    * [.get(domain, sort, limit, skip, filter, sortdir, ids, authorization_bearer)](#UsersDomain.get)
+    * [.get(domain, sort, limit, skip, filter, sortdir, ids, params, authorization_bearer)](#UsersDomain.get)
 
 <a name="UsersDomain.count"></a>
 
@@ -2780,7 +2661,7 @@ Path: api/v1/users/domain/:domain/count
 
 <a name="UsersDomain.get"></a>
 
-### UsersDomain.get(domain, sort, limit, skip, filter, sortdir, ids, authorization_bearer)
+### UsersDomain.get(domain, sort, limit, skip, filter, sortdir, ids, params, authorization_bearer)
 get - Gets all the users
 
 ##### Filter Params
@@ -2817,6 +2698,7 @@ Path: api/v1/users/domain/:domain
 | filter | <code>any</code> | Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-01,created_on<2021-06-08) |
 | sortdir | <code>any</code> | Sort direction (example ascending order: ASC) (example: ASC) |
 | ids | <code>any</code> | Comma seperated id values used in inclusion query (example: d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f) |
+| params | <code>any</code> | (example: id,created_on) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
 <a name="User"></a>
@@ -3806,7 +3688,7 @@ Path: api/v1/auth/register/domain/:domain
 | Param | Type | Description |
 | --- | --- | --- |
 | body | <code>Object</code> |  |
-| domain | <code>any</code> | Domain name (example: test.com) (example: traziventures.com) |
+| domain | <code>any</code> | Domain name (example: test.com) (example: contactsource.com) |
 | randomPassword | <code>any</code> | Generates a random password on the backend securely if set to `true` (example: true) |
 | authorization_bearer | <code>string</code> | The client_credentials generated OAUth2 access token. |
 
@@ -3814,8 +3696,8 @@ Path: api/v1/auth/register/domain/:domain
 body
 ```json
 {
-	"email": "test@test.com",
-	"password": "Pas5w0r!d"
+	"email": "mark+test@trazi.com",
+	"password": "Trazi123**"
 }
 ```
 <a name="AuthDomainToken"></a>
@@ -3889,7 +3771,14 @@ const { Travelling } = require('./sdk.js')('http://127.0.0.1');
 
 
 
+#### [v4.1.0](https://github.com/Trazi-Ventures/travelling/compare/v4.0.1...v4.1.0)
+
+- Added param's filtering on users endpoints [`70414c7`](https://github.com/Trazi-Ventures/travelling/commit/70414c768e6b0523d162e623814978709e1318b7)
+- Updated sdk [`cd95404`](https://github.com/Trazi-Ventures/travelling/commit/cd95404a1405ba984522d6063b867b74285807fd)
+
 #### [v4.0.1](https://github.com/Trazi-Ventures/travelling/compare/v4.0.0...v4.0.1)
+
+> 12 September 2023
 
 - Update package.json [`aebd216`](https://github.com/Trazi-Ventures/travelling/commit/aebd216c8db7558a570f327835e04fcb98b6b062)
 - Updated web sdk to remove double exports [`f7fd354`](https://github.com/Trazi-Ventures/travelling/commit/f7fd354aea5ecaf363f22d53643c442079d9120d)
