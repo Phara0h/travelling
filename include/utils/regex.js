@@ -22,7 +22,7 @@ const regex = {
       '}$'
   ),
   // safeName: new RegExp(/^[A-Za-z0-9_\/\?\-\@\#\$\%\!\^\&\*\.]{1,350}$/g)
-  safeName: new RegExp(/^[A-Za-z0-9\ \.\-\_\@]{1,350}$/),
+  safeName: new RegExp(/^[A-Za-z0-9\ \.\-\_\@\#]{1,350}$/),
   userData: new RegExp(/^[A-Za-z0-9\ \.\,\!\?\$\:\;\~\#\%\&\-\_\@\n\t\(\)\{\}\[\]\"]{1,}$/),
   base64Image: new RegExp(
     '^(data:\\w+\\/[a-zA-Z\\+\\-\\.]+;base64,)(?:[A-Za-z0-9+\\/]{4})*(?:[A-Za-z0-9+\\/]{2}==|[A-Za-z0-9+/]{3}=)?$',

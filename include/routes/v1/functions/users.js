@@ -8,6 +8,7 @@ const Database = require('../../../database');
 const User = require('../../../database/models/user');
 const regex = require('../../../utils/regex');
 const CookieToken = require('../../../utils/cookietoken');
+const EmailUtils = require('../../../utils/email');
 
 async function deleteUser(opts) {
   var id = userUtils.getId(opts.req);
@@ -170,6 +171,14 @@ async function editUser(opts) {
   if (isValid === true) {
     if (opts.needsDomain && (model.email || model.username)) {
       model.domain = domain;
+    }
+
+    if (model.email) {
+      model.email = model.email.toLowerCase();
+
+      if (config.email.validation.internal.dedupeGmail && model.email.includes('@gmail.com')) {
+        model.email = EmailUtils.dedupeGmail(model.email);
+      }
     }
 
     isValid = await Database.checkDupe(model);

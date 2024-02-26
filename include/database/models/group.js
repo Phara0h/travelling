@@ -16,7 +16,8 @@ class Group extends Base(BaseModel, 'groups', {
         method: String,
         remove_from_path: String,
         route: String,
-        host: String
+        host: String,
+        redirect: String
     }
     **/
   allowed: null,
