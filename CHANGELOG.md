@@ -1,6 +1,92 @@
 
 
+#### [v4.1.0](https://github.com/Dragohm/travelling/compare/v4.0.1...v4.1.0)
+
+- Added param's filtering on users endpoints [`70414c7`](https://github.com/Dragohm/travelling/commit/70414c768e6b0523d162e623814978709e1318b7)
+- Updated sdk [`cd95404`](https://github.com/Dragohm/travelling/commit/cd95404a1405ba984522d6063b867b74285807fd)
+
+#### [v4.0.1](https://github.com/Dragohm/travelling/compare/v4.0.0...v4.0.1)
+
+> 12 September 2023
+
+- Update package.json [`aebd216`](https://github.com/Dragohm/travelling/commit/aebd216c8db7558a570f327835e04fcb98b6b062)
+- Updated web sdk to remove double exports [`f7fd354`](https://github.com/Dragohm/travelling/commit/f7fd354aea5ecaf363f22d53643c442079d9120d)
+
+### [v4.0.0](https://github.com/Dragohm/travelling/compare/v3.3.0...v4.0.0)
+
+> 21 August 2023
+
+- Added ability to change default eprofile [`1986203`](https://github.com/Dragohm/travelling/commit/19862031613249ed51aab7c85663b265d9939eca)
+
+#### [v3.3.0](https://github.com/Dragohm/travelling/compare/v3.2.7...v3.3.0)
+
+> 14 August 2023
+
+- Feature #107 Add Gmail dedupe config [`#39`](https://github.com/Dragohm/travelling/pull/39)
+- Update users-get.js [`9f457c2`](https://github.com/Dragohm/travelling/commit/9f457c2d75ea20b9dd5ac9b956b8b777b2527581)
+- Move logic back to interfaces [`7df3b29`](https://github.com/Dragohm/travelling/commit/7df3b29d8078f1cb6a8b3dc49926f39a282815e6)
+- Remove conditional around create user test [`67356da`](https://github.com/Dragohm/travelling/commit/67356dad5c0c223d78bbc30acd6f348fbe52144c)
+- Remove unused var [`0e74f03`](https://github.com/Dragohm/travelling/commit/0e74f03950e654716fb254e55553a0b09def774f)
+- Change scope, and order of if [`cc008a6`](https://github.com/Dragohm/travelling/commit/cc008a6ccba3e7b7bfc8ed4e85bd43eac752823e)
+- oop [`5b3e508`](https://github.com/Dragohm/travelling/commit/5b3e50818788d3d36a7f59e63edb71c1d9fc54ee)
+- consolidate logic to checkUser [`858e861`](https://github.com/Dragohm/travelling/commit/858e861ace793f20b54d9c321311026c4206aa9e)
+- Move into util func [`65acf8a`](https://github.com/Dragohm/travelling/commit/65acf8ab0e719fcb40b90b8033a4ed2b0cb303e2)
+- Update tests to use DeDupe [`28afe82`](https://github.com/Dragohm/travelling/commit/28afe82737b320c4bd26e21cfc0d7408fd942c22)
+- Move dedupe below valid user check [`14ab80e`](https://github.com/Dragohm/travelling/commit/14ab80e99843fc2cc3705d177c568a54556ea55b)
+- Remove unnecesary lowercase [`5f3bfb5`](https://github.com/Dragohm/travelling/commit/5f3bfb5146e2cd0bcd6b02a3f8fd329671fd3a68)
+- Remove oop test db setup, default new config to false [`c62fc94`](https://github.com/Dragohm/travelling/commit/c62fc94eeeaa3f8f54515ece645691167bfc6267)
+- Update config, add gmail dedupe check, add tests [`6c644c3`](https://github.com/Dragohm/travelling/commit/6c644c3d5af40e0073037ef2d5de83032ec7e173)
+
+#### [v3.2.7](https://github.com/Dragohm/travelling/compare/v3.2.6...v3.2.7)
+
+> 21 June 2023
+
+- Feature #88 Add route redirects [`#38`](https://github.com/Dragohm/travelling/pull/38)
+- add tests [`f8548d2`](https://github.com/Dragohm/travelling/commit/f8548d230e4afff23f843f6ae55db0c526e17e10)
+- use other param [`23d0206`](https://github.com/Dragohm/travelling/commit/23d02064366c8bcdd40e028f2b1091fd194a4881)
+- add route redirect logic [`fc3272a`](https://github.com/Dragohm/travelling/commit/fc3272ae350b8500dc4b0c9f448b3a4fdccaccb2)
+- add route redirect logic [`200bbc9`](https://github.com/Dragohm/travelling/commit/200bbc9b6a53ff00399cc69fd4ed4f3c589c884a)
+- Revert "redirects start" [`e2fd904`](https://github.com/Dragohm/travelling/commit/e2fd9044cc5954ed10637140f1f9159703bacc67)
+- Revert "redirects start" [`fa45685`](https://github.com/Dragohm/travelling/commit/fa456854812802f4c1f064a06a59882452781054)
+- redirects start [`a3fd160`](https://github.com/Dragohm/travelling/commit/a3fd1601fd16123a72e7479bf1a67bb8ca45a1d5)
+- redirects start [`d650bfe`](https://github.com/Dragohm/travelling/commit/d650bfe664c2d3455c374d84fa5df87ba6ee5a49)
+
+#### [v3.2.6](https://github.com/Dragohm/travelling/compare/v3.2.5...v3.2.6)
+
+> 21 June 2023
+
+#### [v3.2.5](https://github.com/Dragohm/travelling/compare/v3.2.4...v3.2.5)
+
+> 21 June 2023
+
+- Update regex.js [`77b9bcb`](https://github.com/Dragohm/travelling/commit/77b9bcbd3fc3f7ecaafa8e1eeb8487de49b26d76)
+- Update package.json [`4ffdf10`](https://github.com/Dragohm/travelling/commit/4ffdf105f5f874e59bc7ff44f74c2767e856d5e7)
+
+#### [v3.2.4](https://github.com/Dragohm/travelling/compare/v3.2.3...v3.2.4)
+
+> 19 May 2023
+
+- Fix #102 Fix max login attempts account locking [`#37`](https://github.com/Dragohm/travelling/pull/37)
+- Merge pull request #37 from Dragohm/fix-#102-lock-accounts-on-max-attempts [`#102`](https://github.com/Dragohm/travelling/issues/102)
+- Fix max attempts lock user issue [`8fc5c96`](https://github.com/Dragohm/travelling/commit/8fc5c96ba68fdccc7da0b6dbaf11b65cb28cc89b)
+
+#### [v3.2.3](https://github.com/Dragohm/travelling/compare/v3.2.2...v3.2.3)
+
+> 12 May 2023
+
+- Fix #101 password recovery email data [`#101`](https://github.com/Dragohm/travelling/issues/101)
+
+#### [v3.2.2](https://github.com/Dragohm/travelling/compare/v3.2.1...v3.2.2)
+
+> 12 May 2023
+
+- Feature #101 Add data to password recovery email [`#36`](https://github.com/Dragohm/travelling/pull/36)
+- add data to password recovery email [`3c4baeb`](https://github.com/Dragohm/travelling/commit/3c4baeb46d6eb27e5c920f78179df03dd18d280a)
+- Update Travelling.postman_collection.json [`474eff0`](https://github.com/Dragohm/travelling/commit/474eff08a76ef20325ccb210eea56736770cb759)
+
 #### [v3.2.1](https://github.com/Dragohm/travelling/compare/v3.2.0...v3.2.1)
+
+> 22 March 2023
 
 - Update package.json [`e34774f`](https://github.com/Dragohm/travelling/commit/e34774f2cc05617d3b97aa2cf8bd4d5b949f2f02)
 

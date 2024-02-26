@@ -1,8 +1,8 @@
 'use strict';
-function hasOwnProperty(e, t) {
+function hasOwnProperty$1(e, t) {
   return Object.prototype.hasOwnProperty.call(e, t);
 }
-var isArray =
+var isArray$2 =
   Array.isArray ||
   function (e) {
     return '[object Array]' === Object.prototype.toString.call(e);
@@ -25,10 +25,10 @@ function stringify(e, t, n, r) {
     (n = n || '='),
     null === e && (e = void 0),
     'object' == typeof e
-      ? map(objectKeys(e), function (r) {
+      ? map$1(objectKeys(e), function (r) {
           var o = encodeURIComponent(stringifyPrimitive(r)) + n;
-          return isArray(e[r])
-            ? map(e[r], function (e) {
+          return isArray$2(e[r])
+            ? map$1(e[r], function (e) {
                 return o + encodeURIComponent(stringifyPrimitive(e));
               }).join(t)
             : o + encodeURIComponent(stringifyPrimitive(e[r]));
@@ -40,7 +40,7 @@ function stringify(e, t, n, r) {
       : ''
   );
 }
-function map(e, t) {
+function map$1(e, t) {
   if (e.map) return e.map(t);
   for (var n = [], r = 0; r < e.length; r++) n.push(t(e[r], r));
   return n;
@@ -52,40 +52,41 @@ var objectKeys =
     for (var n in e) Object.prototype.hasOwnProperty.call(e, n) && t.push(n);
     return t;
   };
-function parse(e, t, n, r) {
+function parse$1(e, t, n, r) {
   (t = t || '&'), (n = n || '=');
   var o = {};
   if ('string' != typeof e || 0 === e.length) return o;
+  var a = /\+/g;
   e = e.split(t);
-  var a = 1e3;
-  r && 'number' == typeof r.maxKeys && (a = r.maxKeys);
-  var s = e.length;
-  0 < a && s > a && (s = a);
-  for (var d = 0; d < s; ++d) {
-    var l,
-      h,
+  var s = 1e3;
+  r && 'number' == typeof r.maxKeys && (s = r.maxKeys);
+  var d = e.length;
+  0 < s && d > s && (d = s);
+  for (var l = 0; l < d; ++l) {
+    var h,
       p,
       u,
-      f = e[d].replace(/\+/g, '%20'),
-      c = f.indexOf(n);
-    0 <= c
-      ? ((l = f.substr(0, c)), (h = f.substr(c + 1)))
-      : ((l = f), (h = '')),
-      (p = decodeURIComponent(l)),
+      f,
+      c = e[l].replace(a, '%20'),
+      g = c.indexOf(n);
+    0 <= g
+      ? ((h = c.substr(0, g)), (p = c.substr(g + 1)))
+      : ((h = c), (p = '')),
       (u = decodeURIComponent(h)),
-      hasOwnProperty(o, p)
-        ? isArray(o[p])
-          ? o[p].push(u)
-          : (o[p] = [o[p], u])
-        : (o[p] = u);
+      (f = decodeURIComponent(p)),
+      hasOwnProperty$1(o, u)
+        ? isArray$2(o[u])
+          ? o[u].push(f)
+          : (o[u] = [o[u], f])
+        : (o[u] = f);
   }
   return o;
 }
 var qs = {
     encode: stringify,
     stringify: stringify,
-    decode: parse,
-    parse: parse,
+    decode: parse$1,
+    parse: parse$1,
   },
   maxInt = 2147483647,
   base = 36,
@@ -109,7 +110,7 @@ var qs = {
 function error(e) {
   throw new RangeError(errors[e]);
 }
-function map$1(e, t) {
+function map(e, t) {
   for (var n = e.length, r = []; n--; ) r[n] = t(e[n]);
   return r;
 }
@@ -119,7 +120,7 @@ function mapDomain(e, t) {
   1 < n.length && ((r = n[0] + '@'), (e = n[1])),
     (e = e.replace(regexSeparators, '.'));
   var o = e.split('.'),
-    a = map$1(o, t).join('.');
+    a = map(o, t).join('.');
   return r + a;
 }
 function ucs2decode(e) {
@@ -349,9 +350,9 @@ function write(t, n, r, o, a, l) {
     w = 8 * l - a - 1,
     R = (1 << w) - 1,
     v = R >> 1,
-    x = 23 === a ? g(2, -24) - g(2, -77) : 0,
-    E = o ? 0 : l - 1,
-    L = o ? 1 : -1,
+    S = 23 === a ? g(2, -24) - g(2, -77) : 0,
+    L = o ? 0 : l - 1,
+    x = o ? 1 : -1,
     d = 0 > n || (0 === n && 0 > 1 / n) ? 1 : 0;
   for (
     n = f(n),
@@ -359,7 +360,7 @@ function write(t, n, r, o, a, l) {
         ? ((b = isNaN(n) ? 1 : 0), (y = R))
         : ((y = h(u(n) / p)),
           1 > n * (_ = g(2, -y)) && (y--, (_ *= 2)),
-          (n += 1 <= y + v ? x / _ : x * g(2, 1 - v)),
+          (n += 1 <= y + v ? S / _ : S * g(2, 1 - v)),
           2 <= n * _ && (y++, (_ /= 2)),
           y + v >= R
             ? ((b = 0), (y = R))
@@ -367,14 +368,14 @@ function write(t, n, r, o, a, l) {
             ? ((b = (n * _ - 1) * g(2, a)), (y += v))
             : ((b = n * g(2, v - 1) * g(2, a)), (y = 0)));
     8 <= a;
-    t[r + E] = 255 & b, E += L, b /= 256, a -= 8
+    t[r + L] = 255 & b, L += x, b /= 256, a -= 8
   );
   for (
     y = (y << a) | b, w += a;
     0 < w;
-    t[r + E] = 255 & y, E += L, y /= 256, w -= 8
+    t[r + L] = 255 & y, L += x, y /= 256, w -= 8
   );
-  t[r + E - L] |= 128 * d;
+  t[r + L - x] |= 128 * d;
 }
 var toString = {}.toString,
   isArray$1 =
@@ -383,8 +384,9 @@ var toString = {}.toString,
       return '[object Array]' == toString.call(e);
     },
   INSPECT_MAX_BYTES = 50;
-Buffer$1.TYPED_ARRAY_SUPPORT =
-  !(global$1.TYPED_ARRAY_SUPPORT !== void 0) || global$1.TYPED_ARRAY_SUPPORT;
+(Buffer$1.TYPED_ARRAY_SUPPORT =
+  !(global$1.TYPED_ARRAY_SUPPORT !== void 0) || global$1.TYPED_ARRAY_SUPPORT),
+  kMaxLength();
 function kMaxLength() {
   return Buffer$1.TYPED_ARRAY_SUPPORT ? 2147483647 : 1073741823;
 }
@@ -1592,7 +1594,8 @@ var inherits,
     release: release,
     config: config,
     uptime: uptime,
-  };
+  },
+  process = browser$1;
 inherits =
   'function' == typeof Object.create
     ? function (e, t) {
@@ -1615,7 +1618,7 @@ inherits =
       };
 var inherits$1 = inherits,
   formatRegExp = /%[sdj%]/g;
-function format(e) {
+function format$1(e) {
   if (!isString(e)) {
     for (var t = [], n = 0; n < arguments.length; n++)
       t.push(inspect(arguments[n]));
@@ -1653,8 +1656,8 @@ function format(e) {
 function deprecate(e, t) {
   function n() {
     if (!r) {
-      if (browser$1.throwDeprecation) throw new Error(t);
-      else browser$1.traceDeprecation ? console.trace(t) : console.error(t);
+      if (process.throwDeprecation) throw new Error(t);
+      else process.traceDeprecation ? console.trace(t) : console.error(t);
       r = !0;
     }
     return e.apply(this, arguments);
@@ -1663,7 +1666,7 @@ function deprecate(e, t) {
     return function () {
       return deprecate(e, t).apply(this, arguments);
     };
-  if (!0 === browser$1.noDeprecation) return e;
+  if (!0 === process.noDeprecation) return e;
   var r = !1;
   return n;
 }
@@ -1671,14 +1674,14 @@ var debugEnviron,
   debugs = {};
 function debuglog(e) {
   if (
-    (isUndefined(debugEnviron) &&
-      (debugEnviron = browser$1.env.NODE_DEBUG || ''),
+    (isUndefined(debugEnviron) && (debugEnviron = process.env.NODE_DEBUG || ''),
     (e = e.toUpperCase()),
     !debugs[e])
   )
     if (new RegExp('\\b' + e + '\\b', 'i').test(debugEnviron)) {
+      var t = 0;
       debugs[e] = function () {
-        var t = format.apply(null, arguments);
+        var t = format$1.apply(null, arguments);
         console.error('%s %d: %s', e, 0, t);
       };
     } else debugs[e] = function () {};
@@ -1735,13 +1738,13 @@ function stylizeWithColor(e, t) {
         'm'
     : e;
 }
-function stylizeNoColor(e) {
+function stylizeNoColor(e, t) {
   return e;
 }
 function arrayToHash(e) {
   var t = {};
   return (
-    e.forEach(function (e) {
+    e.forEach(function (e, n) {
       t[e] = !0;
     }),
     t
@@ -1751,7 +1754,7 @@ function formatValue(e, t, r) {
   if (
     e.customInspect &&
     t &&
-    isFunction(t.inspect) &&
+    isFunction$1(t.inspect) &&
     t.inspect !== inspect &&
     !(t.constructor && t.constructor.prototype === t)
   ) {
@@ -1768,7 +1771,7 @@ function formatValue(e, t, r) {
   )
     return formatError(t);
   if (0 === i.length) {
-    if (isFunction(t)) {
+    if (isFunction$1(t)) {
       var d = t.name ? ': ' + t.name : '';
       return e.stylize('[Function' + d + ']', 'special');
     }
@@ -1780,7 +1783,7 @@ function formatValue(e, t, r) {
   var l = '',
     h = !1,
     p = ['{', '}'];
-  if ((isArray$2(t) && ((h = !0), (p = ['[', ']'])), isFunction(t))) {
+  if ((isArray(t) && ((h = !0), (p = ['[', ']'])), isFunction$1(t))) {
     var u = t.name ? ': ' + t.name : '';
     l = ' [Function' + u + ']';
   }
@@ -1832,7 +1835,7 @@ function formatError(e) {
 }
 function formatArray(e, t, n, r, o) {
   for (var a = [], s = 0, d = t.length; s < d; ++s)
-    hasOwnProperty$1(t, s + '')
+    hasOwnProperty(t, s + '')
       ? a.push(formatProperty(e, t, n, r, s + '', !0))
       : a.push('');
   return (
@@ -1851,7 +1854,7 @@ function formatProperty(e, t, n, r, o, a) {
         ? (s = e.stylize('[Getter/Setter]', 'special'))
         : (s = e.stylize('[Getter]', 'special'))
       : d.set && (s = e.stylize('[Setter]', 'special')),
-    hasOwnProperty$1(r, o) || (i = '[' + o + ']'),
+    hasOwnProperty(r, o) || (i = '[' + o + ']'),
     s ||
       (0 > e.seen.indexOf(d.value)
         ? ((s = isNull(n)
@@ -1898,7 +1901,7 @@ function reduceToSingleString(e, t, n) {
     ? n[0] + ('' === t ? '' : t + '\n ') + ' ' + e.join(',\n  ') + ' ' + n[1]
     : n[0] + t + ' ' + e.join(', ') + ' ' + n[1];
 }
-function isArray$2(e) {
+function isArray(e) {
   return Array.isArray(e);
 }
 function isBoolean(e) {
@@ -1934,7 +1937,7 @@ function isError(t) {
     ('[object Error]' === objectToString(t) || t instanceof Error)
   );
 }
-function isFunction(e) {
+function isFunction$1(e) {
   return 'function' == typeof e;
 }
 function objectToString(e) {
@@ -1945,7 +1948,7 @@ function _extend(e, t) {
   for (var n = Object.keys(t), r = n.length; r--; ) e[n[r]] = t[n[r]];
   return e;
 }
-function hasOwnProperty$1(e, t) {
+function hasOwnProperty(e, t) {
   return Object.prototype.hasOwnProperty.call(e, t);
 }
 var url = {
@@ -2000,80 +2003,81 @@ function urlParse(e, t, n) {
   return r.parse(e, t, n), r;
 }
 Url.prototype.parse = function (e, t, n) {
-  return parse$1(this, e, t, n);
+  return parse(this, e, t, n);
 };
-function parse$1(e, t, n, r) {
+function parse(e, t, n, r) {
   if (!isString(t))
     throw new TypeError("Parameter 'url' must be a string, not " + typeof t);
   var o = t.indexOf('?'),
     a = -1 !== o && o < t.indexOf('#') ? '?' : '#',
-    d = t.split(a);
-  (d[0] = d[0].replace(/\\/g, '/')), (t = d.join(a));
-  var u = t;
-  if (((u = u.trim()), !r && 1 === t.split('#').length)) {
-    var f = simplePathPattern.exec(u);
-    if (f)
+    d = t.split(a),
+    u = /\\/g;
+  (d[0] = d[0].replace(u, '/')), (t = d.join(a));
+  var f = t;
+  if (((f = f.trim()), !r && 1 === t.split('#').length)) {
+    var c = simplePathPattern.exec(f);
+    if (c)
       return (
-        (e.path = u),
-        (e.href = u),
-        (e.pathname = f[1]),
-        f[2]
-          ? ((e.search = f[2]),
-            (e.query = n ? parse(e.search.substr(1)) : e.search.substr(1)))
+        (e.path = f),
+        (e.href = f),
+        (e.pathname = c[1]),
+        c[2]
+          ? ((e.search = c[2]),
+            (e.query = n ? parse$1(e.search.substr(1)) : e.search.substr(1)))
           : n && ((e.search = ''), (e.query = {})),
         e
       );
   }
-  var c = protocolPattern.exec(u);
-  if (c) {
-    c = c[0];
-    var g = c.toLowerCase();
-    (e.protocol = g), (u = u.substr(c.length));
+  var g = protocolPattern.exec(f);
+  if (g) {
+    g = g[0];
+    var m = g.toLowerCase();
+    (e.protocol = m), (f = f.substr(g.length));
   }
-  if (r || c || u.match(/^\/\/[^@\/]+@[^@\/]+/)) {
-    var m = '//' === u.substr(0, 2);
-    m && !(c && hostlessProtocol[c]) && ((u = u.substr(2)), (e.slashes = !0));
+  if (r || g || f.match(/^\/\/[^@\/]+@[^@\/]+/)) {
+    var y = '//' === f.substr(0, 2);
+    y && !(g && hostlessProtocol[g]) && ((f = f.substr(2)), (e.slashes = !0));
   }
-  var y, b, _, w;
-  if (!hostlessProtocol[c] && (m || (c && !slashedProtocol[c]))) {
-    var R = -1;
-    for (y = 0; y < hostEndingChars.length; y++)
-      (b = u.indexOf(hostEndingChars[y])),
-        -1 !== b && (-1 === R || b < R) && (R = b);
-    var v, x;
+  var b, _, w, R;
+  if (!hostlessProtocol[g] && (y || (g && !slashedProtocol[g]))) {
+    var v = -1;
+    for (b = 0; b < hostEndingChars.length; b++)
+      (_ = f.indexOf(hostEndingChars[b])),
+        -1 !== _ && (-1 === v || _ < v) && (v = _);
+    var S, L;
     for (
-      x = -1 === R ? u.lastIndexOf('@') : u.lastIndexOf('@', R),
-        -1 !== x &&
-          ((v = u.slice(0, x)),
-          (u = u.slice(x + 1)),
-          (e.auth = decodeURIComponent(v))),
-        R = -1,
-        y = 0;
-      y < nonHostChars.length;
-      y++
+      L = -1 === v ? f.lastIndexOf('@') : f.lastIndexOf('@', v),
+        -1 !== L &&
+          ((S = f.slice(0, L)),
+          (f = f.slice(L + 1)),
+          (e.auth = decodeURIComponent(S))),
+        v = -1,
+        b = 0;
+      b < nonHostChars.length;
+      b++
     )
-      (b = u.indexOf(nonHostChars[y])),
-        -1 !== b && (-1 === R || b < R) && (R = b);
-    -1 === R && (R = u.length),
-      (e.host = u.slice(0, R)),
-      (u = u.slice(R)),
+      (_ = f.indexOf(nonHostChars[b])),
+        -1 !== _ && (-1 === v || _ < v) && (v = _);
+    -1 === v && (v = f.length),
+      (e.host = f.slice(0, v)),
+      (f = f.slice(v)),
       parseHost(e),
       (e.hostname = e.hostname || '');
-    var E = '[' === e.hostname[0] && ']' === e.hostname[e.hostname.length - 1];
-    if (!E) {
-      var L = e.hostname.split(/\./);
-      for (y = 0, _ = L.length; y < _; y++) {
-        var S = L[y];
-        if (S && !S.match(hostnamePartPattern)) {
-          for (var A = '', C = 0, O = S.length; C < O; C++)
-            A += 127 < S.charCodeAt(C) ? 'x' : S[C];
+    var x = '[' === e.hostname[0] && ']' === e.hostname[e.hostname.length - 1];
+    if (!x) {
+      var E = e.hostname.split(/\./);
+      for (b = 0, w = E.length; b < w; b++) {
+        var C = E[b];
+        if (C && !C.match(hostnamePartPattern)) {
+          for (var A = '', T = 0, P = C.length; T < P; T++)
+            A += 127 < C.charCodeAt(T) ? 'x' : C[T];
           if (!A.match(hostnamePartPattern)) {
-            var P = L.slice(0, y),
-              k = L.slice(y + 1),
-              T = S.match(hostnamePartStart);
-            T && (P.push(T[1]), k.unshift(T[2])),
-              k.length && (u = '/' + k.join('.') + u),
-              (e.hostname = P.join('.'));
+            var O = E.slice(0, b),
+              B = E.slice(b + 1),
+              M = C.match(hostnamePartStart);
+            M && (O.push(M[1]), B.unshift(M[2])),
+              B.length && (f = '/' + B.join('.') + f),
+              (e.hostname = O.join('.'));
             break;
           }
         }
@@ -2081,47 +2085,47 @@ function parse$1(e, t, n, r) {
     }
     (e.hostname =
       e.hostname.length > hostnameMaxLen ? '' : e.hostname.toLowerCase()),
-      E || (e.hostname = toASCII(e.hostname)),
-      (w = e.port ? ':' + e.port : '');
-    var B = e.hostname || '';
-    (e.host = B + w),
+      x || (e.hostname = toASCII(e.hostname)),
+      (R = e.port ? ':' + e.port : '');
+    var q = e.hostname || '';
+    (e.host = q + R),
       (e.href += e.host),
-      E &&
+      x &&
         ((e.hostname = e.hostname.substr(1, e.hostname.length - 2)),
-        '/' !== u[0] && (u = '/' + u));
+        '/' !== f[0] && (f = '/' + f));
   }
-  if (!unsafeProtocol[g])
-    for (y = 0, _ = autoEscape.length; y < _; y++) {
-      var h = autoEscape[y];
-      if (-1 !== u.indexOf(h)) {
-        var q = encodeURIComponent(h);
-        q === h && (q = escape(h)), (u = u.split(h).join(q));
+  if (!unsafeProtocol[m])
+    for (b = 0, w = autoEscape.length; b < w; b++) {
+      var h = autoEscape[b];
+      if (-1 !== f.indexOf(h)) {
+        var U = encodeURIComponent(h);
+        U === h && (U = escape(h)), (f = f.split(h).join(U));
       }
     }
-  var M = u.indexOf('#');
-  -1 !== M && ((e.hash = u.substr(M)), (u = u.slice(0, M)));
-  var U = u.indexOf('?');
+  var I = f.indexOf('#');
+  -1 !== I && ((e.hash = f.substr(I)), (f = f.slice(0, I)));
+  var D = f.indexOf('?');
   if (
-    (-1 === U
+    (-1 === D
       ? n && ((e.search = ''), (e.query = {}))
-      : ((e.search = u.substr(U)),
-        (e.query = u.substr(U + 1)),
-        n && (e.query = parse(e.query)),
-        (u = u.slice(0, U))),
-    u && (e.pathname = u),
-    slashedProtocol[g] && e.hostname && !e.pathname && (e.pathname = '/'),
+      : ((e.search = f.substr(D)),
+        (e.query = f.substr(D + 1)),
+        n && (e.query = parse$1(e.query)),
+        (f = f.slice(0, D))),
+    f && (e.pathname = f),
+    slashedProtocol[m] && e.hostname && !e.pathname && (e.pathname = '/'),
     e.pathname || e.search)
   ) {
-    w = e.pathname || '';
-    var I = e.search || '';
-    e.path = w + I;
+    R = e.pathname || '';
+    var Y = e.search || '';
+    e.path = R + Y;
   }
-  return (e.href = format$1(e)), e;
+  return (e.href = format(e)), e;
 }
 function urlFormat(e) {
-  return isString(e) && (e = parse$1({}, e)), format$1(e);
+  return isString(e) && (e = parse({}, e)), format(e);
 }
-function format$1(e) {
+function format(e) {
   var t = e.auth || '';
   t && ((t = encodeURIComponent(t)), (t = t.replace(/%3A/i, ':')), (t += '@'));
   var n = e.protocol || '',
@@ -2158,7 +2162,7 @@ function format$1(e) {
   );
 }
 Url.prototype.format = function () {
-  return format$1(this);
+  return format(this);
 };
 function urlResolve(e, t) {
   return urlParse(e, !1, !0).resolve(t);
@@ -2241,7 +2245,7 @@ function urlResolveObject(e, t) {
         e.host && ('' === u[0] ? (u[0] = e.host) : u.unshift(e.host)),
         (e.host = null)),
       (b = b && ('' === u[0] || '' === w[0])));
-  var x;
+  var S;
   if (y)
     (r.host = e.host || '' === e.host ? e.host : r.host),
       (r.hostname = e.hostname || '' === e.hostname ? e.hostname : r.hostname),
@@ -2258,8 +2262,8 @@ function urlResolveObject(e, t) {
     return (
       R &&
         ((r.hostname = r.host = w.shift()),
-        (x = !!(r.host && 0 < r.host.indexOf('@')) && r.host.split('@')),
-        x && ((r.auth = x.shift()), (r.host = r.hostname = x.shift()))),
+        (S = !!(r.host && 0 < r.host.indexOf('@')) && r.host.split('@')),
+        S && ((r.auth = S.shift()), (r.host = r.hostname = S.shift()))),
       (r.search = e.search),
       (r.query = e.query),
       (isNull(r.pathname) && isNull(r.search)) ||
@@ -2275,32 +2279,32 @@ function urlResolveObject(e, t) {
       r
     );
   for (
-    var E = w.slice(-1)[0],
-      L =
-        ((r.host || e.host || 1 < w.length) && ('.' === E || '..' === E)) ||
-        '' === E,
-      S = 0,
-      A = w.length;
-    0 <= A;
-    A--
+    var L = w.slice(-1)[0],
+      x =
+        ((r.host || e.host || 1 < w.length) && ('.' === L || '..' === L)) ||
+        '' === L,
+      E = 0,
+      C = w.length;
+    0 <= C;
+    C--
   )
-    (E = w[A]),
-      '.' === E
-        ? w.splice(A, 1)
-        : '..' === E
-        ? (w.splice(A, 1), S++)
-        : S && (w.splice(A, 1), S--);
-  if (!b && !_) for (; S--; S) w.unshift('..');
+    (L = w[C]),
+      '.' === L
+        ? w.splice(C, 1)
+        : '..' === L
+        ? (w.splice(C, 1), E++)
+        : E && (w.splice(C, 1), E--);
+  if (!b && !_) for (; E--; E) w.unshift('..');
   b && '' !== w[0] && (!w[0] || '/' !== w[0].charAt(0)) && w.unshift(''),
-    L && '/' !== w.join('/').substr(-1) && w.push('');
-  var C = '' === w[0] || (w[0] && '/' === w[0].charAt(0));
+    x && '/' !== w.join('/').substr(-1) && w.push('');
+  var A = '' === w[0] || (w[0] && '/' === w[0].charAt(0));
   return (
     R &&
-      ((r.hostname = r.host = C ? '' : w.length ? w.shift() : ''),
-      (x = !!(r.host && 0 < r.host.indexOf('@')) && r.host.split('@')),
-      x && ((r.auth = x.shift()), (r.host = r.hostname = x.shift()))),
+      ((r.hostname = r.host = A ? '' : w.length ? w.shift() : ''),
+      (S = !!(r.host && 0 < r.host.indexOf('@')) && r.host.split('@')),
+      S && ((r.auth = S.shift()), (r.host = r.hostname = S.shift()))),
     (b = b || (r.host && w.length)),
-    b && !C && w.unshift(''),
+    b && !A && w.unshift(''),
     w.length
       ? (r.pathname = w.join('/'))
       : ((r.pathname = null), (r.path = null)),
@@ -2325,8 +2329,7 @@ function parseHost(e) {
     t && (e.hostname = t);
 }
 var _blobConstructor,
-  hasFetch =
-    isFunction$1(global$1.fetch) && isFunction$1(global$1.ReadableStream);
+  hasFetch = isFunction(global$1.fetch) && isFunction(global$1.ReadableStream);
 function blobConstructor() {
   if ('undefined' != typeof _blobConstructor) return _blobConstructor;
   try {
@@ -2349,14 +2352,14 @@ function checkTypeSupport(e) {
 }
 var haveArrayBuffer = 'undefined' != typeof global$1.ArrayBuffer,
   haveSlice =
-    haveArrayBuffer && isFunction$1(global$1.ArrayBuffer.prototype.slice),
+    haveArrayBuffer && isFunction(global$1.ArrayBuffer.prototype.slice),
   arraybuffer = haveArrayBuffer && checkTypeSupport('arraybuffer'),
   msstream = !hasFetch && haveSlice && checkTypeSupport('ms-stream'),
   mozchunkedarraybuffer =
     !hasFetch && haveArrayBuffer && checkTypeSupport('moz-chunked-arraybuffer'),
-  overrideMimeType = isFunction$1(xhr.overrideMimeType),
-  vbArray = isFunction$1(global$1.VBArray);
-function isFunction$1(e) {
+  overrideMimeType = isFunction(xhr.overrideMimeType),
+  vbArray = isFunction(global$1.VBArray);
+function isFunction(e) {
   return 'function' == typeof e;
 }
 xhr = null;
@@ -2378,7 +2381,7 @@ function EventEmitter() {
       ((this._events = new EventHandlers()), (this._eventsCount = 0)),
       (this._maxListeners = this._maxListeners || void 0);
   }),
-  (EventEmitter.prototype.setMaxListeners = function (e) {
+  (EventEmitter.prototype.setMaxListeners = function t(e) {
     if ('number' != typeof e || 0 > e || isNaN(e))
       throw new TypeError('"n" argument must be a positive number');
     return (this._maxListeners = e), this;
@@ -2388,7 +2391,7 @@ function $getMaxListeners(e) {
     ? EventEmitter.defaultMaxListeners
     : e._maxListeners;
 }
-EventEmitter.prototype.getMaxListeners = function () {
+EventEmitter.prototype.getMaxListeners = function e() {
   return $getMaxListeners(this);
 };
 function emitNone(e, t, n) {
@@ -2421,49 +2424,49 @@ function emitMany(e, t, n, r) {
     for (var o = e.length, a = arrayClone(e, o), s = 0; s < o; ++s)
       a[s].apply(n, r);
 }
-EventEmitter.prototype.emit = function (e) {
-  var t,
-    n,
+EventEmitter.prototype.emit = function t(e) {
+  var n,
     r,
     o,
     a,
     s,
     d,
-    l = 'error' === e;
-  if (((s = this._events), s)) l = l && null == s.error;
-  else if (!l) return !1;
-  if (((d = this.domain), l)) {
-    if (((t = arguments[1]), d))
-      t || (t = new Error('Uncaught, unspecified "error" event')),
-        (t.domainEmitter = this),
-        (t.domain = d),
-        (t.domainThrown = !1),
-        d.emit('error', t);
-    else if (t instanceof Error) throw t;
+    l,
+    h = 'error' === e;
+  if (((d = this._events), d)) h = h && null == d.error;
+  else if (!h) return !1;
+  if (((l = this.domain), h)) {
+    if (((n = arguments[1]), l))
+      n || (n = new Error('Uncaught, unspecified "error" event')),
+        (n.domainEmitter = this),
+        (n.domain = l),
+        (n.domainThrown = !1),
+        l.emit('error', n);
+    else if (n instanceof Error) throw n;
     else {
-      var h = new Error('Uncaught, unspecified "error" event. (' + t + ')');
-      throw ((h.context = t), h);
+      var p = new Error('Uncaught, unspecified "error" event. (' + n + ')');
+      throw ((p.context = n), p);
     }
     return !1;
   }
-  if (((n = s[e]), !n)) return !1;
-  var p = 'function' == typeof n;
-  switch (((r = arguments.length), r)) {
+  if (((r = d[e]), !r)) return !1;
+  var u = 'function' == typeof r;
+  switch (((o = arguments.length), o)) {
     case 1:
-      emitNone(n, p, this);
+      emitNone(r, u, this);
       break;
     case 2:
-      emitOne(n, p, this, arguments[1]);
+      emitOne(r, u, this, arguments[1]);
       break;
     case 3:
-      emitTwo(n, p, this, arguments[1], arguments[2]);
+      emitTwo(r, u, this, arguments[1], arguments[2]);
       break;
     case 4:
-      emitThree(n, p, this, arguments[1], arguments[2], arguments[3]);
+      emitThree(r, u, this, arguments[1], arguments[2], arguments[3]);
       break;
     default:
-      for (o = Array(r - 1), a = 1; a < r; a++) o[a - 1] = arguments[a];
-      emitMany(n, p, this, o);
+      for (a = Array(o - 1), s = 1; s < o; s++) a[s - 1] = arguments[s];
+      emitMany(r, u, this, a);
   }
   return !0;
 };
@@ -2509,11 +2512,11 @@ function _addListener(e, t, n, r) {
 function emitWarning(t) {
   'function' == typeof console.warn ? console.warn(t) : console.log(t);
 }
-(EventEmitter.prototype.addListener = function (e, t) {
+(EventEmitter.prototype.addListener = function n(e, t) {
   return _addListener(this, e, t, !1);
 }),
   (EventEmitter.prototype.on = EventEmitter.prototype.addListener),
-  (EventEmitter.prototype.prependListener = function (e, t) {
+  (EventEmitter.prototype.prependListener = function n(e, t) {
     return _addListener(this, e, t, !0);
   });
 function _onceWrap(e, t, n) {
@@ -2523,59 +2526,59 @@ function _onceWrap(e, t, n) {
   var o = !1;
   return (r.listener = n), r;
 }
-(EventEmitter.prototype.once = function (e, t) {
+(EventEmitter.prototype.once = function n(e, t) {
   if ('function' != typeof t)
     throw new TypeError('"listener" argument must be a function');
   return this.on(e, _onceWrap(this, e, t)), this;
 }),
-  (EventEmitter.prototype.prependOnceListener = function (e, t) {
+  (EventEmitter.prototype.prependOnceListener = function n(e, t) {
     if ('function' != typeof t)
       throw new TypeError('"listener" argument must be a function');
     return this.prependListener(e, _onceWrap(this, e, t)), this;
   }),
-  (EventEmitter.prototype.removeListener = function (e, t) {
-    var n, r, o, a, s;
+  (EventEmitter.prototype.removeListener = function n(e, t) {
+    var r, o, a, s, d;
     if ('function' != typeof t)
       throw new TypeError('"listener" argument must be a function');
-    if (((r = this._events), !r)) return this;
-    if (((n = r[e]), !n)) return this;
-    if (n === t || (n.listener && n.listener === t))
+    if (((o = this._events), !o)) return this;
+    if (((r = o[e]), !r)) return this;
+    if (r === t || (r.listener && r.listener === t))
       0 == --this._eventsCount
         ? (this._events = new EventHandlers())
-        : (delete r[e],
-          r.removeListener && this.emit('removeListener', e, n.listener || t));
-    else if ('function' != typeof n) {
-      for (o = -1, a = n.length; 0 < a--; )
-        if (n[a] === t || (n[a].listener && n[a].listener === t)) {
-          (s = n[a].listener), (o = a);
+        : (delete o[e],
+          o.removeListener && this.emit('removeListener', e, r.listener || t));
+    else if ('function' != typeof r) {
+      for (a = -1, s = r.length; 0 < s--; )
+        if (r[s] === t || (r[s].listener && r[s].listener === t)) {
+          (d = r[s].listener), (a = s);
           break;
         }
-      if (0 > o) return this;
-      if (1 === n.length) {
-        if (((n[0] = void 0), 0 == --this._eventsCount))
+      if (0 > a) return this;
+      if (1 === r.length) {
+        if (((r[0] = void 0), 0 == --this._eventsCount))
           return (this._events = new EventHandlers()), this;
-        delete r[e];
-      } else spliceOne(n, o);
-      r.removeListener && this.emit('removeListener', e, s || t);
+        delete o[e];
+      } else spliceOne(r, a);
+      o.removeListener && this.emit('removeListener', e, d || t);
     }
     return this;
   }),
-  (EventEmitter.prototype.removeAllListeners = function (e) {
-    var t, n;
-    if (((n = this._events), !n)) return this;
-    if (!n.removeListener)
+  (EventEmitter.prototype.removeAllListeners = function t(e) {
+    var n, r;
+    if (((r = this._events), !r)) return this;
+    if (!r.removeListener)
       return (
         0 === arguments.length
           ? ((this._events = new EventHandlers()), (this._eventsCount = 0))
-          : n[e] &&
+          : r[e] &&
             (0 == --this._eventsCount
               ? (this._events = new EventHandlers())
-              : delete n[e]),
+              : delete r[e]),
         this
       );
     if (0 === arguments.length) {
-      for (var r, o = Object.keys(n), a = 0; a < o.length; ++a)
-        (r = o[a]), 'removeListener' === r || this.removeAllListeners(r);
+      for (var o, a = Object.keys(r), s = 0; s < a.length; ++s)
+        (o = a[s]), 'removeListener' !== o && this.removeAllListeners(o);
       return (
         this.removeAllListeners('removeListener'),
         (this._events = new EventHandlers()),
@@ -2583,35 +2586,35 @@ function _onceWrap(e, t, n) {
         this
       );
     }
-    if (((t = n[e]), 'function' == typeof t)) this.removeListener(e, t);
-    else if (t)
-      do this.removeListener(e, t[t.length - 1]);
-      while (t[0]);
+    if (((n = r[e]), 'function' == typeof n)) this.removeListener(e, n);
+    else if (n)
+      do this.removeListener(e, n[n.length - 1]);
+      while (n[0]);
     return this;
   }),
-  (EventEmitter.prototype.listeners = function (e) {
-    var t,
-      n,
-      r = this._events;
+  (EventEmitter.prototype.listeners = function t(e) {
+    var n,
+      r,
+      o = this._events;
     return (
-      r
-        ? ((t = r[e]),
-          (n = t
-            ? 'function' == typeof t
-              ? [t.listener || t]
-              : unwrapListeners(t)
+      o
+        ? ((n = o[e]),
+          (r = n
+            ? 'function' == typeof n
+              ? [n.listener || n]
+              : unwrapListeners(n)
             : []))
-        : (n = []),
-      n
+        : (r = []),
+      r
     );
   }),
   (EventEmitter.listenerCount = function (e, t) {
     return 'function' == typeof e.listenerCount
       ? e.listenerCount(t)
-      : listenerCount.call(e, t);
+      : listenerCount$1.call(e, t);
   }),
-  (EventEmitter.prototype.listenerCount = listenerCount);
-function listenerCount(e) {
+  (EventEmitter.prototype.listenerCount = listenerCount$1);
+function listenerCount$1(e) {
   var t = this._events;
   if (t) {
     var n = t[e];
@@ -2620,7 +2623,7 @@ function listenerCount(e) {
   }
   return 0;
 }
-EventEmitter.prototype.eventNames = function () {
+EventEmitter.prototype.eventNames = function e() {
   return 0 < this._eventsCount ? Reflect.ownKeys(this._events) : [];
 };
 function spliceOne(e, t) {
@@ -2815,7 +2818,7 @@ function prependListener(e, t, n) {
           : (e._events[t] = [n, e._events[t]])
         : e.on(t, n));
 }
-function listenerCount$1(e, t) {
+function listenerCount(e, t) {
   return e.listeners(t).length;
 }
 function ReadableState(e, t) {
@@ -3032,7 +3035,7 @@ function maybeReadMore_(e, t) {
     n = t.length;
   t.readingMore = !1;
 }
-(Readable.prototype._read = function () {
+(Readable.prototype._read = function (e) {
   this.emit('error', new Error('not implemented'));
 }),
   (Readable.prototype.pipe = function (e, t) {
@@ -3074,7 +3077,7 @@ function maybeReadMore_(e, t) {
       debug('onerror', t),
         l(),
         e.removeListener('error', i),
-        0 === listenerCount$1(e, 'error') && e.emit('error', t);
+        0 === listenerCount(e, 'error') && e.emit('error', t);
     }
     function s() {
       e.removeListener('finish', d), l();
@@ -3231,8 +3234,9 @@ function flow(e) {
           return e[t].apply(e, arguments);
         };
       })(a));
+  var n = ['error', 'close', 'destroy', 'pause', 'resume'];
   return (
-    forEach(['error', 'close', 'destroy', 'pause', 'resume'], function (t) {
+    forEach(n, function (t) {
       e.on(t, o.emit.bind(o, t));
     }),
     (o._read = function (t) {
@@ -3369,9 +3373,9 @@ function WritableState(e, t) {
     (this.bufferedRequestCount = 0),
     (this.corkedRequestsFree = new CorkedRequest(this));
 }
-WritableState.prototype.getBuffer = function () {
-  for (var e = this.bufferedRequest, t = []; e; ) t.push(e), (e = e.next);
-  return t;
+WritableState.prototype.getBuffer = function e() {
+  for (var t = this.bufferedRequest, n = []; t; ) n.push(t), (t = t.next);
+  return n;
 };
 function Writable(e) {
   return this instanceof Writable || this instanceof Duplex
@@ -3434,7 +3438,7 @@ function validChunk(e, t, n, r) {
         e.bufferedRequest &&
         clearBuffer(this, e));
   }),
-  (Writable.prototype.setDefaultEncoding = function (e) {
+  (Writable.prototype.setDefaultEncoding = function t(e) {
     if (
       ('string' == typeof e && (e = e.toLowerCase()),
       !(
@@ -3634,6 +3638,146 @@ function onend() {
 function onEndNT(e) {
   e.end();
 }
+inherits$1(Transform, Duplex);
+function TransformState(e) {
+  (this.afterTransform = function (t, n) {
+    return afterTransform(e, t, n);
+  }),
+    (this.needTransform = !1),
+    (this.transforming = !1),
+    (this.writecb = null),
+    (this.writechunk = null),
+    (this.writeencoding = null);
+}
+function afterTransform(e, t, n) {
+  var r = e._transformState;
+  r.transforming = !1;
+  var o = r.writecb;
+  if (!o) return e.emit('error', new Error('no writecb in Transform class'));
+  (r.writechunk = null),
+    (r.writecb = null),
+    null !== n && n !== void 0 && e.push(n),
+    o(t);
+  var a = e._readableState;
+  (a.reading = !1),
+    (a.needReadable || a.length < a.highWaterMark) && e._read(a.highWaterMark);
+}
+function Transform(e) {
+  if (!(this instanceof Transform)) return new Transform(e);
+  Duplex.call(this, e), (this._transformState = new TransformState(this));
+  var t = this;
+  (this._readableState.needReadable = !0),
+    (this._readableState.sync = !1),
+    e &&
+      ('function' == typeof e.transform && (this._transform = e.transform),
+      'function' == typeof e.flush && (this._flush = e.flush)),
+    this.once('prefinish', function () {
+      'function' == typeof this._flush
+        ? this._flush(function (e) {
+            done(t, e);
+          })
+        : done(t);
+    });
+}
+(Transform.prototype.push = function (e, t) {
+  return (
+    (this._transformState.needTransform = !1),
+    Duplex.prototype.push.call(this, e, t)
+  );
+}),
+  (Transform.prototype._transform = function (e, t, n) {
+    throw new Error('Not implemented');
+  }),
+  (Transform.prototype._write = function (e, t, n) {
+    var r = this._transformState;
+    if (
+      ((r.writecb = n),
+      (r.writechunk = e),
+      (r.writeencoding = t),
+      !r.transforming)
+    ) {
+      var o = this._readableState;
+      (r.needTransform || o.needReadable || o.length < o.highWaterMark) &&
+        this._read(o.highWaterMark);
+    }
+  }),
+  (Transform.prototype._read = function (e) {
+    var t = this._transformState;
+    null !== t.writechunk && t.writecb && !t.transforming
+      ? ((t.transforming = !0),
+        this._transform(t.writechunk, t.writeencoding, t.afterTransform))
+      : (t.needTransform = !0);
+  });
+function done(e, t) {
+  if (t) return e.emit('error', t);
+  var n = e._writableState,
+    r = e._transformState;
+  if (n.length) throw new Error('Calling transform done when ws.length != 0');
+  if (r.transforming)
+    throw new Error('Calling transform done when still transforming');
+  return e.push(null);
+}
+inherits$1(PassThrough, Transform);
+function PassThrough(e) {
+  return this instanceof PassThrough
+    ? void Transform.call(this, e)
+    : new PassThrough(e);
+}
+(PassThrough.prototype._transform = function (e, t, n) {
+  n(null, e);
+}),
+  inherits$1(Stream, EventEmitter),
+  (Stream.Readable = Readable),
+  (Stream.Writable = Writable),
+  (Stream.Duplex = Duplex),
+  (Stream.Transform = Transform),
+  (Stream.PassThrough = PassThrough),
+  (Stream.Stream = Stream);
+function Stream() {
+  EventEmitter.call(this);
+}
+Stream.prototype.pipe = function (e, t) {
+  function n(t) {
+    e.writable && !1 === e.write(t) && d.pause && d.pause();
+  }
+  function r() {
+    d.readable && d.resume && d.resume();
+  }
+  function o() {
+    l || ((l = !0), e.end());
+  }
+  function a() {
+    l || ((l = !0), 'function' == typeof e.destroy && e.destroy());
+  }
+  function i(e) {
+    if ((s(), 0 === EventEmitter.listenerCount(this, 'error'))) throw e;
+  }
+  function s() {
+    d.removeListener('data', n),
+      e.removeListener('drain', r),
+      d.removeListener('end', o),
+      d.removeListener('close', a),
+      d.removeListener('error', i),
+      e.removeListener('error', i),
+      d.removeListener('end', s),
+      d.removeListener('close', s),
+      e.removeListener('close', s);
+  }
+  var d = this;
+  d.on('data', n),
+    e.on('drain', r),
+    e._isStdio || (t && !1 === t.end) || (d.on('end', o), d.on('close', a));
+  var l = !1;
+  return (
+    d.on('error', i),
+    e.on('error', i),
+    d.on('end', s),
+    d.on('close', s),
+    e.on('close', s),
+    e.emit('pipe', d),
+    e
+  );
+};
 var rStates = {
   UNSENT: 0,
   OPENED: 1,
@@ -3650,7 +3794,7 @@ function IncomingMessage(e, t, n) {
     (r.trailers = {}),
     (r.rawTrailers = []),
     r.on('end', function () {
-      browser$1.nextTick(function () {
+      process.nextTick(function () {
         r.emit('close');
       });
     });
@@ -3900,7 +4044,7 @@ var unsafeHeaders = [
         try {
           a.open(e._opts.method, e._opts.url, !0);
         } catch (t) {
-          return void browser$1.nextTick(function () {
+          return void process.nextTick(function () {
             e.emit('error', t);
           });
         }
@@ -3930,7 +4074,7 @@ var unsafeHeaders = [
         try {
           a.send(t);
         } catch (t) {
-          return void browser$1.nextTick(function () {
+          return void process.nextTick(function () {
             e.emit('error', t);
           });
         }
@@ -4127,20 +4271,15 @@ class Fasquest {
     });
   }
   _request(e, n, r = 0) {
-    var o = this._setOptions({ ...e });
-    o.json && o.body && (o.body = JSON.stringify(o.body)),
-      o.body &&
-        !o.headers['Content-Length'] &&
-        (o.headers['Content-Length'] = Buffer.byteLength(o.body));
-    var a = client[o.proto].request(o, (e) => {
+    var o = this._setOptions(e),
+      a = client[o.proto].request(o, (e) => {
         (e.body = ''),
           e.on('data', (t) => {
             e.body += t;
           }),
           e.on('end', () => {
             if (
-              (clearTimeout(i),
-              delete o.agent,
+              (o.timeout && clearTimeout(i),
               -1 !== REDIRECT_CODES.indexOf(e.statusCode) && r < o.redirect_max)
             )
               return (
@@ -4158,8 +4297,9 @@ class Fasquest {
               ? n(a, e, new SimpleError())
               : n(a, e, null);
           });
-      }),
-      i = setTimeout(() => {
+      });
+    if (o.timeout)
+      var i = setTimeout(() => {
         a.destroy();
       }, o.timeout || 6e4);
     a.on('error', (t) => {
@@ -4167,29 +4307,46 @@ class Fasquest {
         -1 < t.message.indexOf('socket hang up')
           ? new RequestTimeoutError(t)
           : new RequestError(t);
-      return delete o.agent, n(a, null, e);
+      return n(a, null, e);
     }),
       o.body && a.write(o.body),
       a.end();
   }
   _setOptions(e) {
-    if (((e.simple = !1 !== e.simple), (e.method = e.method || 'GET'), e.qs)) {
-      var t = qs.stringify(e.qs);
-      0 < t.length && (e.uri += (-1 < e.uri.indexOf('?') ? '&' : '?') + t);
+    var t = {
+      simple: !1 !== e.simple,
+      method: e.method || 'GET',
+      uri: e.uri,
+      timeout: e.timeout,
+    };
+    if (e.qs) {
+      var n = qs.stringify(e.qs);
+      0 < n.length && (t.uri += (-1 < t.uri.indexOf('?') ? '&' : '?') + n);
     }
+    if (
+      ((t = this._uri_to_options(t.uri, t)),
+      (t.agent = e.agent || this.agent[e.proto]),
+      (t.headers = {}),
+      e.headers)
+    )
+      for (var r = Object.keys(e.headers), o = 0; o < r.length; o++)
+        t.headers[r[o]] = e.headers[r[o]];
     return (
-      this._uri_to_options(e),
-      (e.agent = e.agent || this.agent[e.proto]),
-      e.headers || (e.headers = {}),
       e.json
-        ? (e.headers['Content-Type'] = 'application/json')
-        : e.form &&
-          ((e.body = qs.stringify(e.form)),
-          (e.headers['Content-Type'] = 'application/x-www-form-urlencoded'),
-          (e.headers['Content-Length'] = Buffer.byteLength(e.body))),
+        ? ((t.headers['Content-Type'] = 'application/json'),
+          e.body && (t.body = JSON.stringify(e.body)))
+        : e.form
+        ? ((t.body = qs.stringify(e.form)),
+          (t.headers['Content-Type'] = 'application/x-www-form-urlencoded'),
+          (t.headers['Content-Length'] = Buffer.byteLength(t.body)))
+        : e.body &&
+          ((t.headers['Content-Length'] = Buffer.byteLength(e.body)),
+          !t.headers['Content-Type'] &&
+            (t.headers['Content-Type'] = 'text/plain'),
+          (t.body = e.body)),
       e.authorization &&
         (e.authorization.basic
-          ? (e.headers.Authorization =
+          ? (t.headers.Authorization =
               'Basic ' +
               Buffer.from(
                 e.authorization.basic.client +
@@ -4198,36 +4355,37 @@ class Fasquest {
                 'ascii'
               ).toString('base64'))
           : e.authorization.bearer &&
-            (e.headers.Authorization = 'Bearer ' + e.authorization.bearer),
-        delete e.authorization),
-      e.redirect_max || 0 === e.redirect_max || (e.redirect_max = 5),
-      e
+            (t.headers.Authorization = 'Bearer ' + e.authorization.bearer)),
+      e.redirect_max || 0 === e.redirect_max || (t.redirect_max = 5),
+      t
     );
   }
-  _uri_to_options(e) {
-    var t = { proto: '', path: '', port: 80, host: '' },
-      n = e.uri.split('://');
-    if (((t.proto = n[0]), -1 < n[1].indexOf(':'))) {
-      const e = n[1].split(':'),
-        r = e[1].indexOf('/');
-      -1 < r
-        ? ((n[1] = e[1]), (t.path = n[1].slice(r)), (t.port = n[1].slice(0, r)))
-        : (t.port = e[1]),
-        (t.host = e[0]);
-    } else t.port = 'https' == t.proto ? 443 : 80;
-    const r = n[1].indexOf('/');
-    -1 < r
-      ? ((t.path = t.path || n[1].slice(r)),
-        (t.host = t.host || n[1].slice(0, r)))
-      : ((t.path = t.path || '/'), (t.host = t.host || n[1])),
-      (e.proto = t.proto),
-      (e.path = t.path),
-      (e.port = t.port),
-      (e.host = t.host);
+  _uri_to_options(e, t) {
+    var n = { proto: '', path: '', port: 80, host: '' },
+      r = e.split('://');
+    n.proto = r[0];
+    var o = r[1].indexOf(':');
+    if (-1 < o && !isNaN(r[1][o + 1])) {
+      const e = r[1].indexOf('/');
+      -1 < e
+        ? ((n.path = r[1].slice(e)), (n.port = r[1].slice(o + 1, e)))
+        : (n.port = r[1].slice(o + 1)),
+        (n.host = r[1].slice(0, o));
+    } else n.port = 'https' == n.proto ? 443 : 80;
+    const a = r[1].indexOf('/');
+    return (
+      -1 < a
+        ? ((n.path = n.path || r[1].slice(a)),
+          (n.host = n.host || r[1].slice(0, a)))
+        : ((n.path = n.path || '/'), (n.host = n.host || r[1])),
+      (t.proto = n.proto),
+      (t.path = n.path),
+      (t.port = n.port),
+      (t.host = n.host),
+      t
+    );
   }
 }
-var Fasquest_1 = new Fasquest();
-export default Fasquest_1;
 
 /**
  * SDK - importing the SDK for use
@@ -4860,151 +5018,31 @@ function SDK(host, opts) {
      * body
      * ```json
      * {
-     *     "group": {
-     *         "anonymous": {
-     *             "type": "group",
-     *             "allowed": [
-     *                 {
-     *                     "route": "/travelling/portal/*",
-     *                     "host": null,
-     *                     "name": "*-travelling-portal-*"
-     *                 },
-     *                 {
-     *                     "route": "/travelling/api/v1/auth/*",
-     *                     "host": null,
-     *                     "name": "*-travelling-api-v1-auth-*"
-     *                 },
-     *                 {
-     *                     "route": "/travelling/api/v1/user/me/route/allowed",
-     *                     "host": null,
-     *                     "method": "GET",
-     *                     "name": "get-travelling-api-v1-user-me-route-allowed"
-     *                 },
-     *                 {
-     *                     "route": "/travelling/api/v1/user/me/permission/allowed/*",
-     *                     "host": null,
-     *                     "method": "GET",
-     *                     "name": "get-travelling-api-v1-user-me-permission-allowed-*"
-     *                 },
-     *                 {
-     *                     "route": "/travelling/assets/*",
-     *                     "host": null,
-     *                     "removeFromPath": "/travelling/assets/",
-     *                     "method": "GET",
-     *                     "name": "get-travelling-assets-*"
-     *                 },
-     *                 {
-     *                     "route": "/travelling/api/v1/config/password",
-     *                     "host": null,
-     *                     "method": "GET",
-     *                     "name": "get-travelling-api-v1-config-password"
-     *                 },
-     *                 {
-     *                     "route": "/favicon.ico",
-     *                     "host": null,
-     *                     "method": "GET",
-     *                     "name": "get-favicon.ico"
-     *                 }
-     *             ],
-     *             "inherited": null,
-     *             "is_default": false
-     *         },
-     *         "group3": {
-     *             "type": "group",
-     *             "allowed": null,
-     *             "inherited": [
-     *                 "testgroup|group1",
-     *                 "group|group2"
-     *             ],
-     *             "is_default": false
-     *         },
-     *         "superadmin": {
-     *             "type": "group",
-     *             "allowed": [
-     *                 {
-     *                     "host": null,
-     *                     "route": "/travelling/*",
-     *                     "name": "*-travelling-*"
-     *                 },
-     *                 {
-     *                     "name": "test-one-*-three"
-     *                 }
-     *             ],
-     *             "inherited": [
-     *                 "group|anonymous"
-     *             ],
-     *             "is_default": false
-     *         },
-     *         "group4": {
-     *             "type": "group",
-     *             "allowed": null,
-     *             "inherited": [],
-     *             "is_default": false
-     *         },
-     *         "group2": {
-     *             "type": "group",
-     *             "allowed": [
-     *                 {
-     *                     "route": "/test/get",
-     *                     "host": "https://127.0.0.1:4268/:username/:group",
-     *                     "removeFromPath": "/test/get",
-     *                     "method": "GET",
-     *                     "name": "get-test-get"
-     *                 },
-     *                 {
-     *                     "route": "/test/post",
-     *                     "host": "http://127.0.0.1:4267/?id=:id&permission=:permission",
-     *                     "removeFromPath": "/test/post",
-     *                     "method": "POST",
-     *                     "name": "post-test-post"
-     *                 }
-     *             ],
-     *             "inherited": [
-     *                 "testgroup|group1"
-     *             ],
-     *             "is_default": false
-     *         },
-     *         "group5": {
-     *             "type": "group",
-     *             "allowed": [
-     *                 {
-     *                     "route": "/test/delete/:grouptype",
-     *                     "host": "https://127.0.0.1:4268",
-     *                     "removeFromPath": "/test/delete",
-     *                     "method": "DELETE",
-     *                     "name": "delete-test-delete-:grouptype"
-     *                 }
-     *             ],
-     *             "inherited": [
-     *                 "group|group4",
-     *                 "group|superadmin"
-     *             ],
-     *             "is_default": true
-     *         },
-     *         "group1": {
-     *             "type": "group",
-     *             "allowed": null,
-     *             "inherited": null,
-     *             "is_default": false
-     *         }
-     *     },
-     *     "testgroup": {
-     *         "group1": {
-     *             "type": "testgroup",
-     *             "allowed": null,
-     *             "inherited": [
-     *                 "group|group4"
-     *             ],
-     *             "is_default": false
-     *         },
-     *         "superadmin": {
-     *             "type": "testgroup",
-     *             "allowed": null,
-     *             "inherited": null,
-     *             "is_default": false
-     *         }
+     *   "group": {
+     *     "anonymous": {
+     *       "allowed": [
+     *         {"method": "GET", "route": "/account/portal/*"},
+     *         {"method": "GET", "route": "/account/assets/*"},
+     *         {"method": "GET", "route": "/favicon.ico"},
+     *         {"method": "GET", "route": "/account/api/v1/auth/logout"},
+     *         {"method": "PUT", "route": "/account/api/v1/auth/password/forgot"},
+     *         {"method": "PUT", "route": "/account/api/v1/auth/password/reset"},
+     *         {"method": "GET", "route": "/account/api/v1/auth/activate"},
+     *         {"method": "POST", "route": "/account/api/v1/auth/token"},
+     *         {"method": "GET", "route": "/account/api/v1/auth/login/otp"},
+     *         {"method": "POST","route":"/account/api/v1/auth/oauth/authorize"},
+     *         {"method": "GET","route":"/account/api/v1/auth/oauth/authorize"},
+     *         {"method": "GET", "route": "/account/api/v1/user/me/permission/allowed/*"},
+     *         {"method": "GET", "route": "/account/api/v1/user/me/route/allowed"},
+     *         {"method": "GET", "route": "/account/api/v1/config/password"},
+     *         {"method": "GET", "route": "/account/api/v1/config/portal/webclient"},
+     *         {"method": "GET", "route": "/account/metrics"},
+     *         {"method": "GET", "route": "/account/health"}
+     *       ]
      *     }
+     *   }
      * }
+     *
      * ```
      */
     static async import(body, authorization_bearer, opts) {
@@ -7285,6 +7323,7 @@ function SDK(host, opts) {
   * @param {any} filter Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: locked=false,created_on>2021-06-03,created_on<2021-06-06)
   * @param {any} sortdir Sort direction (example ascending order: ASC) (example: ASC)
   * @param {any} ids Comma seperated id values used in inclusion query (example: d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f)
+  * @param {any} params  (example: id)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   */
     static async get(
@@ -7294,6 +7333,7 @@ function SDK(host, opts) {
       filter,
       sortdir,
       ids,
+      params,
       authorization_bearer,
       opts
     ) {
@@ -7301,7 +7341,7 @@ function SDK(host, opts) {
         method: 'GET',
         simple: false,
         uri: hostUrl + '/' + `api/v1/users`,
-        qs: { sort, limit, skip, filter, sortdir, ids },
+        qs: { sort, limit, skip, filter, sortdir, ids, params },
         authorization: {
           bearer: authorization_bearer,
         },
@@ -7425,6 +7465,7 @@ function SDK(host, opts) {
   * @param {any} filter Filter parameters (example: locked=false,created_on>2021-06-03,created_on<2021-06-06) (example: created_on>2021-06-01,created_on<2021-06-08)
   * @param {any} sortdir Sort direction (example ascending order: ASC) (example: ASC)
   * @param {any} ids Comma seperated id values used in inclusion query (example: d0323874-9b24-4bc5-ae38-fb8808c4e453,08c4c17f-317b-4be8-bfbd-451a274a3f7f)
+  * @param {any} params  (example: id,created_on)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   */
     static async get(
@@ -7435,6 +7476,7 @@ function SDK(host, opts) {
       filter,
       sortdir,
       ids,
+      params,
       authorization_bearer,
       opts
     ) {
@@ -7442,7 +7484,7 @@ function SDK(host, opts) {
         method: 'GET',
         simple: false,
         uri: hostUrl + '/' + `api/v1/users/domain/${domain}`,
-        qs: { sort, limit, skip, filter, sortdir, ids },
+        qs: { sort, limit, skip, filter, sortdir, ids, params },
         authorization: {
           bearer: authorization_bearer,
         },
@@ -9221,15 +9263,15 @@ function SDK(host, opts) {
   *
   * Path: api/v1/auth/register/domain/:domain
   * @param {Object} body
-  * @param {any} domain Domain name (example: test.com) (example: dragohmventures.com)
+  * @param {any} domain Domain name (example: test.com) (example: contactsource.com)
   * @param {any} randomPassword Generates a random password on the backend securely if set to `true` (example: true)
   * @param {string} authorization_bearer The client_credentials generated OAUth2 access token.
   * @example
   * body
   * ```json
   * {
- * 	"email": "test@test.com",
- * 	"password": "Pas5w0r!d"
+ * 	"email": "mark+test@dragohm.com",
+ * 	"password": "Trazi123**"
  * }
   * ```
   */

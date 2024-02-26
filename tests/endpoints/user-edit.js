@@ -333,6 +333,28 @@ module.exports = () => {
         );
         expect([400, 404]).toContain(editUserDataPropertyValueRes.statusCode);
       });
+
+      if (config.email.validation.internal.dedupeGmail) {
+        test('Edit Current User (user 1) - Edit user data with dupe gmail', async () => {
+          // First edit user to have gmail email
+          const editRes = await Travelling.User.Current.editPropertyValue(
+            'email',
+            'testing.guy@gmail.com',
+            userContainer.user1Token
+          );
+
+          expect(editRes).toHaveProperty('statusCode', 200);
+
+          // Attempt to edit user data with dupe email properties (+, .)
+          const invalidRes = await Travelling.User.Current.editPropertyValue(
+            'email',
+            't.e.stinggu.y+123213@gmail.com',
+            userContainer.user1Token
+          );
+
+          expect(invalidRes).toHaveProperty('statusCode', 400);
+        });
+      }
     });
   });
 

@@ -24,7 +24,9 @@ class Database {
 
     //config.log.logger.trace('checkAuth: ', users);
     if (users == null || users.length == 0) {
-      if(span) {span.end();}
+      if (span) {
+        span.end();
+      }
       throw {
         user: null,
         err: {
@@ -47,7 +49,9 @@ class Database {
 
     // Locked check
     if (user.locked) {
-      if(span) {span.end();}
+      if (span) {
+        span.end();
+      }
       throw {
         user: user,
         err: {
@@ -59,13 +63,26 @@ class Database {
 
     // Password check
     if (user.password == (await crypto.hash(password, null, user.getEncryptedProfile(user)))) {
-      if (config.login.maxLoginAttempts && (user.failed_login_attempts + 1) >= config.login.maxLoginAttempts && (!user.last_login.ip || user.last_login.ip !== ip)) {
-        config.log.warn(helpers.text(`[Security Flag]: Possible attempt at account hijacking via password brute force. Attacker IP: ${parse.getIp(req)} on account ${sessionUser.email} (${sessionUser.domain})`,span))
-        await lockUserFailedPassword(user, span);
+      if (
+        config.login.maxLoginAttempts &&
+        user.failed_login_attempts + 1 >= config.login.maxLoginAttempts &&
+        (!user.last_login.ip || user.last_login.ip !== ip)
+      ) {
+        config.log.warn(
+          helpers.text(
+            `[Security Flag]: Possible attempt at account hijacking via password brute force. Attacker IP: ${parse.getIp(
+              req
+            )} on account ${sessionUser.email} (${sessionUser.domain})`,
+            span
+          )
+        );
+        await this.lockUserFailedPassword(user, span);
       } else {
         user.failed_login_attempts = 0;
         await user.updated();
-        if(span) {span.end();}
+        if (span) {
+          span.end();
+        }
         return { user, err: null };
       }
     } else {
@@ -75,11 +92,13 @@ class Database {
     // Failed login
 
     if (config.login.maxLoginAttempts && user.failed_login_attempts >= config.login.maxLoginAttempts) {
-      await lockUserFailedPassword(user, span);
+      await this.lockUserFailedPassword(user, span);
     } else {
       await user.updated();
     }
-    if(span) {span.end();}
+    if (span) {
+      span.end();
+    }
     throw {
       user: user,
       err: {
@@ -89,14 +108,16 @@ class Database {
     };
   }
 
-  static async lockUserFailedPassword(user,span) {
+  static async lockUserFailedPassword(user, span) {
     user.locked = true;
     user.locked_reason = config.user.locked.message;
     user.change_password = true;
     await user.updated();
 
-    if(span) {span.end();}
-    
+    if (span) {
+      span.end();
+    }
+
     throw {
       user: user,
       err: {
@@ -124,6 +145,7 @@ class Database {
     userProp.domain = domain;
     userProp.change_username = false;
     userProp.change_password = false;
+    userProp.eprofile = config.pg.crypto.eprofile;
 
     if (config.registration.requireManualActivation) {
       userProp.locked = true;

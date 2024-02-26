@@ -28,7 +28,12 @@ const restTransporter = {
         simple: false,
         uri,
         json: true,
-        body: { user: mail.data.user, token: mail.data.token, clientip: mail.data.clientip }
+        body: {
+          user: mail.data.user,
+          token: mail.data.token,
+          clientip: mail.data.clientip,
+          data: mail.data.data ? { ip: mail.data.data.ip, tokenExpiry: mail.data.data.tokenExpiry } : {}
+        }
       });
       callback(null, true);
     } catch (e) {
@@ -76,12 +81,18 @@ class Email {
       resetPasswordSubject: Handlebars.compile(
         fs.readFileSync(require('path').resolve(config.email.template.passwordResetSubject), 'utf-8')
       ),
-      activationBody: Handlebars.compile(fs.readFileSync(require('path').resolve(config.email.template.activationBody), 'utf-8')),
+      activationBody: Handlebars.compile(
+        fs.readFileSync(require('path').resolve(config.email.template.activationBody), 'utf-8')
+      ),
       activationSubject: Handlebars.compile(
         fs.readFileSync(require('path').resolve(config.email.template.activationSubject), 'utf-8')
       ),
-      welcomeBody: Handlebars.compile(fs.readFileSync(require('path').resolve(config.email.template.welcomeBody), 'utf-8')),
-      welcomeSubject: Handlebars.compile(fs.readFileSync(require('path').resolve(config.email.template.welcomeSubject), 'utf-8'))
+      welcomeBody: Handlebars.compile(
+        fs.readFileSync(require('path').resolve(config.email.template.welcomeBody), 'utf-8')
+      ),
+      welcomeSubject: Handlebars.compile(
+        fs.readFileSync(require('path').resolve(config.email.template.welcomeSubject), 'utf-8')
+      )
     };
   }
 
@@ -102,6 +113,10 @@ class Email {
       subject = templates.resetPasswordSubject({ user });
     }
 
+    const d = new Date();
+    const e = new Date(d.getTime() + config.email.recovery.expiration * 1000);
+    const tokenExpiry = e.toUTCString(); // Could change display formatting here.
+
     var info = await transporter.sendMail({
       from: config.email.from,
       to: email,
@@ -111,7 +126,8 @@ class Email {
       user,
       config,
       token,
-      clientip
+      clientip,
+      data: { ip: clientip, tokenExpiry: tokenExpiry.toString() }
     });
 
     if (config.email.test.enable) {
@@ -189,6 +205,19 @@ class Email {
 
       config.log.logger.debug(testInfo);
     }
+  }
+
+  static dedupeGmail(emailRaw = '') {
+    let [email, domain] = emailRaw.toLowerCase().split('@');
+    if (email.indexOf('.') > -1) {
+      email = email.replace(/\./g, '');
+    }
+
+    if (email.indexOf('+') > -1) {
+      email = email.split('+')[0];
+    }
+
+    return `${email}@${domain}`;
   }
 }
 
