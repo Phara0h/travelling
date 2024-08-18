@@ -13,16 +13,17 @@ const regex = {
       config.password.lowercase +
       ',})(?=(.*[A-Z]){' +
       config.password.uppercase +
-      ',})(?=(.*[@#$%!]){' +
+      ',})(?=(.*[@#$%!\\^\\&\\*\\?\\_\\-\\.]){' +
       config.password.special +
-      ',})(?:[\\da-zA-Z@#$%!\\^\\&\\*\\(\\)]){' +
+      ',})(?:[\\da-zA-Z@#$%!\\^\\&\\*\\?\\_\\-\\.]){' +
       config.password.minchar +
       ',' +
       config.password.maxchar +
       '}$'
   ),
   // safeName: new RegExp(/^[A-Za-z0-9_\/\?\-\@\#\$\%\!\^\&\*\.]{1,350}$/g)
-  safeName: new RegExp(/^[A-Za-z0-9\ \.\-\_\@]{1,350}$/),
+  safeName: new RegExp(/^[A-Za-z0-9\ \.\-\_\@\#]{1,350}$/),
+  userData: new RegExp(/^[A-Za-z0-9\ \.\,\!\?\$\:\;\~\#\%\&\-\_\@\n\t\(\)\{\}\[\]\"]{1,}$/),
   base64Image: new RegExp(
     '^(data:\\w+\\/[a-zA-Z\\+\\-\\.]+;base64,)(?:[A-Za-z0-9+\\/]{4})*(?:[A-Za-z0-9+\\/]{2}==|[A-Za-z0-9+/]{3}=)?$',
     'gi'
@@ -41,7 +42,7 @@ const regex = {
 
     return ['8', '9', 'a', 'b'].indexOf(id.charAt(19)) !== -1;
   },
-  transformRoute: new RegExp(/(:id|:username|:email|:grouptype|:group|:permission)/g)
+  transformRoute: new RegExp(/(:id|:username|:email|:domain|:grouptype|:group|:permission)/g)
 };
 
 module.exports = regex;

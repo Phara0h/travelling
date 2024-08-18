@@ -1,5 +1,5 @@
 /*eslint new-cap: "warn"*/
-const BaseModel = require('adost').PGActiveModel;
+const BaseModel = require('./basemodel.js');
 const Base = require('adost').Base;
 const PGTypes = require('adost').PGTypes;
 const { URL } = require('url');
@@ -16,7 +16,8 @@ class Group extends Base(BaseModel, 'groups', {
         method: String,
         remove_from_path: String,
         route: String,
-        host: String
+        host: String,
+        redirect: String
     }
     **/
   allowed: null,

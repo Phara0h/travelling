@@ -48,6 +48,7 @@
     - [TRAVELLING_COOKIE_TOKEN_SECRET](#travelling_cookie_token_secret)
     - [TRAVELLING_COOKIE_TOKEN_SALT](#travelling_cookie_token_salt)
     - [TRAVELLING_COOKIE_TOKEN_EXPIRATION](#travelling_cookie_token_expiration)
+    - [TRAVELLING_COOKIE_TOKEN_CHECKABLE](#travelling_cookie_token_checkable)
     - [TRAVELLING_COOKIE_DOMAIN](#travelling_cookie_domain)
     - [TRAVELLING_COOKIE_SECURITY_IP_HIJACK_PROTECTION](#travelling_cookie_security_ip_hijack_protection)
 - [USER](#user)
@@ -396,6 +397,12 @@ _The token salt used to generate the persistent token cookie with. This needs to
 _How long the persistent token cookie will last for in days._ </br>
 
 > **Default**: `30`
+
+#### TRAVELLING_COOKIE_TOKEN_CHECKABLE
+
+_Adds JavaScript accessible cookie, called `trav:ls`, contianing the expiration of the `trav:tok` cookie._ </br>
+
+> **Default**: `true`
 
 ##### TRAVELLING_COOKIE_DOMAIN
 

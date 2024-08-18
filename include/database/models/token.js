@@ -1,5 +1,5 @@
 /*eslint new-cap: "warn"*/
-const BaseModel = require('adost').PGActiveModel;
+const BaseModel = require('./basemodel.js');
 const Base = require('adost').Base;
 const PGTypes = require('adost').PGTypes;
 
@@ -28,6 +28,7 @@ class Token extends Base(BaseModel, 'tokens', {
                 secret CHARACTER varying(350),
                 secret_encrypt text,
                 __secret_encrypt character varying(258),
+                eprofile character varying(350),
                 PRIMARY KEY (id, user_id)
               );`);
   }

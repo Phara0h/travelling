@@ -10,6 +10,7 @@ class GroupManager {
     }
 
     this.mergedRoutes = [];
+    this.allPossibleRoutes = {};
     this.groups = [];
     this.mappedGroups = {};
     this.redis = redis;
@@ -37,11 +38,14 @@ class GroupManager {
     if (oldspan) {
       span = helpers.startSpan('updateGroupList', oldspan);
     }
+
     this.log.debug(helpers.text('Updating Groups', span));
     var grps = await Group.findAll();
 
     this.mappedGroups = {};
     this.groups = [];
+    this.allPossibleRoutes = {};
+    var allPossibleRoutesTemp = {};
 
     for (var i = 0; i < grps.length; i++) {
       this.groups.push(grps[i]);
@@ -52,6 +56,32 @@ class GroupManager {
       }
 
       this.mergedRoutes[grps[i].type][grps[i].name] = this.groupInheritedMerge(new Group(grps[i]._), grps, span);
+
+      for (var j = 0; j < this.mergedRoutes[grps[i].type][grps[i].name].length; j++) {
+        allPossibleRoutesTemp[this.mergedRoutes[grps[i].type][grps[i].name][j].route] =
+          this.mergedRoutes[grps[i].type][grps[i].name][j];
+      }
+    }
+
+    const allPossibleRoutesTempKeys = Object.keys(allPossibleRoutesTemp);
+    for (let i = 0; i < allPossibleRoutesTempKeys.length; i++) {
+      var t = allPossibleRoutesTempKeys[i].split('/');
+
+      t.shift();
+      var last = this.allPossibleRoutes;
+
+      for (let j = 0; j < t.length; j++) {
+        if (t[j] != '') {
+          if (!last[t[j]]) {
+            last[t[j]] = {};
+          }
+
+          last[t[j]].name = allPossibleRoutesTempKeys[i];
+          last[t[j]].redirect = allPossibleRoutesTemp[allPossibleRoutesTempKeys[i]].redirect;
+
+          last = last[t[j]];
+        }
+      }
     }
 
     this.redis.needsGroupUpdate = false;
@@ -89,6 +119,7 @@ class GroupManager {
         return this.groups[i];
       }
     }
+
     this.log.error('No default group set. Setting default to anonymous');
 
     for (var i = 0; i < this.groups.length; i++) {
@@ -148,6 +179,7 @@ class GroupManager {
       if (!group.inheritedGroups) {
         group.addProperty('inheritedGroups', []);
       }
+
       for (var i = 0; i < group.inherited.length; ++i) {
         for (var j = 0; j < groups.length; ++j) {
           if (groups[j].id == group.inherited[i]) {
@@ -156,12 +188,15 @@ class GroupManager {
             break;
           }
         }
+
         nallowed.push(...this.groupInheritedMerge(group.inheritedGroups[i], groups, span));
       }
     }
+
     if (span) {
       span.end();
     }
+
     return nallowed;
   }
 }

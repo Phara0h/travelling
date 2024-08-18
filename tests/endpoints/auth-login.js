@@ -1,3 +1,4 @@
+const cookie = require('cookie');
 const config = require('../../include/utils/config');
 
 const { Travelling } = require('../../sdk/node')('http://127.0.0.1:6969/' + config.serviceName, {
@@ -6,10 +7,13 @@ const { Travelling } = require('../../sdk/node')('http://127.0.0.1:6969/' + conf
 var userContainer = require('../include/UserContainer.js');
 var testContainer = require('../include/TestContainer.js');
 const fasq = require('fasquest');
+const { hexToBase64 } = require('@opentelemetry/core');
 
 module.exports = () => {
   describe('Valid', () => {
     test('Login with Test User', async () => {
+      const start = new Date();
+
       var res = await Travelling.Auth.login({
         username: 'test',
         password: 'Pas5w0r!d'
@@ -18,6 +22,29 @@ module.exports = () => {
       userContainer.parseUser1Cookie(res.headers['set-cookie']);
 
       expect(res.statusCode).toEqual(200);
+
+      // Make sure trav.ls token is correct
+      if (config.cookie.token.checkable) {
+        var ls = {};
+        var tok = {};
+
+        for (var i = 0; i < res.headers['set-cookie'].length; i++) {
+          var pc = cookie.parse(res.headers['set-cookie'][i]);
+
+          if (pc['trav:ls']) {
+            ls = pc;
+          } else if (pc['trav:tok']) {
+            tok = pc;
+          }
+        }
+
+        expect(ls['trav:ls']).toBe('1');
+        expect(ls.Path).toBe('/');
+        expect(ls.Expires).toEqual(tok.Expires);
+
+        const cookieExpires = new Date(ls.Expires);
+        expect(cookieExpires.getTime()).toBeGreaterThan(start.getTime());
+      }
     });
 
     test('Login with Test2 User', async () => {
@@ -28,6 +55,13 @@ module.exports = () => {
 
       userContainer.parseUser2Cookie(res.headers['set-cookie']);
       expect(res.statusCode).toEqual(200);
+
+      expect(userContainer.user2).toHaveProperty('tok');
+      expect(userContainer.user2).toHaveProperty('ssid');
+
+      if (config.cookie.token.checkable) {
+        expect(userContainer.user2).toHaveProperty('ls', '1');
+      }
     });
 
     test('Login with Test2 User Again', async () => {
@@ -36,6 +70,7 @@ module.exports = () => {
           password: 'Pas5w0r!d2',
           email: 'test2@test.com'
         },
+        null,
         {
           headers: {
             cookie: userContainer.user2Cookie()
@@ -43,7 +78,8 @@ module.exports = () => {
         }
       );
 
-      expect(res.body.type).toEqual('login-session-error');
+      console.log(res);
+      expect(res.body.msg).toEqual('Access Granted');
     });
 
     test('Login with Test3 User [Locked]', async () => {
@@ -53,6 +89,73 @@ module.exports = () => {
       });
 
       expect(res.body.type).toEqual('locked');
+    });
+
+    test('Login with Test Domain User', async () => {
+      const start = new Date();
+
+      var res = await Travelling.Auth.Domain.login(
+        {
+          password: 'Pas5w0r!d',
+          email: 'test_domain_1@test.com'
+        },
+        'dragohm.com'
+      );
+
+      userContainer.parseUserDomainCookie(res.headers['set-cookie']);
+
+      expect(res.statusCode).toEqual(200);
+
+      // Make sure trav.ls token is correct
+      if (config.cookie.token.checkable) {
+        var ls = {};
+        var tok = {};
+
+        for (var i = 0; i < res.headers['set-cookie'].length; i++) {
+          var pc = cookie.parse(res.headers['set-cookie'][i]);
+
+          if (pc['trav:ls']) {
+            ls = pc;
+          } else if (pc['trav:tok']) {
+            tok = pc;
+          }
+        }
+
+        expect(ls['trav:ls']).toBe('1');
+        expect(ls.Path).toBe('/');
+        expect(ls.Expires).toEqual(tok.Expires);
+
+        const cookieExpires = new Date(ls.Expires);
+        expect(cookieExpires.getTime()).toBeGreaterThan(start.getTime());
+      }
+    });
+
+    test('Login with Test Domain User 2', async () => {
+      var res = await Travelling.Auth.Domain.login(
+        {
+          password: 'Pas5w0r!d',
+          email: 'test_domain_2@test.com'
+        },
+        'dragohm.com'
+      );
+
+      userContainer.parseUserDomain2Cookie(res.headers['set-cookie']);
+
+      expect(res.statusCode).toEqual(200);
+    });
+
+    test('Login with Test Domain User 3 [Gets deleted in user-edit]', async () => {
+      var res = await Travelling.Auth.Domain.login(
+        {
+          password: 'Pas5w0r!d',
+          email: 'test_domain_3@test.com'
+        },
+        'dragohm.com'
+      );
+
+      userContainer.parseUserDomain3Cookie(res.headers['set-cookie']);
+
+      expect(res.statusCode).toEqual(200);
     });
 
     if (config.email.test.enable) {
@@ -99,6 +202,32 @@ module.exports = () => {
         expect(res.body.type).toEqual('locked');
       });
     }
+
+    test('Login with Domain User 5', async () => {
+      var res = await Travelling.Auth.Domain.login(
+        {
+          password: 'Pas5w0r!d5',
+          email: 'test_domain_5@test.com'
+        },
+        'dragohm.com'
+      );
+
+      userContainer.parseUser5Cookie(res.headers['set-cookie']);
+      expect(res.statusCode).toEqual(200);
+    });
+
+    test('Login with Domain User 6', async () => {
+      var res = await Travelling.Auth.Domain.login(
+        {
+          password: 'Pas5w0r!d6',
+          email: 'test_domain_6@test.com'
+        },
+        'dragohm.com'
+      );
+
+      userContainer.parseUserDomain6Cookie(res.headers['set-cookie']);
+      expect(res.statusCode).toEqual(200);
+    });
   });
 
   describe('Invalid', () => {

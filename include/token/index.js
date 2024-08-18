@@ -88,6 +88,7 @@ class TokenHandler {
           reject('Invalid name');
           return;
         }
+
         if (name) {
           var fToken = await Token.findLimtedBy({ name }, 'AND', 1);
 
@@ -96,12 +97,14 @@ class TokenHandler {
             return;
           }
         }
+
         var token = await Token.create({
           user_id,
           type,
           name,
           urls,
-          secret: secret.toString('hex')
+          secret: secret.toString('hex'),
+          eprofile: config.pg.crypto.eprofile
         });
 
         token.secret = secret.toString('hex');
@@ -221,6 +224,7 @@ class TokenHandler {
     if (!token) {
       return false;
     }
+
     var user = await User.findLimtedBy({ id: token.secret }, 'AND', 1);
 
     return user[0];
@@ -282,6 +286,14 @@ class TokenHandler {
 
   static async checkActivationToken(token) {
     return await this.checkTempToken(token, config.email.activation.expiration * 1000, 'activation');
+  }
+
+  static async checkOTPToken(token) {
+    return await this.checkTempToken(token, config.otp.expiration * 1000, 'otp');
+  }
+
+  static async getOTPToken(userId) {
+    return await this.getTempToken('otp', userId, config.otp.expiration * 1000);
   }
 
   static async getRecoveryToken(userId) {

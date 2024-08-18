@@ -1,11 +1,12 @@
 const config = require('./config');
 const misc = require('./misc');
 const regex = require('./regex');
-const usa = require('./usa');
 const Fasquest = require('fasquest');
-
-module.exports = {
-  checkValidUser: async function checkValidUser(user) {
+const User = require('../database/models/user');
+const userSchema = new User()._defaultModel;
+const { getByZip, validZip, validState } = require('zcs').zcs({});
+const utilsUser = {
+  checkValidUser: async function checkValidUser(user, validateEmail = true) {
     if (!user) {
       return {
         type: 'body-error',
@@ -26,19 +27,23 @@ module.exports = {
         msg: 'Must be a real email'
       };
 
-      if (config.email.validation.external.enable) {
-        try {
-          var res = await Fasquest.request({
-            method: config.email.validation.external.method,
-            uri: config.email.validation.external.endpoint + (config.email.validation.external.emailInEndpoint ? user.email : ''),
-            body: config.email.validation.external.emailInBody ? user.email : null,
-            resolveWithFullResponse: true
-          });
-        } catch (error) {
+      if (validateEmail) {
+        if (config.email.validation.external.enable) {
+          try {
+            await Fasquest.request({
+              method: config.email.validation.external.method,
+              uri:
+                config.email.validation.external.endpoint +
+                (config.email.validation.external.emailInEndpoint ? user.email : ''),
+              body: config.email.validation.external.emailInBody ? user.email : null,
+              resolveWithFullResponse: true
+            });
+          } catch (error) {
+            return emailError;
+          }
+        } else if (regex.email.exec(user.email.toLowerCase()) == null) {
           return emailError;
         }
-      } else if (regex.email.exec(user.email.toLowerCase()) == null) {
-        return emailError;
       }
     }
 
@@ -83,12 +88,14 @@ module.exports = {
         msg: 'Must be a valid firstname'
       };
     }
+
     if (user.middlename && (user.middlename.length > 100 || regex.safeName.exec(user.middlename) == null)) {
       return {
         type: 'middlename-error',
         msg: 'Must be a valid middlename'
       };
     }
+
     if (user.lastname && (user.lastname.length > 100 || regex.safeName.exec(user.lastname) == null)) {
       return {
         type: 'lastname-error',
@@ -117,45 +124,46 @@ module.exports = {
       };
     }
 
-    if (user.state && !usa.states[user.state.toUpperCase()]) {
+    if (user.state && !validState(user.state)) {
       return {
         type: 'state-request-error',
         msg: 'Invalid state.'
       };
     }
 
-    if (user.city && !usa.cities[user.city.toUpperCase()]) {
-      return {
-        type: 'city-request-error',
-        msg: 'Invalid city.'
-      };
-    }
+    //// Might be to restrictive
+    // if (user.city && !usa.cities[user.city.toUpperCase()]) {
+    //   return {
+    //     type: 'city-request-error',
+    //     msg: 'Invalid city.'
+    //   };
+    // }
 
-    if (user.state && user.city && !usa.states[user.state.toUpperCase()][user.city.toUpperCase()]) {
-      return {
-        type: 'city-state-request-error',
-        msg: 'This city is not inside of the specified state.'
-      };
-    }
+    // if (user.state && user.city && !usa.states[user.state.toUpperCase()][user.city.toUpperCase()]) {
+    //   return {
+    //     type: 'city-state-request-error',
+    //     msg: 'This city is not inside of the specified state.'
+    //   };
+    // }
 
-    if (user.zip && !usa.zips[user.zip]) {
+    // if (user.zip && user.state && usa.zips[user.zip].state != user.state.toUpperCase()) {
+    //   return {
+    //     type: 'zip-state-request-error',
+    //     msg: 'This zipcode is not belong to the specified state.'
+    //   };
+    // }
+
+    // if (user.zip && user.city && usa.zips[user.zip].city != user.city.toUpperCase()) {
+    //   return {
+    //     type: 'zip-city-request-error',
+    //     msg: 'This zipcode is not belong to the specified city.'
+    //   };
+    // }
+
+    if (user.zip && !validZip(user.zip)) {
       return {
         type: 'zip-request-error',
         msg: 'Invalid zipcode'
-      };
-    }
-
-    if (user.zip && user.state && usa.zips[user.zip].state != user.state.toUpperCase()) {
-      return {
-        type: 'zip-state-request-error',
-        msg: 'This zipcode is not belong to the specified state.'
-      };
-    }
-
-    if (user.zip && user.city && usa.zips[user.zip].city != user.city.toUpperCase()) {
-      return {
-        type: 'zip-city-request-error',
-        msg: 'This zipcode is not belong to the specified city.'
       };
     }
 
@@ -172,6 +180,7 @@ module.exports = {
         msg: 'Must be a valid street type and less than 20 chars.'
       };
     }
+
     if (user.street_affix && (user.street_affix.length > 50 || regex.safeName.exec(user.street_affix) == null)) {
       return {
         type: 'street-affix-error',
@@ -198,6 +207,19 @@ module.exports = {
     }
 
     if (user.user_data) {
+      // Check if user data contains only approved values
+      const keys = Object.keys(user.user_data);
+
+      for (let i = 0; i < keys.length; i++) {
+        if (regex.safeName.exec(keys[i]) == null || regex.userData.exec(user.user_data[keys[i]]) == null) {
+          return {
+            type: 'user-data-error',
+            msg: 'User data contains invalid character(s).'
+          };
+        }
+      }
+
+      // Check if user data is valid JSON
       try {
         user.user_data = JSON.stringify(user.user_data);
       } catch (e) {
@@ -211,10 +233,35 @@ module.exports = {
     return true;
   },
 
+  getPersonalInfo: function getPersonalInfo(user) {
+    return utilsUser.setUser(
+      {},
+      {
+        firstname: user.firstname,
+        middlename: user.middlename,
+        lastname: user.lastname,
+        dob: user.dob,
+        phone: user.phone,
+        state: user.state,
+        city: user.city,
+        zip: user.zip,
+        street_name: user.street_name,
+        street_type: user.street_type,
+        street_affix: user.street_affix,
+        street_number: user.street_number,
+        street_physical: user.street_physical,
+        gender: user.gender
+      }
+    );
+  },
+  checkUserProps: function checkUserProps(prop) {
+    return userSchema[prop] !== undefined;
+  },
   setUser: function setUser(user, props) {
     if (props.username && config.user.username.enabled) {
       user.username = misc.toLower(props.username);
     }
+
     if (props.domain) {
       user.domain = misc.toLower(props.domain) || 'default';
     }
@@ -230,15 +277,21 @@ module.exports = {
     if (props.firstname !== undefined) {
       user.firstname = misc.toLower(props.firstname);
     }
+
     if (props.middlename !== undefined) {
       user.middlename = misc.toLower(props.middlename);
     }
+
     if (props.lastname !== undefined) {
       user.lastname = misc.toLower(props.lastname);
     }
 
     if (props.dob !== undefined) {
-      user.dob = Date.parse(props.dob);
+      if (!props.dob) {
+        user.dob = null;
+      } else {
+        user.dob = new Date(Date.parse(props.dob)).toISOString();
+      }
     }
 
     if (props.phone !== undefined) {
@@ -246,15 +299,20 @@ module.exports = {
     }
 
     if (props.state !== undefined) {
-      user.street_name = misc.toLower(props.street_name);
+      user.state = misc.toLower(props.state);
     }
 
     if (props.city !== undefined) {
-      user.street_name = misc.toLower(props.street_name);
+      user.city = misc.toLower(props.city);
     }
 
     if (props.zip !== undefined) {
-      user.zip = Number(props.zip);
+      user.zip = props.zip;
+      if (!user.city || !user.state) {
+        const { state, city } = getByZip(user.zip);
+        user.city = city;
+        user.state = state;
+      }
     }
 
     if (props.street_name !== undefined) {
@@ -264,6 +322,7 @@ module.exports = {
     if (props.street_type !== undefined) {
       user.street_type = misc.toLower(props.street_type);
     }
+
     if (props.street_affix !== undefined) {
       user.street_affix = misc.toLower(props.street_affix);
     }
@@ -330,5 +389,28 @@ module.exports = {
     }
 
     return user;
+  },
+
+  getId: function getId(req) {
+    if (!req.params.id) {
+      return null;
+    }
+
+    // if prob an email addresss
+    if (req.params.id.indexOf('@') > -1) {
+      return { email: req.params.id };
+    }
+
+    if (!regex.uuidCheck(req.params.id)) {
+      if (regex.username.exec(req.params.id)) {
+        return { username: req.params.id };
+      } else {
+        return null;
+      }
+    }
+
+    return { id: req.params.id };
   }
 };
+
+module.exports = utilsUser;

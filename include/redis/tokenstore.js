@@ -17,6 +17,7 @@ class RedisTokenStore {
     if (fToken) {
       fToken = JSON.parse(fToken);
     }
+
     return fToken;
   }
 

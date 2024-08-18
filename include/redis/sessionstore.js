@@ -23,6 +23,7 @@ class RedisSessionStore {
         delete session._data;
       }
     }
+
     if (callback) {
       callback(null, session);
     }

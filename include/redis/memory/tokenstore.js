@@ -26,6 +26,7 @@ class TokenStore {
       delete this.tokens[type + '_' + token];
       return true;
     } catch (_) {}
+
     return false;
   }
 
